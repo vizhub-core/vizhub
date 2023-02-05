@@ -2,7 +2,7 @@
 export default function Home() {
   return (
     <>
-	  Hello Automatic!
+	  Nav bar goes here
     </>
   );
 }
