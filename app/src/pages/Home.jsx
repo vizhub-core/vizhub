@@ -2,7 +2,7 @@
 export default function Home() {
   return (
     <>
-      <h1>VizHub3</h1>
+      <h1>VizHub3 Test Deploy</h1>
     </>
   );
 }
