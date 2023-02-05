@@ -1,3 +1,5 @@
 *.swp
+*.svg
 .prettierignore
 .gitignore
+dist

@@ -14,20 +14,24 @@ const routes = Object.keys(pages).map((path) => {
   };
 });
 
+// TODO bring in this nav
+//const Nav = () => (
+//  <nav>
+//    <ul>
+//      {routes.map(({ name, path }) => {
+//        return (
+//          <li key={path}>
+//            <Link to={path}>{name}</Link>
+//          </li>
+//        );
+//      })}
+//    </ul>
+//  </nav>
+//);
+
 export function App() {
   return (
     <>
-      <nav>
-        <ul>
-          {routes.map(({ name, path }) => {
-            return (
-              <li key={path}>
-                <Link to={path}>{name}</Link>
-              </li>
-            );
-          })}
-        </ul>
-      </nav>
       <Routes>
         {routes.map(({ path, component: RouteComp }) => {
           return <Route key={path} path={path} element={<RouteComp />}></Route>;
