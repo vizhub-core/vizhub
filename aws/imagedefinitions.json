@@ -1,0 +1,6 @@
+[
+  {
+    "name": "vizhub3-app",
+    "imageUri": "638829852636.dkr.ecr.us-east-1.amazonaws.com/vizhub3:latest"
+  }
+]

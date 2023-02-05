@@ -2,7 +2,7 @@
 export default function Home() {
   return (
     <>
-      <h1>VizHub3 Test Doy</h1>
+	  Hello Automatic!
     </>
   );
 }
