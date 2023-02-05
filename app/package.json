@@ -1,0 +1,34 @@
+{
+  "name": "app",
+  "version": "1.0.0",
+  "description": "Full stack app for VizHub3, based in Vite SSR.",
+  "type": "module",
+  "scripts": {
+    "test": "npm test",
+    "prettier": "prettier {*.*,**/*.*} --single-quote --write",
+    "dev": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vizhub-core/vizhub3.git"
+  },
+  "author": "Curran Kelleher",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/vizhub-core/vizhub3/issues"
+  },
+  "homepage": "https://github.com/vizhub-core/vizhub3#readme",
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.8.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^3.1.0",
+    "compression": "^1.7.4",
+    "express": "^4.18.2",
+    "prettier": "^2.8.3",
+    "serve-static": "^1.15.0",
+    "vite": "^4.1.1"
+  }
+}
