@@ -5,6 +5,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import express from 'express';
+import jsesc from 'jsesc';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const resolve = (p) => path.resolve(__dirname, p);
@@ -82,7 +83,12 @@ async function createServer(
         return res.redirect(301, context.url);
       }
 
-      const html = template.replace(`<!--app-html-->`, appHtml);
+      const pageData = { url };
+      const dataHtml = `<script>window.pageData = ${jsesc(pageData)};</script>`;
+
+      const html = template
+        .replace(`<!--data-html-->`, dataHtml)
+        .replace(`<!--app-html-->`, appHtml);
 
       res.status(200).set({ 'Content-Type': 'text/html' }).end(html);
     } catch (e) {

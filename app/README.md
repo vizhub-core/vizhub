@@ -26,4 +26,3 @@ To deploy to Fargate:
 - SSH into the bastion host EC2 instance
 - Run the commands
 - First time only: create an ELB and Task Definition, associate them
-

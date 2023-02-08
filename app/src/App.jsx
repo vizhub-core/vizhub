@@ -1,18 +1,12 @@
 // Inspired by https://github.com/vitejs/vite-plugin-react/blob/main/playground/ssr-react/src/App.jsx
 import { Link, Route, Routes } from 'react-router-dom';
+import { About } from './pages/About';
+import { Home } from './pages/Home';
 
-// Auto generates routes from files under ./pages
-// https://vitejs.dev/guide/features.html#glob-import
-const pages = import.meta.glob('./pages/*.jsx', { eager: true });
-
-const routes = Object.keys(pages).map((path) => {
-  const name = path.match(/\.\/pages\/(.*)\.jsx$/)[1];
-  return {
-    name,
-    path: name === 'Home' ? '/' : `/${name.toLowerCase()}`,
-    component: pages[path].default,
-  };
-});
+const routes = [
+  { name: 'About', path: '/about', component: About },
+  { name: 'Home', path: '/', component: Home },
+];
 
 // TODO bring in this nav
 //const Nav = () => (
