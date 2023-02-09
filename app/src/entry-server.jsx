@@ -7,6 +7,6 @@ export { pages } from './pages';
 export const render = (pageData) =>
   ReactDOMServer.renderToString(
     <StaticRouter location={pageData.url}>
-      <App pageData={pageData.url} />
+      <App pageData={pageData} />
     </StaticRouter>
   );

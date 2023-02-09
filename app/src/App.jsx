@@ -1,7 +1,7 @@
 // Inspired by
 // https://github.com/vitejs/vite-plugin-react/blob/main/playground/ssr-react/src/App.jsx
 // https://github.com/vizhub-core/vizhub/blob/main/vizhub-v2/packages/neoFrontend/src/App.js
-import { Link, Route, Routes } from 'react-router-dom';
+import { Link, Route, Routes, useLocation } from 'react-router-dom';
 import { pages } from './pages';
 
 // TODO bring in this nav
@@ -20,17 +20,25 @@ import { pages } from './pages';
 //);
 //
 
-export const App = ({ pageData }) => (
-  <Routes>
-    {pages.map((Page) => (
-      <Route
-        key={Page.path}
-        path={Page.path}
-        element={<Page pageData={pageData} />}
-      />
-    ))}
+export const App = ({ pageData }) => {
 
-    {/*
+  // Every time App renders client-side, there may have been a navigation.
+  const location = useLocation();
+  if (!import.meta.env.SSR && location.pathname !== pageData.url) {
+    console.log('Might need to fetch page data from client');
+  }
+
+  return (
+    <Routes>
+      {pages.map((Page) => (
+        <Route
+          key={Page.path}
+          path={Page.path}
+          element={<Page pageData={pageData} />}
+        />
+      ))}
+
+      {/*
                     <Route path="/404" component={NotFoundPage} />
                     <Route
                       path="/authenticated/:provider"
@@ -65,5 +73,6 @@ export const App = ({ pageData }) => (
                     <Route path="/:userName/account" component={AccountPage} />
                     <Route component={NotFoundPage} />
 	  */}
-  </Routes>
-);
+    </Routes>
+  );
+};
