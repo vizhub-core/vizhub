@@ -6,6 +6,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import express from 'express';
 import jsesc from 'jsesc';
+import { matchPath } from 'react-router-dom';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const resolve = (p) => path.resolve(__dirname, p);
@@ -65,20 +66,38 @@ async function createServer(
 
       // This part is directly copied from:
       // https://github.com/vitejs/vite-plugin-react/blob/main/playground/ssr-react/server.js
-      let template, render;
+      let template, render, pages;
       if (!isProd) {
         // always read fresh template in dev
         template = fs.readFileSync(resolve('index.html'), 'utf-8');
         template = await vite.transformIndexHtml(url, template);
-        render = (await vite.ssrLoadModule('/src/entry-server.jsx')).render;
+        const entry = await vite.ssrLoadModule('/src/entry-server.jsx');
+        render = entry.render;
+        pages = entry.pages;
       } else {
         template = indexProd;
         // @ts-ignore
-        render = (await import('./dist/server/entry-server.js')).render;
+        const entry = await import('./dist/server/entry-server.js');
+        render = entry.render;
+        pages = entry.pages;
       }
 
-      const pageData = { url };
+      // Match the route and fetch its data.
+      // From https://stackoverflow.com/questions/66265608/react-router-v6-get-path-pattern-for-current-route
+      let matchedPage;
+      for (const page of pages) {
+        if (matchPath({ path: page.path }, url)) {
+          matchedPage = page;
+        }
+      }
+      console.log('matched:');
+      console.log(matchedPage);
 
+      let pageData = {};
+      if (matchedPage && matchedPage.getPageData) {
+        pageData = await matchedPage.getPageData();
+      }
+      pageData.url = url;
       const appHtml = render(pageData);
 
       const dataHtml = `<script>window.pageData = ${jsesc(pageData)};</script>`;

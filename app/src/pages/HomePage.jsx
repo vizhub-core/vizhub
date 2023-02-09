@@ -12,3 +12,10 @@ export const HomePage = ({ pageData }) => {
     </ul>
   );
 };
+
+HomePage.path = '/';
+
+HomePage.getPageData = async () => {
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+  return { foo: 'bar' };
+};

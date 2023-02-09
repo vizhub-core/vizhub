@@ -2,3 +2,5 @@
 export const ProfilePage = () => {
   return 'Profile';
 };
+
+ProfilePage.path = '/:userName';

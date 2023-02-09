@@ -2,3 +2,5 @@
 export const AboutPage = () => {
   return 'About';
 };
+
+AboutPage.path = '/about';
