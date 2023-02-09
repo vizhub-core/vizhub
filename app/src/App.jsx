@@ -2,9 +2,10 @@
 // https://github.com/vitejs/vite-plugin-react/blob/main/playground/ssr-react/src/App.jsx
 // https://github.com/vizhub-core/vizhub/blob/main/vizhub-v2/packages/neoFrontend/src/App.js
 import { Link, Route, Routes } from 'react-router-dom';
-import { About } from './pages/About';
-import { Home } from './pages/Home';
-import { Profile } from './pages/Profile';
+import { AboutPage } from './pages/AboutPage';
+import { HomePage } from './pages/HomePage';
+import { ProfilePage } from './pages/ProfilePage';
+import { VizPage } from './pages/VizPage';
 
 // TODO bring in this nav
 //const Nav = () => (
@@ -25,12 +26,12 @@ export function App() {
   return (
     <>
       <Routes>
-        <Route path="/about" element={<About />} />
-        <Route path="/" element={<Home />} />
-        <Route path="/:userName" element={<Profile />} />
+        <Route path="/" element={<HomePage />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/:userName" element={<ProfilePage />} />
+        <Route path="/:userName/:vizId" component={VizPage} />
 
         {/*
-                    <Route path="/:userName/:vizId" component={VizPage} />
                     <Route path="/404" component={NotFoundPage} />
                     <Route
                       path="/authenticated/:provider"
