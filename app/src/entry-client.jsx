@@ -6,7 +6,7 @@ import { App } from './App';
 ReactDOM.hydrateRoot(
   document.getElementById('app'),
   <BrowserRouter>
-    <App />
+    <App pageData={window.pageData} />
   </BrowserRouter>
 );
 console.log('hydrated');

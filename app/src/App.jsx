@@ -21,17 +21,18 @@ import { VizPage } from './pages/VizPage';
 //    </ul>
 //  </nav>
 //);
+//
+const pages = [HomePage, AboutPage, ProfilePage, VizPage];
 
-export function App() {
-  return (
-    <>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/about" element={<AboutPage />} />
-        <Route path="/:userName" element={<ProfilePage />} />
-        <Route path="/:userName/:vizId" component={VizPage} />
+export const App = ({ pageData }) => (
+  <Routes>
+    {pages}
+    <Route path="/" element={<HomePage pageData={pageData} />} />
+    <Route path="/about" element={<AboutPage />} />
+    <Route path="/:userName" element={<ProfilePage />} />
+    <Route path="/:userName/:vizId" component={VizPage} />
 
-        {/*
+    {/*
                     <Route path="/404" component={NotFoundPage} />
                     <Route
                       path="/authenticated/:provider"
@@ -66,7 +67,5 @@ export function App() {
                     <Route path="/:userName/account" component={AccountPage} />
                     <Route component={NotFoundPage} />
 	  */}
-      </Routes>
-    </>
-  );
-}
+  </Routes>
+);

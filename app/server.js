@@ -63,6 +63,8 @@ async function createServer(
     try {
       const url = req.originalUrl;
 
+      // This part is directly copied from:
+      // https://github.com/vitejs/vite-plugin-react/blob/main/playground/ssr-react/server.js
       let template, render;
       if (!isProd) {
         // always read fresh template in dev
@@ -75,15 +77,10 @@ async function createServer(
         render = (await import('./dist/server/entry-server.js')).render;
       }
 
-      const context = {};
-      const appHtml = render(url, context);
-
-      if (context.url) {
-        // Somewhere a `<Redirect>` was rendered
-        return res.redirect(301, context.url);
-      }
-
       const pageData = { url };
+
+      const appHtml = render(pageData);
+
       const dataHtml = `<script>window.pageData = ${jsesc(pageData)};</script>`;
 
       const html = template

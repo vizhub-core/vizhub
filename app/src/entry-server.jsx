@@ -3,10 +3,9 @@ import ReactDOMServer from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom/server';
 import { App } from './App';
 
-export function render(url, context) {
-  return ReactDOMServer.renderToString(
-    <StaticRouter location={url} context={context}>
-      <App />
+export const render = (pageData) =>
+  ReactDOMServer.renderToString(
+    <StaticRouter location={pageData.url}>
+      <App pageData={pageData} />
     </StaticRouter>
   );
-}
