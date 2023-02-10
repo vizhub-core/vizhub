@@ -4,3 +4,9 @@ export const VizPage = () => {
 };
 
 VizPage.path = '/:userName/:vizId';
+
+VizPage.getPageData = async () => ({
+  // TODO replace this with the Viz title
+  title: 'TODO get viz title',
+  description: 'TODO get viz README rendered to plain text',
+});

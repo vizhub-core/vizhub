@@ -1,3 +1,5 @@
+import xss from 'xss';
+
 // Inspired by
 // https://github.com/vitejs/vite-plugin-react/blob/main/playground/ssr-react/server.js
 //
@@ -7,6 +9,7 @@ import { fileURLToPath } from 'url';
 import express from 'express';
 import jsesc from 'jsesc';
 import { matchPath } from 'react-router-dom';
+import { seoMetaTags } from './seoMetaTags.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const resolve = (p) => path.resolve(__dirname, p);
@@ -93,18 +96,29 @@ async function createServer(
       console.log('matched:');
       console.log(matchedPage);
 
-      let pageData = {};
-      if (matchedPage && matchedPage.getPageData) {
-        pageData = await matchedPage.getPageData();
-      }
+      const pageData = await matchedPage.getPageData();
       pageData.url = url;
-      const appHtml = render(pageData);
 
-      const dataHtml = `<script>window.pageData = ${jsesc(pageData)};</script>`;
+      const titleSanitized = xss(pageData.title);
+      const descriptionSanitized = xss(pageData.description);
+      const image = pageData.image;
 
       const html = template
-        .replace(`<!--data-html-->`, dataHtml)
-        .replace(`<!--app-html-->`, appHtml);
+        .replace(`<!--title-->`, titleSanitized)
+        .replace(
+          `<!--seo-meta-tags-->`,
+          seoMetaTags({
+            titleSanitized,
+            descriptionSanitized,
+            url,
+            image,
+          })
+        )
+        .replace(`<!--app-html-->`, render(pageData))
+        .replace(
+          `<!--data-html-->`,
+          `<script>window.pageData = ${jsesc(pageData)};</script>`
+        );
 
       res.status(200).set({ 'Content-Type': 'text/html' }).end(html);
     } catch (e) {

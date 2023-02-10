@@ -21,7 +21,6 @@ import { pages } from './pages';
 //
 
 export const App = ({ pageData }) => {
-
   // Every time App renders client-side, there may have been a navigation.
   const location = useLocation();
   if (!import.meta.env.SSR && location.pathname !== pageData.url) {

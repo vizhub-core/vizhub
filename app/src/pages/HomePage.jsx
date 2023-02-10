@@ -17,5 +17,10 @@ HomePage.path = '/';
 
 HomePage.getPageData = async () => {
   await new Promise((resolve) => setTimeout(resolve, 1000));
-  return { foo: 'bar' };
+  return {
+    foo: 'bar',
+    title: 'VizHub',
+    description:
+      'Learn to code interactive graphics &amp; data visualization with Web technologies!',
+  };
 };

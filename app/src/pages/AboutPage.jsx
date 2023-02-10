@@ -4,3 +4,7 @@ export const AboutPage = () => {
 };
 
 AboutPage.path = '/about';
+
+AboutPage.getPageData = async () => ({
+  title: 'About',
+});

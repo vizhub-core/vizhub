@@ -4,3 +4,7 @@ export const ProfilePage = () => {
 };
 
 ProfilePage.path = '/:userName';
+ProfilePage.getPageData = async () => ({
+  // TODO replace this with the user's name
+  title: 'Profile Page',
+});
