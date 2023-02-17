@@ -1,10 +1,10 @@
 {
-  "name": "entities",
+  "name": "gateways",
   "version": "1.0.0",
   "type": "module",
-  "main": "src/index.ts",
   "scripts": {
-    "test": "tsc src/index.ts --noEmit",
+    "tsc": "tsc src/*.ts test/*.ts --noEmit",
+    "test": "vitest",
     "prettier": "prettier {*.*,**/*.*} --single-quote --write"
   },
   "repository": {
@@ -18,9 +18,13 @@
   },
   "homepage": "https://github.com/vizhub-core/vizhub3#readme",
   "dependencies": {
+    "diff-match-patch": "^1.0.5",
+    "json0-ot-diff": "^1.1.2",
+    "ot-json1": "^1.0.2",
+    "vitest": "^0.28.5"
   },
   "devDependencies": {
-    "typescript": "^4.9.5",
-    "prettier": "^2.8.4"
+    "prettier": "^2.8.4",
+    "typescript": "^4.9.5"
   }
 }
