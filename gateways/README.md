@@ -17,3 +17,9 @@ Type checking:
 ```
 npm run tsc
 ```
+
+Or, in watch mode:
+
+```
+npm run tsc-watch
+```

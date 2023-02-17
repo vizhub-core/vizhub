@@ -68,6 +68,8 @@ export const primordialViz: Viz = {
     committed: true,
     commitAuthors: [],
     isFrozen: false,
+    forksCount: 0,
+    upvotesCount: 0
   },
   content: {
     id: 'viz1',

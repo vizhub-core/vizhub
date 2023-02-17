@@ -4,7 +4,10 @@
   "type": "module",
   "scripts": {
     "tsc": "tsc src/*.ts test/*.ts --noEmit",
-    "test": "vitest",
+    "test": "vitest run",
+    "watch-tsc": "npm run tsc -- --watch",
+    "watch-test-watch": "vitest",
+    "watch": "concurrently npm:watch-*",
     "prettier": "prettier {*.*,**/*.*} --single-quote --write"
   },
   "repository": {
@@ -24,6 +27,7 @@
     "vitest": "^0.28.5"
   },
   "devDependencies": {
+    "concurrently": "^7.6.0",
     "prettier": "^2.8.4",
     "typescript": "^4.9.5"
   }
