@@ -4,7 +4,9 @@
   "description": "The proprietary VizHub SaaS product codebase.",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "upgrade":"npm exec --workspaces -- ncu -u",
+    "prettier":"npm run --workspaces -- prettier",
+    "test":"npm run --workspaces -- test"
   },
   "repository": {
     "type": "git",

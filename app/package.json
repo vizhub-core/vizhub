@@ -4,7 +4,7 @@
   "description": "Full stack app for VizHub3, based in Vite SSR.",
   "type": "module",
   "scripts": {
-    "test": "npm test",
+    "test": "",
     "prettier": "prettier {*.*,**/*.*} --single-quote --write",
     "dev": "node server.js",
     "build": "npm run build:client && npm run build:server",
@@ -26,14 +26,14 @@
     "jsesc": "^3.0.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.8.0",
+    "react-router-dom": "^6.8.1",
     "xss": "^1.0.14"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^3.1.0",
     "compression": "^1.7.4",
     "express": "^4.18.2",
-    "prettier": "^2.8.3",
+    "prettier": "^2.8.4",
     "serve-static": "^1.15.0",
     "vite": "^4.1.1"
   }

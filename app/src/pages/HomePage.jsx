@@ -20,6 +20,6 @@ HomePage.getPageData = async () => {
   return {
     foo: 'bar',
     title: 'VizHub',
-    description: 'Viz your data'
+    description: 'Viz your data',
   };
 };

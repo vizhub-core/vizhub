@@ -6,7 +6,7 @@ Corresponds to the "gateways" concept from [Clean Architecture](https://blog.cle
 
 ### Development
 
-Unit tests: 
+Unit tests:
 
 ```
 npm test

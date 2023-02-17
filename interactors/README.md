@@ -8,7 +8,7 @@ The interactors can operate on an instance of `gateways`, whether that is `Memor
 
 ### Development
 
-Unit tests: 
+Unit tests:
 
 ```
 npm test
