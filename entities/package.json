@@ -1,23 +1,25 @@
 {
-  "name": "vizhub3",
+  "name": "entities",
   "version": "1.0.0",
-  "description": "The proprietary VizHub SaaS product codebase.",
-  "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "test"
+    "test": "tsc src/index.ts --noEmit",
+    "prettier": "prettier {*.*,**/*.*} --single-quote --write"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vizhub-core/vizhub3.git"
   },
-  "author": "Curran Kelleher, Datavis Tech INC.",
+  "author": "Curran Kelleher",
   "license": "UNLICENSED",
   "bugs": {
     "url": "https://github.com/vizhub-core/vizhub3/issues"
   },
   "homepage": "https://github.com/vizhub-core/vizhub3#readme",
-  "workspaces": [
-    "app",
-    "entities"
-  ]
+  "dependencies": {
+  },
+  "devDependencies": {
+    "typescript": "^4.9.5",
+    "prettier": "^2.8.4"
+  }
 }
