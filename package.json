@@ -20,6 +20,7 @@
     "app",
     "entities",
     "gateways",
-    "interactors"
+    "interactors",
+    "database"
   ]
 }

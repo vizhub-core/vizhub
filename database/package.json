@@ -1,0 +1,32 @@
+{
+  "name": "database",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "vitest run",
+    "watch": "vitest",
+    "prettier": "prettier {*.*,**/*.*} --single-quote --write"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vizhub-core/vizhub3.git"
+  },
+  "author": "Curran Kelleher",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/vizhub-core/vizhub3/issues"
+  },
+  "homepage": "https://github.com/vizhub-core/vizhub3#readme",
+  "dependencies": {
+    "d3-array": "^3.2.2",
+    "mongodb": "^5.0.1",
+    "mongodb-legacy": "^5.0.0",
+    "sharedb-mongo": "^2.0.0",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "prettier": "^2.8.4",
+    "vitest": "^0.28.5"
+  }
+}
