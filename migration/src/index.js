@@ -11,8 +11,8 @@ const migrate = async () => {
   const n = await vizCount(v2MongoDBDatabase);
 
   v2Vizzes(v2MongoDBDatabase, async (vizV2, i) => {
-    processViz(vizV2, databaseGateways);
-    reportProgress(i, n);
+    processViz({ vizV2, databaseGateways, i });
+    reportProgress({ i, n });
   });
 };
 

@@ -1,6 +1,6 @@
 import v8 from 'v8';
 let previousHeapSizeUsed;
-export const reportProgress = (i, n) => {
+export const reportProgress = ({ i, n }) => {
   if (i % 100 === 0) {
     console.log(
       '*******************************************************************'
