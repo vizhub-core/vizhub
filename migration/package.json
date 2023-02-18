@@ -4,8 +4,8 @@
   "type": "module",
   "main": "src/index.js",
   "scripts": {
-    "build": "vite build --ssr src/migrate.js",
-    "migrate": "npm run build && node dist/migrate.js",
+    "build": "vite build --ssr src/index.js --sourcemap",
+    "migrate": "npm run build && NODE_OPTIONS=--enable-source-maps node dist/index.js",
     "prettier": "prettier {*.*,**/*.*} --single-quote --write"
   },
   "repository": {
@@ -21,6 +21,7 @@
   "dependencies": {
     "mongodb": "^5.0.1",
     "mongodb-legacy": "^5.0.0",
+    "ot-json1": "^1.0.2",
     "sharedb-mongo": "^2.0.0"
   },
   "devDependencies": {

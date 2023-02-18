@@ -2,6 +2,7 @@
 *.svg
 *.sh
 *.ico
+*.pem
 .prettierignore
 .gitignore
 dist
