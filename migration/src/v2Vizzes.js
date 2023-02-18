@@ -10,6 +10,8 @@ export const v2Vizzes = (v2MongoDBDatabase, callback) => {
   // just so we don't DOS the production VizHub DB!
   const wait = 400;
 
+  let previousLastUpdatedTimestamp = 0;
+
   // So after 30 minutes, it looks like the cursor expires.
   // (the cursor in the infoCollection.find() async iterator)
   // Solution: catch the error and restart iteration when it happens.
@@ -27,10 +29,13 @@ export const v2Vizzes = (v2MongoDBDatabase, callback) => {
           continue;
         }
 
-        const content = await contentCollection.findOne({ _id: id });
+        // Invariant: we are always moving forward in time.
+        if (info.lastUpdatedTimestamp < previousLastUpdatedTimestamp) {
+          throw new Error('Not iterating in creation order!');
+          previousLastUpdatedTimestamp = info.lastUpdatedTimestamp;
+        }
 
-        //    console.log(JSON.stringify(info, null, 2));
-        //    console.log(JSON.stringify(content, null, 2));
+        const content = await contentCollection.findOne({ _id: id });
 
         // Get ops associated with this viz only.
         // That is tracked as op.d (a ShareDB data structure)
