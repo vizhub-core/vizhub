@@ -1,17 +1,19 @@
 import { mongoDBSetup } from './mongoDBSetup';
 import { v2Vizzes } from './v2Vizzes';
+import { vizCount } from './vizCount';
+import { processViz } from './processViz';
+import { reportProgress } from './reportProgress';
 
 const migrate = async () => {
   const { v2MongoDBDatabase, v3MongoDBDatabase, databaseGateways } =
     await mongoDBSetup();
 
-  v2Vizzes(v2MongoDBDatabase, async (vizV2) => {
-    const { info, content, ops } = vizV2;
-    const { id } = info;
-    // Sometimes titles have leading or trailing spaces.
-    const title = info.title.trim();
+  const n = await vizCount(v2MongoDBDatabase);
 
-    console.log('Processing viz ' + id + ' ' + title);
+  v2Vizzes(v2MongoDBDatabase, async (vizV2, i) => {
+    processViz(vizV2, databaseGateways);
+    reportProgress(i, n);
   });
 };
+
 migrate();

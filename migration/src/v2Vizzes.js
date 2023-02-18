@@ -1,4 +1,5 @@
 // Iterates over V2 vizzes straight out of Mongo.
+let i = 0;
 export const v2Vizzes = (v2MongoDBDatabase, callback) => {
   // V2 collections
   const infoCollection = v2MongoDBDatabase.collection('documentInfo');
@@ -8,7 +9,7 @@ export const v2Vizzes = (v2MongoDBDatabase, callback) => {
 
   // Wait time between viz fetches,
   // just so we don't DOS the production VizHub DB!
-  const wait = 400;
+  const wait = 200;
 
   let previousLastUpdatedTimestamp = 0;
 
@@ -47,7 +48,7 @@ export const v2Vizzes = (v2MongoDBDatabase, callback) => {
         // Wait at least `wait` ms.
         await Promise.all([
           new Promise((resolve) => setTimeout(resolve, wait)),
-          callback({ info, content, ops }),
+          callback({ info, content, ops }, i++),
         ]);
       }
 
