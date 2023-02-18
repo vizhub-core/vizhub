@@ -4,9 +4,9 @@
   "description": "The proprietary VizHub SaaS product codebase.",
   "main": "index.js",
   "scripts": {
-    "upgrade":"npm exec --workspaces -- ncu -u",
-    "prettier":"npm run --workspaces -- prettier",
-    "test":"npm run --workspaces -- test"
+    "upgrade": "npm exec --workspaces -- ncu -u",
+    "prettier": "npm run --workspaces -- prettier",
+    "test": "npm run --workspaces -- test"
   },
   "repository": {
     "type": "git",
@@ -24,5 +24,10 @@
     "gateways",
     "interactors",
     "database"
-  ]
+  ],
+  "dependencies": {
+    "mongodb-legacy": "^5.0.0",
+    "sharedb": "^3.2.3",
+    "sharedb-mongo": "^2.0.0"
+  }
 }

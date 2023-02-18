@@ -1,10 +1,6 @@
 import ShareDB from 'sharedb';
 import ShareDBMongo from 'sharedb-mongo';
-
-// We need to use mongodb-legacy because
-// ShareDB uses the callback-based API.
-// See https://github.com/mongodb/node-mongodb-native/blob/HEAD/etc/notes/CHANGES_5.0.0.md#optional-callback-support-migrated-to-mongodb-legacy
-import mongodb from 'mongodb-legacy';
+import { MongoClient } from 'mongodb-legacy';
 import * as json1 from 'ot-json1';
 import { describe, it, expect } from 'vitest';
 import { setInitGateways, gatewaysTests } from 'gateways/test';
@@ -17,6 +13,7 @@ ShareDB.types.register(json1.type);
 // See:
 //   https://share.github.io/sharedb/getting-started
 //   https://github.com/share/sharedb-mongo
+//   https://github.com/mongodb/node-mongodb-native/blob/HEAD/etc/notes/CHANGES_5.0.0.md#optional-callback-support-migrated-to-mongodb-legacy
 const mongoURIDefault = 'mongodb://localhost:27017/vizhub-testing';
 const mongoURI = mongoURIDefault;
 //const mongoURI = import.meta.env.VIZHUB_MONGO_URI || mongoURIDefault;
@@ -33,7 +30,7 @@ const timeout = setTimeout(() => {
   console.log('    sudo service mongod start\n');
 }, 4000);
 
-const mongoClient = new mongodb.MongoClient(mongoURI, {
+const mongoClient = new MongoClient(mongoURI, {
   useUnifiedTopology: true,
 });
 const mongoDBConnection = await mongoClient.connect();
