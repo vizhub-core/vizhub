@@ -1,6 +1,4 @@
-// This function accepts as input an array of numbers
-// and returns as output a byte representation that Redis accepts.
-const tobytes = (array) => Buffer.from(new Float32Array(array).buffer);
+import { tobytes } from './redisSetup';
 
 export const storeEmbedding = async ({
   redisClient,

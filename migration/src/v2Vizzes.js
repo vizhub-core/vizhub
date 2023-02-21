@@ -1,16 +1,9 @@
 // Iterates over V2 vizzes straight out of Mongo.
 let i = 0;
-export const v2Vizzes = (v2MongoDBDatabase, callback) => {
-  // V2 collections
-  const infoCollection = v2MongoDBDatabase.collection('documentInfo');
-  const contentCollection = v2MongoDBDatabase.collection('documentContent');
-  const infoOpCollection = v2MongoDBDatabase.collection('o_documentInfo');
-  const contentOpCollection = v2MongoDBDatabase.collection('o_documentContent');
-
-  // Wait time between viz fetches,
-  // just so we don't DOS the production VizHub DB!
-  const wait = 200;
-
+export const v2Vizzes = (
+  { infoCollection, contentCollection, infoOpCollection, contentOpCollection },
+  callback
+) => {
   let previousLastUpdatedTimestamp = 0;
 
   // So after 30 minutes, it looks like the cursor expires.
@@ -35,24 +28,7 @@ export const v2Vizzes = (v2MongoDBDatabase, callback) => {
           throw new Error('Not iterating in creation order!');
           previousLastUpdatedTimestamp = info.lastUpdatedTimestamp;
         }
-
-        // TODO for incremental migration,
-        // move this out so it only happens if processing is needed.
-        // Same for ops.
-        const content = await contentCollection.findOne({ _id: id });
-
-        // Get ops associated with this viz only.
-        // That is tracked as op.d (a ShareDB data structure)
-        const ops = [];
-        for await (const op of await contentOpCollection.find({ d: id })) {
-          ops.push(op);
-        }
-
-        // Wait at least `wait` ms.
-        await Promise.all([
-          new Promise((resolve) => setTimeout(resolve, wait)),
-          callback({ info, content, ops }, i++),
-        ]);
+        await callback(info, i++);
       }
 
       console.log('\n\nFinished!');
@@ -60,7 +36,7 @@ export const v2Vizzes = (v2MongoDBDatabase, callback) => {
       console.log('\n\nError happened');
       console.log(error);
       console.log('\n\nRestarting...');
-      await new Promise((resolve) => setTimeout(resolve, wait));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       resetCursor();
     }
   };

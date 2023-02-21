@@ -1,21 +1,15 @@
 import { logDetail } from './logDetail';
 import { generateEmbedding } from './generateEmbedding';
 import { storeEmbedding } from './storeEmbedding';
-
-// Check if files is even usable.
-const filesAreValid = (contentV2) =>
-  contentV2.files && contentV2.files.length > 0;
-
-// Exclude bundle.js in our analysis.
-// It contains noise like sourcemaps and transpiled JSX.
-const getGoodFiles = (files) =>
-  files.filter((file) => file.name !== 'bundle.js');
+import { computeForkedFrom } from './computeForkedFrom';
+import { isolateGoodFiles } from './isolateGoodFiles';
 
 export const processViz = async ({
   vizV2,
   databaseGateways,
   i,
   redisClient,
+  contentCollection,
 }) => {
   const { info, content, ops } = vizV2;
   const { id, createdTimestamp } = info;
@@ -25,13 +19,8 @@ export const processViz = async ({
 
   logDetail(`Processing viz #${i}: ${id} ${title} `);
 
-  if (!filesAreValid(content)) {
-    logDetail(`  No files, skipping...`);
-    return;
-  }
-
-  const goodFiles = getGoodFiles(content.files);
-  if (goodFiles.length === 0) {
+  const goodFiles = isolateGoodFiles(content);
+  if (!goodFiles) {
     console.log('  No good files, skipping.');
     return;
   }
@@ -43,5 +32,15 @@ export const processViz = async ({
     timestamp: createdTimestamp,
   });
 
-  console.log('stored embedding');
+  const isPrimordialViz = i === 0;
+
+  const { forkedFrom, forkedFromIsBackfilled } = await computeForkedFrom({
+    isPrimordialViz,
+    vizV2,
+    contentCollection,
+    embedding,
+    redisClient,
+  });
+
+  console.log({ forkedFrom, forkedFromIsBackfilled });
 };

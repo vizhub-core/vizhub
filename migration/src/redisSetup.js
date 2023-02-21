@@ -1,6 +1,12 @@
 import { createClient } from 'redis';
 
-export const redisSetup = async (idx = 'idx:vizhub-migration-3') => {
+export const idx = 'idx:vizhub-migration-3';
+
+// This function accepts as input an array of numbers
+// and returns as output a byte representation that Redis accepts.
+export const tobytes = (array) => Buffer.from(new Float32Array(array).buffer);
+
+export const redisSetup = async () => {
   const client = createClient();
   await client.connect();
   // Create an index...
