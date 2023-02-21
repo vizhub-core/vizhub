@@ -22,6 +22,16 @@ Encryption at rest is enabled.
 
 Encryption in transit is enabled.
 
+This works:
+```
+var client = MongoClient.connect(
+'mongodb://Administrator:letmein!@vizhub3proddb.cluster-cb4txtpp8ror.us-east-1.docdb.amazonaws.com:27017/?tls=true&replicaSet=rs0&readPreference=secondaryPreferred&retryWrites=false',
+{
+  tlsCAFile: `rds-combined-ca-bundle.pem` //Specify the DocDB; cert
+},
+```
+
+
 ### AWS MemoryDB (Redis) Setup
 
 Encryption at rest is enabled.
