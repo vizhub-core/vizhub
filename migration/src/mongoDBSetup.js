@@ -6,7 +6,7 @@ import { DatabaseGateways } from 'database';
 
 ShareDB.types.register(json1.type);
 
-const { MongoClient } = MongoDB;
+const { MongoClient, ServerApiVersion } = MongoDB;
 const v2MongoURI = import.meta.env.VITE_VIZHUB_V2_MONGO_URI;
 const v3MongoURI = import.meta.env.VITE_VIZHUB_V3_MONGO_URI;
 
@@ -27,11 +27,17 @@ export const mongoDBSetup = async () => {
   const v2MongoDBConnection = await v2MongoClient.connect();
   const v2MongoDBDatabase = await v2MongoDBConnection.db();
 
+  const credentials = 'X509-cert-6205860848857148202.pem';
+
   const v3MongoClient = new MongoClient(v3MongoURI, {
-    // Specify the AWS DocumentDB cert
-    // See https://us-east-1.console.aws.amazon.com/docdb/home?region=us-east-1#cluster-details/vizhub3proddb
-    tlsCAFile: `rds-combined-ca-bundle.pem`,
+    sslKey: credentials,
+    sslCert: credentials,
+    serverApi: ServerApiVersion.v1,
   });
+  //    // Specify the AWS DocumentDB cert
+  //    // See https://us-east-1.console.aws.amazon.com/docdb/home?region=us-east-1#cluster-details/vizhub3proddb
+  //    tlsCAFile: `rds-combined-ca-bundle.pem`,
+  //  });
   const v3MongoDBConnection = await v3MongoClient.connect();
   const v3MongoDBDatabase = await v3MongoDBConnection.db();
 

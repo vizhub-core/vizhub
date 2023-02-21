@@ -26,7 +26,8 @@
     "mongodb-legacy": "^5.0.0",
     "ot-json1": "^1.0.2",
     "redis": "^4.6.4",
-    "sharedb-mongo": "^2.0.0"
+    "sharedb-mongo": "^2.0.0",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "prettier": "^2.8.4"

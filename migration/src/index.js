@@ -4,6 +4,7 @@ import { v2Vizzes } from './v2Vizzes';
 import { getVizV2 } from './getVizV2';
 import { processViz } from './processViz';
 import { reportProgress } from './reportProgress';
+import { computeV3Files } from './computeV3Files';
 
 const migrate = async () => {
   const { v2MongoDBDatabase, v3MongoDBDatabase, databaseGateways } =
@@ -25,10 +26,10 @@ const migrate = async () => {
     },
     async (info, i) => {
       // #1432 is the first the needs forkedFrom computed.
-      if (i < 1432) {
-        console.log('skipping ' + i);
-        return;
-      }
+      // if (i < 1432) {
+      //   console.log('skipping ' + i);
+      //   return;
+      // }
 
       const vizV2 = await getVizV2({
         info,
@@ -39,7 +40,7 @@ const migrate = async () => {
 
       await processViz({
         vizV2,
-        databaseGateways,
+        gateways: databaseGateways,
         i,
         redisClient,
         contentCollection,
