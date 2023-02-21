@@ -1,5 +1,6 @@
 import { logDetail } from './logDetail';
 import { generateEmbedding } from './generateEmbedding';
+import { storeEmbedding } from './storeEmbedding';
 
 // Check if files is even usable.
 const filesAreValid = (contentV2) =>
@@ -10,9 +11,14 @@ const filesAreValid = (contentV2) =>
 const getGoodFiles = (files) =>
   files.filter((file) => file.name !== 'bundle.js');
 
-export const processViz = async ({ vizV2, databaseGateways, i }) => {
+export const processViz = async ({
+  vizV2,
+  databaseGateways,
+  i,
+  redisClient,
+}) => {
   const { info, content, ops } = vizV2;
-  const { id } = info;
+  const { id, createdTimestamp } = info;
 
   // Sometimes titles have leading or trailing spaces.
   const title = info.title.trim();
@@ -30,5 +36,12 @@ export const processViz = async ({ vizV2, databaseGateways, i }) => {
     return;
   }
   const embedding = await generateEmbedding(goodFiles);
-  console.log(embedding);
+  await storeEmbedding({
+    redisClient,
+    id,
+    embedding,
+    timestamp: createdTimestamp,
+  });
+
+  console.log('stored embedding');
 };

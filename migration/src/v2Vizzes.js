@@ -36,6 +36,9 @@ export const v2Vizzes = (v2MongoDBDatabase, callback) => {
           previousLastUpdatedTimestamp = info.lastUpdatedTimestamp;
         }
 
+        // TODO for incremental migration,
+        // move this out so it only happens if processing is needed.
+        // Same for ops.
         const content = await contentCollection.findOne({ _id: id });
 
         // Get ops associated with this viz only.
