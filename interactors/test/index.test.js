@@ -11,6 +11,7 @@ import { getContentAtCommitTest } from './getContentAtCommitTest';
 import { getContentAtTimestampTest } from './getContentAtTimestampTest';
 import { commitVizTest } from './commitVizTest';
 import { forkVizTest } from './forkVizTest';
+import { upvoteTest } from './upvoteTest';
 
 describe('Interactors', () => {
   findOrCreateUserTest();
@@ -20,6 +21,7 @@ describe('Interactors', () => {
   getContentAtTimestampTest();
   commitVizTest();
   forkVizTest();
+  upvoteTest();
   // TODO allow to specify a timestamp
   // Why? Useful for migration
   // Let forkedFromContent = getContentAtTimestamp(viz.forkedFrom, viz.created)

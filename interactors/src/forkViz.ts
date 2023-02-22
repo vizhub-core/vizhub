@@ -22,8 +22,8 @@ import { CommitViz } from './commitViz';
 //  * Less common cases:
 //    * Fork from any commit, if forkedFromCommitId is provided.
 //    * If uncommitted, the viz is committed first then forked.
-// * See also
-//   https://gitlab.com/curran/vizhub-ee/-/blob/main/vizhub-ee-interactors/src/ForkVizEE.ts
+//  * See also
+//    https://gitlab.com/curran/vizhub-ee/-/blob/main/vizhub-ee-interactors/src/ForkVizEE.ts
 export const ForkViz = (gateways: Gateways) => {
   const { saveCommit, getInfo } = gateways;
   const saveViz = SaveViz(gateways);

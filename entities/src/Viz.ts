@@ -108,10 +108,6 @@ export interface Info {
   forksCount: number;
 
   // How many upvotes this viz has.
-  // TODO
-  //  * Update this in:
-  //    * CreateUpvote
-  //    * DeleteUpvote
   upvotesCount: number;
 }
 
