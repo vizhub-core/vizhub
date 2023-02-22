@@ -1,5 +1,5 @@
 import { Gateways, Result, ok, err, Success } from 'gateways';
-import { VizId, Info, Timestamp, UserId, UpvoteId } from 'entities';
+import { VizId, Info, Timestamp, UserId, UpvoteId, Upvote } from 'entities';
 import { generateId } from './generateId';
 
 // upvoteViz
@@ -14,7 +14,6 @@ export const UpvoteViz = (gateways: Gateways) => {
     timestamp: Timestamp;
   }): Promise<Result<Success>> => {
     const { id, user, viz, timestamp } = options;
-    const upvoteId = generateId();
 
     // Get the info for the viz we are upvoting.
     // TODO consider locking as this is a "critical section"?
@@ -24,15 +23,24 @@ export const UpvoteViz = (gateways: Gateways) => {
     const infoResult = await getInfo(viz);
     if (infoResult.outcome === 'failure') return err(infoResult.error);
     const info = infoResult.value.data;
-
     const newInfo: Info = {
       ...info,
       upvotesCount: info.upvotesCount + 1,
     };
-
     const saveInfoResult = await saveInfo(newInfo);
     if (saveInfoResult.outcome !== 'success') return saveInfoResult;
 
-    return ok('success');
+    // Save the upvote
+    const upvoteId = generateId();
+    const newUpvote: Upvote = {
+      id: upvoteId,
+      user,
+      viz,
+      timestamp,
+    };
+    const saveUpvoteResult = await saveUpvote(newUpvote);
+    if (saveUpvoteResult.outcome !== 'success') return saveUpvoteResult;
+
+    return ok(upvoteId);
   };
 };
