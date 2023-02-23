@@ -9,7 +9,6 @@ export const GetContentAtCommit =
     const { getCommitAncestors, getMilestone, saveMilestone, saveCommit } =
       gateways;
 
-
     // TODO bring back milestones
     //const commitsResult = await getCommitAncestors(id, true);
     const commitsResult = await getCommitAncestors(id);
