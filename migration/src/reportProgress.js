@@ -1,7 +1,7 @@
 import v8 from 'v8';
 let previousHeapSizeUsed;
-export const reportProgress = ({ i, n }) => {
-  if (i % 100 === 0) {
+export const reportProgress = async ({ i, n }) => {
+  if (i % 100 === 99) {
     console.log(
       '*******************************************************************'
     );
@@ -36,5 +36,6 @@ export const reportProgress = ({ i, n }) => {
     previousHeapSizeUsed = heap.used_heap_size;
     console.log();
     console.log();
+    await new Promise((resolve) => setTimeout(resolve, 5000));
   }
 };

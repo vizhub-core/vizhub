@@ -13,7 +13,7 @@ const v3MongoURI = import.meta.env.VITE_VIZHUB_V3_MONGO_URI;
 // TODO consider unifying this logic between
 // database tests and this file.
 // We'll also need it for the API server.
-export const mongoDBSetup = async () => {
+export const mongoDBSetup = async (startFresh) => {
   console.log(`Connecting to MongoDB`);
   console.log(`  Using v2 Mongo URI "${v2MongoURI}".`);
   console.log(`  Using v3 Mongo URI "${v3MongoURI}".`);
@@ -56,6 +56,10 @@ export const mongoDBSetup = async () => {
 
   await v2MongoDBDatabase.command({ ping: 1 });
   await v3MongoDBDatabase.command({ ping: 1 });
+
+  if (startFresh) {
+    await v3MongoDBDatabase.dropDatabase();
+  }
 
   console.log('Connected successfully to MongoDB!');
   return { v2MongoDBDatabase, v3MongoDBDatabase, databaseGateways };

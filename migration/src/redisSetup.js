@@ -6,13 +6,17 @@ export const idx = 'idx:vizhub-migration-3';
 // and returns as output a byte representation that Redis accepts.
 export const tobytes = (array) => Buffer.from(new Float32Array(array).buffer);
 
-export const redisSetup = async () => {
-  const client = createClient();
-  await client.connect();
+export const redisSetup = async (startFresh) => {
+  const redisClient = createClient();
+  await redisClient.connect();
+  if (startFresh) {
+    await redisClient.sendCommand(['FLUSHALL']);
+  }
+
   // Create an index...
   try {
     // Documentation: https://redis.io/docs/stack/search/reference/vectors/
-    await client.sendCommand([
+    await redisClient.sendCommand([
       'FT.CREATE',
       idx,
       'SCHEMA',
@@ -40,5 +44,5 @@ export const redisSetup = async () => {
       process.exit(1);
     }
   }
-  return client;
+  return redisClient;
 };

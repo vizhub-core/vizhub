@@ -1,5 +1,4 @@
 // Iterates over V2 vizzes straight out of Mongo.
-let i = 0;
 export const v2Vizzes = (
   { infoCollection, contentCollection, infoOpCollection, contentOpCollection },
   callback
@@ -11,6 +10,7 @@ export const v2Vizzes = (
   // Solution: catch the error and restart iteration when it happens.
   const resetCursor = async () => {
     try {
+      let i = 0;
       for await (const info of await infoCollection.find()) {
         const id = info.id;
         if (id === undefined) {
@@ -36,7 +36,7 @@ export const v2Vizzes = (
       console.log('\n\nError happened');
       console.log(error);
       console.log('\n\nRestarting...');
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 5000));
       resetCursor();
     }
   };

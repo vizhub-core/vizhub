@@ -1,15 +1,28 @@
-import { generateId, SaveViz, ForkViz, GetViz, CommitViz } from 'interactors';
+import { timeMinute } from 'd3';
+import json0 from 'ot-json0';
+import {
+  generateId,
+  SaveViz,
+  ForkViz,
+  GetViz,
+  CommitViz,
+  UpvoteViz,
+} from 'interactors';
+import { timestampToDate, dateToTimestamp } from 'entities';
 import { diff } from 'gateways';
 import { logDetail } from './logDetail';
 import { generateEmbedding } from './generateEmbedding';
 import { storeEmbedding } from './storeEmbedding';
 import { computeForkedFrom } from './computeForkedFrom';
-import { isolateGoodFiles } from './isolateGoodFiles';
+import { isolateGoodFiles, getGoodFiles } from './isolateGoodFiles';
 import { computeV3Files } from './computeV3Files';
+import { removeEmoji } from './removeEmoji';
 
 // Default height in pixels for vizzes.
 // In V3 data model, height is always explicit.
 const defaultHeight = 500;
+
+const every15Min = timeMinute.every(15);
 
 export const processViz = async ({
   vizV2,
@@ -32,12 +45,6 @@ export const processViz = async ({
     return;
   }
   const embedding = await generateEmbedding(goodFiles);
-  await storeEmbedding({
-    redisClient,
-    id,
-    embedding,
-    timestamp: createdTimestamp,
-  });
 
   const isPrimordialViz = i === 0;
 
@@ -47,6 +54,13 @@ export const processViz = async ({
     contentCollection,
     embedding,
     redisClient,
+  });
+
+  await storeEmbedding({
+    redisClient,
+    id,
+    embedding,
+    timestamp: createdTimestamp,
   });
 
   //  console.log({ forkedFrom, forkedFromIsBackfilled });
@@ -60,14 +74,16 @@ export const processViz = async ({
       // which should put it automatically in the users's
       // "home view" above all folders.
       //folder: 'TODO figure out folder here!',
-      title: vizV2.info.title,
+      title: title,
       forkedFrom,
       forkedFromIsBackfilled,
-      forksCount: 0, // This will be incremented later
+      // This will be incremented later
+      forksCount: 0,
       created: vizV2.info.createdTimestamp,
       updated: vizV2.info.lastUpdatedTimestamp,
       visibility: vizV2.info.privacy || 'public',
-      upvotesCount: vizV2.info.upvotes ? vizV2.info.upvotes.length : 0,
+      // This will be incremented later
+      upvotesCount: 0,
     },
     content: {
       id: vizV2.info.id,
@@ -78,14 +94,6 @@ export const processViz = async ({
 
   if (forkedFromIsBackfilled) {
     vizV3.info.forkedFromIsBackfilled = forkedFromIsBackfilled;
-  }
-
-  if (vizV3.info.upvotesCount > 0) {
-    logDetail(`TODO migrate ${vizV2.info.upvotes.length} upvotes`);
-    for (const upvote of vizV2.info.upvotes) {
-      console.log(upvote);
-    }
-    process.exit();
   }
 
   const {
@@ -99,6 +107,7 @@ export const processViz = async ({
   const forkViz = ForkViz(gateways);
   const getViz = GetViz(gateways);
   const commitViz = CommitViz(gateways);
+  const upvoteViz = UpvoteViz(gateways);
 
   if (isPrimordialViz) {
     console.log('  This is the primordial viz!');
@@ -115,12 +124,6 @@ export const processViz = async ({
     // Compute migrated V3 files from V2 files
     vizV3.content.files = computeV3Files(goodFiles);
 
-    const primordialMilestone = {
-      id: generateId(),
-      commit: primordialCommitId,
-      content: vizV3.content,
-    };
-
     // The first ever commit.
     // Special because it's the only with no parentCommitId.
     const primordialCommit = {
@@ -129,12 +132,11 @@ export const processViz = async ({
       authors: [vizV2.info.owner],
       timestamp: vizV2.info.createdTimestamp,
       ops: diff({}, vizV3.content),
-      milestone: primordialMilestone.id,
+      milestone: null,
     };
 
     await saveCommit(primordialCommit);
 
-    await saveMilestone(primordialMilestone);
     const saveVizResult = await saveViz(vizV3);
     console.log('    Saved primordial commit and viz!');
     //          console.log((await getCommit(primordialCommitId)).value);
@@ -145,6 +147,7 @@ export const processViz = async ({
     // It was not working correctly - some commits had no parents.
   } else {
     // Fork the forkedFrom viz.
+    // TODO fork from specific timestamp
     const forkResult = await forkViz({
       newOwner: vizV2.info.owner,
       forkedFrom,
@@ -208,12 +211,14 @@ export const processViz = async ({
       vizV3Forked.info = { ...vizV3Forked.info, ...vizV3.info };
       vizV3Forked.content = { ...vizV3Forked.content, ...vizV3.content };
 
+      // Kludge: special case fix for strange emoji-related unicode diff error.
+      vizV3Forked = removeEmoji(vizV3Forked);
       await saveViz(vizV3Forked);
       const commitVizResult = await commitViz(vizV3Forked.info.id);
 
       //await new Promise((resolve) => setTimeout(resolve, 10000000));
     } else {
-      await play(soundHiHat);
+      //await play(soundHiHat);
       logDetail(
         '  Op history is valid! Reconstructing history from ' +
           ops.length +
@@ -238,7 +243,7 @@ export const processViz = async ({
       let opTimestamp;
 
       const commitChanges = async ({ goodFiles, commitTimestamp }) => {
-        await play(soundHiHatTiny);
+        //await play(soundHiHatTiny);
         //await new Promise((resolve) =>
         //  setTimeout(resolve, uncommittedChanges)
         //);
@@ -255,9 +260,7 @@ export const processViz = async ({
         vizV3Forked.content = { ...vizV3Forked.content, ...vizV3.content };
 
         // Kludge: special case fix for strange emoji-related unicode diff error.
-        if (i === 14694) {
-          vizV3Forked = removeEmoji(vizV3Forked);
-        }
+        vizV3Forked = removeEmoji(vizV3Forked);
 
         await saveViz(vizV3Forked);
         const commitVizResult = await commitViz(vizV3Forked.info.id);
@@ -325,6 +328,19 @@ export const processViz = async ({
       }
       logDetail('  Done reconstructing history!');
       //await new Promise((resolve) => setTimeout(resolve, 1000));
+    }
+  }
+
+  // Migrate upvotes
+  if (vizV2.info.upvotes && vizV2.info.upvotes.length > 0) {
+    logDetail(`Migrating ${vizV2.info.upvotes.length} upvotes`);
+    for (const upvote of vizV2.info.upvotes) {
+      const { userId, timestamp } = upvote;
+      await upvoteViz({
+        viz: id,
+        user: userId,
+        timestamp,
+      });
     }
   }
 };

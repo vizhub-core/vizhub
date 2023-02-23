@@ -6,11 +6,12 @@ import { processViz } from './processViz';
 import { reportProgress } from './reportProgress';
 import { computeV3Files } from './computeV3Files';
 
+// Delete everything in V3 Mongo and Redis when starting.
 const startFresh = true;
 
 const migrate = async () => {
   const { v2MongoDBDatabase, v3MongoDBDatabase, databaseGateways } =
-    await mongoDBSetup();
+    await mongoDBSetup(startFresh);
 
   // V2 collections
   const infoCollection = v2MongoDBDatabase.collection('documentInfo');
@@ -18,13 +19,7 @@ const migrate = async () => {
   const infoOpCollection = v2MongoDBDatabase.collection('o_documentInfo');
   const contentOpCollection = v2MongoDBDatabase.collection('o_documentContent');
 
-  const redisClient = await redisSetup();
-
-  // Delete everything.
-  if (startFresh) {
-    await v3MongoDBDatabase.dropDatabase();
-    await client.sendCommand(['FLUSHALL']);
-  }
+  const redisClient = await redisSetup(startFresh);
 
   const n = await infoCollection.count();
 
@@ -34,13 +29,20 @@ const migrate = async () => {
     },
     async (info, i) => {
       // #1432 is the first the needs forkedFrom computed.
-      // if (i < 1432) {
-      //   console.log('skipping ' + i);
-      //   return;
-      // }
-      // # 962 failed with:
-      // MongoExpiredSessionError: Use of expired sessions is not permitted
-      // Changed MongoDB driver to v4
+      // #15358 fails with emoji (viz id b091d7e3133748368c4999ecac1f3569)
+      //
+      //
+      //if (i < 15357) {
+      //  return;
+      //}
+
+      // True if this viz has already been migrated.
+      const alreadyMigrated =
+        (await databaseGateways.getInfo(info.id)).outcome === 'success';
+      if (alreadyMigrated) {
+        console.log('skipping already migrated #' + i);
+        return;
+      }
 
       const vizV2 = await getVizV2({
         info,
@@ -57,7 +59,7 @@ const migrate = async () => {
         contentCollection,
       });
 
-      reportProgress({ i, n });
+      await reportProgress({ i, n });
     }
   );
 };

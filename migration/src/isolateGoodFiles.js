@@ -4,7 +4,7 @@ const filesAreValid = (contentV2) =>
 
 // Exclude bundle.js in our analysis.
 // It contains noise like sourcemaps and transpiled JSX.
-const getGoodFiles = (files) =>
+export const getGoodFiles = (files) =>
   files.filter((file) => file.name !== 'bundle.js');
 
 export const isolateGoodFiles = (content) => {
