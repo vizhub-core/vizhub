@@ -27,7 +27,7 @@ export const mongoDBSetup = async () => {
   const v2MongoDBConnection = await v2MongoClient.connect();
   const v2MongoDBDatabase = await v2MongoDBConnection.db();
 
-  const credentials = 'X509-cert-6205860848857148202.pem';
+  const credentials = 'X509-cert.pem';
 
   const v3MongoClient = new MongoClient(v3MongoURI, {
     sslKey: credentials,
