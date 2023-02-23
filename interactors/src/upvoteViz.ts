@@ -13,7 +13,7 @@ export const UpvoteViz = (gateways: Gateways) => {
     viz: VizId;
     timestamp: Timestamp;
   }): Promise<Result<Success>> => {
-    const { id, user, viz, timestamp } = options;
+    const { user, viz, timestamp } = options;
 
     // Get the info for the viz we are upvoting.
     // TODO consider locking as this is a "critical section"?
