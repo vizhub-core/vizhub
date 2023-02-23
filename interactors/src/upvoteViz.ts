@@ -20,6 +20,9 @@ export const UpvoteViz = (gateways: Gateways) => {
     //   If saveInfo is invoked between this get and the save,
     //   will it reset whatever was saved?
     //   https://github.com/mike-marcacci/node-redlock
+    // TODO consider adding an "increment" gateways primitive.
+    //   That would solve the same problem, and would be more efficient (one fewer read)
+    //   Submit OT op to just increment the count. Robust to simultaneious other changes
     const infoResult = await getInfo(viz);
     if (infoResult.outcome === 'failure') return err(infoResult.error);
     const info = infoResult.value.data;

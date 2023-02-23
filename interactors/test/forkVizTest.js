@@ -79,6 +79,8 @@ export const forkVizTest = () => {
         milestone: null,
       });
       expect((await getContentAtCommit(newCommitId)).value).toEqual(newContent);
+
+      // TODO Verify that forksCount has been incremented
     });
 
     it('forkViz error case not found', async () => {
