@@ -1,6 +1,6 @@
 // Wait time between viz fetches,
 // just so we don't DOS the production VizHub DB!
-const wait = 1000;
+const wait = 100;
 
 export const getVizV2 = async ({
   info,
@@ -20,7 +20,6 @@ export const getVizV2 = async ({
     ops.push(op);
   }
 
-  console.log('here');
   await new Promise((resolve) => setTimeout(resolve, wait));
   return { info, content, ops, contentCollection };
 };

@@ -6,6 +6,8 @@ import { processViz } from './processViz';
 import { reportProgress } from './reportProgress';
 import { computeV3Files } from './computeV3Files';
 
+const startFresh = true;
+
 const migrate = async () => {
   const { v2MongoDBDatabase, v3MongoDBDatabase, databaseGateways } =
     await mongoDBSetup();
@@ -17,6 +19,12 @@ const migrate = async () => {
   const contentOpCollection = v2MongoDBDatabase.collection('o_documentContent');
 
   const redisClient = await redisSetup();
+
+  // Delete everything.
+  if (startFresh) {
+    await v3MongoDBDatabase.dropDatabase();
+    await client.sendCommand(['FLUSHALL']);
+  }
 
   const n = await infoCollection.count();
 
@@ -30,6 +38,9 @@ const migrate = async () => {
       //   console.log('skipping ' + i);
       //   return;
       // }
+      // # 962 failed with:
+      // MongoExpiredSessionError: Use of expired sessions is not permitted
+      // Changed MongoDB driver to v4
 
       const vizV2 = await getVizV2({
         info,
