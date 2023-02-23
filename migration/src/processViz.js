@@ -82,6 +82,10 @@ export const processViz = async ({
 
   if (vizV3.info.upvotesCount > 0) {
     logDetail(`TODO migrate ${vizV2.info.upvotes.length} upvotes`);
+    for (const upvote of vizV2.info.upvotes) {
+      console.log(upvote);
+    }
+    process.exit();
   }
 
   const {
@@ -111,6 +115,12 @@ export const processViz = async ({
     // Compute migrated V3 files from V2 files
     vizV3.content.files = computeV3Files(goodFiles);
 
+    const primordialMilestone = {
+      id: generateId(),
+      commit: primordialCommitId,
+      content: vizV3.content,
+    };
+
     // The first ever commit.
     // Special because it's the only with no parentCommitId.
     const primordialCommit = {
@@ -119,22 +129,17 @@ export const processViz = async ({
       authors: [vizV2.info.owner],
       timestamp: vizV2.info.createdTimestamp,
       ops: diff({}, vizV3.content),
-      milestone: null,
+      milestone: primordialMilestone.id,
     };
 
     await saveCommit(primordialCommit);
 
-    const primordialMilestone = {
-      id: generateId(),
-      commit: primordialCommit.id,
-      content: vizV3.content,
-    };
     await saveMilestone(primordialMilestone);
     const saveVizResult = await saveViz(vizV3);
     console.log('    Saved primordial commit and viz!');
-    //      console.log((await getCommit(primordialCommitId)).value);
-    //      console.log((await getViz(vizV3.info.id)).value);
-    //process.exit();
+    //          console.log((await getCommit(primordialCommitId)).value);
+    //          console.log((await getViz(vizV3.info.id)).value);
+    //    process.exit();
     //
     // Don't try for revision history on the primordial viz.
     // It was not working correctly - some commits had no parents.

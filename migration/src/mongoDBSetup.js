@@ -1,7 +1,7 @@
 import ShareDB from 'sharedb';
 import json1 from 'ot-json1';
 import ShareDBMongo from 'sharedb-mongo';
-import MongoDB from 'mongodb-legacy';
+import MongoDB from 'mongodb';
 import { DatabaseGateways } from 'database';
 
 ShareDB.types.register(json1.type);

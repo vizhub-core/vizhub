@@ -11,9 +11,6 @@ export const redisSetup = async () => {
   await client.connect();
   // Create an index...
   try {
-    // Delete everything.
-    //await client.sendCommand(['FLUSHALL']);
-
     // Documentation: https://redis.io/docs/stack/search/reference/vectors/
     await client.sendCommand([
       'FT.CREATE',

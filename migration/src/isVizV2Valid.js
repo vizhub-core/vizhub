@@ -4,7 +4,5 @@ import { isolateGoodFiles } from './isolateGoodFiles';
 export const isVizV2Valid = async ({ id, contentCollection }) => {
   const content = await contentCollection.findOne({ _id: id });
   const goodFiles = isolateGoodFiles(content);
-  console.log(goodFiles);
-  console.log(!!goodFiles);
   return !!goodFiles;
 };
