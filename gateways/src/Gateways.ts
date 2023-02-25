@@ -143,6 +143,7 @@ export interface Gateways {
   // ******************** Non-CRUD Operations **********************
   // ***************************************************************
   getForks(id: VizId): Promise<Result<Array<Snapshot<Info>>>>;
+  incrementForksCount(id: VizId): Promise<Result<Success>>;
 
   // getCommitAncestors
   // Gets all commits from the primordial commit up to the given commit.

@@ -247,4 +247,25 @@ export const gatewaysTests = () => {
       ).toEqual(userJoe);
     });
   });
+
+  describe('increment and decrement forksCount and UpvotesCount', () => {
+    it('incrementForksCount', async () => {
+      const gateways = await initGateways();
+      const { saveInfo, getInfo, incrementForksCount } = gateways;
+      await saveInfo(primordialViz.info);
+      const getForksCount = async () =>
+        (await getInfo(primordialViz.info.id)).value.data.forksCount;
+      expect(await getForksCount()).toEqual(0);
+
+      await incrementForksCount(primordialViz.info.id);
+      expect(await getForksCount()).toEqual(1);
+      await incrementForksCount(primordialViz.info.id);
+      await incrementForksCount(primordialViz.info.id);
+      expect(await getForksCount()).toEqual(3);
+    });
+
+    // TODO it('decrementForksCount', async () => { });
+    // TODO it('incrementUpvotesCount', async () => { });
+    // TODO it('decrementUpvotesCount', async () => { });
+  });
 };

@@ -101,6 +101,10 @@ export const MemoryGateways = () => {
         .map(fakeSnapshot)
     );
 
+  const incrementForksCount = async (id) => {
+    documents.Info[id].forksCount++;
+  };
+
   const getCommitAncestors = async (id, toNearestMilestone, start) => {
     let commit = documents.Commit[id];
     if (!commit) {
@@ -132,7 +136,12 @@ export const MemoryGateways = () => {
   };
 
   // Populate non-CRUD methods.
-  let memoryGateways = { getForks, getCommitAncestors, getUserByEmails };
+  let memoryGateways = {
+    getForks,
+    incrementForksCount,
+    getCommitAncestors,
+    getUserByEmails,
+  };
 
   // Populate CRUD methods.
   for (const entityName of crudEntityNames) {
