@@ -108,8 +108,7 @@ export const MemoryGateways = () => {
 
   const decrementForksCount = async (id) => {
     if (documents.Info[id].forksCount === 0) {
-      // TODO error
-      return err(invalidDecrementError(id));
+      return err(invalidDecrementError(id, 'forksCount'));
     }
     documents.Info[id].forksCount--;
     return ok('success');

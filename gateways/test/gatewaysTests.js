@@ -282,7 +282,10 @@ export const gatewaysTests = () => {
       // Error case
       result = await decrementForksCount(primordialViz.info.id);
       expect(result.outcome).toEqual('failure');
-      // TODO test error code and message
+      expect(result.error.message).toEqual(
+        'Cannot decrement zero-value field `forksCount` on viz `viz1`'
+      );
+      expect(result.error.code).toEqual('invalidCommitOp');
     });
 
     // TODO it('decrementForksCount', async () => { });

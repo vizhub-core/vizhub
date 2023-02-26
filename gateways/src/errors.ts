@@ -36,6 +36,6 @@ export const invalidCommitOp = (
 
 export const invalidDecrementError = (id: VizId, field: string): VizHubError =>
   new VizHubError(
-    'Cannot decrement zero-value field ' + field + ' on viz ' + id,
+    'Cannot decrement zero-value field `' + field + '` on viz `' + id + '`',
     VizHubErrorCode.invalidCommitOp
   );
