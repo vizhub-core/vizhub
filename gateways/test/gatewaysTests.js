@@ -249,19 +249,40 @@ export const gatewaysTests = () => {
   });
 
   describe('increment and decrement forksCount and UpvotesCount', () => {
-    it('incrementForksCount', async () => {
+    it('incrementForksCount and decrementForksCount', async () => {
       const gateways = await initGateways();
-      const { saveInfo, getInfo, incrementForksCount } = gateways;
+      const { saveInfo, getInfo, incrementForksCount, decrementForksCount } =
+        gateways;
       await saveInfo(primordialViz.info);
       const getForksCount = async () =>
         (await getInfo(primordialViz.info.id)).value.data.forksCount;
       expect(await getForksCount()).toEqual(0);
 
-      await incrementForksCount(primordialViz.info.id);
+      // Increment
+      let result;
+      result = await incrementForksCount(primordialViz.info.id);
+      expect(result.outcome).toEqual('success');
+      expect(result.value).toEqual('success');
+
       expect(await getForksCount()).toEqual(1);
       await incrementForksCount(primordialViz.info.id);
       await incrementForksCount(primordialViz.info.id);
       expect(await getForksCount()).toEqual(3);
+
+      // Decrement
+      result = await decrementForksCount(primordialViz.info.id);
+      expect(result.outcome).toEqual('success');
+      expect(result.value).toEqual('success');
+      expect(await getForksCount()).toEqual(2);
+
+      await decrementForksCount(primordialViz.info.id);
+      await decrementForksCount(primordialViz.info.id);
+      expect(await getForksCount()).toEqual(0);
+
+      // Error case
+      result = await decrementForksCount(primordialViz.info.id);
+      expect(result.outcome).toEqual('failure');
+      // TODO test error code and message
     });
 
     // TODO it('decrementForksCount', async () => { });

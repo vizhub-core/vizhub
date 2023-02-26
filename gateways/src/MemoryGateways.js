@@ -5,7 +5,7 @@
 // implementation of gateways, as a precursor to the
 // database gateways implementation found in the
 // `database` package.
-import { resourceNotFoundError } from './errors';
+import { resourceNotFoundError, invalidDecrementError } from './errors';
 import { ok, err } from './Result';
 
 // A stub similar to ShareDB snapshots.
@@ -103,6 +103,16 @@ export const MemoryGateways = () => {
 
   const incrementForksCount = async (id) => {
     documents.Info[id].forksCount++;
+    return ok('success');
+  };
+
+  const decrementForksCount = async (id) => {
+    if (documents.Info[id].forksCount === 0) {
+      // TODO error
+      return err(invalidDecrementError(id));
+    }
+    documents.Info[id].forksCount--;
+    return ok('success');
   };
 
   const getCommitAncestors = async (id, toNearestMilestone, start) => {
@@ -139,6 +149,7 @@ export const MemoryGateways = () => {
   let memoryGateways = {
     getForks,
     incrementForksCount,
+    decrementForksCount,
     getCommitAncestors,
     getUserByEmails,
   };
