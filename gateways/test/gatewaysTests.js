@@ -288,8 +288,47 @@ export const gatewaysTests = () => {
       expect(result.error.code).toEqual('invalidCommitOp');
     });
 
-    // TODO it('decrementForksCount', async () => { });
-    // TODO it('incrementUpvotesCount', async () => { });
-    // TODO it('decrementUpvotesCount', async () => { });
+    it('incrementUpvotesCount and decrementUpvotesCount', async () => {
+      const gateways = await initGateways();
+      const {
+        saveInfo,
+        getInfo,
+        incrementUpvotesCount,
+        decrementUpvotesCount,
+      } = gateways;
+      await saveInfo(primordialViz.info);
+      const getUpvotesCount = async () =>
+        (await getInfo(primordialViz.info.id)).value.data.upvotesCount;
+      expect(await getUpvotesCount()).toEqual(0);
+
+      // Increment
+      let result;
+      result = await incrementUpvotesCount(primordialViz.info.id);
+      expect(result.outcome).toEqual('success');
+      expect(result.value).toEqual('success');
+
+      expect(await getUpvotesCount()).toEqual(1);
+      await incrementUpvotesCount(primordialViz.info.id);
+      await incrementUpvotesCount(primordialViz.info.id);
+      expect(await getUpvotesCount()).toEqual(3);
+
+      // Decrement
+      result = await decrementUpvotesCount(primordialViz.info.id);
+      expect(result.outcome).toEqual('success');
+      expect(result.value).toEqual('success');
+      expect(await getUpvotesCount()).toEqual(2);
+
+      await decrementUpvotesCount(primordialViz.info.id);
+      await decrementUpvotesCount(primordialViz.info.id);
+      expect(await getUpvotesCount()).toEqual(0);
+
+      // Error case
+      result = await decrementUpvotesCount(primordialViz.info.id);
+      expect(result.outcome).toEqual('failure');
+      expect(result.error.message).toEqual(
+        'Cannot decrement zero-value field `upvotesCount` on viz `viz1`'
+      );
+      expect(result.error.code).toEqual('invalidCommitOp');
+    });
   });
 };

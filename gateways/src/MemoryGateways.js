@@ -106,6 +106,19 @@ export const MemoryGateways = () => {
     return ok('success');
   };
 
+  const incrementUpvotesCount = async (id) => {
+    documents.Info[id].upvotesCount++;
+    return ok('success');
+  };
+
+  const decrementUpvotesCount = async (id) => {
+    if (documents.Info[id].upvotesCount === 0) {
+      return err(invalidDecrementError(id, 'upvotesCount'));
+    }
+    documents.Info[id].upvotesCount--;
+    return ok('success');
+  };
+
   const decrementForksCount = async (id) => {
     if (documents.Info[id].forksCount === 0) {
       return err(invalidDecrementError(id, 'forksCount'));
@@ -149,6 +162,8 @@ export const MemoryGateways = () => {
     getForks,
     incrementForksCount,
     decrementForksCount,
+    incrementUpvotesCount,
+    decrementUpvotesCount,
     getCommitAncestors,
     getUserByEmails,
   };
