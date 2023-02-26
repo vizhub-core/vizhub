@@ -248,7 +248,7 @@ export const gatewaysTests = () => {
     });
   });
 
-  describe('increment and decrement forksCount and UpvotesCount', () => {
+  describe('increment and decrement forksCount and upvotesCount', () => {
     it('incrementForksCount and decrementForksCount', async () => {
       const gateways = await initGateways();
       const { saveInfo, getInfo, incrementForksCount, decrementForksCount } =

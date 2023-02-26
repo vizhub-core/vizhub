@@ -9,6 +9,7 @@
 import { descending } from 'd3-array';
 import {
   resourceNotFoundError,
+  invalidDecrementError,
   ok,
   err,
   crudEntityNames,
@@ -64,6 +65,37 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
         }
         if (error) return resolve(err(error));
         resolve(ok('success'));
+      });
+    });
+
+  // A generic "add" implementation for ShareDB,
+  // for incrementing and decrementing numeric fields.
+  //  * `id` - the id of the document
+  //  * `field` - the field to add to
+  //  * `number` - the number to add to the field value
+  const shareDBAdd = (collectionName, field, number) => (id) =>
+    new Promise((resolve, reject) => {
+      const shareDBDoc = shareDBConnection.get(collectionName, id);
+      shareDBDoc.fetch((error) => {
+        if (error) return resolve(err(error));
+
+        const callback = (error) => {
+          if (error) return resolve(err(error));
+          resolve(ok('success'));
+        };
+
+        if (!shareDBDoc.type) {
+          return resolve(err(resourceNotFoundError(id)));
+        } else {
+          if (number < 0 && shareDBDoc.data[field] === 0) {
+            resolve(err(invalidDecrementError(id, field)));
+          }
+          // Leverage the `ena` operator,
+          // which is an isolated addition of a number.
+          // See https://github.com/ottypes/json1/blob/master/spec.md#parts-of-an-operation
+          const op = [field, { ena: number }];
+          shareDBDoc.submitOp(op, callback);
+        }
       });
     });
 
@@ -231,8 +263,18 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
       );
     });
 
+  const from = toCollectionName('Info');
+  const incrementForksCount = shareDBAdd(from, 'forksCount', 1);
+  const decrementForksCount = shareDBAdd(from, 'forksCount', -1);
+  const incrementUpvotesCount = shareDBAdd(from, 'upvotesCount', 1);
+  const decrementUpvotesCount = shareDBAdd(from, 'upvotesCount', -1);
+
   let databaseGateways = {
     getForks,
+    incrementForksCount,
+    decrementForksCount,
+    incrementUpvotesCount,
+    decrementUpvotesCount,
     getCommitAncestors,
     getUserByEmails,
   };

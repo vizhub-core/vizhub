@@ -7,5 +7,6 @@ export {
   VizHubError,
   resourceNotFoundError,
   invalidCommitOp,
+  invalidDecrementError,
 } from './errors';
 export { crudEntityNames, noSnapshot, MemoryGateways } from './MemoryGateways';
