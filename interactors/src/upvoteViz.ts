@@ -6,7 +6,7 @@ import { generateId } from './generateId';
 //  * Creates a new Upvote associated with this viz
 //  * Increments upvotesCount on the viz
 export const UpvoteViz = (gateways: Gateways) => {
-  const { getInfo, saveInfo, saveUpvote } = gateways;
+  const { saveUpvote, incrementUpvotesCount } = gateways;
 
   return async (options: {
     user: UserId;
@@ -14,24 +14,6 @@ export const UpvoteViz = (gateways: Gateways) => {
     timestamp: Timestamp;
   }): Promise<Result<Success>> => {
     const { user, viz, timestamp } = options;
-
-    // Get the info for the viz we are upvoting.
-    // TODO consider locking as this is a "critical section"?
-    //   If saveInfo is invoked between this get and the save,
-    //   will it reset whatever was saved?
-    //   https://github.com/mike-marcacci/node-redlock
-    // TODO consider adding an "increment" gateways primitive.
-    //   That would solve the same problem, and would be more efficient (one fewer read)
-    //   Submit OT op to just increment the count. Robust to simultaneious other changes
-    const infoResult = await getInfo(viz);
-    if (infoResult.outcome === 'failure') return err(infoResult.error);
-    const info = infoResult.value.data;
-    const newInfo: Info = {
-      ...info,
-      upvotesCount: info.upvotesCount + 1,
-    };
-    const saveInfoResult = await saveInfo(newInfo);
-    if (saveInfoResult.outcome !== 'success') return saveInfoResult;
 
     // Save the upvote
     const upvoteId = generateId();
@@ -43,6 +25,12 @@ export const UpvoteViz = (gateways: Gateways) => {
     };
     const saveUpvoteResult = await saveUpvote(newUpvote);
     if (saveUpvoteResult.outcome !== 'success') return saveUpvoteResult;
+
+    // Increment upvote count
+    const incrementResult = await incrementUpvotesCount(viz);
+    if (incrementResult.outcome === 'failure') {
+      return err(incrementResult.error);
+    }
 
     return ok(upvoteId);
   };

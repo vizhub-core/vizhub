@@ -9,9 +9,10 @@ export const GetContentAtCommit =
     const { getCommitAncestors, getMilestone, saveMilestone, saveCommit } =
       gateways;
 
-    // TODO bring back milestones
-    //const commitsResult = await getCommitAncestors(id, true);
-    const commitsResult = await getCommitAncestors(id);
+    // TODO indentify the case where this fails in migration
+    // and add a test for it.
+    const commitsResult = await getCommitAncestors(id, true);
+    //const commitsResult = await getCommitAncestors(id);
     if (commitsResult.outcome === 'failure') return commitsResult;
     const commits = commitsResult.value;
     const { milestone } = commits[0];

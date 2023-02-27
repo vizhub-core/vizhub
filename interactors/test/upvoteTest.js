@@ -4,7 +4,7 @@ import { initGateways } from './initGateways';
 import { SaveViz, UpvoteViz, setPredictableGenerateId } from '../src';
 
 export const upvoteTest = () => {
-  describe.only('upvoteViz', async () => {
+  describe('upvoteViz', async () => {
     it('upvoteViz', async () => {
       setPredictableGenerateId();
       const upvoteId = '100';
