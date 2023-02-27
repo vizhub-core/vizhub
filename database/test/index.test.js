@@ -4,6 +4,7 @@ import { MongoClient } from 'mongodb-legacy';
 import * as json1 from 'ot-json1';
 import { describe, it, expect } from 'vitest';
 import { setInitGateways, gatewaysTests } from 'gateways/test';
+import { interactorsTests } from 'interactors/test';
 import { DatabaseGateways } from '../src';
 
 // VizHub uses json1, not json0, for OT.
@@ -62,4 +63,5 @@ describe('DatabaseGateways', () => {
   });
 
   gatewaysTests();
+  interactorsTests();
 });
