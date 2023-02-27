@@ -1,5 +1,4 @@
-import { describe, it, expect } from 'vitest';
-
+import { describe } from 'vitest';
 import { gatewaysTests } from './gatewaysTests';
 
 describe('MemoryGateways', () => {

@@ -297,9 +297,11 @@ export const gatewaysTests = () => {
         decrementUpvotesCount,
       } = gateways;
       await saveInfo(primordialViz.info);
+
+      const originalUpvotesCount = primordialViz.info.upvotesCount;
       const getUpvotesCount = async () =>
         (await getInfo(primordialViz.info.id)).value.data.upvotesCount;
-      expect(await getUpvotesCount()).toEqual(0);
+      expect(await getUpvotesCount()).toEqual(originalUpvotesCount);
 
       // Increment
       let result;
@@ -307,22 +309,23 @@ export const gatewaysTests = () => {
       expect(result.outcome).toEqual('success');
       expect(result.value).toEqual('success');
 
-      expect(await getUpvotesCount()).toEqual(1);
+      expect(await getUpvotesCount()).toEqual(originalUpvotesCount + 1);
       await incrementUpvotesCount(primordialViz.info.id);
       await incrementUpvotesCount(primordialViz.info.id);
-      expect(await getUpvotesCount()).toEqual(3);
+      expect(await getUpvotesCount()).toEqual(originalUpvotesCount + 3);
 
       // Decrement
       result = await decrementUpvotesCount(primordialViz.info.id);
       expect(result.outcome).toEqual('success');
       expect(result.value).toEqual('success');
-      expect(await getUpvotesCount()).toEqual(2);
+      expect(await getUpvotesCount()).toEqual(originalUpvotesCount + 2);
 
       await decrementUpvotesCount(primordialViz.info.id);
       await decrementUpvotesCount(primordialViz.info.id);
-      expect(await getUpvotesCount()).toEqual(0);
+      expect(await getUpvotesCount()).toEqual(originalUpvotesCount);
 
-      // Error case
+      // Error case: decrementing when value is already zero.
+      await saveInfo({ ...primordialViz.info, upvotesCount: 0 });
       result = await decrementUpvotesCount(primordialViz.info.id);
       expect(result.outcome).toEqual('failure');
       expect(result.error.message).toEqual(
