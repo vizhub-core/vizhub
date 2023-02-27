@@ -69,7 +69,10 @@ export const primordialViz: Viz = {
     commitAuthors: [],
     isFrozen: false,
     forksCount: 0,
-    upvotesCount: 0,
+
+    // This is important for testing that
+    // upvotesCount gets reset to 0 when forking.
+    upvotesCount: 2,
   },
   content: {
     id: 'viz1',

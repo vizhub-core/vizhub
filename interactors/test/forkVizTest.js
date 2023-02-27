@@ -38,6 +38,17 @@ export const forkVizTest = () => {
       await saveCommit(primordialCommit);
       await saveViz(primordialViz);
 
+      const getForksCount = async () =>
+        (await getInfo(primordialViz.info.id)).value.data.forksCount;
+
+      // TODO consider unifying getUpvotesCount definitions
+      const getUpvotesCount = async () =>
+        (await getInfo(primordialViz.info.id)).value.data.upvotesCount;
+
+      // Sanity check
+      expect(await getForksCount()).toEqual(0);
+      expect(await getUpvotesCount()).toEqual(2);
+
       const forkViz = await ForkViz(gateways);
       const getContentAtCommit = await GetContentAtCommit(gateways);
 
@@ -63,6 +74,12 @@ export const forkVizTest = () => {
         updated: timestamp,
         start: newCommitId,
         end: newCommitId,
+
+        // Verify forksCount is reset to 0 on the fork.
+        forksCount: 0,
+
+        // Verify upvotesCount is reset to 0 on the fork.
+        upvotesCount: 0,
       });
 
       const newContent = { ...primordialViz.content, id: newVizId };
@@ -80,7 +97,8 @@ export const forkVizTest = () => {
       });
       expect((await getContentAtCommit(newCommitId)).value).toEqual(newContent);
 
-      // TODO Verify that forksCount has been incremented
+      // Verify that forksCount has been incremented
+      expect(await getForksCount()).toEqual(1);
     });
 
     it('forkViz error case not found', async () => {
@@ -140,6 +158,8 @@ export const forkVizTest = () => {
         updated: timestamp,
         start: newCommitId,
         end: newCommitId,
+        forksCount: 0,
+        upvotesCount: 0,
       });
 
       const newContent = { ...primordialVizV2.content, id: newVizId };
@@ -198,6 +218,8 @@ export const forkVizTest = () => {
         start: newCommitId2,
         end: newCommitId2,
         committed: true,
+        forksCount: 0,
+        upvotesCount: 0,
       });
 
       const newContent = {

@@ -25,7 +25,7 @@ import { CommitViz } from './commitViz';
 //  * See also
 //    https://gitlab.com/curran/vizhub-ee/-/blob/main/vizhub-ee-interactors/src/ForkVizEE.ts
 export const ForkViz = (gateways: Gateways) => {
-  const { saveCommit, getInfo } = gateways;
+  const { saveCommit, getInfo, incrementForksCount } = gateways;
   const saveViz = SaveViz(gateways);
   const getContentAtCommit = GetContentAtCommit(gateways);
   const commitViz = CommitViz(gateways);
@@ -67,6 +67,8 @@ export const ForkViz = (gateways: Gateways) => {
       ...info,
       id: newVizId,
       forkedFrom: forkedFrom,
+      forksCount: 0,
+      upvotesCount: 0,
       owner: newOwner,
       created: timestamp,
       updated: timestamp,
@@ -98,10 +100,20 @@ export const ForkViz = (gateways: Gateways) => {
     // then don't save the Info or Content.
     // This is why these are serial and not parallel.
     const saveCommitResult = await saveCommit(newCommit);
-    if (saveCommitResult.outcome !== 'success') return saveCommitResult;
+    if (saveCommitResult.outcome !== 'success') {
+      return saveCommitResult;
+    }
 
     const saveVizResult = await saveViz({ info: newInfo, content: newContent });
-    if (saveVizResult.outcome !== 'success') return saveVizResult;
+    if (saveVizResult.outcome !== 'success') {
+      return saveVizResult;
+    }
+
+    // Increment forksCount
+    const incrementResult = await incrementForksCount(forkedFrom);
+    if (incrementResult.outcome !== 'success') {
+      return incrementResult;
+    }
 
     return ok(newVizId);
   };

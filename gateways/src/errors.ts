@@ -1,4 +1,4 @@
-import { CommitId } from 'entities';
+import { CommitId, VizId } from 'entities';
 
 // A VizHub-specific error code.
 export enum VizHubErrorCode {

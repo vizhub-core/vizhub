@@ -18,8 +18,13 @@ export const upvoteTest = () => {
 
       const { id } = primordialViz.info;
 
+      // TODO consider unifying getUpvotesCount definitions
+      const getUpvotesCount = async () =>
+        (await getInfo(id)).value.data.upvotesCount;
+
       // Verify that initially upvotesCount is 0
-      expect((await getInfo(id)).value.data.upvotesCount).toEqual(0);
+      const originalUpvotesCount = primordialViz.info.upvotesCount;
+      expect(await getUpvotesCount()).toEqual(originalUpvotesCount);
 
       const upvoteVizResult = await upvoteViz({
         viz: id,
@@ -30,7 +35,7 @@ export const upvoteTest = () => {
       expect(upvoteVizResult.value).toEqual(upvoteId);
 
       // Verify upvotesCount is incremented
-      expect((await getInfo(id)).value.data.upvotesCount).toEqual(1);
+      expect(await getUpvotesCount()).toEqual(originalUpvotesCount + 1);
 
       // Verify the upvote has been saved
       expect((await getUpvote(upvoteId)).value.data).toEqual({
