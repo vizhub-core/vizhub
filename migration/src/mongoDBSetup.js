@@ -10,9 +10,7 @@ const { MongoClient, ServerApiVersion } = MongoDB;
 const v2MongoURI = import.meta.env.VITE_VIZHUB_V2_MONGO_URI;
 const v3MongoURI = import.meta.env.VITE_VIZHUB_V3_MONGO_URI;
 
-// TODO consider unifying this logic between
-// database tests and this file.
-// We'll also need it for the API server.
+// TODO import this from database package
 export const mongoDBSetup = async (startFresh) => {
   console.log(`Connecting to MongoDB`);
   console.log(`  Using v2 Mongo URI "${v2MongoURI}".`);
