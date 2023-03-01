@@ -1,2 +1,3 @@
 export { DatabaseGateways } from './DatabaseGateways';
-export { databaseSetup } from './databaseSetup';
+export { mongoDBSetup } from './mongoDBSetup';
+export { shareDBSetup } from './shareDBSetup';
