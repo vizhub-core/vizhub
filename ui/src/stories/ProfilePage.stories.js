@@ -1,4 +1,5 @@
 import { ProfilePage } from '../components/ProfilePage';
+import { renderVizPreviews } from './renderVizPreviews';
 
 export default {
   title: 'VizHub/ProfilePage',
@@ -16,7 +17,12 @@ export const LoggedIn = {
     user: {
       name: 'Jane Doe',
     },
+    renderVizPreviews,
   },
 };
 
-export const LoggedOut = {};
+export const LoggedOut = {
+  args: {
+    renderVizPreviews,
+  },
+};
