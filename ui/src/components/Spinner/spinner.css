@@ -1,0 +1,12 @@
+.vh-spinner {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.vh-spinner svg {
+  transition: opacity 3s;
+}
