@@ -21,18 +21,13 @@ for (let i = 0; i < numDots; i++) {
   dots.push({
     x: Math.cos(angle) * wheelRadius,
     y: Math.sin(angle) * wheelRadius,
-    r:
-      minRadius +
-      (i / (numDots - 1)) * (maxRadius - minRadius),
+    r: minRadius + (i / (numDots - 1)) * (maxRadius - minRadius),
   });
 }
 
 // From https://bl.ocks.org/curran/685fa8300650c4324d571c6b0ecc55de
 // And vizhub-v2/packages/neoFrontend/src/LoadingScreen/index.js
-export const Spinner = ({
-  height = 40,
-  fill = 'currentcolor',
-}) => {
+export const Spinner = ({ height = 40, fill = 'currentcolor' }) => {
   const [showSpinner, setShowSpinner] = useState(false);
   const svgRef = useRef();
   const dotsRef = useRef();
@@ -43,10 +38,7 @@ export const Spinner = ({
 
       // Trigger the fade-in animation.
       svgRef.current.style = 'opacity: 1;';
-      dotsRef.current.setAttribute(
-        'transform',
-        `rotate(${angle})`
-      );
+      dotsRef.current.setAttribute('transform', `rotate(${angle})`);
     }, blankScreenDelay);
 
     return () => {
@@ -62,10 +54,7 @@ export const Spinner = ({
       if (dotsRef.current) {
         // Set the attribute directly on the DOM for performant animation
         // that avoids the React render cycle entirely.
-        dotsRef.current.setAttribute(
-          'transform',
-          `rotate(${angle})`
-        );
+        dotsRef.current.setAttribute('transform', `rotate(${angle})`);
         angle += speed;
         requestAnimationFrame(animate);
       }
@@ -86,9 +75,7 @@ export const Spinner = ({
         <g transform="translate(50, 50)" fill={fill}>
           <g ref={dotsRef}>
             {showSpinner
-              ? dots.map(({ x, y, r }) => (
-                  <circle cx={x} cy={y} r={r}></circle>
-                ))
+              ? dots.map(({ x, y, r }) => <circle cx={x} cy={y} r={r}></circle>)
               : null}
           </g>
         </g>

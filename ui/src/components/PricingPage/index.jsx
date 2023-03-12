@@ -88,12 +88,7 @@ const plans = {
 };
 
 const CheckSVG = () => (
-  <svg
-    width="16"
-    height="16"
-    fill="currentColor"
-    viewBox="0 0 16 16"
-  >
+  <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
     <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z" />
   </svg>
 );
@@ -110,24 +105,13 @@ const CheckSVG = () => (
 // );
 
 const ArrowLeftShortSVG = () => (
-  <svg
-    width="16"
-    height="16"
-    fill="currentColor"
-    viewBox="0 0 16 16"
-  >
+  <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
     <path d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z" />
   </svg>
 );
 
 const PlanCard = ({
-  plan: {
-    name,
-    previousPlanBullet,
-    bullets,
-    pricing,
-    callToAction,
-  },
+  plan: { name, previousPlanBullet, bullets, pricing, callToAction },
   onClick,
 }) => (
   <div className="col">
@@ -136,13 +120,9 @@ const PlanCard = ({
         <h4 className="my-0 fw-normal">{name}</h4>
       </div>
       <div className="card-body">
-        <h1 className="card-title pricing-card-title">
-          ${pricing.price}
-        </h1>
+        <h1 className="card-title pricing-card-title">${pricing.price}</h1>
         {pricing.unit ? (
-          <small className="text-muted">
-            {pricing.unit}
-          </small>
+          <small className="text-muted">{pricing.unit}</small>
         ) : null}
         <ul className="list-unstyled mt-3 mb-4 mx-2 text-start">
           {previousPlanBullet ? (
@@ -165,9 +145,7 @@ const PlanCard = ({
         <button
           type="button"
           className={`w-100 btn btn-lg ${
-            callToAction.isOutline
-              ? 'btn-outline-primary'
-              : 'btn-primary'
+            callToAction.isOutline ? 'btn-outline-primary' : 'btn-primary'
           }`}
           onClick={onClick}
         >
@@ -205,15 +183,9 @@ export const PricingPage = ({
       />
       <div className="container py-4 vh-pricing-page">
         <div className="row row-cols-1 row-cols-lg-3 mb-3 text-center">
-          <PlanCard
-            plan={plans.free}
-            onClick={onFreeClick}
-          />
+          <PlanCard plan={plans.free} onClick={onFreeClick} />
           <PlanCard plan={plans.pro} onClick={onProClick} />
-          <PlanCard
-            plan={plans.enterprise}
-            onClick={onEnterpriseClick}
-          />
+          <PlanCard plan={plans.enterprise} onClick={onEnterpriseClick} />
         </div>
         {/*
       <h2 className="display-6 text-center mb-4">
