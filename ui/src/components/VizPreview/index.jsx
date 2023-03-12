@@ -1,4 +1,6 @@
 import PropTypes from 'prop-types';
+
+// TODO disable user-select
 //import './viz-preview.scss'
 
 // Shows a preview of a viz.
