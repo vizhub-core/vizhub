@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import './viz-preview.scss'
+import './viz-preview.scss';
 
 // Shows a preview of a viz.
 // See also
