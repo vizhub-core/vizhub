@@ -1,0 +1,29 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "API for VizHub3",
+  "type": "module",
+  "scripts": {
+    "test": "",
+    "prettier": "prettier {*.*,**/*.*} --single-quote --write",
+    "dev": "node server.js",
+    "build": "vite build --ssr src/entry-server.jsx --outDir dist/server",
+    "serve": "NODE_ENV=production node server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vizhub-core/vizhub3.git"
+  },
+  "author": "Curran Kelleher",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/vizhub-core/vizhub3/issues"
+  },
+  "homepage": "https://github.com/vizhub-core/vizhub3#readme",
+  "dependencies": {
+    "compression": "^1.7.4",
+    "express": "^4.18.2",
+    "prettier": "^2.8.4",
+    "vite": "^4.1.1"
+  }
+}

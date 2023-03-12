@@ -24,6 +24,7 @@ const defaultHeight = 500;
 
 const every15Min = timeMinute.every(15);
 
+// TODO migrate collaborators
 export const processViz = async ({
   vizV2,
   gateways,

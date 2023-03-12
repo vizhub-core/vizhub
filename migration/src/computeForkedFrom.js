@@ -2,6 +2,9 @@ import { logDetail } from './logDetail';
 import { isVizV2Valid } from './isVizV2Valid';
 import { vectorSimilaritySearch } from './vectorSimilaritySearch';
 
+// TODO backfill forked from deleted viz case
+// by querying the ShareDB op log looking for the creation op,
+// then setting forkedFrom to the parent.
 export const computeForkedFrom = async ({
   isPrimordialViz,
   vizV2,
