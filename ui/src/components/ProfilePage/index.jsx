@@ -1,6 +1,7 @@
 import Container from 'react-bootstrap/Container';
 import Image from 'react-bootstrap/Image';
 import { VizPreview } from '../VizPreview';
+import { VizPreviewCollection } from '../VizPreviewCollection';
 import { Header } from '../Header';
 
 export const ProfilePage = (props) => (
@@ -18,7 +19,7 @@ export const ProfilePage = (props) => (
           <div className="profile-page__user-name">username</div>
         </div>
       </div>
-      <div className="viz-preview-collection">
+      <VizPreviewCollection>
         {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((d, i) => (
           <VizPreview
             key={i}
@@ -29,7 +30,7 @@ export const ProfilePage = (props) => (
             ownerAvatarURL="https://github.com/mdo.png"
           />
         ))}
-      </div>
+      </VizPreviewCollection>
     </Container>
   </div>
 );
