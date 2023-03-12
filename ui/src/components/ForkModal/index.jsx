@@ -1,7 +1,7 @@
+import { useState, useCallback } from 'react';
+import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
-import PropTypes from 'prop-types';
-import { useState, useCallback } from 'react';
 import { Button } from '../Button';
 
 export const ForkModal = ({ show, onClose, onFork }) => {
