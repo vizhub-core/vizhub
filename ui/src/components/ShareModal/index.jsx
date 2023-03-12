@@ -1,9 +1,8 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap/Modal';
 import Nav from 'react-bootstrap/Nav';
 import { Button } from '../Button';
-
 import { LinkSection } from './LinkSection';
 
 const sections = {
@@ -16,9 +15,30 @@ const sections = {
   snippet: () => null,
 };
 
-export const ShareModal = ({ show, onClose, onLinkCopy }) => {
+export const ShareModal = ({
+  show,
+  onClose,
+  onLinkCopy,
+  onLinkSectionNavigate,
+  onEmbedSectionNavigate,
+  onSnippetSectionNavigate,
+}) => {
   const [section, setSection] = useState('link');
   const Section = sections[section];
+
+  const handleSectionSelect = useCallback((newSection) => {
+
+    // Emit these for analytics only
+    if (newSection === 'link') {
+      onLinkSectionNavigate();
+    } else if (newSection === 'embed') {
+      onEmbedSectionNavigate();
+    } else if (newSection === 'snippet') {
+      onSnippetSectionNavigate();
+    }
+
+    setSection(newSection);
+  }, []);
 
   return show ? (
     <Modal show={show} onHide={onClose} animation={false}>
@@ -27,7 +47,11 @@ export const ShareModal = ({ show, onClose, onLinkCopy }) => {
       </Modal.Header>
       <Modal.Body>
         <div className="vizhub-form-note contextual">SHARE WITH</div>
-        <Nav variant="pills" defaultActiveKey={section} onSelect={setSection}>
+        <Nav
+          variant="pills"
+          defaultActiveKey={section}
+          onSelect={handleSectionSelect}
+        >
           <Nav.Item>
             <Nav.Link eventKey="link">Link</Nav.Link>
           </Nav.Item>
@@ -54,4 +78,13 @@ ShareModal.propTypes = {
 
   // Exposed for analytics only
   onLinkCopy: PropTypes.func.isRequired,
+
+  // Exposed for analytics only
+  onLinkSectionNavigate: PropTypes.func.isRequired,
+
+  // Exposed for analytics only
+  onEmbedSectionNavigate: PropTypes.func.isRequired,
+
+  // Exposed for analytics only
+  onSnippetSectionNavigate: PropTypes.func.isRequired,
 };
