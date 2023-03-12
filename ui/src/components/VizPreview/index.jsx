@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+//import './viz-preview.scss'
 
 // Shows a preview of a viz.
 // See also
@@ -11,11 +12,6 @@ export const VizPreview = ({
   ownerAvatarURL,
   onClick,
 }) => {
-  // Verified useMemo optimizations 3/19/22.
-  // To verify, uncomment the following line and make sure re-renders
-  // don't happen for each and every VizPreview when query results change.
-  // console.log('rendering VizPreview');
-
   return (
     <div className="viz-preview" onClick={onClick}>
       <div
