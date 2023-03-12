@@ -1,7 +1,5 @@
 import PropTypes from 'prop-types';
-
-// TODO disable user-select
-//import './viz-preview.scss'
+import './viz-preview.scss'
 
 // Shows a preview of a viz.
 // See also
@@ -15,7 +13,7 @@ export const VizPreview = ({
   onClick,
 }) => {
   return (
-    <div className="viz-preview" onClick={onClick}>
+    <div className="vh-viz-preview" onClick={onClick}>
       <div
         className="thumbnail"
         style={{
