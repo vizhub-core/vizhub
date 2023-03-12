@@ -6,8 +6,11 @@ import { Meta } from '@storybook/blocks';
 
 This codebase follows the following principles:
 
+- UI components in this package should be purely "dumb"
+- No application logic should leak into this package
 - UI is ignorant of (decoupled from) VizHub's `entities` data structures
 - UI is decoupled from its app environment, meaning:
   - Links are not really links, but rather callbacks
   - Form submissions are not really form submissions, but rather callbacks
-- Based on Bootstrap, so we leverage their utilities where possible
+- Instrument as much as possible for analytics, surfacing additional callbacks
+- Based on Bootstrap, so we leverage their features where possible

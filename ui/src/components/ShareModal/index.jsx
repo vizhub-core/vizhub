@@ -27,7 +27,6 @@ export const ShareModal = ({
   const Section = sections[section];
 
   const handleSectionSelect = useCallback((newSection) => {
-
     // Emit these for analytics only
     if (newSection === 'link') {
       onLinkSectionNavigate();

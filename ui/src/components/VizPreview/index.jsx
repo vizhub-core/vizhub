@@ -42,5 +42,5 @@ export const VizPreview = ({
 };
 
 VizPreview.propTypes = {
-  onClick: PropTypes.func.isRequired,
+  onClick: PropTypes.func,
 };

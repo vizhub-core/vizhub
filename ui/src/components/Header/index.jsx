@@ -72,10 +72,10 @@ export const Header = ({
 
 Header.propTypes = {
   user: PropTypes.shape({}),
-  onLogin: PropTypes.func.isRequired,
-  onLogout: PropTypes.func.isRequired,
-  onCreateViz: PropTypes.func.isRequired,
-  onProfile: PropTypes.func.isRequired,
-  onForum: PropTypes.func.isRequired,
-  onVizHub: PropTypes.func.isRequired,
+  onLogin: PropTypes.func,
+  onLogout: PropTypes.func,
+  onCreateViz: PropTypes.func,
+  onProfile: PropTypes.func,
+  onForum: PropTypes.func,
+  onVizHub: PropTypes.func,
 };
