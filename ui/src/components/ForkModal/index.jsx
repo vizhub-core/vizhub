@@ -1,20 +1,26 @@
 import { useState, useCallback } from 'react';
-import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { VisibilityControl } from '../VisibilityControl';
 
-export const ForkModal = ({ show, onClose, onFork }) => {
-  const [title, setTitle] = useState();
+export const ForkModal = ({
+  show,
+  onClose,
+  onFork,
+  initialTitle,
+  initialVisibility,
+}) => {
+  const [title, setTitle] = useState(initialTitle);
+  const [visibility, setVisibility] = useState(initialVisibility);
 
   const handleTitleChange = useCallback((event) => {
     setTitle(event.target.value);
   }, []);
 
   const handleForkClick = useCallback(() => {
-    onFork({ title });
-  }, [title]);
+    onFork({ title, visibility });
+  }, [title, visibility]);
 
   return show ? (
     <Modal show={show} onHide={onClose} animation={false}>
@@ -30,10 +36,13 @@ export const ForkModal = ({ show, onClose, onFork }) => {
             onChange={handleTitleChange}
           />
           <Form.Text className="text-muted">
-            Choose a title for your new viz
+            Choose a title for your viz
           </Form.Text>
         </Form.Group>
-        <VisibilityControl />
+        <VisibilityControl
+          visibility={visibility}
+          setVisibility={setVisibility}
+        />
       </Modal.Body>
       <Modal.Footer>
         <Button variant="primary" onClick={handleForkClick}>
@@ -42,9 +51,4 @@ export const ForkModal = ({ show, onClose, onFork }) => {
       </Modal.Footer>
     </Modal>
   ) : null;
-};
-
-ForkModal.propTypes = {
-  onClose: PropTypes.func.isRequired,
-  onFork: PropTypes.func.isRequired,
 };
