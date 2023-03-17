@@ -1,4 +1,3 @@
-// See also
 import { describe, it, expect } from 'vitest';
 import { primordialViz } from 'gateways/test';
 import { initGateways } from './initGateways';

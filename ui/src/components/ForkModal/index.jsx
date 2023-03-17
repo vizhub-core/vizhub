@@ -2,7 +2,8 @@ import { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
-import { Button } from '../Button';
+import Button from 'react-bootstrap/Button';
+import { VisibilityControl } from '../VisibilityControl';
 
 export const ForkModal = ({ show, onClose, onFork }) => {
   const [title, setTitle] = useState();
@@ -32,13 +33,7 @@ export const ForkModal = ({ show, onClose, onFork }) => {
             Choose a title for your new viz
           </Form.Text>
         </Form.Group>
-        <Form.Group className="mb-3" controlId="visibility">
-          <Form.Label>Visibility</Form.Label>
-          <Form.Check type="radio" id="private" label="private" />
-          <Form.Check type="radio" id="unlisted" label="unlisted" />
-          <Form.Check type="radio" id="public" label="public" />
-          <Form.Text className="text-muted">Who can access this viz</Form.Text>
-        </Form.Group>
+        <VisibilityControl />
       </Modal.Body>
       <Modal.Footer>
         <Button variant="primary" onClick={handleForkClick}>

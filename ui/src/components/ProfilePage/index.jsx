@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import Container from 'react-bootstrap/Container';
 import Image from 'react-bootstrap/Image';
+import Button from 'react-bootstrap/Button';
 import { VizPreviewCollection } from '../VizPreviewCollection';
 import { Header } from '../Header';
-import { Button } from '../Button';
 
 export const ProfilePage = (props) => {
   const { renderVizPreviews, onMoreClick } = props;

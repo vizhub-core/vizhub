@@ -32,7 +32,7 @@ export const ForkViz = (gateways: Gateways) => {
 
   return async (options: {
     newOwner: UserId; // The owner of the new viz.
-    forkedFrom: VizId; // The ID viz being forked.
+    forkedFrom: VizId; // The ID of the viz being forked.
     timestamp: Timestamp; // The timestamp at which this viz is forked.
     forkedFromCommitId?: CommitId; // The ID of the commit being forked from (optional).
     newVizId?: VizId; // The ID of the new viz (optional).

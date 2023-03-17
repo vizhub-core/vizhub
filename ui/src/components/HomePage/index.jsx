@@ -1,7 +1,7 @@
 import Container from 'react-bootstrap/Container';
 import PropTypes from 'prop-types';
+import Button from 'react-bootstrap/Button';
 import { Header } from '../Header';
-import { Button } from '../Button';
 import { VizPreviewCollection } from '../VizPreviewCollection';
 import './home-page.scss';
 

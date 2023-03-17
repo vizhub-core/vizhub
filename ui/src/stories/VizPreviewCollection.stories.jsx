@@ -14,6 +14,6 @@ export default {
 
 export const Normal = {
   args: {
-    children: renderVizPreviews,
+    children: renderVizPreviews(),
   },
 };

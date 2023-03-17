@@ -1,4 +1,4 @@
-import { Button } from '../components/Button';
+import Button from 'react-bootstrap/Button';
 
 // More on how to set up stories at: https://storybook.js.org/docs/7.0/react/writing-stories/introduction
 export default {

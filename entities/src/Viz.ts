@@ -109,6 +109,10 @@ export interface Info {
 
   // How many upvotes this viz has.
   upvotesCount: number;
+
+  // If this viz is currently in the "trash",
+  // this field represents when it was put there.
+  trashed?: Timestamp;
 }
 
 // Configuration
