@@ -29,7 +29,7 @@ export default {
 
 export const Normal = {
   args: {
-    initialOwner: { id: '43275', label: 'fred' },
+    initialOwner: '43275',
     possibleOwners: [
       { id: '43275', label: 'fred' },
       { id: '84367', label: 'fred-corp' },

@@ -18,19 +18,13 @@ export const OwnerControl = ({ owner, setOwner, possibleOwners }) => {
     [possibleOwners]
   );
 
-  // Invoke `setOwner` when the user selects a dropdown option.
-  const handleSelect = useCallback(
-    (id) => {
-      setOwner(ownersById.get(id));
-    },
-    [setOwner, ownersById]
-  );
-
   return (
     <Form.Group className="mb-3" controlId="owner">
       <Form.Label>Owner</Form.Label>
-      <Dropdown onSelect={handleSelect}>
-        <Dropdown.Toggle id="dropdown-owner">{owner.label}</Dropdown.Toggle>
+      <Dropdown onSelect={setOwner}>
+        <Dropdown.Toggle id="dropdown-owner">
+          {ownersById.get(owner).label}
+        </Dropdown.Toggle>
         <Dropdown.Menu>
           {otherPossibleOwners.map((possibleOwner) => (
             <Dropdown.Item key={possibleOwner.id} eventKey={possibleOwner.id}>
