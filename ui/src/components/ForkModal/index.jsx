@@ -3,6 +3,7 @@ import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { VisibilityControl } from '../VisibilityControl';
+import { OwnerControl } from '../OwnerControl';
 
 export const ForkModal = ({
   show,
@@ -10,17 +11,20 @@ export const ForkModal = ({
   onFork,
   initialTitle,
   initialVisibility,
+  initialOwner,
+  possibleOwners,
 }) => {
   const [title, setTitle] = useState(initialTitle);
   const [visibility, setVisibility] = useState(initialVisibility);
+  const [owner, setOwner] = useState(initialOwner);
 
   const handleTitleChange = useCallback((event) => {
     setTitle(event.target.value);
   }, []);
 
   const handleForkClick = useCallback(() => {
-    onFork({ title, visibility });
-  }, [title, visibility]);
+    onFork({ title, visibility, owner });
+  }, [title, visibility, owner]);
 
   return show ? (
     <Modal show={show} onHide={onClose} animation={false}>
@@ -42,6 +46,11 @@ export const ForkModal = ({
         <VisibilityControl
           visibility={visibility}
           setVisibility={setVisibility}
+        />
+        <OwnerControl
+          owner={owner}
+          setOwner={setOwner}
+          possibleOwners={possibleOwners}
         />
       </Modal.Body>
       <Modal.Footer>
