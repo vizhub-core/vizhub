@@ -1,4 +1,4 @@
 .vh-pricing-page .card {
-  box-shadow: var(--vizhub-box-shadow);
+  box-shadow: var(--vh-box-shadow);
   background-color: white;
 }

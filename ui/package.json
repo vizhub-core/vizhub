@@ -23,7 +23,6 @@
   },
   "homepage": "https://github.com/vizhub-core/vizhub3#readme",
   "dependencies": {
-    "bootstrap": "^5.3.0-alpha1",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.2",
     "react-dom": "^18.2.0"
@@ -32,17 +31,16 @@
     "@storybook/addon-essentials": "^7.0.0-rc.1",
     "@storybook/addon-interactions": "^7.0.0-rc.1",
     "@storybook/addon-links": "^7.0.0-rc.1",
-    "@storybook/blocks": "^7.0.0-rc.1",
+    "@storybook/blocks": "^7.0.0-alpha.8",
     "@storybook/react": "^7.0.0-rc.1",
-    "@storybook/react-vite": "^7.0.0-rc.1",
+    "@storybook/react-vite": "^7.0.0-alpha.25",
     "@storybook/testing-library": "^0.0.14-next.1",
-    "@types/react": "^18.0.28",
+    "@types/react": "^18.0.29",
     "@types/react-dom": "^18.0.11",
     "@vitejs/plugin-react": "^3.1.0",
-    "prettier": "^2.8.4",
+    "prettier": "^2.8.7",
     "prop-types": "^15.8.1",
-    "sass": "^1.59.2",
     "storybook": "^7.0.0-rc.1",
-    "vite": "^4.1.4"
+    "vite": "^4.2.1"
   }
 }

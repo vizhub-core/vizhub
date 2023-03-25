@@ -45,7 +45,7 @@ export const ShareModal = ({
         <Modal.Title>Share</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <div className="vizhub-form-note contextual">SHARE WITH</div>
+        <div className="vh-form-note contextual">SHARE WITH</div>
         <Nav
           variant="pills"
           defaultActiveKey={section}
