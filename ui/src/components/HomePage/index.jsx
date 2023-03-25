@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Button from 'react-bootstrap/Button';
 import { Header } from '../Header';
 import { VizPreviewCollection } from '../VizPreviewCollection';
+import '../index.scss';
 import './home-page.scss';
 
 export const HomePage = (props) => {

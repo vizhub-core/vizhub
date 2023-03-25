@@ -3,8 +3,8 @@
   flex-direction: column;
   justify-content: space-between;
   background-color: white;
-  box-shadow: var(--vizhub-box-shadow);
-  border-radius: var(--vizhub-border-radius);
+  box-shadow: var(--vh-box-shadow);
+  border-radius: var(--vh-border-radius);
   cursor: pointer;
 
   /* Aspect ratio, original thumbnail size: 230 X 120*/
@@ -36,9 +36,9 @@
 .vh-viz-preview .content-container {
   display: flex;
   flex-direction: column;
-  padding: var(--vizhub-padding-lots);
-  border-top: 1px solid var(--vizhub-rule-color);
-  border-bottom: 1px solid var(--vizhub-rule-color);
+  padding: var(--vh-padding-lots);
+  border-top: 1px solid var(--vh-rule-color);
+  border-bottom: 1px solid var(--vh-rule-color);
 
   /* Handle single-line titles. */
   flex: 1;
@@ -46,8 +46,8 @@
 }
 
 .vh-viz-preview .content-container .last-updated-date {
-  color: var(--vizhub-foreground-color-light);
-  font-size: var(--vizhub-small-font-size);
+  color: var(--vh-foreground-color-light);
+  font-size: var(--vh-small-font-size);
   padding-bottom: 4px;
 }
 
@@ -65,7 +65,7 @@
 .vh-viz-preview .meta-container {
   display: flex;
   align-items: center;
-  padding: var(--vizhub-padding-little);
+  padding: var(--vh-padding-little);
   font-size: var(--small-font-size);
 
   .owner-avatar-image {

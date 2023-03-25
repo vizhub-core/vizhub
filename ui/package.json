@@ -25,7 +25,8 @@
   "dependencies": {
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.2",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "vizhub-ui": "^3.0.0"
   },
   "devDependencies": {
     "@storybook/addon-essentials": "^7.0.0-rc.1",

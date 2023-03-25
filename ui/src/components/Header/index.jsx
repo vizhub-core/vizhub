@@ -6,6 +6,7 @@ import Container from 'react-bootstrap/Container';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Image from 'react-bootstrap/Image';
 import Button from 'react-bootstrap/Button';
+import '../index.scss';
 import './header.css';
 
 // Inspired by:

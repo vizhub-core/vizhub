@@ -1,6 +1,7 @@
 import { useMemo, useCallback } from 'react';
 import Form from 'react-bootstrap/Form';
 import Dropdown from 'react-bootstrap/Dropdown';
+import '../index.scss';
 
 export const OwnerControl = ({ owner, setOwner, possibleOwners }) => {
   // Possible owners that are not the current owner.

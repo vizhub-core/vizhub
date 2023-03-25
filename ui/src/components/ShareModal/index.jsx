@@ -4,6 +4,7 @@ import Modal from 'react-bootstrap/Modal';
 import Nav from 'react-bootstrap/Nav';
 import Button from 'react-bootstrap/Button';
 import { LinkSection } from './LinkSection';
+import '../index.scss';
 
 const sections = {
   link: LinkSection,

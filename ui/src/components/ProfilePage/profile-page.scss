@@ -1,4 +1,4 @@
-.profile-page {
+.vh-profile-page {
   overflow: auto;
 
   &__avatar {
@@ -8,11 +8,11 @@
 
   &__full-name {
     font-weight: bold;
-    font-size: var(--vizhub-h3-font-size);
+    font-size: var(--vh-h3-font-size);
   }
 
   &__user-name {
-    color: var(--vizhub-foreground-color-light);
-    font-size: var(--vizhub-small-font-size);
+    color: var(--vh-foreground-color-light);
+    font-size: var(--vh-small-font-size);
   }
 }

@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Header } from '../Header';
-import './pricing-page.css';
+import '../index.scss';
+import './pricing-page.scss';
 
 const plans = {
   free: {
@@ -86,6 +87,7 @@ const plans = {
   },
 };
 
+// TODO move to icons
 const CheckSVG = () => (
   <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
     <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z" />
@@ -103,12 +105,14 @@ const CheckSVG = () => (
 //   </svg>
 // );
 
+// TODO move to icons
 const ArrowLeftShortSVG = () => (
   <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
     <path d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z" />
   </svg>
 );
 
+// TODO split out
 const PlanCard = ({
   plan: { name, previousPlanBullet, bullets, pricing, callToAction },
   onClick,
@@ -170,7 +174,7 @@ export const PricingPage = ({
   onVizHub,
 }) => {
   return (
-    <>
+    <div className="vh-page vh-pricing-page">
       <Header
         user={user}
         onLogin={onLogin}
@@ -180,111 +184,14 @@ export const PricingPage = ({
         onForum={onForum}
         onVizHub={onVizHub}
       />
-      <div className="container py-4 vh-pricing-page">
+      <div className="container py-4">
         <div className="row row-cols-1 row-cols-lg-3 mb-3 text-center">
           <PlanCard plan={plans.free} onClick={onFreeClick} />
           <PlanCard plan={plans.pro} onClick={onProClick} />
           <PlanCard plan={plans.enterprise} onClick={onEnterpriseClick} />
         </div>
-        {/*
-      <h2 className="display-6 text-center mb-4">
-        Compare plans
-      </h2>
-
-      <div className="table-responsive">
-        <table className="table text-center">
-          <thead>
-            <tr>
-              <th style={{ width: '34%' }}></th>
-              <th style={{ width: '22%' }}>Free</th>
-              <th style={{ width: '22%' }}>Pro</th>
-              <th style={{ width: '22%' }}>Enterprise</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th scope="row" className="text-start">
-                Public
-              </th>
-              <td>
-                <CheckSVG />
-              </td>
-              <td>
-                <CheckSVG />
-              </td>
-              <td>
-                <CheckSVG />
-              </td>
-            </tr>
-            <tr>
-              <th scope="row" className="text-start">
-                Private
-              </th>
-              <td></td>
-              <td>
-                <CheckSVG />
-              </td>
-              <td>
-                <CheckSVG />
-              </td>
-            </tr>
-          </tbody>
-
-          <tbody>
-            <tr>
-              <th scope="row" className="text-start">
-                Permissions
-              </th>
-              <td>
-                <CheckSVG />
-              </td>
-              <td>
-                <CheckSVG />
-              </td>
-              <td>
-                <CheckSVG />
-              </td>
-            </tr>
-            <tr>
-              <th scope="row" className="text-start">
-                Sharing
-              </th>
-              <td></td>
-              <td>
-                <CheckSVG />
-              </td>
-              <td>
-                <CheckSVG />
-              </td>
-            </tr>
-            <tr>
-              <th scope="row" className="text-start">
-                Unlimited members
-              </th>
-              <td></td>
-              <td>
-                <CheckSVG />
-              </td>
-              <td>
-                <CheckSVG />
-              </td>
-            </tr>
-            <tr>
-              <th scope="row" className="text-start">
-                Extra security
-              </th>
-              <td></td>
-              <td></td>
-              <td>
-                <CheckSVG />
-              </td>
-            </tr>
-          </tbody>
-        </table>
       </div>
-      */}
-      </div>
-    </>
+    </div>
   );
 };
 
