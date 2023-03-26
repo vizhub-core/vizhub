@@ -7,6 +7,7 @@ export default {
   parameters: {
     layout: 'fullscreen',
   },
+  argTypes: { onEmailSubmit: { action: 'emailSubmit' } },
 };
 
 export const LoggedIn = {

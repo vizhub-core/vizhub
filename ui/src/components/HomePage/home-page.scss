@@ -7,6 +7,8 @@
 
     .blurb {
       max-width: 960px;
+      display: flex;
+      flex-direction: column;
 
       .description {
         font-size: 2em;
@@ -18,6 +20,7 @@
         font-size: 4em;
       }
       .vh-email-submission {
+        max-width: 550px;
         input {
           background-color: rgb(255, 255, 255);
         }

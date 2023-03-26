@@ -1,31 +1,54 @@
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+import { useState, useCallback } from 'react';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
-import { Header } from '../Header';
+// import { Header } from '../Header';
 import '../index.scss';
 import './home-page.scss';
 
-export const HomePage = (props) => {
+export const HomePage = ({ onEmailSubmit }) => {
+  const [email, setEmail] = useState('');
+
+  const handleEmailChange = useCallback((event) => {
+    setEmail(event.target.value);
+  }, []);
+
+  const handleEmailSubmit = useCallback(
+    (event) => {
+      event.preventDefault();
+      onEmailSubmit(email);
+    },
+    [email]
+  );
+
   return (
     <div className="vh-page vh-home-page">
-      <Header {...props} />
+      {/* <Header {...props} /> */}
       <div className="blurb-container">
         <div className="blurb">
           <div className="callout">Accelerate Dataviz Delivery</div>
           <p className="description">
             <strong>Develop bespoke data visualizations</strong> faster and more
-            collaboratively than ever with VizHub 3. Built for client services.
+            collaboratively than ever with <strong>VizHub 3</strong>. Built for
+            client services.
           </p>
-          <InputGroup className="vh-email-submission">
-            <Form.Control placeholder="Your email" aria-label="Your email" />
-            <Button variant="primary" id="button-addon2">
-              Join the private beta
-            </Button>
-          </InputGroup>
+          <Form onSubmit={handleEmailSubmit}>
+            <InputGroup className="vh-email-submission">
+              <Form.Control
+                placeholder="Your email"
+                aria-label="Your email"
+                onChange={handleEmailChange}
+              />
+              <Button
+                variant="primary"
+                disabled={!email}
+                onClick={handleEmailSubmit}
+              >
+                Join the private beta
+              </Button>
+            </InputGroup>
+          </Form>
         </div>
       </div>
     </div>
