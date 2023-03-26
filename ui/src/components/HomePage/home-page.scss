@@ -1,2 +1,27 @@
 .vh-home-page {
+  .blurb-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+
+    .blurb {
+      max-width: 960px;
+
+      .description {
+        font-size: 2em;
+        margin: 1em 0 1.5em 0;
+      }
+
+      .callout {
+        font-family: Poppins;
+        font-size: 4em;
+      }
+      .vh-email-submission {
+        input {
+          background-color: rgb(255, 255, 255);
+        }
+      }
+    }
+  }
 }
