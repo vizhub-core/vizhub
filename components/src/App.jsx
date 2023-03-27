@@ -9,25 +9,28 @@ const stories = import.meta.glob('./stories/*.jsx', { eager: true });
 const entries = Object.keys(stories).map((key) => {
   const name = key.substring(10).split('.')[0];
   const component = stories[key].default;
-  return { name, component };
+  return { key, name, component };
 });
 
+const entriesMap = new Map(entries.map((d) => [d.name, d]));
+
 function App() {
-  const [Component, setComponent] = useState(null);
+  const [storyName, setStoryName] = useState(null);
+  const Component = storyName ? entriesMap.get(storyName).component : null;
   return (
     <div className="App">
       <div className="sidebar">
         {entries.map(({ name, component }) => (
           <div
             key={name}
-            className={`entry${component === Component ? ' active' : ''}`}
-            onClick={() => setComponent(component)}
+            className={`entry${name === storyName ? ' active' : ''}`}
+            onClick={() => setStoryName(name)}
           >
             {name}
           </div>
         ))}
       </div>
-      <div className="component">{Component}</div>
+      <div className="component">{<Component />}</div>
     </div>
   );
 }
