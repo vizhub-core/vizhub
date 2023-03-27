@@ -1,9 +1,9 @@
-import { HomePage } from '../components/HomePage';
+import { HomePageBody } from '../components/HomePageBody';
 import { renderVizPreviews } from './renderVizPreviews';
 
 export default {
-  title: 'VizHub/HomePage',
-  component: HomePage,
+  title: 'VizHub/HomePageBody',
+  component: HomePageBody,
   parameters: {
     layout: 'fullscreen',
   },

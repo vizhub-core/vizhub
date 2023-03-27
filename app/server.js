@@ -86,17 +86,21 @@ async function createServer(
       }
 
       // Match the route and fetch its data.
-      // From https://stackoverflow.com/questions/66265608/react-router-v6-get-path-pattern-for-current-route
+      // https://stackoverflow.com/questions/66265608/react-router-v6-get-path-pattern-for-current-route
+      // https://reactrouter.com/en/main/utils/match-path#matchpath
+      let match;
       let matchedPage;
+
       for (const page of pages) {
-        if (matchPath({ path: page.path }, url)) {
+        match = matchPath({ path: page.path }, url);
+        if (match) {
           matchedPage = page;
+          break;
         }
       }
-      console.log('matched:');
-      console.log(matchedPage);
 
-      const pageData = await matchedPage.getPageData();
+      const params = match ? match.params : null;
+      const pageData = await matchedPage.getPageData(params);
       pageData.url = url;
 
       const titleSanitized = xss(pageData.title);

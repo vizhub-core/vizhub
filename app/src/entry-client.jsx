@@ -10,4 +10,3 @@ ReactDOM.hydrateRoot(
     <App pageData={window.pageData} />
   </BrowserRouter>
 );
-console.log('hydrated');

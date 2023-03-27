@@ -1,9 +1,9 @@
-import { ProfilePage } from '../components/ProfilePage';
+import { ProfilePageBody } from '../components/ProfilePageBody';
 import { renderVizPreviews } from './renderVizPreviews';
 
 export default {
-  title: 'VizHub/ProfilePage',
-  component: ProfilePage,
+  title: 'VizHub/ProfilePageBody',
+  component: ProfilePageBody,
   // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/7.0/react/writing-docs/docs-page
   // tags: ['autodocs'],
   parameters: {
@@ -17,6 +17,8 @@ export const LoggedIn = {
     user: {
       name: 'Jane Doe',
     },
+    userName: 'schmoe',
+    displayName: 'Joe Schmoe',
     renderVizPreviews,
   },
 };
@@ -24,5 +26,7 @@ export const LoggedIn = {
 export const LoggedOut = {
   args: {
     renderVizPreviews,
+    userName: 'schmoe',
+    displayName: 'Joe Schmoe',
   },
 };

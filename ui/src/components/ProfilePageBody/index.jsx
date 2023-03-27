@@ -7,11 +7,14 @@ import { Header } from '../Header';
 import '../index.scss';
 import './profile-page.scss';
 
-export const ProfilePage = (props) => {
-  const { renderVizPreviews, onMoreClick } = props;
+export const ProfilePageBody = ({
+  renderVizPreviews,
+  onMoreClick,
+  userName,
+  displayName,
+}) => {
   return (
     <div className="vh-page vh-profile-page">
-      <Header {...props} />
       <Container className="mt-3 mb-3">
         <div className="d-flex mb-3">
           <Image
@@ -20,8 +23,8 @@ export const ProfilePage = (props) => {
             roundedCircle
           />
           <div className="d-flex flex-column justify-content-center">
-            <div className="vh-profile-page__full-name">Full Name</div>
-            <div className="vh-profile-page__user-name">username</div>
+            <div className="vh-profile-page__full-name">{displayName}</div>
+            <div className="vh-profile-page__user-name">{userName}</div>
           </div>
         </div>
 
@@ -35,4 +38,7 @@ export const ProfilePage = (props) => {
 };
 
 // Just for Storybook event listeners
-ProfilePage.propTypes = { ...Header.propTypes, onMoreClick: PropTypes.func };
+ProfilePageBody.propTypes = {
+  ...Header.propTypes,
+  onMoreClick: PropTypes.func,
+};

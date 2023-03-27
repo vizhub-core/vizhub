@@ -8,7 +8,7 @@ import 'vizhub-ui/dist/vizhub-ui.css';
 import '../index.scss';
 import './home-page.scss';
 
-export const HomePage = ({ onEmailSubmit }) => {
+export const HomePageBody = ({ onEmailSubmit }) => {
   const [email, setEmail] = useState('');
 
   const handleEmailChange = useCallback((event) => {
