@@ -1,4 +1,5 @@
 import { VizPreview } from '../components/VizPreview';
+import './stories.css';
 
 const args = {
   title: 'Primordial Viz',
@@ -10,5 +11,9 @@ const args = {
 };
 
 export const VizPreviewStory = () => {
-  return <VizPreview {...args} />;
+  return (
+    <div className="layout-centered">
+      <VizPreview {...args} />
+    </div>
+  );
 };
