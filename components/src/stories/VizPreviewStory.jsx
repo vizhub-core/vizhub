@@ -9,10 +9,12 @@ const args = {
   ownerAvatarURL: 'https://github.com/mdo.png',
 };
 
-export const VizPreviewStory = () => {
+const Story = () => {
   return (
     <div className="layout-centered">
       <VizPreview {...args} />
     </div>
   );
 };
+
+export default Story;

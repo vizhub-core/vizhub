@@ -7,10 +7,12 @@ const args = {
   },
 };
 
-export const HomePageBodyStory = () => {
+const Story = () => {
   return (
     <div className="layout-fullscreen">
       <HomePageBody {...args} />
     </div>
   );
 };
+
+export default Story;

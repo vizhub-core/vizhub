@@ -8,7 +8,7 @@ const stories = import.meta.glob('./stories/*.jsx', { eager: true });
 
 const entries = Object.keys(stories).map((key) => {
   const name = key.substring(10).split('.')[0];
-  const component = stories[key][name];
+  const component = stories[key].default;
   return { name, component };
 });
 
@@ -20,7 +20,7 @@ function App() {
         {entries.map(({ name, component }) => (
           <div
             key={name}
-            className="entry"
+            className={`entry${component === Component ? ' active' : ''}`}
             onClick={() => setComponent(component)}
           >
             {name}

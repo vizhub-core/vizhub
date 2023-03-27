@@ -18,6 +18,9 @@
     .entry:hover {
       background-color: #5f687a;
     }
+    .entry.active {
+      background-color: #1f61e5;
+    }
   }
 
   .component {
