@@ -1,0 +1,6 @@
+/* Make all pages exactly 100% height. */
+html,
+body,
+#app {
+  height: 100%;
+}

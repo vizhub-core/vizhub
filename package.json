@@ -23,7 +23,8 @@
     "entities",
     "gateways",
     "interactors",
-    "database"
+    "database",
+    "ui"
   ],
   "dependencies": {
     "mongodb-legacy": "^5.0.0",
