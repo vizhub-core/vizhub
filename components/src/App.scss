@@ -1,0 +1,13 @@
+.App {
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+
+  .sidebar {
+    width: 200px;
+  }
+
+  .component {
+    flex: 1;
+  }
+}
