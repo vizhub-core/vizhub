@@ -5,3 +5,8 @@
     justify-content: center;
     background-color: var(--vh-background-color);
 }
+
+.layout-fullscreen{
+    height: 100%;
+    background-color: var(--vh-background-color);
+}

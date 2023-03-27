@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import './App.scss';
+import './stories/stories.css';
 
 // Auto generates routes from files under ./pages
 // https://vitejs.dev/guide/features.html#glob-import

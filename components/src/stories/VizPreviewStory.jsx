@@ -1,5 +1,4 @@
 import { VizPreview } from '../components/VizPreview';
-import './stories.css';
 
 const args = {
   title: 'Primordial Viz',
