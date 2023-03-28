@@ -2,16 +2,15 @@ import { useState } from 'react';
 import './App.scss';
 import './stories/stories.css';
 
-// Auto generates routes from files under ./pages
+// Auto generates list of stories.
+// Supports hot reloading!
 // https://vitejs.dev/guide/features.html#glob-import
 const stories = import.meta.glob('./stories/*.jsx', { eager: true });
-
 const entries = Object.keys(stories).map((key) => {
-  const name = key.substring(10).split('.')[0];
+  const name = key.substring(10).split('.')[0].replace('Story', '');
   const component = stories[key].default;
   return { key, name, component };
 });
-
 const entriesMap = new Map(entries.map((d) => [d.name, d]));
 
 function App() {
@@ -20,7 +19,7 @@ function App() {
   return (
     <div className="App">
       <div className="sidebar">
-        {entries.map(({ name, component }) => (
+        {entries.map(({ name }) => (
           <div
             key={name}
             className={`entry${name === storyName ? ' active' : ''}`}
