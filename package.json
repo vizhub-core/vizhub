@@ -24,7 +24,7 @@
     "gateways",
     "interactors",
     "database",
-    "ui"
+    "components"
   ],
   "dependencies": {
     "mongodb-legacy": "^5.0.0",

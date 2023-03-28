@@ -1,4 +1,4 @@
-import { ProfilePageBody } from 'ui/src/components/ProfilePageBody';
+import { ProfilePageBody } from 'components/src/components/ProfilePageBody';
 // Inspired by https://github.com/vitejs/vite-plugin-react/blob/main/playground/ssr-react/src/pages/Home.jsx
 export const ProfilePage = ({ pageData }) => {
   const { profileUser } = pageData;
