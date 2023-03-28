@@ -18,7 +18,7 @@ const OwnerControlWrapper = ({ initialOwner, possibleOwners, onChange }) => {
   );
 };
 
-const args = {
+export const args = {
   initialOwner: '43275',
   possibleOwners: [
     { id: '43275', label: 'fred' },
