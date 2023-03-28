@@ -1,18 +1,18 @@
-# Based on https://github.com/backspace-academy/aws-nodejs-sample-codebuild/blob/master/buildspec.yml
+# Based on
+# https://docs.aws.amazon.com/codebuild/latest/userguide/sample-docker.html
 version: 0.2
 
 phases:
   install:
     runtime-versions:
-      nodejs: 18
+      nodejs: 19
+      docker: 20
+  pre_build:
     commands:
-      - echo Installing ...
+      - echo npm install ...
       - npm install
-  # pre_build:
-  #   commands:
-  #     - echo Installing source NPM dependencies...
-  #     - npm install
-  #     - npm install unit.js
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
   build:
     commands:
       - echo Build started on `date`

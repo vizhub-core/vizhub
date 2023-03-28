@@ -4,24 +4,19 @@ VizHub Platform V3
 
 ## Docker
 
-How to use Docker.
+See also [Dockerizing a Node.js web app](https://nodejs.org/en/docs/guides/nodejs-docker-webapp)
 
-At the top level we have:
-
-- `Dockerfile` - defines a container for the `app` package
-- `deploy.sh` - automates building this package and deploying it to AWS Fargate
-
-To test locally:
+How to use Docker to verify locally:
 
 ```
 docker build -t vizhub3-app .
+docker images
+docker run -p 5173:5173 -d vizhub3-app
+docker ps
+docker logs <id>
+docker stop <id>
 ```
 
 ## Production Deployment
 
-Production deployment follows the AWS patterns in [Create a CI/CD pipeline to deploy microservices with AWS Fargate and Amazon API Gateway](https://docs.aws.amazon.com/prescriptive-guidance/latest/patterns/create-a-ci-cd-pipeline-to-deploy-microservices-with-aws-fargate-and-amazon-api-gateway.html)
-j
-
-Branches for CD:
-
-- `production-app` controls production app deployment in AWS CodePipeline
+Production deployment follows the AWS patterns in [YouTube: AWS DevOps CI CD Pipeline With NodeJS + ECS + CodePipeline + ECR](https://www.youtube.com/watch?v=Iem8ZI517L4)
