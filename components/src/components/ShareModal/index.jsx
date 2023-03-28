@@ -18,6 +18,7 @@ const sections = {
 
 export const ShareModal = ({
   show,
+  linkToCopy,
   onClose,
   onLinkCopy,
   onLinkSectionNavigate,
@@ -62,7 +63,7 @@ export const ShareModal = ({
             <Nav.Link eventKey="snippet">Snippet</Nav.Link>
           </Nav.Item>
         </Nav>
-        <Section onLinkCopy={onLinkCopy} />
+        <Section linkToCopy={linkToCopy} onLinkCopy={onLinkCopy} />
       </Modal.Body>
       <Modal.Footer>
         <Button variant="primary" onClick={onClose}>

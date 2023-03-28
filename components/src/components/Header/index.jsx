@@ -24,7 +24,7 @@ const AvatarToggle = forwardRef(({ children, onClick }, ref) => (
 
 export const Header = ({
   authenticatedUserAvatarURL,
-  onLogin,
+  onLoginClick,
   onLogoutClick,
   onCreateVizClick,
   onProfileClick,
@@ -62,7 +62,11 @@ export const Header = ({
               </Dropdown.Menu>
             </Dropdown>
           ) : (
-            <Button size="sm" className="vh-header-button" onClick={onLogin}>
+            <Button
+              size="sm"
+              className="vh-header-button"
+              onClick={onLoginClick}
+            >
               Log in
             </Button>
           )}

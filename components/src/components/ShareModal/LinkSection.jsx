@@ -5,13 +5,13 @@ import Button from 'react-bootstrap/Button';
 
 // TODO show tooltip after copy operation
 // TODO make copy operation actually work
-export const LinkSection = ({ onLinkCopy }) => (
+export const LinkSection = ({ linkToCopy, onLinkCopy }) => (
   <Form.Group className="mb-3 mt-3" controlId="formShareLink">
     <InputGroup>
       <FormControl
         aria-label="Link URL"
         aria-describedby="button-copy"
-        defaultValue="https://vizhub.com/curran/2ee9f785faee42e6b697c527cd196025"
+        defaultValue={linkToCopy}
         readOnly
       />
       <Button variant="outline-primary" id="button-copy" onClick={onLinkCopy}>
