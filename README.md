@@ -18,6 +18,7 @@ docker logs <id>
 docker stop <id>
 ```
 
+
 ## Production Deployment
 
 Production deployment follows the AWS patterns in [YouTube: AWS DevOps CI CD Pipeline With NodeJS + ECS + CodePipeline + ECR](https://www.youtube.com/watch?v=Iem8ZI517L4)
