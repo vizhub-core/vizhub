@@ -30,7 +30,7 @@ function App() {
           </div>
         ))}
       </div>
-      <div className="component">{<Component />}</div>
+      <div className="component">{Component ? <Component /> : null}</div>
     </div>
   );
 }
