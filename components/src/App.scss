@@ -2,6 +2,7 @@
   height: 100%;
   display: flex;
   justify-content: space-between;
+  overflow: hidden;
 
   .sidebar {
     width: 200px;
@@ -15,7 +16,8 @@
       cursor: pointer;
       user-select: none;
     }
-    .entry:hover {
+    .entry:hover,
+    .entry:focus {
       background-color: #5f687a;
     }
     .entry.active {

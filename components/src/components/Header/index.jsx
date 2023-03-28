@@ -23,41 +23,42 @@ const AvatarToggle = forwardRef(({ children, onClick }, ref) => (
 ));
 
 export const Header = ({
-  user,
+  authenticatedUserAvatarURL,
   onLogin,
-  onLogout,
-  onCreateViz,
-  onProfile,
-  onForum,
-  onVizHub,
+  onLogoutClick,
+  onCreateVizClick,
+  onProfileClick,
+  onForumClick,
+  onVizHubClick,
 }) => (
   <Navbar bg="dark" variant="dark" expand="md">
     <Container fluid>
-      <Navbar.Brand
-        style={{ cursor: 'pointer' }}
-        onClick={onVizHub}
-      ></Navbar.Brand>
+      <Navbar.Brand style={{ cursor: 'pointer' }} onClick={onVizHubClick}>
+        VizHubLogoGoesHere
+      </Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="me-auto" />
         <Nav className="align-items-md-center">
-          <Nav.Link onClick={onForum}>Forum</Nav.Link>
-          {user ? (
+          <Nav.Link onClick={onForumClick}>Forum</Nav.Link>
+          {authenticatedUserAvatarURL ? (
             <Dropdown align="end">
               <Dropdown.Toggle as={AvatarToggle}>
                 <Image
-                  src="https://github.com/mdo.png"
+                  src={authenticatedUserAvatarURL}
                   roundedCircle
                   width="32"
                   height="32"
                 />
               </Dropdown.Toggle>
               <Dropdown.Menu>
-                <Dropdown.Item onClick={onCreateViz}>Create Viz</Dropdown.Item>
+                <Dropdown.Item onClick={onCreateVizClick}>
+                  Create Viz
+                </Dropdown.Item>
                 <Dropdown.Divider />
-                <Dropdown.Item onClick={onProfile}>Profile</Dropdown.Item>
+                <Dropdown.Item onClick={onProfileClick}>Profile</Dropdown.Item>
                 <Dropdown.Divider />
-                <Dropdown.Item onClick={onLogout}>Log out</Dropdown.Item>
+                <Dropdown.Item onClick={onLogoutClick}>Log out</Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
           ) : (

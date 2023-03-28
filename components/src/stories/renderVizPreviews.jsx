@@ -1,4 +1,4 @@
-import { VizPreview } from './VizPreview';
+import { VizPreview } from '../components/VizPreview';
 
 export const renderVizPreviews = () =>
   [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((d, i) => (

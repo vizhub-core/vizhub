@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { ForkModal } from '../components/ForkModal';
 import { args as ownerControlArgs } from './OwnerControlStory';
 
@@ -5,7 +6,6 @@ import { args as ownerControlArgs } from './OwnerControlStory';
 const { initialOwner, possibleOwners } = ownerControlArgs;
 
 export const args = {
-  show: true,
   initialTitle: 'fork of Bar Chart',
   initialVisibility: 'public',
   initialOwner,
@@ -20,9 +20,16 @@ export const args = {
 };
 
 const Story = () => {
+  const [show, setShow] = useState(true);
   return (
     <div className="layout-centered">
-      <ForkModal {...args} />
+      <ForkModal
+        show={show}
+        {...args}
+        onClose={() => {
+          setShow(false);
+        }}
+      />
     </div>
   );
 };

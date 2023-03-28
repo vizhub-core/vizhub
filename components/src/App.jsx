@@ -6,11 +6,13 @@ import './stories/stories.css';
 // Supports hot reloading!
 // https://vitejs.dev/guide/features.html#glob-import
 const stories = import.meta.glob('./stories/*.jsx', { eager: true });
-const entries = Object.keys(stories).map((key) => {
-  const name = key.substring(10).split('.')[0].replace('Story', '');
-  const component = stories[key].default;
-  return { key, name, component };
-});
+const entries = Object.keys(stories)
+  .map((key) => {
+    const name = key.substring(10).split('.')[0].replace('Story', '');
+    const component = stories[key].default;
+    return { key, name, component };
+  })
+  .filter(({ key }) => key.includes('Story'));
 const entriesMap = new Map(entries.map((d) => [d.name, d]));
 
 function App() {
@@ -18,9 +20,10 @@ function App() {
   const Component = storyName ? entriesMap.get(storyName).component : null;
   return (
     <div className="App">
-      <div className="sidebar">
+      <div className="sidebar" tabIndex="0">
         {entries.map(({ name }) => (
           <div
+            tabIndex="-1"
             key={name}
             className={`entry${name === storyName ? ' active' : ''}`}
             onClick={() => setStoryName(name)}
