@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { HomePageBody } from 'ui/src/components/HomePageBody';
+import { HomePageBody } from 'components/src/components/HomePageBody';
 // Decoupled navigation from interaction, to support
 // testing the UI in isolation, for example in Storybook.
 // Inspired by https://github.com/vitejs/vite-plugin-react/blob/main/playground/ssr-react/src/pages/Home.jsx

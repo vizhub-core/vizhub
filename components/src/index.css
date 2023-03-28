@@ -1,0 +1,16 @@
+/* Make all pages exactly 100% height. */
+/* Each page is responsible for its own scrollbars */
+html,
+body,
+#root {
+  height: 100%;
+}
+
+/* @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&family=Poppins:wght@800&display=swap');
+
+.vh-page {
+  background-color: var(--vh-background-color);
+  height: 100%;
+ 
+  flex-direction: column;
+} */
