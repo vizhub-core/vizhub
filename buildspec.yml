@@ -5,7 +5,7 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      nodejs: 19
+      docker: 19
   pre_build:
     commands:
       - echo npm install ...

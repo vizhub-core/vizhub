@@ -1,7 +1,5 @@
 import { useState, useCallback } from 'react';
-import InputGroup from 'react-bootstrap/InputGroup';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
+import { InputGroup, Form, Button } from '../bootstrap';
 
 // import { Header } from '../Header';
 import 'vizhub-ui/dist/vizhub-ui.css';

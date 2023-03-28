@@ -11,6 +11,7 @@ How to use Docker to verify locally:
 ```
 docker build -t vizhub3-app .
 docker images
+docker rmi <id>
 docker run -p 5173:5173 -d vizhub3-app
 docker ps
 docker logs <id>

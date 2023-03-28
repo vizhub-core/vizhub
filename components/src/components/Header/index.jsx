@@ -1,11 +1,6 @@
 import { forwardRef } from 'react';
 import PropTypes from 'prop-types';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
-import Container from 'react-bootstrap/Container';
-import Dropdown from 'react-bootstrap/Dropdown';
-import Image from 'react-bootstrap/Image';
-import Button from 'react-bootstrap/Button';
+import { Nav, Navbar, Container, Dropdown, Image, Button } from '../bootstrap';
 import '../index.scss';
 import './header.css';
 

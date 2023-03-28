@@ -1,8 +1,6 @@
 import { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import Modal from 'react-bootstrap/Modal';
-import Nav from 'react-bootstrap/Nav';
-import Button from 'react-bootstrap/Button';
+import { Modal, Nav, Button } from '../bootstrap';
 import { LinkSection } from './LinkSection';
 import '../index.scss';
 

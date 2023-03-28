@@ -1,6 +1,5 @@
-import { useMemo, useCallback } from 'react';
-import Form from 'react-bootstrap/Form';
-import Dropdown from 'react-bootstrap/Dropdown';
+import { useMemo } from 'react';
+import { Form, Dropdown } from '../bootstrap';
 import '../index.scss';
 
 export const OwnerControl = ({ owner, setOwner, possibleOwners }) => {

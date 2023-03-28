@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import Form from 'react-bootstrap/Form';
+import { Form } from '../bootstrap';
 import '../index.scss';
 
 const visibilities = {
