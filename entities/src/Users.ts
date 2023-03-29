@@ -46,3 +46,9 @@ export interface User {
   // Raw unmodified profile data from authentication providers
   profiles?: Profiles;
 }
+
+// One of these is created
+// when a user signs up for the beta program mailing list.
+export interface BetaProgramSignup {
+  email: EmailAddress;
+}

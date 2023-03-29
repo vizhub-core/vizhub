@@ -20,6 +20,7 @@ import {
   Milestone,
   Deployment,
   MergeRequest,
+  BetaProgramSignup,
 } from 'entities';
 
 export const ts1: Timestamp = 1638100000;
@@ -276,4 +277,8 @@ export const sampleMergeRequest: MergeRequest = {
   description: 'Yo dawg this is my first VizHub MR!',
   author: userJoe.id,
   created: ts4,
+};
+
+export const sampleBetaProgramSignup: BetaProgramSignup = {
+  email: 'test@test.com',
 };

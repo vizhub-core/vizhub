@@ -39,6 +39,7 @@ export const crudEntityNames = [
   'Milestone',
   'Deployment',
   'MergeRequest',
+  'BetaProgramSignup',
 ];
 
 // These entities are stored directly in Mongo,

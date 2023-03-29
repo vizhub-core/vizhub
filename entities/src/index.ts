@@ -34,7 +34,7 @@ export type {
 
 export type { Tagging, TaggingId } from './Tags';
 
-export type { User, UserId, UserName, EmailAddress, Profiles } from './Users';
+export type { User, UserId, UserName, EmailAddress, Profiles, BetaProgramSignup } from './Users';
 
 export type {
   Viz,

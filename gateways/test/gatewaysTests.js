@@ -20,6 +20,7 @@ import {
   sampleMilestone,
   sampleDeployment,
   sampleMergeRequest,
+  sampleBetaProgramSignup,
   commit2,
   commit2WithMilestone,
   commit3,
@@ -102,6 +103,7 @@ const sampleEntities = {
   Milestone: sampleMilestone,
   Deployment: sampleDeployment,
   MergeRequest: sampleMergeRequest,
+  BetaProgramSignup: sampleBetaProgramSignup,
 };
 
 export const gatewaysTests = () => {
