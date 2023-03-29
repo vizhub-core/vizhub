@@ -17,21 +17,30 @@ const entriesMap = new Map(entries.map((d) => [d.name, d]));
 
 function App() {
   const [storyName, setStoryName] = useState(null);
+  const [showSidebar, setShowSidebar] = useState(true);
   const Component = storyName ? entriesMap.get(storyName).component : null;
   return (
     <div className="App">
-      <div className="sidebar" tabIndex="0">
-        {entries.map(({ name }) => (
+      {showSidebar ? (
+        <div className="sidebar" tabIndex="0">
           <div
-            tabIndex="-1"
-            key={name}
-            className={`entry${name === storyName ? ' active' : ''}`}
-            onClick={() => setStoryName(name)}
+            className="entry hide-sidebar"
+            onClick={() => setShowSidebar(false)}
           >
-            {name}
+            hide sidebar
           </div>
-        ))}
-      </div>
+          {entries.map(({ name }) => (
+            <div
+              tabIndex="-1"
+              key={name}
+              className={`entry${name === storyName ? ' active' : ''}`}
+              onClick={() => setStoryName(name)}
+            >
+              {name}
+            </div>
+          ))}
+        </div>
+      ) : null}
       <div className="component">{Component ? <Component /> : null}</div>
     </div>
   );

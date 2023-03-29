@@ -1,7 +1,6 @@
 import { useState, useCallback } from 'react';
 import { InputGroup, Form, Button } from '../bootstrap';
 
-// import { Header } from '../Header';
 import 'vizhub-ui/dist/vizhub-ui.css';
 import '../index.scss';
 import './home-page.scss';
@@ -26,7 +25,8 @@ export const HomePageBody = ({ onEmailSubmit }) => {
       {/* <Header {...props} /> */}
       <div className="blurb-container">
         <div className="blurb">
-          <div className="callout">Accelerate Dataviz Delivery</div>
+          <div className="callout large">Accelerate</div>
+          <div className="callout">Dataviz Delivery</div>
           <p className="description">
             <strong>Develop bespoke data visualizations</strong> faster and more
             collaboratively than ever with <strong>VizHub 3</strong>. Built for

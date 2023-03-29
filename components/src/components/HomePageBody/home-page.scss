@@ -8,9 +8,9 @@
     min-height: 0;
 
     .blurb {
-      max-width: 960px;
+      max-width: 700px;
 
-      padding: 10px;
+      padding: 10px 10px 80px 10px;
       display: flex;
       flex-direction: column;
 
@@ -21,10 +21,14 @@
 
       .callout {
         font-family: Poppins;
-        font-size: 3em;
+        font-size: 2.5em;
       }
+
+      .callout.large {
+        font-size: 3.5em;
+      }
+
       .vh-email-submission {
-        max-width: 550px;
         input {
           background-color: rgb(255, 255, 255);
         }

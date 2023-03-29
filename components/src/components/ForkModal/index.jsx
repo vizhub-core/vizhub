@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { Modal, Modal, Form, Button } from '../bootstrap';
+import { Modal, Form, Button } from '../bootstrap';
 import { VisibilityControl } from '../VisibilityControl';
 import { OwnerControl } from '../OwnerControl';
 import '../index.scss';
