@@ -1,0 +1,38 @@
+.vh-beta-confirm-page {
+  .blurb-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+
+    .blurb {
+      max-width: 700px;
+
+      padding: 10px 10px 80px 10px;
+      display: flex;
+      flex-direction: column;
+
+      .description {
+        font-size: 1.5em;
+        margin: 1em 0 1.5em 0;
+      }
+
+      .callout {
+        font-family: Poppins;
+        font-size: 2.5em;
+      }
+
+      .callout.large {
+        font-size: 3.5em;
+      }
+
+      .vh-email-submission {
+        input {
+          background-color: rgb(255, 255, 255);
+        }
+      }
+    }
+  }
+}
