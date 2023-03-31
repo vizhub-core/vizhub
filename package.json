@@ -20,6 +20,7 @@
   "homepage": "https://github.com/vizhub-core/vizhub3#readme",
   "workspaces": [
     "app",
+    "api",
     "entities",
     "gateways",
     "interactors",

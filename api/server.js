@@ -17,18 +17,9 @@ async function createServer(
 
   let vite;
   if (!isProd) {
-    vite = await (
-      await import('vite')
-    ).createServer({
-      root,
-      logLevel: isTest ? 'error' : 'info',
-      server: {
-        middlewareMode: true,
-      },
-      appType: 'custom',
-    });
+    vite = await import('vite');
     // use vite's connect instance as middleware
-    app.use(vite.middlewares);
+    // app.use(vite.middlewares);
   } else {
     app.use((await import('compression')).default());
   }

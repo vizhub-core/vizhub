@@ -10,6 +10,7 @@ import express from 'express';
 import jsesc from 'jsesc';
 import { matchPath } from 'react-router-dom';
 import { seoMetaTags } from './seoMetaTags.js';
+import { api } from 'api/src/api.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const resolve = (p) => path.resolve(__dirname, p);
@@ -27,6 +28,9 @@ async function createServer(
     : '';
 
   const app = express();
+
+  // Listen for API routes
+  api(app);
 
   /**
    * @type {import('vite').ViteDevServer}

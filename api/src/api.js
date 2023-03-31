@@ -6,6 +6,7 @@
 // TODO pull in MongoDB + ShareDB setup from database package
 export const api = (expressApp) => {
   expressApp.get('/api/test', (req, res) => {
+    console.log('received request');
     res.send('Hello World!');
   });
 };
