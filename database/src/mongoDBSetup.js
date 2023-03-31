@@ -6,7 +6,8 @@
 // See:
 //   https://share.github.io/sharedb/getting-started
 //   https://github.com/share/sharedb-mongo
-import { MongoClient } from 'mongodb-legacy';
+import MongoLegacy from 'mongodb-legacy';
+const { MongoClient } = MongoLegacy;
 
 export const mongoDBSetup = async ({ mongoURI }) => {
   setTimeout(() => {

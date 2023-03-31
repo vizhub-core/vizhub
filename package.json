@@ -6,7 +6,9 @@
   "scripts": {
     "upgrade": "npm exec --workspaces -- ncu -u",
     "prettier": "npm run --workspaces -- prettier",
-    "test": "npm run --workspaces -- test"
+    "test": "npm run --workspaces -- test",
+    "build": "cd app; npm run build",
+    "start": "cd app; npm run serve"
   },
   "repository": {
     "type": "git",
@@ -28,6 +30,7 @@
     "components"
   ],
   "dependencies": {
+    "16": "^0.0.2",
     "mongodb-legacy": "^5.0.0",
     "sharedb": "^3.2.3",
     "sharedb-mongo": "^2.0.0"
