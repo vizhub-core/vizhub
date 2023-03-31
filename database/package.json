@@ -4,7 +4,8 @@
   "type": "module",
   "main": "src/index.js",
   "scripts": {
-    "test": "vitest run",
+    "test": "",
+    "test-db": "vitest run",
     "watch": "vitest",
     "prettier": "prettier {*.*,**/*.*} --single-quote --write"
   },

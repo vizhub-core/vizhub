@@ -8,5 +8,6 @@ export {
   resourceNotFoundError,
   invalidCommitOp,
   invalidDecrementError,
+  missingParameterError,
 } from './errors';
 export { crudEntityNames, noSnapshot, MemoryGateways } from './MemoryGateways';

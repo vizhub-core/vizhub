@@ -4,14 +4,14 @@ import { v2Vizzes } from './v2Vizzes';
 import { getVizV2 } from './getVizV2';
 import { processViz } from './processViz';
 import { reportProgress } from './reportProgress';
-import { computeV3Files } from './computeV3Files';
 
 // Delete everything in V3 Mongo and Redis when starting.
 const startFresh = true;
 
 const migrate = async () => {
-  const { v2MongoDBDatabase, v3MongoDBDatabase, databaseGateways } =
-    await mongoDBSetup(startFresh);
+  const { v2MongoDBDatabase, databaseGateways } = await mongoDBSetup(
+    startFresh
+  );
 
   // V2 collections
   const infoCollection = v2MongoDBDatabase.collection('documentInfo');

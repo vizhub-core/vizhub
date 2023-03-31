@@ -77,7 +77,7 @@ async function createServer(
     const entry = await import('./dist/server/entry-server.js');
     api = entry.api;
   }
-  api(app);
+  await api({ app, isProd });
 
   // Handle SSR pages in such a way that they update (like hot reloading)
   // in dev on each page request, so we don't need to restart the server all the time.

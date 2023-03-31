@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe } from 'vitest';
 import { setInitGateways, gatewaysTests } from 'gateways/test';
 import { interactorsTests } from 'interactors/test';
 import { DatabaseGateways, mongoDBSetup, shareDBSetup } from '../src';

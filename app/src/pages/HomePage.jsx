@@ -10,12 +10,17 @@ const vizKit = VizKit({ baseUrl: './api' });
 export const HomePage = ({ pageData }) => {
   const navigate = useNavigate();
 
-  const handleEmailSubmit = (email) => {
+  const handleEmailSubmit = async (email) => {
     navigate('/beta-confirm');
     console.log('Submitting email ' + email);
-    vizKit.rest.privateBetaEmailSubmit(email).then((result) => {
-      console.log(result);
-    });
+
+    const result = await vizKit.rest.privateBetaEmailSubmit(email);
+    if (result.outcome === 'success') {
+      console.log('Successfully submitted email!');
+    } else if (result.outcome === 'failure') {
+      console.log('Error when submitting email.');
+      console.log(result.error);
+    }
   };
   //  console.log('pageData in HomePage:');
   //  console.log(pageData);

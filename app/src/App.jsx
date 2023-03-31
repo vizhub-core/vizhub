@@ -1,24 +1,8 @@
 // Inspired by
 // https://github.com/vitejs/vite-plugin-react/blob/main/playground/ssr-react/src/App.jsx
 // https://github.com/vizhub-core/vizhub/blob/main/vizhub-v2/packages/neoFrontend/src/App.js
-import { Link, Route, Routes, useLocation } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import { pages } from './pages';
-
-// TODO bring in this nav
-//const Nav = () => (
-//  <nav>
-//    <ul>
-//      {routes.map(({ name, path }) => {
-//        return (
-//          <li key={path}>
-//            <Link to={path}>{name}</Link>
-//          </li>
-//        );
-//      })}
-//    </ul>
-//  </nav>
-//);
-//
 
 export const App = ({ pageData }) => {
   // Every time App renders client-side, there may have been a navigation.
