@@ -18,7 +18,8 @@ export const api = async ({ app, isProd }) => {
   // TODO connect to production DB in prod
   let gateways;
   console.log('isProd = ' + isProd);
-  if (isProd) {
+  //if (isProd) {
+  if (false) {
     console.log('Connecting to production MongoDB...');
     const { mongoDBDatabase, mongoDBConnection } = await mongoDBSetup({
       mongoURI:
