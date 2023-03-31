@@ -10,7 +10,6 @@ import express from 'express';
 import jsesc from 'jsesc';
 import { matchPath } from 'react-router-dom';
 import { seoMetaTags } from './seoMetaTags.js';
-import { api } from 'api/src/api.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const resolve = (p) => path.resolve(__dirname, p);
@@ -29,8 +28,8 @@ async function createServer(
 
   const app = express();
 
-  // Listen for API routes
-  api(app);
+  // Support parsing of JSON bodies in API requests.
+  app.use(express.json());
 
   /**
    * @type {import('vite').ViteDevServer}
@@ -67,6 +66,21 @@ async function createServer(
     );
   }
 
+  // Handle the API requests.
+  // When an API endpoint changes, we do need to restart the server
+  // TODO think about how to make it so we don't need to restart the server
+  let api;
+  if (!isProd) {
+    const entry = await vite.ssrLoadModule('/src/entry-server.jsx');
+    api = entry.api;
+  } else {
+    const entry = await import('./dist/server/entry-server.js');
+    api = entry.api;
+  }
+  api(app);
+
+  // Handle SSR pages in such a way that they update (like hot reloading)
+  // in dev on each page request, so we don't need to restart the server all the time.
   app.use('*', async (req, res) => {
     try {
       const url = req.originalUrl;
