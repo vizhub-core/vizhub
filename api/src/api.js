@@ -95,7 +95,7 @@ export const api = async ({ app, isProd, env }) => {
     }
   });
 
-  app.get('/api/test', async (res) => {
+  app.get('/api/test', (req, res) => {
     res.send('testing');
   });
 };
