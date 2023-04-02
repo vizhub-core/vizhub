@@ -13,23 +13,33 @@ import { DatabaseGateways, mongoDBSetup, shareDBSetup } from 'database';
 // });
 
 // TODO pull in MongoDB + ShareDB setup from database package
-export const api = async ({ app, isProd }) => {
+export const api = async ({ app, isProd, env }) => {
   // TODO only do this in dev
   // TODO connect to production DB in prod
+  // TODO
+  // TODO
   let gateways;
   console.log('isProd = ' + isProd);
-  //if (isProd) {
-  if (false) {
+  if (isProd) {
     console.log('Connecting to production MongoDB...');
-    const { mongoDBDatabase, mongoDBConnection } = await mongoDBSetup({
-      mongoURI:
-        'mongodb+srv://vizhub-app-server:8jbLmnVuSPhYVsAy@vizhub3.6sag6.mongodb.net/?retryWrites=true&w=majority',
+
+    const username = env.VIZHUB3_MONGO_USERNAME;
+    const password = env.VIZHUB3_MONGO_PASSWORD;
+    const database = env.VIZHUB3_MONGO_DATABASE;
+
+    const uri = `mongodb+srv://${username}:${password}@vizhub3.6sag6.mongodb.net/${database}?retryWrites=true&w=majority`;
+    const client = new MongoClient(uri, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      serverApi: ServerApiVersion.v1,
     });
-    const { shareDBConnection } = await shareDBSetup({ mongoDBConnection });
+    const connection = await client.connect();
+    const db = client.db();
+    // await client.close();
 
     gateways = DatabaseGateways({
-      shareDBConnection,
-      mongoDBDatabase,
+      shareDBConnection: connection,
+      mongoDBDatabase: db,
     });
   } else {
     gateways = MemoryGateways();

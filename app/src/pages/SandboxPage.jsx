@@ -27,5 +27,5 @@ SandboxPage.getPageData = async ({ env }) => {
   const collections = await db.listCollections().toArray();
   await client.close();
 
-  return { envVar, test: 'test', collections };
+  return { test: 'test', collections };
 };
