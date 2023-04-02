@@ -32,17 +32,29 @@ export const api = async ({ app, isProd, env }) => {
   if (isProd) {
     console.log('Connecting to production MongoDB...');
 
-    const username = env.VIZHUB3_MONGO_CONNECTION_STRING;
+    const username = env.VIZHUB3_MONGO_USERNAME;
     const password = env.VIZHUB3_MONGO_PASSWORD;
     const database = env.VIZHUB3_MONGO_DATABASE;
 
     const uri = `mongodb+srv://${username}:${password}@vizhub3.6sag6.mongodb.net/${database}?retryWrites=true&w=majority`;
+    console.log(uri);
     const client = new MongoClient(uri, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       serverApi: ServerApiVersion.v1,
     });
-    //...
+    const connection = await client.connect();
+    const mongoDBDatabase = client.db();
+
+    const shareDBConnection = new ShareDB({
+      db: ShareDBMongo({
+        mongo: (callback) => {
+          callback(null, connection);
+        },
+      }),
+    }).connect();
+
+    gateways = DatabaseGateways({ shareDBConnection, mongoDBDatabase });
   } else if (env.VIZHUB3_MONGO_LOCAL) {
     console.log('Connecting to local MongoDB...');
 
