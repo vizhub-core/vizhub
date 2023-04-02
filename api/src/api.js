@@ -62,4 +62,8 @@ export const api = async ({ app, isProd, env }) => {
       res.send(err(missingParameterError('email')));
     }
   });
+
+  app.get('/api/test', async (res) => {
+    res.send('testing');
+  });
 };

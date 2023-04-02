@@ -17,7 +17,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const resolve = (p) => path.resolve(__dirname, p);
 const isTest = env.VITEST;
 
-console.log('Starting server v7');
+console.log('Starting server v8');
 
 async function createServer(
   root = process.cwd(),
