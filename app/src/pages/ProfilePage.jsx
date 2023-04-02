@@ -13,7 +13,7 @@ export const ProfilePage = ({ pageData }) => {
 };
 
 ProfilePage.path = '/:userName';
-ProfilePage.getPageData = async (params) => {
+ProfilePage.getPageData = async ({ params }) => {
   const { userName } = params;
   // TODO populate user as authenticatedUser
 

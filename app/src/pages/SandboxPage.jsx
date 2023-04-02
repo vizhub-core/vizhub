@@ -9,8 +9,8 @@ export const SandboxPage = ({ pageData }) => {
 
 SandboxPage.path = '/sandbox';
 
-SandboxPage.getPageData = async () => {
-  const envVar = import.meta.env.VITE_SOME_KEY || 'not found';
+SandboxPage.getPageData = async ({ env }) => {
+  const envVar = env.VITE_SOME_KEY || 'not found';
   console.log('in sandbox page getPageData');
   console.log(envVar);
 
