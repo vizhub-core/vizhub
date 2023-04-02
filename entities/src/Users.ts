@@ -2,6 +2,10 @@
 //  * Unique identifier string for a user.
 export type UserId = string;
 
+// Id
+// Generic random id.
+export type Id = string;
+
 // UserName
 //  * String used as the username, e.g. `curran`
 //  * From GitHub usernames
@@ -50,5 +54,6 @@ export interface User {
 // One of these is created
 // when a user signs up for the beta program mailing list.
 export interface BetaProgramSignup {
+  id: Id;
   email: EmailAddress;
 }

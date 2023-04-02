@@ -1,6 +1,12 @@
 import MongoDB from 'mongodb-legacy';
+import ShareDB from 'sharedb';
+import json1 from 'ot-json1';
+import ShareDBMongo from 'sharedb-mongo';
 import { MemoryGateways, err, missingParameterError } from 'gateways';
 import { DatabaseGateways } from 'database';
+
+// TODO json1-presence
+ShareDB.types.register(json1.type);
 
 const { MongoClient, ServerApiVersion } = MongoDB;
 // Inspired by:
@@ -26,7 +32,7 @@ export const api = async ({ app, isProd, env }) => {
   if (isProd) {
     console.log('Connecting to production MongoDB...');
 
-    const username = env.VIZHUB3_MONGO_USERNAME;
+    const username = env.VIZHUB3_MONGO_CONNECTION_STRING;
     const password = env.VIZHUB3_MONGO_PASSWORD;
     const database = env.VIZHUB3_MONGO_DATABASE;
 
@@ -36,14 +42,24 @@ export const api = async ({ app, isProd, env }) => {
       useUnifiedTopology: true,
       serverApi: ServerApiVersion.v1,
     });
-    const connection = await client.connect();
-    const db = client.db();
-    // await client.close();
+    //...
+  } else if (env.VIZHUB3_MONGO_LOCAL) {
+    console.log('Connecting to local MongoDB...');
 
-    gateways = DatabaseGateways({
-      shareDBConnection: connection,
-      mongoDBDatabase: db,
-    });
+    const uri = 'mongodb://localhost:27017/vizhub3';
+    const client = new MongoClient(uri);
+    const connection = await client.connect();
+    const mongoDBDatabase = client.db();
+
+    const shareDBConnection = new ShareDB({
+      db: ShareDBMongo({
+        mongo: (callback) => {
+          callback(null, connection);
+        },
+      }),
+    }).connect();
+
+    gateways = DatabaseGateways({ shareDBConnection, mongoDBDatabase });
   } else {
     gateways = MemoryGateways();
   }
@@ -55,7 +71,11 @@ export const api = async ({ app, isProd, env }) => {
     if (req.body && req.body.email) {
       const email = req.body.email;
       console.log('saving email ' + email);
-      const result = await saveBetaProgramSignup({ email });
+      const result = await saveBetaProgramSignup({
+        // TODO use common ID generator
+        id: ('' + Math.random()).replace('.', ''),
+        email,
+      });
       console.log('saved email. Result: ' + JSON.stringify(result));
       return result;
     } else {

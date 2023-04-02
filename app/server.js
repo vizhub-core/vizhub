@@ -120,10 +120,12 @@ async function createServer(
       }
 
       const params = match ? match.params : null;
-      const pageData = await matchedPage.getPageData({
-        params,
-        env,
-      });
+      const pageData = matchedPage.getPageData
+        ? await matchedPage.getPageData({
+            params,
+            env,
+          })
+        : {};
       pageData.url = url;
 
       const titleSanitized = xss(pageData.title);

@@ -48,6 +48,7 @@ export const crudEntityNames = [
 export const noSnapshot = {
   Commit: true,
   Milestone: true,
+  BetaProgramSignup: true,
 };
 
 // An in-memory implementation for gateways,
