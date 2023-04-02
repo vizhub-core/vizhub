@@ -3,12 +3,14 @@ import { HomePage } from './HomePage';
 import { ProfilePage } from './ProfilePage';
 import { VizPage } from './VizPage';
 import { BetaConfirmPage } from './BetaConfirmPage';
+import { SandboxPage } from './SandboxPage';
 
-// TODO use Vite's fancy thing to auto-aggregate these
+// Note: order matters (profile page should come last)
 export const pages = [
   HomePage,
   AboutPage,
-  ProfilePage,
   VizPage,
   BetaConfirmPage,
+  SandboxPage,
+  ProfilePage,
 ];
