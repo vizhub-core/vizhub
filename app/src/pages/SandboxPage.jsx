@@ -21,6 +21,7 @@ SandboxPage.getPageData = async ({ env }) => {
   const v3MongoURI =
     'mongodb+srv://vizhub-app-server:dtW42z472ki6zlSM@vizhub3-pe-0.6sag6.mongodb.net/?retryWrites=true&w=majority';
   const v3MongoClient = new MongoClient(v3MongoURI);
+  const v3MongoDBConnection = await v3MongoClient.connect();
   const v3MongoDBDatabase = await v3MongoDBConnection.db();
 
   let dbPing;
