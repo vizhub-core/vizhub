@@ -11,18 +11,17 @@ import jsesc from 'jsesc';
 import { matchPath } from 'react-router-dom';
 import { seoMetaTags } from './seoMetaTags.js';
 
+const env = process.env;
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const resolve = (p) => path.resolve(__dirname, p);
-const isTest = process.env.VITEST;
+const isTest = env.VITEST;
 
-console.log('Starting server v6');
-console.log('VITE_SOME_KEY = ' + process.env.VITE_SOME_KEY);
-//
-//process.env.MY_CUSTOM_SECRET = 'API_KEY_qwertyuiop';
-//
+console.log('Starting server v7');
+
 async function createServer(
   root = process.cwd(),
-  isProd = process.env.NODE_ENV === 'production',
+  isProd = env.NODE_ENV === 'production',
   hmrPort
 ) {
   const indexProd = isProd
@@ -123,7 +122,7 @@ async function createServer(
       const params = match ? match.params : null;
       const pageData = await matchedPage.getPageData({
         params,
-        env: process.env,
+        env,
       });
       pageData.url = url;
 

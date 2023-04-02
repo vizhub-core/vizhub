@@ -14,13 +14,8 @@ export const SandboxPage = ({ pageData }) => {
 SandboxPage.path = '/sandbox';
 
 SandboxPage.getPageData = async ({ env }) => {
-  // TODO move to env var and reset.
-  const password = 'dtW42z472ki6zlSM';
-
-  const envVar = env.VITE_SOME_KEY || 'not found';
-  console.log('in sandbox page getPageData');
-  console.log(envVar);
-
+  // TODO const username = env.VIZHUB3_MONGO_USERNAME;
+  const password = env.VIZHUB3_MONGO_PASSWORD;
   const uri = `mongodb+srv://vizhub-app-server:${password}@vizhub3.6sag6.mongodb.net/?retryWrites=true&w=majority`;
   const client = new MongoClient(uri, {
     useNewUrlParser: true,
