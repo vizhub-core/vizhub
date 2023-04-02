@@ -2,7 +2,7 @@ import MongoDB from 'mongodb-legacy';
 import ShareDB from 'sharedb';
 import json1 from 'ot-json1';
 import ShareDBMongo from 'sharedb-mongo';
-import { MemoryGateways, err, missingParameterError } from 'gateways';
+import { MemoryGateways, err, missingParameterError, ok } from 'gateways';
 import { DatabaseGateways } from 'database';
 
 // TODO json1-presence
