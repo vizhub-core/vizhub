@@ -1,3 +1,7 @@
+import MongoDB from 'mongodb-legacy';
+
+const { MongoClient, ServerApiVersion } = MongoDB;
+
 export const SandboxPage = ({ pageData }) => {
   console.log('in sandbox page render');
   console.log(pageData);
@@ -14,5 +18,18 @@ SandboxPage.getPageData = async ({ env }) => {
   console.log('in sandbox page getPageData');
   console.log(envVar);
 
-  return { envVar, test: 'test' };
+  const v3MongoURI =
+    'mongodb+srv://vizhub-app-server:dtW42z472ki6zlSM@vizhub3-pe-0.6sag6.mongodb.net/?retryWrites=true&w=majority';
+  const v3MongoClient = new MongoClient(v3MongoURI);
+  const v3MongoDBDatabase = await v3MongoDBConnection.db();
+
+  let dbPing;
+  try {
+    await v3MongoDBDatabase.command({ ping: 1 });
+    dbPing = 'success';
+  } catch (error) {
+    dbPing = error;
+  }
+
+  return { envVar, test: 'test', dbPing };
 };
