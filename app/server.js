@@ -15,7 +15,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const resolve = (p) => path.resolve(__dirname, p);
 const isTest = process.env.VITEST;
 
-console.log('Starting server v5');
+console.log('Starting server v6');
 console.log('VITE_SOME_KEY = ' + process.env.VITE_SOME_KEY);
 //
 //process.env.MY_CUSTOM_SECRET = 'API_KEY_qwertyuiop';
