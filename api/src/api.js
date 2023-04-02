@@ -1,5 +1,8 @@
+import MongoDB from 'mongodb-legacy';
 import { MemoryGateways, err, missingParameterError } from 'gateways';
-import { DatabaseGateways, mongoDBSetup, shareDBSetup } from 'database';
+import { DatabaseGateways } from 'database';
+
+const { MongoClient, ServerApiVersion } = MongoDB;
 // Inspired by:
 // https://github.com/curran/sharedb-racer-react-demo/blob/main/src/server.js
 // https://github.com/vizhub-core/vizhub/blob/main/prototypes/open-core-first-attempt/packages/vizhub-core/src/server/index.js
