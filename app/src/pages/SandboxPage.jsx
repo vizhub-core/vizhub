@@ -7,30 +7,30 @@ export const SandboxPage = ({ pageData }) => {
   console.log(pageData);
 
   return (
-    <pre style={{ fontSize: '4em' }}>{JSON.stringify(pageData, null, 2)}</pre>
+    <pre style={{ fontSize: '2em' }}>{JSON.stringify(pageData, null, 2)}</pre>
   );
 };
 
 SandboxPage.path = '/sandbox';
 
 SandboxPage.getPageData = async ({ env }) => {
+  // TODO move to env var and reset.
+  const password = 'dtW42z472ki6zlSM';
+
   const envVar = env.VITE_SOME_KEY || 'not found';
   console.log('in sandbox page getPageData');
   console.log(envVar);
 
-  const v3MongoURI =
-    'mongodb+srv://vizhub-app-server:dtW42z472ki6zlSM@vizhub3-pe-0.6sag6.mongodb.net/?retryWrites=true&w=majority';
-  const v3MongoClient = new MongoClient(v3MongoURI);
-  const v3MongoDBConnection = await v3MongoClient.connect();
-  const v3MongoDBDatabase = await v3MongoDBConnection.db();
+  const uri = `mongodb+srv://vizhub-app-server:${password}@vizhub3.6sag6.mongodb.net/?retryWrites=true&w=majority`;
+  const client = new MongoClient(uri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    serverApi: ServerApiVersion.v1,
+  });
+  await client.connect();
+  const db = client.db('test');
+  const collections = await db.listCollections().toArray();
+  await client.close();
 
-  let dbPing;
-  try {
-    await v3MongoDBDatabase.command({ ping: 1 });
-    dbPing = 'success';
-  } catch (error) {
-    dbPing = error;
-  }
-
-  return { envVar, test: 'test', dbPing };
+  return { envVar, test: 'test', collections };
 };
