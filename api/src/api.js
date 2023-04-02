@@ -89,13 +89,15 @@ export const api = async ({ app, isProd, env }) => {
         email,
       });
       console.log('saved email. Result: ' + JSON.stringify(result));
-      return result;
+      res.send(ok('success'));
     } else {
       res.send(err(missingParameterError('email')));
     }
   });
 
   app.get('/api/test', (req, res) => {
-    res.send('testing');
+    setTimeout(() => {
+      res.send('testing');
+    }, 10000);
   });
 };
