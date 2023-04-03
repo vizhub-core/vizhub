@@ -8,7 +8,8 @@
     "prettier": "npm run --workspaces -- prettier",
     "test": "npm run --workspaces -- test",
     "build": "cd app; npm run build",
-    "serve": "cd app; npm run serve"
+    "serve": "cd app; npm run serve",
+    "dev": "cd app; npm run dev"
   },
   "repository": {
     "type": "git",
