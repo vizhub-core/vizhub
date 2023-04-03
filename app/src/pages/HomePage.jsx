@@ -12,7 +12,6 @@ export const HomePage = ({ pageData }) => {
 
   const handleEmailSubmit = async (email) => {
     navigate('/beta-confirm');
-    console.log('Submitting email ' + email);
 
     const result = await vizKit.rest.privateBetaEmailSubmit(email);
     if (result.outcome === 'success') {
@@ -37,8 +36,9 @@ HomePage.path = '/';
 HomePage.getPageData = async () => {
   await new Promise((resolve) => setTimeout(resolve, 1000));
   return {
-    foo: 'bar',
-    title: 'VizHub',
+    title: 'VizHub 3 Beta',
     description: 'Viz your data',
+    image:
+      'https://vizhub.com/api/visualization/preview/77a2f42571494263931b8c4d38b7d63c.png',
   };
 };
