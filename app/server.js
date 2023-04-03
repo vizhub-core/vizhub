@@ -2,13 +2,14 @@ import xss from 'xss';
 
 // Inspired by
 // https://github.com/vitejs/vite-plugin-react/blob/main/playground/ssr-react/server.js
-//
+// Also the Auth0 sample app found under vizhub3/auth0
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import express from 'express';
 import jsesc from 'jsesc';
 import { matchPath } from 'react-router-dom';
+import { auth } from 'express-openid-connect';
 import { seoMetaTags } from './seoMetaTags.js';
 
 const env = process.env;
@@ -17,7 +18,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const resolve = (p) => path.resolve(__dirname, p);
 const isTest = env.VITEST;
 
-console.log('Starting server v8');
+console.log('Starting server v9');
 
 async function createServer(
   root = process.cwd(),
@@ -33,9 +34,18 @@ async function createServer(
   // Support parsing of JSON bodies in API requests.
   app.use(express.json());
 
-  /**
-   * @type {import('vite').ViteDevServer}
-   */
+  // Set up Auth0 authentication.
+  const authConfig = {
+    authRequired: false,
+    auth0Logout: true,
+    secret: env.VIZHUB3_AUTH0_SECRET,
+    baseURL: env.VIZHUB3_AUTH0_BASE_URL,
+    clientID: env.VIZHUB3_AUTH0_CLIENT_ID,
+    issuerBaseURL: env.VIZHUB3_AUTH0_ISSUER_BASE_URL,
+  };
+  console.log(authConfig);
+  app.use(auth(authConfig));
+
   let vite;
   if (!isProd) {
     vite = await (
@@ -85,6 +95,10 @@ async function createServer(
   // in dev on each page request, so we don't need to restart the server all the time.
   app.use('*', async (req, res) => {
     try {
+      console.log('Authentication:');
+      console.log(req.oidc.isAuthenticated());
+      console.log(req.oidc.user);
+
       const url = req.originalUrl;
 
       // This part is directly copied from:
