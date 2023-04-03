@@ -43,7 +43,6 @@ async function createServer(
     clientID: env.VIZHUB3_AUTH0_CLIENT_ID,
     issuerBaseURL: env.VIZHUB3_AUTH0_ISSUER_BASE_URL,
   };
-  console.log(authConfig);
   app.use(auth(authConfig));
 
   let vite;

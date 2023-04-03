@@ -18,22 +18,32 @@ docker logs <id>
 docker stop <id>
 ```
 
-
 ## Production Deployment
 
-Production deployment follows the AWS patterns in [YouTube: AWS DevOps CI CD Pipeline With NodeJS + ECS + CodePipeline + ECR](https://www.youtube.com/watch?v=Iem8ZI517L4)
+Production deployment uses:
 
-## Fargate
+- AWS AppRunner
+- MongoDB Atlas
+- Auth0
 
-See also:
+## Environment Variables
 
-- [Getting started with Amazon ECR](https://docs.aws.amazon.com/AmazonECR/latest/userguide/getting-started-console.html).
-- [AWS Fargate: From Start to Finish for a NodeJS App](https://medium.com/@arliber/aws-fargate-from-start-to-finish-for-a-nodejs-app-9a0e5fbf6361)
+To enable use of MongoDB in development:
+`export VIZHUB3_MONGO_LOCAL=true`
 
-To deploy to Fargate:
+MongoDB variables:
 
-- Navigate to AWS Console / Amazon ECR / Repositories / `vizhub3`
-- Click "View push commands"
-- SSH into the bastion host EC2 instance
-- Run the commands
-- First time only: create an ELB and Task Definition, associate them
+```
+VIZHUB3_MONGO_USERNAME
+VIZHUB3_MONGO_PASSWORD
+VIZHUB3_MONGO_DATABASE
+```
+
+Auth0 environment variables
+
+```
+export VIZHUB3_AUTH0_SECRET= <random string from `openssl rand -hex 32`>
+export VIZHUB3_AUTH0_BASE_URL=
+export VIZHUB3_AUTH0_CLIENT_ID=http://localhost:5173
+export VIZHUB3_AUTH0_ISSUER_BASE_URL=
+```
