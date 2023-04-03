@@ -42,6 +42,9 @@ async function createServer(
     baseURL: env.VIZHUB3_AUTH0_BASE_URL,
     clientID: env.VIZHUB3_AUTH0_CLIENT_ID,
     issuerBaseURL: env.VIZHUB3_AUTH0_ISSUER_BASE_URL,
+    routes: {
+      callback: '/login/callback',
+    },
   };
   app.use(auth(authConfig));
 
