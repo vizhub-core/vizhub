@@ -26,7 +26,6 @@ const initQueueProcessor = (
 
   // Every minute, batch increment all queued (eventID, date) pairs.
   const processQueue = async () => {
-    console.log('TODO processQueue');
     // Clear the queue.
     const previousQueue = queue;
     queue = [];
@@ -42,44 +41,51 @@ const initQueueProcessor = (
         );
       }, {})
     );
-    console.log('allEventIDs = ' + allEventIds);
     if (allEventIds.length > 0) {
       // This is intentional, to test that the system is working in production
       console.log('Incrementing event records:', allEventIds);
 
+      // TODORedLock
+
       // Get the current version for all event records to be incremented.
       // Note that a given record may be incremented more than once.
-      // const existingAnalyticsEvents = new Set (
-      //   await Promise.all(
-      //     allEventIds.map((eventId) => getAnalyticsEvent({ id: eventId }))
-      //   )
-      // ).filter((result) => result.outcome !== 'failure');
-      const analyticsEvents: Map<AnalyticsEventId, AnalyticsEvent> = new Map();
+      const existingAnalyticsEvents = (
+        await Promise.all(
+          allEventIds.map((eventId) => getAnalyticsEvent(eventId))
+        )
+      )
+        .filter((result) => result.outcome === 'success')
+        .map((d) => d.value);
 
-      // // Assemble a lookup table of eventID to record.
-      // const recordsById = records.reduce(
-      //   (accumulator, record) => ({ ...accumulator, [record.id]: record }),
-      //   {}
-      // );
-      // console.log('existingAnalyticsEvents');
-      // console.log(existingAnalyticsEvents);
-
-      // // TODORedLock
-      // // TODO acquire distributed lock to handle multiple app servers.
-      // // See https://github.com/mike-marcacci/node-redlock
-      // // const lock = redlock.lock('write-event-records', 1000);
+      // Build a lookup table by id.
+      const analyticsEvents: Map<AnalyticsEventId, AnalyticsEvent> = new Map(
+        existingAnalyticsEvents.map((analyticsEvent) => [
+          analyticsEvent.id,
+          analyticsEvent,
+        ])
+      );
 
       // For each queue entry, increment its records (mutating recordsByID).
       for (const { eventIds, date } of previousQueue) {
         for (const eventId of eventIds) {
-          const intervals = increment({}, date, maxEntries);
-          console.log(intervals);
-          saveAnalyticsEvent({
+          const analyticsEvent = analyticsEvents.get(eventId) || {
             id: eventId,
-            intervals,
-          });
+            intervals: {},
+          };
+          const newAnalyticsEvent = {
+            ...analyticsEvent,
+            intervals: increment(analyticsEvent.intervals, date, maxEntries),
+          };
+          analyticsEvents.set(eventId, newAnalyticsEvent);
         }
       }
+
+      // Save the updated events.
+      await Promise.all(
+        allEventIds.map((eventId) =>
+          saveAnalyticsEvent(analyticsEvents.get(eventId))
+        )
+      );
     }
   };
 
@@ -101,8 +107,6 @@ export const RecordAnalyticsEvents = (gateways, testing = false) => {
   }): Promise<Result<Success>> => {
     const { eventId, timestamp } = options;
     const date = timestampToDate(timestamp);
-    console.log('TODO track eventIds: ' + eventId);
-    console.log('TODO use date: ' + date);
 
     // Isolate each level of the nested id.
     const values: string[] = eventId.split('.');
