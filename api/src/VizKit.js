@@ -14,14 +14,14 @@ export const VizKit = ({ baseUrl }) => {
           })
         ).json(),
       // TODO reduce duplication
-      sendEvent: async (eventIds) =>
+      sendEvent: async (eventId) =>
         await (
           await fetch(`${baseUrl}/send-event`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ eventIds }),
+            body: JSON.stringify({ eventId }),
           })
         ).json(),
     },

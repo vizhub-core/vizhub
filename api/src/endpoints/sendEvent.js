@@ -1,13 +1,15 @@
-import { err, missingParameterError, ok } from 'gateways';
+import { err, missingParameterError } from 'gateways';
+import { RecordAnalyticsEvents } from 'interactors';
+import { dateToTimestamp } from 'entities';
 
+// Handles recording an analytics event.
 export const sendEvent = ({ app, gateways }) => {
-  // todo invoke recordEvent interactor using gateways
+  const recordAnalyticsEvents = RecordAnalyticsEvents(gateways);
   app.post('/api/send-event', async (req, res) => {
-    console.log('event request');
-    if (req.body && req.body.eventIds) {
-      const eventIds = req.body.eventIds;
-      console.log('TODO save events ' + eventIds);
-      res.send(ok('success'));
+    if (req.body && req.body.eventId) {
+      const eventId = req.body.eventId;
+      const timestamp = dateToTimestamp(new Date());
+      res.send(await recordAnalyticsEvents({ eventId, timestamp }));
     } else {
       res.send(err(missingParameterError('eventIds')));
     }
