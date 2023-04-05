@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { ts1, ts2 } from 'gateways/test';
+import { ts1, ts2, ts3 } from 'gateways/test';
 import { initGateways } from './initGateways';
 
 import { RecordAnalyticsEvents } from '../src';
@@ -45,7 +45,7 @@ export const recordAnalyticsEventsTest = () => {
       });
     });
 
-    it.only('should update existing analytics events', async () => {
+    it('should update existing analytics events', async () => {
       const gateways = initGateways();
       const { getAnalyticsEvent } = gateways;
       const recordAnalyticsEvents = RecordAnalyticsEvents(gateways, true);
@@ -64,10 +64,6 @@ export const recordAnalyticsEventsTest = () => {
 
       // This is where it should update the existing event.
       await recordAnalyticsEvents.processQueue();
-
-      // console.log(
-      //   JSON.stringify(await getAnalyticsEvent('pageview.home'), null, 2)
-      // );
 
       const intervals = {
         minutes: { '2021-11-28T11:46': 1, '2021-11-29T15:33': 1 },
@@ -90,6 +86,114 @@ export const recordAnalyticsEventsTest = () => {
         intervals,
       });
     });
-    // it.only('should update existing events', async () => {
+
+    it('should update multiple nested analytics events', async () => {
+      const gateways = initGateways();
+      const { getAnalyticsEvent } = gateways;
+      const recordAnalyticsEvents = RecordAnalyticsEvents(gateways, true);
+
+      await recordAnalyticsEvents({
+        eventId: 'pageview.home',
+        timestamp: ts1,
+      });
+
+      await recordAnalyticsEvents.processQueue();
+
+      await recordAnalyticsEvents({
+        eventId: 'pageview.home',
+        timestamp: ts2,
+      });
+
+      await recordAnalyticsEvents({
+        eventId: 'pageview.viz.1',
+        timestamp: ts2,
+      });
+
+      await recordAnalyticsEvents({
+        eventId: 'pageview.viz.2',
+        timestamp: ts3,
+      });
+
+      // This is where it should update the existing event.
+      await recordAnalyticsEvents.processQueue();
+
+      // console.log(
+      //   JSON.stringify((await getAnalyticsEvent('pageview.viz')).value)
+      // );
+
+      expect((await getAnalyticsEvent('pageview.home')).value).toEqual({
+        id: 'pageview.home',
+        intervals: {
+          minutes: { '2021-11-28T11:46': 1, '2021-11-29T15:33': 1 },
+          hours: { '2021-11-28T11': 1, '2021-11-29T15': 1 },
+          days: { '2021-11-28': 1, '2021-11-29': 1 },
+          weeks: { '2021-W47': 1, '2021-W48': 1 },
+          months: { '2021-11': 2 },
+          quarters: { '2021-Q4': 2 },
+          years: { 2021: 2 },
+          all: { all: 2 },
+        },
+      });
+
+      expect((await getAnalyticsEvent('pageview.viz.1')).value).toEqual({
+        id: 'pageview.viz.1',
+        intervals: {
+          minutes: { '2021-11-29T15:33': 1 },
+          hours: { '2021-11-29T15': 1 },
+          days: { '2021-11-29': 1 },
+          weeks: { '2021-W48': 1 },
+          months: { '2021-11': 1 },
+          quarters: { '2021-Q4': 1 },
+          years: { 2021: 1 },
+          all: { all: 1 },
+        },
+      });
+
+      expect((await getAnalyticsEvent('pageview.viz.2')).value).toEqual({
+        id: 'pageview.viz.2',
+        intervals: {
+          minutes: { '2021-11-30T19:20': 1 },
+          hours: { '2021-11-30T19': 1 },
+          days: { '2021-11-30': 1 },
+          weeks: { '2021-W48': 1 },
+          months: { '2021-11': 1 },
+          quarters: { '2021-Q4': 1 },
+          years: { 2021: 1 },
+          all: { all: 1 },
+        },
+      });
+
+      expect((await getAnalyticsEvent('pageview.viz')).value).toEqual({
+        id: 'pageview.viz',
+        intervals: {
+          minutes: { '2021-11-29T15:33': 1, '2021-11-30T19:20': 1 },
+          hours: { '2021-11-29T15': 1, '2021-11-30T19': 1 },
+          days: { '2021-11-29': 1, '2021-11-30': 1 },
+          weeks: { '2021-W48': 2 },
+          months: { '2021-11': 2 },
+          quarters: { '2021-Q4': 2 },
+          years: { 2021: 2 },
+          all: { all: 2 },
+        },
+      });
+
+      expect((await getAnalyticsEvent('pageview')).value).toEqual({
+        id: 'pageview',
+        intervals: {
+          minutes: {
+            '2021-11-28T11:46': 1,
+            '2021-11-29T15:33': 2,
+            '2021-11-30T19:20': 1,
+          },
+          hours: { '2021-11-28T11': 1, '2021-11-29T15': 2, '2021-11-30T19': 1 },
+          days: { '2021-11-28': 1, '2021-11-29': 2, '2021-11-30': 1 },
+          weeks: { '2021-W47': 1, '2021-W48': 3 },
+          months: { '2021-11': 4 },
+          quarters: { '2021-Q4': 4 },
+          years: { 2021: 4 },
+          all: { all: 4 },
+        },
+      });
+    });
   });
 };

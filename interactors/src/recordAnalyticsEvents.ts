@@ -12,94 +12,94 @@ import {
 const maxEntries = 90;
 const everyMinute = 1000 * 60;
 
-let queue: { eventIds: string[]; date: Date }[] = [];
-let initialized = false;
+// Sends a new event for recording in the multiscale timeseries analytics store.
+export const RecordAnalyticsEvents = (gateways, testing = false) => {
+  let queue: { eventIds: string[]; date: Date }[] = [];
+  let initialized = false;
 
-const initQueueProcessor = (
-  { getAnalyticsEvent, saveAnalyticsEvent },
-  testing
-) => {
-  // Ensure a single setInterval call, even if multiple instances of SendEvent.
-  if (initialized) return;
+  const initQueueProcessor = (
+    { getAnalyticsEvent, saveAnalyticsEvent },
+    testing
+  ) => {
+    // Ensure a single setInterval call, even if multiple instances of SendEvent.
+    if (initialized) return;
 
-  initialized = true;
+    initialized = true;
 
-  // Every minute, batch increment all queued (eventID, date) pairs.
-  const processQueue = async () => {
-    // Clear the queue.
-    const previousQueue = queue;
-    queue = [];
-    // Identify the set of event IDs touched (no duplicates).
-    const allEventIds = Object.keys(
-      previousQueue.reduce((accumulator, { eventIds }) => {
-        return eventIds.reduce(
-          (innerAccumulator, eventID) => ({
-            ...innerAccumulator,
-            [eventID]: true,
-          }),
-          accumulator
+    // Every minute, batch increment all queued (eventID, date) pairs.
+    const processQueue = async () => {
+      // Clear the queue.
+      const previousQueue = queue;
+      queue = [];
+      // Identify the set of event IDs touched (no duplicates).
+      const allEventIds = Object.keys(
+        previousQueue.reduce((accumulator, { eventIds }) => {
+          return eventIds.reduce(
+            (innerAccumulator, eventID) => ({
+              ...innerAccumulator,
+              [eventID]: true,
+            }),
+            accumulator
+          );
+        }, {})
+      );
+      if (allEventIds.length > 0) {
+        // This is intentional, to test that the system is working in production
+        // console.log('Incrementing event records:', allEventIds);
+
+        // TODORedLock
+
+        // Get the current version for all event records to be incremented.
+        // Note that a given record may be incremented more than once.
+        const existingAnalyticsEvents = (
+          await Promise.all(
+            allEventIds.map((eventId) => getAnalyticsEvent(eventId))
+          )
+        )
+          .filter((result) => result.outcome === 'success')
+          .map((d) => d.value);
+
+        // Build a lookup table by id.
+        const analyticsEvents: Map<AnalyticsEventId, AnalyticsEvent> = new Map(
+          existingAnalyticsEvents.map((analyticsEvent) => [
+            analyticsEvent.id,
+            analyticsEvent,
+          ])
         );
-      }, {})
-    );
-    if (allEventIds.length > 0) {
-      // This is intentional, to test that the system is working in production
-      console.log('Incrementing event records:', allEventIds);
 
-      // TODORedLock
-
-      // Get the current version for all event records to be incremented.
-      // Note that a given record may be incremented more than once.
-      const existingAnalyticsEvents = (
-        await Promise.all(
-          allEventIds.map((eventId) => getAnalyticsEvent(eventId))
-        )
-      )
-        .filter((result) => result.outcome === 'success')
-        .map((d) => d.value);
-
-      // Build a lookup table by id.
-      const analyticsEvents: Map<AnalyticsEventId, AnalyticsEvent> = new Map(
-        existingAnalyticsEvents.map((analyticsEvent) => [
-          analyticsEvent.id,
-          analyticsEvent,
-        ])
-      );
-
-      // For each queue entry, increment its records (mutating recordsByID).
-      for (const { eventIds, date } of previousQueue) {
-        for (const eventId of eventIds) {
-          const analyticsEvent = analyticsEvents.get(eventId) || {
-            id: eventId,
-            intervals: {},
-          };
-          const newAnalyticsEvent = {
-            ...analyticsEvent,
-            intervals: increment(analyticsEvent.intervals, date, maxEntries),
-          };
-          analyticsEvents.set(eventId, newAnalyticsEvent);
+        // For each queue entry, increment its records (mutating recordsByID).
+        for (const { eventIds, date } of previousQueue) {
+          for (const eventId of eventIds) {
+            const analyticsEvent = analyticsEvents.get(eventId) || {
+              id: eventId,
+              intervals: {},
+            };
+            const newAnalyticsEvent = {
+              ...analyticsEvent,
+              intervals: increment(analyticsEvent.intervals, date, maxEntries),
+            };
+            analyticsEvents.set(eventId, newAnalyticsEvent);
+          }
         }
-      }
 
-      // Save the updated events.
-      await Promise.all(
-        allEventIds.map((eventId) =>
-          saveAnalyticsEvent(analyticsEvents.get(eventId))
-        )
-      );
+        // Save the updated events.
+        await Promise.all(
+          allEventIds.map((eventId) =>
+            saveAnalyticsEvent(analyticsEvents.get(eventId))
+          )
+        );
+      }
+    };
+
+    if (testing) {
+      // If in a unit test environment, expose this function to tests.
+      return processQueue;
+    } else {
+      // If in a production environment, execute this function each minute.
+      setInterval(processQueue, everyMinute);
     }
   };
 
-  if (testing) {
-    // If in a unit test environment, expose this function to tests.
-    return processQueue;
-  } else {
-    // If in a production environment, execute this function each minute.
-    setInterval(processQueue, everyMinute);
-  }
-};
-
-// Sends a new event for recording in the multiscale timeseries analytics store.
-export const RecordAnalyticsEvents = (gateways, testing = false) => {
   const processQueue = initQueueProcessor(gateways, testing);
   const recordAnalyticsEvents = async (options: {
     eventId: AnalyticsEventId;
@@ -128,16 +128,3 @@ export const RecordAnalyticsEvents = (gateways, testing = false) => {
 
   return recordAnalyticsEvents;
 };
-
-//     let { eventIDs, date } = requestModel;
-
-//     // console.log('sendEvent: ' + JSON.stringify(eventIDs, null, 2));
-
-//     // Fall back to current date if no date was passed in.
-//     date = date || new Date();
-
-//     queue.push({ eventIDs, date });
-
-//     return 'success';
-//   }
-// }
