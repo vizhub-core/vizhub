@@ -2,8 +2,9 @@ import MongoDB from 'mongodb-legacy';
 import ShareDB from 'sharedb';
 import json1 from 'ot-json1';
 import ShareDBMongo from 'sharedb-mongo';
-import { MemoryGateways, err, missingParameterError, ok } from 'gateways';
+import { MemoryGateways } from 'gateways';
 import { DatabaseGateways } from 'database';
+import { endpoints } from './endpoints';
 
 // TODO json1-presence
 ShareDB.types.register(json1.type);
@@ -71,37 +72,10 @@ export const api = async ({ app, isProd, env }) => {
     gateways = MemoryGateways();
   }
 
-  const { saveBetaProgramSignup } = gateways;
-
-  // TODO factor out these endpoints
-  app.post('/api/private-beta-email-submit', async (req, res) => {
-    console.log('received request');
-    if (req.body && req.body.email) {
-      const email = req.body.email;
-      console.log('saving email ' + email);
-      const result = await saveBetaProgramSignup({
-        // TODO use common ID generator
-        id: ('' + Math.random()).replace('.', ''),
-        email,
-      });
-      console.log('saved email. Result: ' + JSON.stringify(result));
-      res.send(ok('success'));
-    } else {
-      res.send(err(missingParameterError('email')));
-    }
-  });
-
-  // TODO factor out these endpoints
-  app.post('/api/send-event', async (req, res) => {
-    console.log('event request');
-    if (req.body && req.body.eventIds) {
-      const eventIds = req.body.eventIds;
-      console.log('TODO save events ' + eventIds);
-      res.send(ok('success'));
-    } else {
-      res.send(err(missingParameterError('eventIds')));
-    }
-  });
+  // Set up endpoints
+  for (const endpoint of endpoints) {
+    endpoint({ app, gateways });
+  }
 
   // TODO test the auto-scaling using this
   // simulates image generation
