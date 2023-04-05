@@ -1,31 +1,35 @@
-// import MongoDB from 'mongodb-legacy';
+import { useEffect, useState } from 'react';
+import { Spinner } from 'components';
+import { VizKit } from 'api/src/VizKit';
 
-// const { MongoClient, ServerApiVersion } = MongoDB;
+const vizKit = VizKit({ baseUrl: './api' });
 
 export const SandboxPage = ({ pageData }) => {
-  console.log('in sandbox page render');
-  console.log(pageData);
+  const [analyticsEvent, setAnalyticsEvent] = useState(null);
 
-  return (
-    <pre style={{ fontSize: '2em' }}>{JSON.stringify(pageData, null, 2)}</pre>
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await vizKit.rest.getEvent('pageview.home');
+      if (result.outcome === 'success') {
+        setAnalyticsEvent(result.value.data);
+      }
+      console.log(result);
+    };
+    fetchData();
+  }, []);
+
+  return analyticsEvent ? (
+    <pre style={{ fontSize: '2em' }}>
+      {JSON.stringify(analyticsEvent.intervals.days, null, 2)}
+    </pre>
+  ) : (
+    <Spinner />
   );
 };
 
 SandboxPage.path = '/sandbox';
 
-SandboxPage.getPageData = async ({ env }) => {
-  // TODO const username = env.VIZHUB3_MONGO_USERNAME;
-  // const password = env.VIZHUB3_MONGO_PASSWORD;
-  // const uri = `mongodb+srv://vizhub-app-server:${password}@vizhub3.6sag6.mongodb.net/?retryWrites=true&w=majority`;
-  // const client = new MongoClient(uri, {
-  //   useNewUrlParser: true,
-  //   useUnifiedTopology: true,
-  //   serverApi: ServerApiVersion.v1,
-  // });
-  // await client.connect();
-  // const db = client.db('test');
-  // const collections = await db.listCollections().toArray();
-  // await client.close();
+// SandboxPage.getPageData = async ({ env }) => {
 
-  return { test: 'test' };
-};
+//   return { test: 'test' };
+// };

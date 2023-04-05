@@ -24,6 +24,16 @@ export const VizKit = ({ baseUrl }) => {
             body: JSON.stringify({ eventId }),
           })
         ).json(),
+      getEvent: async (eventId) =>
+        await (
+          await fetch(`${baseUrl}/get-event`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ eventId }),
+          })
+        ).json(),
     },
   };
 };

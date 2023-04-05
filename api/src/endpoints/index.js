@@ -1,3 +1,5 @@
 import { privateBetaEmailSubmit } from './privateBetaEmailSubmit';
 import { sendEvent } from './sendEvent';
-export const endpoints = [privateBetaEmailSubmit, sendEvent];
+import { getEvent } from './getEvent';
+
+export const endpoints = [privateBetaEmailSubmit, sendEvent, getEvent];
