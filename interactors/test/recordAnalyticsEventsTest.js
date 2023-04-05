@@ -7,7 +7,7 @@ import { RecordAnalyticsEvents } from '../src';
 // https://github.com/vizhub-core/vizhub/blob/76d4ca43a8b0f3c543919ccc66a7228d75ba37cd/vizhub-v2/packages/useCases/test/eventRecords.js
 export const recordAnalyticsEventsTest = () => {
   describe('recordAnalyticsEvent', async () => {
-    it('should create a new analytics event', async () => {
+    it.only('should create a new analytics event', async () => {
       const gateways = initGateways();
       const { getAnalyticsEvent } = gateways;
       const recordAnalyticsEvents = RecordAnalyticsEvents(gateways, true);
@@ -34,12 +34,12 @@ export const recordAnalyticsEventsTest = () => {
         all: { all: 1 },
       };
 
-      expect((await getAnalyticsEvent('pageview.home')).value).toEqual({
+      expect((await getAnalyticsEvent('pageview.home')).value.data).toEqual({
         id: 'pageview.home',
         intervals,
       });
 
-      expect((await getAnalyticsEvent('pageview')).value).toEqual({
+      expect((await getAnalyticsEvent('pageview')).value.data).toEqual({
         id: 'pageview',
         intervals,
       });
@@ -76,12 +76,12 @@ export const recordAnalyticsEventsTest = () => {
         all: { all: 2 },
       };
 
-      expect((await getAnalyticsEvent('pageview.home')).value).toEqual({
+      expect((await getAnalyticsEvent('pageview.home')).value.data).toEqual({
         id: 'pageview.home',
         intervals,
       });
 
-      expect((await getAnalyticsEvent('pageview')).value).toEqual({
+      expect((await getAnalyticsEvent('pageview')).value.data).toEqual({
         id: 'pageview',
         intervals,
       });
@@ -118,10 +118,10 @@ export const recordAnalyticsEventsTest = () => {
       await recordAnalyticsEvents.processQueue();
 
       // console.log(
-      //   JSON.stringify((await getAnalyticsEvent('pageview.viz')).value)
+      //   JSON.stringify((await getAnalyticsEvent('pageview.viz')).value.data)
       // );
 
-      expect((await getAnalyticsEvent('pageview.home')).value).toEqual({
+      expect((await getAnalyticsEvent('pageview.home')).value.data).toEqual({
         id: 'pageview.home',
         intervals: {
           minutes: { '2021-11-28T11:46': 1, '2021-11-29T15:33': 1 },
@@ -135,7 +135,7 @@ export const recordAnalyticsEventsTest = () => {
         },
       });
 
-      expect((await getAnalyticsEvent('pageview.viz.1')).value).toEqual({
+      expect((await getAnalyticsEvent('pageview.viz.1')).value.data).toEqual({
         id: 'pageview.viz.1',
         intervals: {
           minutes: { '2021-11-29T15:33': 1 },
@@ -149,7 +149,7 @@ export const recordAnalyticsEventsTest = () => {
         },
       });
 
-      expect((await getAnalyticsEvent('pageview.viz.2')).value).toEqual({
+      expect((await getAnalyticsEvent('pageview.viz.2')).value.data).toEqual({
         id: 'pageview.viz.2',
         intervals: {
           minutes: { '2021-11-30T19:20': 1 },
@@ -163,7 +163,7 @@ export const recordAnalyticsEventsTest = () => {
         },
       });
 
-      expect((await getAnalyticsEvent('pageview.viz')).value).toEqual({
+      expect((await getAnalyticsEvent('pageview.viz')).value.data).toEqual({
         id: 'pageview.viz',
         intervals: {
           minutes: { '2021-11-29T15:33': 1, '2021-11-30T19:20': 1 },
@@ -177,7 +177,7 @@ export const recordAnalyticsEventsTest = () => {
         },
       });
 
-      expect((await getAnalyticsEvent('pageview')).value).toEqual({
+      expect((await getAnalyticsEvent('pageview')).value.data).toEqual({
         id: 'pageview',
         intervals: {
           minutes: {

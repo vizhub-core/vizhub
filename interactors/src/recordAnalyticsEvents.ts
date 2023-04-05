@@ -10,7 +10,7 @@ import {
 } from 'entities';
 
 const maxEntries = 90;
-const everyMinute = 1000 * 60;
+const processQueueIntervalMS = 1000 * 10;
 
 // Sends a new event for recording in the multiscale timeseries analytics store.
 export const RecordAnalyticsEvents = (gateways, testing = false) => {
@@ -57,7 +57,7 @@ export const RecordAnalyticsEvents = (gateways, testing = false) => {
           )
         )
           .filter((result) => result.outcome === 'success')
-          .map((d) => d.value);
+          .map((d) => d.value.data);
 
         // Build a lookup table by id.
         const analyticsEvents: Map<AnalyticsEventId, AnalyticsEvent> = new Map(
@@ -95,8 +95,8 @@ export const RecordAnalyticsEvents = (gateways, testing = false) => {
       // If in a unit test environment, expose this function to tests.
       return processQueue;
     } else {
-      // If in a production environment, execute this function each minute.
-      setInterval(processQueue, everyMinute);
+      // If in a production environment, execute this function periodically.
+      setInterval(processQueue, processQueueIntervalMS);
     }
   };
 
