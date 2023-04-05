@@ -23,12 +23,7 @@ const { MongoClient, ServerApiVersion } = MongoDB;
 
 // TODO pull in MongoDB + ShareDB setup from database package
 export const api = async ({ app, isProd, env }) => {
-  // TODO only do this in dev
-  // TODO connect to production DB in prod
-  // TODO
-  // TODO
   let gateways;
-  console.log('isProd = ' + isProd);
   if (isProd) {
     console.log('Connecting to production MongoDB...');
 
@@ -37,7 +32,7 @@ export const api = async ({ app, isProd, env }) => {
     const database = env.VIZHUB3_MONGO_DATABASE;
 
     const uri = `mongodb+srv://${username}:${password}@vizhub3.6sag6.mongodb.net/${database}?retryWrites=true&w=majority`;
-    console.log(uri);
+
     const client = new MongoClient(uri, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
@@ -78,6 +73,7 @@ export const api = async ({ app, isProd, env }) => {
 
   const { saveBetaProgramSignup } = gateways;
 
+  // TODO factor out these endpoints
   app.post('/api/private-beta-email-submit', async (req, res) => {
     console.log('received request');
     if (req.body && req.body.email) {
@@ -95,6 +91,20 @@ export const api = async ({ app, isProd, env }) => {
     }
   });
 
+  // TODO factor out these endpoints
+  app.post('/api/send-event', async (req, res) => {
+    console.log('event request');
+    if (req.body && req.body.eventIds) {
+      const eventIds = req.body.eventIds;
+      console.log('TODO save events ' + eventIds);
+      res.send(ok('success'));
+    } else {
+      res.send(err(missingParameterError('eventIds')));
+    }
+  });
+
+  // TODO test the auto-scaling using this
+  // simulates image generation
   app.get('/api/test', (req, res) => {
     setTimeout(() => {
       res.send('testing');

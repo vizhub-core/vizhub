@@ -13,6 +13,17 @@ export const VizKit = ({ baseUrl }) => {
             body: JSON.stringify({ email }),
           })
         ).json(),
+      // TODO reduce duplication
+      sendEvent: async (eventIds) =>
+        await (
+          await fetch(`${baseUrl}/send-event`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ eventIds }),
+          })
+        ).json(),
     },
   };
 };

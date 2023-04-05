@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { HomePageBody } from 'components/src/components/HomePageBody';
 import { VizKit } from 'api/src/VizKit';
@@ -9,6 +10,11 @@ const vizKit = VizKit({ baseUrl: './api' });
 // Inspired by https://github.com/vitejs/vite-plugin-react/blob/main/playground/ssr-react/src/pages/Home.jsx
 export const HomePage = ({ pageData }) => {
   const navigate = useNavigate();
+
+  // Send an analytics event to track this page view.
+  useEffect(() => {
+    vizKit.rest.sendEvent('event.pageview.home');
+  }, []);
 
   const handleEmailSubmit = async (email) => {
     navigate('/beta-confirm');
