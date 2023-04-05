@@ -63,4 +63,4 @@ export type { Timestamp, Markdown, Visibility, Snapshot } from './common';
 
 export { dateToTimestamp, timestampToDate } from './common';
 
-export type { AnayticsEvent, AnayticsEventIds } from './Analytics';
+export type { AnalyticsEvent, AnalyticsEventId } from './Analytics';

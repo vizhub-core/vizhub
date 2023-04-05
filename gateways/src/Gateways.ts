@@ -36,6 +36,8 @@ import {
   MergeRequest,
   MergeRequestId,
   EmailAddress,
+  AnalyticsEvent,
+  AnalyticsEventId,
 } from 'entities';
 import { Result, Success } from './Result';
 
@@ -138,6 +140,10 @@ export interface Gateways {
   saveMergeRequest(mergeRequest: MergeRequest): Promise<Result<Success>>;
   getMergeRequest(id: MergeRequestId): Promise<Result<Snapshot<MergeRequest>>>;
   deleteMergeRequest(id: MergeRequestId): Promise<Result<Success>>;
+
+  saveAnalyticsEvent(analyticsEvent: AnalyticsEvent): Promise<Result<Success>>;
+  getAnalyticsEvent(id: AnalyticsEventId): Promise<Result<AnalyticsEvent>>;
+  deleteAnalyticsEvent(id: AnalyticsEventId): Promise<Result<Success>>;
 
   // ***************************************************************
   // ******************** Non-CRUD Operations **********************
