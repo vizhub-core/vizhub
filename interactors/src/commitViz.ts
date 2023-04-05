@@ -14,6 +14,7 @@ export const CommitViz = (gateways: Gateways) => {
   const getContentAtCommit = GetContentAtCommit(gateways);
 
   return async (id: VizId): Promise<Result<CommitId>> => {
+    // TODORedLock
     const getVizResult = await getViz(id);
     if (getVizResult.outcome === 'failure') return getVizResult;
     const { info, content } = getVizResult.value;

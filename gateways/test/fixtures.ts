@@ -280,5 +280,6 @@ export const sampleMergeRequest: MergeRequest = {
 };
 
 export const sampleBetaProgramSignup: BetaProgramSignup = {
+  id: '74893257843',
   email: 'test@test.com',
 };

@@ -59,12 +59,8 @@ export type {
   UpvoteId,
 } from './Viz';
 
-export type {
-  Timestamp,
-  Markdown,
-  Visibility,
-  Snapshot,
-  MultiscaleTimeseries,
-} from './common';
+export type { Timestamp, Markdown, Visibility, Snapshot } from './common';
 
 export { dateToTimestamp, timestampToDate } from './common';
+
+export type { AnayticsEvent, AnayticsEventIds } from './Analytics';

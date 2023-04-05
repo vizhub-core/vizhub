@@ -40,6 +40,7 @@ export const crudEntityNames = [
   'Deployment',
   'MergeRequest',
   'BetaProgramSignup',
+  'AnayticsEvent',
 ];
 
 // These entities are stored directly in Mongo,
@@ -49,6 +50,7 @@ export const noSnapshot = {
   Commit: true,
   Milestone: true,
   BetaProgramSignup: true,
+  AnayticsEvent: true,
 };
 
 // An in-memory implementation for gateways,

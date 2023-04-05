@@ -26,9 +26,3 @@ export interface Snapshot<Type> {
   data: Type;
   v: number;
 }
-
-// MultiscaleTimeseries
-//  * An instance of a multiscale timeseries object
-//  * Used for analytics and tracking events over time
-//  * https://github.com/vizhub-core/multiscale-timeseries
-export type MultiscaleTimeseries = any;

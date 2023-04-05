@@ -13,7 +13,7 @@ export const TrashViz = (gateways: Gateways) => {
     timestamp: Timestamp; // The timestamp at which this viz is trashed.
   }): Promise<Result<Success>> => {
     const { id, timestamp } = options;
-
+    // TODORedLock
     const getInfoResult = await getInfo(id);
     if (getInfoResult.outcome === 'failure') return err(getInfoResult.error);
     const info = getInfoResult.value.data;

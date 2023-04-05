@@ -13,6 +13,7 @@ import { commitVizTest } from './commitVizTest';
 import { forkVizTest } from './forkVizTest';
 import { upvoteTest } from './upvoteTest';
 import { trashTest } from './trashTest';
+import { recordAnalyticsEventsTest } from './recordAnalyticsEventsTest';
 
 export const interactorsTests = () => {
   describe('Interactors', () => {
@@ -25,6 +26,8 @@ export const interactorsTests = () => {
     forkVizTest();
     upvoteTest();
     trashTest();
+    recordAnalyticsEventsTest();
+
     // TODO allow to specify a timestamp
     // Why? Useful for migration
     // Let forkedFromContent = getContentAtTimestamp(viz.forkedFrom, viz.created)

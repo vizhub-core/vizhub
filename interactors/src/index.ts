@@ -12,3 +12,4 @@ export { ForkViz } from './forkViz';
 export { generateId, setPredictableGenerateId } from './generateId';
 export { UpvoteViz } from './upvoteViz';
 export { TrashViz } from './trashViz';
+export { RecordAnalyticsEvents } from './recordAnalyticsEvents';
