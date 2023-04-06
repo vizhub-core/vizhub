@@ -39,6 +39,7 @@ export const Header = ({
               <Dropdown.Toggle
                 className="navbar__avatar-toggle"
                 variant="secondary"
+                id="authenticated-user-actions-dropdown"
               >
                 <img
                   src={authenticatedUserAvatarURL}

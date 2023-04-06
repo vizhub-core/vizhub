@@ -41,7 +41,7 @@ export const HomePage = ({ pageData }) => {
   }, []);
 
   return (
-    <div className="vh-page">
+    <div className="vh-page overflow-auto">
       <Header
         onLoginClick={handleLoginClick}
         onLogoutClick={handleLogoutClick}
