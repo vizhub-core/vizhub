@@ -27,25 +27,24 @@ export const HomePage = ({ pageData }) => {
       console.log(result.error);
     }
   };
-  //  console.log('pageData in HomePage:');
-  //  console.log(pageData);
-  //  return (
-  //    <ul>
-  //      <li onClick={() => navigate('/about')}>About</li>
-  //    </ul>
-  //  );
+
   const authenticatedUserAvatarURL = pageData.auth0User
     ? pageData.auth0User.picture
     : null;
-  // onLoginClick,
+
   const handleLoginClick = useCallback(() => {
     window.location.href = '/login';
+  }, []);
+
+  const handleLogoutClick = useCallback(() => {
+    window.location.href = '/logout';
   }, []);
 
   return (
     <div className="vh-page">
       <Header
         onLoginClick={handleLoginClick}
+        onLogoutClick={handleLogoutClick}
         authenticatedUserAvatarURL={authenticatedUserAvatarURL}
       ></Header>
       <HomePageBody onEmailSubmit={handleEmailSubmit} />
