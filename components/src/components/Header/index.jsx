@@ -29,13 +29,20 @@ export const Header = ({
   <Navbar bg="dark" variant="dark" expand="md">
     <Container fluid>
       <Navbar.Brand style={{ cursor: 'pointer' }} onClick={onVizHubClick}>
-        VizHubLogoGoesHere
+        VizHub 3 Beta
       </Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="me-auto" />
         <Nav className="align-items-md-center">
-          <Nav.Link onClick={onForumClick}>Forum</Nav.Link>
+          <Nav.Link
+            onClick={onForumClick}
+            href="https://vizhub.com/forum/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Forum
+          </Nav.Link>
           {authenticatedUserAvatarURL ? (
             <Dropdown align="end">
               <Dropdown.Toggle as={AvatarToggle}>

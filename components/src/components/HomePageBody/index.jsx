@@ -3,7 +3,7 @@ import { InputGroup, Form, Button } from '../bootstrap';
 
 import 'vizhub-ui/dist/vizhub-ui.css';
 import '../index.scss';
-import './home-page.scss';
+import './styles.scss';
 
 export const HomePageBody = ({ onEmailSubmit }) => {
   const [email, setEmail] = useState('');
@@ -21,7 +21,7 @@ export const HomePageBody = ({ onEmailSubmit }) => {
   );
 
   return (
-    <div className="vh-page vh-home-page">
+    <div className="vh-home-page-body">
       {/* <Header {...props} /> */}
       <div className="blurb-container">
         <div className="blurb">

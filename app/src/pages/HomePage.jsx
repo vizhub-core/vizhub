@@ -1,6 +1,6 @@
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { HomePageBody } from 'components/src/components/HomePageBody';
+import { HomePageBody, Header } from 'components';
 import { VizKit } from 'api/src/VizKit';
 
 const vizKit = VizKit({ baseUrl: './api' });
@@ -34,7 +34,23 @@ export const HomePage = ({ pageData }) => {
   //      <li onClick={() => navigate('/about')}>About</li>
   //    </ul>
   //  );
-  return <HomePageBody onEmailSubmit={handleEmailSubmit} />;
+  const authenticatedUserAvatarURL = pageData.auth0User
+    ? pageData.auth0User.picture
+    : null;
+  // onLoginClick,
+  const handleLoginClick = useCallback(() => {
+    window.location.href = '/login';
+  }, []);
+
+  return (
+    <div className="vh-page">
+      <Header
+        onLoginClick={handleLoginClick}
+        authenticatedUserAvatarURL={authenticatedUserAvatarURL}
+      ></Header>
+      <HomePageBody onEmailSubmit={handleEmailSubmit} />
+    </div>
+  );
 };
 
 HomePage.path = '/';

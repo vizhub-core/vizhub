@@ -18,8 +18,6 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const resolve = (p) => path.resolve(__dirname, p);
 const isTest = env.VITEST;
 
-console.log('Starting server v9');
-
 async function createServer(
   root = process.cwd(),
   isProd = env.NODE_ENV === 'production',
@@ -97,9 +95,8 @@ async function createServer(
   // in dev on each page request, so we don't need to restart the server all the time.
   app.use('*', async (req, res) => {
     try {
-      console.log('Authentication:');
-      console.log(req.oidc.isAuthenticated());
-      console.log(req.oidc.user);
+      // const userInfo = await req.oidc.fetchUserInfo();
+      // console.log(userInfo);
 
       const url = req.originalUrl;
 
@@ -143,6 +140,9 @@ async function createServer(
           })
         : {};
       pageData.url = url;
+      if (req.oidc.user) {
+        pageData.auth0User = req.oidc.user;
+      }
 
       const titleSanitized = xss(pageData.title);
       const descriptionSanitized = xss(pageData.description);

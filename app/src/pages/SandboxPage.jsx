@@ -4,10 +4,11 @@ import { VizKit } from 'api/src/VizKit';
 
 const vizKit = VizKit({ baseUrl: './api' });
 
-export const SandboxPage = ({ pageData }) => {
+export const SandboxPage = ({}) => {
   const [analyticsEvent, setAnalyticsEvent] = useState(null);
 
   useEffect(() => {
+    console.log('Fetch');
     const fetchData = async () => {
       const result = await vizKit.rest.getEvent('pageview.home');
       if (result.outcome === 'success') {

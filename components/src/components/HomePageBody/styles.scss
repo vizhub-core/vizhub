@@ -1,9 +1,12 @@
-.vh-home-page {
+.vh-home-page-body {
+  flex: 1;
+  display: flex;
+
   .blurb-container {
+    flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
-    flex: 1;
     overflow-y: auto;
     min-height: 0;
 

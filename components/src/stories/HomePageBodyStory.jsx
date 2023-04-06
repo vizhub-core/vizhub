@@ -10,7 +10,9 @@ const args = {
 const Story = () => {
   return (
     <div className="layout-fullscreen">
-      <HomePageBody {...args} />
+      <div className="vh-page">
+        <HomePageBody {...args} />
+      </div>
     </div>
   );
 };

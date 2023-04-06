@@ -22,7 +22,6 @@ const { MongoClient, ServerApiVersion } = MongoDB;
 //   message,
 // });
 
-// TODO pull in MongoDB + ShareDB setup from database package
 export const api = async ({ app, isProd, env }) => {
   let gateways;
   if (isProd) {
