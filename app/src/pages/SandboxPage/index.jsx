@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { Spinner } from 'components';
 import { VizKit } from 'api/src/VizKit';
+import './styles.css';
 
 const vizKit = VizKit({ baseUrl: './api' });
 
@@ -40,7 +41,14 @@ export const SandboxPage = ({}) => {
     }
   }, [analyticsEvent, vizModule]);
 
-  return analyticsEvent && vizModule ? <svg ref={svgRef}></svg> : <Spinner />;
+  return analyticsEvent && vizModule ? (
+    <div class="analytics-view">
+      <div class="analytics-chart-title">Home page views per day</div>
+      <svg ref={svgRef}></svg>
+    </div>
+  ) : (
+    <Spinner />
+  );
 };
 
 SandboxPage.path = '/sandbox';

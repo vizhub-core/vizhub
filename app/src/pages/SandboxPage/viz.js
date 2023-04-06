@@ -2,7 +2,6 @@ import { select } from 'd3-selection';
 import { utcDay } from 'd3-time';
 import { utcFormat } from 'd3-time-format';
 import { scaleUtc, scaleLinear } from 'd3-scale';
-import { area, curveStep } from 'd3-shape';
 import { extent, max } from 'd3-array';
 import { axisBottom, axisLeft } from 'd3-axis';
 
@@ -17,6 +16,13 @@ const format = utcFormat('%Y-%m-%d');
 // The number of days shown
 const maxEntries = 7;
 
+// The gap (pixels) between vertical bars.
+const gap = 30;
+
+const yTicks = 5;
+
+const round = 8;
+
 export const viz = (node, { analyticsEvent }) => {
   const svg = select(node).attr('width', width).attr('height', height);
 
@@ -29,29 +35,19 @@ export const viz = (node, { analyticsEvent }) => {
 
   const data = dates.map((date) => ({
     date,
-    value: timeseries[format(date)] || 0,
+    count: timeseries[format(date)] || 0,
   }));
+
+  const xValue = (d) => d.date;
+  const yValue = (d) => d.count;
 
   const { top, right, bottom, left } = margin;
 
-  const xScale = scaleUtc(extent(dates), [left, width - right]);
+  const xScale = scaleUtc(extent(data.map(xValue)), [left, width - right]);
 
-  const yScale = scaleLinear(
-    [0, max(data, (d) => d.value)],
-    [height - bottom, top]
-  );
+  const yScale = scaleLinear([0, max(data, yValue)], [height - bottom, top]);
 
-  const areaGenerator = area()
-    .x((d) => xScale(d.date))
-    .y1((d) => yScale(d.value))
-    .y0(yScale(0))
-    .curve(curveStep);
-
-  svg
-    .selectAll('path')
-    .data([null])
-    .join('path')
-    .attr('d', areaGenerator(data));
+  const barWidth = (width - right - left) / (data.length - 1) - gap * 2;
 
   svg
     .selectAll('g.x-axis')
@@ -59,7 +55,11 @@ export const viz = (node, { analyticsEvent }) => {
     .join('g')
     .attr('class', 'x-axis')
     .attr('transform', `translate(0,${height - bottom})`)
-    .call(axisBottom(xScale).ticks(maxEntries));
+    .call(axisBottom(xScale).ticks(maxEntries))
+    .call((selection) => {
+      selection.select('.domain').remove();
+      selection.selectAll('.tick line').remove();
+    });
 
   svg
     .selectAll('g.y-axis')
@@ -67,7 +67,23 @@ export const viz = (node, { analyticsEvent }) => {
     .join('g')
     .attr('class', 'y-axis')
     .attr('transform', `translate(${left},0)`)
-    .call(axisLeft(yScale));
+    .call(
+      axisLeft(yScale)
+        .tickSize(-(width - right - left))
+        .ticks(yTicks)
+    )
+    .call((selection) => {
+      selection.select('.domain').remove();
+    });
 
-  console.log(data);
+  svg
+    .selectAll('rect')
+    .data(data)
+    .join('rect')
+    .attr('x', (d) => xScale(xValue(d)) - barWidth / 2)
+    .attr('y', (d) => yScale(yValue(d)))
+    .attr('width', barWidth)
+    .attr('height', (d) => height - bottom - yScale(yValue(d)))
+    .attr('rx', round)
+    .attr('ry', round);
 };
