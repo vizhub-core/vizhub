@@ -1,6 +1,7 @@
 import { forwardRef } from 'react';
 import PropTypes from 'prop-types';
 import { Nav, Navbar, Container, Dropdown, Image, Button } from '../bootstrap';
+import { LogoSVG } from './LogoSVG';
 import '../index.scss';
 import './header.css';
 
@@ -28,8 +29,12 @@ export const Header = ({
 }) => (
   <Navbar bg="dark" variant="dark" expand="md">
     <Container fluid>
-      <Navbar.Brand style={{ cursor: 'pointer' }} onClick={onVizHubClick}>
-        VizHub 3 Beta
+      <Navbar.Brand
+        className="vh-brand-logo"
+        style={{ cursor: 'pointer' }}
+        onClick={onVizHubClick}
+      >
+        <LogoSVG height={32} />
       </Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">

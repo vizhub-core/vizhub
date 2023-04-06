@@ -24,7 +24,24 @@ const { MongoClient, ServerApiVersion } = MongoDB;
 
 export const api = async ({ app, isProd, env }) => {
   let gateways;
-  if (isProd) {
+  if (env.VIZHUB3_MONGO_LOCAL) {
+    console.log('Connecting to local MongoDB...');
+
+    const uri = 'mongodb://localhost:27017/vizhub3';
+    const client = new MongoClient(uri);
+    const connection = await client.connect();
+    const mongoDBDatabase = client.db();
+
+    const shareDBConnection = new ShareDB({
+      db: ShareDBMongo({
+        mongo: (callback) => {
+          callback(null, connection);
+        },
+      }),
+    }).connect();
+
+    gateways = DatabaseGateways({ shareDBConnection, mongoDBDatabase });
+  } else if (isProd) {
     console.log('Connecting to production MongoDB...');
 
     const username = env.VIZHUB3_MONGO_USERNAME;
@@ -38,23 +55,6 @@ export const api = async ({ app, isProd, env }) => {
       useUnifiedTopology: true,
       serverApi: ServerApiVersion.v1,
     });
-    const connection = await client.connect();
-    const mongoDBDatabase = client.db();
-
-    const shareDBConnection = new ShareDB({
-      db: ShareDBMongo({
-        mongo: (callback) => {
-          callback(null, connection);
-        },
-      }),
-    }).connect();
-
-    gateways = DatabaseGateways({ shareDBConnection, mongoDBDatabase });
-  } else if (env.VIZHUB3_MONGO_LOCAL) {
-    console.log('Connecting to local MongoDB...');
-
-    const uri = 'mongodb://localhost:27017/vizhub3';
-    const client = new MongoClient(uri);
     const connection = await client.connect();
     const mongoDBDatabase = client.db();
 
