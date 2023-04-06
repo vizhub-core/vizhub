@@ -1,22 +1,8 @@
-import { forwardRef } from 'react';
 import PropTypes from 'prop-types';
 import { Nav, Navbar, Container, Dropdown, Image, Button } from '../bootstrap';
 import { LogoSVG } from './LogoSVG';
 import '../index.scss';
 import './header.css';
-
-// Inspired by:
-// https://react-bootstrap.netlify.app/components/dropdowns/#custom-dropdown-components
-const AvatarToggle = forwardRef(({ children, onClick }, ref) => (
-  <button
-    type="button"
-    className="navbar__avatar-toggle dropdown-toggle"
-    ref={ref}
-    onClick={onClick}
-  >
-    {children}
-  </button>
-));
 
 export const Header = ({
   authenticatedUserAvatarURL,
@@ -50,13 +36,16 @@ export const Header = ({
           </Nav.Link>
           {authenticatedUserAvatarURL ? (
             <Dropdown align="end">
-              <Dropdown.Toggle as={AvatarToggle}>
-                <Image
+              <Dropdown.Toggle
+                className="navbar__avatar-toggle"
+                variant="secondary"
+              >
+                <img
                   src={authenticatedUserAvatarURL}
-                  roundedCircle
                   width="32"
                   height="32"
-                />
+                  className="rounded-circle"
+                ></img>
               </Dropdown.Toggle>
               <Dropdown.Menu>
                 <Dropdown.Item onClick={onCreateVizClick}>
