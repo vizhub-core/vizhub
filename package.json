@@ -32,6 +32,13 @@
   ],
   "dependencies": {
     "16": "^0.0.2",
+    "d3-array": "^3.2.3",
+    "d3-axis": "^3.0.0",
+    "d3-scale": "^4.0.2",
+    "d3-selection": "^3.0.0",
+    "d3-shape": "^3.2.0",
+    "d3-time": "^3.1.0",
+    "d3-time-format": "^4.1.0",
     "mongodb-legacy": "^5.0.0",
     "sharedb": "^3.2.3",
     "sharedb-mongo": "^2.0.0"
