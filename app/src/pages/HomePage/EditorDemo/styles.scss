@@ -5,24 +5,26 @@
 
   .editor-demo-body {
     flex: 1;
-    max-width: 1000px;
-    background-color: rgb(9, 255, 0);
+    max-width: 1200px;
+    background-color: white;
+    border-radius: var(--vh-border-radius);
+    box-shadow: var(--vh-box-shadow);
 
     .split-pane {
       height: 100%;
       display: flex;
-    }
-    #codemirror-container {
-      height: 100%;
-      flex: 1;
-    }
-    .cm-editor {
-      height: 100%;
-    }
-    #runner-iframe {
-      flex: 1;
-      height: 100%;
-      border: none;
+      .codemirror-container {
+        height: 100%;
+        flex: 1;
+        .cm-editor {
+          height: 100%;
+        }
+      }
+      .runner-iframe {
+        flex: 1;
+        height: 100%;
+        border: none;
+      }
     }
   }
 }
