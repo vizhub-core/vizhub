@@ -2,6 +2,7 @@ import { useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { HomePageBody, Header } from 'components';
 import { VizKit } from 'api/src/VizKit';
+import { EditorDemo } from './EditorDemo';
 
 const vizKit = VizKit({ baseUrl: './api' });
 
@@ -47,7 +48,9 @@ export const HomePage = ({ pageData }) => {
         onLogoutClick={handleLogoutClick}
         authenticatedUserAvatarURL={authenticatedUserAvatarURL}
       ></Header>
-      <HomePageBody onEmailSubmit={handleEmailSubmit} />
+      <HomePageBody onEmailSubmit={handleEmailSubmit}>
+        <EditorDemo />
+      </HomePageBody>
     </div>
   );
 };
@@ -55,7 +58,7 @@ export const HomePage = ({ pageData }) => {
 HomePage.path = '/';
 
 HomePage.getPageData = async () => {
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+  // await new Promise((resolve) => setTimeout(resolve, 1000));
   return {
     title: 'VizHub 3 Beta',
     description: 'Viz your data',

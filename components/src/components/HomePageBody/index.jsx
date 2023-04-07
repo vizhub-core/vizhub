@@ -5,7 +5,7 @@ import 'vizhub-ui/dist/vizhub-ui.css';
 import '../index.scss';
 import './styles.scss';
 
-export const HomePageBody = ({ onEmailSubmit }) => {
+export const HomePageBody = ({ onEmailSubmit, children }) => {
   const [email, setEmail] = useState('');
 
   const handleEmailChange = useCallback((event) => {
@@ -22,7 +22,6 @@ export const HomePageBody = ({ onEmailSubmit }) => {
 
   return (
     <div className="vh-home-page-body">
-      {/* <Header {...props} /> */}
       <div className="blurb-container">
         <div className="blurb">
           <div className="callout large">Accelerate</div>
@@ -50,6 +49,7 @@ export const HomePageBody = ({ onEmailSubmit }) => {
           </Form>
         </div>
       </div>
+      {children}
     </div>
   );
 };

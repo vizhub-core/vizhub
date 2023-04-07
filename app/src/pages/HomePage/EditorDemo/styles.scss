@@ -1,0 +1,28 @@
+.editor-demo {
+  height: 800px;
+  display: flex;
+  justify-content: center;
+
+  .editor-demo-body {
+    flex: 1;
+    max-width: 1000px;
+    background-color: rgb(9, 255, 0);
+
+    .split-pane {
+      height: 100%;
+      display: flex;
+    }
+    #codemirror-container {
+      height: 100%;
+      flex: 1;
+    }
+    .cm-editor {
+      height: 100%;
+    }
+    #runner-iframe {
+      flex: 1;
+      height: 100%;
+      border: none;
+    }
+  }
+}

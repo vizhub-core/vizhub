@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Interactive Builder Test</title>
+    <style>
+      html {
+        height: 100%;
+      }
+      body {
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+      }
+      .split-pane {
+        height: 100%;
+        display: flex;
+      }
+      #codemirror-container {
+        height: 100%;
+        flex: 1;
+      }
+      .cm-editor {
+        height: 100%;
+      }
+      #runner-iframe {
+        flex: 1;
+        height: 100%;
+        border: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="split-pane">
+      <div id="codemirror-container"></div>
+      <iframe id="runner-iframe"></iframe>
+    </div>
+    <script src="bundle.js"></script>
+  </body>
+</html>
