@@ -110,6 +110,6 @@ export const scatterPlot = (
     .attr('cx', (d) => xScale(xValue(d)))
     .attr('cy', (d) => yScale(yValue(d)))
     .attr('r', circleRadius)
-    .attr('opacity', 0.2);
+    .attr('opacity', 200 / 1000);
 };`,
 };

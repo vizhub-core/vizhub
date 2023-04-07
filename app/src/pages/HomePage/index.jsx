@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { HomePageBody, Header } from 'components';
 import { VizKit } from 'api/src/VizKit';
 import { EditorDemo } from './EditorDemo';
+import './styles.scss';
 
 const vizKit = VizKit({ baseUrl: './api' });
 
@@ -49,6 +50,15 @@ export const HomePage = ({ pageData }) => {
         authenticatedUserAvatarURL={authenticatedUserAvatarURL}
       ></Header>
       <HomePageBody onEmailSubmit={handleEmailSubmit}>
+        <div className="demo-blurb-container">
+          <div className="demo-blurb">
+            <div className="demo-blurb-title">Instant Feedback</div>
+            <div className="demo-blurb-description">
+              Hold "alt" and drag on the numbers in the code
+            </div>
+          </div>
+        </div>
+
         <EditorDemo />
       </HomePageBody>
     </div>

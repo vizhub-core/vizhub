@@ -66,16 +66,6 @@ export const setupEditorDemo = ({ codemirrorContainer, iframe }) => {
     }
   };
 
-  const initializeIframe = () =>
-    new Promise((resolve) => {
-      iframe.contentWindow.onmessage = ({ data }) => {
-        if (data.type === 'initDone') {
-          resolve();
-        }
-      };
-      iframe.contentWindow.postMessage({ type: 'init' }, '*');
-    });
-
   const times = [];
   const avg = (arr) => arr.reduce((a, b) => a + b, 0) / arr.length;
   const profile = false;
@@ -133,4 +123,20 @@ export const setupEditorDemo = ({ codemirrorContainer, iframe }) => {
       });
     },
   });
+
+  // Kick off the initial render
+  // TODO work out race conditions,
+  // make sure iframe and worker are both primed
+  handleCodeChange({
+    ...files,
+  });
+  // const initializeIframe = () =>
+  //   new Promise((resolve) => {
+  //     iframe.contentWindow.onmessage = ({ data }) => {
+  //       if (data.type === 'initDone') {
+  //         resolve();
+  //       }
+  //     };
+  //     iframe.contentWindow.postMessage({ type: 'init' }, '*');
+  //   });
 };
