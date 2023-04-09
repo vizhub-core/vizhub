@@ -7,6 +7,7 @@ import { getForksTest } from './getForksTest';
 import { getCommitAncestorsTest } from './getCommitAncestorsTest';
 import { getUserByEmailsTest } from './getUserByEmailsTest';
 import { incrementDecrementTest } from './incrementDecrementTest';
+import { getFolderAncestorsTest } from './getFolderAncestorsTest';
 
 export const gatewaysTests = () => {
   describe(`CRUD`, () => {
@@ -19,7 +20,5 @@ export const gatewaysTests = () => {
   getCommitAncestorsTest();
   getUserByEmailsTest();
   incrementDecrementTest();
-
-  //import { getFolderAncestorsTest } from './getFolderAncestorsTest';
-  //    getFolderAncestorsTest();
+  getFolderAncestorsTest();
 };

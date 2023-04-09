@@ -150,6 +150,22 @@ export const MemoryGateways = () => {
     return ok(commits.reverse());
   };
 
+  const getFolderAncestors = async (id) => {
+    let folder = documents.Folder[id];
+    if (!folder) {
+      return err(resourceNotFoundError(id));
+    }
+    const folders = [folder];
+    while (folder.parent) {
+      if (!(folder.parent in documents.Folder)) {
+        return err(resourceNotFoundError(commit.parent));
+      }
+      folder = documents.Folder[folder.parent];
+      folders.push(folder);
+    }
+    return ok(folders.reverse());
+  };
+
   const getUserByEmails = async (emails) => {
     const user = Object.values(documents.User).find(
       (user) =>
@@ -168,6 +184,7 @@ export const MemoryGateways = () => {
     incrementUpvotesCount,
     decrementUpvotesCount,
     getCommitAncestors,
+    getFolderAncestors,
     getUserByEmails,
   };
 

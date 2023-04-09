@@ -52,6 +52,22 @@ export const sampleFolder: Folder = {
   visibility: 'public',
 };
 
+export const folder2: Folder = {
+  id: '57489302578490324',
+  name: 'My Special Vizzes',
+  owner: userJoe.id,
+  visibility: 'public',
+  parent: sampleFolder.id,
+};
+
+export const folder3: Folder = {
+  id: '47238590473285438',
+  name: 'My Ultra Special Vizzes',
+  owner: userJoe.id,
+  visibility: 'public',
+  parent: folder2.id,
+};
+
 // The first ever viz.
 // Special because it's the only one not forked from another.
 export const primordialViz: Viz = {

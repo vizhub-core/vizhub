@@ -155,6 +155,7 @@ export interface Gateways {
   decrementUpvotesCount(id: VizId): Promise<Result<Success>>;
 
   // getCommitAncestors
+  //
   // Gets all commits from the primordial commit up to the given commit.
   // The returned array is in sorted order with to parent/child lineage.
   // The returned array always represents a non-branching chain of commits.
@@ -175,5 +176,13 @@ export interface Gateways {
     start?: CommitId
   ): Promise<Result<Array<Commit>>>;
 
+  // getUserByEmails
+  //
+  // Gets the user that matches any of the given emails.
   getUserByEmails(emails: Array<EmailAddress>): Promise<Result<Snapshot<User>>>;
+
+  // getFolderAncestors
+  //
+  // Gets the parent folders of the given folder.
+  getFolderAncestors(id: FolderId): Promise<Result<Array<Folder>>>;
 }
