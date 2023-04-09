@@ -268,36 +268,26 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
     }
 
     const [result] = results;
-    // Mongo does not guarantee any ordering, so we need to
-    // sort on the order here to ensure lineage ordering.
-    // This is the order in which the commits must be "replayed".
-    //
-    // Note: Sorting by timestamp does not work, because they are not granular enough.
-    // If two commits happen during the same second, the correct ordering
-    // cannot be determined by timestamps alone.
     const ancestors = result.ancestors.sort((a, b) =>
       descending(a.order, b.order)
     );
-    // Derive the final result as an array of pure Commit objects,
-    // including the one that matches commitId.
-    delete result.ancestors;
-    for (const folder of ancestors) {
-      delete folder.order;
-    }
     ancestors.push(result);
 
-    for (const folder of ancestors) {
-      // Remove Mongo's internal id
-      delete folder._id;
+    // Remove any unwanted fields and guard against mutability bugs
+    // by making a shallow copy of each folder.
+    // See entities/Folders for a list of fields.
 
-      // Remove ShareDB fields
-      delete folder._m;
-      delete folder._o;
-      delete folder._type;
-      delete folder._v;
-    }
+    const folders = ancestors.map(
+      ({ id, name, parent, owner, visibility }) => ({
+        id,
+        name,
+        parent,
+        owner,
+        visibility,
+      })
+    );
 
-    return ok(ancestors);
+    return ok(folders);
   };
 
   const getUserByEmails = (emails) =>
