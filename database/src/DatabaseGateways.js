@@ -88,7 +88,7 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
           return resolve(err(resourceNotFoundError(id)));
         } else {
           if (number < 0 && shareDBDoc.data[field] === 0) {
-            resolve(err(invalidDecrementError(id, field)));
+            return resolve(err(invalidDecrementError(id, field)));
           }
           // Leverage the `ena` operator,
           // which is an isolated addition of a number.

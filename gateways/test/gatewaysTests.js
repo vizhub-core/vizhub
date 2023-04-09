@@ -19,11 +19,6 @@ export const gatewaysTests = () => {
   getForksTest();
   getCommitAncestorsTest();
   getUserByEmailsTest();
-  getFolderAncestorsTest();
-
-  // TODO investigate why this test
-  // causes any tests that follow it to emit a
-  // ShareDBError: Invalid op submitted. Op version newer than current snapshot
-  // The fix for now is to run this last.
   incrementDecrementTest();
+  getFolderAncestorsTest();
 };

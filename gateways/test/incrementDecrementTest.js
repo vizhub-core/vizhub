@@ -33,9 +33,14 @@ export const incrementDecrementTest = () => {
       await decrementForksCount(primordialViz.info.id);
       await decrementForksCount(primordialViz.info.id);
       expect(await getForksCount()).toEqual(0);
+    });
 
-      // Error case
-      result = await decrementForksCount(primordialViz.info.id);
+    it('decrementForksCount from 0 error case', async () => {
+      const gateways = await initGateways();
+      const { saveInfo, decrementForksCount } = gateways;
+      // Error case: decrementing when value is already zero.
+      await saveInfo({ ...primordialViz.info, forksCount: 0 });
+      const result = await decrementForksCount(primordialViz.info.id);
       expect(result.outcome).toEqual('failure');
       expect(result.error.message).toEqual(
         'Cannot decrement zero-value field `forksCount` on viz `viz1`'
@@ -78,10 +83,14 @@ export const incrementDecrementTest = () => {
       await decrementUpvotesCount(primordialViz.info.id);
       await decrementUpvotesCount(primordialViz.info.id);
       expect(await getUpvotesCount()).toEqual(originalUpvotesCount);
+    });
 
+    it('decrementUpvotesCount from 0 error case', async () => {
+      const gateways = await initGateways();
+      const { saveInfo, decrementUpvotesCount } = gateways;
       // Error case: decrementing when value is already zero.
       await saveInfo({ ...primordialViz.info, upvotesCount: 0 });
-      result = await decrementUpvotesCount(primordialViz.info.id);
+      const result = await decrementUpvotesCount(primordialViz.info.id);
       expect(result.outcome).toEqual('failure');
       expect(result.error.message).toEqual(
         'Cannot decrement zero-value field `upvotesCount` on viz `viz1`'
