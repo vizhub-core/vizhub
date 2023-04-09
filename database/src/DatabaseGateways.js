@@ -26,7 +26,7 @@ const toCollectionName = (entityName) => entityName.toLowerCase() + 's';
 export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
   // A generic "save" implementation for ShareDB.
   const shareDBSave = (collectionName) => (entity) =>
-    new Promise((resolve, reject) => {
+    new Promise((resolve) => {
       const shareDBDoc = shareDBConnection.get(collectionName, entity.id);
       shareDBDoc.fetch((error) => {
         if (error) return resolve(err(error));
@@ -46,7 +46,7 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
 
   // A generic "get" implementation for ShareDB.
   const shareDBGet = (collectionName) => (id) =>
-    new Promise((resolve, reject) => {
+    new Promise((resolve) => {
       const shareDBDoc = shareDBConnection.get(collectionName, id);
       shareDBDoc.fetch((error) => {
         if (error) return resolve(err(error));
@@ -57,7 +57,7 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
 
   // A generic "delete" implementation for ShareDB.
   const shareDBDelete = (collectionName) => (id) =>
-    new Promise((resolve, reject) => {
+    new Promise((resolve) => {
       const shareDBDoc = shareDBConnection.get(collectionName, id);
       shareDBDoc.del((error) => {
         if (error && error.code === 'ERR_DOC_DOES_NOT_EXIST') {
@@ -74,7 +74,7 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
   //  * `field` - the field to add to
   //  * `number` - the number to add to the field value
   const shareDBAdd = (collectionName, field, number) => (id) =>
-    new Promise((resolve, reject) => {
+    new Promise((resolve) => {
       const shareDBDoc = shareDBConnection.get(collectionName, id);
       shareDBDoc.fetch((error) => {
         if (error) return resolve(err(error));
@@ -240,6 +240,66 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
     return ok(ancestors);
   };
 
+  const getFolderAncestors = async (id) => {
+    const entityName = 'Folder';
+    const from = toCollectionName(entityName);
+    const collection = mongoDBDatabase.collection(from);
+
+    const $graphLookup = {
+      from,
+      startWith: '$parent',
+      connectFromField: 'parent',
+      connectToField: '_id',
+      as: 'ancestors',
+      depthField: 'order',
+    };
+
+    const results = await (
+      await collection.aggregate([{ $match: { _id: id } }, { $graphLookup }])
+    ).toArray();
+
+    if (results.length === 0) {
+      return err(resourceNotFoundError(id));
+    }
+
+    // Sanity check.
+    if (results.length > 1) {
+      throw new Error('Results.length should be exactly 1.');
+    }
+
+    const [result] = results;
+    // Mongo does not guarantee any ordering, so we need to
+    // sort on the order here to ensure lineage ordering.
+    // This is the order in which the commits must be "replayed".
+    //
+    // Note: Sorting by timestamp does not work, because they are not granular enough.
+    // If two commits happen during the same second, the correct ordering
+    // cannot be determined by timestamps alone.
+    const ancestors = result.ancestors.sort((a, b) =>
+      descending(a.order, b.order)
+    );
+    // Derive the final result as an array of pure Commit objects,
+    // including the one that matches commitId.
+    delete result.ancestors;
+    for (const folder of ancestors) {
+      delete folder.order;
+    }
+    ancestors.push(result);
+
+    for (const folder of ancestors) {
+      // Remove Mongo's internal id
+      delete folder._id;
+
+      // Remove ShareDB fields
+      delete folder._m;
+      delete folder._o;
+      delete folder._type;
+      delete folder._v;
+    }
+
+    return ok(ancestors);
+  };
+
   const getUserByEmails = (emails) =>
     new Promise((resolve, reject) => {
       const entityName = 'User';
@@ -276,6 +336,7 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
     incrementUpvotesCount,
     decrementUpvotesCount,
     getCommitAncestors,
+    getFolderAncestors,
     getUserByEmails,
   };
 

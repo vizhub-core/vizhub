@@ -3,7 +3,7 @@ import { initGateways } from './initGateways';
 import { sampleFolder, folder2, folder3 } from './fixtures';
 
 export const getFolderAncestorsTest = () => {
-  describe.only('getFolderAncestors', () => {
+  describe('getFolderAncestors', () => {
     it('getFolderAncestors level 1', async () => {
       const gateways = await initGateways();
       const { saveFolder, getFolderAncestors } = gateways;
