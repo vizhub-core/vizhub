@@ -7,7 +7,7 @@ import { RecordAnalyticsEvents } from '../src';
 // https://github.com/vizhub-core/vizhub/blob/76d4ca43a8b0f3c543919ccc66a7228d75ba37cd/vizhub-v2/packages/useCases/test/eventRecords.js
 export const recordAnalyticsEventsTest = () => {
   describe('recordAnalyticsEvent', async () => {
-    it.only('should create a new analytics event', async () => {
+    it('should create a new analytics event', async () => {
       const gateways = initGateways();
       const { getAnalyticsEvent } = gateways;
       const recordAnalyticsEvents = RecordAnalyticsEvents(gateways, true);
