@@ -75,29 +75,27 @@ export const canUserReadVizTest = () => {
       expect(result.value).toEqual(true);
     });
 
-    //it('private viz collaborator (editor)', async () => {
-    //  const gateways = initGateways();
-    //  const { savePermission } = gateways;
-    //  const saveViz = SaveViz(gateways);
-    //  const canUserReadViz = CanUserReadViz(gateways);
+    it('private viz collaborator (editor)', async () => {
+      const gateways = initGateways();
+      const { savePermission } = gateways;
+      const saveViz = SaveViz(gateways);
+      const canUserReadViz = CanUserReadViz(gateways);
 
-    //  await saveViz({
-    //    info: { ...primordialViz.info, visibility: 'private' },
-    //    content: primordialViz.content,
-    //  });
+      await saveViz({
+        info: { ...primordialViz.info, visibility: 'private' },
+        content: primordialViz.content,
+      });
 
-    //  // Grants userJane editor access.
-    //  expect((await savePermission(samplePermission)).outcome).toEqual(
-    //    'success'
-    //  );
+      // Grants userJane editor access to primordialViz.
+      await savePermission(samplePermission);
 
-    //  const result = await canUserReadViz({
-    //    viz: primordialViz.info.id,
-    //    user: userJoe.id,
-    //  });
-    //  expect(result.outcome).toEqual('success');
-    //  expect(result.value).toEqual(true);
-    //});
+      const result = await canUserReadViz({
+        viz: primordialViz.info.id,
+        user: userJane.id,
+      });
+      expect(result.outcome).toEqual('success');
+      expect(result.value).toEqual(true);
+    });
     // it('private viz collaborator on parent folder', async () => { });
     // it('private viz collaborator on parent parent folder', async () => { });
   });

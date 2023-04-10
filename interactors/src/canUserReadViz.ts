@@ -30,24 +30,25 @@ export const CanUserReadViz = (gateways: Gateways) => {
       return ok(true);
     }
 
-    // // At this point we need to look at the permissions (collaborators).
-    // // To implement "waterfall permissions" (like Box),
-    // // we look up all the folder ancestors of this viz,
-    // // then check if the user has permission to access any of those.
-    // const permissionsResult = await getPermissions({
-    //   user,
-    //   // TODO resources: [viz, ...ancestors]
-    //   resources: [viz],
-    // });
-    // if (permissionsResult.outcome === 'failure')
-    //   return err(permissionsResult.error);
-    // const permissions = permissionsResult.value.data;
+    // At this point we need to look at the permissions (collaborators).
+    // To implement "waterfall permissions" (like Box),
+    // we look up all the folder ancestors of this viz,
+    // then check if the user has permission to access any of those.
+    const permissionsResult = await getPermissions(
+      user,
+      // TODO resources: [viz, ...ancestors]
+      [viz]
+    );
+    if (permissionsResult.outcome === 'failure') {
+      return err(permissionsResult.error);
+    }
+    const permissions = permissionsResult.value.map((d) => d.data);
 
-    // // If the user is a collaborator on any of these resources,
-    // // then the user can read this viz.
-    // if (permissions.length > 0) {
-    //   return ok(true);
-    // }
+    // If the user is a collaborator on any of these resources,
+    // then the user can read this viz.
+    if (permissions.length > 0) {
+      return ok(true);
+    }
 
     return ok(false);
   };
