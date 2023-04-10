@@ -194,5 +194,5 @@ export interface Gateways {
   getPermissions(
     user: User,
     resources: Array<ResourceId>
-  ): Promise<Result<Array<Permission>>>;
+  ): Promise<Result<Array<Snapshot<Permission>>>>;
 }

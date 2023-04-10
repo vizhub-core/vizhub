@@ -183,7 +183,7 @@ export const MemoryGateways = () => {
       .filter((permission) =>
         resources.some((resource) => resource === permission.resource)
       );
-    return ok(permissions);
+    return ok(permissions.map(fakeSnapshot));
   };
 
   // Populate non-CRUD methods.

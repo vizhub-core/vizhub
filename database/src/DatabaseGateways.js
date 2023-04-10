@@ -325,7 +325,7 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
         (error, results) => {
           query.destroy();
           if (error) return resolve(err(error));
-          resolve(ok(results.map((d) => d.data)));
+          resolve(ok(results.map((doc) => doc.toSnapshot())));
         }
       );
     });

@@ -8,6 +8,9 @@ import {
   userJane,
 } from './fixtures';
 
+// Unpacks snapshots.
+const unpack = (result) => result.value.map((snapshot) => snapshot.data);
+
 export const getPermissionsTest = () => {
   describe('getPermissions', () => {
     it('getPermissions for a viz', async () => {
@@ -20,7 +23,7 @@ export const getPermissionsTest = () => {
         primordialViz.info.id,
       ]);
       expect(permissionsResult.outcome).toEqual('success');
-      expect(permissionsResult.value).toEqual([samplePermission]);
+      expect(unpack(permissionsResult)).toEqual([samplePermission]);
     });
 
     it('getPermissions for a viz, empty case by user', async () => {
@@ -63,7 +66,7 @@ export const getPermissionsTest = () => {
         sampleFolder.id,
       ]);
       expect(permissionsResult.outcome).toEqual('success');
-      expect(permissionsResult.value).toEqual([permission]);
+      expect(unpack(permissionsResult)).toEqual([permission]);
     });
 
     it('getPermissions, permissions on multiple resources', async () => {
@@ -84,7 +87,7 @@ export const getPermissionsTest = () => {
         sampleFolder.id,
       ]);
       expect(permissionsResult.outcome).toEqual('success');
-      expect(permissionsResult.value).toEqual([samplePermission, permission]);
+      expect(unpack(permissionsResult)).toEqual([samplePermission, permission]);
     });
 
     it('getPermissions, permissions on multiple resources, single user match', async () => {
@@ -106,7 +109,7 @@ export const getPermissionsTest = () => {
         sampleFolder.id,
       ]);
       expect(permissionsResult.outcome).toEqual('success');
-      expect(permissionsResult.value).toEqual([samplePermission]);
+      expect(unpack(permissionsResult)).toEqual([samplePermission]);
     });
   });
 };
