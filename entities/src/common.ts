@@ -19,9 +19,9 @@ export type Markdown = string;
 //     It is listed in the personal profile view under "Unlisted"
 export type Visibility = 'public' | 'private' | 'unlisted';
 
-export const PUBLIC:Visibility = 'public';
-export const PRIVATE:Visibility = 'private';
-export const UNLISTED:Visibility = 'unlisted';
+export const PUBLIC: Visibility = 'public';
+export const PRIVATE: Visibility = 'private';
+export const UNLISTED: Visibility = 'unlisted';
 
 // A ShareDB Snapshot. See:
 // https://share.github.io/sharedb/api/snapshot

@@ -1,16 +1,16 @@
-import { Result, ok, err } from 'gateways';
-import { VizId, Viz, PUBLIC } from 'entities';
+import { Gateways, Result, ok, err } from 'gateways';
+import { VizId, UserId, ResourceId, PUBLIC } from 'entities';
 
 // canUserReadViz
 // * Checks if a user has access permissions to
 //   read the given viz.
 export const CanUserReadViz = (gateways: Gateways) => {
-  const { getInfo, getPermissions } = gateways;
+  const { getInfo, getPermissions, getFolderAncestors } = gateways;
 
   return async (options: {
     user: UserId;
     viz: VizId;
-  }): Promise<Result<Success>> => {
+  }): Promise<Result<boolean>> => {
     const { user, viz } = options;
 
     // Get the info for the viz we are looking at.
@@ -32,13 +32,23 @@ export const CanUserReadViz = (gateways: Gateways) => {
 
     // At this point we need to look at the permissions (collaborators).
     // To implement "waterfall permissions" (like Box),
-    // we look up all the folder ancestors of this viz,
-    // then check if the user has permission to access any of those.
-    const permissionsResult = await getPermissions(
-      user,
-      // TODO resources: [viz, ...ancestors]
-      [viz]
-    );
+    // we look up all the folder ancestors of this viz.
+    let resources: Array<ResourceId>;
+    if (info.folder) {
+      const ancestorsResult = await getFolderAncestors(info.folder);
+      if (ancestorsResult.outcome === 'failure') {
+        return err(ancestorsResult.error);
+      }
+      const ancestors = ancestorsResult.value;
+
+      resources = [viz, ...ancestors.map((folder) => folder.id)];
+    } else {
+      resources = [viz];
+    }
+
+    // Then check if the user has permission to access any of those folders,
+    // in addition to permissions on this viz.
+    const permissionsResult = await getPermissions(user, resources);
     if (permissionsResult.outcome === 'failure') {
       return err(permissionsResult.error);
     }

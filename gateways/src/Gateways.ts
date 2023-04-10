@@ -192,7 +192,7 @@ export interface Gateways {
   // Looks up the permissions that match the given user
   // and any of the given resources.
   getPermissions(
-    user: User,
+    user: UserId,
     resources: Array<ResourceId>
   ): Promise<Result<Array<Snapshot<Permission>>>>;
 }

@@ -5,9 +5,10 @@ import {
   userJoe,
   userJane,
   samplePermission,
+  sampleFolder,
 } from 'gateways/test';
 import { initGateways } from './initGateways';
-import { SaveViz, CanUserReadViz } from '../src';
+import { CanUserReadViz } from '../src';
 
 export const canUserReadVizTest = () => {
   describe('canUserReadViz', async () => {
@@ -26,10 +27,10 @@ export const canUserReadVizTest = () => {
     });
     it('public viz', async () => {
       const gateways = initGateways();
-      const saveViz = SaveViz(gateways);
       const canUserReadViz = CanUserReadViz(gateways);
+      const { saveInfo } = gateways;
 
-      await saveViz(primordialViz);
+      await saveInfo(primordialViz.info);
 
       const result = await canUserReadViz({
         viz: primordialViz.info.id,
@@ -41,13 +42,12 @@ export const canUserReadVizTest = () => {
 
     it('private viz non-owner non-collaborator', async () => {
       const gateways = initGateways();
-      const saveViz = SaveViz(gateways);
       const canUserReadViz = CanUserReadViz(gateways);
+      const { saveInfo, saveFolder } = gateways;
 
-      await saveViz({
-        info: { ...primordialViz.info, visibility: 'private' },
-        content: primordialViz.content,
-      });
+      await saveInfo({ ...primordialViz.info, visibility: 'private' });
+
+      saveFolder(sampleFolder);
 
       const result = await canUserReadViz({
         viz: primordialViz.info.id,
@@ -59,13 +59,10 @@ export const canUserReadVizTest = () => {
 
     it('private viz owner', async () => {
       const gateways = initGateways();
-      const saveViz = SaveViz(gateways);
+      const { saveInfo } = gateways;
       const canUserReadViz = CanUserReadViz(gateways);
 
-      await saveViz({
-        info: { ...primordialViz.info, visibility: 'private' },
-        content: primordialViz.content,
-      });
+      await saveInfo({ ...primordialViz.info, visibility: 'private' });
 
       const result = await canUserReadViz({
         viz: primordialViz.info.id,
@@ -75,16 +72,13 @@ export const canUserReadVizTest = () => {
       expect(result.value).toEqual(true);
     });
 
-    it('private viz collaborator (editor)', async () => {
+    it('private viz collaborator', async () => {
       const gateways = initGateways();
-      const { savePermission } = gateways;
-      const saveViz = SaveViz(gateways);
+      const { savePermission, saveFolder, saveInfo } = gateways;
       const canUserReadViz = CanUserReadViz(gateways);
 
-      await saveViz({
-        info: { ...primordialViz.info, visibility: 'private' },
-        content: primordialViz.content,
-      });
+      await saveInfo({ ...primordialViz.info, visibility: 'private' });
+      saveFolder(sampleFolder);
 
       // Grants userJane editor access to primordialViz.
       await savePermission(samplePermission);
@@ -96,7 +90,28 @@ export const canUserReadVizTest = () => {
       expect(result.outcome).toEqual('success');
       expect(result.value).toEqual(true);
     });
-    // it('private viz collaborator on parent folder', async () => { });
+
+    it('private viz collaborator on parent folder', async () => {
+      const gateways = initGateways();
+      const { savePermission, saveFolder, saveInfo } = gateways;
+      const canUserReadViz = CanUserReadViz(gateways);
+
+      await saveInfo({ ...primordialViz.info, visibility: 'private' });
+
+      saveFolder(sampleFolder);
+
+      // Grants userJane editor access to
+      // the parent folder of primordialViz.
+      await savePermission({ ...samplePermission, resource: sampleFolder.id });
+
+      const result = await canUserReadViz({
+        viz: primordialViz.info.id,
+        user: userJane.id,
+      });
+      expect(result.outcome).toEqual('success');
+      expect(result.value).toEqual(true);
+    });
     // it('private viz collaborator on parent parent folder', async () => { });
   });
+  // TODO test no-folder and folder case
 };

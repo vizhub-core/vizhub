@@ -149,7 +149,9 @@ export const MemoryGateways = () => {
     }
     return ok(commits.reverse());
   };
-
+  // TODO consider only returning ids here?
+  // For permissions, onlu ids are needed.
+  // For breadcrumbs, names are needed as well
   const getFolderAncestors = async (id) => {
     let folder = documents.Folder[id];
     if (!folder) {
