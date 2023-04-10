@@ -178,7 +178,12 @@ export const MemoryGateways = () => {
 
   const getPermissions = async (user, resources) => {
     const allPermissions = Object.values(documents.Permission);
-    return ok(allPermissions);
+    const permissions = allPermissions
+      .filter((permission) => permission.user === user)
+      .filter((permission) =>
+        resources.some((resource) => resource === permission.resource)
+      );
+    return ok(permissions);
   };
 
   // Populate non-CRUD methods.
