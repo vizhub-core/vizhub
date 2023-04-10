@@ -1,5 +1,5 @@
-import { Result, ok } from 'gateways';
-import { VizId, Viz } from 'entities';
+import { Result, ok, err } from 'gateways';
+import { VizId, Viz, PUBLIC } from 'entities';
 
 // canUserReadViz
 // * Checks if a user has access permissions to
@@ -13,6 +13,17 @@ export const CanUserReadViz = (gateways: Gateways) => {
   }): Promise<Result<Success>> => {
     const { user, viz } = options;
 
-    return ok(true);
+    // Get the info for the viz we are looking at.
+    const infoResult = await getInfo(viz);
+    if (infoResult.outcome === 'failure') return err(infoResult.error);
+    const info = infoResult.value.data;
+
+    // If visibility is public on this viz,
+    // then anyone can read it, so return true.
+    if (info.visibility === PUBLIC) {
+      return ok(true);
+    }
+
+    return ok(false);
   };
 };
