@@ -313,6 +313,23 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
       );
     });
 
+  const getPermissions = (user, resources) =>
+    new Promise((resolve, reject) => {
+      const entityName = 'Permission';
+      const query = shareDBConnection.createFetchQuery(
+        toCollectionName(entityName),
+        {
+          $and: [{ user }, { resource: { $in: resources } }],
+        },
+        {},
+        (error, results) => {
+          query.destroy();
+          if (error) return resolve(err(error));
+          resolve(ok(results.map((d) => d.data)));
+        }
+      );
+    });
+
   const from = toCollectionName('Info');
   const incrementForksCount = shareDBAdd(from, 'forksCount', 1);
   const decrementForksCount = shareDBAdd(from, 'forksCount', -1);
@@ -328,6 +345,7 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
     getCommitAncestors,
     getFolderAncestors,
     getUserByEmails,
+    getPermissions,
   };
 
   for (const entityName of crudEntityNames) {
