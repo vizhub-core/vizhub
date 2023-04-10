@@ -1,6 +1,11 @@
 import { describe, it, expect } from 'vitest';
 import { VizHubErrorCode } from 'gateways';
-import { primordialViz, userJoe, userJane } from 'gateways/test';
+import {
+  primordialViz,
+  userJoe,
+  userJane,
+  samplePermission,
+} from 'gateways/test';
 import { initGateways } from './initGateways';
 import { SaveViz, CanUserReadViz } from '../src';
 
@@ -69,6 +74,7 @@ export const canUserReadVizTest = () => {
       expect(result.outcome).toEqual('success');
       expect(result.value).toEqual(true);
     });
+
     //it('private viz collaborator (editor)', async () => {
     //  const gateways = initGateways();
     //  const { savePermission } = gateways;
@@ -81,7 +87,9 @@ export const canUserReadVizTest = () => {
     //  });
 
     //  // Grants userJane editor access.
-    //  await savePermission(samplePermission);
+    //  expect((await savePermission(samplePermission)).outcome).toEqual(
+    //    'success'
+    //  );
 
     //  const result = await canUserReadViz({
     //    viz: primordialViz.info.id,

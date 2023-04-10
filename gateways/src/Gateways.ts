@@ -38,6 +38,7 @@ import {
   EmailAddress,
   AnalyticsEvent,
   AnalyticsEventId,
+  ResourceId,
 } from 'entities';
 import { Result, Success } from './Result';
 
@@ -185,4 +186,13 @@ export interface Gateways {
   //
   // Gets the parent folders of the given folder.
   getFolderAncestors(id: FolderId): Promise<Result<Array<Folder>>>;
+
+  // getPermissions
+  //
+  // Looks up the permissions that match the given user
+  // and any of the given resources.
+  getPermissions(
+    user: User,
+    resources: Array<ResourceId>
+  ): Promise<Result<Array<Permission>>>;
 }

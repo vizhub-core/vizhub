@@ -11,6 +11,9 @@ export type Role = 'admin' | 'editor' | 'viewer';
 //  * Unique identifier string for a Permission.
 export type PermissionId = string;
 
+// A viz or a folder are considered "resources".
+export type ResourceId = VizId | FolderId;
+
 // Permission
 //  * A role granted to a user for a resource
 export interface Permission {
@@ -20,7 +23,7 @@ export interface Permission {
   user: UserId;
 
   // The resource the permission is on
-  resource: VizId | FolderId;
+  resource: ResourceId;
 
   // The role of this permission
   role: Role;

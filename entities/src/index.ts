@@ -21,7 +21,7 @@ export type {
   OrgMembershipId,
 } from './Orgs';
 
-export type { Permission, PermissionId, Role } from './Permissions';
+export type { Permission, PermissionId, Role, ResourceId } from './Permissions';
 
 export type {
   Commit,

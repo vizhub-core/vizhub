@@ -8,6 +8,7 @@ import { getCommitAncestorsTest } from './getCommitAncestorsTest';
 import { getUserByEmailsTest } from './getUserByEmailsTest';
 import { incrementDecrementTest } from './incrementDecrementTest';
 import { getFolderAncestorsTest } from './getFolderAncestorsTest';
+import { getPermissionsTest } from './getPermissionsTest';
 
 export const gatewaysTests = () => {
   describe(`CRUD`, () => {
@@ -21,4 +22,5 @@ export const gatewaysTests = () => {
   getUserByEmailsTest();
   incrementDecrementTest();
   getFolderAncestorsTest();
+  getPermissionsTest();
 };

@@ -176,6 +176,11 @@ export const MemoryGateways = () => {
     return user ? ok(fakeSnapshot(user)) : err(resourceNotFoundError(emails));
   };
 
+  const getPermissions = async (user, resources) => {
+    const allPermissions = Object.values(documents.Permission);
+    return ok(allPermissions);
+  };
+
   // Populate non-CRUD methods.
   let memoryGateways = {
     getForks,
@@ -186,6 +191,7 @@ export const MemoryGateways = () => {
     getCommitAncestors,
     getFolderAncestors,
     getUserByEmails,
+    getPermissions,
   };
 
   // Populate CRUD methods.
