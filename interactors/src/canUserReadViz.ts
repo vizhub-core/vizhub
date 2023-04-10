@@ -24,6 +24,12 @@ export const CanUserReadViz = (gateways: Gateways) => {
       return ok(true);
     }
 
+    // If the user is the owner of this viz,
+    // then the user can read this viz.
+    if (info.owner === user) {
+      return ok(true);
+    }
+
     return ok(false);
   };
 };
