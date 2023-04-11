@@ -7,6 +7,10 @@ import { Timestamp } from './common';
 //  * Access levels for users
 export type Role = 'admin' | 'editor' | 'viewer';
 
+export const ADMIN: Role = 'admin';
+export const EDITOR: Role = 'editor';
+export const VIEWER: Role = 'viewer';
+
 // PermissionId
 //  * Unique identifier string for a Permission.
 export type PermissionId = string;

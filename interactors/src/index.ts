@@ -14,3 +14,4 @@ export { UpvoteViz } from './upvoteViz';
 export { TrashViz } from './trashViz';
 export { RecordAnalyticsEvents } from './recordAnalyticsEvents';
 export { CanUserReadViz } from './canUserReadViz';
+export { CanUserWriteViz } from './canUserWriteViz';

@@ -22,6 +22,7 @@ export type {
 } from './Orgs';
 
 export type { Permission, PermissionId, Role, ResourceId } from './Permissions';
+export { ADMIN, EDITOR, VIEWER } from './Permissions';
 
 export type {
   Commit,

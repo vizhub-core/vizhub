@@ -15,6 +15,7 @@ import { upvoteTest } from './upvoteTest';
 import { trashTest } from './trashTest';
 import { recordAnalyticsEventsTest } from './recordAnalyticsEventsTest';
 import { canUserReadVizTest } from './canUserReadVizTest';
+import { canUserWriteVizTest } from './canUserWriteVizTest';
 
 export const interactorsTests = () => {
   describe('Interactors', () => {
@@ -29,7 +30,7 @@ export const interactorsTests = () => {
     trashTest();
     recordAnalyticsEventsTest();
     canUserReadVizTest();
-    //canUserWriteVizTest();
+    canUserWriteVizTest();
     //canUserAdminVizTest();
 
     // TODO allow to specify a timestamp

@@ -21,6 +21,7 @@ import {
   Deployment,
   MergeRequest,
   BetaProgramSignup,
+  EDITOR,
 } from 'entities';
 
 export const ts1: Timestamp = 1638100000;
@@ -236,7 +237,7 @@ export const samplePermission: Permission = {
   id: '4832795483290574238423',
   user: userJane.id,
   resource: primordialViz.info.id,
-  role: 'editor',
+  role: EDITOR,
   timestamp: ts3,
   grantedBy: userJoe.id,
 };
