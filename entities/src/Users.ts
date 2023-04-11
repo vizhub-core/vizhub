@@ -47,6 +47,10 @@ export interface User {
   //  * primaryEmail is not included in this list
   secondaryEmails?: Array<EmailAddress>;
 
+  // picture
+  //  * A URL that resolves to a picture of this user.
+  picture?: string;
+
   // Raw unmodified profile data from authentication providers
   profiles?: Profiles;
 }
