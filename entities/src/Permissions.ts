@@ -12,7 +12,7 @@ export const VIEWER: Role = 'viewer';
 
 // Action
 //  * Specific actions a user may or may not be allowed to perform.
-export type Action = 'read'|'write'|'delete';
+export type Action = 'read' | 'write' | 'delete';
 export const READ: Action = 'read';
 export const WRITE: Action = 'write';
 export const DELETE: Action = 'delete';
