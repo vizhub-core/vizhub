@@ -6,10 +6,22 @@ import { Timestamp } from './common';
 // Role
 //  * Access levels for users
 export type Role = 'admin' | 'editor' | 'viewer';
-
 export const ADMIN: Role = 'admin';
 export const EDITOR: Role = 'editor';
 export const VIEWER: Role = 'viewer';
+
+// Action
+//  * Specific actions a user may or may not be allowed to perform.
+export type Action = 'read'|'write'|'delete';
+export const READ: Action = 'read';
+export const WRITE: Action = 'write';
+export const DELETE: Action = 'delete';
+
+// Permissions matrix implemented in interactors:
+//          READ    WRITE    DELETE
+// VIEWER    X
+// EDITOR    X        X
+// ADMIN     X        X        X
 
 // PermissionId
 //  * Unique identifier string for a Permission.
