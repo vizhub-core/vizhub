@@ -9,7 +9,6 @@ import { fileURLToPath } from 'url';
 import express from 'express';
 import jsesc from 'jsesc';
 import { matchPath } from 'react-router-dom';
-import { auth } from 'express-openid-connect';
 import { seoMetaTags } from './seoMetaTags.js';
 
 const env = process.env;
@@ -31,20 +30,6 @@ async function createServer(
 
   // Support parsing of JSON bodies in API requests.
   app.use(express.json());
-
-  // Set up Auth0 authentication.
-  const authConfig = {
-    authRequired: false,
-    auth0Logout: true,
-    secret: env.VIZHUB3_AUTH0_SECRET,
-    baseURL: env.VIZHUB3_AUTH0_BASE_URL,
-    clientID: env.VIZHUB3_AUTH0_CLIENT_ID,
-    issuerBaseURL: env.VIZHUB3_AUTH0_ISSUER_BASE_URL,
-    routes: {
-      callback: '/login/callback',
-    },
-  };
-  app.use(auth(authConfig));
 
   let vite;
   if (!isProd) {
@@ -70,7 +55,10 @@ async function createServer(
     // use vite's connect instance as middleware
     app.use(vite.middlewares);
   } else {
+    // Compress requests for performance in production.
     app.use((await import('compression')).default());
+
+    // Serve the build as static files.
     app.use(
       (await import('serve-static')).default(resolve('dist/client'), {
         index: false,
@@ -81,15 +69,21 @@ async function createServer(
   // Handle the API requests.
   // When an API endpoint changes, we do need to restart the server
   // TODO think about how to make it so we don't need to restart the server
-  let api;
+  let entry;
   if (!isProd) {
-    const entry = await vite.ssrLoadModule('/src/entry-server.jsx');
-    api = entry.api;
+    entry = await vite.ssrLoadModule('/src/entry-server.jsx');
   } else {
-    const entry = await import('./dist/server/entry-server.js');
-    api = entry.api;
+    entry = await import('./dist/server/entry-server.js');
   }
+
+  // Unpack the entry point.
+  const { api, authentication } = entry;
+
+  // Set up the API endpoints.
   await api({ app, isProd, env });
+
+  // Set up authentication.
+  authentication({ app, env });
 
   // Handle SSR pages in such a way that they update (like hot reloading)
   // in dev on each page request, so we don't need to restart the server all the time.
