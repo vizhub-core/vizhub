@@ -12,6 +12,13 @@ import {
   DELETE,
 } from 'entities';
 
+// Delete is allowed only for admins.
+const canDelete = (permission) => permission.role === ADMIN;
+
+// Write is allowed only for editor and admin roles.
+const canWrite = (permission) =>
+  permission.role === EDITOR || permission.role === ADMIN;
+
 // VerifyAccess
 // * Determines whether or not a given user is allowed to perform
 //   a given action on a given viz.
@@ -68,19 +75,12 @@ export const VerifyVizAccess = (gateways: Gateways) => {
         return ok(true);
       }
 
-      // Write is allowed only for editor and admin roles.
       if (action === WRITE) {
-        return ok(
-          permissions.some(
-            (permission) =>
-              permission.role === EDITOR || permission.role === ADMIN
-          )
-        );
+        return ok(permissions.some(canWrite));
       }
 
-      // Delete is allowed only for admins.
       if (action === DELETE) {
-        return ok(permissions.some((permission) => permission.role === ADMIN));
+        return ok(permissions.some(canDelete));
       }
     }
 
