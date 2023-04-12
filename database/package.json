@@ -5,6 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "test": "",
+    "tsc": "",
     "test-db": "vitest run",
     "watch": "vitest",
     "prettier": "prettier {*.*,**/*.*} --single-quote --write"

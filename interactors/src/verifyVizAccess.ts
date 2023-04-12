@@ -1,6 +1,6 @@
 import { Gateways, Result, ok, err } from 'gateways';
 import {
-  VizInfo,
+  Info,
   UserId,
   ResourceId,
   PUBLIC,
@@ -27,19 +27,19 @@ export const VerifyVizAccess = (gateways: Gateways) => {
 
   return async (options: {
     userId: UserId;
-    vizInfo: VizInfo;
+    info: Info;
     action: Action;
   }): Promise<Result<boolean>> => {
-    const { userId, vizInfo, action } = options;
+    const { userId, info, action } = options;
 
     // If visibility is public, then anyone can read.
-    if (action === READ && vizInfo.visibility === PUBLIC) {
+    if (action === READ && info.visibility === PUBLIC) {
       return ok(true);
     }
 
     // If the user is the owner of this viz,
     // then the user can perform any action.
-    if (vizInfo.owner === userId) {
+    if (info.owner === userId) {
       return ok(true);
     }
 
@@ -47,16 +47,16 @@ export const VerifyVizAccess = (gateways: Gateways) => {
     // To implement "waterfall permissions" (like Box),
     // we look up all the folder ancestors of this viz.
     let resources: Array<ResourceId>;
-    if (vizInfo.folder) {
-      const ancestorsResult = await getFolderAncestors(vizInfo.folder);
+    if (info.folder) {
+      const ancestorsResult = await getFolderAncestors(info.folder);
       if (ancestorsResult.outcome === 'failure') {
         return err(ancestorsResult.error);
       }
       const ancestors = ancestorsResult.value;
 
-      resources = [vizInfo.id, ...ancestors.map((folder) => folder.id)];
+      resources = [info.id, ...ancestors.map((folder) => folder.id)];
     } else {
-      resources = [vizInfo.id];
+      resources = [info.id];
     }
 
     // Then check if the user has permission to access any of those folders,

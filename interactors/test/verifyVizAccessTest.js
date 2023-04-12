@@ -14,7 +14,7 @@ import { initGateways } from './initGateways';
 import { VerifyVizAccess } from '../src';
 
 const verify =
-  ({ userId, vizInfo, action, expected, permissions = [], folders = [] }) =>
+  ({ userId, info, action, expected, permissions = [], folders = [] }) =>
   async () => {
     const gateways = initGateways();
     const { saveFolder, savePermission } = gateways;
@@ -29,7 +29,7 @@ const verify =
 
     const result = await verifyVizAccess({
       userId,
-      vizInfo,
+      info,
       action,
     });
 
@@ -46,7 +46,7 @@ export const verifyVizAccessTest = () => {
       it(
         'read public viz, anyone',
         verify({
-          vizInfo: primordialViz.info,
+          info: primordialViz.info,
           action: READ,
           expected: true,
         })
@@ -55,7 +55,7 @@ export const verifyVizAccessTest = () => {
         'read private viz, non-owner non-collaborator',
         verify({
           userId: userJane.id,
-          vizInfo: { ...primordialViz.info, visibility: 'private' },
+          info: { ...primordialViz.info, visibility: 'private' },
           folders: [sampleFolder],
           action: READ,
           expected: false,
@@ -65,7 +65,7 @@ export const verifyVizAccessTest = () => {
         'read private viz, non-owner non-collaborator, no folder',
         verify({
           userId: userJane.id,
-          vizInfo: {
+          info: {
             ...primordialViz.info,
             visibility: 'private',
             folder: undefined,
@@ -78,7 +78,7 @@ export const verifyVizAccessTest = () => {
         'write viz, owner',
         verify({
           userId: userJoe.id,
-          vizInfo: primordialViz.info,
+          info: primordialViz.info,
           action: WRITE,
           expected: true,
         })
@@ -87,7 +87,7 @@ export const verifyVizAccessTest = () => {
         'delete viz, owner',
         verify({
           userId: userJoe.id,
-          vizInfo: primordialViz.info,
+          info: primordialViz.info,
           action: DELETE,
           expected: true,
         })
@@ -96,7 +96,7 @@ export const verifyVizAccessTest = () => {
         'write viz, non-owner non-collaborator',
         verify({
           userId: userJane.id,
-          vizInfo: primordialViz.info,
+          info: primordialViz.info,
           folders: [sampleFolder],
           action: WRITE,
           expected: false,
@@ -106,7 +106,7 @@ export const verifyVizAccessTest = () => {
         'delete viz, non-owner non-collaborator',
         verify({
           userId: userJane.id,
-          vizInfo: primordialViz.info,
+          info: primordialViz.info,
           folders: [sampleFolder],
           action: DELETE,
           expected: false,
@@ -118,7 +118,7 @@ export const verifyVizAccessTest = () => {
         'read private viz, collaborator (editor)',
         verify({
           userId: userJane.id,
-          vizInfo: { ...primordialViz.info, visibility: 'private' },
+          info: { ...primordialViz.info, visibility: 'private' },
           action: READ,
           permissions: [samplePermission],
           folders: [sampleFolder],
@@ -129,7 +129,7 @@ export const verifyVizAccessTest = () => {
         'read private viz, collaborator (editor), no folder',
         verify({
           userId: userJane.id,
-          vizInfo: {
+          info: {
             ...primordialViz.info,
             visibility: 'private',
             folder: undefined,
@@ -144,7 +144,7 @@ export const verifyVizAccessTest = () => {
         'read private viz, collaborator (viewer)',
         verify({
           userId: userJane.id,
-          vizInfo: { ...primordialViz.info, visibility: 'private' },
+          info: { ...primordialViz.info, visibility: 'private' },
           action: READ,
           permissions: [{ ...samplePermission, role: VIEWER }],
           folders: [sampleFolder],
@@ -155,7 +155,7 @@ export const verifyVizAccessTest = () => {
         'read private viz, collaborator (admin)',
         verify({
           userId: userJane.id,
-          vizInfo: { ...primordialViz.info, visibility: 'private' },
+          info: { ...primordialViz.info, visibility: 'private' },
           action: READ,
           permissions: [{ ...samplePermission, role: ADMIN }],
           folders: [sampleFolder],
@@ -166,7 +166,7 @@ export const verifyVizAccessTest = () => {
         'write private viz, collaborator (editor)',
         verify({
           userId: userJane.id,
-          vizInfo: { ...primordialViz.info, visibility: 'private' },
+          info: { ...primordialViz.info, visibility: 'private' },
           action: WRITE,
           permissions: [samplePermission],
           folders: [sampleFolder],
@@ -177,7 +177,7 @@ export const verifyVizAccessTest = () => {
         'write private viz, collaborator (viewer)',
         verify({
           userId: userJane.id,
-          vizInfo: { ...primordialViz.info, visibility: 'private' },
+          info: { ...primordialViz.info, visibility: 'private' },
           action: WRITE,
           permissions: [{ ...samplePermission, role: VIEWER }],
           folders: [sampleFolder],
@@ -188,7 +188,7 @@ export const verifyVizAccessTest = () => {
         'write private viz, collaborator (admin)',
         verify({
           userId: userJane.id,
-          vizInfo: { ...primordialViz.info, visibility: 'private' },
+          info: { ...primordialViz.info, visibility: 'private' },
           action: READ,
           permissions: [{ ...samplePermission, role: ADMIN }],
           folders: [sampleFolder],
@@ -199,7 +199,7 @@ export const verifyVizAccessTest = () => {
         'delete private viz, collaborator (editor)',
         verify({
           userId: userJane.id,
-          vizInfo: { ...primordialViz.info, visibility: 'private' },
+          info: { ...primordialViz.info, visibility: 'private' },
           action: DELETE,
           permissions: [samplePermission],
           folders: [sampleFolder],
@@ -210,7 +210,7 @@ export const verifyVizAccessTest = () => {
         'delete private viz, collaborator (viewer)',
         verify({
           userId: userJane.id,
-          vizInfo: { ...primordialViz.info, visibility: 'private' },
+          info: { ...primordialViz.info, visibility: 'private' },
           action: DELETE,
           permissions: [{ ...samplePermission, role: VIEWER }],
           folders: [sampleFolder],
@@ -221,7 +221,7 @@ export const verifyVizAccessTest = () => {
         'delete private viz, collaborator (admin)',
         verify({
           userId: userJane.id,
-          vizInfo: { ...primordialViz.info, visibility: 'private' },
+          info: { ...primordialViz.info, visibility: 'private' },
           action: DELETE,
           permissions: [{ ...samplePermission, role: ADMIN }],
           folders: [sampleFolder],
@@ -234,7 +234,7 @@ export const verifyVizAccessTest = () => {
         'read private viz, collaborator (editor) on parent folder',
         verify({
           userId: userJane.id,
-          vizInfo: { ...primordialViz.info, visibility: 'private' },
+          info: { ...primordialViz.info, visibility: 'private' },
           action: READ,
           permissions: [{ ...samplePermission, resource: sampleFolder.id }],
           folders: [sampleFolder],
@@ -245,7 +245,7 @@ export const verifyVizAccessTest = () => {
         'write private viz, collaborator (editor) on parent folder',
         verify({
           userId: userJane.id,
-          vizInfo: { ...primordialViz.info, visibility: 'private' },
+          info: { ...primordialViz.info, visibility: 'private' },
           action: WRITE,
           permissions: [{ ...samplePermission, resource: sampleFolder.id }],
           folders: [sampleFolder],
@@ -256,7 +256,7 @@ export const verifyVizAccessTest = () => {
         'delete private viz, collaborator (editor) on parent folder',
         verify({
           userId: userJane.id,
-          vizInfo: { ...primordialViz.info, visibility: 'private' },
+          info: { ...primordialViz.info, visibility: 'private' },
           action: DELETE,
           permissions: [{ ...samplePermission, resource: sampleFolder.id }],
           folders: [sampleFolder],
@@ -267,7 +267,7 @@ export const verifyVizAccessTest = () => {
         'delete private viz, collaborator (admin) on parent folder',
         verify({
           userId: userJane.id,
-          vizInfo: { ...primordialViz.info, visibility: 'private' },
+          info: { ...primordialViz.info, visibility: 'private' },
           action: DELETE,
           permissions: [
             { ...samplePermission, resource: sampleFolder.id, role: ADMIN },
@@ -281,7 +281,7 @@ export const verifyVizAccessTest = () => {
         'write private viz, collaborator (editor) on parent parent folder',
         verify({
           userId: userJane.id,
-          vizInfo: {
+          info: {
             ...primordialViz.info,
             visibility: 'private',
             folder: folder2.id,
@@ -297,7 +297,7 @@ export const verifyVizAccessTest = () => {
         'write private viz, collaborator (editor) on parent parent parent folder',
         verify({
           userId: userJane.id,
-          vizInfo: {
+          info: {
             ...primordialViz.info,
             visibility: 'private',
             folder: folder3.id,

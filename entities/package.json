@@ -4,7 +4,8 @@
   "type": "module",
   "main": "src/index.ts",
   "scripts": {
-    "test": "tsc src/index.ts --noEmit",
+    "test": "",
+    "tsc": "tsc src/index.ts --noEmit",
     "prettier": "prettier {*.*,**/*.*} --single-quote --write"
   },
   "repository": {

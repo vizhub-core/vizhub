@@ -21,7 +21,7 @@ export type {
   OrgMembershipId,
 } from './Orgs';
 
-export type { Permission, PermissionId, Role, ResourceId } from './Permissions';
+export type { Permission, PermissionId, Role, ResourceId, Action } from './Permissions';
 export { ADMIN, EDITOR, VIEWER, READ, WRITE, DELETE } from './Permissions';
 
 export type {

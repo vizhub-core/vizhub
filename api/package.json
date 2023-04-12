@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "test": "",
+    "tsc": "",
     "prettier": "prettier {*.*,**/*.*} --single-quote --write",
     "dev": "node server.js",
     "build": "vite build --ssr src/entry-server.jsx --outDir dist/server",

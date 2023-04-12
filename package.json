@@ -7,6 +7,7 @@
     "upgrade": "npm exec --workspaces -- ncu -u",
     "prettier": "npm run --workspaces -- prettier",
     "test": "npm run --workspaces -- test",
+    "tsc": "npm run --workspaces -- tsc",
     "build": "cd app; npm run build",
     "serve": "cd app; npm run serve",
     "dev": "cd app; npm run dev"
