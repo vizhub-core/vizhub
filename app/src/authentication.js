@@ -1,10 +1,12 @@
 import { auth } from 'express-openid-connect';
 import { decodeJwt } from 'jose';
-import { UpdateOrCreateUser } from 'interactors';
+import { UpdateOrCreateUser, RecordAnalyticsEvents } from 'interactors';
+import { dateToTimestamp } from 'entities';
 
 // Deals with authentication via Auth0.
 export const authentication = ({ app, env, gateways }) => {
   const updateOrCreateUser = UpdateOrCreateUser(gateways);
+  const recordAnalyticsEvents = RecordAnalyticsEvents(gateways);
 
   // See https://github.com/auth0/express-openid-connect/blob/master/EXAMPLES.md#9-validate-claims-from-an-id-token-before-logging-a-user-in
   const afterCallback = async (req, res, session) => {
@@ -48,6 +50,12 @@ export const authentication = ({ app, env, gateways }) => {
       console.log('Error when updating user');
       console.log(result.error);
     }
+
+    await recordAnalyticsEvents({
+      eventId: `login.${id}`,
+      // TODO consider making this the default internally
+      timestamp: dateToTimestamp(new Date()),
+    });
     // TODO record analytics event
     // TODO update first login timestamp on user
     // TODO update last login timestamp on user
