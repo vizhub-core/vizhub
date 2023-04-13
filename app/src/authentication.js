@@ -1,11 +1,13 @@
 import { auth } from 'express-openid-connect';
 import { decodeJwt } from 'jose';
+import { UpdateOrCreateUser } from 'interactors';
 
 // Deals with authentication via Auth0.
 export const authentication = ({ app, env, gateways }) => {
+  const updateOrCreateUser = UpdateOrCreateUser(gateways);
+
   // See https://github.com/auth0/express-openid-connect/blob/master/EXAMPLES.md#9-validate-claims-from-an-id-token-before-logging-a-user-in
-  const afterCallback = (req, res, session) => {
-    console.log('afterCallback');
+  const afterCallback = async (req, res, session) => {
     const claims = decodeJwt(session.id_token);
 
     // Example claims from GitHub social login:
@@ -32,14 +34,23 @@ export const authentication = ({ app, env, gateways }) => {
       ? claims.sub.substring(7)
       : claims.sub;
 
-    console.log('TODO update or create this user via gateways');
-    console.log({
+    const options = {
       id,
       userName: claims.nickname,
       displayName: claims.name,
       primaryEmail: claims.email,
       picture: claims.picture,
-    });
+    };
+
+    const result = await updateOrCreateUser(options);
+
+    if (result.outcome !== 'success') {
+      console.log('Error when updating user');
+      console.log(result.error);
+    }
+    // TODO record analytics event
+    // TODO update first login timestamp on user
+    // TODO update last login timestamp on user
 
     return session;
   };
