@@ -16,14 +16,15 @@ export type UserName = string;
 //  * String that is an email address
 export type EmailAddress = string;
 
-// Raw unmodified profile data from third party authentication.
-export interface Profiles {
-  // Raw unmodified profile data from GitHub authentication.
-  githubProfileData?: any;
+// Plan
+//  * What level of paying customer this user is.
+export type Plan = 'free' | 'pro';
 
-  // Raw unmodified profile data from Google authentication.
-  googleProfileData?: any;
-}
+// Not a paying customer.
+export const FREE: Plan = 'free';
+
+// A paying customer.
+export const PRO: Plan = 'pro';
 
 // User
 //  * A representation of a user on the platform
@@ -51,8 +52,9 @@ export interface User {
   //  * A URL that resolves to a picture of this user.
   picture?: string;
 
-  // Raw unmodified profile data from authentication providers
-  profiles?: Profiles;
+  // plan
+  //  * What level of paying customer this user is.
+  plan: Plan;
 }
 
 // One of these is created

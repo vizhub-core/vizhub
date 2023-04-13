@@ -37,6 +37,7 @@ export const userJoe: User = {
   displayName: 'Joe Shmoe',
   primaryEmail: 'joe@shmoe.com',
   secondaryEmails: ['joe@hugecorp.com', 'joe@joes-diner.com'],
+  plan: 'free',
 };
 
 export const userJane: User = {
@@ -44,6 +45,7 @@ export const userJane: User = {
   userName: 'jane',
   displayName: 'Jane Shmoe',
   primaryEmail: 'jane@shmoe.com',
+  plan: 'free',
 };
 
 export const sampleFolder: Folder = {

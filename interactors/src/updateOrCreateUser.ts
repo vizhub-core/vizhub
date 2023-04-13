@@ -1,6 +1,5 @@
-import { Result, ok } from 'gateways';
-import { Profiles, User, Snapshot } from 'entities';
-import { generateId } from './generateId';
+import { Result, Success, ok } from 'gateways';
+import { User, UserId } from 'entities';
 
 // findOrCreateUser
 //
@@ -51,10 +50,10 @@ export const UpdateOrCreateUser =
         userName,
         displayName,
         picture,
+        plan: 'free',
       };
     }
 
-    console.log(JSON.stringify(user));
     // Save the updated or newly created user.
     await saveUser(user);
 

@@ -46,7 +46,7 @@ export type {
   UserId,
   UserName,
   EmailAddress,
-  Profiles,
+  Plan,
   BetaProgramSignup,
 } from './Users';
 
