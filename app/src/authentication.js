@@ -2,7 +2,7 @@ import { auth } from 'express-openid-connect';
 import { decodeJwt } from 'jose';
 
 // Deals with authentication via Auth0.
-export const authentication = ({ app, env }) => {
+export const authentication = ({ app, env, gateways }) => {
   // See https://github.com/auth0/express-openid-connect/blob/master/EXAMPLES.md#9-validate-claims-from-an-id-token-before-logging-a-user-in
   const afterCallback = (req, res, session) => {
     console.log('afterCallback');

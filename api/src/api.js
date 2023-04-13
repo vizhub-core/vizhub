@@ -22,7 +22,7 @@ const { MongoClient, ServerApiVersion } = MongoDB;
 //   message,
 // });
 
-export const api = async ({ app, isProd, env }) => {
+export const initializeGateways = async ({ isProd, env }) => {
   let gateways;
   if (env.VIZHUB3_MONGO_LOCAL) {
     console.log('Connecting to local MongoDB...');
@@ -70,7 +70,10 @@ export const api = async ({ app, isProd, env }) => {
   } else {
     gateways = MemoryGateways();
   }
+  return gateways;
+};
 
+export const api = async ({ app, isProd, gateways }) => {
   // Set up endpoints
   for (const endpoint of endpoints) {
     endpoint({ app, gateways });

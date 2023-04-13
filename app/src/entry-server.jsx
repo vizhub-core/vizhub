@@ -4,7 +4,7 @@ import { StaticRouter } from 'react-router-dom/server';
 import SSRProvider from 'react-bootstrap/cjs/SSRProvider.js';
 import { App } from './App';
 export { pages } from './pages';
-export { api } from 'api/src/api';
+export { initializeGateways, api } from 'api/src/api';
 export { authentication } from './authentication';
 
 export const render = (pageData) =>

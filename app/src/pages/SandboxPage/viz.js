@@ -1,8 +1,8 @@
 import { select } from 'd3-selection';
 import { utcDay } from 'd3-time';
 import { utcFormat } from 'd3-time-format';
-import { scaleUtc, scaleLinear } from 'd3-scale';
-import { extent, max } from 'd3-array';
+import { scaleBand, scaleLinear } from 'd3-scale';
+import { max } from 'd3-array';
 import { axisBottom, axisLeft } from 'd3-axis';
 
 const width = 600;
@@ -12,9 +12,10 @@ const margin = { top: 10, right: 30, bottom: 20, left: 30 };
 const recordKey = 'days';
 const d3TimeInterval = utcDay;
 const format = utcFormat('%Y-%m-%d');
+const formatTick = utcFormat('%-m/%-d');
 
 // The number of days shown
-const maxEntries = 7;
+const maxEntries = 30;
 
 // The gap (pixels) between vertical bars.
 const gap = 30;
@@ -43,11 +44,11 @@ export const viz = (node, { analyticsEvent }) => {
 
   const { top, right, bottom, left } = margin;
 
-  const xScale = scaleUtc(extent(data.map(xValue)), [left, width - right]);
+  const xScale = scaleBand(data.map(xValue), [left, width - right]).padding(
+    0.3
+  );
 
   const yScale = scaleLinear([0, max(data, yValue)], [height - bottom, top]);
-
-  const barWidth = (width - right - left) / (data.length - 1) - gap * 2;
 
   svg
     .selectAll('g.x-axis')
@@ -55,7 +56,11 @@ export const viz = (node, { analyticsEvent }) => {
     .join('g')
     .attr('class', 'x-axis')
     .attr('transform', `translate(0,${height - bottom})`)
-    .call(axisBottom(xScale).ticks(maxEntries))
+    .call(
+      axisBottom(xScale)
+        .ticks(maxEntries)
+        .tickFormat((d, i) => (i % 2 ? formatTick(d) : ''))
+    )
     .call((selection) => {
       selection.select('.domain').remove();
       selection.selectAll('.tick line').remove();
@@ -80,10 +85,9 @@ export const viz = (node, { analyticsEvent }) => {
     .selectAll('rect')
     .data(data)
     .join('rect')
-    .attr('x', (d) => xScale(xValue(d)) - barWidth / 2)
+    .attr('x', (d) => xScale(xValue(d)))
     .attr('y', (d) => yScale(yValue(d)))
-    .attr('width', barWidth)
+    .attr('width', xScale.bandwidth())
     .attr('height', (d) => height - bottom - yScale(yValue(d)))
-    .attr('rx', round)
-    .attr('ry', round);
+    .attr('fill', '#AAA');
 };

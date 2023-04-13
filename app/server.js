@@ -77,13 +77,15 @@ async function createServer(
   }
 
   // Unpack the entry point.
-  const { api, authentication } = entry;
+  const { initializeGateways, api, authentication } = entry;
+
+  const gateways = await initializeGateways({ isProd, env });
 
   // Set up the API endpoints.
-  await api({ app, isProd, env });
+  await api({ app, isProd, gateways });
 
   // Set up authentication.
-  authentication({ app, env });
+  authentication({ app, env, gateways });
 
   // Handle SSR pages in such a way that they update (like hot reloading)
   // in dev on each page request, so we don't need to restart the server all the time.

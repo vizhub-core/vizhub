@@ -4,7 +4,7 @@ import { describe } from 'vitest';
 //  * https://github.com/vizhub-core/vizhub/blob/main/vizhub-v3/vizhub-interactors/test/test.ts
 //  * https://gitlab.com/curran/vizhub-ee/-/blob/main/vizhub-ee-interactors/test/test.ts
 
-import { findOrCreateUserTest } from './findOrCreateUserTest';
+import { updateOrCreateUserTest } from './updateOrCreateUserTest';
 import { getVizTest } from './getVizTest';
 import { saveVizTest } from './saveVizTest';
 import { getContentAtCommitTest } from './getContentAtCommitTest';
@@ -18,7 +18,7 @@ import { verifyVizAccessTest } from './verifyVizAccessTest';
 
 export const interactorsTests = () => {
   describe('Interactors', () => {
-    findOrCreateUserTest();
+    updateOrCreateUserTest();
     getVizTest();
     saveVizTest();
     getContentAtCommitTest();
