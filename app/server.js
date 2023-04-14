@@ -22,6 +22,7 @@ async function createServer(
   isProd = env.NODE_ENV === 'production',
   hmrPort
 ) {
+  console.log('Starting server v50');
   const indexProd = isProd
     ? fs.readFileSync(resolve('dist/client/index.html'), 'utf-8')
     : '';
