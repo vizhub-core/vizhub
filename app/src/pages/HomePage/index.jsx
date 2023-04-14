@@ -14,7 +14,7 @@ export const HomePage = ({ pageData }) => {
   const navigate = useNavigate();
 
   // Send an analytics event to track this page view.
-  useEffect(async () => {
+  useEffect(() => {
     vizKit.rest.sendEvent('pageview.home');
   }, []);
 
@@ -65,13 +65,3 @@ export const HomePage = ({ pageData }) => {
 };
 
 HomePage.path = '/';
-
-HomePage.getPageData = async () => {
-  // await new Promise((resolve) => setTimeout(resolve, 1000));
-  return {
-    title: 'VizHub 3 Beta',
-    description: 'Viz your data',
-    image:
-      'https://vizhub.com/api/visualization/preview/77a2f42571494263931b8c4d38b7d63c.png',
-  };
-};

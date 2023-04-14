@@ -2,7 +2,7 @@
 // https://github.com/vitejs/vite-plugin-react/blob/main/playground/ssr-react/src/App.jsx
 // https://github.com/vizhub-core/vizhub/blob/main/vizhub-v2/packages/neoFrontend/src/App.js
 import { Route, Routes, useLocation } from 'react-router-dom';
-import { pages } from './pages';
+import { pages } from './pages/client';
 
 export const App = ({ pageData }) => {
   // Every time App renders client-side, there may have been a navigation.

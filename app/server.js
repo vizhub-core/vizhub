@@ -22,10 +22,13 @@ async function createServer(
   isProd = env.NODE_ENV === 'production',
   hmrPort
 ) {
-  console.log('Starting server v50');
   const indexProd = isProd
     ? fs.readFileSync(resolve('dist/client/index.html'), 'utf-8')
     : '';
+
+  const prodServerEntry = isProd
+    ? await import('./dist/server/entry-server.js')
+    : null;
 
   const app = express();
 
@@ -108,7 +111,7 @@ async function createServer(
         entry = await vite.ssrLoadModule('/src/entry-server.jsx');
       } else {
         template = indexProd;
-        entry = await import('./dist/server/entry-server.js');
+        entry = prodServerEntry;
       }
       const { render, pages, vizKit } = entry;
 
@@ -132,6 +135,7 @@ async function createServer(
             params,
             env,
             vizKit,
+            gateways,
           })
         : {};
       pageData.url = url;

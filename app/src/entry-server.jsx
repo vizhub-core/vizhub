@@ -4,7 +4,7 @@ import { StaticRouter } from 'react-router-dom/server';
 import SSRProvider from 'react-bootstrap/cjs/SSRProvider.js';
 import fetch from 'node-fetch';
 import { App } from './App';
-export { pages } from './pages';
+export { pages } from './pages/server';
 export { initializeGateways, api } from 'api/src/api';
 import { VizKit } from 'api/src/VizKit';
 export { authentication } from './authentication';

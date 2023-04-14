@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { Spinner } from 'components';
 import { EventViz } from './EventViz';
 
@@ -44,22 +44,3 @@ export const SandboxPage = ({ pageData }) => {
 };
 
 SandboxPage.path = '/sandbox';
-
-SandboxPage.getPageData = async ({ vizKit }) => {
-  const pageData = { analyticsEvents: [] };
-  const { getEvent } = vizKit.rest;
-
-  const results = await Promise.all([
-    getEvent('pageview.home'),
-    getEvent('login'),
-  ]);
-
-  // const result = await vizKit.rest.getEvents(['pageview.home','login']);
-  for (const result of results) {
-    if (result.outcome === 'success') {
-      pageData.analyticsEvents.push(result.value);
-    }
-  }
-
-  return pageData;
-};
