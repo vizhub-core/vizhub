@@ -5,7 +5,7 @@ import { VizKit } from 'api/src/VizKit';
 import { EditorDemo } from './EditorDemo';
 import './styles.scss';
 
-const vizKit = VizKit({ baseUrl: './api' });
+const vizKit = VizKit({ baseUrl: './api', fetch });
 
 // Decoupled navigation from interaction, to support
 // testing the UI in isolation, for example in Storybook.

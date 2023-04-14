@@ -27,8 +27,6 @@ export const SandboxPage = ({ pageData }) => {
     fetchViz();
   }, []);
 
-  console.log(analyticsEvents);
-
   return analyticsEvents && vizModule ? (
     analyticsEvents
       .map((snapshot) => snapshot.data)
