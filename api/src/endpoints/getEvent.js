@@ -1,5 +1,4 @@
 import { err, missingParameterError } from 'gateways';
-import { dateToTimestamp } from 'entities';
 
 // Gets an analytics event for display.
 export const getEvent = ({ app, gateways }) => {
