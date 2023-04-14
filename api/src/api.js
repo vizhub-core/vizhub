@@ -22,6 +22,7 @@ const { MongoClient, ServerApiVersion } = MongoDB;
 //   message,
 // });
 
+// TODO move this to a different file
 export const initializeGateways = async ({ isProd, env }) => {
   let gateways;
   if (env.VIZHUB3_MONGO_LOCAL) {

@@ -1,18 +1,14 @@
 import { SandboxPage } from './index';
 
-SandboxPage.getPageData = async ({ vizKit, gateways }) => {
-  console.log('gateways are available here');
-  console.log(gateways);
-
-  const pageData = { analyticsEvents: [] };
-  const { getEvent } = vizKit.rest;
+SandboxPage.getPageData = async ({ gateways }) => {
+  const { getAnalyticsEvent } = gateways;
 
   const results = await Promise.all([
-    getEvent('pageview.home'),
-    getEvent('login'),
+    getAnalyticsEvent('pageview.home'),
+    getAnalyticsEvent('login'),
   ]);
 
-  // const result = await vizKit.rest.getEvents(['pageview.home','login']);
+  const pageData = { analyticsEvents: [] };
   for (const result of results) {
     if (result.outcome === 'success') {
       pageData.analyticsEvents.push(result.value);

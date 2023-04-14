@@ -1,5 +1,5 @@
 import { privateBetaEmailSubmit } from './privateBetaEmailSubmit';
-import { sendEvent } from './sendEvent';
-import { getEvent } from './getEvent';
+import { recordAnalyticsEvents } from './recordAnalyticsEvents';
 
-export const endpoints = [privateBetaEmailSubmit, sendEvent, getEvent];
+// TODO Glob import
+export const endpoints = [privateBetaEmailSubmit, recordAnalyticsEvents];

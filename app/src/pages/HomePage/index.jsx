@@ -15,7 +15,7 @@ export const HomePage = ({ pageData }) => {
 
   // Send an analytics event to track this page view.
   useEffect(() => {
-    vizKit.rest.sendEvent('pageview.home');
+    vizKit.rest.recordAnalyticsEvents('pageview.home');
   }, []);
 
   const handleEmailSubmit = async (email) => {
