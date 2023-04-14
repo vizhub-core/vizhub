@@ -1,10 +1,12 @@
 // Modeled after https://github.com/octokit/octokit.js/#constructor-options
 // See also https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#uploading_json_data
-export const VizKit = async ({ baseUrl }) => {
-  const fetch = import.meta.env.SSR
-    ? (await import('node-fetch')).default
-    : window.fetch;
-
+export const VizKit = ({ baseUrl, ssrFetch }) => {
+  let fetch;
+  if (import.meta.env.SSR) {
+    fetch = ssrFetch;
+  } else {
+    fetch = window.fetch;
+  }
   return {
     rest: {
       privateBetaEmailSubmit: async (email) =>

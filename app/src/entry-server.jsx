@@ -2,6 +2,7 @@
 import ReactDOMServer from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom/server';
 import SSRProvider from 'react-bootstrap/cjs/SSRProvider.js';
+import fetch from 'node-fetch';
 import { App } from './App';
 export { pages } from './pages';
 export { initializeGateways, api } from 'api/src/api';
@@ -9,8 +10,10 @@ import { VizKit } from 'api/src/VizKit';
 export { authentication } from './authentication';
 
 // This is the API client that runs on the server side.
-export const initVizKit = async () =>
-  await VizKit({ baseUrl: 'http://localhost:5173/api' });
+export const vizKit = VizKit({
+  baseUrl: 'http://localhost:5173/api',
+  ssrFetch: fetch,
+});
 
 export const render = (pageData) =>
   ReactDOMServer.renderToString(

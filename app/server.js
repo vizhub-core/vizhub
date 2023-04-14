@@ -110,9 +110,7 @@ async function createServer(
         template = indexProd;
         entry = await import('./dist/server/entry-server.js');
       }
-      const { render, pages, initVizKit } = entry;
-
-      const vizKit = await initVizKit();
+      const { render, pages, vizKit } = entry;
 
       // Match the route and fetch its data.
       // https://stackoverflow.com/questions/66265608/react-router-v6-get-path-pattern-for-current-route

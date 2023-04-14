@@ -5,6 +5,8 @@ import { VizKit } from 'api/src/VizKit';
 import { EditorDemo } from './EditorDemo';
 import './styles.scss';
 
+const vizKit = VizKit({ baseUrl: './api' });
+
 // Decoupled navigation from interaction, to support
 // testing the UI in isolation, for example in Storybook.
 // Inspired by https://github.com/vitejs/vite-plugin-react/blob/main/playground/ssr-react/src/pages/Home.jsx
@@ -13,11 +15,7 @@ export const HomePage = ({ pageData }) => {
 
   // Send an analytics event to track this page view.
   useEffect(async () => {
-    const sendEvent = async () => {
-      const vizKit = await VizKit({ baseUrl: './api' });
-      vizKit.rest.sendEvent('pageview.home');
-    };
-    sendEvent();
+    vizKit.rest.sendEvent('pageview.home');
   }, []);
 
   const handleEmailSubmit = async (email) => {
