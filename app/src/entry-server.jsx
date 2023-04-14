@@ -1,6 +1,7 @@
 // Inspired by https://github.com/vitejs/vite-plugin-react/blob/main/playground/ssr-react/src/entry-server.jsx
 import ReactDOMServer from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom/server';
+import fetch from 'node-fetch';
 import SSRProvider from 'react-bootstrap/cjs/SSRProvider.js';
 import { App } from './App';
 export { pages } from './pages';
@@ -9,7 +10,7 @@ import { VizKit } from 'api/src/VizKit';
 export { authentication } from './authentication';
 
 // This is the API client that runs on the server side.
-export const vizKit = VizKit({ baseUrl: 'http://localhost:5173/api' });
+export const vizKit = VizKit({ baseUrl: 'http://localhost:5173/api', fetch });
 
 export const render = (pageData) =>
   ReactDOMServer.renderToString(

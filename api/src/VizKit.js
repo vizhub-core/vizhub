@@ -1,6 +1,10 @@
+// Works in a browser runtime.
+// Does not work in a Node runtime.
+const globalFetch = fetch;
+
 // Modeled after https://github.com/octokit/octokit.js/#constructor-options
 // See also https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#uploading_json_data
-export const VizKit = ({ baseUrl }) => {
+export const VizKit = ({ baseUrl, fetch = globalFetch }) => {
   return {
     rest: {
       privateBetaEmailSubmit: async (email) =>

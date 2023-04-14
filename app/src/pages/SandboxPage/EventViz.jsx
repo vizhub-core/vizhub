@@ -8,8 +8,8 @@ export const EventViz = ({ analyticsEvent, vizModule, title }) => {
   }, [analyticsEvent, vizModule]);
 
   return (
-    <div class="event-viz">
-      <div class="event-viz-title">{title}</div>
+    <div className="event-viz">
+      <div className="event-viz-title">{title}</div>
       <svg ref={svgRef}></svg>
     </div>
   );
