@@ -6,7 +6,7 @@ import { max } from 'd3-array';
 import { axisBottom, axisLeft } from 'd3-axis';
 
 const width = 600;
-const height = 200;
+const height = 150;
 const margin = { top: 10, right: 30, bottom: 20, left: 30 };
 
 const recordKey = 'days';
@@ -17,12 +17,7 @@ const formatTick = utcFormat('%-m/%-d');
 // The number of days shown
 const maxEntries = 30;
 
-// The gap (pixels) between vertical bars.
-const gap = 30;
-
 const yTicks = 5;
-
-const round = 8;
 
 export const viz = (node, { analyticsEvent }) => {
   const svg = select(node).attr('width', width).attr('height', height);
@@ -44,12 +39,15 @@ export const viz = (node, { analyticsEvent }) => {
 
   const { top, right, bottom, left } = margin;
 
-  const xScale = scaleBand(data.map(xValue), [left, width - right]).padding(
-    0.3
-  );
+  const xScale = scaleBand(data.map(xValue), [
+    left,
+    width - right,
+  ]).paddingInner(0.3);
 
-  const yScale = scaleLinear([0, max(data, yValue)], [height - bottom, top]);
-
+  const yScale = scaleLinear(
+    [0, max(data, yValue)],
+    [height - bottom, top]
+  ).nice(yTicks);
   svg
     .selectAll('g.x-axis')
     .data([null])
@@ -58,12 +56,13 @@ export const viz = (node, { analyticsEvent }) => {
     .attr('transform', `translate(0,${height - bottom})`)
     .call(
       axisBottom(xScale)
-        .ticks(maxEntries)
-        .tickFormat((d, i) => (i % 2 ? formatTick(d) : ''))
+        .tickFormat((d, i) => (i % 2 === 0 ? formatTick(d) : ''))
+        .tickSize(-(height - top - bottom))
+        .tickPadding(10)
     )
     .call((selection) => {
       selection.select('.domain').remove();
-      selection.selectAll('.tick line').remove();
+      // selection.selectAll('.tick line').remove();
     });
 
   svg

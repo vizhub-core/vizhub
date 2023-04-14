@@ -1,16 +1,22 @@
 import { useEffect, useState, useRef } from 'react';
 import { Spinner } from 'components';
+import { EventViz } from './EventViz';
 
 import './styles.css';
+
+const titles = {
+  'pageview.home': 'Home page views',
+  login: 'Logins',
+};
+
 // TODO Figure out a few core elements of the platform:
 // 1. Get page data server-side
 // 2. Hydrate ShareDB doc client-side
 // 3. Ensure ShareDB updates reach the client
 // 4. Ensure ShareDB changes are _not_ allowed from the client side
 export const SandboxPage = ({ pageData }) => {
-  const { analyticsEvent } = pageData;
+  const { analyticsEvents } = pageData;
   const [vizModule, setVizModule] = useState(null);
-  const svgRef = useRef();
 
   // Dynamic import to manually chunk this code,
   // so the D3 dependencies are not in the main JS bundle.
@@ -21,17 +27,19 @@ export const SandboxPage = ({ pageData }) => {
     fetchViz();
   }, []);
 
-  useEffect(() => {
-    if (analyticsEvent && vizModule) {
-      vizModule.viz(svgRef.current, { analyticsEvent });
-    }
-  }, [analyticsEvent, vizModule]);
+  console.log(analyticsEvents);
 
-  return analyticsEvent && vizModule ? (
-    <div class="analytics-view">
-      <div class="analytics-chart-title">Home page views per day</div>
-      <svg ref={svgRef}></svg>
-    </div>
+  return analyticsEvents && vizModule ? (
+    analyticsEvents
+      .map((snapshot) => snapshot.data)
+      .map((analyticsEvent, i) => (
+        <EventViz
+          key={i}
+          analyticsEvent={analyticsEvent}
+          title={titles[analyticsEvent.id]}
+          vizModule={vizModule}
+        />
+      ))
   ) : (
     <Spinner />
   );
@@ -40,14 +48,19 @@ export const SandboxPage = ({ pageData }) => {
 SandboxPage.path = '/sandbox';
 
 SandboxPage.getPageData = async ({ vizKit }) => {
-  const pageData = {};
+  const pageData = { analyticsEvents: [] };
+  const { getEvent } = vizKit.rest;
 
-  //const result = await vizKit.rest.getEvent('login');
-  const result = await vizKit.rest.getEvent('pageview.home');
+  const results = await Promise.all([
+    getEvent('pageview.home'),
+    getEvent('login'),
+  ]);
 
   // const result = await vizKit.rest.getEvents(['pageview.home','login']);
-  if (result.outcome === 'success') {
-    pageData.analyticsEvent = result.value.data;
+  for (const result of results) {
+    if (result.outcome === 'success') {
+      pageData.analyticsEvents.push(result.value);
+    }
   }
 
   return pageData;
