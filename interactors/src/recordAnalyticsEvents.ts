@@ -103,10 +103,10 @@ export const RecordAnalyticsEvents = (gateways, testing = false) => {
   const processQueue = initQueueProcessor(gateways, testing);
   const recordAnalyticsEvents = async (options: {
     eventId: AnalyticsEventId;
-    timestamp: Timestamp;
+    timestamp?: Timestamp;
   }): Promise<Result<Success>> => {
     const { eventId, timestamp } = options;
-    const date = timestampToDate(timestamp);
+    const date = timestamp ? timestampToDate(timestamp) : new Date();
 
     // Isolate each level of the nested id.
     const values: string[] = eventId.split('.');

@@ -51,14 +51,7 @@ export const authentication = ({ app, env, gateways }) => {
       console.log(result.error);
     }
 
-    await recordAnalyticsEvents({
-      eventId: `login.${id}`,
-      // TODO consider making this the default internally
-      timestamp: dateToTimestamp(new Date()),
-    });
-    // TODO record analytics event
-    // TODO update first login timestamp on user
-    // TODO update last login timestamp on user
+    await recordAnalyticsEvents({ eventId: `login.${id}` });
 
     return session;
   };

@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { Spinner } from 'components';
-import { VizKit } from 'api/src/VizKit';
+
 import './styles.css';
 // TODO Figure out a few core elements of the platform:
 // 1. Get page data server-side
@@ -39,13 +39,13 @@ export const SandboxPage = ({ pageData }) => {
 
 SandboxPage.path = '/sandbox';
 
-SandboxPage.getPageData = async ({}) => {
-  // TODO move this out of here
-  const vizKit = VizKit({ baseUrl: 'http://localhost:5173/api' });
-
+SandboxPage.getPageData = async ({ vizKit }) => {
   const pageData = {};
 
+  //const result = await vizKit.rest.getEvent('login');
   const result = await vizKit.rest.getEvent('pageview.home');
+
+  // const result = await vizKit.rest.getEvents(['pageview.home','login']);
   if (result.outcome === 'success') {
     pageData.analyticsEvent = result.value.data;
   }

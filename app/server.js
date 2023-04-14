@@ -98,21 +98,18 @@ async function createServer(
 
       // This part is directly copied from:
       // https://github.com/vitejs/vite-plugin-react/blob/main/playground/ssr-react/server.js
-      let template, render, pages;
+      let entry, template;
+
       if (!isProd) {
         // always read fresh template in dev
         template = fs.readFileSync(resolve('index.html'), 'utf-8');
         template = await vite.transformIndexHtml(url, template);
-        const entry = await vite.ssrLoadModule('/src/entry-server.jsx');
-        render = entry.render;
-        pages = entry.pages;
+        entry = await vite.ssrLoadModule('/src/entry-server.jsx');
       } else {
         template = indexProd;
-        // @ts-ignore
-        const entry = await import('./dist/server/entry-server.js');
-        render = entry.render;
-        pages = entry.pages;
+        entry = await import('./dist/server/entry-server.js');
       }
+      const { render, pages, vizKit } = entry;
 
       // Match the route and fetch its data.
       // https://stackoverflow.com/questions/66265608/react-router-v6-get-path-pattern-for-current-route
@@ -133,6 +130,7 @@ async function createServer(
         ? await matchedPage.getPageData({
             params,
             env,
+            vizKit,
           })
         : {};
       pageData.url = url;
