@@ -58,7 +58,6 @@ export const HomePage = ({ pageData }) => {
             </div>
           </div>
         </div>
-
         <EditorDemo />
       </HomePageBody>
     </div>

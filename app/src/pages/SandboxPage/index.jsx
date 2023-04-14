@@ -2,29 +2,15 @@ import { useEffect, useState, useRef } from 'react';
 import { Spinner } from 'components';
 import { VizKit } from 'api/src/VizKit';
 import './styles.css';
-
-const vizKit = VizKit({ baseUrl: './api' });
-
-export const SandboxPage = ({}) => {
-  const [analyticsEvent, setAnalyticsEvent] = useState(null);
+// TODO Figure out a few core elements of the platform:
+// 1. Get page data server-side
+// 2. Hydrate ShareDB doc client-side
+// 3. Ensure ShareDB updates reach the client
+// 4. Ensure ShareDB changes are _not_ allowed from the client side
+export const SandboxPage = ({ pageData }) => {
+  const { analyticsEvent } = pageData;
   const [vizModule, setVizModule] = useState(null);
   const svgRef = useRef();
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const result = await vizKit.rest.getEvent('pageview.home');
-      if (result.outcome === 'success') {
-        setAnalyticsEvent(result.value.data);
-      }
-    };
-    fetchData();
-
-    const interval = setInterval(() => {
-      console.log('TODO fetch data and update');
-    }, 1000 * 60);
-
-    return () => clearInterval(interval);
-  }, []);
 
   // Dynamic import to manually chunk this code,
   // so the D3 dependencies are not in the main JS bundle.
@@ -53,7 +39,16 @@ export const SandboxPage = ({}) => {
 
 SandboxPage.path = '/sandbox';
 
-// SandboxPage.getPageData = async ({ env }) => {
+SandboxPage.getPageData = async ({}) => {
+  // TODO move this out of here
+  const vizKit = VizKit({ baseUrl: 'http://localhost:5173/api' });
 
-//   return { test: 'test' };
-// };
+  const pageData = {};
+
+  const result = await vizKit.rest.getEvent('pageview.home');
+  if (result.outcome === 'success') {
+    pageData.analyticsEvent = result.value.data;
+  }
+
+  return pageData;
+};

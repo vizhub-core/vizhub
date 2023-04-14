@@ -38,7 +38,7 @@ export const Spinner = ({ height = 40, fill = 'currentcolor' }) => {
 
       // Trigger the fade-in animation.
       svgRef.current.style = 'opacity: 1;';
-      dotsRef.current.setAttribute('transform', `rotate(${angle})`);
+      // dotsRef.current.setAttribute('transform', `rotate(${angle})`);
     }, blankScreenDelay);
 
     return () => {
@@ -56,6 +56,7 @@ export const Spinner = ({ height = 40, fill = 'currentcolor' }) => {
         // that avoids the React render cycle entirely.
         dotsRef.current.setAttribute('transform', `rotate(${angle})`);
         angle += speed;
+        console.log('here');
         requestAnimationFrame(animate);
       }
     };
@@ -75,7 +76,9 @@ export const Spinner = ({ height = 40, fill = 'currentcolor' }) => {
         <g transform="translate(50, 50)" fill={fill}>
           <g ref={dotsRef}>
             {showSpinner
-              ? dots.map(({ x, y, r }) => <circle cx={x} cy={y} r={r}></circle>)
+              ? dots.map(({ x, y, r }, i) => (
+                  <circle key={i} cx={x} cy={y} r={r}></circle>
+                ))
               : null}
           </g>
         </g>
