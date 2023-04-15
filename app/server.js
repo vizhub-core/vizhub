@@ -113,7 +113,7 @@ async function createServer(
         template = indexProd;
         entry = prodServerEntry;
       }
-      const { render, pages, vizKit } = entry;
+      const { render, pages } = entry;
 
       // Match the route and fetch its data.
       // https://stackoverflow.com/questions/66265608/react-router-v6-get-path-pattern-for-current-route
@@ -130,11 +130,18 @@ async function createServer(
       }
 
       const params = match ? match.params : null;
+
+      // Invalid URL
+      if (!matchedPage) {
+        // TODO better 404 page
+        res.status(404).set({ 'Content-Type': 'text/html' }).end('Not found');
+        return;
+      }
+
       const pageData = matchedPage.getPageData
         ? await matchedPage.getPageData({
             params,
             env,
-            vizKit,
             gateways,
           })
         : {};
@@ -172,7 +179,7 @@ async function createServer(
     }
   });
 
-  return { app, vite };
+  return { app };
 }
 
 if (!isTest) {
