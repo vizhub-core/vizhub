@@ -47,17 +47,30 @@ export const setupEditorDemo = ({ codemirrorContainer, iframe }) => {
   const handleCodeChange = (files) => {
     latestFiles = files;
     if (state === IDLE) {
-      requestAnimationFrame(update);
+      //      requestAnimationFrame(update);
       state = ENQUEUED;
+      update();
     } else if (state === PENDING_CLEAN) {
       state = PENDING_DIRTY;
     }
   };
 
+  const profileHotReloadFPS = true;
+  let updateCount = 0;
+  if (profileHotReloadFPS) {
+    setInterval(() => {
+      if (updateCount > 0) {
+        console.log(updateCount + ' updates in the last second');
+      }
+      updateCount = 0;
+    }, 1000);
+  }
+
   // Builds and runs the latest files.
   const update = async () => {
-    state = PENDING_CLEAN;
     await run(await build(latestFiles));
+    state = PENDING_CLEAN;
+    updateCount++;
     if (state === PENDING_DIRTY) {
       requestAnimationFrame(update);
       state = ENQUEUED;
@@ -66,21 +79,22 @@ export const setupEditorDemo = ({ codemirrorContainer, iframe }) => {
     }
   };
 
-  const times = [];
+  let buildTimes = [];
+  const profileBuildTimes = true;
   const avg = (arr) => arr.reduce((a, b) => a + b, 0) / arr.length;
-  const profile = false;
   const n = 100;
 
   const build = (files) =>
-    new Promise((resolve, reject) => {
+    new Promise((resolve) => {
       worker.onmessage = ({ data }) => {
         const { errors, warnings, src, pkg, time } = data;
 
-        if (profile) {
-          times.push(time);
+        if (profileBuildTimes) {
+          buildTimes.push(time);
           // Every n times, log the rolling average.
-          if (times.length % n === 0) {
-            console.log(avg(times.slice(times.length - n)));
+          if (buildTimes.length % n === 0) {
+            console.log('Average build time: ' + avg(buildTimes) + ' ms');
+            buildTimes = [];
           }
         }
 
