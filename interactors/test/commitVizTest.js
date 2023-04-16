@@ -3,7 +3,7 @@
 import { describe, it, expect } from 'vitest';
 import { primordialViz, primordialCommit, ts3, userJoe } from 'gateways/test';
 import { initGateways } from './initGateways';
-import { GetViz, SaveViz, CommitViz, setPredictableGenerateId } from '../src';
+import { SaveViz, CommitViz, setPredictableGenerateId } from '../src';
 
 export const commitVizTest = () => {
   describe('commitViz', async () => {

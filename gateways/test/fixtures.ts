@@ -1,6 +1,6 @@
 // See also https://github.com/vizhub-core/vizhub/blob/main/vizhub-v3/vizhub-interactors/test/fixtures.ts
 // }
-import { diff } from '../src';
+import { diff } from 'ot';
 import {
   Viz,
   Timestamp,

@@ -1,5 +1,5 @@
 import { Gateways, Result, ok, err, Success } from 'gateways';
-import { VizId, Info, Timestamp, UserId, UpvoteId, Upvote } from 'entities';
+import { VizId, Timestamp, UserId, Upvote } from 'entities';
 import { generateId } from './generateId';
 
 // upvoteViz

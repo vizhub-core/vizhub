@@ -6,6 +6,7 @@ import xss from 'xss';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import http from 'http';
 import express from 'express';
 import jsesc from 'jsesc';
 import { matchPath } from 'react-router-dom';
@@ -83,7 +84,11 @@ async function createServer(
   // Unpack the entry point.
   const { initializeGateways, api, authentication } = entry;
 
-  const gateways = await initializeGateways({ isProd, env });
+  // This API is required for the ShareDB WebSocket server.
+  const server = http.createServer(app);
+
+  // Initialize gateways and ShareDB WebSocket server.
+  const gateways = await initializeGateways({ isProd, env, server });
 
   // Set up the API endpoints.
   await api({ app, isProd, gateways });
@@ -179,13 +184,9 @@ async function createServer(
     }
   });
 
-  return { app };
+  server.listen(5173, () => {
+    console.log('VizHub App Server listening at http://localhost:5173');
+  });
 }
 
-if (!isTest) {
-  createServer().then(({ app }) =>
-    app.listen(5173, () => {
-      console.log('VizHub App Server listening at http://localhost:5173');
-    })
-  );
-}
+createServer();

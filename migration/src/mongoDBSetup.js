@@ -1,10 +1,10 @@
 import ShareDB from 'sharedb';
-import json1 from 'ot-json1';
 import ShareDBMongo from 'sharedb-mongo';
 import MongoDB from 'mongodb';
 import { DatabaseGateways } from 'database';
+import { otType } from 'ot';
 
-ShareDB.types.register(json1.type);
+ShareDB.types.register(otType);
 
 const { MongoClient, ServerApiVersion } = MongoDB;
 const v2MongoURI = import.meta.env.VITE_VIZHUB_V2_MONGO_URI;

@@ -8,10 +8,10 @@ SandboxPage.getPageData = async ({ gateways }) => {
     getAnalyticsEvent('login'),
   ]);
 
-  const pageData = { analyticsEvents: [] };
+  const pageData = { analyticsEventSnapshots: [] };
   for (const result of results) {
     if (result.outcome === 'success') {
-      pageData.analyticsEvents.push(result.value);
+      pageData.analyticsEventSnapshots.push(result.value);
     }
   }
 

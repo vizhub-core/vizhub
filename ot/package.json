@@ -1,14 +1,11 @@
 {
-  "name": "gateways",
+  "name": "ot",
   "version": "1.0.0",
   "type": "module",
-  "main": "src/index.ts",
+  "main": "index.ts",
   "scripts": {
-    "tsc": "tsc src/*.ts test/*.ts --noEmit",
-    "test": "vitest run",
-    "watch-tsc": "npm run tsc -- --watch",
-    "watch-test-watch": "vitest",
-    "watch": "concurrently npm:watch-*",
+    "tsc": "",
+    "test": "",
     "prettier": "prettier {*.*,**/*.*} --single-quote --write"
   },
   "repository": {
@@ -22,11 +19,11 @@
   },
   "homepage": "https://github.com/vizhub-core/vizhub3#readme",
   "dependencies": {
-    "vitest": "^0.28.5"
+    "diff-match-patch": "^1.0.5",
+    "json0-ot-diff": "^1.1.2",
+    "sharedb-client-browser": "^4.2.1"
   },
   "devDependencies": {
-    "concurrently": "^7.6.0",
-    "prettier": "^2.8.4",
-    "typescript": "^4.9.5"
+    "prettier": "^2.8.4"
   }
 }

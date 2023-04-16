@@ -1,4 +1,5 @@
-import { Gateways, Result, ok, err, apply, invalidCommitOp } from 'gateways';
+import { Gateways, Result, ok, err, invalidCommitOp } from 'gateways';
+import { apply } from 'ot';
 import { Content, Commit, CommitId } from 'entities';
 import { generateId } from './generateId';
 

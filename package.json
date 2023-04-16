@@ -29,7 +29,8 @@
     "gateways",
     "interactors",
     "database",
-    "components"
+    "components",
+    "ot"
   ],
   "dependencies": {
     "16": "^0.0.2",

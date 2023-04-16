@@ -14,12 +14,9 @@ import {
   err,
   crudEntityNames,
   noSnapshot,
-  otType,
-  diff,
 } from 'gateways';
-
-// Converts and entity name to a MongoDB collection name
-const toCollectionName = (entityName) => entityName.toLowerCase() + 's';
+import { otType, diff } from 'ot';
+import { toCollectionName } from './toCollectionName';
 
 // An in-database implementation for gateways,
 // for use in production.

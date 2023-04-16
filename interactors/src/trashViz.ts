@@ -1,4 +1,4 @@
-import { Gateways, Result, Success, ok, err, diff } from 'gateways';
+import { Gateways, Result, Success, ok, err } from 'gateways';
 import { VizId, Info, Timestamp } from 'entities';
 
 // trashViz
