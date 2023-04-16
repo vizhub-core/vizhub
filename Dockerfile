@@ -1,4 +1,4 @@
-FROM node:19
+FROM public.ecr.aws/docker/library/node:18-slim
 WORKDIR /usr/src/vizhub3
 COPY . .
 RUN npm install
