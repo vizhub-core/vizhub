@@ -1,5 +1,5 @@
 // From https://github.com/vizhub-core/vizhub/commit/6ca078935b9771dc6e05a6065bcfd522a4724dcf
-import React, { useRef, useEffect, useState } from 'react';
+import React from 'react';
 import './spinner.css';
 
 // The time in ms before kicking off the spinner.
@@ -27,62 +27,16 @@ for (let i = 0; i < numDots; i++) {
 
 // From https://bl.ocks.org/curran/685fa8300650c4324d571c6b0ecc55de
 // And vizhub-v2/packages/neoFrontend/src/LoadingScreen/index.js
-export const Spinner = ({ height = 40, fill = 'currentcolor' }) => {
-  const [showSpinner, setShowSpinner] = useState(false);
-  const svgRef = useRef();
-  const dotsRef = useRef();
-
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      setShowSpinner(true);
-
-      // Trigger the fade-in animation.
-      svgRef.current.style = 'opacity: 1;';
-      // dotsRef.current.setAttribute('transform', `rotate(${angle})`);
-    }, blankScreenDelay);
-
-    return () => {
-      clearTimeout(timeoutId);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!showSpinner) return;
-    let angle = 0;
-    const animate = () => {
-      // Stop the animation if React has cleaned up the ref (component unmounted).
-      if (dotsRef.current) {
-        // Set the attribute directly on the DOM for performant animation
-        // that avoids the React render cycle entirely.
-        dotsRef.current.setAttribute('transform', `rotate(${angle})`);
-        angle += speed;
-        console.log('here');
-        requestAnimationFrame(animate);
-      }
-    };
-
-    // Kick off the animation.
-    animate();
-  }, [showSpinner]);
-
-  return (
-    <div className="vh-spinner">
-      <svg
-        ref={svgRef}
-        height={height}
-        viewBox="0 0 100 100"
-        style={{ opacity: 0 }}
-      >
-        <g transform="translate(50, 50)" fill={fill}>
-          <g ref={dotsRef}>
-            {showSpinner
-              ? dots.map(({ x, y, r }, i) => (
-                  <circle key={i} cx={x} cy={y} r={r}></circle>
-                ))
-              : null}
-          </g>
+export const Spinner = ({ height = 40, fill = 'currentcolor' }) => (
+  <div className="vh-spinner">
+    <svg height={height} viewBox="0 0 100 100" style={{ opacity: 1 }}>
+      <g transform="translate(50, 50)" fill={fill}>
+        <g className="vh-spinner-dots">
+          {dots.map(({ x, y, r }, i) => (
+            <circle key={i} cx={x} cy={y} r={r}></circle>
+          ))}
         </g>
-      </svg>
-    </div>
-  );
-};
+      </g>
+    </svg>
+  </div>
+);
