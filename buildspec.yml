@@ -1,7 +1,7 @@
 # From https://dev.to/aws-builders/deploying-nodejs-application-on-amazon-ec2-using-aws-codepipeline-20i1
 version: 0.2
 phases:
-  pre_build: commands:.
+  pre_build: commands:
     - npm install
   build:
     commands:
