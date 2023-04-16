@@ -1,8 +1,14 @@
-# From https://dev.to/aws-builders/deploying-nodejs-application-on-amazon-ec2-using-aws-codepipeline-20i1
+# From:
+# https://dev.to/aws-builders/deploying-nodejs-application-on-amazon-ec2-using-aws-codepipeline-20i1
+# https://github.com/backspace-academy/aws-nodejs-sample-codebuild/blob/master/buildspec.yml
 version: 0.2
+
 phases:
-  pre_build: commands:
-    - npm install
+  install:
+    runtime-versions:
+      nodejs: 18
+    commands:
+      - npm install
   build:
     commands:
       - npm run build
