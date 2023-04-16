@@ -1,13 +1,8 @@
 import MongoDB from 'mongodb-legacy';
-import ShareDB from 'sharedb';
-import json1 from 'ot-json1';
-import ShareDBMongo from 'sharedb-mongo';
-import { MemoryGateways } from 'gateways';
-import { DatabaseGateways } from 'database';
+import { WebSocketServer } from 'ws';
+import WebSocketJSONStream from '@teamwork/websocket-json-stream';
+import { DatabaseGateways, shareDBSetup } from 'database';
 import { endpoints } from './endpoints';
-
-// TODO json1-presence
-ShareDB.types.register(json1.type);
 
 const { MongoClient, ServerApiVersion } = MongoDB;
 // Inspired by:
@@ -23,25 +18,13 @@ const { MongoClient, ServerApiVersion } = MongoDB;
 // });
 
 // TODO move this to a different file
-export const initializeGateways = async ({ isProd, env }) => {
-  let gateways;
+export const initializeGateways = async ({ isProd, env, server }) => {
+  let mongoClient;
   if (env.VIZHUB3_MONGO_LOCAL) {
     console.log('Connecting to local MongoDB...');
 
     const uri = 'mongodb://localhost:27017/vizhub3';
-    const client = new MongoClient(uri);
-    const connection = await client.connect();
-    const mongoDBDatabase = client.db();
-
-    const shareDBConnection = new ShareDB({
-      db: ShareDBMongo({
-        mongo: (callback) => {
-          callback(null, connection);
-        },
-      }),
-    }).connect();
-
-    gateways = DatabaseGateways({ shareDBConnection, mongoDBDatabase });
+    mongoClient = new MongoClient(uri);
   } else if (isProd) {
     console.log('Connecting to production MongoDB...');
 
@@ -51,26 +34,26 @@ export const initializeGateways = async ({ isProd, env }) => {
 
     const uri = `mongodb+srv://${username}:${password}@vizhub3.6sag6.mongodb.net/${database}?retryWrites=true&w=majority`;
 
-    const client = new MongoClient(uri, {
+    mongoClient = new MongoClient(uri, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       serverApi: ServerApiVersion.v1,
     });
-    const connection = await client.connect();
-    const mongoDBDatabase = client.db();
-
-    const shareDBConnection = new ShareDB({
-      db: ShareDBMongo({
-        mongo: (callback) => {
-          callback(null, connection);
-        },
-      }),
-    }).connect();
-
-    gateways = DatabaseGateways({ shareDBConnection, mongoDBDatabase });
-  } else {
-    gateways = MemoryGateways();
   }
+
+  const mongoDBConnection = await mongoClient.connect();
+  const mongoDBDatabase = mongoClient.db();
+
+  const { shareDBBackend, shareDBConnection } = await shareDBSetup({
+    mongoDBConnection,
+  });
+
+  const wss = new WebSocketServer({ server });
+  wss.on('connection', (ws) => {
+    shareDBBackend.listen(new WebSocketJSONStream(ws));
+  });
+
+  const gateways = DatabaseGateways({ shareDBConnection, mongoDBDatabase });
   return gateways;
 };
 

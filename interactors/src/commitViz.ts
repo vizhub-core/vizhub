@@ -1,4 +1,5 @@
-import { Gateways, Result, ok, diff } from 'gateways';
+import { Gateways, Result, ok } from 'gateways';
+import { diff } from 'ot';
 import { VizId, Info, Commit, CommitId } from 'entities';
 import { generateId } from './generateId';
 import { GetViz } from './getViz';

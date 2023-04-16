@@ -1,4 +1,5 @@
-import { Gateways, Result, ok, err, diff } from 'gateways';
+import { Gateways, Result, ok, err } from 'gateways';
+import { diff } from 'ot';
 import {
   VizId,
   Info,

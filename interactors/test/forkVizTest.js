@@ -2,7 +2,8 @@
 //  * https://gitlab.com/curran/vizhub-ee/-/blob/main/vizhub-ee-interactors/test/ForkVizEETest.ts
 //  * https://github.com/vizhub-core/vizhub/blob/main/vizhub-v3/vizhub-interactors/test/ForkVizTest.ts
 import { describe, it, expect } from 'vitest';
-import { diff, VizHubErrorCode } from 'gateways';
+import { VizHubErrorCode } from 'gateways';
+import { diff } from 'ot';
 import {
   primordialViz,
   primordialVizV2,
@@ -17,7 +18,6 @@ import {
 } from 'gateways/test';
 import { initGateways } from './initGateways';
 import {
-  GetViz,
   SaveViz,
   ForkViz,
   GetContentAtCommit,

@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Spinner } from 'components';
-import { EventViz } from './EventViz';
-
+import { EventVizLive } from './EventVizLive';
 import './styles.css';
 
 const titles = {
@@ -15,7 +14,8 @@ const titles = {
 // 3. Ensure ShareDB updates reach the client
 // 4. Ensure ShareDB changes are _not_ allowed from the client side
 export const SandboxPage = ({ pageData }) => {
-  const { analyticsEvents } = pageData;
+  const { analyticsEventSnapshots } = pageData;
+  // const analyticsEvents = useAnalyticsEvents(pageData);
   const [vizModule, setVizModule] = useState(null);
 
   // Dynamic import to manually chunk this code,
@@ -27,17 +27,15 @@ export const SandboxPage = ({ pageData }) => {
     fetchViz();
   }, []);
 
-  return analyticsEvents && vizModule ? (
-    analyticsEvents
-      .map((snapshot) => snapshot.data)
-      .map((analyticsEvent, i) => (
-        <EventViz
-          key={i}
-          analyticsEvent={analyticsEvent}
-          title={titles[analyticsEvent.id]}
-          vizModule={vizModule}
-        />
-      ))
+  return analyticsEventSnapshots && vizModule ? (
+    analyticsEventSnapshots.map((analyticsEventSnapshot, i) => (
+      <EventVizLive
+        key={i}
+        analyticsEventSnapshot={analyticsEventSnapshot}
+        title={titles[analyticsEventSnapshot.data.id]}
+        vizModule={vizModule}
+      />
+    ))
   ) : (
     <Spinner />
   );

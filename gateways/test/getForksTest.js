@@ -1,28 +1,6 @@
 import { initGateways } from './initGateways';
-import {
-  primordialViz,
-  primordialCommit,
-  userJoe,
-  sampleUpvote,
-  sampleVizAuthorship,
-  sampleComment,
-  sampleMention,
-  sampleFolder,
-  samplePermission,
-  sampleOrg,
-  sampleOrgMembership,
-  sampleTagging,
-  sampleCollection,
-  sampleCollectionMembership,
-  sampleMilestone,
-  sampleDeployment,
-  sampleMergeRequest,
-  sampleBetaProgramSignup,
-  commit2,
-  commit2WithMilestone,
-  commit3,
-} from './fixtures';
-import { describe, it, expect } from 'vitest';
+import { primordialViz } from './fixtures';
+import { it, expect } from 'vitest';
 
 export const getForksTest = () => {
   it('getForks', async () => {

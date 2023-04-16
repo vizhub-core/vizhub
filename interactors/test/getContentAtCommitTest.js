@@ -1,7 +1,8 @@
 // See also
 //  * https://gitlab.com/curran/vizhub-ee/-/blob/main/vizhub-ee-interactors/test/GetContentAtCommitTest.ts
 import { describe, it, expect } from 'vitest';
-import { VizHubErrorCode, diff } from 'gateways';
+import { VizHubErrorCode } from 'gateways';
+import { diff } from 'ot';
 import {
   primordialCommit,
   primordialViz,

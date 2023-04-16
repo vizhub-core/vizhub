@@ -26,18 +26,18 @@
   "dependencies": {
     "@codemirror/lang-javascript": "^6.1.5",
     "@replit/codemirror-interact": "^6.1.0",
+    "@teamwork/websocket-json-stream": "^2.0.0",
     "codemirror": "^6.0.1",
     "express-openid-connect": "^2.13.0",
     "jose": "^4.13.1",
     "jsesc": "^3.0.2",
     "mongodb-legacy": "^5.0.0",
-    "node-fetch": "^3.3.1",
-    "ot-json1": "^1.0.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.8.1",
     "sharedb": "^3.3.1",
     "sharedb-mongo": "^3.0.1",
+    "ws": "^8.13.0",
     "xss": "^1.0.14"
   },
   "devDependencies": {
