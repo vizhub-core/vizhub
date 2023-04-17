@@ -3,18 +3,13 @@ import { Spinner } from 'components';
 import { EventVizLive } from './EventVizLive';
 import './styles.css';
 
-const titles = {
-  'pageview.home': 'Home page views',
-  login: 'Logins',
-};
-
 // TODO Figure out a few core elements of the platform:
 // 1. Get page data server-side
 // 2. Hydrate ShareDB doc client-side
 // 3. Ensure ShareDB updates reach the client
 // 4. Ensure ShareDB changes are _not_ allowed from the client side
 export const SandboxPage = ({ pageData }) => {
-  const { analyticsEventSnapshots } = pageData;
+  const { analyticsEventSnapshots, titles } = pageData;
   // const analyticsEvents = useAnalyticsEvents(pageData);
   const [vizModule, setVizModule] = useState(null);
 

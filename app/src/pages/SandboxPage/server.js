@@ -3,17 +3,23 @@ import { SandboxPage } from './index';
 SandboxPage.getPageData = async ({ gateways }) => {
   const { getAnalyticsEvent } = gateways;
 
-  const results = await Promise.all([
-    getAnalyticsEvent('pageview.home'),
-    getAnalyticsEvent('login'),
-  ]);
+  const titles = {
+    'pageview.home': 'Home Page Views',
+    login: 'Logins',
+    'private-beta-email-submit': 'Private Beta Signups',
+  };
 
-  const pageData = { analyticsEventSnapshots: [] };
-  for (const result of results) {
-    if (result.outcome === 'success') {
-      pageData.analyticsEventSnapshots.push(result.value);
-    }
-  }
+  const analyticsEventSnapshots = (
+    await Promise.all([
+      getAnalyticsEvent('pageview.home'),
+      getAnalyticsEvent('login'),
+      getAnalyticsEvent('private-beta-email-submit'),
+    ])
+  )
+    .filter((result) => result.outcome === 'success')
+    .map((result) => result.value);
+
+  const pageData = { analyticsEventSnapshots, titles };
 
   return pageData;
 };
