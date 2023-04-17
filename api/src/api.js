@@ -32,7 +32,12 @@ export const initializeGateways = async ({ isProd, env, server }) => {
     const password = env.VIZHUB3_MONGO_PASSWORD;
     const database = env.VIZHUB3_MONGO_DATABASE;
 
+    console.log('Mongo details:');
+    console.log(JSON.stringify({ username, password, database }));
+
     const uri = `mongodb+srv://${username}:${password}@vizhub3.6sag6.mongodb.net/${database}?retryWrites=true&w=majority`;
+    console.log('uri:');
+    console.log(uri);
 
     mongoClient = new MongoClient(uri, {
       useNewUrlParser: true,

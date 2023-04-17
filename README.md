@@ -47,13 +47,17 @@ Authentication is managed by Auth0.
 Auth0 environment variables:
 
 ```
-export VIZHUB3_AUTH0_SECRET= <random string from `openssl rand -hex 32`>
+export VIZHUB3_AUTH0_SECRET= <>
 export VIZHUB3_AUTH0_BASE_URL=
-export VIZHUB3_AUTH0_CLIENT_ID=http://localhost:5173
+export VIZHUB3_AUTH0_CLIENT_ID=
 export VIZHUB3_AUTH0_ISSUER_BASE_URL=
 ```
 
-Use [Caddy](https://caddyserver.com/docs/install#debian-ubuntu-raspbian) for local HTTPS.
+ * VIZHUB3_AUTH0_CLIENT_ID - This is found in the Auth0 UI under "Basic information" and called "Client ID". 
+ * VIZHUB3_AUTH0_SECRET - This is found in the Auth0 UI under "Basic information" and called "Client Secret. It may also be possible to generate this from `openssl rand -hex 32`, not sure.
+ * VIZHUB3_AUTH0_ISSUER_BASE_URL - This is found in the Auth0 UI under "Basic information" and called "Domain". It probably ends in "us.auth0.com" unless a custom domain has been configured.
+ * export VIZHUB3_AUTH0_BASE_URL - This is the URL for the site, for example `https://beta.vizhub.com`
+
 
 In the "Application URIs" config inside the Auth0 UI:
 
