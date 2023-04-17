@@ -19,11 +19,11 @@ const canDelete = (permission) => permission.role === ADMIN;
 const canWrite = (permission) =>
   permission.role === EDITOR || permission.role === ADMIN;
 
-// VerifyAccess
+// VerifyVizAccess
 // * Determines whether or not a given user is allowed to perform
 //   a given action on a given viz.
 export const VerifyVizAccess = (gateways: Gateways) => {
-  const { getInfo, getPermissions, getFolderAncestors } = gateways;
+  const { getPermissions, getFolderAncestors } = gateways;
 
   return async (options: {
     userId: UserId;

@@ -1,6 +1,5 @@
 import { describe, it, expect } from 'vitest';
 import { VIEWER, ADMIN, READ, WRITE, DELETE } from 'entities';
-import { VizHubErrorCode } from 'gateways';
 import {
   primordialViz,
   userJoe,
