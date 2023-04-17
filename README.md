@@ -2,7 +2,6 @@
 
 VizHub Platform V3
 
-
 ## Docker
 
 See also [Dockerizing a Node.js web app](https://nodejs.org/en/docs/guides/nodejs-docker-webapp)
@@ -53,11 +52,10 @@ export VIZHUB3_AUTH0_CLIENT_ID=
 export VIZHUB3_AUTH0_ISSUER_BASE_URL=
 ```
 
- * VIZHUB3_AUTH0_CLIENT_ID - This is found in the Auth0 UI under "Basic information" and called "Client ID". 
- * VIZHUB3_AUTH0_SECRET - This is found in the Auth0 UI under "Basic information" and called "Client Secret. It may also be possible to generate this from `openssl rand -hex 32`, not sure.
- * VIZHUB3_AUTH0_ISSUER_BASE_URL - This is found in the Auth0 UI under "Basic information" and called "Domain". It probably ends in "us.auth0.com" unless a custom domain has been configured.
- * export VIZHUB3_AUTH0_BASE_URL - This is the URL for the site, for example `https://beta.vizhub.com`
-
+- VIZHUB3_AUTH0_CLIENT_ID - This is found in the Auth0 UI under "Basic information" and called "Client ID".
+- VIZHUB3_AUTH0_SECRET - This is found in the Auth0 UI under "Basic information" and called "Client Secret. It may also be possible to generate this from `openssl rand -hex 32`, not sure.
+- VIZHUB3_AUTH0_ISSUER_BASE_URL - This is found in the Auth0 UI under "Basic information" and called "Domain". It probably ends in "us.auth0.com" unless a custom domain has been configured. **Note** you need to put `https://` in front of the value that you copy out of the Auth0 UI.
+- export VIZHUB3_AUTH0_BASE_URL - This is the URL for the site, for example `https://beta.vizhub.com`
 
 In the "Application URIs" config inside the Auth0 UI:
 

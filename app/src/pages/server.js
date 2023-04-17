@@ -1,6 +1,6 @@
 import { AboutPage } from './AboutPage';
 import { HomePage } from './HomePage/server';
-import { ProfilePage } from './ProfilePage';
+import { ProfilePage } from './ProfilePage/server';
 import { VizPage } from './VizPage';
 import { BetaConfirmPage } from './BetaConfirmPage';
 import { SandboxPage } from './SandboxPage/server';

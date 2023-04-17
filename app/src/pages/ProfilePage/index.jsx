@@ -13,15 +13,3 @@ export const ProfilePage = ({ pageData }) => {
 };
 
 ProfilePage.path = '/:userName';
-ProfilePage.getPageData = async ({ params }) => {
-  const { userName } = params;
-  // TODO populate user as authenticatedUser
-
-  // TODO populate displayName properly
-  const profileUser = { userName, displayName: userName };
-
-  return {
-    title: `${userName} on VizHub`,
-    profileUser,
-  };
-};
