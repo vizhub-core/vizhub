@@ -16,10 +16,9 @@ export const ProfilePageBody = ({
     <div className="vh-page vh-profile-page">
       <Container className="mt-3 mb-3">
         <div className="d-flex mb-3">
-          <Image
-            className="vh-profile-page__avatar me-3"
+          <img
+            className="vh-profile-page__avatar me-3 rounded-circle"
             src={picture}
-            roundedCircle
           />
           <div className="d-flex flex-column justify-content-center">
             <div className="vh-profile-page__full-name">{displayName}</div>
