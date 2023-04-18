@@ -22,6 +22,7 @@ import { toCollectionName } from './toCollectionName';
 // for use in production.
 export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
   // A generic "save" implementation for ShareDB.
+  // TODORedLock
   const shareDBSave = (collectionName) => (entity) =>
     new Promise((resolve) => {
       const shareDBDoc = shareDBConnection.get(collectionName, entity.id);
@@ -90,6 +91,8 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
           // Leverage the `ena` operator,
           // which is an isolated addition of a number.
           // See https://github.com/ottypes/json1/blob/master/spec.md#parts-of-an-operation
+          // Note that because this operation respects OT,
+          // we do not need to use any lock.
           const op = [field, { ena: number }];
           shareDBDoc.submitOp(op, callback);
         }
@@ -97,6 +100,7 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
     });
 
   // A generic "save" implementation for MongoDB.
+  // TODORedLock
   const mongoDBSave = (collectionName) => {
     const collection = mongoDBDatabase.collection(collectionName);
     return async (entity) => {
@@ -237,6 +241,9 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
     return ok(ancestors);
   };
 
+  // TODO consider making this a ShareDB query.
+  // Use case: breadcrumbs that change in real time
+  //   when a viz/folder is moved.
   const getFolderAncestors = async (id) => {
     const entityName = 'Folder';
     const from = toCollectionName(entityName);
@@ -286,6 +293,24 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
 
     return ok(folders);
   };
+
+  const getUserByUserName = (userName) =>
+    new Promise((resolve, reject) => {
+      const entityName = 'User';
+      const query = shareDBConnection.createFetchQuery(
+        toCollectionName(entityName),
+        { userName },
+        {},
+        (error, results) => {
+          query.destroy();
+          if (error) return resolve(err(error));
+          if (results.length === 0) {
+            return resolve(err(resourceNotFoundError(userName)));
+          }
+          resolve(ok(results[0].toSnapshot()));
+        }
+      );
+    });
 
   const getUserByEmails = (emails) =>
     new Promise((resolve, reject) => {
@@ -341,6 +366,7 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
     decrementUpvotesCount,
     getCommitAncestors,
     getFolderAncestors,
+    getUserByUserName,
     getUserByEmails,
     getPermissions,
   };
