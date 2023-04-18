@@ -34,19 +34,16 @@ export const HomePage = ({ pageData }) => {
     ? pageData.auth0User.picture
     : null;
 
-  const handleLoginClick = useCallback(() => {
-    window.location.href = '/login';
-  }, []);
-
-  const handleLogoutClick = useCallback(() => {
-    window.location.href = '/logout';
-  }, []);
+  const authenticatedUserUserName = pageData.auth0User
+    ? pageData.auth0User.nickname
+    : null;
 
   return (
     <div className="vh-page overflow-auto">
       <Header
-        onLoginClick={handleLoginClick}
-        onLogoutClick={handleLogoutClick}
+        loginHref={'/login'}
+        logoutHref={'/logout'}
+        profileHref={`/${authenticatedUserUserName}`}
         authenticatedUserAvatarURL={authenticatedUserAvatarURL}
       ></Header>
       <HomePageBody onEmailSubmit={handleEmailSubmit}>

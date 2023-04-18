@@ -1,18 +1,9 @@
 import { Header } from '../components/Header';
 
-const args = {
-  onLoginClick: () => {
-    console.log('onLoginClick');
-  },
-  onLogoutClick: () => {
-    console.log('onLogoutClick');
-  },
-  onCreateVizClick: () => {
-    console.log('onCreateVizClick');
-  },
-  onProfileClick: () => {
-    console.log('onProfileClick');
-  },
+export const args = {
+  loginHref: 'loginHref',
+  logoutHref: 'logoutHref',
+  profileHref: 'profileHref',
   onForumClick: () => {
     console.log('onForumClick');
   },

@@ -1,27 +1,9 @@
 import { Header } from '../components/Header';
+import { args as loggedOutArgs } from './HeaderLoggedOutStory';
 
 const args = {
-  // authenticatedUserDisplayName: 'Jane Doe',
+  ...loggedOutArgs,
   authenticatedUserAvatarURL: 'https://github.com/mdo.png',
-
-  // onLogin: () => {
-  //   console.log('onLogin');
-  // },
-  onLogoutClick: () => {
-    console.log('onLogoutClick');
-  },
-  onCreateVizClick: () => {
-    console.log('onCreateVizClick');
-  },
-  onProfileClick: () => {
-    console.log('onProfileClick');
-  },
-  onForumClick: () => {
-    console.log('onForumClick');
-  },
-  onVizHubClick: () => {
-    console.log('onVizHubClick');
-  },
 };
 
 const Story = () => {

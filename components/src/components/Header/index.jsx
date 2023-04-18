@@ -6,10 +6,10 @@ import './header.css';
 
 export const Header = ({
   authenticatedUserAvatarURL,
-  onLoginClick,
-  onLogoutClick,
+  loginHref,
+  logoutHref,
+  profileHref,
   onCreateVizClick,
-  onProfileClick,
   onForumClick,
   onVizHubClick,
 }) => (
@@ -53,16 +53,17 @@ export const Header = ({
                   Create Viz
                 </Dropdown.Item>
                 <Dropdown.Divider />
-                <Dropdown.Item onClick={onProfileClick}>Profile</Dropdown.Item>
+                <Dropdown.Item href={profileHref}>Profile</Dropdown.Item>
                 <Dropdown.Divider />
-                <Dropdown.Item onClick={onLogoutClick}>Log out</Dropdown.Item>
+                <Dropdown.Item href={logoutHref}>Log out</Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
           ) : (
             <Button
+              as="a"
+              href={loginHref}
               size="sm"
               className="vh-header-button"
-              onClick={onLoginClick}
             >
               Log in
             </Button>
