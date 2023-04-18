@@ -18,6 +18,11 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const resolve = (p) => path.resolve(__dirname, p);
 const isTest = env.VITEST;
 
+// TODO better 404 page
+const send404 = (res) => {
+  res.status(404).set({ 'Content-Type': 'text/html' }).end('Not found');
+};
+
 async function createServer(
   root = process.cwd(),
   isProd = env.NODE_ENV === 'production',
@@ -138,9 +143,7 @@ async function createServer(
 
       // Invalid URL
       if (!matchedPage) {
-        // TODO better 404 page
-        res.status(404).set({ 'Content-Type': 'text/html' }).end('Not found');
-        return;
+        return send404(res);
       }
 
       const pageData = matchedPage.getPageData
@@ -150,6 +153,11 @@ async function createServer(
             gateways,
           })
         : {};
+
+      // Returning `null` indicates that the resource was not found.
+      if (pageData === null) {
+        return send404(res);
+      }
       pageData.url = url;
       if (req.oidc.user) {
         pageData.auth0User = req.oidc.user;

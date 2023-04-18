@@ -2,17 +2,18 @@ import { ProfilePage } from './index';
 
 ProfilePage.getPageData = async ({ gateways, params }) => {
   const { userName } = params;
-
-  // TODO
   const { getUserByUserName } = gateways;
 
-  // TODO populate displayName properly
-  const profileUser = { userName, displayName: userName };
+  const result = await getUserByUserName(userName);
+  if (result.outcome === 'success') {
+    return {
+      title: `${userName} on VizHub`,
+      profileUserSnapshot: result.value,
+    };
+  }
 
-  return {
-    title: `${userName} on VizHub`,
-    profileUser,
-  };
+  // Indicates not found
+  return null;
 };
 
 export { ProfilePage };

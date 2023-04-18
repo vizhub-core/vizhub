@@ -10,6 +10,7 @@ export const ProfilePageBody = ({
   onMoreClick,
   userName,
   displayName,
+  picture,
 }) => {
   return (
     <div className="vh-page vh-profile-page">
@@ -17,7 +18,7 @@ export const ProfilePageBody = ({
         <div className="d-flex mb-3">
           <Image
             className="vh-profile-page__avatar me-3"
-            src="https://github.com/mdo.png"
+            src={picture}
             roundedCircle
           />
           <div className="d-flex flex-column justify-content-center">
