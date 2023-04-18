@@ -5,6 +5,7 @@ import {
   Content,
   User,
   UserId,
+  UserName,
   Upvote,
   UpvoteId,
   VizAuthorship,
@@ -181,6 +182,11 @@ export interface Gateways {
   //
   // Gets the user that matches any of the given emails.
   getUserByEmails(emails: Array<EmailAddress>): Promise<Result<Snapshot<User>>>;
+
+  // getUserByUserName
+  //
+  // Gets the user that matches the given userName.
+  getUserByEmails(userName: UserName): Promise<Result<Snapshot<User>>>;
 
   // getFolderAncestors
   //

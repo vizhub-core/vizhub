@@ -168,6 +168,13 @@ export const MemoryGateways = () => {
     return ok(folders.reverse());
   };
 
+  const getUserByUserName = async (userName) => {
+    const user = Object.values(documents.User).find(
+      (user) => user.userName === userName
+    );
+    return user ? ok(fakeSnapshot(user)) : err(resourceNotFoundError(userName));
+  };
+
   const getUserByEmails = async (emails) => {
     const user = Object.values(documents.User).find(
       (user) =>
@@ -197,6 +204,7 @@ export const MemoryGateways = () => {
     decrementUpvotesCount,
     getCommitAncestors,
     getFolderAncestors,
+    getUserByUserName,
     getUserByEmails,
     getPermissions,
   };
