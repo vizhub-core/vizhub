@@ -1,4 +1,5 @@
 import { select } from 'd3-selection';
+import 'd3-transition';
 import { utcDay } from 'd3-time';
 import { utcFormat } from 'd3-time-format';
 import { scaleBand, scaleLinear } from 'd3-scale';
@@ -83,10 +84,21 @@ export const viz = (node, { analyticsEvent }) => {
   svg
     .selectAll('rect')
     .data(data)
-    .join('rect')
+    .join(
+      (enter) =>
+        enter
+          .append('rect')
+          .attr('y', (d) => yScale(yValue(d)))
+          .attr('height', (d) => height - bottom - yScale(yValue(d))),
+      (update) =>
+        update.call((selection) =>
+          selection
+            .transition()
+            .attr('y', (d) => yScale(yValue(d)))
+            .attr('height', (d) => height - bottom - yScale(yValue(d)))
+        )
+    )
     .attr('x', (d) => xScale(xValue(d)))
-    .attr('y', (d) => yScale(yValue(d)))
     .attr('width', xScale.bandwidth())
-    .attr('height', (d) => height - bottom - yScale(yValue(d)))
     .attr('fill', '#AAA');
 };
