@@ -15,12 +15,15 @@ export const VizPreviewPresenter = ({ infoSnapshot, ownerUser }) => {
   // TODO format this
   const lastUpdatedDateFormatted = timestampToDate(updated);
 
+  const href = `/${ownerUser.userName}/${id}`;
+
   return (
     <VizPreview
       title={title}
       thumbnailImageURL={thumbnailImageURL}
       ownerName={ownerName}
       ownerAvatarURL={ownerAvatarURL}
+      href={href}
     />
   );
 };

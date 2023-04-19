@@ -1,7 +1,7 @@
 import { AboutPage } from './AboutPage';
 import { HomePage } from './HomePage/server';
 import { ProfilePage } from './ProfilePage/server';
-import { VizPage } from './VizPage';
+import { VizPage } from './VizPage/server';
 import { BetaConfirmPage } from './BetaConfirmPage';
 import { SandboxPage } from './SandboxPage/server';
 

@@ -11,10 +11,10 @@ export const VizPreview = ({
   lastUpdatedDateFormatted,
   ownerName,
   ownerAvatarURL,
-  onClick,
+  href,
 }) => {
   return (
-    <div className="vh-viz-preview" onClick={onClick}>
+    <a className="vh-viz-preview" href={href} rel="noreferrer noopener">
       <div
         className="thumbnail"
         style={{
@@ -38,7 +38,7 @@ export const VizPreview = ({
           </>
         ) : null}
       </div>
-    </div>
+    </a>
   );
 };
 

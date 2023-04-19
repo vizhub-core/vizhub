@@ -7,9 +7,7 @@ const args = {
   lastUpdatedDateFormatted: 'December 6, 2021',
   ownerName: 'Joe Schmoe',
   ownerAvatarURL: 'https://github.com/mdo.png',
-  onClick: () => {
-    console.log('onClick');
-  },
+  href: 'test-href',
 };
 
 const Story = () => {

@@ -9,5 +9,6 @@ export const renderVizPreviews = () =>
       lastUpdatedDateFormatted="December 6, 2021"
       ownerName="Joe Schmo"
       ownerAvatarURL="https://github.com/mdo.png"
+      href={`test/${i}`}
     />
   ));
