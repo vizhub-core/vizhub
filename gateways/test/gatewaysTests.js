@@ -10,6 +10,7 @@ import { getUserByUserNameTest } from './getUserByUserNameTest';
 import { incrementDecrementTest } from './incrementDecrementTest';
 import { getFolderAncestorsTest } from './getFolderAncestorsTest';
 import { getPermissionsTest } from './getPermissionsTest';
+import { getInfosByOwnerTest } from './getInfosByOwnerTest';
 
 export const gatewaysTests = () => {
   describe(`CRUD`, () => {
@@ -25,4 +26,5 @@ export const gatewaysTests = () => {
   incrementDecrementTest();
   getFolderAncestorsTest();
   getPermissionsTest();
+  getInfosByOwnerTest();
 };

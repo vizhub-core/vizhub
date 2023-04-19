@@ -6,13 +6,16 @@ ProfilePage.getPageData = async ({ gateways, params }) => {
 
   const result = await getUserByUserName(userName);
   if (result.outcome === 'success') {
+
+// getInfosByOwner
+
     return {
       title: `${userName} on VizHub`,
       profileUserSnapshot: result.value,
     };
   }
 
-  // Indicates not found
+  // Indicates user not found
   return null;
 };
 

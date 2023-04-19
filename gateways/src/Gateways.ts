@@ -201,4 +201,6 @@ export interface Gateways {
     user: UserId,
     resources: Array<ResourceId>
   ): Promise<Result<Array<Snapshot<Permission>>>>;
+
+  getInfosByOwner(owner: UserId): Promise<Result<Array<Snapshot<Info>>>>;
 }

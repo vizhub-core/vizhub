@@ -23,6 +23,11 @@ export const getForksTest = () => {
     });
 
     // There should be 2 forks: 'viz2' and 'viz3'
+    // TODO consider query aspects:
+    //  * Hydrate ShareDB query in client
+    //  * Server-visible-only query
+    //  * Pagination
+    //  * Sorting
     const getForksResult = await getForks(primordialViz.info.id);
     expect(getForksResult.outcome).toEqual('success');
     const forks = getForksResult.value;
