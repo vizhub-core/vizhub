@@ -101,10 +101,6 @@ export interface Info {
   isFrozen: boolean;
 
   // How many forks this viz has.
-  // TODO
-  //  * Update this in:
-  //    * ForkViz
-  //    * DeleteViz
   forksCount: number;
 
   // How many upvotes this viz has.

@@ -9,6 +9,8 @@ import { fileURLToPath } from 'url';
 import http from 'http';
 import express from 'express';
 import jsesc from 'jsesc';
+import { WebSocketServer } from 'ws';
+import WebSocketJSONStream from '@teamwork/websocket-json-stream';
 import { matchPath } from 'react-router-dom';
 import { seoMetaTags } from './seoMetaTags.js';
 
@@ -92,8 +94,18 @@ async function createServer(
   // This API is required for the ShareDB WebSocket server.
   const server = http.createServer(app);
 
-  // Initialize gateways and ShareDB WebSocket server.
-  const gateways = await initializeGateways({ isProd, env, server });
+  // Initialize gateways and database connections.
+  const { gateways, shareDBBackend } = await initializeGateways({
+    isProd,
+    env,
+    server,
+  });
+
+  // Listen for ShareDB connections over WebSocket.
+  const wss = new WebSocketServer({ server });
+  wss.on('connection', (ws) => {
+    shareDBBackend.listen(new WebSocketJSONStream(ws));
+  });
 
   // Set up the API endpoints.
   await api({ app, isProd, gateways });

@@ -40,6 +40,8 @@ const migrate = async () => {
       const alreadyMigrated =
         (await databaseGateways.getInfo(info.id)).outcome === 'success';
       if (alreadyMigrated) {
+	      // TODO add commits for any fresh changes
+	      // for incremental migration
         console.log('skipping already migrated #' + i);
         return;
       }

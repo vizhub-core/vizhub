@@ -1,13 +1,16 @@
 import { describe } from 'vitest';
 import { setInitGateways, gatewaysTests } from 'gateways/test';
 import { interactorsTests } from 'interactors/test';
-import { DatabaseGateways, mongoDBSetup, shareDBSetup } from '../src';
+import { DatabaseGateways } from '../src';
+import { initializeMongoDB } from '../src/initializeMongoDB';
+import { initializeShareDB } from '../src/initializeShareDB';
 
 describe('DatabaseGateways', async () => {
   // Make the MongoDB connection only once, for all tests,
   // as it takes some time.
-  const { mongoDBDatabase, mongoDBConnection } = await mongoDBSetup({
-    mongoURI: 'mongodb://localhost:27017/vizhub-testing',
+  const { mongoDBDatabase, mongoDBConnection } = await initializeMongoDB({
+    env: { VIZHUB3_MONGO_LOCAL: 'true' },
+    mongoLocalURI: 'mongodb://localhost:27017/vizhub-testing',
   });
 
   // Swap out the initGateways function used by gatewaysTests
@@ -22,7 +25,9 @@ describe('DatabaseGateways', async () => {
     // otherwise context leaks between them as
     // ShareDB keeps things in memory that are supposed to sync
     // with Mongo.
-    const { shareDBConnection } = await shareDBSetup({ mongoDBConnection });
+    const { shareDBConnection } = await initializeShareDB({
+      mongoDBConnection,
+    });
 
     const databaseGateways = DatabaseGateways({
       shareDBConnection,
