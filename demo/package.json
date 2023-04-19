@@ -1,0 +1,26 @@
+{
+  "name": "demo",
+  "version": "1.0.0",
+  "description": "Demonstration database content for testing.",
+  "type": "module",
+  "scripts": {
+    "test": "",
+    "tsc": "",
+    "prettier": "prettier {*.*,**/*.*} --single-quote --write",
+    "populate": "vitest run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vizhub-core/vizhub3.git"
+  },
+  "author": "Curran Kelleher",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/vizhub-core/vizhub3/issues"
+  },
+  "homepage": "https://github.com/vizhub-core/vizhub3#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "vitest": "^0.28.5"
+  }
+}

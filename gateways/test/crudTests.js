@@ -61,9 +61,7 @@ export const crudTests = (entityName, sampleEntity) => {
       expect(getResultBefore.outcome).toEqual('success');
 
       const deleteResult = await gateways[deleteMethod](sampleEntity.id);
-      //           console.log(deleteResult);
       expect(deleteResult.outcome).toEqual('success');
-      //     expect(deleteResult.value).toEqual('success');
 
       const getResultAfter = await gateways[getMethod](sampleEntity.id);
       expect(getResultAfter.outcome).toEqual('failure');

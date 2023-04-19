@@ -14,6 +14,11 @@ export const initializeMongoDB = async ({
   env,
   mongoLocalURI = 'mongodb://localhost:27017/vizhub3',
 }) => {
+  const timeout = setTimeout(() => {
+    console.log('\nHaving trouble connecting to the MongoDB database...');
+    console.log('  Ensure that the database is running.');
+  }, 5000);
+
   let mongoClient;
   if (env.VIZHUB3_MONGO_LOCAL) {
     console.log('Connecting to local MongoDB...');
@@ -38,5 +43,9 @@ export const initializeMongoDB = async ({
 
   const mongoDBConnection = await mongoClient.connect();
   const mongoDBDatabase = mongoClient.db();
+
+  await mongoDBDatabase.command({ ping: 1 });
+  clearTimeout(timeout);
+
   return { mongoDBConnection, mongoDBDatabase };
 };

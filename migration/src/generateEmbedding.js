@@ -3,6 +3,7 @@ import '@tensorflow/tfjs-node';
 
 let model;
 
+// TODO consider using OpenAI embeddings.
 export const generateEmbedding = async (goodFiles) => {
   const sentence = removeEmoji(goodFiles)
     // Substring on name as there was one particular case
