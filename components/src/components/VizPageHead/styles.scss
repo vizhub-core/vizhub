@@ -1,0 +1,17 @@
+.vh-viz-page-head {
+  height: 41px;
+  background-color: white;
+  display: flex;
+  flex: 1;
+  justify-content: space-between;
+  align-items: center;
+
+  .side {
+    display: flex;
+    padding: 0 5px;
+    gap: 5px;
+    .btn {
+      font-weight: 600;
+    }
+  }
+}

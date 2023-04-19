@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { Nav, Navbar, Container, Dropdown, Image, Button } from '../bootstrap';
+import { Nav, Navbar, Container, Dropdown, Button } from '../bootstrap';
 import { LogoSVG } from './LogoSVG';
 import '../index.scss';
 import './header.css';
