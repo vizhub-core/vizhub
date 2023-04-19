@@ -1,5 +1,6 @@
 import { ProfilePageBody } from 'components/src/components/ProfilePageBody';
 import { useShareDBDocData } from '../../useShareDBDocData';
+import { VizPreviewPresenter } from './VizPreviewPresenter';
 // Inspired by https://github.com/vitejs/vite-plugin-react/blob/main/playground/ssr-react/src/pages/Home.jsx
 export const ProfilePage = ({ pageData }) => {
   const { profileUserSnapshot, infoSnapshots } = pageData;
@@ -11,8 +12,12 @@ export const ProfilePage = ({ pageData }) => {
   return (
     <ProfilePageBody
       renderVizPreviews={() =>
-        infoSnapshots.map((snapshot) => (
-          <div key={snapshot.id}>{snapshot.data.title}</div>
+        infoSnapshots.map((infoSnapshot) => (
+          <VizPreviewPresenter
+            key={infoSnapshot.data.id}
+            infoSnapshot={infoSnapshot}
+            ownerUser={profileUser}
+          />
         ))
       }
       displayName={displayName}
