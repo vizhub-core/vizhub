@@ -48,6 +48,5 @@ export const getInfosByOwnerTest = () => {
         )
       )
     ).toEqual(new Set([primordialViz.info.id, 'viz2', 'viz3']));
-
   });
 };

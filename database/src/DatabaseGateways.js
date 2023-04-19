@@ -176,6 +176,24 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
       );
     });
 
+  const getInfosByOwner = (owner) =>
+    new Promise((resolve, reject) => {
+      const entityName = 'Info';
+      const query = shareDBConnection.createFetchQuery(
+        toCollectionName(entityName),
+        { owner },
+        {},
+        (error, results) => {
+          // Avoid memory leak.
+          // See https://github.com/share/sharedb/blob/4067b0c5d194a1e4078d52dadd668492dafe017b/lib/client/connection.js#L541
+          query.destroy();
+
+          if (error) return resolve(err(error));
+          resolve(ok(results.map((doc) => doc.toSnapshot())));
+        }
+      );
+    });
+
   const getCommitAncestors = async (id, toNearestMilestone, start) => {
     const entityName = 'Commit';
     const from = toCollectionName(entityName);
@@ -360,6 +378,7 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
 
   let databaseGateways = {
     getForks,
+    getInfosByOwner,
     incrementForksCount,
     decrementForksCount,
     incrementUpvotesCount,

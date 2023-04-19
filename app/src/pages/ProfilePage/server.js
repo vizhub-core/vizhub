@@ -6,8 +6,7 @@ ProfilePage.getPageData = async ({ gateways, params }) => {
 
   const result = await getUserByUserName(userName);
   if (result.outcome === 'success') {
-
-// getInfosByOwner
+    // getInfosByOwner
 
     return {
       title: `${userName} on VizHub`,
