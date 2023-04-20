@@ -2,12 +2,15 @@
 import { Button } from '../bootstrap';
 import { ForkSVG } from '../Icons/ForkSVG';
 import { ShareSVG } from '../Icons/ShareSVG';
+import { ChevronSVG } from '../Icons/ChevronSVG';
+
 import './styles.scss';
 
 export const VizPageHead = () => (
   <div className="vh-viz-page-head">
     <div className="side">
       <Button variant="light" size="sm">
+        <ChevronSVG left />
         Open Editor
       </Button>
     </div>

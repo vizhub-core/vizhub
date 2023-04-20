@@ -1,6 +1,7 @@
 import { LogoSVG } from '../components/Icons/LogoSVG';
 import { ForkSVG } from '../components/Icons/ForkSVG';
 import { ShareSVG } from '../components/Icons/ShareSVG';
+import { ChevronSVG } from '../components/Icons/ChevronSVG';
 
 import { ForkSVG as v2ForkSVG } from '../components/Icons/v2/ForkSVG';
 // TODO migrate all of these to new icons.
@@ -35,7 +36,15 @@ const v2icons = [
   VimSVG,
 ];
 
-const v3icons = [LogoSVG, ForkSVG, ShareSVG];
+const v3icons = [
+  LogoSVG,
+  ForkSVG,
+  ShareSVG,
+  ChevronSVG,
+  ({ height }) => <ChevronSVG height={height} left />,
+  ({ height }) => <ChevronSVG height={height} up />,
+  ({ height }) => <ChevronSVG height={height} down />,
+];
 
 const displayIcons = (icons) => (
   <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}>
