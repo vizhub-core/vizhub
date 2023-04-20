@@ -1,10 +1,8 @@
 // From https://github.com/vizhub-core/vizhub/blob/main/vizhub-v2/packages/neoFrontend/src/svg/LogoSVG.js
-import React from 'react';
-
 const viewBoxWidth = 800;
 const viewBoxHeight = 237.402;
 
-export const LogoSVG = ({ height, fill = 'currentcolor' }) => (
+export const LogoSVG = ({ height = 32, fill = 'currentcolor' }) => (
   <svg
     height={height}
     width={(viewBoxWidth / viewBoxHeight) * height}
