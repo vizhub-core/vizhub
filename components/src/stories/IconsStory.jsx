@@ -1,6 +1,8 @@
 // TODO migrate all of these to new icons.
 import { LogoSVG } from '../components/Icons/LogoSVG';
-import { ForkSVG } from '../components/Icons/v2/ForkSVG';
+import { ForkSVG } from '../components/Icons/ForkSVG';
+import { ForkSVG as v2ForkSVG } from '../components/Icons/v2/ForkSVG';
+
 import { CloseSVG } from '../components/Icons/v2/CloseSVG';
 import { PullSVG } from '../components/Icons/v2/PullSVG';
 import { SettingsSVG } from '../components/Icons/v2/SettingsSVG';
@@ -14,9 +16,8 @@ import { MiniSVG } from '../components/Icons/v2/MiniSVG';
 import { SplitSVG } from '../components/Icons/v2/SplitSVG';
 import { VimSVG } from '../components/Icons/v2/VimSVG';
 
-const icons = [
-  LogoSVG,
-  ForkSVG,
+const v2icons = [
+  v2ForkSVG,
   CloseSVG,
   PullSVG,
   SettingsSVG,
@@ -33,16 +34,27 @@ const icons = [
   VimSVG,
 ];
 
+const v3icons = [LogoSVG, ForkSVG];
+
+const displayIcons = (icons) => (
+  <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}>
+    {icons.map((IconSVG) => (
+      <div
+        style={{ display: 'flex', border: '1px solid gray', margin: '10px' }}
+      >
+        <IconSVG />
+      </div>
+    ))}
+  </div>
+);
+
 const Story = () => {
   return (
     <div className="layout-fullscreen">
-      <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}>
-        {icons.map((IconSVG) => (
-          <div style={{ border: '1px solid gray', margin: '10px' }}>
-            <IconSVG />
-          </div>
-        ))}
-      </div>
+      <div>V2</div>
+      {displayIcons(v2icons)}
+      <div>V3</div>
+      {displayIcons(v3icons)}
     </div>
   );
 };
