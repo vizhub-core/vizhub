@@ -1,12 +1,13 @@
-// TODO migrate all of these to new icons.
 import { LogoSVG } from '../components/Icons/LogoSVG';
 import { ForkSVG } from '../components/Icons/ForkSVG';
-import { ForkSVG as v2ForkSVG } from '../components/Icons/v2/ForkSVG';
+import { ShareSVG } from '../components/Icons/ShareSVG';
 
+import { ForkSVG as v2ForkSVG } from '../components/Icons/v2/ForkSVG';
+// TODO migrate all of these to new icons.
 import { CloseSVG } from '../components/Icons/v2/CloseSVG';
 import { PullSVG } from '../components/Icons/v2/PullSVG';
 import { SettingsSVG } from '../components/Icons/v2/SettingsSVG';
-import { ShareSVG } from '../components/Icons/v2/ShareSVG';
+import { ShareSVG as v2ShareSVG } from '../components/Icons/v2/ShareSVG';
 import { ArrowSVG } from '../components/Icons/v2/ArrowSVG';
 import { VoteSVG } from '../components/Icons/v2/VoteSVG';
 import { SpinnerSVG } from '../components/Icons/v2/SpinnerSVG';
@@ -18,10 +19,10 @@ import { VimSVG } from '../components/Icons/v2/VimSVG';
 
 const v2icons = [
   v2ForkSVG,
+  v2ShareSVG,
   CloseSVG,
   PullSVG,
   SettingsSVG,
-  ShareSVG,
   ArrowSVG,
   () => <ArrowSVG left={true} />,
   VoteSVG,
@@ -34,15 +35,15 @@ const v2icons = [
   VimSVG,
 ];
 
-const v3icons = [LogoSVG, ForkSVG];
+const v3icons = [LogoSVG, ForkSVG, ShareSVG];
 
 const displayIcons = (icons) => (
   <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}>
     {icons.map((IconSVG) => (
       <div
-        style={{ display: 'flex', border: '1px solid gray', margin: '10px' }}
+        style={{ border: '1px solid gray', display: 'flex', margin: '10px' }}
       >
-        <IconSVG />
+        <IconSVG height="100" />
       </div>
     ))}
   </div>
