@@ -1,8 +1,5 @@
 import { useState, useCallback } from 'react';
 import { InputGroup, Form, Button } from '../bootstrap';
-
-import 'vizhub-ui/dist/vizhub-ui.css';
-import '../index.scss';
 import './styles.scss';
 
 export const HomePageBody = ({ onEmailSubmit, children }) => {

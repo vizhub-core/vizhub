@@ -1,8 +1,7 @@
 import PropTypes from 'prop-types';
 import { Nav, Navbar, Container, Dropdown, Button } from '../bootstrap';
 import { LogoSVG } from '../Icons/LogoSVG';
-import '../index.scss';
-import './header.css';
+import './styles.css';
 
 export const Header = ({
   authenticatedUserAvatarURL,

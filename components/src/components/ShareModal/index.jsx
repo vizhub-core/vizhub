@@ -2,7 +2,6 @@ import { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, Nav, Button } from '../bootstrap';
 import { LinkSection } from './LinkSection';
-import '../index.scss';
 
 const sections = {
   link: LinkSection,

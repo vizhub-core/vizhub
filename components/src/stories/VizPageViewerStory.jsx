@@ -21,7 +21,7 @@ const renderVizRunner = (svgRef) => {
 
   return dimensions ? (
     <iframe
-      srcdoc={srcdoc}
+      srcDoc={srcdoc}
       style={{
         width: width + 'px',
         height: height + 'px',

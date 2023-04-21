@@ -1,6 +1,5 @@
 import React from 'react';
-import '../index.scss';
-import './pricing-page.scss';
+import './styles.scss';
 
 const plans = {
   free: {

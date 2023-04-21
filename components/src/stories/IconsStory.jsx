@@ -50,8 +50,9 @@ const v3icons = [
 
 const displayIcons = (icons) => (
   <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}>
-    {icons.map((IconSVG) => (
+    {icons.map((IconSVG, i) => (
       <div
+        key={i}
         style={{ border: '1px solid gray', display: 'flex', margin: '10px' }}
       >
         <IconSVG height="100" />
@@ -63,9 +64,9 @@ const displayIcons = (icons) => (
 const Story = () => {
   return (
     <div className="layout-fullscreen">
-      <div>V2</div>
+      <h1>V2</h1>
       {displayIcons(v2icons)}
-      <div>V3</div>
+      <h1>V3</h1>
       {displayIcons(v3icons)}
     </div>
   );

@@ -2,6 +2,7 @@
 // This strange looking way of importing makes it work with Vite's SSR build.
 import InputGroup from 'react-bootstrap/cjs/InputGroup.js';
 import Form from 'react-bootstrap/cjs/Form.js';
+import FormControl from 'react-bootstrap/cjs/FormControl.js';
 import Button from 'react-bootstrap/cjs/Button.js';
 import Modal from 'react-bootstrap/cjs/Modal.js';
 import Nav from 'react-bootstrap/cjs/Nav.js';
@@ -13,6 +14,7 @@ import Image from 'react-bootstrap/cjs/Image.js';
 export {
   InputGroup,
   Form,
+  FormControl,
   Button,
   Modal,
   Nav,

@@ -1,6 +1,4 @@
-import PropTypes from 'prop-types';
-import '../index.scss';
-import './viz-preview.scss';
+import './styles.scss';
 
 // Shows a preview of a viz.
 // See also
@@ -40,8 +38,4 @@ export const VizPreview = ({
       </div>
     </a>
   );
-};
-
-VizPreview.propTypes = {
-  onClick: PropTypes.func,
 };

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import './App.scss';
 import './stories/stories.css';
+import { Sidebar } from './Sidebar';
 
 // Auto generates list of stories.
 // Supports hot reloading!
@@ -13,33 +14,21 @@ const entries = Object.keys(stories)
     return { key, name, component };
   })
   .filter(({ key }) => key.includes('Story'));
-const entriesMap = new Map(entries.map((d) => [d.name, d]));
+const entriesMap = new Map(entries.map((d) => [d.key, d]));
 
 function App() {
-  const [storyName, setStoryName] = useState(null);
+  const [storyKey, setStoryKey] = useState(null);
   const [showSidebar, setShowSidebar] = useState(true);
-  const Component = storyName ? entriesMap.get(storyName).component : null;
+  const Component = storyKey ? entriesMap.get(storyKey).component : null;
   return (
     <div className="App">
       {showSidebar ? (
-        <div className="sidebar" tabIndex="0">
-          <div
-            className="entry hide-sidebar"
-            onClick={() => setShowSidebar(false)}
-          >
-            hide sidebar
-          </div>
-          {entries.map(({ name }) => (
-            <div
-              tabIndex="-1"
-              key={name}
-              className={`entry${name === storyName ? ' active' : ''}`}
-              onClick={() => setStoryName(name)}
-            >
-              {name}
-            </div>
-          ))}
-        </div>
+        <Sidebar
+          entries={entries}
+          storyKey={storyKey}
+          setStoryKey={setStoryKey}
+          setShowSidebar={setShowSidebar}
+        />
       ) : null}
       <div className="component">{Component ? <Component /> : null}</div>
     </div>

@@ -1,7 +1,4 @@
-import Form from 'react-bootstrap/Form';
-import FormControl from 'react-bootstrap/FormControl';
-import InputGroup from 'react-bootstrap/InputGroup';
-import Button from 'react-bootstrap/Button';
+import { Form, FormControl, InputGroup, Button } from '../bootstrap';
 
 // TODO show tooltip after copy operation
 // TODO make copy operation actually work

@@ -1,9 +1,8 @@
 import PropTypes from 'prop-types';
-import { Container, Image, Button } from '../bootstrap';
+import { Container, Button } from '../bootstrap';
 import { VizPreviewCollection } from '../VizPreviewCollection';
 import { Header } from '../Header';
-import '../index.scss';
-import './profile-page.scss';
+import './styles.scss';
 
 export const ProfilePageBody = ({
   renderVizPreviews,

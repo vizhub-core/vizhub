@@ -1,5 +1,3 @@
-import 'vizhub-ui/dist/vizhub-ui.css';
-import '../index.scss';
 import './styles.scss';
 
 export const BetaConfirmPageBody = ({ onEmailSubmit }) => {

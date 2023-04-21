@@ -2,7 +2,6 @@ import { useState, useCallback } from 'react';
 import { Modal, Form, Button } from '../bootstrap';
 import { VisibilityControl } from '../VisibilityControl';
 import { OwnerControl } from '../OwnerControl';
-import '../index.scss';
 
 export const ForkModal = ({
   show,
