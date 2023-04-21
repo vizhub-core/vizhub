@@ -2,6 +2,7 @@ import { LogoSVG } from '../components/Icons/LogoSVG';
 import { ForkSVG } from '../components/Icons/ForkSVG';
 import { ShareSVG } from '../components/Icons/ShareSVG';
 import { ChevronSVG } from '../components/Icons/ChevronSVG';
+import { DownloadSVG } from '../components/Icons/DownloadSVG';
 
 import { ForkSVG as v2ForkSVG } from '../components/Icons/v2/ForkSVG';
 // TODO migrate all of these to new icons.
@@ -44,6 +45,7 @@ const v3icons = [
   ({ height }) => <ChevronSVG height={height} left />,
   ({ height }) => <ChevronSVG height={height} up />,
   ({ height }) => <ChevronSVG height={height} down />,
+  DownloadSVG,
 ];
 
 const displayIcons = (icons) => (
