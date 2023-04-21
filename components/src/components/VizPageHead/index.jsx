@@ -7,11 +7,11 @@ import { DownloadSVG } from '../Icons/DownloadSVG';
 
 import './styles.scss';
 
-export const VizPageHead = () => (
+export const VizPageHead = ({ showEditor, toggleShowEditor }) => (
   <div className="vh-viz-page-head">
     <div className="side">
-      <Button variant="light" size="sm">
-        <ChevronSVG left />
+      <Button variant="light" size="sm" onClick={toggleShowEditor}>
+        <ChevronSVG left={showEditor} />
         Open Editor
       </Button>
     </div>
