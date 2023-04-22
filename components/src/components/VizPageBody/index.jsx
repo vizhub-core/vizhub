@@ -1,14 +1,21 @@
 import { VizPageHead } from '../VizPageHead';
 import { VizPageViewer } from '../VizPageViewer';
+import { VizPageSidebar } from '../VizPageSidebar';
+
 import './styles.scss';
 
 export const VizPageBody = ({
-  renderVizRunner,
+  // For VizPageHead
   showEditor,
   setShowEditor,
   onExportClick,
   onShareClick,
   onForkClick,
+
+  // For VizPageViewer
+  vizTitle,
+  vizHeight,
+  renderVizRunner,
   renderMarkdownHTML,
 }) => {
   return (
@@ -20,10 +27,15 @@ export const VizPageBody = ({
         onShareClick={onShareClick}
         onForkClick={onForkClick}
       />
-      <VizPageViewer
-        renderVizRunner={renderVizRunner}
-        renderMarkdownHTML={renderMarkdownHTML}
-      />
+      <div className="split-pane">
+        {showEditor ? <VizPageSidebar /> : null}
+        <VizPageViewer
+          vizTitle={vizTitle}
+          vizHeight={vizHeight}
+          renderVizRunner={renderVizRunner}
+          renderMarkdownHTML={renderMarkdownHTML}
+        />
+      </div>
     </div>
   );
 };

@@ -37,7 +37,7 @@ const renderVizRunner = (svgRef) => {
   ) : null;
 };
 
-const args = {
+export const args = {
   vizTitle: 'Viz Title',
   vizHeight: 500,
   renderVizRunner,

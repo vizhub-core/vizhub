@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { VizPageHead } from '../components/VizPageHead';
 
-const args = {
+export const args = {
   onExportClick: () => console.log('onExportClick'),
   onShareClick: () => console.log('onShareClick'),
   onForkClick: () => console.log('onForkClick'),

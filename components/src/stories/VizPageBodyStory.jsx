@@ -1,13 +1,11 @@
 import { useState } from 'react';
 import { VizPageBody } from '../components/VizPageBody';
-import { renderMarkdownHTML } from './renderMarkdownHTML';
+import { args as viewerArgs } from './VizPageViewerStory';
+import { args as headArgs } from './VizPageHeadStory';
 
 const args = {
-  onExportClick: () => console.log('onExportClick'),
-  onShareClick: () => console.log('onShareClick'),
-  onForkClick: () => console.log('onForkClick'),
-  renderVizRunner: () => null,
-  renderMarkdownHTML,
+  ...viewerArgs,
+  ...headArgs,
 };
 
 const Story = () => {
