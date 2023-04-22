@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { VizPageViewer } from '../components/VizPageViewer';
+import { renderMarkdownHTML } from './renderMarkdownHTML';
 
 const renderVizRunner = (svgRef) => {
   const [dimensions, setDimensions] = useState(null);
@@ -13,6 +14,10 @@ const renderVizRunner = (svgRef) => {
 
   const srcdoc = 'Hello World';
 
+  // TODO figure out a way to render the complete runner iframe
+  // _before_ JS loads in the client - send it all from the server.
+  // How to scale the iframe? Put some critical JS in the initial payload
+  // that measures dimensions and sets the iframe scale!
   if (dimensions === null) {
     return null;
   }
@@ -36,44 +41,7 @@ const args = {
   vizTitle: 'Viz Title',
   vizHeight: 500,
   renderVizRunner,
-  renderMarkdownHTML: () => (
-    <>
-      <p>This is a test of Markdown rendering.</p>
-      <p>
-        Support for <code>inline code snippets</code> and tables:
-      </p>
-      <table>
-        <thead>
-          <tr>
-            <th>First Header</th>
-            <th>Second Header</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Content Cell</td>
-            <td>Content Cell</td>
-          </tr>
-          <tr>
-            <td>Content Cell</td>
-            <td>Content Cell</td>
-          </tr>
-        </tbody>
-      </table>
-      <pre>
-        <code>
-          {`// You can import API functions like this from D3.js.
-import { select } from 'd3';
-import { message } from './myMessage';
-select('#message').text(message);
-`}
-        </code>
-      </pre>
-      <p>
-        Adding a pipe <code>|</code> in a cell :
-      </p>
-    </>
-  ),
+  renderMarkdownHTML,
 };
 
 const Story = () => {

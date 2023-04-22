@@ -19,7 +19,7 @@ export const VizPageViewer = ({
           {renderVizRunner(svgRef)}
         </div>
         <h4 className="title">{vizTitle}</h4>
-        <div class="vh-markdown-body">{renderMarkdownHTML()}</div>
+        <div className="vh-markdown-body">{renderMarkdownHTML()}</div>
       </div>
     </div>
   );
