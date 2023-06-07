@@ -39,6 +39,14 @@ export const initializeMongoDB = async ({
       useUnifiedTopology: true,
       serverApi: ServerApiVersion.v1,
     });
+  } else {
+    console.log('Check your VizHub environment variables.');
+    console.log(
+      'Either set VIZHUB3_MONGO_LOCAL=true for loval development, or'
+    );
+    console.log(
+      'Set VIZHUB3_MONGO_USERNAME,VIZHUB3_MONGO_PASSWORD, and VIZHUB3_MONGO_DATABASE for production deployment.'
+    );
   }
 
   const mongoDBConnection = await mongoClient.connect();
