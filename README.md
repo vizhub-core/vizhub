@@ -39,8 +39,6 @@ VIZHUB3_MONGO_PASSWORD
 VIZHUB3_MONGO_DATABASE
 ```
 
-## Auth0 Setup
-
 Authentication is managed by Auth0.
 
 Auth0 environment variables:
@@ -61,6 +59,16 @@ In the "Application URIs" config inside the Auth0 UI:
 
 - "Application Login URI" - http://localhost:5173/login
 - "Allowed Callback URLs" - http://localhost:5173/login/callback - this is unique as per the GitHub "plugin" thing
+
+Example `.bashrc`:
+
+```
+export VIZHUB3_MONGO_LOCAL=true
+export VIZHUB3_AUTH0_SECRET=7OsDu5GSODQStQhJ9t4ng31v2udKK08L7ZB_YDPlQchMtZQ6aBCeRIZenxp8D_f9n
+export VIZHUB3_AUTH0_BASE_URL=http://localhost:5173
+export VIZHUB3_AUTH0_CLIENT_ID=faBeeyfQBSm11XbTGT45AMTDjk9noHnJ
+export VIZHUB3_AUTH0_ISSUER_BASE_URL=dev-5yxv3gr1hihugt46.us.auth0.com
+```
 
 ### Auth-related Errors
 

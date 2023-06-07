@@ -111,7 +111,14 @@ async function createServer(
   await api({ app, isProd, gateways });
 
   // Set up authentication.
-  authentication({ app, env, gateways });
+  if (env.VIZHUB3_AUTH0_SECRET) {
+    authentication({ app, env, gateways });
+  } else {
+    console.log(
+      'Environment variable VIZHUB3_AUTH0_SECRET is not set. See README for details.'
+    );
+    console.log('Starting dev server without authentication enabled...');
+  }
 
   // Handle SSR pages in such a way that they update (like hot reloading)
   // in dev on each page request, so we don't need to restart the server all the time.
@@ -171,7 +178,7 @@ async function createServer(
         return send404(res);
       }
       pageData.url = url;
-      if (req.oidc.user) {
+      if (req?.oidc?.user) {
         pageData.auth0User = req.oidc.user;
       }
 
