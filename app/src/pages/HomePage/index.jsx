@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { HomePageBody, Header } from 'components';
 import { VizKit } from 'api/src/VizKit';
