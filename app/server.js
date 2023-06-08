@@ -146,6 +146,11 @@ async function createServer(
     console.log('Starting dev server without authentication enabled...');
   }
 
+  // Debug for testing sentry
+  app.get('/debug-sentry', function mainHandler(req, res) {
+    throw new Error('My first Sentry error!');
+  });
+
   // Handle SSR pages in such a way that they update (like hot reloading)
   // in dev on each page request, so we don't need to restart the server all the time.
   app.use('*', async (req, res) => {
@@ -235,10 +240,6 @@ async function createServer(
       console.log(e.stack);
       res.status(500).end(e.stack);
     }
-  });
-
-  app.get('/debug-sentry', function mainHandler(req, res) {
-    throw new Error('My first Sentry error!');
   });
 
   // The error handler must be before any other error middleware and after all controllers
