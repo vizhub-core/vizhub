@@ -22,7 +22,8 @@ docker stop <id>
 
 Production deployment uses:
 
-- AWS AppRunner
+- AWS CodePipeline, CodeBuild, Fargate
+- Continuous deployment for beta.vizhub.com based on `fargate-beta` branch
 - MongoDB Atlas
 - Auth0
 
