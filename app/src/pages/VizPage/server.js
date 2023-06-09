@@ -1,5 +1,5 @@
 import { VizPage } from './index';
-import { parseAuth0User } from '../../parseAuth0User';
+import { parseAuth0Sub } from '../../parseAuth0User';
 
 VizPage.getPageData = async ({ gateways, params, auth0User }) => {
   const { id } = params;
@@ -24,34 +24,28 @@ VizPage.getPageData = async ({ gateways, params, auth0User }) => {
   }
   const ownerUserSnapshot = ownerUserResult.value;
 
-  const {
-    authenticatedUserAvatarURL,
-    authenticatedUserUserName,
-    authenticatedUserId,
-  } = parseAuth0User(auth0User);
+  // If the user is currently authenticated...
+  let authenticatedUserSnapshot = null;
+  if (auth0User) {
+    const authenticatedUserId = parseAuth0Sub(auth0User.sub);
 
-  // Get the User entity for the currently authenticated user.
-  // TODO batch this together so we make only one query against User collection
-  // e.g. const getUsersResult = await getUsers([owner,authenticatedUserId]);
+    // Get the User entity for the currently authenticated user.
+    // TODO batch this together so we make only one query against User collection
+    // e.g. const getUsersResult = await getUsers([owner,authenticatedUserId]);
 
-  const authenticatedUserResult = await getUser(authenticatedUserId);
-  if (authenticatedUserResult.outcome === 'failure') {
-    console.log('Error when fetching authenticated user:');
-    console.log(authenticatedUserResult.error);
-    return null;
+    const authenticatedUserResult = await getUser(authenticatedUserId);
+    if (authenticatedUserResult.outcome === 'failure') {
+      console.log('Error when fetching authenticated user:');
+      console.log(authenticatedUserResult.error);
+      return null;
+    }
+    authenticatedUserSnapshot = authenticatedUserResult.value;
   }
-  const authenticatedUserSnapshot = authenticatedUserResult.value;
 
   return {
     infoSnapshot,
     ownerUserSnapshot,
     title,
-
-    // TODO migrate to just expose `authenticauthenticatedUserSnapshotatedUser`
-    authenticatedUserAvatarURL,
-    authenticatedUserUserName,
-    authenticatedUserId,
-
     authenticatedUserSnapshot,
   };
 };

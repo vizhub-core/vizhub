@@ -215,10 +215,6 @@ async function createServer(
         return send404(res);
       }
 
-      // Expose the (raw) currently authenticated user in `pageData`.
-      // TODO remove this in favor of using the VizHub User entity.
-      pageData.auth0User = auth0User;
-
       // Expose the page URL (on page load) in `pageData`.
       // This allows the client to know if a client-side navigation happened.
       pageData.url = url;
