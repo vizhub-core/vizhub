@@ -1,9 +1,10 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { HomePageBody, Header } from 'components';
+import { User } from 'entities';
 import { VizKit } from 'api/src/VizKit';
+import { useShareDBDocData } from '../../useShareDBDocData';
 import { EditorDemo } from './EditorDemo';
-import { parseAuth0User } from '../parseAuth0User';
 import './styles.scss';
 
 const vizKit = VizKit({ baseUrl: './api' });
@@ -31,16 +32,19 @@ export const HomePage = ({ pageData }) => {
     }
   };
 
-  const { authenticatedUserAvatarURL, authenticatedUserUserName } =
-    parseAuth0User(pageData.auth0User);
+  const { authenticatedUserSnapshot } = pageData;
+  const authenticatedUser: User = useShareDBDocData(
+    authenticatedUserSnapshot,
+    'User'
+  );
 
   return (
     <div className="vh-page overflow-auto">
       <Header
         loginHref={'/login'}
         logoutHref={'/logout'}
-        profileHref={`/${authenticatedUserUserName}`}
-        authenticatedUserAvatarURL={authenticatedUserAvatarURL}
+        profileHref={`/${authenticatedUser.userName}`}
+        authenticatedUserAvatarURL={authenticatedUser.picture}
       ></Header>
       <HomePageBody onEmailSubmit={handleEmailSubmit}>
         <div className="demo-blurb-container">

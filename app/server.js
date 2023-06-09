@@ -196,22 +196,28 @@ async function createServer(
         return send404(res);
       }
 
+      // Get at the currently authenticated user.
+      const auth0User = req?.oidc?.user || null;
+
+      // Invoke `getPageData` for the matched page.
       const pageData = matchedPage.getPageData
         ? await matchedPage.getPageData({
             params,
             env,
             gateways,
+            auth0User,
           })
         : {};
 
-      // Returning `null` indicates that the resource was not found.
+      // Returning `null` from `getPageData()`
+      // indicates that the resource was not found.
       if (pageData === null) {
         return send404(res);
       }
+
+      // Expose the page URL (on page load) in `pageData`.
+      // This allows the client to know if a client-side navigation happened.
       pageData.url = url;
-      if (req?.oidc?.user) {
-        pageData.auth0User = req.oidc.user;
-      }
 
       const titleSanitized = xss(pageData.title);
       const descriptionSanitized = xss(pageData.description);
