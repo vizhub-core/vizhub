@@ -2,31 +2,6 @@
 
 VizHub Platform V3
 
-## Docker
-
-See also [Dockerizing a Node.js web app](https://nodejs.org/en/docs/guides/nodejs-docker-webapp)
-
-How to use Docker to verify locally:
-
-```
-docker build -t vizhub3-app .
-docker images
-docker rmi <id>
-docker run -p 5173:5173 -d vizhub3-app
-docker ps
-docker logs <id>
-docker stop <id>
-```
-
-## Production Deployment
-
-Production deployment uses:
-
-- AWS CodePipeline, CodeBuild, Fargate
-- Continuous deployment for beta.vizhub.com based on `fargate-beta` branch
-- MongoDB Atlas
-- Auth0
-
 ## Environment Variables
 
 To enable use of MongoDB in development:
@@ -70,6 +45,40 @@ export VIZHUB3_AUTH0_BASE_URL=http://localhost:5173
 export VIZHUB3_AUTH0_CLIENT_ID=faBeeyfQBSm11XbTGT45AMTDjk9noHnJ
 export VIZHUB3_AUTH0_ISSUER_BASE_URL=dev-5yxv3gr1hihugt46.us.auth0.com
 ```
+
+## Demo Database
+
+To populate your local database with sample data for development, run:
+
+```
+cd demo
+npm run populate
+```
+
+## Docker
+
+See also [Dockerizing a Node.js web app](https://nodejs.org/en/docs/guides/nodejs-docker-webapp)
+
+How to use Docker to verify locally:
+
+```
+docker build -t vizhub3-app .
+docker images
+docker rmi <id>
+docker run -p 5173:5173 -d vizhub3-app
+docker ps
+docker logs <id>
+docker stop <id>
+```
+
+## Production Deployment
+
+Production deployment uses:
+
+- AWS CodePipeline, CodeBuild, Fargate
+- Continuous deployment for beta.vizhub.com based on `fargate-beta` branch
+- MongoDB Atlas
+- Auth0
 
 ### Auth-related Errors
 
