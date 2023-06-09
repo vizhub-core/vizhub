@@ -1,3 +1,4 @@
+import { useCallback, useState } from 'react';
 import { useShareDBDocData } from '../../useShareDBDocData';
 import { VizPageHead, Header } from 'components';
 import { parseAuth0User } from '../parseAuth0User';
@@ -10,6 +11,10 @@ const getUserDisplayName = (user) => user.displayName || user.userName;
 export const VizPage = ({ pageData }) => {
   const { infoSnapshot, ownerUserSnapshot } = pageData;
 
+  // TODO move this to URL
+  // ?edit=files
+  const [showEditor, setShowEditor] = useState(false);
+
   const info = useShareDBDocData(infoSnapshot, 'Info');
   const ownerUser = useShareDBDocData(ownerUserSnapshot, 'User');
 
@@ -18,6 +23,17 @@ export const VizPage = ({ pageData }) => {
   console.log('title', info.title);
   console.log('author', getUserDisplayName(ownerUser));
 
+  const onExportClick = useCallback(() => {
+    console.log('TODO onExportClick');
+  }, []);
+
+  const onShareClick = useCallback(() => {
+    console.log('TODO onShareClick');
+  }, []);
+
+  const onForkClick = useCallback(() => {
+    console.log('TODO onForkClick');
+  }, []);
   // Send an analytics event to track this page view.
   // TODO match how vizHub2 does it, so we can use that existing data
   // useEffect(() => {
@@ -25,7 +41,6 @@ export const VizPage = ({ pageData }) => {
   // }, []);
 
   // return info.title;
-
   const { authenticatedUserAvatarURL, authenticatedUserUserName } =
     parseAuth0User(pageData.auth0User);
 
@@ -37,7 +52,13 @@ export const VizPage = ({ pageData }) => {
         profileHref={`/${authenticatedUserUserName}`}
         authenticatedUserAvatarURL={authenticatedUserAvatarURL}
       ></Header>
-      <VizPageHead />
+      <VizPageHead
+        showEditor={showEditor}
+        setShowEditor={setShowEditor}
+        onExportClick={onExportClick}
+        onShareClick={onShareClick}
+        onForkClick={onForkClick}
+      />
     </div>
   );
 };
