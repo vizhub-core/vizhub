@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { HomePageBody, Header } from 'components';
 import { VizKit } from 'api/src/VizKit';
 import { EditorDemo } from './EditorDemo';
+import { parseAuth0User } from '../parseAuth0User';
 import './styles.scss';
 
 const vizKit = VizKit({ baseUrl: './api' });
@@ -30,13 +31,8 @@ export const HomePage = ({ pageData }) => {
     }
   };
 
-  const authenticatedUserAvatarURL = pageData.auth0User
-    ? pageData.auth0User.picture
-    : null;
-
-  const authenticatedUserUserName = pageData.auth0User
-    ? pageData.auth0User.nickname
-    : null;
+  const { authenticatedUserAvatarURL, authenticatedUserUserName } =
+    parseAuth0User(pageData.auth0User);
 
   return (
     <div className="vh-page overflow-auto">
