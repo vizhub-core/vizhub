@@ -1,7 +1,7 @@
 import { auth } from 'express-openid-connect';
 import { decodeJwt } from 'jose';
 import { UpdateOrCreateUser, RecordAnalyticsEvents } from 'interactors';
-import { dateToTimestamp } from 'entities';
+import { parseAuth0Sub } from './parseAuth0User';
 
 // Deals with authentication via Auth0.
 export const authentication = ({ app, env, gateways }) => {
@@ -32,9 +32,7 @@ export const authentication = ({ app, env, gateways }) => {
     // VizHub 2 used the GitHub id as the user id,
     // so let's use that here as well so that users of
     // VizHub 2 can log into VizHub 3 and access their accounts.
-    const id = claims.sub.startsWith('github')
-      ? claims.sub.substring(7)
-      : claims.sub;
+    const id = parseAuth0Sub(claims.sub);
 
     const options = {
       id,

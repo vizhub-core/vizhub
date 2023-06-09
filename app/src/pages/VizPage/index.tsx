@@ -2,7 +2,6 @@ import { useCallback, useState } from 'react';
 import { Info } from 'entities';
 import { useShareDBDocData } from '../../useShareDBDocData';
 import { VizPageHead, Header, ForkModal } from 'components';
-import { parseAuth0User } from '../parseAuth0User';
 
 // Display `user.displayName` if it's populated.
 // Otherwise fall back to `user.userName`.
@@ -10,7 +9,18 @@ const getUserDisplayName = (user) => user.displayName || user.userName;
 
 // Inspired by https://github.com/vitejs/vite-plugin-react/blob/main/playground/ssr-react/src/pages/Home.jsx
 export const VizPage = ({ pageData }) => {
-  const { infoSnapshot, ownerUserSnapshot } = pageData;
+  const {
+    infoSnapshot,
+    ownerUserSnapshot,
+
+    // TODO migrate to just expose `authenticauthenticatedUserSnapshotatedUser`
+    // change header props source
+    authenticatedUserAvatarURL,
+    authenticatedUserUserName,
+    authenticatedUserId,
+
+    authenticatedUserSnapshot,
+  } = pageData;
 
   // TODO move this to URL
   // ?edit=files
@@ -19,6 +29,10 @@ export const VizPage = ({ pageData }) => {
 
   const info: Info = useShareDBDocData(infoSnapshot, 'Info');
   const ownerUser = useShareDBDocData(ownerUserSnapshot, 'User');
+  const authenticatedUser = useShareDBDocData(
+    authenticatedUserSnapshot,
+    'User'
+  );
 
   console.log('TODO present this stuff:');
   console.log(JSON.stringify({ info, ownerUser }, null, 2));
@@ -52,18 +66,13 @@ export const VizPage = ({ pageData }) => {
 
   // return info.title;
   console.log(pageData);
-  const {
-    authenticatedUserAvatarURL,
-    authenticatedUserUserName,
-    authenticatedUserId,
-  } = parseAuth0User(pageData.auth0User);
 
   // The list of possible owners of a fork of this viz.
   const possibleOwners = [
     // TODO label: getUserDisplayName(authenticatedUser)
     //   where authenticatedUser = pageData.authenticatedUser,
     //   fetched from User collection of VizHub DB
-    { id: authenticatedUserId, label: authenticatedUserUserName },
+    { id: authenticatedUserId, label: getUserDisplayName(authenticatedUser) },
   ];
 
   return (

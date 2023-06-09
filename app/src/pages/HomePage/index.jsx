@@ -2,8 +2,8 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { HomePageBody, Header } from 'components';
 import { VizKit } from 'api/src/VizKit';
+import { parseAuth0User } from '../../parseAuth0User';
 import { EditorDemo } from './EditorDemo';
-import { parseAuth0User } from '../parseAuth0User';
 import './styles.scss';
 
 const vizKit = VizKit({ baseUrl: './api' });
