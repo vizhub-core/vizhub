@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react';
+import { Info } from 'entities';
 import { useShareDBDocData } from '../../useShareDBDocData';
-import { VizPageHead, Header } from 'components';
+import { VizPageHead, Header, ForkModal } from 'components';
 import { parseAuth0User } from '../parseAuth0User';
 
 // Display `user.displayName` if it's populated.
@@ -14,8 +15,9 @@ export const VizPage = ({ pageData }) => {
   // TODO move this to URL
   // ?edit=files
   const [showEditor, setShowEditor] = useState(false);
+  const [showForkModal, setShowForkModal] = useState(false);
 
-  const info = useShareDBDocData(infoSnapshot, 'Info');
+  const info: Info = useShareDBDocData(infoSnapshot, 'Info');
   const ownerUser = useShareDBDocData(ownerUserSnapshot, 'User');
 
   console.log('TODO present this stuff:');
@@ -31,9 +33,17 @@ export const VizPage = ({ pageData }) => {
     console.log('TODO onShareClick');
   }, []);
 
-  const onForkClick = useCallback(() => {
-    console.log('TODO onForkClick');
+  // When the user clicks the "Fork" icon to open the fork modal.
+  // When the user hits the "x" to close the modal.
+  const toggleForkModal = useCallback(() => {
+    setShowForkModal((showForkModal) => !showForkModal);
   }, []);
+
+  // When the user clicks "Fork" from within the fork modal.
+  const onFork = useCallback(() => {
+    console.log('TODO onFork - fork the viz, navigate, show toast');
+  }, []);
+
   // Send an analytics event to track this page view.
   // TODO match how vizHub2 does it, so we can use that existing data
   // useEffect(() => {
@@ -41,8 +51,20 @@ export const VizPage = ({ pageData }) => {
   // }, []);
 
   // return info.title;
-  const { authenticatedUserAvatarURL, authenticatedUserUserName } =
-    parseAuth0User(pageData.auth0User);
+  console.log(pageData);
+  const {
+    authenticatedUserAvatarURL,
+    authenticatedUserUserName,
+    authenticatedUserId,
+  } = parseAuth0User(pageData.auth0User);
+
+  // The list of possible owners of a fork of this viz.
+  const possibleOwners = [
+    // TODO label: getUserDisplayName(authenticatedUser)
+    //   where authenticatedUser = pageData.authenticatedUser,
+    //   fetched from User collection of VizHub DB
+    { id: authenticatedUserId, label: authenticatedUserUserName },
+  ];
 
   return (
     <div className="vh-page overflow-auto">
@@ -57,7 +79,16 @@ export const VizPage = ({ pageData }) => {
         setShowEditor={setShowEditor}
         onExportClick={onExportClick}
         onShareClick={onShareClick}
-        onForkClick={onForkClick}
+        onForkClick={toggleForkModal}
+      />
+      <ForkModal
+        initialTitle={'Fork of ' + info.title}
+        initialVisibility={info.visibility}
+        initialOwner={authenticatedUserId}
+        possibleOwners={possibleOwners}
+        show={showForkModal}
+        onClose={toggleForkModal}
+        onFork={onFork}
       />
     </div>
   );
