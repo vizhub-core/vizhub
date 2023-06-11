@@ -1,17 +1,36 @@
-import { useContext } from 'react';
+import { useContext, useMemo } from 'react';
+import { VizPageHead, ForkModal } from 'components';
 import { AuthenticatedUserContext } from '../../contexts/AuthenticatedUserContext';
 import { Header } from '../../smartComponents/Header';
-import { VizPageHead, ForkModal } from 'components';
+import { getUserDisplayName } from '../../presenters/getUserDisplayName';
+import { User } from 'entities';
 
-export const VizPageBody = () => {
-  const authenticatedUser = useContext(AuthenticatedUserContext);
+export const VizPageBody = ({
+  showEditor,
+  setShowEditor,
+  onExportClick,
+  onShareClick,
+  showForkModal,
+  toggleForkModal,
+  info,
+  onFork,
+}) => {
+  const authenticatedUser: User | null = useContext(AuthenticatedUserContext);
+
   // The list of possible owners of a fork of this viz.
-  const possibleOwners = [
-    // TODO label: getUserDisplayName(authenticatedUser)
-    //   where authenticatedUser = pageData.authenticatedUser,
-    //   fetched from User collection of VizHub DB
-    { id: authenticatedUser.id, label: getUserDisplayName(authenticatedUser) },
-  ];
+  const possibleForkOwners = useMemo(
+    () =>
+      authenticatedUser
+        ? [
+            {
+              id: authenticatedUser.id,
+              label: getUserDisplayName(authenticatedUser),
+            },
+          ]
+        : [],
+    [authenticatedUser]
+  );
+
   return (
     <div className="vh-page overflow-auto">
       <Header />
@@ -25,8 +44,8 @@ export const VizPageBody = () => {
       <ForkModal
         initialTitle={'Fork of ' + info.title}
         initialVisibility={info.visibility}
-        initialOwner={authenticatedUserId}
-        possibleOwners={possibleOwners}
+        initialOwner={authenticatedUser?.id}
+        possibleOwners={possibleForkOwners}
         show={showForkModal}
         onClose={toggleForkModal}
         onFork={onFork}

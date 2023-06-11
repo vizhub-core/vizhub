@@ -1,8 +1,6 @@
 import { useCallback, useState } from 'react';
 import { Info, User } from 'entities';
 import { useShareDBDocData } from '../../useShareDBDocData';
-import { VizPageHead, ForkModal } from 'components';
-import { Header } from '../../smartComponents/Header';
 import { AuthenticatedUserProvider } from '../../contexts/AuthenticatedUserContext';
 import { VizPageBody } from './VizPageBody';
 
@@ -51,19 +49,22 @@ export const VizPage = ({ pageData }) => {
   //   vizKit.rest.recordAnalyticsEvents('pageview.viz.' + info.id);
   // }, []);
 
-  // The list of possible owners of a fork of this viz.
-  const possibleOwners = [
-    // TODO label: getUserDisplayName(authenticatedUser)
-    //   where authenticatedUser = pageData.authenticatedUser,
-    //   fetched from User collection of VizHub DB
-    { id: authenticatedUser.id, label: getUserDisplayName(authenticatedUser) },
-  ];
-
   return (
     <AuthenticatedUserProvider
       authenticatedUserSnapshot={pageData.authenticatedUserSnapshot}
     >
-      <VizPageBody />
+      <VizPageBody
+        {...{
+          showEditor,
+          setShowEditor,
+          onExportClick,
+          onShareClick,
+          showForkModal,
+          toggleForkModal,
+          info,
+          onFork,
+        }}
+      />
     </AuthenticatedUserProvider>
   );
 };
