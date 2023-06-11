@@ -4,25 +4,16 @@ import { useShareDBDocData } from '../../useShareDBDocData';
 import { AuthenticatedUserProvider } from '../../contexts/AuthenticatedUserContext';
 import { VizPageBody } from './VizPageBody';
 
-// Display `user.displayName` if it's populated.
-// Otherwise fall back to `user.userName`.
-const getUserDisplayName = (user) => user.displayName || user.userName;
-
 // Inspired by https://github.com/vitejs/vite-plugin-react/blob/main/playground/ssr-react/src/pages/Home.jsx
 export const VizPage = ({ pageData }) => {
   const { infoSnapshot, ownerUserSnapshot } = pageData;
   const info: Info = useShareDBDocData(infoSnapshot, 'Info');
-  const ownerUser: User = useShareDBDocData(ownerUserSnapshot, 'User');
+  // const ownerUser: User = useShareDBDocData(ownerUserSnapshot, 'User');
 
   // TODO move this to URL
   // ?edit=files
   const [showEditor, setShowEditor] = useState(false);
   const [showForkModal, setShowForkModal] = useState(false);
-
-  console.log('TODO present this stuff:');
-  console.log(JSON.stringify({ info, ownerUser }, null, 2));
-  console.log('title', info.title);
-  console.log('author', getUserDisplayName(ownerUser));
 
   const onExportClick = useCallback(() => {
     console.log('TODO onExportClick');
