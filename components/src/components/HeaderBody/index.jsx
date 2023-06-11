@@ -3,7 +3,7 @@ import { Nav, Navbar, Container, Dropdown, Button } from '../bootstrap';
 import { LogoSVG } from '../Icons/LogoSVG';
 import './styles.css';
 
-export const Header = ({
+export const HeaderBody = ({
   authenticatedUserAvatarURL,
   loginHref,
   logoutHref,
@@ -73,7 +73,7 @@ export const Header = ({
   </Navbar>
 );
 
-Header.propTypes = {
+HeaderBody.propTypes = {
   user: PropTypes.shape({}),
   onLogin: PropTypes.func,
   onLogout: PropTypes.func,

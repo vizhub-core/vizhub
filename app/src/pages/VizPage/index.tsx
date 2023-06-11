@@ -1,7 +1,10 @@
 import { useCallback, useState } from 'react';
 import { Info, User } from 'entities';
 import { useShareDBDocData } from '../../useShareDBDocData';
-import { VizPageHead, Header, ForkModal } from 'components';
+import { VizPageHead, ForkModal } from 'components';
+import { Header } from '../../smartComponents/Header';
+import { AuthenticatedUserProvider } from '../../contexts/AuthenticatedUserContext';
+import { VizPageBody } from './VizPageBody';
 
 // Display `user.displayName` if it's populated.
 // Otherwise fall back to `user.userName`.
@@ -9,20 +12,14 @@ const getUserDisplayName = (user) => user.displayName || user.userName;
 
 // Inspired by https://github.com/vitejs/vite-plugin-react/blob/main/playground/ssr-react/src/pages/Home.jsx
 export const VizPage = ({ pageData }) => {
-  const { infoSnapshot, ownerUserSnapshot, authenticatedUserSnapshot } =
-    pageData;
+  const { infoSnapshot, ownerUserSnapshot } = pageData;
+  const info: Info = useShareDBDocData(infoSnapshot, 'Info');
+  const ownerUser: User = useShareDBDocData(ownerUserSnapshot, 'User');
 
   // TODO move this to URL
   // ?edit=files
   const [showEditor, setShowEditor] = useState(false);
   const [showForkModal, setShowForkModal] = useState(false);
-
-  const info: Info = useShareDBDocData(infoSnapshot, 'Info');
-  const ownerUser: User = useShareDBDocData(ownerUserSnapshot, 'User');
-  const authenticatedUser: User = useShareDBDocData(
-    authenticatedUserSnapshot,
-    'User'
-  );
 
   console.log('TODO present this stuff:');
   console.log(JSON.stringify({ info, ownerUser }, null, 2));
@@ -63,30 +60,11 @@ export const VizPage = ({ pageData }) => {
   ];
 
   return (
-    <div className="vh-page overflow-auto">
-      <Header
-        loginHref={'/login'}
-        logoutHref={'/logout'}
-        profileHref={`/${authenticatedUser.userName}`}
-        authenticatedUserAvatarURL={authenticatedUser.picture}
-      ></Header>
-      <VizPageHead
-        showEditor={showEditor}
-        setShowEditor={setShowEditor}
-        onExportClick={onExportClick}
-        onShareClick={onShareClick}
-        onForkClick={toggleForkModal}
-      />
-      <ForkModal
-        initialTitle={'Fork of ' + info.title}
-        initialVisibility={info.visibility}
-        initialOwner={authenticatedUserId}
-        possibleOwners={possibleOwners}
-        show={showForkModal}
-        onClose={toggleForkModal}
-        onFork={onFork}
-      />
-    </div>
+    <AuthenticatedUserProvider
+      authenticatedUserSnapshot={pageData.authenticatedUserSnapshot}
+    >
+      <VizPageBody />
+    </AuthenticatedUserProvider>
   );
 };
 
