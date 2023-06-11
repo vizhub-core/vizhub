@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { HomePageBody, Header } from 'components';
-import { User } from 'entities';
+import { HomePageBody } from 'components';
 import { VizKit } from 'api/src/VizKit';
-import { useShareDBDocData } from '../../useShareDBDocData';
 import { EditorDemo } from './EditorDemo';
 import './styles.scss';
+import { Header } from '../../smartComponents/Header';
+import { AuthenticatedUserProvider } from '../../contexts/AuthenticatedUserContext';
 
 const vizKit = VizKit({ baseUrl: './api' });
 
@@ -32,32 +32,26 @@ export const HomePage = ({ pageData }) => {
     }
   };
 
-  const { authenticatedUserSnapshot } = pageData;
-  const authenticatedUser: User = useShareDBDocData(
-    authenticatedUserSnapshot,
-    'User'
-  );
-
   return (
-    <div className="vh-page overflow-auto">
-      <Header
-        loginHref={'/login'}
-        logoutHref={'/logout'}
-        profileHref={`/${authenticatedUser.userName}`}
-        authenticatedUserAvatarURL={authenticatedUser.picture}
-      ></Header>
-      <HomePageBody onEmailSubmit={handleEmailSubmit}>
-        <div className="demo-blurb-container">
-          <div className="demo-blurb">
-            <div className="demo-blurb-title">Instant Feedback</div>
-            <div className="demo-blurb-description">
-              Hold "alt" and drag on the numbers in the code
+    <AuthenticatedUserProvider
+      authenticatedUserSnapshot={pageData.authenticatedUserSnapshot}
+    >
+      <div className="vh-page overflow-auto">
+        <Header />
+
+        <HomePageBody onEmailSubmit={handleEmailSubmit}>
+          <div className="demo-blurb-container">
+            <div className="demo-blurb">
+              <div className="demo-blurb-title">Instant Feedback</div>
+              <div className="demo-blurb-description">
+                Hold "alt" and drag on the numbers in the code
+              </div>
             </div>
           </div>
-        </div>
-        <EditorDemo />
-      </HomePageBody>
-    </div>
+          <EditorDemo />
+        </HomePageBody>
+      </div>
+    </AuthenticatedUserProvider>
   );
 };
 

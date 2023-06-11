@@ -30,30 +30,33 @@ const logShareDBError = (error) => {
 };
 
 // Subscribes to live updates via ShareDB.
+// `snapshot` may be null, in which case `null` is returned.
 export const useShareDBDocData = (snapshot, entityName) => {
-  const [data, setData] = useState(snapshot.data);
+  const [data, setData] = useState(snapshot ? snapshot.data : null);
 
   useEffect(() => {
-    const connection = getConnection();
-    const shareDBDoc = connection.get(
-      toCollectionName(entityName),
-      snapshot.data.id
-    );
-    shareDBDoc.ingestSnapshot(snapshot, logShareDBError);
-    shareDBDoc.subscribe(logShareDBError);
+    if (snapshot) {
+      const connection = getConnection();
+      const shareDBDoc = connection.get(
+        toCollectionName(entityName),
+        snapshot.data.id
+      );
+      shareDBDoc.ingestSnapshot(snapshot, logShareDBError);
+      shareDBDoc.subscribe(logShareDBError);
 
-    const updateState = () => {
-      setData(shareDBDoc.data);
-    };
+      const updateState = () => {
+        setData(shareDBDoc.data);
+      };
 
-    shareDBDoc.on('op batch', updateState);
+      shareDBDoc.on('op batch', updateState);
 
-    // TODO test cleanup for leaks
-    // use doc.unsubscribe? doc.destroy?
-    return () => {
-      shareDBDoc.off('op batch', updateState);
-    };
-  }, []);
+      // TODO test cleanup for leaks
+      // use doc.unsubscribe? doc.destroy?
+      return () => {
+        shareDBDoc.off('op batch', updateState);
+      };
+    }
+  }, [snapshot]);
 
   return data;
 };
