@@ -58,12 +58,7 @@ export const HeaderBody = ({
               </Dropdown.Menu>
             </Dropdown>
           ) : (
-            <Button
-              as="a"
-              href={loginHref}
-              size="sm"
-              className="vh-header-button"
-            >
+            <Button as="a" href={loginHref} className="vh-header-button">
               Log in
             </Button>
           )}
