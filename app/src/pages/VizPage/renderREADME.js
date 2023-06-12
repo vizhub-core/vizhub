@@ -1,2 +1,2 @@
 export const renderREADME = (readmeMarkdown, marked, filterXSS) =>
-  filterXSS(marked(readmeMarkdown));
+  readmeMarkdown ? filterXSS(marked.parse(readmeMarkdown)) : '';

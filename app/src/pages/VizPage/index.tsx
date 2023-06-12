@@ -1,14 +1,31 @@
 import { useCallback, useState } from 'react';
-import { Info } from 'entities';
+import { Content, Info, User } from 'entities';
 import { useShareDBDocData } from '../../useShareDBDocData';
 import { AuthenticatedUserProvider } from '../../contexts/AuthenticatedUserContext';
 import { VizPageBody } from './VizPageBody';
+import { getUserDisplayName } from '../../accessors/getUserDisplayName';
 
 // Inspired by https://github.com/vitejs/vite-plugin-react/blob/main/playground/ssr-react/src/pages/Home.jsx
 export const VizPage = ({ pageData }) => {
-  const { infoSnapshot, ownerUserSnapshot } = pageData;
+  const {
+    infoSnapshot,
+    contentSnapshot,
+    ownerUserSnapshot,
+    initialReadmeHTML,
+  } = pageData;
   const info: Info = useShareDBDocData(infoSnapshot, 'Info');
-  // const ownerUser: User = useShareDBDocData(ownerUserSnapshot, 'User');
+  const content: Content = useShareDBDocData(contentSnapshot, 'Content');
+  const ownerUser: User = useShareDBDocData(ownerUserSnapshot, 'User');
+
+  console.log(
+    'TODO display owner user details in Viz PAge:',
+    getUserDisplayName(ownerUser)
+  );
+
+  console.log(
+    'TODO pass content with files into depths of Viz page:',
+    JSON.stringify(content, null, 2)
+  );
 
   // TODO move this to URL
   // ?edit=files
@@ -54,6 +71,7 @@ export const VizPage = ({ pageData }) => {
           toggleForkModal,
           info,
           onFork,
+          initialReadmeHTML,
         }}
       />
     </AuthenticatedUserProvider>

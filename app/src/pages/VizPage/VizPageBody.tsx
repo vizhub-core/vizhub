@@ -5,7 +5,7 @@ import { SmartHeader } from '../../smartComponents/SmartHeader';
 import { getUserDisplayName } from '../../accessors/getUserDisplayName';
 import { User } from 'entities';
 import { renderVizRunner } from './renderVizRunner';
-import { renderMarkdownHTML } from './renderMarkdownHTML';
+import { useRenderMarkdownHTML } from './useRenderMarkdownHTML';
 
 export const VizPageBody = ({
   showEditor,
@@ -16,6 +16,7 @@ export const VizPageBody = ({
   toggleForkModal,
   info,
   onFork,
+  initialReadmeHTML,
 }) => {
   const authenticatedUser: User | null = useContext(AuthenticatedUserContext);
 
@@ -33,6 +34,7 @@ export const VizPageBody = ({
     [authenticatedUser]
   );
 
+  const renderMarkdownHTML = useRenderMarkdownHTML(initialReadmeHTML);
   return (
     <div className="vh-page overflow-auto">
       <SmartHeader />

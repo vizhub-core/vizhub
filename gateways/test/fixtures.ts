@@ -101,6 +101,10 @@ export const primordialViz: Viz = {
         name: 'index.html',
         text: '<body>Hello</body>',
       },
+      '9693462': {
+        name: 'README.md',
+        text: 'Test [Markdown](https://www.markdownguide.org/).',
+      },
     },
     title: 'Primordial Viz',
   },
