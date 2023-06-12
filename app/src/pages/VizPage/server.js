@@ -1,9 +1,25 @@
 import { VizPage } from './index';
 import { parseAuth0Sub } from '../../parseAuth0User';
 
+// TODO render markdown server-side and cache it.
+// const getInitialReadmeHTML = (content: Content) =>
+//   import.meta.env.SSR
+//     ? // If we're on the server,
+//       // render Markdown synchronously.
+//       renderREADME(
+//         getFileText(content, 'README.md'),
+//         // These dynamic imports should only be called on the server.
+//         await import('marked'),
+//         await import('filter-xss')
+//       )
+//     : // If we're in the client,
+//       // grab the server-rendered HTML to use for initial hydration,
+//       // before the Web Worker that renders Markdown client side has loaded.
+//       serverRenderedMarkdown;
+
 VizPage.getPageData = async ({ gateways, params, auth0User }) => {
   const { id } = params;
-  const { getInfo, getUser } = gateways;
+  const { getInfo, getContent, getUser } = gateways;
 
   // Get the Info entity.
   const infoResult = await getInfo(id);

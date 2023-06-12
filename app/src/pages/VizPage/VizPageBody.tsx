@@ -2,7 +2,7 @@ import { useContext, useMemo } from 'react';
 import { VizPageHead, ForkModal, VizPageViewer } from 'components';
 import { AuthenticatedUserContext } from '../../contexts/AuthenticatedUserContext';
 import { SmartHeader } from '../../smartComponents/SmartHeader';
-import { getUserDisplayName } from '../../presenters/getUserDisplayName';
+import { getUserDisplayName } from '../../accessors/getUserDisplayName';
 import { User } from 'entities';
 import { renderVizRunner } from './renderVizRunner';
 import { renderMarkdownHTML } from './renderMarkdownHTML';
