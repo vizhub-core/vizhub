@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { Info, User } from 'entities';
+import { Info } from 'entities';
 import { useShareDBDocData } from '../../useShareDBDocData';
 import { AuthenticatedUserProvider } from '../../contexts/AuthenticatedUserContext';
 import { VizPageBody } from './VizPageBody';

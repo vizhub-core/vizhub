@@ -1,11 +1,11 @@
 import { useContext } from 'react';
-import { HeaderBody } from 'components';
+import { Header } from 'components';
 import { AuthenticatedUserContext } from '../contexts/AuthenticatedUserContext';
 
-export const Header = () => {
+export const SmartHeader = () => {
   const authenticatedUser = useContext(AuthenticatedUserContext);
   return (
-    <HeaderBody
+    <Header
       loginHref={'/login'}
       logoutHref={'/logout'}
       profileHref={`/${authenticatedUser?.userName}`}
