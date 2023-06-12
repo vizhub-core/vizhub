@@ -253,6 +253,10 @@ async function createServer(
 
   server.listen(5173, () => {
     console.log('VizHub App Server listening at http://localhost:5173');
+    console.log('                               http://localhost:5173/joe');
+    console.log(
+      '                               http://localhost:5173/joe/viz1'
+    );
   });
 }
 
