@@ -1,9 +1,8 @@
-import PropTypes from 'prop-types';
 import { Nav, Navbar, Container, Dropdown, Button } from '../bootstrap';
 import { LogoSVG } from '../Icons/LogoSVG';
 import './styles.css';
 
-export const HeaderBody = ({
+export const Header = ({
   authenticatedUserAvatarURL,
   loginHref,
   logoutHref,
@@ -58,12 +57,7 @@ export const HeaderBody = ({
               </Dropdown.Menu>
             </Dropdown>
           ) : (
-            <Button
-              as="a"
-              href={loginHref}
-              size="sm"
-              className="vh-header-button"
-            >
+            <Button as="a" href={loginHref} className="vh-header-button">
               Log in
             </Button>
           )}
@@ -72,13 +66,3 @@ export const HeaderBody = ({
     </Container>
   </Navbar>
 );
-
-HeaderBody.propTypes = {
-  user: PropTypes.shape({}),
-  onLogin: PropTypes.func,
-  onLogout: PropTypes.func,
-  onCreateViz: PropTypes.func,
-  onProfile: PropTypes.func,
-  onForum: PropTypes.func,
-  onVizHub: PropTypes.func,
-};

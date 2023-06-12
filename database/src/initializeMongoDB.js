@@ -16,7 +16,8 @@ export const initializeMongoDB = async ({
 }) => {
   const timeout = setTimeout(() => {
     console.log('\nHaving trouble connecting to the MongoDB database...');
-    console.log('  Ensure that the database is running.');
+    console.log('  Ensure that the database is running. Try:');
+    console.log('  sudo systemctl start mongod');
   }, 5000);
 
   let mongoClient;

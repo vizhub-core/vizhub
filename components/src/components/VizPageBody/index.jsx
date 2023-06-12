@@ -13,6 +13,7 @@ export const VizPageBody = ({
   onForkClick,
 
   // For VizPageViewer
+
   vizTitle,
   vizHeight,
   renderVizRunner,

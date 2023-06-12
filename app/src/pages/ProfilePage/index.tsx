@@ -1,6 +1,6 @@
 import { User } from 'entities';
 import { ProfilePageBody } from 'components';
-import { Header } from '../../smartComponents/Header';
+import { SmartHeader } from '../../smartComponents/SmartHeader';
 import { AuthenticatedUserProvider } from '../../contexts/AuthenticatedUserContext';
 import { useShareDBDocData } from '../../useShareDBDocData';
 import { VizPreviewPresenter } from './VizPreviewPresenter';
@@ -23,7 +23,7 @@ export const ProfilePage = ({ pageData }) => {
       authenticatedUserSnapshot={pageData.authenticatedUserSnapshot}
     >
       <div className="vh-page overflow-auto">
-        <Header />
+        <SmartHeader />
         <ProfilePageBody
           renderVizPreviews={() =>
             infoSnapshots.map((infoSnapshot) => (

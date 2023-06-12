@@ -1,7 +1,5 @@
-import PropTypes from 'prop-types';
 import { Container, Button } from '../bootstrap';
 import { VizPreviewCollection } from '../VizPreviewCollection';
-import { HeaderBody } from '../HeaderBody';
 import './styles.scss';
 
 export const ProfilePageBody = ({
@@ -32,10 +30,4 @@ export const ProfilePageBody = ({
       </Container>
     </div>
   );
-};
-
-// Just for Storybook event listeners
-ProfilePageBody.propTypes = {
-  ...HeaderBody.propTypes,
-  onMoreClick: PropTypes.func,
 };

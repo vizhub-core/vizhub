@@ -4,7 +4,7 @@ import { HomePageBody } from 'components';
 import { VizKit } from 'api/src/VizKit';
 import { EditorDemo } from './EditorDemo';
 import './styles.scss';
-import { Header } from '../../smartComponents/Header';
+import { SmartHeader } from '../../smartComponents/SmartHeader';
 import { AuthenticatedUserProvider } from '../../contexts/AuthenticatedUserContext';
 
 const vizKit = VizKit({ baseUrl: './api' });
@@ -37,7 +37,7 @@ export const HomePage = ({ pageData }) => {
       authenticatedUserSnapshot={pageData.authenticatedUserSnapshot}
     >
       <div className="vh-page overflow-auto">
-        <Header />
+        <SmartHeader />
 
         <HomePageBody onEmailSubmit={handleEmailSubmit}>
           <div className="demo-blurb-container">

@@ -1,7 +1,8 @@
 export { Spinner } from './components/Spinner';
 export { HomePageBody } from './components/HomePageBody';
-export { HeaderBody } from './components/HeaderBody';
+export { Header } from './components/Header';
 export { VizPageHead } from './components/VizPageHead';
 export { ForkModal } from './components/ForkModal';
 export { ProfilePageBody } from './components/ProfilePageBody';
+export { VizPageViewer } from './components/VizPageViewer';
 import './components/index.scss';
