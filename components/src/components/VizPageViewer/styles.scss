@@ -43,5 +43,32 @@
       padding: var(--vh-padding-lots) 0px;
       border-bottom: 1px solid var(--vh-rule-color);
     }
+    .meta-info {
+      display: flex;
+      justify-content: space-between;
+      padding: var(--vh-padding-lots) 0px;
+      font-size: var(--vh-font-size-small);
+      &-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: bold;
+        color: currentColor;
+        text-decoration: none;
+        img {
+          box-shadow: var(--vh-box-shadow);
+        }
+      }
+      &-left:hover {
+        color: var(--bs-link-color);
+        text-decoration: underline;
+      }
+      &-right {
+        display: flex;
+        flex-direction: column;
+        font-size: 12px;
+        align-items: end;
+      }
+    }
   }
 }
