@@ -52,6 +52,7 @@ export const args = {
   forksPageHref: '/user/vizId/forks',
   ownerUserHref: '/user',
   upvotesCount: 25,
+  license: 'MIT',
 };
 
 const Story = () => {
