@@ -39,7 +39,9 @@
         left: 0;
       }
     }
-    .title {
+    .title-bar {
+      display: flex;
+      justify-content: space-between;
       padding: var(--vh-padding-lots) 0px;
       border-bottom: 1px solid var(--vh-rule-color);
     }
