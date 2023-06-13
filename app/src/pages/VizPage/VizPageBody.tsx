@@ -10,6 +10,7 @@ import { formatTimestamp } from '../../accessors/formatTimestamp';
 import { getForksPageHref } from '../../accessors/getForksPageHref';
 import { getProfilePageHref } from '../../accessors/getProfilePageHref';
 import { getVizPageHref } from '../../accessors/getVizPageHref';
+import { getLicense } from '../../accessors/getLicense';
 
 export const VizPageBody = ({
   info,
@@ -61,6 +62,9 @@ export const VizPageBody = ({
   // This supports server-rendering of markdown.
   const renderMarkdownHTML = useRenderMarkdownHTML(initialReadmeHTML);
 
+  // The license to display for this viz.
+  const license = useMemo(() => getLicense(content), [content]);
+
   return (
     <div className="vh-page overflow-auto">
       <SmartHeader />
@@ -90,6 +94,7 @@ export const VizPageBody = ({
         forksPageHref={getForksPageHref(ownerUser, info)}
         ownerUserHref={getProfilePageHref(ownerUser)}
         upvotesCount={info.upvotesCount}
+        license={license}
       />
       <ForkModal
         initialTitle={'Fork of ' + info.title}

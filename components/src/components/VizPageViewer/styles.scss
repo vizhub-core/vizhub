@@ -72,5 +72,12 @@
         align-items: end;
       }
     }
+    .license {
+      color: silver;
+      font-size: 10px;
+      padding: var(--vh-padding-lots) 0px;
+      border-top: 1px solid var(--vh-rule-color);
+      text-align: center;
+    }
   }
 }

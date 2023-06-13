@@ -17,6 +17,7 @@ export const VizPageViewer = ({
   forksPageHref,
   ownerUserHref,
   upvotesCount,
+  license,
 }) => {
   // This SVG elemeng is used only for its dynamic resizing behavior.
   // It's invisible, nothing is rendered into it.
@@ -59,6 +60,7 @@ export const VizPageViewer = ({
           </div>
         </div>
         <div className="vh-markdown-body">{renderMarkdownHTML()}</div>
+        <div className="license">{license} Licensed</div>
       </div>
     </div>
   );
