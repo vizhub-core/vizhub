@@ -1,9 +1,13 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Content, Info, User } from 'entities';
+// TODO import { VizKit } from 'vizkit';
+import { VizKit } from 'api/src/VizKit';
 import { useShareDBDocData } from '../../useShareDBDocData';
 import { AuthenticatedUserProvider } from '../../contexts/AuthenticatedUserContext';
 import { VizPageBody } from './VizPageBody';
 import { getUserDisplayName } from '../../accessors/getUserDisplayName';
+
+const vizKit = VizKit({ baseUrl: './api' });
 
 // Inspired by https://github.com/vitejs/vite-plugin-react/blob/main/playground/ssr-react/src/pages/Home.jsx
 export const VizPage = ({ pageData }) => {
@@ -52,10 +56,11 @@ export const VizPage = ({ pageData }) => {
   }, []);
 
   // Send an analytics event to track this page view.
-  // TODO match how vizHub2 does it, so we can use that existing data
-  // useEffect(() => {
-  //   vizKit.rest.recordAnalyticsEvents('pageview.viz.' + info.id);
-  // }, []);
+  useEffect(() => {
+    vizKit.rest.recordAnalyticsEvents(
+      `event.pageview.viz.owner:${ownerUser.id}.viz:${info.id}`
+    );
+  }, []);
 
   return (
     <AuthenticatedUserProvider

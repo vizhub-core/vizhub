@@ -49,7 +49,7 @@ export const authentication = ({ app, env, gateways }) => {
       console.log(result.error);
     }
 
-    await recordAnalyticsEvents({ eventId: `login.${id}` });
+    await recordAnalyticsEvents({ eventId: `event.login.${id}` });
 
     return session;
   };

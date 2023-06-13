@@ -4,16 +4,17 @@ SandboxPage.getPageData = async ({ gateways }) => {
   const { getAnalyticsEvent } = gateways;
 
   const titles = {
-    'pageview.home': 'Home Page Views',
-    login: 'Logins',
-    'private-beta-email-submit': 'Private Beta Signups',
+    event: 'Overall Activity',
+    'event.pageview.home': 'Home Page Views',
+    'event.login': 'Logins',
+    'event.private-beta-email-submit': 'Private Beta Signups',
   };
 
   const analyticsEventSnapshots = (
     await Promise.all([
-      getAnalyticsEvent('pageview.home'),
-      getAnalyticsEvent('login'),
-      getAnalyticsEvent('private-beta-email-submit'),
+      getAnalyticsEvent('event.pageview.home'),
+      getAnalyticsEvent('event.login'),
+      getAnalyticsEvent('event.private-beta-email-submit'),
     ])
   )
     .filter((result) => result.outcome === 'success')

@@ -16,7 +16,9 @@ export const privateBetaEmailSubmit = ({ app, gateways }) => {
         console.log(result.error);
       }
 
-      await recordAnalyticsEvents({ eventId: 'private-beta-email-submit' });
+      await recordAnalyticsEvents({
+        eventId: 'event.private-beta-email-submit',
+      });
 
       res.send(ok('success'));
     } else {
