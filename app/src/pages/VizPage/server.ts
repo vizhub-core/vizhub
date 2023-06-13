@@ -1,31 +1,15 @@
 import marked from 'marked';
 import xss from 'xss';
 import { GetViz } from 'interactors';
-import { VizId } from 'entities';
+import { Info, VizId, Snapshot, Content, User } from 'entities';
 import { parseAuth0Sub } from '../../parseAuth0User';
 import { VizPage } from './index';
 import { renderREADME } from './renderREADME';
 import { getFileText } from '../../accessors/getFileText';
 
-// TODO render markdown server-side and cache it.
-// const getInitialReadmeHTML = (content: Content) =>
-//   import.meta.env.SSR
-//     ? // If we're on the server,
-//       // render Markdown synchronously.
-//       renderREADME(
-//         getFileText(content, 'README.md'),
-//         // These dynamic imports should only be called on the server.
-//         await import('marked'),
-//         await import('filter-xss')
-//       )
-//     : // If we're in the client,
-//       // grab the server-rendered HTML to use for initial hydration,
-//       // before the Web Worker that renders Markdown client side has loaded.
-//       serverRenderedMarkdown;
-
 VizPage.getPageData = async ({ gateways, params, auth0User }) => {
   const id: VizId = params.id;
-  const { getUser } = gateways;
+  const { getUser, getInfo } = gateways;
   const getViz = GetViz(gateways);
 
   // Get the Info and Content entities that comprise the Viz.
@@ -35,8 +19,8 @@ VizPage.getPageData = async ({ gateways, params, auth0User }) => {
     return null;
   }
 
-  const { infoSnapshot, contentSnapshot } = vizResult.value;
-  const { title, owner } = infoSnapshot.data;
+  const { infoSnapshot, contentSnapshot, info } = vizResult.value;
+  const { title, owner, forkedFrom } = info;
 
   // Get the User entity for the owner of the viz.
   const ownerUserResult = await getUser(owner);
@@ -54,7 +38,7 @@ VizPage.getPageData = async ({ gateways, params, auth0User }) => {
 
     // Get the User entity for the currently authenticated user.
     // TODO batch this together so we make only one query against User collection
-    // e.g. const getUsersResult = await getUsers([owner,authenticatedUserId]);
+    // e.g. const getUsersResult = await getUsers([owner,authenticatedUserId,forkedFromOwner]);
 
     const authenticatedUserResult = await getUser(authenticatedUserId);
     if (authenticatedUserResult.outcome === 'failure') {
@@ -74,14 +58,50 @@ VizPage.getPageData = async ({ gateways, params, auth0User }) => {
     xss
   );
 
-  return {
+  let forkedFromInfoSnapshot = null;
+  let forkedFromOwnerUserSnapshot = null;
+  if (forkedFrom) {
+    // Get the Info entity for the viz that this viz was forked from.
+    const forkedFromInfoResult = await getInfo(forkedFrom);
+    if (forkedFromInfoResult.outcome === 'failure') {
+      console.log('Error when fetching owner user for forked from:');
+      console.log(forkedFromInfoResult.error);
+      return null;
+    }
+    forkedFromInfoSnapshot = forkedFromInfoResult.value;
+
+    // Get the User entity for the owner of the viz that this viz was forked from.
+    const forkedFromOwnerUserResult = await getUser(
+      forkedFromInfoSnapshot.owner
+    );
+    if (forkedFromOwnerUserResult.outcome === 'failure') {
+      console.log('Error when fetching owner user for forked from:');
+      console.log(forkedFromOwnerUserResult.error);
+      return null;
+    }
+    forkedFromOwnerUserSnapshot = forkedFromOwnerUserResult.value;
+  }
+
+  const result: {
+    infoSnapshot: Snapshot<Info>;
+    contentSnapshot: Snapshot<Content>;
+    ownerUserSnapshot: Snapshot<User>;
+    forkedFromInfoSnapshot: Snapshot<Info> | null;
+    forkedFromOwnerUserSnapshot: Snapshot<User> | null;
+    title: string;
+    authenticatedUserSnapshot: Snapshot<User> | null;
+    initialReadmeHTML: string;
+  } = {
     infoSnapshot,
     contentSnapshot,
     ownerUserSnapshot,
+    forkedFromInfoSnapshot,
+    forkedFromOwnerUserSnapshot,
     title,
     authenticatedUserSnapshot,
     initialReadmeHTML,
   };
+  return result;
 };
 
 export { VizPage };

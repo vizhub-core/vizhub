@@ -38,6 +38,8 @@ export const userJoe: User = {
   primaryEmail: 'joe@shmoe.com',
   secondaryEmails: ['joe@hugecorp.com', 'joe@joes-diner.com'],
   plan: 'free',
+  picture:
+    'https://avatars.githubusercontent.com/u/68416?s=80&u=31d283c06af36e3cc7f6da3aac1e302064d68f81&v=4',
 };
 
 export const userJane: User = {

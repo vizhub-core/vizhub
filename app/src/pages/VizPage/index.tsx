@@ -16,14 +16,19 @@ export const VizPage = ({ pageData }) => {
     contentSnapshot,
     ownerUserSnapshot,
     initialReadmeHTML,
+    forkedFromInfoSnapshot,
+    forkedFromOwnerUserSnapshot,
   } = pageData;
   const info: Info = useShareDBDocData(infoSnapshot, 'Info');
   const content: Content = useShareDBDocData(contentSnapshot, 'Content');
   const ownerUser: User = useShareDBDocData(ownerUserSnapshot, 'User');
-
-  console.log(
-    'TODO display owner user details in Viz PAge:',
-    getUserDisplayName(ownerUser)
+  const forkedFromInfo: Info = useShareDBDocData(
+    forkedFromInfoSnapshot,
+    'Info'
+  );
+  const forkedFromOwnerUser: User = useShareDBDocData(
+    forkedFromOwnerUserSnapshot,
+    'User'
   );
 
   console.log(
@@ -68,13 +73,20 @@ export const VizPage = ({ pageData }) => {
     >
       <VizPageBody
         {...{
+          // Entities
+          info,
+          content,
+          ownerUser,
+          forkedFromInfo,
+          forkedFromOwnerUser,
+
+          // UI state
           showEditor,
           setShowEditor,
           onExportClick,
           onShareClick,
           showForkModal,
           toggleForkModal,
-          info,
           onFork,
           initialReadmeHTML,
         }}
