@@ -41,10 +41,15 @@ export const VizPageViewer = ({
           <div className="meta-info-right">
             <div>Last edited {createdDateFormatted}</div>
             <div>Created on {updatedDateFormatted}</div>
-            <div>
-              Forked from <a href={forkedFromVizHref}>{forkedFromVizTitle}</a>
-            </div>
-            <a href={forksPageHref}>{forksCount} forks</a>
+            {forkedFromVizHref ? (
+              <>
+                <div>
+                  Forked from{' '}
+                  <a href={forkedFromVizHref}>{forkedFromVizTitle}</a>
+                </div>
+                <a href={forksPageHref}>{forksCount} forks</a>
+              </>
+            ) : null}
           </div>
         </div>
         <div className="vh-markdown-body">{renderMarkdownHTML()}</div>
