@@ -4,8 +4,9 @@
   "description": "Full stack app for VizHub3, based in Vite SSR.",
   "type": "module",
   "scripts": {
-    "test": "",
-    "tsc": "",
+    "test": "vitest",
+    "coverage": "vitest run --coverage",
+    "tsc": "tsc --noEmit",
     "prettier": "prettier {*.*,**/*.*} --single-quote --write",
     "dev": "node server.js",
     "build": "npm run build:client && npm run build:server",
@@ -52,6 +53,7 @@
     "rollup-plugin-visualizer": "^5.9.0",
     "sass": "^1.63.0",
     "serve-static": "^1.15.0",
-    "vite": "^4.3.9"
+    "vite": "^4.3.9",
+    "vitest": "^0.32.0"
   }
 }
