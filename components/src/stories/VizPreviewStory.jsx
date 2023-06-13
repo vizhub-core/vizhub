@@ -8,6 +8,7 @@ const args = {
   ownerName: 'Joe Schmoe',
   ownerAvatarURL: 'https://github.com/mdo.png',
   href: 'test-href',
+  upvotesCount: 25,
 };
 
 const Story = () => {

@@ -89,6 +89,7 @@ export const VizPageBody = ({
         forksCount={info.forksCount}
         forksPageHref={getForksPageHref(ownerUser, info)}
         ownerUserHref={getProfilePageHref(ownerUser)}
+        upvotesCount={info.upvotesCount}
       />
       <ForkModal
         initialTitle={'Fork of ' + info.title}

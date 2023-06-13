@@ -51,6 +51,7 @@ export const args = {
   forksCount: 25,
   forksPageHref: '/user/vizId/forks',
   ownerUserHref: '/user',
+  upvotesCount: 25,
 };
 
 const Story = () => {

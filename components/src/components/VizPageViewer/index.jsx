@@ -1,4 +1,5 @@
 import { useRef } from 'react';
+import { UpvoteWidget } from 'components';
 import './styles.scss';
 
 export const VizPageViewer = ({
@@ -15,6 +16,7 @@ export const VizPageViewer = ({
   forksCount,
   forksPageHref,
   ownerUserHref,
+  upvotesCount,
 }) => {
   // This SVG elemeng is used only for its dynamic resizing behavior.
   // It's invisible, nothing is rendered into it.
@@ -27,7 +29,11 @@ export const VizPageViewer = ({
           <svg ref={svgRef} viewBox={`0 0 960 ${vizHeight}`} />
           {renderVizRunner(svgRef)}
         </div>
-        <h4 className="title">{vizTitle}</h4>
+        <div className="title-bar">
+          <h4>{vizTitle}</h4>
+          <UpvoteWidget upvotesCount={upvotesCount} />
+        </div>
+
         <div className="meta-info">
           <a href={ownerUserHref} className="meta-info-left">
             <img

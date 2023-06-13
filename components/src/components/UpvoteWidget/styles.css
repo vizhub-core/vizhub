@@ -1,0 +1,6 @@
+.vh-upvote-widget {
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  gap: 4px;
+}

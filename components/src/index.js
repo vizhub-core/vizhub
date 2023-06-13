@@ -5,4 +5,5 @@ export { VizPageHead } from './components/VizPageHead';
 export { ForkModal } from './components/ForkModal';
 export { ProfilePageBody } from './components/ProfilePageBody';
 export { VizPageViewer } from './components/VizPageViewer';
+export { UpvoteWidget } from './components/UpvoteWidget';
 import './components/index.scss';

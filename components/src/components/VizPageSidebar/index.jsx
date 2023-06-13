@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { Item, useListState, Section } from 'react-stately';
+import { Item, useListState } from 'react-stately';
 import { mergeProps, useFocusRing, useListBox, useOption } from 'react-aria';
 
 import './styles.scss';
