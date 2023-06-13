@@ -1,11 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Content, Info, User } from 'entities';
-// TODO import { VizKit } from 'vizkit';
 import { VizKit } from 'api/src/VizKit';
 import { useShareDBDocData } from '../../useShareDBDocData';
 import { AuthenticatedUserProvider } from '../../contexts/AuthenticatedUserContext';
 import { VizPageBody } from './VizPageBody';
-import { getUserDisplayName } from '../../accessors/getUserDisplayName';
 
 const vizKit = VizKit({ baseUrl: './api' });
 
