@@ -1,6 +1,6 @@
 // From https://github.com/vizhub-core/vizhub/commit/6ca078935b9771dc6e05a6065bcfd522a4724dcf
 import React from 'react';
-import './spinner.css';
+import './styles.css';
 
 // const minRadius = 4;
 // const maxRadius = 10;

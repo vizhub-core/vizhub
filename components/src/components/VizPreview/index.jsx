@@ -1,3 +1,4 @@
+import { UpvoteWidget } from '../UpvoteWidget';
 import './styles.scss';
 
 // Shows a preview of a viz.
@@ -10,6 +11,7 @@ export const VizPreview = ({
   ownerName,
   ownerAvatarURL,
   href,
+  upvotesCount,
 }) => {
   return (
     <a className="vh-viz-preview" href={href} rel="noreferrer noopener">
@@ -25,16 +27,15 @@ export const VizPreview = ({
         <div className="title">{title}</div>
       </div>
       <div className="meta-container">
-        {ownerName ? (
-          <>
-            <img
-              className="owner-avatar-image"
-              src={ownerAvatarURL}
-              alt={ownerName}
-            />
-            <div className="owner-name">{ownerName}</div>
-          </>
-        ) : null}
+        <div className="owner">
+          <img
+            className="owner-avatar-image"
+            src={ownerAvatarURL}
+            alt={ownerName}
+          />
+          <div className="owner-name">{ownerName}</div>
+        </div>
+        <UpvoteWidget upvotesCount={upvotesCount} />
       </div>
     </a>
   );
