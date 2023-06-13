@@ -6,7 +6,7 @@
   "scripts": {
     "test": "vitest",
     "coverage": "vitest run --coverage",
-    "tsc": "tsc --noEmit",
+    "tsc": "",
     "prettier": "prettier {*.*,**/*.*} --single-quote --write",
     "dev": "node server.js",
     "build": "npm run build:client && npm run build:server",

@@ -4,11 +4,12 @@ import { VizKit } from 'api/src/VizKit';
 import { useShareDBDocData } from '../../useShareDBDocData';
 import { AuthenticatedUserProvider } from '../../contexts/AuthenticatedUserContext';
 import { VizPageBody } from './VizPageBody';
+import { Page } from '../Page';
 
 const vizKit = VizKit({ baseUrl: './api' });
 
 // Inspired by https://github.com/vitejs/vite-plugin-react/blob/main/playground/ssr-react/src/pages/Home.jsx
-export const VizPage = ({ pageData }) => {
+export const VizPage: Page = ({ pageData }) => {
   const {
     infoSnapshot,
     contentSnapshot,
