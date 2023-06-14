@@ -1,4 +1,4 @@
-import marked from 'marked';
+import * as marked from 'marked';
 import xss from 'xss';
 import { GetViz } from 'interactors';
 import { Info, VizId, Snapshot, Content, User } from 'entities';
