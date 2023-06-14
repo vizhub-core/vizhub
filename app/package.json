@@ -6,12 +6,12 @@
   "scripts": {
     "test": "vitest",
     "coverage": "vitest run --coverage",
-    "tsc": "",
+    "tsc": "tsc src/entry-client.tsx --noEmit --allowJs",
     "prettier": "prettier {*.*,**/*.*} --single-quote --write",
     "dev": "node server.js",
     "build": "npm run build:client && npm run build:server",
     "build:client": "vite build --outDir dist/client",
-    "build:server": "vite build --ssr src/entry-server.jsx --outDir dist/server",
+    "build:server": "vite build --ssr src/entry-server.tsx --outDir dist/server",
     "serve": "NODE_ENV=production node server"
   },
   "repository": {
