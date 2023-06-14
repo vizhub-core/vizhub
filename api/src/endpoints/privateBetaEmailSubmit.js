@@ -27,7 +27,7 @@ export const privateBetaEmailSubmit = ({ app, gateways }) => {
     }
   });
 
-  app.post('/api/private-beta-email-submit-debug', async (req, res) => {
+  app.get('/api/private-beta-email-submit-debug', async (req, res) => {
     throw new Error('private-beta-email-submit-debug');
   });
 };
