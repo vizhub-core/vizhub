@@ -5,6 +5,9 @@ import { App } from './App';
 import './app.css';
 import 'vizhub-ui/dist/vizhub-ui.css';
 
+console.log('Welcome to VizHub!');
+console.log('  version:', window.pageData.version);
+
 ReactDOM.hydrateRoot(
   document.getElementById('app'),
   <BrowserRouter>

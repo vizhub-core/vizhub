@@ -60,7 +60,12 @@ export const setupEditorDemo = ({ codemirrorContainer, iframe }) => {
   if (profileHotReloadFPS) {
     setInterval(() => {
       if (updateCount > 0) {
-        console.log(updateCount + ' updates in the last second');
+        console.log(
+          updateCount +
+            ' hot reload' +
+            (updateCount !== 1 ? 's' : '') +
+            ' in the last second'
+        );
       }
       updateCount = 0;
     }, 1000);

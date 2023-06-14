@@ -219,6 +219,12 @@ async function createServer(
       // This allows the client to know if a client-side navigation happened.
       pageData.url = url;
 
+      // Expose the current version to the client.
+      // This is useful mostly for debugging AWS deployments.
+      // (if the version fails to update, we know the deployment failed)
+      // TODO import this from package.json
+      pageData.version = '3.0.0-beta.1';
+
       const titleSanitized = xss(pageData.title);
       const descriptionSanitized = xss(pageData.description);
       const image = pageData.image;
