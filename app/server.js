@@ -15,6 +15,9 @@ import { matchPath } from 'react-router-dom';
 import * as Sentry from '@sentry/node';
 import { seoMetaTags } from './seoMetaTags.js';
 
+// TODO import this from package.json
+const version = '3.0.0-beta.2';
+
 const env = process.env;
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -222,8 +225,7 @@ async function createServer(
       // Expose the current version to the client.
       // This is useful mostly for debugging AWS deployments.
       // (if the version fails to update, we know the deployment failed)
-      // TODO import this from package.json
-      pageData.version = '3.0.0-beta.1';
+      pageData.version = version;
 
       const titleSanitized = xss(pageData.title);
       const descriptionSanitized = xss(pageData.description);
