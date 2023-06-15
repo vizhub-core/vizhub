@@ -13,21 +13,23 @@ const migrate = async () => {
   // The source database
   const { v2MongoDBDatabase } = await initializeV2MongoDBDatabase();
 
-  // The target database
-  const databaseGateways = await initializeGateways({
-    isProd: true,
-    env: import.meta.env,
-  });
-
   // V2 collections
   const infoCollection = v2MongoDBDatabase.collection('documentInfo');
   const contentCollection = v2MongoDBDatabase.collection('documentContent');
   const infoOpCollection = v2MongoDBDatabase.collection('o_documentInfo');
   const contentOpCollection = v2MongoDBDatabase.collection('o_documentContent');
 
-  const redisClient = await redisSetup(startFresh);
-
   const n = await infoCollection.count();
+  console.log('Ready to migrate ' + n + ' V2 vizzes.');
+
+  // The target database
+  const databaseGateways = await initializeGateways({
+    isProd: true,
+    env: import.meta.env,
+  });
+
+  // Redis client! Used for storing embeddings and doing vector similarity search.
+  const redisClient = await redisSetup(startFresh);
 
   v2Vizzes(
     {
