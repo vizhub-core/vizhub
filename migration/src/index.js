@@ -19,13 +19,13 @@ const migrate = async () => {
   const infoOpCollection = v2MongoDBDatabase.collection('o_documentInfo');
   const contentOpCollection = v2MongoDBDatabase.collection('o_documentContent');
 
-  const n = await infoCollection.count();
+  const n = await infoCollection.countDocuments();
   console.log('Ready to migrate ' + n + ' V2 vizzes.');
 
   // The target database
   const databaseGateways = await initializeGateways({
     isProd: true,
-    env: import.meta.env,
+    env: process.env,
   });
 
   // Redis client! Used for storing embeddings and doing vector similarity search.

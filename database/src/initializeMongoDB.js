@@ -21,7 +21,7 @@ export const initializeMongoDB = async ({
   }, 5000);
 
   let mongoClient;
-  if (env.VIZHUB3_MONGO_LOCAL) {
+  if (env.VIZHUB3_MONGO_LOCAL === 'true') {
     console.log('Connecting to local MongoDB...');
     mongoClient = new MongoClient(mongoLocalURI);
   } else if (isProd) {
@@ -30,8 +30,9 @@ export const initializeMongoDB = async ({
     const username = env.VIZHUB3_MONGO_USERNAME;
     const password = env.VIZHUB3_MONGO_PASSWORD;
     const database = env.VIZHUB3_MONGO_DATABASE;
+    const domain = env.VIZHUB3_MONGO_DOMAIN;
 
-    const uri = `mongodb+srv://${username}:${password}@vizhub3.6sag6.mongodb.net/${database}?retryWrites=true&w=majority`;
+    const uri = `mongodb+srv://${username}:${password}@${domain}/${database}?retryWrites=true&w=majority`;
     console.log('uri:');
     console.log(uri);
 
