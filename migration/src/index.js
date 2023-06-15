@@ -23,10 +23,14 @@ const migrate = async () => {
   console.log('Ready to migrate ' + n + ' V2 vizzes.');
 
   // The target database
-  const databaseGateways = await initializeGateways({
+  const { gateways, mongoDBDatabase } = await initializeGateways({
     isProd: true,
     env: process.env,
   });
+
+  await mongoDBDatabase.command({ ping: 1 });
+
+  console.log('Connected successfully to v3 MongoDB!');
 
   // Redis client! Used for storing embeddings and doing vector similarity search.
   const redisClient = await redisSetup(startFresh);
@@ -46,7 +50,7 @@ const migrate = async () => {
 
       // True if this viz has already been migrated.
       const alreadyMigrated =
-        (await databaseGateways.getInfo(info.id)).outcome === 'success';
+        (await gateways.getInfo(info.id)).outcome === 'success';
       if (alreadyMigrated) {
         // TODO add commits for any fresh changes
         // for incremental migration
@@ -63,7 +67,7 @@ const migrate = async () => {
 
       await processViz({
         vizV2,
-        gateways: databaseGateways,
+        gateways,
         i,
         redisClient,
         contentCollection,
