@@ -1,4 +1,5 @@
-import { mongoDBSetup } from './mongoDBSetup';
+import { initializeGateways } from 'database';
+import { initializeV2MongoDBDatabase } from './initializeV2MongoDBDatabase';
 import { redisSetup } from './redisSetup';
 import { v2Vizzes } from './v2Vizzes';
 import { getVizV2 } from './getVizV2';
@@ -9,9 +10,14 @@ import { reportProgress } from './reportProgress';
 const startFresh = true;
 
 const migrate = async () => {
-  const { v2MongoDBDatabase, databaseGateways } = await mongoDBSetup(
-    startFresh
-  );
+  // The source database
+  const { v2MongoDBDatabase } = await initializeV2MongoDBDatabase();
+
+  // The target database
+  const databaseGateways = await initializeGateways({
+    isProd: true,
+    env: import.meta.env,
+  });
 
   // V2 collections
   const infoCollection = v2MongoDBDatabase.collection('documentInfo');
@@ -40,8 +46,8 @@ const migrate = async () => {
       const alreadyMigrated =
         (await databaseGateways.getInfo(info.id)).outcome === 'success';
       if (alreadyMigrated) {
-	      // TODO add commits for any fresh changes
-	      // for incremental migration
+        // TODO add commits for any fresh changes
+        // for incremental migration
         console.log('skipping already migrated #' + i);
         return;
       }

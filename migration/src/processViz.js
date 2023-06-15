@@ -9,7 +9,7 @@ import {
   UpvoteViz,
 } from 'interactors';
 import { timestampToDate, dateToTimestamp } from 'entities';
-import { diff } from 'gateways';
+import { diff } from 'ot';
 import { logDetail } from './logDetail';
 import { generateEmbedding } from './generateEmbedding';
 import { storeEmbedding } from './storeEmbedding';

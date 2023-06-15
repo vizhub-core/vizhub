@@ -1,15 +1,9 @@
-import ShareDB from 'sharedb';
-import ShareDBMongo from 'sharedb-mongo';
-import MongoDB from 'mongodb';
-import { DatabaseGateways } from 'database';
-import { otType } from 'ot';
+import MongoLegacy from 'mongodb-legacy';
+const { MongoClient } = MongoLegacy;
 
-ShareDB.types.register(otType);
-
-const { MongoClient } = MongoDB;
 const v2MongoURI = import.meta.env.VITE_VIZHUB_V2_MONGO_URI;
 
-export const initializeV2MongoDB = async () => {
+export const initializeV2MongoDBDatabase = async () => {
   console.log(`Connecting to v2 MongoDB`);
   console.log(`  Using v2 Mongo URI "${v2MongoURI}".`);
 
