@@ -40,8 +40,3 @@ export const generateEmbeddingOpenAI = async ({ goodFiles, openAiAPIKey }) => {
 
   return await embed(input);
 };
-
-
-As a paid user, I expect to get in-platform AI-assisted coding capabilities.
-
-These capabilities should not only meet but exceed the capab

@@ -1,45 +1,76 @@
+import { Timestamp } from 'entities';
 // Feature flag for restarting the cursor after an error.
-const restartAfterError = true;
+const restartAfterError = false;
 // Iterates over V2 vizzes straight out of Mongo.
-export const v2Vizzes = ({ infoCollection }, callback) => {
+// Restricts the search to vizzes that may have been modified
+// between `startTime` and `endTime`.
+export const v2Vizzes = async (
+  {
+    infoCollection,
+    startTime,
+    endTime,
+  }: { infoCollection: any; startTime: Timestamp; endTime: Timestamp },
+  callback
+) => {
   let previousLastUpdatedTimestamp = 0;
 
-  // So after 30 minutes, it looks like the cursor expires.
-  // (the cursor in the infoCollection.find() async iterator)
-  // Solution: catch the error and restart iteration when it happens.
-  const resetCursor = async () => {
-    try {
-      let i = 0;
-      for await (const info of await infoCollection.find()) {
-        const id = info.id;
-        if (id === undefined) {
-          // This happens A LOT
-          // Could be deleted documents? Not sure...
-          //console.log(
-          //  'Something is up - wierd document missing id. Skipping...'
-          //);
-          //console.log(info);
-          continue;
-        }
+  // Invariant: we are always moving forward in time.
 
-        // Invariant: we are always moving forward in time.
-        if (info.lastUpdatedTimestamp < previousLastUpdatedTimestamp) {
-          throw new Error('Not iterating in creation order!');
-          previousLastUpdatedTimestamp = info.lastUpdatedTimestamp;
-        }
-        await callback(info, i++);
-      }
+  const infoIterator = infoCollection.find({
+    $or: [
+      { lastUpdatedTimestamp: { $gt: startTime, $lt: endTime } },
+      { createdTimestamp: { $gt: startTime, $lt: endTime } },
+    ],
+  });
+  // // TODO sort by createdTimestamp
+  // .sort({ createdTimestamp: 1 })
+  // .batchSize(1000)
+  // .cursor();
 
-      console.log('\n\nFinished!');
-    } catch (error) {
-      console.log('\n\nError happened');
-      if (restartAfterError) {
-        console.log(error);
-        console.log('\n\nRestarting...');
-        await new Promise((resolve) => setTimeout(resolve, 5000));
-        resetCursor();
-      }
+  let i = 0;
+  for await (const info of infoIterator) {
+    // Example info object:
+    //   id: '86a75dc8bdbe4965ba353a79d4bd44c8',
+    //   documentType: 'visualization',
+    //   owner: '68416',
+    //   title: 'Hello VizHub',
+    //   description: 'An example showing the capabilities of VizHub:\n' ,
+    //   lastUpdatedTimestamp: 1637796734,
+    //   height: 500,
+    //   imagesUpdatedTimestamp: 1637796747,
+    //   upvotes: [
+    //     { userId: '109077681', timestamp: 1669937159 },
+    //     { userId: '1662717', timestamp: 1665921348 },
+    //   ],
+    //   forksCount: 1928,
+    //   upvotesCount: 32,
+    //   scoreWilson: 0.9959470021151213,
+    //   scoreRedditHotCreated: -3274.7097037834797,
+    //   scoreHackerHotCreated: 0.000004699099088412536,
+    //   scoreRedditHotLastUpdated: -973.5958593390352,
+    //   scoreHackerHotLastUpdated: 0.000041541182517826015,
+    //   createdTimestamp: 1534246611,
+    //   _type: 'http://sharejs.org/types/JSONv0',
+    //   _v: 12438,
+    //   _m: { ctime: 1534246611924, mtime: 1686771772904 },
+    //   _o: new ObjectId("648a183cb23a965ca9d2a2f7")
+    // }
+    // console.log(info);
+
+    const id = info.id;
+    if (id === undefined) {
+      // This happens A LOT
+      // Could be deleted documents? Not sure...
+      //console.log(
+      //  'Something is up - wierd document missing id. Skipping...'
+      //);
+      //console.log(info);
+      continue;
     }
-  };
-  resetCursor();
+
+    await callback(info, i++);
+  }
+
+  console.log(`\n\nFinished iterating ${i + 1} vizzes`);
+  process.exit(0);
 };

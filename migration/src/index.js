@@ -1,3 +1,4 @@
+import { timeMonth } from 'd3-time';
 import { initializeGateways } from 'database';
 import { initializeV2MongoDBDatabase } from './initializeV2MongoDBDatabase';
 import { redisSetup } from './redisSetup';
@@ -9,6 +10,14 @@ import { dateToTimestamp, timestampToDate } from 'entities';
 
 // Delete everything in V3 Mongo and Redis when starting.
 const startFresh = true;
+
+// Hardcoded earliest timestamp.
+// This is the lowest value for `vizInfo.createdTimestamp` in the V2 database.
+const firstVizCreationDate = timestampToDate(1534246611);
+
+// console.log('firstVizCreationMonthMin', firstVizCreationMonthMin);
+// console.log('firstVizCreationMonthMax', firstVizCreationMonthMax);
+// process.exit(0);
 
 const migrate = async () => {
   // The source database
@@ -42,9 +51,17 @@ const migrate = async () => {
 
   console.log('  Connected successfully to v3 Redis!');
 
+  // Floor the month using d3-time
+  const startTimeDate = timeMonth.floor(firstVizCreationDate);
+  const endTimeDate = timeMonth.offset(startTimeDate, 1);
+  const startTime = dateToTimestamp(startTimeDate);
+  const endTime = dateToTimestamp(endTimeDate);
+
   v2Vizzes(
     {
       infoCollection,
+      startTime,
+      endTime,
     },
     async (info, i) => {
       // #1432 is the first the needs forkedFrom computed.
@@ -72,10 +89,7 @@ const migrate = async () => {
         contentOpCollection,
       });
 
-      // TODO hardcode the earliest timestamp, floor the month
-      const firstVizCreationDate = timestampToDate(1534246611);
-      console.log('firstVizCreationDate', firstVizCreationDate);
-      process.exit(0);
+      console.log('info', JSON.stringify(info, null, 2));
 
       // await processViz({
       //   vizV2,
