@@ -1,5 +1,8 @@
 import { Configuration, OpenAIApi } from 'openai';
 
+// The dimension of the embedding, as a string.
+export const embeddingSize = 1536;
+
 const apiKey = process.env.VIZHUB_OPENAI_API_KEY;
 
 const configuration = new Configuration({ apiKey });
@@ -38,5 +41,7 @@ export const generateEmbeddingOpenAI = async ({ goodFiles, openAiAPIKey }) => {
   return await embed(input);
 };
 
-// The dimension of the embedding, as a string.
-export const embeddingSize = 1536;
+
+As a paid user, I expect to get in-platform AI-assisted coding capabilities.
+
+These capabilities should not only meet but exceed the capab

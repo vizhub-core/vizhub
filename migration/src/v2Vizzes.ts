@@ -1,8 +1,7 @@
+// Feature flag for restarting the cursor after an error.
+const restartAfterError = true;
 // Iterates over V2 vizzes straight out of Mongo.
-export const v2Vizzes = (
-  { infoCollection, contentCollection, infoOpCollection, contentOpCollection },
-  callback
-) => {
+export const v2Vizzes = ({ infoCollection }, callback) => {
   let previousLastUpdatedTimestamp = 0;
 
   // So after 30 minutes, it looks like the cursor expires.
@@ -34,10 +33,12 @@ export const v2Vizzes = (
       console.log('\n\nFinished!');
     } catch (error) {
       console.log('\n\nError happened');
-      console.log(error);
-      console.log('\n\nRestarting...');
-      await new Promise((resolve) => setTimeout(resolve, 5000));
-      resetCursor();
+      if (restartAfterError) {
+        console.log(error);
+        console.log('\n\nRestarting...');
+        await new Promise((resolve) => setTimeout(resolve, 5000));
+        resetCursor();
+      }
     }
   };
   resetCursor();
