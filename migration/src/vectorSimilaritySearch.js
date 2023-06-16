@@ -24,6 +24,6 @@ export const vectorSimilaritySearch = async ({
     'DIALECT',
     '2',
   ]);
-  console.log(knnResults);
+  // console.log(knnResults);
   return knnResults[1];
 };
