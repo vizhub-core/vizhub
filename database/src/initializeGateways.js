@@ -13,5 +13,5 @@ export const initializeGateways = async ({ isProd, env }) => {
   });
 
   const gateways = DatabaseGateways({ shareDBConnection, mongoDBDatabase });
-  return { gateways, shareDBBackend, mongoDBDatabase };
+  return { gateways, shareDBBackend, mongoDBDatabase, mongoDBConnection };
 };

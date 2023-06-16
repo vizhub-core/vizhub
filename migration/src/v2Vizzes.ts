@@ -1,6 +1,5 @@
 import { Timestamp } from 'entities';
-// Feature flag for restarting the cursor after an error.
-const restartAfterError = false;
+
 // Iterates over V2 vizzes straight out of Mongo.
 // Restricts the search to vizzes that may have been modified
 // between `startTime` and `endTime`.
@@ -68,9 +67,13 @@ export const v2Vizzes = async (
       continue;
     }
 
-    await callback(info, i++);
+    // Within each batch, i starts at 0,
+    await callback(info, i);
+
+    // then increments by 1 for each iteration.
+    i++;
   }
 
-  console.log(`\n\nFinished iterating ${i + 1} vizzes`);
-  process.exit(0);
+  // By the end, i is the number of vizzes iterated.
+  return i;
 };

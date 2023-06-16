@@ -20,5 +20,5 @@ export const initializeV2MongoDBDatabase = async () => {
   clearTimeout(timeout);
 
   console.log('Connected successfully to v2 MongoDB!');
-  return { v2MongoDBDatabase };
+  return { v2MongoDBDatabase, v2MongoClient };
 };

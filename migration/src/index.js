@@ -1,4 +1,4 @@
-import { timeMonth } from 'd3-time';
+import { timeWeek } from 'd3-time';
 import { initializeGateways } from 'database';
 import { initializeV2MongoDBDatabase } from './initializeV2MongoDBDatabase';
 import { redisSetup } from './redisSetup';
@@ -21,7 +21,8 @@ const firstVizCreationDate = timestampToDate(1534246611);
 
 const migrate = async () => {
   // The source database
-  const { v2MongoDBDatabase } = await initializeV2MongoDBDatabase();
+  const { v2MongoDBDatabase, v2MongoClient } =
+    await initializeV2MongoDBDatabase();
 
   // V2 collections
   const infoCollection = v2MongoDBDatabase.collection('documentInfo');
@@ -33,10 +34,11 @@ const migrate = async () => {
   console.log('  Ready to migrate ' + n + ' V2 vizzes.');
 
   // The target database
-  const { gateways, mongoDBDatabase } = await initializeGateways({
-    isProd: true,
-    env: process.env,
-  });
+  const { gateways, mongoDBDatabase, mongoDBConnection } =
+    await initializeGateways({
+      isProd: true,
+      env: process.env,
+    });
 
   await mongoDBDatabase.command({ ping: 1 });
 
@@ -52,36 +54,32 @@ const migrate = async () => {
   console.log('  Connected successfully to v3 Redis!');
 
   // Floor the month using d3-time
-  const startTimeDate = timeMonth.floor(firstVizCreationDate);
-  const endTimeDate = timeMonth.offset(startTimeDate, 1);
+  const firstVizCreationDateFloored = timeWeek.floor(firstVizCreationDate);
+
+  // TODO persist this in Redis, so that we can resume from where we left off.
+  const batchNumber = 0;
+
+  // Define a one-week batch of vizzes to migrate.
+  const startTimeDate = timeWeek.offset(
+    firstVizCreationDateFloored,
+    batchNumber
+  );
+  const endTimeDate = timeWeek.offset(startTimeDate, 1);
+
   const startTime = dateToTimestamp(startTimeDate);
   const endTime = dateToTimestamp(endTimeDate);
 
-  v2Vizzes(
+  console.log('\nbatchNumber', batchNumber);
+  console.log('startTime', startTimeDate.toLocaleString());
+  console.log('endTime', endTimeDate.toLocaleString());
+
+  const numVizzesProcessed = await v2Vizzes(
     {
       infoCollection,
       startTime,
       endTime,
     },
     async (info, i) => {
-      // #1432 is the first the needs forkedFrom computed.
-      // #15358 fails with emoji (viz id b091d7e3133748368c4999ecac1f3569)
-      //
-      //
-      //if (i < 15357) {
-      //  return;
-      //}
-
-      // True if this viz has already been migrated.
-      // const alreadyMigrated =
-      //   (await gateways.getInfo(info.id)).outcome === 'success';
-      // if (alreadyMigrated) {
-      //   // TODO add commits for any fresh changes
-      //   // for incremental migration
-      //   console.log('skipping already migrated #' + i);
-      //   return;
-      // }
-
       const vizV2 = await getVizV2({
         info,
         contentCollection,
@@ -89,8 +87,9 @@ const migrate = async () => {
         contentOpCollection,
       });
 
-      console.log('info', JSON.stringify(info, null, 2));
+      // console.log('info', JSON.stringify(info, null, 2));
 
+      console.log('processing viz #' + i + ' ' + info.id);
       // await processViz({
       //   vizV2,
       //   gateways,
@@ -102,6 +101,17 @@ const migrate = async () => {
       // await reportProgress({ i, n });
     }
   );
+
+  console.log(`\n\nFinished iterating ${numVizzesProcessed} vizzes!`);
+
+  // Close the connection to the v2 database
+  await v2MongoClient.close();
+
+  // Close the connection to the v3 database
+  await mongoDBConnection.close();
+
+  // Close the connection to Redis
+  await redisClient.quit();
 };
 
 migrate();
