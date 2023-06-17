@@ -21,17 +21,18 @@ const embed = async (input) => {
 
 export const generateEmbeddingOpenAI = async (goodFiles) => {
   const input = removeEmoji(goodFiles)
-    // Substring on name as there was one particular case
-    // f1ae79caa0d74e13bcfb7ba16355d65f
-    // where someone apparently pasted data into the file name field
-    .map(({ name, text }) =>
-      [
-        `File \`${name?.substring(0, 100)}\`:`,
-        '```',
-        text?.substring(0, 4000).trim(),
-        '```',
-      ].join('\n')
-    )
+    .map(({ name, text }) => {
+      // Substring on name as there was one particular case
+      // f1ae79caa0d74e13bcfb7ba16355d65f
+      // where someone apparently pasted data into the file name field
+      const nameSubstring = name?.substring(0, 100).trim();
+
+      // Substring on text to handle large files such as CSV or JSON data files.
+      const textSubstring = text?.substring(0, 4000).trim();
+
+      // Put the name and text together in a format that OpenAI can understand.
+      return `File \`${nameSubstring}\`:\n\`\`\`${textSubstring}\`\`\``;
+    })
     .join('\n\n');
 
   console.log('TODO format sentence for openai');
