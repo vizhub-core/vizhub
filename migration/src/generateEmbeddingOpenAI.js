@@ -1,4 +1,5 @@
 import { Configuration, OpenAIApi } from 'openai';
+import { removeEmoji } from './removeEmoji';
 
 // The dimension of the embedding, as a string.
 export const embeddingSize = 1536;
@@ -18,7 +19,7 @@ const embed = async (input) => {
   return embedding;
 };
 
-export const generateEmbeddingOpenAI = async ({ goodFiles, openAiAPIKey }) => {
+export const generateEmbeddingOpenAI = async (goodFiles) => {
   const input = removeEmoji(goodFiles)
     // Substring on name as there was one particular case
     // f1ae79caa0d74e13bcfb7ba16355d65f
@@ -26,17 +27,21 @@ export const generateEmbeddingOpenAI = async ({ goodFiles, openAiAPIKey }) => {
     .map(({ name, text }) =>
       [
         `File \`${name?.substring(0, 100)}\`:`,
-        '```\n',
-        text?.substring(0, 4000),
-        '```\n',
+        '```',
+        text?.substring(0, 4000).trim(),
+        '```',
       ].join('\n')
     )
     .join('\n\n');
 
   console.log('TODO format sentence for openai');
   console.log('TODO check ballpark token limit');
-
+  console.log(
+    '** Begin input *************************************************************************'
+  );
   console.log(input);
-
+  console.log(
+    '** End input *************************************************************************'
+  );
   return await embed(input);
 };

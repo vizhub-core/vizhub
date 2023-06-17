@@ -5,7 +5,7 @@ import { redisSetup } from './redisSetup';
 import { v2Vizzes } from './v2Vizzes';
 import { getVizV2 } from './getVizV2';
 import { dateToTimestamp, timestampToDate } from 'entities';
-// import { processViz } from './processViz';
+import { processViz } from './processViz';
 // import { reportProgress } from './reportProgress';
 
 // Delete everything in V3 Mongo and Redis when starting.
@@ -90,13 +90,13 @@ const migrate = async () => {
       // console.log('info', JSON.stringify(info, null, 2));
 
       console.log('processing viz #' + i + ' ' + info.id);
-      // await processViz({
-      //   vizV2,
-      //   gateways,
-      //   i,
-      //   redisClient,
-      //   contentCollection,
-      // });
+      await processViz({
+        vizV2,
+        gateways,
+        i,
+        redisClient,
+        contentCollection,
+      });
 
       // await reportProgress({ i, n });
     }
