@@ -112,7 +112,7 @@ async function createServer(
   // TODO think about how to make it so we don't need to restart the server
   let entry;
   if (!isProd) {
-    entry = await vite.ssrLoadModule('/src/entry-server.jsx');
+    entry = await vite.ssrLoadModule('/src/entry-server.tsx');
   } else {
     entry = await import('./dist/server/entry-server.js');
   }
@@ -171,7 +171,7 @@ async function createServer(
         // always read fresh template in dev
         template = fs.readFileSync(resolve('index.html'), 'utf-8');
         template = await vite.transformIndexHtml(url, template);
-        entry = await vite.ssrLoadModule('/src/entry-server.jsx');
+        entry = await vite.ssrLoadModule('/src/entry-server.tsx');
       } else {
         template = indexProd;
         entry = prodServerEntry;
