@@ -5,3 +5,4 @@
 .prettierignore
 .gitignore
 dist
+rollup.browser.js

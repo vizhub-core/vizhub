@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import { bundle } from './bundle';
 
 // From https://github.com/vizhub-core/vizhub/blob/main/vizhub-v2/packages/presenters/test/test.js
 
@@ -20,12 +21,12 @@ describe('getComputedIndexHTML', () => {
       { name: 'foo.js', text: 'export const foo = "bar";' },
     ];
     expect(true).toEqual(true);
-    // expect(removeSourceMap(await bundle(files))).toEqual([
-    //   {
-    //     name: 'bundle.js',
-    //     text: '(function () {\n\t\'use strict\';\n\n\tconst foo = "bar";\n\n\tconsole.log(foo);\n\n}());\n',
-    //   },
-    // ]);
+    expect(removeSourceMap(await bundle(files))).toEqual([
+      {
+        name: 'bundle.js',
+        text: '(function () {\n\t\'use strict\';\n\n\tconst foo = "bar";\n\n\tconsole.log(foo);\n\n}());\n',
+      },
+    ]);
   });
 });
 

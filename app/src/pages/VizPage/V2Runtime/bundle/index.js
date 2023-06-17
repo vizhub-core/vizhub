@@ -31,7 +31,6 @@ export const bundle = async (files) => {
   const inputOptions = {
     input: './index.js',
     plugins: [
-      svelte(),
       hypothetical({
         files: transformFilesToObject(files),
       }),
