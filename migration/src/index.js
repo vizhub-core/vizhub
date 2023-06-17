@@ -71,7 +71,7 @@ const migrate = async () => {
 
   console.log('\nbatchNumber', batchNumber);
   console.log('startTime', startTimeDate.toLocaleString());
-  console.log('endTime', endTimeDate.toLocaleString());
+  console.log('endTime  ', endTimeDate.toLocaleString());
 
   const numVizzesProcessed = await v2Vizzes(
     {

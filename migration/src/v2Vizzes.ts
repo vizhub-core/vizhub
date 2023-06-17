@@ -11,20 +11,27 @@ export const v2Vizzes = async (
   }: { infoCollection: any; startTime: Timestamp; endTime: Timestamp },
   callback
 ) => {
-  let previousLastUpdatedTimestamp = 0;
-
-  // Invariant: we are always moving forward in time.
-
   const infoIterator = infoCollection.find({
-    $or: [
-      { lastUpdatedTimestamp: { $gt: startTime, $lt: endTime } },
-      { createdTimestamp: { $gt: startTime, $lt: endTime } },
+    $and: [
+      { lastUpdatedTimestamp: { $gt: startTime } },
+      { createdTimestamp: { $lt: endTime } },
     ],
   });
   // // TODO sort by createdTimestamp
   // .sort({ createdTimestamp: 1 })
   // .batchSize(1000)
   // .cursor();
+
+  // Invariant: we are always moving forward in time
+  // with respect to creation date.
+  // This is important because the inference of `forkedFrom`
+  // needs to have all previously created vizzes available.
+  //
+  // To enforce this, we track the `createdTimestamp`
+  // of the previous viz in the batch, and throw an error
+  // if the current viz has a lower `createdTimestamp`.
+  // Set to -Infinity to handle the first viz in the batch.
+  let previousCreatedTimestamp = -Infinity;
 
   let i = 0;
   for await (const info of infoIterator) {
@@ -66,6 +73,12 @@ export const v2Vizzes = async (
       //console.log(info);
       continue;
     }
+
+    // Invariant: we are always moving forward in time.
+    if (info.createdTimestamp < previousCreatedTimestamp) {
+      throw new Error('Not iterating in creation order!');
+    }
+    previousCreatedTimestamp = info.createdTimestamp;
 
     // Within each batch, i starts at 0,
     await callback(info, i);
