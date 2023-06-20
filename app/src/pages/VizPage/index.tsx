@@ -36,6 +36,7 @@ export const VizPage: Page = ({ pageData }) => {
   );
 
   // TODO move this to URL
+  // https://github.com/vizhub-core/vizhub3/issues/107
   // ?edit=files
   const [showEditor, setShowEditor] = useState(false);
   const [showForkModal, setShowForkModal] = useState(false);
