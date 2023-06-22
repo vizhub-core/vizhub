@@ -2,6 +2,9 @@ import { logDetail } from './logDetail';
 import { isVizV2Valid } from './isVizV2Valid';
 import { vectorSimilaritySearch } from './vectorSimilaritySearch';
 
+let guessesCorrect = 0;
+let guessesIncorrect = 0;
+
 // TODO backfill forked from deleted viz case
 // by querying the ShareDB op log looking for the creation op,
 // then setting forkedFrom to the parent.
@@ -14,7 +17,7 @@ export const computeForkedFrom = async ({
 }) => {
   // Compute forkedFrom
   let forkedFrom = null;
-  let forkedFromIsBackfilled;
+  let forkedFromIsBackfilled = false;
   if (!isPrimordialViz) {
     // Figure out if we need to backfill forkedFrom.
     logDetail('  Checking if we need to backfill forkedFrom...');
@@ -31,29 +34,26 @@ export const computeForkedFrom = async ({
         logDetail('    Forked from is legit. No need to backfill.');
 
         // TODO Test how accurate this is
-        //const knnResults = await redisClient.sendCommand([
-        //  'FT.SEARCH',
-        //  idx,
-        //  `(@timestamp:[0,${
-        //    vizV2.info.createdTimestamp - 1
-        //  }])=>[KNN 4 @v $BLOB AS dist]`,
-        //  'PARAMS',
-        //  '2',
-        //  'BLOB',
-        //  tobytes(embedding),
-        //  'SORTBY',
-        //  'dist',
-        //  'DIALECT',
-        //  '2',
-        //]);
-        //const guessIsCorrect = knnResults[1] === vizV2.info.forkedFrom;
-        //if (guessIsCorrect) {
-        //  guessesCorrect++;
-        //} else {
-        //  guessesIncorrect++;
-        //}
+        const mostSimilar = await vectorSimilaritySearch({
+          redisClient,
+          embedding,
+          timestamp: vizV2.info.createdTimestamp,
+        });
+        // logDetail(
+        //   `      Guessed that ${vizV2.info.id} is forked from ${mostSimilar}`
+        // );
 
-        //isForkedFromValid = true;
+        const guessIsCorrect = mostSimilar === vizV2.info.forkedFrom;
+        logDetail(
+          `      Guessed ${guessIsCorrect ? 'correctly' : 'incorrectly'} that ${
+            vizV2.info.id
+          } is forked from ${mostSimilar}}`
+        );
+        if (guessIsCorrect) {
+          guessesCorrect++;
+        } else {
+          guessesIncorrect++;
+        }
       } else {
         logDetail('    Forked points to a deleted viz. Need to backfill.');
       }
