@@ -10,10 +10,7 @@ import { isolateGoodFiles, getGoodFiles } from './isolateGoodFiles';
 import { computeV3Files } from './computeV3Files';
 import { Gateways } from 'gateways';
 import { Collection } from 'mongodb-legacy';
-
-// Default height in pixels for vizzes.
-// In V3 data model, height is always explicit.
-const defaultHeight = 500;
+import { updateMigratedViz } from './updateMigratedViz';
 
 // Hardcoded ID of the primordial viz (actually in the V2 database)
 const primordialVizId = '86a75dc8bdbe4965ba353a79d4bd44c8';
@@ -45,7 +42,7 @@ export const processViz = async ({
   contentCollection: Collection;
 }) => {
   // Setup
-  const saveViz = SaveViz(gateways);
+
   const { id, createdTimestamp } = vizV2.info;
   const isPrimordialViz = id === primordialVizId;
 
@@ -56,6 +53,10 @@ export const processViz = async ({
   const infoMigratedResult = await gateways.getInfo(id);
   const isAlreadyMigrated = infoMigratedResult.outcome === 'success';
   logDetail(`  Already migrated: ${isAlreadyMigrated}`);
+  let infoMigrated: Info | undefined;
+  if (isAlreadyMigrated) {
+    infoMigrated = infoMigratedResult.value.data;
+  }
 
   // If the viz has already been migrated, figure out if it has been updated since then.
   let hasBeenUpdatedSinceLastMigration = false;
@@ -116,86 +117,19 @@ export const processViz = async ({
   console.log('  forkedFrom:', forkedFrom);
   console.log('  forkedFromIsBackfilled:', forkedFromIsBackfilled);
 
-  // Scaffold the V3 viz.
-  const info: Info = {
-    id: vizV2.info.id,
-    owner: vizV2.info.owner,
-
-    // For now, folder is undefined,
-    // which should put it automatically in the users's
-    // "home view" above all folders.
-    //folder: 'TODO figure out folder here!',
-    title: title,
-    forkedFrom,
-    // This will be incremented later
-    forksCount: 0,
-    created: vizV2.info.createdTimestamp,
-    updated: vizV2.info.lastUpdatedTimestamp,
-    visibility: vizV2.info.privacy || 'public',
-    // This will be incremented later
-    upvotesCount: 0,
-    // Start and end will be filled in later
-    start: 'invalid',
-    end: 'invalid',
-    folder: null,
-    isFrozen: false,
-    committed: false,
-    commitAuthors: [],
-  };
-
-  // If the forkedFrom is backfilled, set the flag.
-  // Otherwise leave `forkedFromIsBackfilled` as undefined.
-  if (forkedFromIsBackfilled) {
-    info.forkedFromIsBackfilled = true;
-  }
-
-  const content: Content = {
-    id: vizV2.info.id,
-    height: vizV2.info.height | defaultHeight,
-    title: vizV2.info.title,
-    files: {}, // This is filled in later
-  };
-  const vizV3: Viz = { info, content };
-
   // Handle the primordial viz.
   // TODO handle the case that the primordial viz has been updated.
   if (isPrimordialViz) {
     console.log('  This is the primordial viz!');
-    console.log('    Generating the Primordial Commit');
-
-    // The first ever commit.
-    // Special because it's the only with no parentCommitId.
-
-    // TODO don't clobber the primordial commit if it already exists.
-    const primordialCommitId = generateId();
-
-    vizV3.info.start = primordialCommitId;
-    vizV3.info.end = primordialCommitId;
-    vizV3.info.committed = true;
-    vizV3.info.commitAuthors = [];
-    vizV3.info.isFrozen = false;
-
-    // Compute migrated V3 files from V2 files
-    vizV3.content.files = computeV3Files(goodFiles) as Files;
-
-    // The first ever commit.
-    // Special because it's the only with no parentCommitId.
-    const primordialCommit: Commit = {
-      id: primordialCommitId,
-      viz: vizV2.info.id,
-      authors: [vizV2.info.owner],
-      timestamp: vizV2.info.createdTimestamp,
-      ops: diff({}, vizV3.content),
-      milestone: null,
-    };
-
-    await gateways.saveCommit(primordialCommit);
-
-    const saveVizResult = await saveViz(vizV3);
-    if (saveVizResult.outcome === 'failure') {
-      throw new Error('Failed to save primordial viz! ' + saveVizResult.error);
+    if (!isAlreadyMigrated) {
+      console.log('    Being migrated for the first time!');
+      await migratePrimordialViz({});
+    } else {
+      // If we're here, then the primordial viz has already been migrated
+      // AND it has been updated since the last migration.
+      // So we need to create a new commit, but leave the start commit alone.
+      await updateMigratedViz({});
     }
-    console.log('    Saved primordial commit and viz!');
     //          console.log((await getCommit(primordialCommitId)).value);
     //          console.log((await getViz(vizV3.info.id)).value);
     //    process.exit();
@@ -204,7 +138,21 @@ export const processViz = async ({
     // It was not working correctly - some commits had no parents.
   } else {
     console.log('  This is not the primordial viz!');
-    process.exit();
+    if (isAlreadyMigrated) {
+      console.log(
+        '    This viz has already been migrated. Updating migrated viz...'
+      );
+    } else {
+      console.log(
+        '    This viz has not been migrated yet. Migrating viz for the first time...'
+      );
+      // This viz has not been migrated yet.
+      // So we need to create the viz in V3 by forking, then update it.
+      createMigratedViz({});
+    }
+
+    // This gets called in both cases.
+    updateMigratedViz({});
 
     // // Fork the forkedFrom viz.
     // // TODO fork from specific timestamp
