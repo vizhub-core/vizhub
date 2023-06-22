@@ -1,16 +1,14 @@
 import { timeMinute } from 'd3';
-import { generateId, SaveViz } from 'interactors';
-import { Viz, Info, Content, Files, Commit } from 'entities';
-import { diff } from 'ot';
+import { Info } from 'entities';
 import { logDetail } from './logDetail';
 import { generateEmbeddingOpenAI } from './generateEmbeddingOpenAI';
 import { storeEmbedding } from './storeEmbedding';
 import { computeForkedFrom } from './computeForkedFrom';
-import { isolateGoodFiles, getGoodFiles } from './isolateGoodFiles';
-import { computeV3Files } from './computeV3Files';
+import { isolateGoodFiles } from './isolateGoodFiles';
 import { Gateways } from 'gateways';
 import { Collection } from 'mongodb-legacy';
 import { updateMigratedViz } from './updateMigratedViz';
+import { migratePrimordialViz } from './migratePrimordialViz';
 
 // Hardcoded ID of the primordial viz (actually in the V2 database)
 const primordialVizId = '86a75dc8bdbe4965ba353a79d4bd44c8';
@@ -123,7 +121,14 @@ export const processViz = async ({
     console.log('  This is the primordial viz!');
     if (!isAlreadyMigrated) {
       console.log('    Being migrated for the first time!');
-      await migratePrimordialViz({});
+      await migratePrimordialViz({
+        vizV2,
+        title,
+        forkedFrom,
+        forkedFromIsBackfilled,
+        goodFiles,
+        gateways,
+      });
     } else {
       // If we're here, then the primordial viz has already been migrated
       // AND it has been updated since the last migration.

@@ -23,6 +23,7 @@ const firstVizCreationDate = timestampToDate(1534246611);
 // process.exit(0);
 
 const migrate = async () => {
+  console.log(`Initializing connections`);
   // The source database
   const { v2MongoDBDatabase, v2MongoClient } =
     await initializeV2MongoDBDatabase();
@@ -33,9 +34,6 @@ const migrate = async () => {
   const infoOpCollection = v2MongoDBDatabase.collection('o_documentInfo');
   const contentOpCollection = v2MongoDBDatabase.collection('o_documentContent');
   const userCollection = v2MongoDBDatabase.collection('user');
-
-  const n = await infoCollection.countDocuments();
-  console.log('  Ready to migrate ' + n + ' V2 vizzes.');
 
   // The target database
   const { gateways, mongoDBDatabase, mongoDBConnection } =
@@ -52,10 +50,9 @@ const migrate = async () => {
   const redisClient = await redisSetup(startFresh);
 
   // Ping Redis to make sure it's working.
-
   await redisClient.ping();
 
-  console.log('  Connected successfully to v3 Redis!');
+  console.log('    Connected successfully to v3 Redis!');
 
   // Floor the month using d3-time
   const firstVizCreationDateFloored = timeWeek.floor(firstVizCreationDate);
@@ -73,9 +70,9 @@ const migrate = async () => {
   const startTime = dateToTimestamp(startTimeDate);
   const endTime = dateToTimestamp(endTimeDate);
 
-  console.log('\nbatchNumber', batchNumber);
-  console.log('startTime', startTimeDate.toLocaleString());
-  console.log('endTime  ', endTimeDate.toLocaleString());
+  console.log('\nStarting migration batch #', batchNumber);
+  console.log('  startTime', startTimeDate.toLocaleString());
+  console.log('  endTime  ', endTimeDate.toLocaleString());
 
   // Iterate over vizzes in the V2 database that may have been created
   // or updated during the time period defined by startTime and endTime.
@@ -146,8 +143,6 @@ const migrate = async () => {
           )
         );
       }
-
-      // TODO migrate users (owner, collaborators, upvoters)
 
       // await reportProgress({ i, n });
     }
