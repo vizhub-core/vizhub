@@ -6,6 +6,7 @@ import { v2Vizzes } from './v2Vizzes';
 import { getVizV2 } from './getVizV2';
 import { dateToTimestamp, timestampToDate } from 'entities';
 import { processViz } from './processViz';
+import { migrateUserIfNeeded } from './migrateUserIfNeeded';
 // import { reportProgress } from './reportProgress';
 
 // Delete everything in V3 Mongo and Redis when starting.
@@ -29,6 +30,7 @@ const migrate = async () => {
   const contentCollection = v2MongoDBDatabase.collection('documentContent');
   const infoOpCollection = v2MongoDBDatabase.collection('o_documentInfo');
   const contentOpCollection = v2MongoDBDatabase.collection('o_documentContent');
+  const userCollection = v2MongoDBDatabase.collection('user');
 
   const n = await infoCollection.countDocuments();
   console.log('  Ready to migrate ' + n + ' V2 vizzes.');
@@ -90,12 +92,20 @@ const migrate = async () => {
       // console.log('info', JSON.stringify(info, null, 2));
 
       console.log('processing viz #' + i + ' ' + info.id);
+      // Migrate the viz!
       await processViz({
         vizV2,
         gateways,
         i,
         redisClient,
         contentCollection,
+      });
+
+      // Migrate the viz owner if needed.
+      await migrateUserIfNeeded({
+        userId: vizV2.info.owner,
+        gateways,
+        userCollection,
       });
 
       // await reportProgress({ i, n });
