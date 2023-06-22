@@ -1,7 +1,7 @@
 import MongoLegacy from 'mongodb-legacy';
 const { MongoClient } = MongoLegacy;
 
-const v2MongoURI = import.meta.env.VITE_VIZHUB_V2_MONGO_URI;
+const v2MongoURI = process.env.VIZHUB_V2_MONGO_URI;
 
 export const initializeV2MongoDBDatabase = async () => {
   console.log(`Connecting to v2 MongoDB`);
@@ -20,5 +20,5 @@ export const initializeV2MongoDBDatabase = async () => {
   clearTimeout(timeout);
 
   console.log('Connected successfully to v2 MongoDB!');
-  return { v2MongoDBDatabase };
+  return { v2MongoDBDatabase, v2MongoClient };
 };

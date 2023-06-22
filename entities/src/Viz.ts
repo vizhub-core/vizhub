@@ -36,8 +36,8 @@ export interface Info {
   // The user or organization that owns this viz.
   owner: UserId | OrgId;
 
-  // Every Viz exists within a Folder.
-  folder: FolderId;
+  // A Viz may or may not exist within a Folder.
+  folder: FolderId | null;
 
   // The title of the viz.
   title: string;
