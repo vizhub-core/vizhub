@@ -8,7 +8,6 @@ import { dateToTimestamp, timestampToDate } from 'entities';
 import { processViz } from './processViz';
 import { migrateUserIfNeeded } from './migrateUserIfNeeded';
 import { migrateUpvotesIfNeeded } from './migrateUpvotesIfNeeded';
-import { SaveViz, ForkViz, GetViz, CommitViz, UpvoteViz } from 'interactors';
 // import { reportProgress } from './reportProgress';
 
 // Delete everything in V3 Mongo and Redis when starting.

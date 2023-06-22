@@ -71,7 +71,10 @@ export const migrateUserIfNeeded = async ({
     primaryEmail: userV2.email,
     secondaryEmails: [],
     picture: userV2.avatarUrl,
-    plan: userV2.plan,
+
+    // Everyone starts out as free.
+    plan: 'free',
+
     company: userV2.company,
     website: userV2.website,
     location: userV2.location,

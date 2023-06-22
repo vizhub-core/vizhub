@@ -1,22 +1,6 @@
 import { timeMinute } from 'd3';
-import json0 from 'ot-json0';
-import {
-  generateId,
-  SaveViz,
-  ForkViz,
-  GetViz,
-  CommitViz,
-  UpvoteViz,
-} from 'interactors';
-import {
-  timestampToDate,
-  dateToTimestamp,
-  Viz,
-  Info,
-  Content,
-  Files,
-  Commit,
-} from 'entities';
+import { generateId, SaveViz } from 'interactors';
+import { Viz, Info, Content, Files, Commit } from 'entities';
 import { diff } from 'ot';
 import { logDetail } from './logDetail';
 import { generateEmbeddingOpenAI } from './generateEmbeddingOpenAI';
@@ -24,8 +8,6 @@ import { storeEmbedding } from './storeEmbedding';
 import { computeForkedFrom } from './computeForkedFrom';
 import { isolateGoodFiles, getGoodFiles } from './isolateGoodFiles';
 import { computeV3Files } from './computeV3Files';
-import { removeEmoji } from './removeEmoji';
-import { log } from 'console';
 import { Gateways } from 'gateways';
 import { Collection } from 'mongodb-legacy';
 
@@ -42,7 +24,7 @@ const autoCommitInterval = timeMinute.every(15);
 // Feature flag for development.
 // Should be set to false in production (CRON job)
 // Set to true to re-migrate all vizzes.
-const alwaysReMigrate = true;
+const alwaysReMigrate = false;
 
 // Processes a single viz.
 // Assumption: the same viz can be processed multiple times without issue.
@@ -63,22 +45,19 @@ export const processViz = async ({
   contentCollection: Collection;
 }) => {
   const saveViz = SaveViz(gateways);
-  // const forkViz = ForkViz(gateways);
-  // const getViz = GetViz(gateways);
-  // const commitViz = CommitViz(gateways);
-  //
 
   const { id, createdTimestamp } = vizV2.info;
 
   // Sometimes titles have leading or trailing spaces, so trim that.
   const title = vizV2.info.title.trim();
 
-  logDetail(` Processing viz #${i}: ${id} ${title} `);
+  logDetail(`Processing viz #${i}: ${id} ${title} `);
 
-  // True if the viz has already been migrated.
+  // Figure out if the viz has already been migrated.
   const infoMigratedResult = await gateways.getInfo(id);
   const isAlreadyMigrated = infoMigratedResult.outcome === 'success';
 
+  // If the viz has already been migrated, figure out if it has been updated since then.
   let hasBeenUpdatedSinceLastMigration = false;
   if (isAlreadyMigrated) {
     const infoMigrated: Info = infoMigratedResult.value.data;
@@ -176,10 +155,15 @@ export const processViz = async ({
   const vizV3: Viz = { info, content };
 
   // Handle the primordial viz.
+  // TODO handle the case that the primordial viz has been updated.
   if (isPrimordialViz) {
     console.log('  This is the primordial viz!');
     console.log('    Generating the Primordial Commit');
 
+    // The first ever commit.
+    // Special because it's the only with no parentCommitId.
+
+    // TODO don't clobber the primordial commit if it already exists.
     const primordialCommitId = generateId();
 
     vizV3.info.start = primordialCommitId;
