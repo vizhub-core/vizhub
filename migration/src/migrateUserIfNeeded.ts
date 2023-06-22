@@ -16,10 +16,10 @@ export const migrateUserIfNeeded = async ({
   const userV3Result = await gateways.getUser(userId);
   const userAlreadyMigrated = userV3Result.outcome === 'success';
   if (userAlreadyMigrated) {
-    console.log(`  User ${userId} already migrated, skipping migration`);
+    console.log(`    User ${userId} already migrated, skipping migration`);
     return;
   } else {
-    console.log(`  User ${userId} not yet migrated, migrating now`);
+    console.log(`    User ${userId} not yet migrated, migrating now`);
   }
 
   const userV2 = await userCollection.findOne({ id: userId });
@@ -82,8 +82,8 @@ export const migrateUserIfNeeded = async ({
     migratedFromV2: true,
   };
 
-  console.log(`Migrating user ${userId} to v3`);
-  console.log(userV3);
+  console.log(`    Migrating user ${userId} to v3`);
+  console.log(JSON.stringify(userV3, null, 2));
 
   await gateways.saveUser(userV3);
 };

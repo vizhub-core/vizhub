@@ -8,6 +8,7 @@ import { dateToTimestamp, timestampToDate } from 'entities';
 import { processViz } from './processViz';
 import { migrateUserIfNeeded } from './migrateUserIfNeeded';
 import { migrateUpvotesIfNeeded } from './migrateUpvotesIfNeeded';
+import { logDetail } from './logDetail';
 // import { reportProgress } from './reportProgress';
 
 // Delete everything in V3 Mongo and Redis when starting.
@@ -76,6 +77,8 @@ const migrate = async () => {
   console.log('startTime', startTimeDate.toLocaleString());
   console.log('endTime  ', endTimeDate.toLocaleString());
 
+  // Iterate over vizzes in the V2 database that may have been created
+  // or updated during the time period defined by startTime and endTime.
   const numVizzesProcessed = await v2Vizzes(
     {
       infoCollection,
@@ -83,6 +86,7 @@ const migrate = async () => {
       endTime,
     },
     async (info, i) => {
+      // Get the viz from the V2 database.
       const vizV2 = await getVizV2({
         info,
         contentCollection,
@@ -90,10 +94,8 @@ const migrate = async () => {
         contentOpCollection,
       });
 
-      // console.log('info', JSON.stringify(info, null, 2));
-
-      console.log('processing viz #' + i + ' ' + info.id);
       // Migrate the viz! Does not includes Upvotes or Users.
+      logDetail(`Processing viz #${i}: ${info.id} ${info.title} `);
       await processViz({
         vizV2,
         gateways,
@@ -103,12 +105,14 @@ const migrate = async () => {
       });
 
       // Migrate upvotes
+      logDetail(`  Migrating upvotes`);
       await migrateUpvotesIfNeeded({
         vizV2,
         gateways,
       });
 
       // Migrate the viz owner if needed.
+      logDetail(`  Migrating owner user`);
       await migrateUserIfNeeded({
         userId: vizV2.info.owner,
         gateways,
@@ -117,6 +121,7 @@ const migrate = async () => {
 
       // Migrate the users that upvoted this viz.
       if (vizV2.info.upvotes && vizV2.info.upvotes.length > 0) {
+        logDetail(`  Migrating upvoter users`);
         await Promise.all(
           vizV2.info.upvotes.map(({ userId }) =>
             migrateUserIfNeeded({
@@ -127,6 +132,22 @@ const migrate = async () => {
           )
         );
       }
+
+      // Migrate the users that are collaborators on this viz.
+      if (vizV2.info.collaborators && vizV2.info.collaborators.length > 0) {
+        logDetail(`  Migrating collaborator users`);
+        await Promise.all(
+          vizV2.info.collaborators.map(({ userId }) =>
+            migrateUserIfNeeded({
+              userId,
+              gateways,
+              userCollection,
+            })
+          )
+        );
+      }
+
+      // TODO migrate users (owner, collaborators, upvoters)
 
       // await reportProgress({ i, n });
     }

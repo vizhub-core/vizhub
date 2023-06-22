@@ -24,7 +24,7 @@ const openAi = new OpenAIApi(configuration);
 function truncateIfNeeded(str) {
   if (!str) str = ' ';
   let tokens = encode(str);
-  console.log(`Input has ${tokens.length} tokens.`);
+  console.log(`    Input for embedding has ${tokens.length} tokens.`);
   if (tokens.length > maxTokens) {
     str = decode(tokens.slice(0, maxTokens));
     console.log(
@@ -60,12 +60,12 @@ export const generateEmbeddingOpenAI = async (goodFiles) => {
     })
     .join('\n\n');
 
-  console.log(
-    '** Begin input *************************************************************************'
-  );
-  console.log(input);
-  console.log(
-    '** End input *************************************************************************'
-  );
+  // console.log(
+  //   '** Begin input *************************************************************************'
+  // );
+  // console.log(input);
+  // console.log(
+  //   '** End input *************************************************************************'
+  // );
   return await embed(input);
 };

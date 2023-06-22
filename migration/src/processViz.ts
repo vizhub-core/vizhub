@@ -24,7 +24,7 @@ const autoCommitInterval = timeMinute.every(15);
 // Feature flag for development.
 // Should be set to false in production (CRON job)
 // Set to true to re-migrate all vizzes.
-const alwaysReMigrate = false;
+const alwaysReMigrate = true;
 
 // Processes a single viz.
 // Assumption: the same viz can be processed multiple times without issue.
@@ -44,18 +44,18 @@ export const processViz = async ({
   redisClient: any;
   contentCollection: Collection;
 }) => {
+  // Setup
   const saveViz = SaveViz(gateways);
-
   const { id, createdTimestamp } = vizV2.info;
+  const isPrimordialViz = id === primordialVizId;
 
   // Sometimes titles have leading or trailing spaces, so trim that.
   const title = vizV2.info.title.trim();
 
-  logDetail(`Processing viz #${i}: ${id} ${title} `);
-
   // Figure out if the viz has already been migrated.
   const infoMigratedResult = await gateways.getInfo(id);
   const isAlreadyMigrated = infoMigratedResult.outcome === 'success';
+  logDetail(`  Already migrated: ${isAlreadyMigrated}`);
 
   // If the viz has already been migrated, figure out if it has been updated since then.
   let hasBeenUpdatedSinceLastMigration = false;
@@ -64,6 +64,9 @@ export const processViz = async ({
     hasBeenUpdatedSinceLastMigration =
       vizV2.info.lastUpdatedTimestamp > infoMigrated.updated;
   }
+  logDetail(
+    `    Updated since last migration: ${hasBeenUpdatedSinceLastMigration}`
+  );
 
   // If the viz has already been migrated and has not been updated since,
   // then skip it.
@@ -71,37 +74,36 @@ export const processViz = async ({
     logDetail('  Already migrated and not updated since, skipping this viz.');
     return;
   }
-  // Isolate the "good files" that we want to embed.
-  // This excludes files that are too large or derived from other files (e.g. `bundle.js`).
+
+  // Isolate the "good files" that we want to use for embedding.
+  // This excludes invalid files and `bundle.js` (since it's auto-generated).
   const goodFiles = isolateGoodFiles(vizV2.content);
+
+  // If there are no good files, skip this viz! It's not worth migrating.
   if (!goodFiles) {
     console.log('  No good files, skipping this viz.');
     return;
   }
 
-  // Generate the embedding for the viz.
+  // If we are here, it means we are going to migrate this viz,
+  // either because it has not been migrated yet,
+  // or because it has been updated since the last migration.
+
+  // Generate the embedding for the viz (latest version).
+  logDetail('  Generating embedding');
   const embedding = await generateEmbeddingOpenAI(goodFiles);
-  logDetail('  Generated embedding');
-  console.log(embedding);
 
   // Store the embedding in Redis.
-  logDetail('  Storing embedding...');
+  logDetail('    Storing embedding in Redis...');
   await storeEmbedding({
     redisClient,
     id,
     embedding,
     timestamp: createdTimestamp,
   });
-  logDetail('  Stored embedding!');
+  logDetail('    Stored embedding!');
 
   // Compute the forkedFrom and forkedFromIsBackfilled fields.
-
-  // The primordial viz is special.
-  const isPrimordialViz = id === primordialVizId;
-
-  // TODO migrate upvotes
-  // TODO migrate comments
-  // TODO migrate users (owner, collaborators, upvoters)
 
   const { forkedFrom, forkedFromIsBackfilled } = await computeForkedFrom({
     isPrimordialViz,
@@ -111,7 +113,8 @@ export const processViz = async ({
     redisClient,
   });
 
-  console.log({ forkedFrom, forkedFromIsBackfilled });
+  console.log('  forkedFrom:', forkedFrom);
+  console.log('  forkedFromIsBackfilled:', forkedFromIsBackfilled);
 
   // Scaffold the V3 viz.
   const info: Info = {
