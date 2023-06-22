@@ -7,6 +7,8 @@ import { getVizV2 } from './getVizV2';
 import { dateToTimestamp, timestampToDate } from 'entities';
 import { processViz } from './processViz';
 import { migrateUserIfNeeded } from './migrateUserIfNeeded';
+import { migrateUpvotesIfNeeded } from './migrateUpvotesIfNeeded';
+import { SaveViz, ForkViz, GetViz, CommitViz, UpvoteViz } from 'interactors';
 // import { reportProgress } from './reportProgress';
 
 // Delete everything in V3 Mongo and Redis when starting.
@@ -42,8 +44,8 @@ const migrate = async () => {
       env: process.env,
     });
 
+  // Ping MongoDB to make sure it's working.
   await mongoDBDatabase.command({ ping: 1 });
-
   console.log('  Connected successfully to v3 MongoDB!');
 
   // Redis client! Used for storing embeddings and doing vector similarity search.
@@ -92,7 +94,7 @@ const migrate = async () => {
       // console.log('info', JSON.stringify(info, null, 2));
 
       console.log('processing viz #' + i + ' ' + info.id);
-      // Migrate the viz!
+      // Migrate the viz! Does not includes Upvotes or Users.
       await processViz({
         vizV2,
         gateways,
@@ -101,12 +103,31 @@ const migrate = async () => {
         contentCollection,
       });
 
+      // Migrate upvotes
+      await migrateUpvotesIfNeeded({
+        vizV2,
+        gateways,
+      });
+
       // Migrate the viz owner if needed.
       await migrateUserIfNeeded({
         userId: vizV2.info.owner,
         gateways,
         userCollection,
       });
+
+      // Migrate the users that upvoted this viz.
+      if (vizV2.info.upvotes && vizV2.info.upvotes.length > 0) {
+        await Promise.all(
+          vizV2.info.upvotes.map(({ userId }) =>
+            migrateUserIfNeeded({
+              userId,
+              gateways,
+              userCollection,
+            })
+          )
+        );
+      }
 
       // await reportProgress({ i, n });
     }

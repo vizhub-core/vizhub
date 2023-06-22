@@ -11,8 +11,16 @@ export const migrateUserIfNeeded = async ({
   gateways: Gateways;
   userCollection: Collection<Document>;
 }) => {
-  // Check if user exists
-  //   const content = await contentCollection.findOne({ _id: id });
+  // Check if user was already migrated.
+  // If so, don't migrate again.
+  const userV3Result = await gateways.getUser(userId);
+  const userAlreadyMigrated = userV3Result.outcome === 'success';
+  if (userAlreadyMigrated) {
+    console.log(`  User ${userId} already migrated, skipping migration`);
+    return;
+  } else {
+    console.log(`  User ${userId} not yet migrated, migrating now`);
+  }
 
   const userV2 = await userCollection.findOne({ id: userId });
 

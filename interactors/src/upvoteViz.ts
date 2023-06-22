@@ -1,6 +1,6 @@
 import { Gateways, Result, ok, err, Success } from 'gateways';
 import { VizId, Timestamp, UserId, Upvote } from 'entities';
-import { generateId } from './generateId';
+import { generateUpvoteId } from './generateUpvoteId';
 
 // upvoteViz
 //  * Creates a new Upvote associated with this viz
@@ -16,7 +16,7 @@ export const UpvoteViz = (gateways: Gateways) => {
     const { user, viz, timestamp } = options;
 
     // Save the upvote
-    const upvoteId = generateId();
+    const upvoteId = generateUpvoteId(viz, user);
     const newUpvote: Upvote = {
       id: upvoteId,
       user,
@@ -32,6 +32,6 @@ export const UpvoteViz = (gateways: Gateways) => {
       return err(incrementResult.error);
     }
 
-    return ok(upvoteId);
+    return ok('success');
   };
 };

@@ -26,6 +26,8 @@ import { isolateGoodFiles, getGoodFiles } from './isolateGoodFiles';
 import { computeV3Files } from './computeV3Files';
 import { removeEmoji } from './removeEmoji';
 import { log } from 'console';
+import { Gateways } from 'gateways';
+import { Collection } from 'mongodb-legacy';
 
 // Default height in pixels for vizzes.
 // In V3 data model, height is always explicit.
@@ -37,13 +39,35 @@ const primordialVizId = '86a75dc8bdbe4965ba353a79d4bd44c8';
 // Auto-commit changes from the oplog for every viz every 15 minutes.
 const autoCommitInterval = timeMinute.every(15);
 
+// Feature flag for development.
+// Should be set to false in production (CRON job)
+// Set to true to re-migrate all vizzes.
+const alwaysReMigrate = true;
+
+// Processes a single viz.
+// Assumption: the same viz can be processed multiple times without issue.
+// e.g. if the process is interrupted, it can be restarted, or
+// if the process is run multiple times, it will not cause issues, or
+// if an already migrated viz has been updated in V2, it can be re-migrated.
 export const processViz = async ({
   vizV2,
   gateways,
   i,
   redisClient,
   contentCollection,
+}: {
+  vizV2: any;
+  gateways: Gateways;
+  i: number;
+  redisClient: any;
+  contentCollection: Collection;
 }) => {
+  const saveViz = SaveViz(gateways);
+  // const forkViz = ForkViz(gateways);
+  // const getViz = GetViz(gateways);
+  // const commitViz = CommitViz(gateways);
+  //
+
   const { id, createdTimestamp } = vizV2.info;
 
   // Sometimes titles have leading or trailing spaces, so trim that.
@@ -51,6 +75,23 @@ export const processViz = async ({
 
   logDetail(` Processing viz #${i}: ${id} ${title} `);
 
+  // True if the viz has already been migrated.
+  const infoMigratedResult = await gateways.getInfo(id);
+  const isAlreadyMigrated = infoMigratedResult.outcome === 'success';
+
+  let hasBeenUpdatedSinceLastMigration = false;
+  if (isAlreadyMigrated) {
+    const infoMigrated: Info = infoMigratedResult.value.data;
+    hasBeenUpdatedSinceLastMigration =
+      vizV2.info.lastUpdatedTimestamp > infoMigrated.updated;
+  }
+
+  // If the viz has already been migrated and has not been updated since,
+  // then skip it.
+  if (!hasBeenUpdatedSinceLastMigration && !alwaysReMigrate) {
+    logDetail('  Already migrated and not updated since, skipping this viz.');
+    return;
+  }
   // Isolate the "good files" that we want to embed.
   // This excludes files that are too large or derived from other files (e.g. `bundle.js`).
   const goodFiles = isolateGoodFiles(vizV2.content);
@@ -134,21 +175,6 @@ export const processViz = async ({
   };
   const vizV3: Viz = { info, content };
 
-  // Set up interactors.
-  // TODO refactor to do this once and re-use the interactor instances
-  const {
-    saveCommit,
-    getContent,
-    getCommit,
-    getCommitAncestors,
-    saveMilestone,
-  } = gateways;
-  const saveViz = SaveViz(gateways);
-  const forkViz = ForkViz(gateways);
-  const getViz = GetViz(gateways);
-  const commitViz = CommitViz(gateways);
-  const upvoteViz = UpvoteViz(gateways);
-
   // Handle the primordial viz.
   if (isPrimordialViz) {
     console.log('  This is the primordial viz!');
@@ -176,7 +202,7 @@ export const processViz = async ({
       milestone: null,
     };
 
-    await saveCommit(primordialCommit);
+    await gateways.saveCommit(primordialCommit);
 
     const saveVizResult = await saveViz(vizV3);
     if (saveVizResult.outcome === 'failure') {
@@ -376,17 +402,4 @@ export const processViz = async ({
     //   logDetail('  Done reconstructing history!');
     //   //await new Promise((resolve) => setTimeout(resolve, 1000));
   }
-
-  // // Migrate upvotes
-  // if (vizV2.info.upvotes && vizV2.info.upvotes.length > 0) {
-  //   logDetail(`Migrating ${vizV2.info.upvotes.length} upvotes`);
-  //   for (const upvote of vizV2.info.upvotes) {
-  //     const { userId, timestamp } = upvote;
-  //     await upvoteViz({
-  //       viz: id,
-  //       user: userId,
-  //       timestamp,
-  //     });
-  //   }
-  // }
 };
