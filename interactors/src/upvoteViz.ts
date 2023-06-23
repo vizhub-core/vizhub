@@ -16,7 +16,7 @@ export const UpvoteViz = (gateways: Gateways) => {
     const { user, viz, timestamp } = options;
 
     // Save the upvote
-    const upvoteId = generateUpvoteId(viz, user);
+    const upvoteId = generateUpvoteId(user, viz);
     const newUpvote: Upvote = {
       id: upvoteId,
       user,

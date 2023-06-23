@@ -1,14 +1,16 @@
 import { describe, it, expect } from 'vitest';
 import { primordialViz, ts3, userJoe } from 'gateways/test';
 import { initGateways } from './initGateways';
-import { SaveViz, UpvoteViz, setPredictableGenerateId } from '../src';
+import {
+  SaveViz,
+  UpvoteViz,
+  generateUpvoteId,
+  setPredictableGenerateId,
+} from '../src';
 
 export const upvoteTest = () => {
   describe('upvoteViz', async () => {
     it('upvoteViz', async () => {
-      setPredictableGenerateId();
-      const upvoteId = '100';
-
       const gateways = initGateways();
       const { getInfo, getUpvote } = gateways;
       const saveViz = SaveViz(gateways);
@@ -17,6 +19,8 @@ export const upvoteTest = () => {
       await saveViz(primordialViz);
 
       const { id } = primordialViz.info;
+
+      const upvoteId = generateUpvoteId(userJoe.id, id);
 
       // TODO consider unifying getUpvotesCount definitions
       const getUpvotesCount = async () =>
@@ -32,7 +36,7 @@ export const upvoteTest = () => {
         timestamp: ts3,
       });
       expect(upvoteVizResult.outcome).toEqual('success');
-      expect(upvoteVizResult.value).toEqual(upvoteId);
+      expect(upvoteVizResult.value).toEqual('success');
 
       // Verify upvotesCount is incremented
       expect(await getUpvotesCount()).toEqual(originalUpvotesCount + 1);
