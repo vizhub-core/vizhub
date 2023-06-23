@@ -114,15 +114,18 @@ const migrate = async () => {
 
       // Migrate the viz owner if needed.
       logDetail(`  Migrating owner user`);
+      process.stdout.write('    ');
       await migrateUserIfNeeded({
         userId: vizV2.info.owner,
         gateways,
         userCollection,
       });
+      process.stdout.write('\n');
 
       // Migrate the users that upvoted this viz.
       if (vizV2.info.upvotes && vizV2.info.upvotes.length > 0) {
         logDetail(`  Migrating upvoter users`);
+        process.stdout.write('    ');
         await Promise.all(
           vizV2.info.upvotes.map(({ userId }) =>
             migrateUserIfNeeded({
@@ -132,11 +135,13 @@ const migrate = async () => {
             })
           )
         );
+        process.stdout.write('\n');
       }
 
       // Migrate the users that are collaborators on this viz.
       if (vizV2.info.collaborators && vizV2.info.collaborators.length > 0) {
         logDetail(`  Migrating collaborator users`);
+        process.stdout.write('    ');
         await Promise.all(
           vizV2.info.collaborators.map(({ userId }) =>
             migrateUserIfNeeded({
@@ -146,6 +151,7 @@ const migrate = async () => {
             })
           )
         );
+        process.stdout.write('\n');
       }
 
       // await reportProgress({ i, n });

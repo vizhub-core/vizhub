@@ -13,7 +13,11 @@ export const migrateUpvotesIfNeeded = async ({
 }) => {
   const upvoteViz = UpvoteViz(gateways);
   if (vizV2.info.upvotes && vizV2.info.upvotes.length > 0) {
-    logDetail(`    Migrating ${vizV2.info.upvotes.length} upvotes`);
+    logDetail(
+      `    Migrating ${vizV2.info.upvotes.length} upvotes ('+' = migrated, '-' = skipped)`
+    );
+    process.stdout.write(`    `);
+
     for (const upvote of vizV2.info.upvotes) {
       const viz = vizV2.info.id;
       const user = upvote.userId;
@@ -24,11 +28,13 @@ export const migrateUpvotesIfNeeded = async ({
       const upvoteExists =
         (await gateways.getUpvote(upvoteId)).outcome === 'success';
       if (upvoteExists) {
-        console.log('      Skipping upvote ', upvoteId);
+        // console.log('      Skipping upvote ', upvoteId);
+        process.stdout.write('-');
         continue;
       }
-
+      process.stdout.write('+');
       await upvoteViz({ viz, user, timestamp });
     }
+    process.stdout.write('\n');
   }
 };
