@@ -47,7 +47,7 @@ export const computeForkedFrom = async ({
         logDetail(
           `      Guessed ${guessIsCorrect ? 'correctly' : 'incorrectly'} that ${
             vizV2.info.id
-          } is forked from ${mostSimilar}}`
+          } is forked from ${mostSimilar}`
         );
         if (guessIsCorrect) {
           guessesCorrect++;

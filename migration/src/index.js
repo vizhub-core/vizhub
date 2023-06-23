@@ -12,7 +12,7 @@ import { logDetail } from './logDetail';
 // import { reportProgress } from './reportProgress';
 
 // Delete everything in V3 Mongo and Redis when starting.
-const startFresh = true;
+const startFresh = false;
 
 // Hardcoded earliest timestamp.
 // This is the lowest value for `vizInfo.createdTimestamp` in the V2 database.
@@ -44,6 +44,13 @@ const migrate = async () => {
 
   // Ping MongoDB to make sure it's working.
   await mongoDBDatabase.command({ ping: 1 });
+
+  // Drop everything in V3 Mongo - DANGEROUS!
+  // if (startFresh) {
+  //   console.log('Dropping everything in V3 Mongo...');
+  //   await mongoDBDatabase.dropDatabase();
+  // }
+
   console.log('  Connected successfully to v3 MongoDB!');
 
   // Redis client! Used for storing embeddings and doing vector similarity search.
