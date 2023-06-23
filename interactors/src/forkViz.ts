@@ -37,19 +37,22 @@ export const ForkViz = (gateways: Gateways) => {
     timestamp: Timestamp; // The timestamp at which this viz is forked.
     forkedFromCommitId?: CommitId; // The ID of the commit being forked from (optional).
     newVizId?: VizId; // The ID of the new viz (optional).
-  }): Promise<Result<VizId>> => {
+  }): Promise<Result<Info>> => {
     const { newOwner, forkedFrom, timestamp, forkedFromCommitId } = options;
-    const commitId = generateId();
-    const newVizId = options.newVizId || generateId();
+    const commitId: CommitId = generateId();
+    const newVizId: VizId = options.newVizId || generateId();
 
     // Get the info for the viz we are forking from.
     const infoResult = await getInfo(forkedFrom);
     if (infoResult.outcome === 'failure') return err(infoResult.error);
-    const info = infoResult.value.data;
+    const info: Info = infoResult.value.data;
 
     // Choose a particular commit to fork from.
     // If forkedFromCommitId is not specified,
     // fork from the endCommit of the forked from viz.
+    // TODO if timestamp is less than last updated,
+    // then fork from the last updated commit.
+
     let parentCommitId: CommitId = forkedFromCommitId || info.end;
 
     // If we want to fork from the current version
@@ -116,6 +119,6 @@ export const ForkViz = (gateways: Gateways) => {
       return incrementResult;
     }
 
-    return ok(newVizId);
+    return ok(newInfo);
   };
 };

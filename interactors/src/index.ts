@@ -15,3 +15,4 @@ export { TrashViz } from './trashViz';
 export { RecordAnalyticsEvents } from './recordAnalyticsEvents';
 export { VerifyVizAccess } from './verifyVizAccess';
 export { generateUpvoteId } from './generateUpvoteId';
+export { GetCommitAtTimestamp } from './getCommitAtTimestamp';

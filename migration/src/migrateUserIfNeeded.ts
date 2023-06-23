@@ -82,8 +82,12 @@ export const migrateUserIfNeeded = async ({
     migratedFromV2: true,
   };
 
-  console.log(`    Migrating user ${userId} to v3`);
-  console.log(JSON.stringify(userV3, null, 2));
+  console.log(
+    `    Migrating user ${userV3.userName} (${userV3.displayName} from ${userV3.location} -${userV3.bio})`
+  );
+
+  //}) to v3`);
+  // console.log(JSON.stringify(userV3, null, 2));
 
   await gateways.saveUser(userV3);
 };

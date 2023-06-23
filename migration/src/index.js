@@ -93,13 +93,17 @@ const migrate = async () => {
 
       // Migrate the viz! Does not includes Upvotes or Users.
       logDetail(`Processing viz #${i}: ${info.id} ${info.title} `);
-      await processViz({
+      const result = await processViz({
         vizV2,
         gateways,
         i,
         redisClient,
         contentCollection,
       });
+      if (result === null) {
+        console.log(`  Skipping viz #${i}: ${info.id} ${info.title} `);
+        return;
+      }
 
       // Migrate upvotes
       logDetail(`  Migrating upvotes`);

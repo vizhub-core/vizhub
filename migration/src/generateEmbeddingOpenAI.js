@@ -12,6 +12,12 @@ const model = 'text-embedding-ada-002';
 // The maximum number of tokens that OpenAI can handle for the model.
 const maxTokens = 8191;
 
+// The maximum length of a file name.
+const maxFileNameLength = 100;
+
+// The maximum length of a file text.
+const maxFileTextLength = 4000;
+
 // The API key for OpenAI.
 const apiKey = process.env.VIZHUB_OPENAI_API_KEY;
 
@@ -50,10 +56,10 @@ export const generateEmbeddingOpenAI = async (goodFiles) => {
       // Substring on name as there was one particular case
       // f1ae79caa0d74e13bcfb7ba16355d65f
       // where someone apparently pasted data into the file name field
-      const nameSubstring = name?.substring(0, 100).trim();
+      const nameSubstring = name?.substring(0, maxFileNameLength).trim();
 
       // Substring on text to handle large files such as CSV or JSON data files.
-      const textSubstring = text?.substring(0, 4000).trim();
+      const textSubstring = text?.substring(0, maxFileTextLength).trim();
 
       // Put the name and text together in a format that OpenAI can understand.
       return `File \`${nameSubstring}\`:\n\`\`\`${textSubstring}\`\`\``;
