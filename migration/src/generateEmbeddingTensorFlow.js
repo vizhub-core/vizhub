@@ -4,7 +4,7 @@ import '@tensorflow/tfjs-node';
 let model;
 
 // TODO consider using OpenAI embeddings.
-export const generateEmbedding = async (goodFiles) => {
+export const generateEmbeddingTensorFlow = async (goodFiles) => {
   const sentence = removeEmoji(goodFiles)
     // Substring on name as there was one particular case
     // f1ae79caa0d74e13bcfb7ba16355d65f

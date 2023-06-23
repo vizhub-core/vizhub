@@ -25,18 +25,16 @@ export const initializeMongoDB = async ({
     console.log('Connecting to local MongoDB...');
     mongoClient = new MongoClient(mongoLocalURI);
   } else if (isProd) {
-    console.log('Connecting to production MongoDB...');
+    console.log('  Connecting to production MongoDB...');
 
     const username = env.VIZHUB3_MONGO_USERNAME;
     const password = env.VIZHUB3_MONGO_PASSWORD;
     const database = env.VIZHUB3_MONGO_DATABASE;
-    const domain = env.VIZHUB3_MONGO_DOMAIN || 'vizhub3.6sag6.mongodb.net'; // TODO remove this hardcoding after verification
-
-    console.log('env.VIZHUB3_MONGO_DOMAIN', env.VIZHUB3_MONGO_DOMAIN);
+    const domain = env.VIZHUB3_MONGO_DOMAIN;
 
     const uri = `mongodb+srv://${username}:${password}@${domain}/${database}?retryWrites=true&w=majority`;
-    console.log('uri:');
-    console.log(uri);
+    // console.log('uri:');
+    // console.log(uri);
 
     mongoClient = new MongoClient(uri, {
       useNewUrlParser: true,

@@ -5,6 +5,7 @@ import { generateId } from './generateId';
 import { GetViz } from './getViz';
 import { GetContentAtCommit } from './getContentAtCommit';
 
+const debug = false;
 // commitViz
 // * Mints a new commit for uncommitted changes.
 // * See also
@@ -44,6 +45,12 @@ export const CommitViz = (gateways: Gateways) => {
       ops: diff(previousContent, content),
       milestone: null,
     };
+    if (debug) {
+      console.log('in commitViz');
+      console.log('previousContent', previousContent);
+      console.log('content', content);
+      console.log('newCommit', JSON.stringify(newCommit, null, 2));
+    }
 
     const newInfo: Info = {
       ...info,

@@ -55,6 +55,26 @@ export interface User {
   // plan
   //  * What level of paying customer this user is.
   plan: Plan;
+
+  // company
+  //  * What company this user works for.
+  company?: string;
+
+  // website
+  //  * The website of this user.
+  website?: string;
+
+  // location
+  //  * The location of this user.
+  location?: string;
+
+  // bio
+  //  * The bio of this user.
+  bio?: string;
+
+  // migratedFromV2
+  //  * Whether this user was migrated from the V2 database.
+  migratedFromV2?: boolean;
 }
 
 // One of these is created

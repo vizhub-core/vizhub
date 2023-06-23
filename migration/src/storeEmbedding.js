@@ -1,5 +1,7 @@
 import { tobytes } from './redisSetup';
 
+// Stores an embedding in Redis.
+// See also: https://redis.io/commands/hset
 export const storeEmbedding = async ({
   redisClient,
   id,

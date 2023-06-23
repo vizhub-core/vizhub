@@ -1,6 +1,6 @@
 import { Gateways, Result, ok, err, Success } from 'gateways';
 import { VizId, Timestamp, UserId, Upvote } from 'entities';
-import { generateId } from './generateId';
+import { generateUpvoteId } from './generateUpvoteId';
 
 // upvoteViz
 //  * Creates a new Upvote associated with this viz
@@ -16,22 +16,24 @@ export const UpvoteViz = (gateways: Gateways) => {
     const { user, viz, timestamp } = options;
 
     // Save the upvote
-    const upvoteId = generateId();
+    const upvoteId = generateUpvoteId(user, viz);
     const newUpvote: Upvote = {
       id: upvoteId,
       user,
       viz,
       timestamp,
     };
+
+    // Save upvote
     const saveUpvoteResult = await saveUpvote(newUpvote);
     if (saveUpvoteResult.outcome !== 'success') return saveUpvoteResult;
 
-    // Increment upvote count
+    // Increment upvote count (only if the upvote was saved)
     const incrementResult = await incrementUpvotesCount(viz);
     if (incrementResult.outcome === 'failure') {
       return err(incrementResult.error);
     }
 
-    return ok(upvoteId);
+    return ok('success');
   };
 };
