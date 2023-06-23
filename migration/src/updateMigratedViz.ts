@@ -1,7 +1,8 @@
 import { timeMinute, timeFormat } from 'd3';
 import { Gateways } from 'gateways';
+import { Info, Op, timestampToDate } from 'entities';
 import { VizV2 } from './VizV2';
-import { Info, timestampToDate } from 'entities';
+import { logDetail } from './logDetail';
 
 const dateFormat = timeFormat('%m/%d/%Y');
 
@@ -43,44 +44,40 @@ export const updateMigratedViz = async ({
   console.log('lastUpdatedV2', dateFormat(lastUpdatedV2Date));
   console.log('lastUpdatedV3', dateFormat(lastUpdatedV3Date));
 
-  // Get the ops that happened between the last updated timestamps
-  const ops = vizV2.ops.filter(
-    (op) => op.timestamp >= lastUpdatedV2 && op.timestamp <= lastUpdatedV3
-  );
+  if (vizV2.ops.length === 0) {
+    console.log('vizV2.ops.length === 0');
+    process.exit(0);
+  }
+  // // Get the ops that happened between the last updated timestamps
+  // const ops = vizV2.ops.filter(
+  //   (op) => op.timestamp >= lastUpdatedV2 && op.timestamp <= lastUpdatedV3
+  // );
 
-  console.log('vizV2.ops', vizV2.ops);
-  process.exit(0);
+  // Revision History from ShareDB Ops
+  // ---------------------------------
+  // Some of the op history for the early vizzes was unfortunately deleted.
+  // In particular, that of the first 1286 vizzes created.
+  // First, let's check if the viz has op history starting at version 0.
+  // If it does, then the op log history is intact and we can derive
+  // a complete revision history from it.
+  //
+  // While we could in theory try reconstructing a partial history by applying
+  // inverted ops from the current state, that seems sketchy as I'm
+  // not sure if the op inverses are all actually valid or not.
+  //
+  // So, let's just ignore the partial revision histories.
 
-  // // At this point, this viz has a new commit,
-  // // but the content is still what it was forked from.
-  // //
-  // // Next, we need to modify its content.
-  // let vizV3Forked = (await getViz(vizV2.info.id)).value;
+  const ops: Array<Op> = vizV2.ops;
+  const opHistoryIsValid = ops.length > 0 && ops[0].v === 0;
+
+  if (!opHistoryIsValid) {
+    //      await play(soundTom);
+    logDetail('  Op history is not valid. Creating simple commits.');
+    // Since we don't have valid revision history,
+    // let's just created a boring set of commits for this viz:
+  }
 };
 
-// // Revision History from ShareDB Ops
-// //
-// // Some of the op history for the early vizzes was unfortunately deleted.
-// // In particular, that of the first 1286 vizzes created.
-// // First, let's check if the viz has op history starting at version 0.
-// // If it does, then the op log history is intact and we can derive
-// // a complete revision history from it.
-// //
-// // While we could in theory try reconstructing a partial history by applying
-// // inverted ops from the current state, that seems sketchy as I'm
-// // not sure if the op inverses are all actually valid or not.
-// //
-// // So, let's just ignore the partial revision histories.
-
-// const ops = vizV2.ops;
-// const opHistoryIsValid = ops.length > 0 && ops[0].v === 0;
-
-// if (!opHistoryIsValid) {
-//   //      await play(soundTom);
-//   logDetail('  Op history is not valid. Creating simple commits.');
-//   // Since we don't have valid revision history,
-//   // let's just created a boring set of commits for this viz:
-//   //  * One commit to fork (that just changes the id) at created timestamps
 //   //  * One commit to modify the content at last updated
 
 //   // Compute migrated V3 files from V2 files

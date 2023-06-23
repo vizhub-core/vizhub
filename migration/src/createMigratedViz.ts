@@ -28,8 +28,8 @@ export const createMigratedViz = async ({
 
   // If we are here, then the viz has never been migrated
   // so we need to create a new viz in V3 by forking the viz in V3.
-  // Fork the forkedFrom viz.
-  // TODO fork from specific timestamp
+  // Fork the forkedFrom vis at the specific timestamp
+  // when the vizV2 was created.
   const forkResult = await forkViz({
     newOwner: vizV2.info.owner,
     forkedFrom,
@@ -45,5 +45,7 @@ export const createMigratedViz = async ({
   }
   const migratedInfo: Info = forkResult.value;
 
+  // This function only does the forking.
+  // The content is filled in later by updateMigratedViz.
   return ok(migratedInfo);
 };
