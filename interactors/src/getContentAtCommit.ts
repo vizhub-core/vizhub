@@ -3,6 +3,8 @@ import { apply } from 'ot';
 import { Content, Commit, CommitId } from 'entities';
 import { generateId } from './generateId';
 
+const debug = false;
+
 // https://gitlab.com/curran/vizhub-ee/-/blob/main/vizhub-ee-interactors/src/GetContentAtCommit.ts
 export const GetContentAtCommit =
   (gateways: Gateways, options?: { milestoneFrequency: number }) =>
@@ -12,13 +14,18 @@ export const GetContentAtCommit =
 
     // TODO indentify the case where this fails in migration
     // and add a test for it.
-    const commitsResult = await getCommitAncestors(id, true);
+    const commitsResult = await getCommitAncestors(id, false);
     //const commitsResult = await getCommitAncestors(id);
     if (commitsResult.outcome === 'failure') return commitsResult;
     const commits = commitsResult.value;
     const { milestone } = commits[0];
 
     let content = {};
+    if (debug) {
+      console.log('in getContentAtCommit');
+      console.log('commits', JSON.stringify(commits, null, 2));
+      console.log('content', JSON.stringify(content, null, 2));
+    }
     // Handle the case where we start from a milestone.
     if (milestone) {
       // Get the milestone (and report failure if missing)
@@ -39,12 +46,21 @@ export const GetContentAtCommit =
       try {
         content = apply(content, commit.ops);
       } catch (error: any) {
+        if (debug) {
+          console.log(
+            'handling error from `json1.apply` in getContentAtCommit'
+          );
+          console.log('content', content);
+          console.log('commit.ops', commit.ops);
+        }
         // Report out any op applications errors from JSON1 that may occur,
         // to support debugging (should never happen if everything is working).
         return err(
           invalidCommitOp(
             commit.id,
-            error.message + '\nOps: \n' + JSON.stringify(commit.ops, null, 2)
+            error.message +
+              '\nin getContentAtCommit\ncommit.ops: \n' +
+              JSON.stringify(commit.ops, null, 2)
           )
         );
       }

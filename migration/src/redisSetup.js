@@ -12,8 +12,8 @@ export const idx = 'idx:vizhub';
 export const tobytes = (array) => Buffer.from(new Float32Array(array).buffer);
 
 export const redisSetup = async (startFresh) => {
-  console.log(`Connecting to v3 Redis`);
-  console.log(`  Using v3 Redis URI "${v3RedisURI}".`);
+  console.log(`  Connecting to v3 Redis`);
+  console.log(`    Using v3 Redis URI "${v3RedisURI}".`);
 
   const redisClient = createClient({
     password: v3RedisPassword,

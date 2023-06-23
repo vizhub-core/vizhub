@@ -16,17 +16,19 @@ export const UpvoteViz = (gateways: Gateways) => {
     const { user, viz, timestamp } = options;
 
     // Save the upvote
-    const upvoteId = generateUpvoteId(viz, user);
+    const upvoteId = generateUpvoteId(user, viz);
     const newUpvote: Upvote = {
       id: upvoteId,
       user,
       viz,
       timestamp,
     };
+
+    // Save upvote
     const saveUpvoteResult = await saveUpvote(newUpvote);
     if (saveUpvoteResult.outcome !== 'success') return saveUpvoteResult;
 
-    // Increment upvote count
+    // Increment upvote count (only if the upvote was saved)
     const incrementResult = await incrementUpvotesCount(viz);
     if (incrementResult.outcome === 'failure') {
       return err(incrementResult.error);

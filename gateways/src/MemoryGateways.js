@@ -9,7 +9,7 @@ import { resourceNotFoundError, invalidDecrementError } from './errors';
 import { ok, err } from './Result';
 
 // A stub similar to ShareDB snapshots.
-const fakeSnapshot = (data) => ({
+export const fakeSnapshot = (data) => ({
   data,
   v: 1,
   type: 'json1',
