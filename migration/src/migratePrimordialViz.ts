@@ -70,8 +70,6 @@ export const migratePrimordialViz = async ({
 
   // The first ever commit.
   // Special because it's the only with no parentCommitId.
-
-  // TODO don't clobber the primordial commit if it already exists.
   const primordialCommitId = generateId();
 
   vizV3.info.start = primordialCommitId;

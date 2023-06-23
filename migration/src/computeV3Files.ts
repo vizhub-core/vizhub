@@ -7,7 +7,7 @@ const generateFileId = () => uuid().substr(0, 8);
 
 export const computeV3Files = (
   goodFiles: FilesV2,
-  oldContentV3: Content
+  oldContentV3?: Content
 ): Files => {
   let getFileId: (file?: FileV2) => string = generateFileId;
 

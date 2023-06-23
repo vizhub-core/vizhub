@@ -11,6 +11,8 @@ const dateFormat = timeFormat('%m/%d/%Y');
 // Auto-commit changes from the oplog for every viz every 15 minutes.
 const autoCommitInterval = timeMinute.every(15);
 
+const debug = false;
+
 // If we are here, then the viz has been migrated
 // AND has also been updated in V2 but not yet in V3.
 // We need to update the viz in V3 to reflect the changes.
@@ -59,8 +61,11 @@ export const updateMigratedViz = async ({
   const lastUpdatedV3 = infoMigrated.updated;
   const lastUpdatedV3Date = timestampToDate(lastUpdatedV3);
 
-  console.log('lastUpdatedV2', dateFormat(lastUpdatedV2Date));
-  console.log('lastUpdatedV3', dateFormat(lastUpdatedV3Date));
+  if (debug) {
+    console.log('in updateMigratedViz');
+    console.log('lastUpdatedV2', dateFormat(lastUpdatedV2Date));
+    console.log('lastUpdatedV3', dateFormat(lastUpdatedV3Date));
+  }
 
   // Revision History from ShareDB Ops
   // ---------------------------------
@@ -120,11 +125,21 @@ export const updateMigratedViz = async ({
       process.exit();
     }
 
+    if (debug) {
+      console.log(JSON.stringify(uncommitted, null, 2));
+
+      console.log('infoMigrated.id', infoMigrated.id);
+
+      console.log('==== Attempting to commit viz...');
+    }
     const commitVizResult = await commitViz(infoMigrated.id);
     if (commitVizResult.outcome === 'failure') {
       console.log('Error while committing viz.');
       console.log(commitVizResult.error);
       process.exit();
+    }
+    if (debug) {
+      console.log('==== Successfully committed viz!');
     }
     logDetail('  Created simple commits! Migrated viz is now up to date.');
   }
