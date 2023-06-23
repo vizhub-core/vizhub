@@ -3,6 +3,7 @@ import { SaveViz, generateId } from 'interactors';
 import { computeV3Files } from './computeV3Files';
 import { diff } from 'ot';
 import { Gateways } from 'gateways';
+import { FilesV2 } from './VizV2';
 
 // Default height in pixels for vizzes.
 // In V3 data model, height is always explicit.
@@ -21,7 +22,7 @@ export const migratePrimordialViz = async ({
   title: string;
   forkedFrom: VizId;
   forkedFromIsBackfilled: boolean;
-  goodFiles: Files;
+  goodFiles: FilesV2;
   gateways: Gateways;
 }) => {
   console.log('    Generating the Primordial Commit');

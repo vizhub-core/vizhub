@@ -9,6 +9,7 @@ import { Collection } from 'mongodb-legacy';
 import { updateMigratedViz } from './updateMigratedViz';
 import { migratePrimordialViz } from './migratePrimordialViz';
 import { createMigratedViz } from './createMigratedViz';
+import { FilesV2 } from './VizV2';
 
 // Hardcoded ID of the primordial viz (actually in the V2 database)
 const primordialVizId = '86a75dc8bdbe4965ba353a79d4bd44c8';
@@ -66,7 +67,7 @@ export const processViz = async ({
 
   // Isolate the "good files" that we want to use for embedding.
   // This excludes invalid files and `bundle.js` (since it's auto-generated).
-  const goodFiles = isolateGoodFiles(vizV2.content);
+  const goodFiles: FilesV2 = isolateGoodFiles(vizV2.content);
 
   // If there are no good files, skip this viz! It's not worth migrating.
   if (!goodFiles) {
@@ -129,10 +130,7 @@ export const processViz = async ({
       // So we need to create the viz in V3 by forking, then update it.
       const creationResult = await createMigratedViz({
         vizV2,
-        // title,
         forkedFrom,
-        // forkedFromIsBackfilled,
-        // goodFiles,
         gateways,
       });
       if (creationResult.outcome === 'failure') {
@@ -151,6 +149,7 @@ export const processViz = async ({
     vizV2,
     gateways,
     infoMigrated,
+    goodFiles,
   });
 
   return true;

@@ -1,4 +1,4 @@
-import { VizId } from 'entities';
+import { Files, VizId } from 'entities';
 
 export type VizV2 = {
   info: InfoV2;
@@ -29,7 +29,13 @@ export type InfoV2 = {
 
 export type ContentV2 = {
   id: VizId;
-  files: Array<{ name: string; content: string }>;
+  files: FilesV2;
+};
+
+export type FilesV2 = Array<FileV2>;
+export type FileV2 = {
+  name: string;
+  text: string;
 };
 
 // An example of a VizV2:

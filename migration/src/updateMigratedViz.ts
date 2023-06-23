@@ -1,8 +1,10 @@
 import { timeMinute, timeFormat } from 'd3';
 import { Gateways } from 'gateways';
-import { Info, Op, timestampToDate } from 'entities';
-import { VizV2 } from './VizV2';
+import { Content, Info, Op, Viz, timestampToDate } from 'entities';
+import { FilesV2, VizV2 } from './VizV2';
 import { logDetail } from './logDetail';
+import { computeV3Files } from './computeV3Files';
+import { CommitViz, SaveViz } from 'interactors';
 
 const dateFormat = timeFormat('%m/%d/%Y');
 
@@ -16,11 +18,17 @@ const autoCommitInterval = timeMinute.every(15);
 export const updateMigratedViz = async ({
   vizV2,
   gateways,
+
+  // `infoMigrated` is the info for the viz in V3,
+  // which is the already migrated version that
+  // needs to be updated with more commits.
   infoMigrated,
+  goodFiles,
 }: {
   vizV2: VizV2;
   gateways: Gateways;
   infoMigrated: Info | undefined;
+  goodFiles: FilesV2;
 }) => {
   // console.log('in updateMigratedViz');
   // console.log('vizV2.info', vizV2.info);
@@ -29,6 +37,16 @@ export const updateMigratedViz = async ({
   if (!infoMigrated) {
     throw new Error('infoMigrated is undefined');
   }
+
+  // Get the migrated content as well.
+  const contentMigratedResult = await gateways.getContent(infoMigrated.id);
+  if (contentMigratedResult.outcome === 'failure') {
+    console.log('Error while getting content for viz in V3.');
+    console.log(contentMigratedResult.error);
+    process.exit();
+  }
+  const contentMigrated: Content = contentMigratedResult.value.data;
+
   // We only need to consider the delta between the V2 and V3 versions,
   // which is isolated in the ops that happen between the last updated timestamps
   // for the V2 and V3 versions.
@@ -44,15 +62,6 @@ export const updateMigratedViz = async ({
   console.log('lastUpdatedV2', dateFormat(lastUpdatedV2Date));
   console.log('lastUpdatedV3', dateFormat(lastUpdatedV3Date));
 
-  if (vizV2.ops.length === 0) {
-    console.log('vizV2.ops.length === 0');
-    process.exit(0);
-  }
-  // // Get the ops that happened between the last updated timestamps
-  // const ops = vizV2.ops.filter(
-  //   (op) => op.timestamp >= lastUpdatedV2 && op.timestamp <= lastUpdatedV3
-  // );
-
   // Revision History from ShareDB Ops
   // ---------------------------------
   // Some of the op history for the early vizzes was unfortunately deleted.
@@ -66,43 +75,60 @@ export const updateMigratedViz = async ({
   // not sure if the op inverses are all actually valid or not.
   //
   // So, let's just ignore the partial revision histories.
-
   const ops: Array<Op> = vizV2.ops;
   const opHistoryIsValid = ops.length > 0 && ops[0].v === 0;
-
   if (!opHistoryIsValid) {
-    //      await play(soundTom);
     logDetail('  Op history is not valid. Creating simple commits.');
     // Since we don't have valid revision history,
     // let's just created a boring set of commits for this viz:
+    //  * One commit to modify the content at last updated date
+
+    // Prepare the viz for CommitViz by simulating the user editing it.
+    // Simulates Joe typing "Beautiful " into the HTML of the primordial viz.
+    const uncommitted: Viz = {
+      // We modify the migrated viz with the changes
+      // that make it the most recently modified
+      // version from Viz V2.
+      // Note that we want to keep a few fields
+      // in vizV3Forked intact (from `...infoMigrated,`), namely:
+      //  * info.start
+      //  * info.end
+      //  * info.isFrozen
+      info: {
+        ...infoMigrated,
+        updated: lastUpdatedV2,
+        committed: false,
+        commitAuthors: [vizV2.info.owner],
+      },
+      content: {
+        ...contentMigrated,
+        // Compute the files for the viz, ensuring that
+        // where possible the file IDs carry over.
+        files: computeV3Files(goodFiles, contentMigrated),
+      },
+    };
+
+    const saveViz = SaveViz(gateways);
+    const commitViz = CommitViz(gateways);
+
+    //   // Kludge: special case fix for strange emoji-related unicode diff error.
+    //   vizV3Forked = removeEmoji(vizV3Forked);
+    const saveVizResult = await saveViz(uncommitted);
+    if (saveVizResult.outcome === 'failure') {
+      console.log('Error while saving viz.');
+      console.log(saveVizResult.error);
+      process.exit();
+    }
+
+    const commitVizResult = await commitViz(infoMigrated.id);
+    if (commitVizResult.outcome === 'failure') {
+      console.log('Error while committing viz.');
+      console.log(commitVizResult.error);
+      process.exit();
+    }
+    logDetail('  Created simple commits! Migrated viz is now up to date.');
   }
 };
-
-//   //  * One commit to modify the content at last updated
-
-//   // Compute migrated V3 files from V2 files
-//   const forkedFromContentV3 = (await getContent(forkedFrom)).value.data;
-//   vizV3.content.files = computeV3Files(goodFiles, forkedFromContentV3);
-
-//   // Prepare the viz for CommitViz
-//   vizV3.info.committed = false;
-//   vizV3.info.commitAuthors = [vizV2.info.owner];
-
-//   // We modify the forked viz with the changes
-//   // that make it the most recently modified
-//   // version from Viz V2.
-//   // Note that we want to keep a few fields
-//   // in vizV3Forked, namely:
-//   //  * info.start
-//   //  * info.end
-//   //  * info.isFrozen
-//   vizV3Forked.info = { ...vizV3Forked.info, ...vizV3.info };
-//   vizV3Forked.content = { ...vizV3Forked.content, ...vizV3.content };
-
-//   // Kludge: special case fix for strange emoji-related unicode diff error.
-//   vizV3Forked = removeEmoji(vizV3Forked);
-//   await saveViz(vizV3Forked);
-//   const commitVizResult = await commitViz(vizV3Forked.info.id);
 
 //   //await new Promise((resolve) => setTimeout(resolve, 10000000));
 // } else {
@@ -116,7 +142,13 @@ export const updateMigratedViz = async ({
 //   // We have a valid revision history.
 //   // Let's compress all ops into commits
 //   // that fall into 15 minute intervals.
+// We have a valid revision history.
 
+// // TODO figure out where this goes
+// // Get the ops that happened between the last updated timestamps
+// const ops = vizV2.ops.filter(
+//   (op) => op.timestamp >= lastUpdatedV2 && op.timestamp <= lastUpdatedV3
+// );
 //   // data will track the V2 content document.
 //   let data = {};
 

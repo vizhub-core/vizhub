@@ -4,6 +4,9 @@ import { ForkViz } from 'interactors';
 import { VizV2 } from './VizV2';
 import { GetCommitAtTimestamp } from 'interactors';
 
+// If we're here, then the viz has not yet been migrated.
+// The task before us is to create a new viz in V3 by forking the viz in V3.
+// The new viz will have the same id as the viz in V2.
 export const createMigratedViz = async ({
   vizV2,
   forkedFrom,
