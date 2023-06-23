@@ -48,7 +48,6 @@ export const upvoteTest = () => {
         viz: id,
         timestamp: ts3,
       });
-      // TODO use getUpvotesForViz
     });
   });
 };

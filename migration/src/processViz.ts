@@ -123,9 +123,7 @@ export const processViz = async ({
       // After this operation, we are done with this viz.
       return true;
     } else {
-      console.log(
-        '    This viz has already been migrated. Updating migrated viz...'
-      );
+      console.log('   This is the first migration of a non-primordial viz!');
       // This viz has not been migrated yet.
       // So we need to create the viz in V3 by forking, then update it.
       const creationResult = await createMigratedViz({

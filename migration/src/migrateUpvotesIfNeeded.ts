@@ -24,7 +24,7 @@ export const migrateUpvotesIfNeeded = async ({
       const timestamp = upvote.timestamp;
 
       // If the upvote already exists, skip it
-      const upvoteId = generateUpvoteId(viz, user);
+      const upvoteId = generateUpvoteId(user, viz);
       const upvoteExists =
         (await gateways.getUpvote(upvoteId)).outcome === 'success';
       if (upvoteExists) {

@@ -20,15 +20,18 @@ export const createMigratedViz = async ({
   const forkViz = ForkViz(gateways);
   const getCommitAtTimestamp = GetCommitAtTimestamp(gateways);
 
-  // Get the commit id of the forkedFrom viz at the creation timestamp of the vizV2.
-  const infoResult = await getInfo(forkedFrom);
-  if (infoResult.outcome === 'failure') return infoResult;
-  const info = infoResult.value.data;
-  const timestamp = vizV2.info.createdTimestamp;
-  const commitIdResult = await getCommitAtTimestamp(info, timestamp);
+  // Figure out the commitId of the forkedFrom viz at the time the vizV2 was created.
+  const forkedFromInfoResult = await getInfo(forkedFrom);
+  if (forkedFromInfoResult.outcome === 'failure') return forkedFromInfoResult;
+  const forkedFromInfo = forkedFromInfoResult.value.data;
+  const commitIdResult = await getCommitAtTimestamp(
+    forkedFromInfo,
+    vizV2.info.createdTimestamp
+  );
   if (commitIdResult.outcome === 'failure') return commitIdResult;
   const forkedFromCommitId: CommitId = commitIdResult.value;
 
+  console.log('     forkedFromCommitId:', forkedFromCommitId);
   // If we are here, then the viz has never been migrated
   // so we need to create a new viz in V3 by forking the viz in V3.
   // Fork the forkedFrom vis at the specific timestamp
