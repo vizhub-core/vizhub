@@ -1,5 +1,7 @@
 import { useContext, useMemo } from 'react';
-import { VizPageHead, ForkModal, VizPageViewer } from 'components';
+import { VizPageHead } from 'components/src/components/VizPageHead';
+import { ForkModal } from 'components/src/components/ForkModal';
+import { VizPageViewer } from 'components/src/components/VizPageViewer';
 import { defaultVizHeight } from 'entities';
 import { AuthenticatedUserContext } from '../../contexts/AuthenticatedUserContext';
 import { SmartHeader } from '../../smartComponents/SmartHeader';

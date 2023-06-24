@@ -24,14 +24,16 @@
   },
   "homepage": "https://github.com/vizhub-core/vizhub3#readme",
   "workspaces": [
-    "app",
-    "api",
-    "entities",
-    "gateways",
-    "interactors",
-    "database",
-    "components",
-    "ot"
+"api",
+"app",
+"components",
+"database",
+"demo",
+"entities",
+"gateways",
+"interactors",
+"migration",
+"ot"
   ],
   "dependencies": {
     "16": "^0.0.2",
