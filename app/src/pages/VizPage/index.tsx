@@ -30,11 +30,6 @@ export const VizPage: Page = ({ pageData }) => {
     'User'
   );
 
-  console.log(
-    'TODO pass content with files into depths of Viz page:',
-    JSON.stringify(content, null, 2)
-  );
-
   // TODO move this to URL
   // https://github.com/vizhub-core/vizhub3/issues/107
   // ?edit=files

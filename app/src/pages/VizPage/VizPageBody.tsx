@@ -75,6 +75,7 @@ export const VizPageBody = ({
         onExportClick={onExportClick}
         onShareClick={onShareClick}
         onForkClick={toggleForkModal}
+        showForkButton={!!authenticatedUser}
       />
       <VizPageViewer
         vizTitle={info.title}

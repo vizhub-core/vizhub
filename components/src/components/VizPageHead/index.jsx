@@ -12,6 +12,7 @@ export const VizPageHead = ({
   onExportClick,
   onShareClick,
   onForkClick,
+  showForkButton,
 }) => {
   const toggleShowEditor = useCallback(
     () => setShowEditor(!showEditor),
@@ -35,10 +36,12 @@ export const VizPageHead = ({
           <ShareSVG />
           Share
         </Button>
-        <Button size="sm" onClick={onForkClick}>
-          <ForkSVG />
-          Fork
-        </Button>
+        {showForkButton ? (
+          <Button size="sm" onClick={onForkClick}>
+            <ForkSVG />
+            Fork
+          </Button>
+        ) : null}
       </div>
     </div>
   );
