@@ -1,7 +1,8 @@
 {
   "//": "gets rid of the error:  'React' refers to a UMD global, but the current file is a module. Consider adding an import instead.'",
   "compilerOptions": {
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "skipLibCheck": true
   },
   "include": ["src/**/*"],
   "///": "TODO - remove this when we have this change: https://github.com/vitest-dev/vitest/issues/3622",

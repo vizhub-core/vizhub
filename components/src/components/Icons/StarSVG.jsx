@@ -1,6 +1,6 @@
 // From https://primer.style/design/foundations/icons/star-16
-export const StarSVG = ({ height = 16, fill = 'currentcolor' }) => (
-  <svg height={height} viewBox="0 0 16 16">
+export const StarSVG = ({ height = 16, fill = 'currentcolor', ...props }) => (
+  <svg height={height} viewBox="0 0 16 16" {...props}>
     <path
       fill={fill}
       transform="translate(0 0.5)"

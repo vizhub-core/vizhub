@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useCallback, useRef } from 'react';
 import { UpvoteWidget } from 'components';
 import './styles.scss';
 
@@ -24,6 +24,11 @@ export const VizPageViewer = ({
   // It's invisible, nothing is rendered into it.
   const svgRef = useRef();
 
+  const handleUpvoteClick = useCallback(() => {
+    console.log('upvote clicked');
+    alert('TODO handle upvoting');
+  }, []);
+
   return (
     <div className="vh-viz-page-viewer">
       <div className="viewer-content">
@@ -36,7 +41,10 @@ export const VizPageViewer = ({
         </div>
         <div className="title-bar">
           <h4>{vizTitle}</h4>
-          <UpvoteWidget upvotesCount={upvotesCount} />
+          <UpvoteWidget
+            upvotesCount={upvotesCount}
+            onClick={handleUpvoteClick}
+          />
         </div>
 
         <div className="meta-info">
