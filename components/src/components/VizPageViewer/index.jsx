@@ -18,6 +18,7 @@ export const VizPageViewer = ({
   ownerUserHref,
   upvotesCount,
   license,
+  defaultVizHeight,
 }) => {
   // This SVG elemeng is used only for its dynamic resizing behavior.
   // It's invisible, nothing is rendered into it.
@@ -27,7 +28,10 @@ export const VizPageViewer = ({
     <div className="vh-viz-page-viewer">
       <div className="viewer-content">
         <div className="viz-frame">
-          <svg ref={svgRef} viewBox={`0 0 960 ${vizHeight}`} />
+          <svg
+            ref={svgRef}
+            viewBox={`0 0 960 ${vizHeight || defaultVizHeight}`}
+          />
           {renderVizRunner(svgRef)}
         </div>
         <div className="title-bar">

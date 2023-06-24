@@ -44,11 +44,18 @@ export const initializeMongoDB = async ({
   } else {
     console.log('Check your VizHub environment variables.');
     console.log(
-      'Either set VIZHUB3_MONGO_LOCAL=true for loval development, or'
+      'Either set VIZHUB3_MONGO_LOCAL=true for local development, or'
     );
     console.log(
       'Set VIZHUB3_MONGO_USERNAME,VIZHUB3_MONGO_PASSWORD, and VIZHUB3_MONGO_DATABASE for production deployment.'
     );
+    console.log('Current values:');
+    console.log('VIZHUB3_MONGO_LOCAL:', env.VIZHUB3_MONGO_LOCAL);
+    // console.log('VIZHUB3_MONGO_USERNAME:', env.VIZHUB3_MONGO_USERNAME);
+    // console.log('VIZHUB3_MONGO_PASSWORD:', env.VIZHUB3_MONGO_PASSWORD);
+    // console.log('VIZHUB3_MONGO_DATABASE:', env.VIZHUB3_MONGO_DATABASE);
+    // console.log('VIZHUB3_MONGO_DOMAIN:', env.VIZHUB3_MONGO_DOMAIN);
+    process.exit(1);
   }
 
   const mongoDBConnection = await mongoClient.connect();

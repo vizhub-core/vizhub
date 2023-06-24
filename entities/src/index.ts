@@ -65,6 +65,7 @@ export type {
   Upvote,
   UpvoteId,
 } from './Viz';
+export { defaultVizHeight } from './Viz';
 
 export type { Timestamp, Markdown, Visibility, Snapshot } from './common';
 

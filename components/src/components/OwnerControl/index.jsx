@@ -22,7 +22,7 @@ export const OwnerControl = ({ owner, setOwner, possibleOwners }) => {
       <Form.Label>Owner</Form.Label>
       <Dropdown onSelect={setOwner}>
         <Dropdown.Toggle id="dropdown-owner">
-          {ownersById.get(owner).label}
+          {ownersById.get(owner)?.label}
         </Dropdown.Toggle>
         <Dropdown.Menu>
           {otherPossibleOwners.map((possibleOwner) => (

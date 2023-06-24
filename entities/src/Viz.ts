@@ -144,6 +144,10 @@ export interface File {
   text: string;
 }
 
+// The default height of a viz in pixels.
+// Homage to bl.ocks.org.
+export const defaultVizHeight = 500;
+
 // Content
 //  * Heavyweight content of a viz.
 //  * Contains the full content of all files in the viz.
@@ -165,6 +169,8 @@ export interface Content {
   // height
   // * The customized height of the viz in pixels
   // * Not defined if the user has not customized it
+  // * If not defined, the default height is used,
+  //   which is specified by defaultVizHeight.
   height?: number;
 
   // license

@@ -1,5 +1,6 @@
 import { useContext, useMemo } from 'react';
 import { VizPageHead, ForkModal, VizPageViewer } from 'components';
+import { defaultVizHeight } from 'entities';
 import { AuthenticatedUserContext } from '../../contexts/AuthenticatedUserContext';
 import { SmartHeader } from '../../smartComponents/SmartHeader';
 import { getUserDisplayName } from '../../accessors/getUserDisplayName';
@@ -95,6 +96,7 @@ export const VizPageBody = ({
         ownerUserHref={getProfilePageHref(ownerUser)}
         upvotesCount={info.upvotesCount}
         license={license}
+        defaultVizHeight={defaultVizHeight}
       />
       <ForkModal
         initialTitle={'Fork of ' + info.title}
