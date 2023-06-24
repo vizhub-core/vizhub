@@ -4,6 +4,7 @@
   "type": "module",
   "main": "src/index.js",
   "scripts": {
+    "test": "",
     "build": "vite build --ssr src/index.js --sourcemap",
     "migrate": "npm run build && NODE_OPTIONS=--enable-source-maps node dist/index.js",
     "prettier": "prettier {*.*,**/*.*} --single-quote --write",

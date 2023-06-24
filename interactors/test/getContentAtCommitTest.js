@@ -63,7 +63,6 @@ export const getContentAtCommitTest = () => {
       const result = await getContentAtCommit(commit2InvalidOp.id);
       expect(result.outcome).toEqual('failure');
       expect(result.error.code).toEqual(VizHubErrorCode.invalidCommitOp);
-      console.log(result.error.message);
       expect(result.error.message)
         .toEqual(`Invalid op in commit with id: commit2
 Invalid document snapshot: undefined
@@ -111,7 +110,7 @@ commit.ops:
 
     it('getContentAtCommit, using Milestones, missing milestone error case', async () => {
       const gateways = initGateways();
-      const { saveCommit, saveMilestone } = gateways;
+      const { saveCommit } = gateways;
       const getContentAtCommit = GetContentAtCommit(gateways);
       // Exclude sampleMilestone from saving,
       // which will trigger the error.
