@@ -66,7 +66,8 @@ export const getContentAtCommitTest = () => {
       expect(result.error.message)
         .toEqual(`Invalid op in commit with id: commit2
 Invalid document snapshot: undefined
-Ops: 
+in getContentAtCommit
+commit.ops: 
 [
   "random",
   {
@@ -109,7 +110,7 @@ Ops:
 
     it('getContentAtCommit, using Milestones, missing milestone error case', async () => {
       const gateways = initGateways();
-      const { saveCommit, saveMilestone } = gateways;
+      const { saveCommit } = gateways;
       const getContentAtCommit = GetContentAtCommit(gateways);
       // Exclude sampleMilestone from saving,
       // which will trigger the error.

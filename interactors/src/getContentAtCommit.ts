@@ -12,10 +12,7 @@ export const GetContentAtCommit =
     const { getCommitAncestors, getMilestone, saveMilestone, saveCommit } =
       gateways;
 
-    // TODO indentify the case where this fails in migration
-    // and add a test for it.
-    const commitsResult = await getCommitAncestors(id, false);
-    //const commitsResult = await getCommitAncestors(id);
+    const commitsResult = await getCommitAncestors(id, true);
     if (commitsResult.outcome === 'failure') return commitsResult;
     const commits = commitsResult.value;
     const { milestone } = commits[0];

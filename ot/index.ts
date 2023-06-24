@@ -1,10 +1,10 @@
 // Operational Transformation (OT) utilities.
 // This file is the central point where the OT types are imported.
 // Localized to one file so it's easy to change it in future.
-import OTJSON1Presence from "sharedb-client-browser/dist/ot-json1-presence-umd.cjs";
-import jsondiff from "json0-ot-diff";
-import diffMatchPatch from "diff-match-patch";
-import { Op } from "entities";
+import OTJSON1Presence from 'sharedb-client-browser/dist/ot-json1-presence-umd.cjs';
+import jsondiff from 'json0-ot-diff';
+import diffMatchPatch from 'diff-match-patch';
+import { Op } from 'entities';
 
 const { json1Presence, textUnicode } = OTJSON1Presence;
 

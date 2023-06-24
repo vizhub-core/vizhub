@@ -5,7 +5,7 @@
   "main": "src/index.ts",
   "scripts": {
     "test": "",
-    "tsc": "tsc src/index.ts --noEmit",
+    "tsc": "tsc --noEmit",
     "prettier": "prettier {*.*,**/*.*} --single-quote --write"
   },
   "repository": {

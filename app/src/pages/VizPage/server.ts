@@ -6,6 +6,9 @@ import { parseAuth0Sub } from '../../parseAuth0User';
 import { VizPage } from './index';
 import { renderREADME } from './renderREADME';
 import { getFileText } from '../../accessors/getFileText';
+import { RenderMarkdown } from './renderMarkdown';
+
+const renderMarkdown = RenderMarkdown(marked);
 
 VizPage.getPageData = async ({ gateways, params, auth0User }) => {
   const id: VizId = params.id;
@@ -54,7 +57,7 @@ VizPage.getPageData = async ({ gateways, params, auth0User }) => {
   const content = contentSnapshot.data;
   const initialReadmeHTML = renderREADME(
     getFileText(content, 'README.md'),
-    marked,
+    renderMarkdown,
     xss
   );
 
