@@ -6,7 +6,7 @@ import { AuthenticatedUserProvider } from '../../contexts/AuthenticatedUserConte
 import { VizPageBody } from './VizPageBody';
 import { Page } from '../Page';
 
-const vizKit = VizKit({ baseUrl: './api' });
+const vizKit = VizKit({ baseUrl: '/api' });
 
 // Inspired by https://github.com/vitejs/vite-plugin-react/blob/main/playground/ssr-react/src/pages/Home.jsx
 export const VizPage: Page = ({ pageData }) => {
