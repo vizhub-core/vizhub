@@ -4,7 +4,7 @@
   "description": "Full stack app for VizHub3, based in Vite SSR.",
   "type": "module",
   "scripts": {
-    "test": "vitest",
+    "test": "vitest run",
     "coverage": "vitest run --coverage",
     "tsc": "tsc --noEmit",
     "prettier": "prettier {*.*,**/*.*} --single-quote --write",

@@ -63,10 +63,12 @@ export const getContentAtCommitTest = () => {
       const result = await getContentAtCommit(commit2InvalidOp.id);
       expect(result.outcome).toEqual('failure');
       expect(result.error.code).toEqual(VizHubErrorCode.invalidCommitOp);
+      console.log(result.error.message);
       expect(result.error.message)
         .toEqual(`Invalid op in commit with id: commit2
 Invalid document snapshot: undefined
-Ops: 
+in getContentAtCommit
+commit.ops: 
 [
   "random",
   {
