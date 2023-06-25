@@ -1,6 +1,7 @@
 import { Content, Info, Viz, VizId } from 'entities';
 import { Gateways } from 'gateways';
 import { GetContentAtCommit, GetViz } from 'interactors';
+import fastDeepEqual from 'fast-deep-equal';
 
 // Validates a freshly migrated viz.
 export const validateViz = async ({
@@ -29,7 +30,15 @@ export const validateViz = async ({
   if (getContentResult.outcome === 'failure') {
     throw new Error(`Failed to get content: ${getContentResult.error}`);
   }
-  if (JSON.stringify(content) !== JSON.stringify(getContentResult.value)) {
+  const reconstructedContent: Content = getContentResult.value;
+  const matches = fastDeepEqual(content, reconstructedContent);
+  console.log('matches', matches);
+  if (!matches) {
+    console.log('JSON.stringify(content)', JSON.stringify(content, null, 2));
+    console.log(
+      'JSON.stringify(reconstructedContent)',
+      JSON.stringify(reconstructedContent, null, 2)
+    );
     throw new Error(`Content does not match`);
   }
 
