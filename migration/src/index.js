@@ -9,6 +9,8 @@ import { processViz } from './processViz';
 import { migrateUserIfNeeded } from './migrateUserIfNeeded';
 import { migrateUpvotesIfNeeded } from './migrateUpvotesIfNeeded';
 import { logDetail } from './logDetail';
+import { validateViz } from './validateViz';
+
 // import { reportProgress } from './reportProgress';
 
 // Delete everything in V3 Mongo and Redis when starting.

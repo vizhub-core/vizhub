@@ -11,6 +11,11 @@ export const validateViz = async ({
   gateways: Gateways;
 }) => {
   const getViz = GetViz(gateways);
+  const viz: Viz = await getViz(id);
+
+  console.log(JSON.stringify(viz, null, 2));
+
+  return true;
 
   // TODO Check that the start commit is valid
   // TODO Check that the end commit is valid
