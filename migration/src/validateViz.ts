@@ -1,6 +1,6 @@
-import { Viz, VizId } from 'entities';
+import { Content, Info, Viz, VizId } from 'entities';
 import { Gateways } from 'gateways';
-import { GetViz } from 'interactors';
+import { GetContentAtCommit, GetViz } from 'interactors';
 
 // Validates a freshly migrated viz.
 export const validateViz = async ({
@@ -11,9 +11,27 @@ export const validateViz = async ({
   gateways: Gateways;
 }) => {
   const getViz = GetViz(gateways);
-  const viz: Viz = await getViz(id);
+  const getContentAtCommit = GetContentAtCommit(gateways);
 
-  console.log(JSON.stringify(viz, null, 2));
+  const getVizResult = await getViz(id);
+  if (getVizResult.outcome === 'failure') {
+    throw new Error(`Failed to get viz: ${getVizResult.error}`);
+  }
+  const { info, content }: { info: Info; content: Content } =
+    getVizResult.value;
+
+  console.log('info.start', info.start);
+  console.log('info.end', info.end);
+  console.log('info.created', info.created);
+  console.log('info.updated', info.updated);
+
+  const getContentResult = await getContentAtCommit(info.end);
+  if (getContentResult.outcome === 'failure') {
+    throw new Error(`Failed to get content: ${getContentResult.error}`);
+  }
+  if (JSON.stringify(content) !== JSON.stringify(getContentResult.value)) {
+    throw new Error(`Content does not match`);
+  }
 
   return true;
 

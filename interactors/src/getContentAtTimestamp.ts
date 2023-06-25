@@ -5,7 +5,7 @@ import { GetCommitAtTimestamp } from './getCommitAtTimestamp';
 
 // https://gitlab.com/curran/vizhub-ee/-/blob/main/vizhub-ee-interactors/src/GetContentAtTimestamp.ts
 export const GetContentAtTimestamp = (gateways: Gateways) => {
-  const { getInfo, getCommitAncestors } = gateways;
+  const { getInfo } = gateways;
   const getCommitAtTimestamp = GetCommitAtTimestamp(gateways);
   const getContentAtCommit = GetContentAtCommit(gateways);
 
