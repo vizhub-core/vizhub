@@ -161,6 +161,12 @@ const migrate = async () => {
         process.stdout.write('\n');
       }
 
+      logDetail(`Processed viz #${i}: ${info.id} ${info.title}! Validating...`);
+      await validateViz({
+        id: info.id,
+        gateways,
+      });
+      process.exit(0);
       // await reportProgress({ i, n });
     }
   );

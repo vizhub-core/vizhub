@@ -177,7 +177,7 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
     });
 
   const getInfosByOwner = (owner) =>
-    new Promise((resolve, reject) => {
+    new Promise((resolve) => {
       const entityName = 'Info';
       const query = shareDBConnection.createFetchQuery(
         toCollectionName(entityName),
