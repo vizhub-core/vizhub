@@ -5,6 +5,7 @@ import {
   commit2,
   commit2WithMilestone,
   commit3,
+  primordialCommitWithMilestone,
 } from './fixtures';
 
 export const getCommitAncestorsTest = () => {
@@ -54,7 +55,7 @@ export const getCommitAncestorsTest = () => {
       expect(result.value).toEqual([primordialCommit, commit2, commit3]);
     });
 
-    it('getCommitAncestors to nearest milestone', async () => {
+    it('getCommitAncestors to nearest milestone, degenerate case', async () => {
       const gateways = await initGateways();
       const { saveCommit, getCommitAncestors } = gateways;
 
@@ -64,6 +65,49 @@ export const getCommitAncestorsTest = () => {
       const result = await getCommitAncestors(commit2.id, true);
       expect(result.value.length).toEqual(1);
       expect(result.value).toEqual([commit2WithMilestone]);
+    });
+
+    it('getCommitAncestors to nearest milestone, non-degenerate case', async () => {
+      const gateways = await initGateways();
+      const { saveCommit, getCommitAncestors } = gateways;
+
+      await saveCommit(primordialCommit);
+      await saveCommit(commit2WithMilestone);
+      await saveCommit(commit3);
+
+      const result = await getCommitAncestors(commit3.id, true);
+      expect(result.value.length).toEqual(2);
+      expect(result.value).toEqual([commit2WithMilestone, commit3]);
+    });
+
+    it('getCommitAncestors to nearest milestone, non-degenerate case 3', async () => {
+      const gateways = await initGateways();
+      const { saveCommit, getCommitAncestors } = gateways;
+
+      await saveCommit(primordialCommitWithMilestone);
+      await saveCommit(commit2);
+      await saveCommit(commit3);
+
+      const result = await getCommitAncestors(commit3.id, true);
+      expect(result.value.length).toEqual(3);
+      expect(result.value).toEqual([
+        primordialCommitWithMilestone,
+        commit2,
+        commit3,
+      ]);
+    });
+
+    it('getCommitAncestors to nearest milestone, revision 3, no actual milestones', async () => {
+      const gateways = await initGateways();
+      const { saveCommit, getCommitAncestors } = gateways;
+
+      await saveCommit(primordialCommit);
+      await saveCommit(commit2);
+      await saveCommit(commit3);
+
+      const result = await getCommitAncestors(commit3.id, true);
+      expect(result.value.length).toEqual(3);
+      expect(result.value).toEqual([primordialCommit, commit2, commit3]);
     });
 
     it('getCommitAncestors to start', async () => {

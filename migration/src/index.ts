@@ -33,7 +33,7 @@ const migrate = async () => {
   // V2 collections
   const infoCollection = v2MongoDBDatabase.collection('documentInfo');
   const contentCollection = v2MongoDBDatabase.collection('documentContent');
-  const infoOpCollection = v2MongoDBDatabase.collection('o_documentInfo');
+  // const infoOpCollection = v2MongoDBDatabase.collection('o_documentInfo');
   const contentOpCollection = v2MongoDBDatabase.collection('o_documentContent');
   const userCollection = v2MongoDBDatabase.collection('user');
 
@@ -96,21 +96,24 @@ const migrate = async () => {
       const vizV2 = await getVizV2({
         info,
         contentCollection,
-        infoOpCollection,
         contentOpCollection,
       });
 
       // Migrate the viz! Does not includes Upvotes or Users.
       logDetail(`Processing viz #${i}: ${info.id} ${info.title} `);
-      const result = await processViz({
+      const isVizV2Valid: boolean = await processViz({
         vizV2,
         gateways,
         i,
         redisClient,
         contentCollection,
       });
-      if (result === null) {
-        console.log(`  Skipping viz #${i}: ${info.id} ${info.title} `);
+
+      // If the viz is invalid, skip it.
+      if (!isVizV2Valid) {
+        console.log(
+          `  Skipping invalid V2 viz #${i}: ${info.id} ${info.title} `
+        );
         return;
       }
 
@@ -169,12 +172,17 @@ const migrate = async () => {
         process.stdout.write('\n');
       }
 
-      logDetail(`Processed viz #${i}: ${info.id} ${info.title}! Validating...`);
-      await validateViz({
+      // Check if the viz is valid after migration.
+      logDetail(`Validating...`);
+      const isVizV3Valid: boolean = await validateViz({
         id: info.id,
         gateways,
       });
-      process.exit(0);
+      if (!isVizV3Valid) {
+        console.log('Migrated viz is invalid! TODO roll back... ');
+        process.exit(0);
+      }
+      logDetail(`Validation passed!`);
       // await reportProgress({ i, n });
     }
   );

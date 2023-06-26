@@ -206,17 +206,20 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
       connectToField: '_id',
       as: 'ancestors',
       depthField: 'order',
-      restrictSearchWithMatch: toNearestMilestone
-        ? { milestone: { $ne: null } }
-        : {},
+      restrictSearchWithMatch: {},
     };
 
+    // If we want to get the ancestors up to the nearest milestone,
+    // we need to restrict the search to only those commits that
+    // do not have a milestone.
+    // Note that the results DO NOT include the commit with the milestone.
     if (toNearestMilestone) {
-      $graphLookup.restrictSearchWithMatch = { milestone: { $ne: null } };
+      $graphLookup.restrictSearchWithMatch.milestone = { $eq: null };
     }
 
+    // TODO thoroughly test this. It may be buggy.
     if (start) {
-      $graphLookup.restrictSearchWithMatch = { _id: start };
+      $graphLookup.restrictSearchWithMatch._id = start;
     }
 
     const results = await (
@@ -240,7 +243,7 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
     // Note: Sorting by timestamp does not work, because they are not granular enough.
     // If two commits happen during the same second, the correct ordering
     // cannot be determined by timestamps alone.
-    const ancestors = result.ancestors.sort((a, b) =>
+    let ancestors = result.ancestors.sort((a, b) =>
       descending(a.order, b.order)
     );
     // Derive the final result as an array of pure Commit objects,
@@ -250,6 +253,31 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
       delete commit.order;
     }
     ancestors.push(result);
+
+    if (toNearestMilestone) {
+      // Handle the case that the commit we searched from itself has a milestone.
+      const mostRecentCommit = ancestors[ancestors.length - 1];
+      if (mostRecentCommit.milestone) {
+        // In this case, we only need to return the most recent commit.
+        // The other commits are not needed, as they only connect this milestone
+        // to the previous milestone.
+        // TODO consider optimizing this case? We could do a find({ _id: id }) before
+        // we attempt the aggregate step and check if the commit has a milestone.
+        ancestors = [mostRecentCommit];
+      } else {
+        // Note that the results DO NOT include the commit with the milestone.
+        // For that we may need to perform an additional query.
+        // we only need to perform this additional query if the last returned commit
+        // has a parent. If it doesn't, then there are no milestones in the DB.
+        const firstCommitWithoutMilestone = ancestors[0];
+        if (firstCommitWithoutMilestone.parent) {
+          const commitWithMilestone = await collection.findOne({
+            _id: firstCommitWithoutMilestone.parent,
+          });
+          ancestors.unshift(commitWithMilestone);
+        }
+      }
+    }
 
     // Remove Mongo's internal id.
     for (const commit of ancestors) {
