@@ -41,7 +41,8 @@ const migrate = async () => {
   const { gateways, mongoDBDatabase, mongoDBConnection } =
     await initializeGateways({
       isProd: true,
-      env: process.env,
+      // env: process.env,
+      env: { ...process.env, VIZHUB3_MONGO_LOCAL: 'true' },
     });
 
   // Ping MongoDB to make sure it's working.

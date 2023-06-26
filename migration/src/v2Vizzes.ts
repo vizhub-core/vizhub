@@ -67,9 +67,7 @@ export const v2Vizzes = async (
     if (id === undefined) {
       // This happens A LOT
       // Could be deleted documents? Not sure...
-      //console.log(
-      //  'Something is up - wierd document missing id. Skipping...'
-      //);
+      console.log('Something is up - wierd document missing id. Skipping...');
       //console.log(info);
       continue;
     }

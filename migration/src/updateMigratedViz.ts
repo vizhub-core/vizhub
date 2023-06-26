@@ -118,9 +118,6 @@ export const updateMigratedViz = async ({
       },
     };
 
-    console.log('uncommitted', uncommitted);
-    process.exit();
-
     const saveViz = SaveViz(gateways);
     const commitViz = CommitViz(gateways);
 

@@ -144,12 +144,12 @@ export const processViz = async ({
   // - if the viz has not been migrated yet, it gets called after the viz is created.
   // - if the viz has already been migrated, it gets called after the viz is updated.
   // - the viz may even be the primordial viz, in which case it gets called after the viz is created.
-  // await updateMigratedViz({
-  //   vizV2,
-  //   gateways,
-  //   infoMigrated,
-  //   goodFiles,
-  // });
+  await updateMigratedViz({
+    vizV2,
+    gateways,
+    infoMigrated,
+    goodFiles,
+  });
 
   return true;
 };
