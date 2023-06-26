@@ -9,6 +9,8 @@ import { processViz } from './processViz';
 import { migrateUserIfNeeded } from './migrateUserIfNeeded';
 import { migrateUpvotesIfNeeded } from './migrateUpvotesIfNeeded';
 import { logDetail } from './logDetail';
+import { validateViz } from './validateViz';
+
 // import { reportProgress } from './reportProgress';
 
 // Delete everything in V3 Mongo and Redis when starting.
@@ -31,7 +33,7 @@ const migrate = async () => {
   // V2 collections
   const infoCollection = v2MongoDBDatabase.collection('documentInfo');
   const contentCollection = v2MongoDBDatabase.collection('documentContent');
-  const infoOpCollection = v2MongoDBDatabase.collection('o_documentInfo');
+  // const infoOpCollection = v2MongoDBDatabase.collection('o_documentInfo');
   const contentOpCollection = v2MongoDBDatabase.collection('o_documentContent');
   const userCollection = v2MongoDBDatabase.collection('user');
 
@@ -39,7 +41,8 @@ const migrate = async () => {
   const { gateways, mongoDBDatabase, mongoDBConnection } =
     await initializeGateways({
       isProd: true,
-      env: process.env,
+      // env: process.env,
+      env: { ...process.env, VIZHUB3_MONGO_LOCAL: 'true' },
     });
 
   // Ping MongoDB to make sure it's working.
@@ -94,25 +97,34 @@ const migrate = async () => {
       const vizV2 = await getVizV2({
         info,
         contentCollection,
-        infoOpCollection,
         contentOpCollection,
       });
 
       // Migrate the viz! Does not includes Upvotes or Users.
       logDetail(`Processing viz #${i}: ${info.id} ${info.title} `);
-      const result = await processViz({
+      const isVizV2Valid: boolean = await processViz({
         vizV2,
         gateways,
         i,
         redisClient,
         contentCollection,
       });
-      if (result === null) {
-        console.log(`  Skipping viz #${i}: ${info.id} ${info.title} `);
+
+      // If the viz is invalid, skip it.
+      if (!isVizV2Valid) {
+        console.log(
+          `  Skipping invalid V2 viz #${i}: ${info.id} ${info.title} `
+        );
         return;
       }
 
       // Migrate upvotes
+      // We do this always, because when an upvote is added to a viz,
+      // the viz itself doesn't change (last updated date is not updated),
+      // so we need to track the changes to upvotes separately.
+      // Note that this migration only adds upvotes, it does not remove them.
+      // So if an upvote is removed from a viz in the V2 database,
+      // after having been migrated, it will still be in the V3 database.
       logDetail(`  Migrating upvotes`);
       await migrateUpvotesIfNeeded({
         vizV2,
@@ -161,6 +173,17 @@ const migrate = async () => {
         process.stdout.write('\n');
       }
 
+      // Check if the viz is valid after migration.
+      logDetail(`Validating...`);
+      const isVizV3Valid: boolean = await validateViz({
+        id: info.id,
+        gateways,
+      });
+      if (!isVizV3Valid) {
+        console.log('Migrated viz is invalid! TODO roll back... ');
+        process.exit(0);
+      }
+      logDetail(`Validation passed!`);
       // await reportProgress({ i, n });
     }
   );

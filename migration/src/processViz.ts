@@ -15,6 +15,7 @@ import { FilesV2 } from './VizV2';
 const primordialVizId = '86a75dc8bdbe4965ba353a79d4bd44c8';
 
 // Processes a single viz.
+// Returns true if the viz is valid (worth of migration), false if not.
 // Assumption: the same viz can be processed multiple times without issue.
 // e.g. if the process is interrupted, it can be restarted, or
 // if the process is run multiple times, it will not cause issues, or
@@ -59,10 +60,10 @@ export const processViz = async ({
   logDetail(`  Updated since last migration: ${updatedSinceLastMigration}`);
 
   // If the viz has already been migrated and has not been updated since,
-  // then skip it.
+  // then do nothing and report that it is valid.
   if (isAlreadyMigrated && !updatedSinceLastMigration) {
     logDetail('  Already migrated and not updated since, skipping this viz.');
-    return false;
+    return true;
   }
 
   // Isolate the "good files" that we want to use for embedding.
@@ -94,7 +95,6 @@ export const processViz = async ({
   logDetail('    Stored embedding!');
 
   // Compute the forkedFrom and forkedFromIsBackfilled fields.
-
   const { forkedFrom, forkedFromIsBackfilled } = await computeForkedFrom({
     isPrimordialViz,
     vizV2,
@@ -139,6 +139,7 @@ export const processViz = async ({
     }
   }
 
+  // TODO bring this back
   // This gets called in all cases:
   // - if the viz has not been migrated yet, it gets called after the viz is created.
   // - if the viz has already been migrated, it gets called after the viz is updated.

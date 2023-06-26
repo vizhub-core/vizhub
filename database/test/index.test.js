@@ -1,4 +1,4 @@
-import { describe } from 'vitest';
+import { describe, afterAll } from 'vitest';
 import { setInitGateways, gatewaysTests } from 'gateways/test';
 import { interactorsTests } from 'interactors/test';
 import { DatabaseGateways } from '../src';
@@ -40,4 +40,10 @@ describe('DatabaseGateways', async () => {
   // These tests use initGateways that we define above.
   gatewaysTests();
   interactorsTests();
+
+  // Clean up the database after all tests are done.
+  afterAll(async () => {
+    await mongoDBDatabase.dropDatabase();
+    await mongoDBConnection.close();
+  });
 });

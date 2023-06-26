@@ -176,6 +176,17 @@ export const primordialCommit: Commit = {
   milestone: null,
 };
 
+// The first ever commit with a (fake) milestone.
+// Used only for testing milestone related queries.
+export const primordialCommitWithMilestone: Commit = {
+  id: primordialCommitId,
+  viz: primordialViz.info.id,
+  authors: [userJoe.id],
+  timestamp: ts1,
+  ops: diff({}, primordialViz.content),
+  milestone: 'some-milestone-id',
+};
+
 export const commit2: Commit = {
   id: 'commit2',
   parent: 'commit1',

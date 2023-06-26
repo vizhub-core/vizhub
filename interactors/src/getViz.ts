@@ -1,10 +1,10 @@
-import { Result, ok } from 'gateways';
+import { Gateways, Result, ok } from 'gateways';
 import { VizId, Snapshot, Info, Content } from 'entities';
 
 // getViz
 // * Gets both info and content
 export const GetViz =
-  ({ getInfo, getContent }) =>
+  ({ getInfo, getContent }: Gateways) =>
   async (
     id: VizId
   ): Promise<

@@ -20,6 +20,7 @@ export const GetContentAtCommit =
     let content = {};
     if (debug) {
       console.log('in getContentAtCommit');
+      console.log('id', id);
       console.log('commits', JSON.stringify(commits, null, 2));
       console.log('content', JSON.stringify(content, null, 2));
     }
