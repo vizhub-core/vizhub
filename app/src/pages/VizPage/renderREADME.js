@@ -11,18 +11,20 @@ const xss = (d) => d;
 // https://github.com/vizhub-core/vizhub/blob/main/vizhub-v2/packages/neoFrontend/src/pages/VizPage/Body/Viewer/DescriptionSection/renderMarkdown.js
 const renderer = new Renderer();
 renderer.link = function (href, title, text) {
-  const link = Renderer.prototype.link.call(this, href, title, text);
-  return link.replace('<a', '<a target="_blank"');
+  return Renderer.prototype.link
+    .call(this, href, title, text)
+    .replace('<a', '<a target="_blank"');
 };
 
-// Set up the renderer to add IDs to headings.
-marked.use(
-  gfmHeadingId({
-    prefix: 'heading-',
-  })
-);
-// Opt out of the default behavior of mangling emails (gets rid of warning).
-marked.use({ mangle: false, renderer });
+marked
+  // Set up the renderer to add IDs to headings.
+  .use(
+    gfmHeadingId({
+      prefix: 'heading-',
+    })
+  )
+  // Opt out of the default behavior of mangling emails (gets rid of warning).
+  .use({ mangle: false, renderer });
 
 // Wraps YouTube embeds in a styled wrapper,
 // so that the embed resizes nicely,
