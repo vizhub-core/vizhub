@@ -115,6 +115,12 @@ const migrate = async () => {
       }
 
       // Migrate upvotes
+      // We do this always, because when an upvote is added to a viz,
+      // the viz itself doesn't change (last updated date is not updated),
+      // so we need to track the changes to upvotes separately.
+      // Note that this migration only adds upvotes, it does not remove them.
+      // So if an upvote is removed from a viz in the V2 database,
+      // after having been migrated, it will still be in the V3 database.
       logDetail(`  Migrating upvotes`);
       await migrateUpvotesIfNeeded({
         vizV2,

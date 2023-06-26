@@ -15,6 +15,7 @@ import { FilesV2 } from './VizV2';
 const primordialVizId = '86a75dc8bdbe4965ba353a79d4bd44c8';
 
 // Processes a single viz.
+// Returns true if the viz is valid (worth of migration), false if not.
 // Assumption: the same viz can be processed multiple times without issue.
 // e.g. if the process is interrupted, it can be restarted, or
 // if the process is run multiple times, it will not cause issues, or
