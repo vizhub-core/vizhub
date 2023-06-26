@@ -66,7 +66,9 @@ export const VizPageViewer = ({
                   Forked from{' '}
                   <a href={forkedFromVizHref}>{forkedFromVizTitle}</a>
                 </div>
-                <a href={forksPageHref}>{forksCount} forks</a>
+                <a href={forksPageHref}>
+                  {forksCount} fork{forksCount === 1 ? '' : 's'}
+                </a>
               </>
             ) : null}
           </div>

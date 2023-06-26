@@ -61,7 +61,7 @@ VizPage.getPageData = async ({ gateways, params, auth0User }) => {
     xss
   );
 
-  let forkedFromInfoSnapshot = null;
+  let forkedFromInfoSnapshot: Snapshot<Info> = null;
   let forkedFromOwnerUserSnapshot = null;
   if (forkedFrom) {
     // Get the Info entity for the viz that this viz was forked from.
@@ -72,10 +72,11 @@ VizPage.getPageData = async ({ gateways, params, auth0User }) => {
       return null;
     }
     forkedFromInfoSnapshot = forkedFromInfoResult.value;
+    console.log('forkedFromInfoSnapshot', forkedFromInfoSnapshot);
 
     // Get the User entity for the owner of the viz that this viz was forked from.
     const forkedFromOwnerUserResult = await getUser(
-      forkedFromInfoSnapshot.owner
+      forkedFromInfoSnapshot.data.owner
     );
     if (forkedFromOwnerUserResult.outcome === 'failure') {
       console.log('Error when fetching owner user for forked from:');
