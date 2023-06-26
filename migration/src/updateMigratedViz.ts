@@ -89,7 +89,9 @@ export const updateMigratedViz = async ({
     //  * One commit to modify the content at last updated date
 
     // Prepare the viz for CommitViz by simulating the user editing it.
-    // Simulates Joe typing "Beautiful " into the HTML of the primordial viz.
+    // This is necessary because CommitViz expects the viz to have
+    // been edited by the user.
+    // All changes up until the last updated date are considered.
     const uncommitted: Viz = {
       // We modify the migrated viz with the changes
       // that make it the most recently modified
@@ -104,6 +106,9 @@ export const updateMigratedViz = async ({
         updated: lastUpdatedV2,
         committed: false,
         commitAuthors: [vizV2.info.owner],
+
+        // Include title in case the title has changed.
+        title: vizV2.info.title,
       },
       content: {
         ...contentMigrated,
@@ -112,6 +117,9 @@ export const updateMigratedViz = async ({
         files: computeV3Files(goodFiles, contentMigrated),
       },
     };
+
+    console.log('uncommitted', uncommitted);
+    process.exit();
 
     const saveViz = SaveViz(gateways);
     const commitViz = CommitViz(gateways);

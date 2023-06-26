@@ -4,7 +4,7 @@ import { ForkViz } from 'interactors';
 import { VizV2 } from './VizV2';
 import { GetCommitAtTimestamp } from 'interactors';
 
-const debug = false;
+const debug = true;
 
 // If we're here, then the viz has not yet been migrated.
 // The task before us is to create a new viz in V3 by forking the viz in V3.
