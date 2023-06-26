@@ -1,4 +1,5 @@
 import * as marked from 'marked';
+import { gfmHeadingId } from 'marked-gfm-heading-id';
 import xss from 'xss';
 import { GetViz } from 'interactors';
 import { Info, VizId, Snapshot, Content, User } from 'entities';
@@ -7,6 +8,16 @@ import { VizPage } from './index';
 import { renderREADME } from './renderREADME';
 import { getFileText } from '../../accessors/getFileText';
 import { RenderMarkdown } from './renderMarkdown';
+
+// Set up the renderer to add IDs to headings.
+marked.use(
+  gfmHeadingId({
+    prefix: 'heading-',
+  })
+);
+
+// Opt out of the default behavior of mangling emails (gets rid of warning).
+marked.use({ mangle: false });
 
 const renderMarkdown = RenderMarkdown(marked);
 
