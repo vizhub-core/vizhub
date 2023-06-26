@@ -1,7 +1,7 @@
 import { Content, Info, Viz, VizId } from 'entities';
 import { Gateways } from 'gateways';
 import { GetContentAtCommit, GetViz } from 'interactors';
-import fastDeepEqual from 'fast-deep-equal';
+import * as fastDeepEqual from 'fast-deep-equal';
 
 // Validates a freshly migrated viz.
 export const validateViz = async ({

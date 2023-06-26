@@ -73,6 +73,19 @@ export const folder3: Folder = {
   parent: folder2.id,
 };
 
+// Sample README.md text.
+// Used in tests.
+// Also useful for manual QA.
+// Has examples of:
+// - Links (these should open in a new tab)
+// - Headers (these should be converted to H1s with ids prefixed by "heading-")
+export const sampleReadmeText = [
+  'Test [Markdown](https://www.markdownguide.org/).',
+  '# Introduction',
+  '',
+  'This is a test.',
+].join('\n');
+
 // The first ever viz.
 // Special because it's the only one not forked from another.
 export const primordialViz: Viz = {
@@ -105,7 +118,7 @@ export const primordialViz: Viz = {
       },
       '9693462': {
         name: 'README.md',
-        text: 'Test [Markdown](https://www.markdownguide.org/).',
+        text: sampleReadmeText,
       },
     },
     title: 'Primordial Viz',
