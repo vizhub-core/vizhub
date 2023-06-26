@@ -41,8 +41,8 @@ const migrate = async () => {
   const { gateways, mongoDBDatabase, mongoDBConnection } =
     await initializeGateways({
       isProd: true,
-      // env: process.env,
-      env: { ...process.env, VIZHUB3_MONGO_LOCAL: 'true' },
+      env: process.env,
+      // env: { ...process.env, VIZHUB3_MONGO_LOCAL: 'true' },
     });
 
   // Ping MongoDB to make sure it's working.
@@ -68,127 +68,142 @@ const migrate = async () => {
   const firstVizCreationDateFloored = timeWeek.floor(firstVizCreationDate);
 
   // TODO persist this in Redis, so that we can resume from where we left off.
-  const batchNumber = 0;
+  let batchNumber = 0;
 
-  // Define a one-week batch of vizzes to migrate.
-  const startTimeDate = timeWeek.offset(
-    firstVizCreationDateFloored,
-    batchNumber
-  );
-  const endTimeDate = timeWeek.offset(startTimeDate, 1);
+  // True to continue multiple batches, false to stop after one batch.
+  const keepGoing = true;
 
-  const startTime = dateToTimestamp(startTimeDate);
-  const endTime = dateToTimestamp(endTimeDate);
+  const performBatch = async () => {
+    // Define a one-week batch of vizzes to migrate.
+    const startTimeDate = timeWeek.offset(
+      firstVizCreationDateFloored,
+      batchNumber
+    );
+    const endTimeDate = timeWeek.offset(startTimeDate, 1);
 
-  console.log('\nStarting migration batch #', batchNumber);
-  console.log('  startTime', startTimeDate.toLocaleString());
-  console.log('  endTime  ', endTimeDate.toLocaleString());
+    const startTime = dateToTimestamp(startTimeDate);
+    const endTime = dateToTimestamp(endTimeDate);
 
-  // Iterate over vizzes in the V2 database that may have been created
-  // or updated during the time period defined by startTime and endTime.
-  const numVizzesProcessed = await v2Vizzes(
-    {
-      infoCollection,
-      startTime,
-      endTime,
-    },
-    async (info, i) => {
-      // Get the viz from the V2 database.
-      const vizV2 = await getVizV2({
-        info,
-        contentCollection,
-        contentOpCollection,
-      });
+    console.log('\nStarting migration batch #', batchNumber);
+    console.log('  startTime', startTimeDate.toLocaleString());
+    console.log('  endTime  ', endTimeDate.toLocaleString());
 
-      // Migrate the viz! Does not includes Upvotes or Users.
-      logDetail(`Processing viz #${i}: ${info.id} ${info.title} `);
-      const isVizV2Valid: boolean = await processViz({
-        vizV2,
-        gateways,
-        i,
-        redisClient,
-        contentCollection,
-      });
+    // Iterate over vizzes in the V2 database that may have been created
+    // or updated during the time period defined by startTime and endTime.
+    const numVizzesProcessed = await v2Vizzes(
+      {
+        infoCollection,
+        startTime,
+        endTime,
+      },
+      async (info, i) => {
+        // Get the viz from the V2 database.
+        const vizV2 = await getVizV2({
+          info,
+          contentCollection,
+          contentOpCollection,
+        });
 
-      // If the viz is invalid, skip it.
-      if (!isVizV2Valid) {
-        console.log(
-          `  Skipping invalid V2 viz #${i}: ${info.id} ${info.title} `
-        );
-        return;
-      }
+        // Migrate the viz! Does not includes Upvotes or Users.
+        logDetail(`Processing viz #${i}: ${info.id} ${info.title} `);
+        const isVizV2Valid: boolean = await processViz({
+          vizV2,
+          gateways,
+          i,
+          redisClient,
+          contentCollection,
+        });
 
-      // Migrate upvotes
-      // We do this always, because when an upvote is added to a viz,
-      // the viz itself doesn't change (last updated date is not updated),
-      // so we need to track the changes to upvotes separately.
-      // Note that this migration only adds upvotes, it does not remove them.
-      // So if an upvote is removed from a viz in the V2 database,
-      // after having been migrated, it will still be in the V3 database.
-      logDetail(`  Migrating upvotes`);
-      await migrateUpvotesIfNeeded({
-        vizV2,
-        gateways,
-      });
+        // If the viz is invalid, skip it.
+        if (!isVizV2Valid) {
+          console.log(
+            `  Skipping invalid V2 viz #${i}: ${info.id} ${info.title} `
+          );
+          return;
+        }
 
-      // Migrate the viz owner if needed.
-      logDetail(`  Migrating owner user`);
-      process.stdout.write('    ');
-      await migrateUserIfNeeded({
-        userId: vizV2.info.owner,
-        gateways,
-        userCollection,
-      });
-      process.stdout.write('\n');
+        // Migrate upvotes
+        // We do this always, because when an upvote is added to a viz,
+        // the viz itself doesn't change (last updated date is not updated),
+        // so we need to track the changes to upvotes separately.
+        // Note that this migration only adds upvotes, it does not remove them.
+        // So if an upvote is removed from a viz in the V2 database,
+        // after having been migrated, it will still be in the V3 database.
+        logDetail(`  Migrating upvotes`);
+        await migrateUpvotesIfNeeded({
+          vizV2,
+          gateways,
+        });
 
-      // Migrate the users that upvoted this viz.
-      if (vizV2.info.upvotes && vizV2.info.upvotes.length > 0) {
-        logDetail(`  Migrating upvoter users`);
+        // Migrate the viz owner if needed.
+        logDetail(`  Migrating owner user`);
         process.stdout.write('    ');
-        await Promise.all(
-          vizV2.info.upvotes.map(({ userId }) =>
-            migrateUserIfNeeded({
-              userId,
-              gateways,
-              userCollection,
-            })
-          )
-        );
+        await migrateUserIfNeeded({
+          userId: vizV2.info.owner,
+          gateways,
+          userCollection,
+        });
         process.stdout.write('\n');
-      }
 
-      // Migrate the users that are collaborators on this viz.
-      if (vizV2.info.collaborators && vizV2.info.collaborators.length > 0) {
-        logDetail(`  Migrating collaborator users`);
-        process.stdout.write('    ');
-        await Promise.all(
-          vizV2.info.collaborators.map(({ userId }) =>
-            migrateUserIfNeeded({
-              userId,
-              gateways,
-              userCollection,
-            })
-          )
-        );
-        process.stdout.write('\n');
-      }
+        // Migrate the users that upvoted this viz.
+        if (vizV2.info.upvotes && vizV2.info.upvotes.length > 0) {
+          logDetail(`  Migrating upvoter users`);
+          process.stdout.write('    ');
+          await Promise.all(
+            vizV2.info.upvotes.map(({ userId }) =>
+              migrateUserIfNeeded({
+                userId,
+                gateways,
+                userCollection,
+              })
+            )
+          );
+          process.stdout.write('\n');
+        }
 
-      // Check if the viz is valid after migration.
-      logDetail(`Validating...`);
-      const isVizV3Valid: boolean = await validateViz({
-        id: info.id,
-        gateways,
-      });
-      if (!isVizV3Valid) {
-        console.log('Migrated viz is invalid! TODO roll back... ');
-        process.exit(0);
+        // Migrate the users that are collaborators on this viz.
+        if (vizV2.info.collaborators && vizV2.info.collaborators.length > 0) {
+          logDetail(`  Migrating collaborator users`);
+          process.stdout.write('    ');
+          await Promise.all(
+            vizV2.info.collaborators.map(({ userId }) =>
+              migrateUserIfNeeded({
+                userId,
+                gateways,
+                userCollection,
+              })
+            )
+          );
+          process.stdout.write('\n');
+        }
+
+        // Check if the viz is valid after migration.
+        logDetail(`Validating...`);
+        const isVizV3Valid: boolean = await validateViz({
+          id: info.id,
+          gateways,
+        });
+        if (!isVizV3Valid) {
+          console.log('Migrated viz is invalid! TODO roll back... ');
+          process.exit(0);
+        }
+        logDetail(`Validation passed!`);
+        // await reportProgress({ i, n });
       }
-      logDetail(`Validation passed!`);
-      // await reportProgress({ i, n });
+    );
+
+    console.log(`\n\nFinished iterating ${numVizzesProcessed} vizzes!`);
+
+    if (keepGoing) {
+      batchNumber++;
+
+      console.log(`\n\nPerforming next batch #${batchNumber}...`);
+
+      await performBatch();
     }
-  );
+  };
 
-  console.log(`\n\nFinished iterating ${numVizzesProcessed} vizzes!`);
+  await performBatch();
 
   // Close the connection to the v2 database
   await v2MongoClient.close();
