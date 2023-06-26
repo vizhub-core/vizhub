@@ -1,6 +1,19 @@
-import xss from 'xss';
-import * as marked from 'marked';
+// import xss from 'xss';
+
+import { marked, Renderer } from 'marked';
 import { gfmHeadingId } from 'marked-gfm-heading-id';
+
+const xss = (d) => d;
+
+// Use a custom renderer to open links in a new tab.
+// Draws from
+// https://github.com/markedjs/marked/issues/144
+// https://github.com/vizhub-core/vizhub/blob/main/vizhub-v2/packages/neoFrontend/src/pages/VizPage/Body/Viewer/DescriptionSection/renderMarkdown.js
+const renderer = new Renderer();
+renderer.link = function (href, title, text) {
+  const link = Renderer.prototype.link.call(this, href, title, text);
+  return link.replace('<a', '<a target="_blank"');
+};
 
 // Set up the renderer to add IDs to headings.
 marked.use(
@@ -8,28 +21,8 @@ marked.use(
     prefix: 'heading-',
   })
 );
-
 // Opt out of the default behavior of mangling emails (gets rid of warning).
-marked.use({ mangle: false });
-
-// Use a custom renderer to open links in a new tab.
-// Draws from
-// https://github.com/markedjs/marked/issues/144
-// https://github.com/vizhub-core/vizhub/blob/main/vizhub-v2/packages/neoFrontend/src/pages/VizPage/Body/Viewer/DescriptionSection/renderMarkdown.js
-const renderer = new marked.Renderer();
-renderer.link = function (href, title, text) {
-  const link = marked.Renderer.prototype.link.call(this, href, title, text);
-  return link.replace('<a', '<a target="_blank" ');
-};
-marked.setOptions({
-  renderer: renderer,
-});
-
-// Renders Markdown
-// Usage:
-//   const html = renderMarkdown('# Hello World!');
-// Exported for testing only.
-export const renderMarkdown = marked;
+marked.use({ mangle: false, renderer });
 
 // Wraps YouTube embeds in a styled wrapper,
 // so that the embed resizes nicely,
@@ -51,7 +44,7 @@ const responsiveYouTube = (html) =>
 export const renderREADME = (readmeText) =>
   readmeText
     ? responsiveYouTube(
-        xss(renderMarkdown.parse(readmeText), {
+        xss(marked.parse(readmeText), {
           // Allow iframes in READMEs
           whiteList: {
             ...xss.whiteList,
