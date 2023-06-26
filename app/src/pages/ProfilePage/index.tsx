@@ -13,14 +13,9 @@ export const ProfilePage = ({ pageData }) => {
   const profileUser = useShareDBDocData(profileUserSnapshot, 'User');
   const { userName, displayName, picture } = profileUser;
 
-  const authenticatedUser: User = useShareDBDocData(
-    authenticatedUserSnapshot,
-    'User'
-  );
-
   return (
     <AuthenticatedUserProvider
-      authenticatedUserSnapshot={pageData.authenticatedUserSnapshot}
+      authenticatedUserSnapshot={authenticatedUserSnapshot}
     >
       <div className="vh-page overflow-auto">
         <SmartHeader />
