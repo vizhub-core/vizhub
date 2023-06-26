@@ -28,6 +28,7 @@ importScripts(
   ])
 );
 
+// TODO update this to use Vite's build, not JSDelivr
 // Inspired by https://github.com/mdn/simple-web-worker/blob/gh-pages/worker.js
 onmessage = ({ data }) => {
   postMessage(filterXSS(marked(data)));

@@ -1,7 +1,11 @@
 import { Content, Info, Viz, VizId } from 'entities';
 import { Gateways } from 'gateways';
 import { GetContentAtCommit, GetViz } from 'interactors';
-import fastDeepEqual from 'fast-deep-equal';
+import * as fastDeepEqual from 'fast-deep-equal';
+
+// WTF TypeScript?!
+// @ts-ignore
+const eq = fastDeepEqual.default;
 
 // Validates a freshly migrated viz.
 export const validateViz = async ({
@@ -33,7 +37,7 @@ export const validateViz = async ({
     return false;
   }
   const reconstructedContent: Content = getContentResult.value;
-  const matches = fastDeepEqual(content, reconstructedContent);
+  const matches = eq(content, reconstructedContent);
   if (!matches) {
     console.log('getContentAtCommit failed');
     console.log(`reconstructedContent does not match content`);

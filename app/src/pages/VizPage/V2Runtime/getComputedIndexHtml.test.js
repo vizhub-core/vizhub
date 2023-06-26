@@ -11,8 +11,6 @@ const removeSourceMap = (files) => {
 
 describe('getComputedIndexHTML', () => {
   it('should bundle files using Rollup', async () => {
-    expect(true).toEqual(true);
-
     const files = [
       {
         name: 'index.js',
@@ -20,7 +18,6 @@ describe('getComputedIndexHTML', () => {
       },
       { name: 'foo.js', text: 'export const foo = "bar";' },
     ];
-    expect(true).toEqual(true);
     expect(removeSourceMap(await bundle(files))).toEqual([
       {
         name: 'bundle.js',
