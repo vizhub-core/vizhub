@@ -16,7 +16,7 @@ import * as Sentry from '@sentry/node';
 import { seoMetaTags } from './seoMetaTags.js';
 
 // TODO import this from package.json
-const version = '3.0.0-beta.7';
+const version = '3.0.0-beta.8';
 
 const env = process.env;
 

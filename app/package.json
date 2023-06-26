@@ -37,6 +37,7 @@
     "jsdom": "^22.1.0",
     "jsesc": "^3.0.2",
     "marked": "^5.1.0",
+    "marked-gfm-heading-id": "^3.0.4",
     "mongodb-legacy": "^5.0.0",
     "path-posix": "^1.0.0",
     "react": "^18.2.0",

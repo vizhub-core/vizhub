@@ -1,14 +1,9 @@
-import * as marked from 'marked';
-import xss from 'xss';
 import { GetViz } from 'interactors';
 import { Info, VizId, Snapshot, Content, User } from 'entities';
 import { parseAuth0Sub } from '../../parseAuth0User';
 import { VizPage } from './index';
 import { renderREADME } from './renderREADME';
 import { getFileText } from '../../accessors/getFileText';
-import { RenderMarkdown } from './renderMarkdown';
-
-const renderMarkdown = RenderMarkdown(marked);
 
 VizPage.getPageData = async ({ gateways, params, auth0User }) => {
   const id: VizId = params.id;
@@ -55,11 +50,7 @@ VizPage.getPageData = async ({ gateways, params, auth0User }) => {
   // Render Markdown server-side.
   // TODO cache it.
   const content = contentSnapshot.data;
-  const initialReadmeHTML = renderREADME(
-    getFileText(content, 'README.md'),
-    renderMarkdown,
-    xss
-  );
+  const initialReadmeHTML = renderREADME(getFileText(content, 'README.md'));
 
   let forkedFromInfoSnapshot: Snapshot<Info> = null;
   let forkedFromOwnerUserSnapshot = null;
