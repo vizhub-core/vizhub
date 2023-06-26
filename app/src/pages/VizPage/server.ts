@@ -72,7 +72,6 @@ VizPage.getPageData = async ({ gateways, params, auth0User }) => {
       return null;
     }
     forkedFromInfoSnapshot = forkedFromInfoResult.value;
-    console.log('forkedFromInfoSnapshot', forkedFromInfoSnapshot);
 
     // Get the User entity for the owner of the viz that this viz was forked from.
     const forkedFromOwnerUserResult = await getUser(
