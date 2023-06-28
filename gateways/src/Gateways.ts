@@ -41,8 +41,12 @@ import {
   AnalyticsEventId,
   ResourceId,
   SortField,
+  SortOrder,
 } from 'entities';
 import { Result, Success } from './Result';
+
+// The maximum number of Info documents to return in a single page from `getInfos()`
+export const pageSize = 50;
 
 export interface Gateways {
   // ***************************************************************
@@ -214,8 +218,8 @@ export interface Gateways {
     owner,
     forkedFrom,
     sortField,
-    limit,
-    offset,
+    pageNumber,
+    sortOrder,
   }: {
     // owner
     //
@@ -236,7 +240,11 @@ export interface Gateways {
     // Assumption, either owner or forkedFrom is specified, not both
     forkedFrom?: VizId;
     sortField?: SortField;
-    limit?: number;
-    offset?: number;
+
+    // The page number to return, considering `pageSize` results per page.
+    pageNumber?: number;
+
+    // The order to sort the results by (ascending or descending).
+    sortOrder?: SortOrder;
   }): Promise<Result<Array<Snapshot<Info>>>>;
 }

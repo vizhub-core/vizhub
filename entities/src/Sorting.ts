@@ -33,7 +33,9 @@ export type SortField =
   | 'upvotesCount'
   | 'scoreHackerHotLastUpdated';
 
-// export type SortOrder = 'ascending' | 'descending';
+export type SortOrder = 'ascending' | 'descending';
+
+export const defaultSortOrder: SortOrder = 'ascending';
 
 export type SortOption = {
   // Used in URL param - backwards compatibility with old URLs
