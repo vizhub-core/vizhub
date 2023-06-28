@@ -17,6 +17,7 @@ import {
 } from 'gateways';
 import { otType, diff } from 'ot';
 import { toCollectionName } from './toCollectionName';
+import { pageSize } from 'gateways/src/Gateways';
 
 // An in-database implementation for gateways,
 // for use in production.
@@ -188,6 +189,41 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
           // See https://github.com/share/sharedb/blob/4067b0c5d194a1e4078d52dadd668492dafe017b/lib/client/connection.js#L541
           query.destroy();
 
+          if (error) return resolve(err(error));
+          resolve(ok(results.map((doc) => doc.toSnapshot())));
+        }
+      );
+    });
+
+  const getInfos = ({
+    owner,
+    forkedFrom,
+    sortField,
+    pageNumber = 0,
+    sortOrder,
+  }) =>
+    new Promise((resolve) => {
+      const entityName = 'Info';
+
+      // Restrict search to given owner and/or forkedFrom.
+      const mongoQuery = {
+        ...(owner && { owner }),
+        ...(forkedFrom && { forkedFrom }),
+        $limit: pageSize,
+        $skip: pageNumber * pageSize,
+      };
+
+      // TODO add test for basic access control - exclude non-public infos
+      // if (!includePrivate) {
+      // mongoQuery['visibility'] = 'public';
+      // }
+
+      const query = shareDBConnection.createFetchQuery(
+        toCollectionName(entityName),
+        mongoQuery,
+        {},
+        (error, results) => {
+          query.destroy();
           if (error) return resolve(err(error));
           resolve(ok(results.map((doc) => doc.toSnapshot())));
         }
@@ -406,7 +442,11 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
 
   let databaseGateways = {
     getForks,
+
+    // TODO remove this
     getInfosByOwner,
+
+    getInfos,
     incrementForksCount,
     decrementForksCount,
     incrementUpvotesCount,

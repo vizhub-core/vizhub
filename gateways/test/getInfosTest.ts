@@ -8,10 +8,10 @@ import {
   defaultSortOption,
   defaultSortOrder,
 } from 'entities';
+import { pageSize } from 'gateways';
 import { initGateways } from './initGateways';
 import { primordialViz } from './fixtures';
 import { Gateways, Result } from '../src';
-import { pageSize } from '../src/Gateways';
 
 // TODO consider query aspects:
 //  * Hydrate ShareDB query in client (in case of page navigation)
@@ -20,7 +20,7 @@ import { pageSize } from '../src/Gateways';
 //  * Sorting - Allow the user to sort by various fields
 export const getInfosTest = () => {
   describe('getInfos', () => {
-    it('should get a single info', async () => {
+    it.only('should get a single info', async () => {
       const gateways: Gateways = await initGateways();
       const { saveInfo, getInfos } = gateways;
       await saveInfo(primordialViz.info);
@@ -158,5 +158,9 @@ export const getInfosTest = () => {
       infos.sort((a, b) => descending(a[sortField], b[sortField]));
       expect(resultInfos).toEqual(infos);
     });
+
+    // TODO add test for basic access control - exclude non-public infos
+    // TODO Add test that lists forks of a given info for all users
+    // TODO Add test that lists forks of a given info for a specific user
   });
 };
