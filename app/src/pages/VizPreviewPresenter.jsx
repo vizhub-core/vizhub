@@ -1,5 +1,5 @@
 import { VizPreview } from 'components/src/components/VizPreview';
-import { useShareDBDocData } from '../../useShareDBDocData';
+import { useShareDBDocData } from '../useShareDBDocData';
 
 export const VizPreviewPresenter = ({ infoSnapshot, ownerUser }) => {
   const info = useShareDBDocData(infoSnapshot, 'Info');

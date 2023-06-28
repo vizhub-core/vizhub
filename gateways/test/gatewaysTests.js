@@ -11,6 +11,7 @@ import { incrementDecrementTest } from './incrementDecrementTest';
 import { getFolderAncestorsTest } from './getFolderAncestorsTest';
 import { getPermissionsTest } from './getPermissionsTest';
 import { getInfosByOwnerTest } from './getInfosByOwnerTest';
+import { getInfosTest } from './getInfosTest';
 
 export const gatewaysTests = () => {
   describe(`CRUD`, () => {
@@ -26,5 +27,9 @@ export const gatewaysTests = () => {
   incrementDecrementTest();
   getFolderAncestorsTest();
   getPermissionsTest();
+
+  // TODO deprecate / remove this test
   getInfosByOwnerTest();
+
+  getInfosTest();
 };

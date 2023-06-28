@@ -1,4 +1,5 @@
 export type { Gateways } from './Gateways';
+export { pageSize } from './Gateways';
 export type { Result, Success } from './Result';
 export { ok, err } from './Result';
 export {

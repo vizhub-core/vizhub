@@ -1,4 +1,4 @@
-import { ProfilePage } from './index';
+import { ProfilePage, ProfilePageData } from './index';
 import { parseAuth0Sub } from '../../parseAuth0User';
 
 ProfilePage.getPageData = async ({ gateways, params, auth0User }) => {
@@ -35,12 +35,14 @@ ProfilePage.getPageData = async ({ gateways, params, auth0User }) => {
       authenticatedUserSnapshot = authenticatedUserResult.value;
     }
 
-    return {
+    const pageData: ProfilePageData = {
       title: `${userName} on VizHub`,
+      authenticatedUserSnapshot,
       profileUserSnapshot,
       infoSnapshots,
-      authenticatedUserSnapshot,
     };
+
+    return pageData;
   }
 
   // Indicates user not found

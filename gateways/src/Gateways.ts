@@ -40,8 +40,13 @@ import {
   AnalyticsEvent,
   AnalyticsEventId,
   ResourceId,
+  SortField,
+  SortOrder,
 } from 'entities';
 import { Result, Success } from './Result';
+
+// The maximum number of Info documents to return in a single page from `getInfos()`
+export const pageSize = 50;
 
 export interface Gateways {
   // ***************************************************************
@@ -186,7 +191,7 @@ export interface Gateways {
   // getUserByUserName
   //
   // Gets the user that matches the given userName.
-  getUserByEmails(userName: UserName): Promise<Result<Snapshot<User>>>;
+  getUserByUserName(userName: UserName): Promise<Result<Snapshot<User>>>;
 
   // getFolderAncestors
   //
@@ -202,5 +207,44 @@ export interface Gateways {
     resources: Array<ResourceId>
   ): Promise<Result<Array<Snapshot<Permission>>>>;
 
+  // TODO Deprecate this method in favor of getInfos
   getInfosByOwner(owner: UserId): Promise<Result<Array<Snapshot<Info>>>>;
+
+  // getInfos
+  //
+  // Gets all infos that match the given parameters, sorted by
+  // the given sort order, and limited to the given page size and offset.
+  getInfos({
+    owner,
+    forkedFrom,
+    sortField,
+    pageNumber,
+    sortOrder,
+  }: {
+    // owner
+    //
+    // Owner to filter by
+    // Optional, useful for profile page
+    // Assumption, either owner or forkedFrom is specified, not both
+    // TODO consider use case of specifying both - "Show my forks of this viz"
+    //
+    // Forks page menu options:
+    // 1. Show all forks of this viz
+    // 2. Show my forks of this viz
+    owner?: UserId;
+
+    // forkedFrom
+    //
+    // forkedFrom to filter by
+    // Optional, useful for forks page
+    // Assumption, either owner or forkedFrom is specified, not both
+    forkedFrom?: VizId;
+    sortField?: SortField;
+
+    // The page number to return, considering `pageSize` results per page.
+    pageNumber?: number;
+
+    // The order to sort the results by (ascending or descending).
+    sortOrder?: SortOrder;
+  }): Promise<Result<Array<Snapshot<Info>>>>;
 }
