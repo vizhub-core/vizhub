@@ -1,18 +1,7 @@
-import { ProfilePage } from './index';
+import { ProfilePage, ProfilePageData } from './index';
 import { parseAuth0Sub } from '../../parseAuth0User';
-import { Info, Snapshot, User } from 'entities';
-import { Gateways } from 'gateways';
-import { PageData } from '../Page';
 
-ProfilePage.getPageData = async ({
-  gateways,
-  params,
-  auth0User,
-}: {
-  gateways: Gateways;
-  params: { userName: string };
-  auth0User: any;
-}) => {
+ProfilePage.getPageData = async ({ gateways, params, auth0User }) => {
   const { userName } = params;
   const { getUserByUserName, getInfosByOwner, getUser } = gateways;
 
@@ -46,13 +35,9 @@ ProfilePage.getPageData = async ({
       authenticatedUserSnapshot = authenticatedUserResult.value;
     }
 
-    const pageData: PageData & {
-      profileUserSnapshot: Snapshot<User>;
-      infoSnapshots: Array<Snapshot<Info>>;
-    } = {
+    const pageData: ProfilePageData = {
       title: `${userName} on VizHub`,
       authenticatedUserSnapshot,
-
       profileUserSnapshot,
       infoSnapshots,
     };

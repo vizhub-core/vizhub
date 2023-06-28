@@ -40,6 +40,7 @@ import {
   AnalyticsEvent,
   AnalyticsEventId,
   ResourceId,
+  SortField,
 } from 'entities';
 import { Result, Success } from './Result';
 
@@ -202,5 +203,24 @@ export interface Gateways {
     resources: Array<ResourceId>
   ): Promise<Result<Array<Snapshot<Permission>>>>;
 
+  // TODO Deprecate this method in favor of getInfos
   getInfosByOwner(owner: UserId): Promise<Result<Array<Snapshot<Info>>>>;
+
+  // getInfos
+  //
+  // Gets all infos that match the given parameters, sorted by
+  // the given sort order, and limited to the given page size and offset.
+  getInfos({
+    owner,
+    forkedFrom,
+    sortField,
+    limit,
+    offset,
+  }: {
+    owner?: UserId;
+    forkedFrom?: VizId;
+    sortField?: SortField;
+    limit?: number;
+    offset?: number;
+  }): Promise<Result<Array<Snapshot<Info>>>>;
 }

@@ -1,4 +1,4 @@
-import { HomePage } from './index';
+import { HomePage, HomePageData } from './index';
 import { parseAuth0Sub } from '../../parseAuth0User';
 import { PageData } from '../Page';
 
@@ -19,10 +19,7 @@ HomePage.getPageData = async ({
     authenticatedUserSnapshot = authenticatedUserResult.value;
   }
 
-  const pageData: PageData & {
-    description: string;
-    image: string;
-  } = {
+  const pageData: HomePageData = {
     title: 'VizHub 3 Beta',
     authenticatedUserSnapshot,
     description: 'Viz your data',

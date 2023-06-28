@@ -1,11 +1,15 @@
-import { User } from 'entities';
+import { Info, Snapshot, User } from 'entities';
 import { ProfilePageBody } from 'components';
 import { SmartHeader } from '../../smartComponents/SmartHeader';
 import { AuthenticatedUserProvider } from '../../contexts/AuthenticatedUserContext';
 import { useShareDBDocData } from '../../useShareDBDocData';
 import { VizPreviewPresenter } from '../VizPreviewPresenter';
-import { Page } from '../Page';
-import { ProfilePageData } from './server';
+import { Page, PageData } from '../Page';
+
+export type ProfilePageData = PageData & {
+  profileUserSnapshot: Snapshot<User>;
+  infoSnapshots: Array<Snapshot<Info>>;
+};
 
 // Inspired by https://github.com/vitejs/vite-plugin-react/blob/main/playground/ssr-react/src/pages/Home.jsx
 export const ProfilePage: Page = ({
