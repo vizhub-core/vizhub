@@ -13,6 +13,7 @@ import { WebSocketServer } from 'ws';
 import WebSocketJSONStream from '@teamwork/websocket-json-stream';
 import { matchPath } from 'react-router-dom';
 import * as Sentry from '@sentry/node';
+import { seoMetaTags } from './src/seoMetaTags.js';
 
 // TODO import this from package.json
 const version = '3.0.0-beta.8';
@@ -105,8 +106,6 @@ async function createServer(
       })
     );
   }
-  // Strange workaround to include TypeScript here.
-  const { seoMetaTags } = await vite.ssrLoadModule('/src/seoMetaTags');
 
   // Handle the API requests.
   // When an API endpoint changes, we do need to restart the server
