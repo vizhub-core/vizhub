@@ -2,6 +2,7 @@ import { initGateways } from './initGateways';
 import { primordialViz } from './fixtures';
 import { it, expect } from 'vitest';
 
+// TODO deprecate / remove this test
 export const getInfosByOwnerTest = () => {
   it('getInfosByOwner', async () => {
     const gateways = await initGateways();
