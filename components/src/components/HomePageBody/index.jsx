@@ -24,7 +24,7 @@ export const HomePageBody = ({ onEmailSubmit, children }) => {
           <div className="callout large">Accelerate</div>
           <div className="callout">Dataviz Delivery</div>
           <p className="description">
-            <strong>Develop bespoke data visualizations</strong> faster and more
+            <strong>Develop custom data visualizations</strong> faster and more
             collaboratively than ever with <strong>VizHub 3</strong>. Built for
             client services.
           </p>
