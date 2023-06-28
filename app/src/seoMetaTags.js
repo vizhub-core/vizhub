@@ -8,18 +8,13 @@ const oEmbedURL = absoluteURL('/oembed');
 
 // Generates HTML for server-rendered SEO meta tags.
 export const seoMetaTags = ({
+  // Required
   titleSanitized,
   relativeUrl,
-  descriptionSanitized,
-  image,
-}: {
-  // Required
-  titleSanitized: string;
-  relativeUrl: string;
 
   // Optional
-  descriptionSanitized?: string;
-  image?: string;
+  descriptionSanitized,
+  image,
 }) => {
   const url = absoluteURL(relativeUrl);
   // Example of a valid oEmbed link:
