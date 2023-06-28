@@ -217,7 +217,23 @@ export interface Gateways {
     limit,
     offset,
   }: {
+    // owner
+    //
+    // Owner to filter by
+    // Optional, useful for profile page
+    // Assumption, either owner or forkedFrom is specified, not both
+    // TODO consider use case of specifying both - "Show my forks of this viz"
+    //
+    // Forks page menu options:
+    // 1. Show all forks of this viz
+    // 2. Show my forks of this viz
     owner?: UserId;
+
+    // forkedFrom
+    //
+    // forkedFrom to filter by
+    // Optional, useful for forks page
+    // Assumption, either owner or forkedFrom is specified, not both
     forkedFrom?: VizId;
     sortField?: SortField;
     limit?: number;
