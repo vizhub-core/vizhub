@@ -1,8 +1,11 @@
+import { Info, User } from 'entities';
 import { VizPreview } from 'components/src/components/VizPreview';
 import { useShareDBDocData } from '../useShareDBDocData';
+import { getUserDisplayName } from '../accessors/getUserDisplayName';
 
-export const VizPreviewPresenter = ({ infoSnapshot, ownerUser }) => {
-  const info = useShareDBDocData(infoSnapshot, 'Info');
+export const VizPreviewPresenter = ({ infoSnapshot, ownerUserSnapshot }) => {
+  const info: Info = useShareDBDocData(infoSnapshot, 'Info');
+  const ownerUser: User = useShareDBDocData(ownerUserSnapshot, 'User');
 
   // TODO make this work for real
   // See https://github.com/vizhub-core/vizhub3/issues/65
@@ -13,7 +16,7 @@ export const VizPreviewPresenter = ({ infoSnapshot, ownerUser }) => {
     <VizPreview
       title={info.title}
       thumbnailImageURL={thumbnailImageURL}
-      ownerName={ownerUser.displayName}
+      ownerName={getUserDisplayName(ownerUser)}
       ownerAvatarURL={ownerUser.picture}
       href={`/${ownerUser.userName}/${info.id}`}
     />
