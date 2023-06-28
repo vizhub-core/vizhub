@@ -1,16 +1,26 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Content, Info, User } from 'entities';
+import { Content, Info, Snapshot, User } from 'entities';
 import { VizKit } from 'api/src/VizKit';
 import { useShareDBDocData } from '../../useShareDBDocData';
 import { AuthenticatedUserProvider } from '../../contexts/AuthenticatedUserContext';
 import { VizPageBody } from './VizPageBody';
-import { Page } from '../Page';
+import { Page, PageData } from '../Page';
 import './styles.css';
 
 const vizKit = VizKit({ baseUrl: '/api' });
 
+export type VizPageData = PageData & {
+  infoSnapshot: Snapshot<Info>;
+  contentSnapshot: Snapshot<Content>;
+  ownerUserSnapshot: Snapshot<User>;
+  forkedFromInfoSnapshot: Snapshot<Info> | null;
+  forkedFromOwnerUserSnapshot: Snapshot<User> | null;
+  authenticatedUserSnapshot: Snapshot<User> | null;
+  initialReadmeHTML: string;
+};
+
 // Inspired by https://github.com/vitejs/vite-plugin-react/blob/main/playground/ssr-react/src/pages/Home.jsx
-export const VizPage: Page = ({ pageData }) => {
+export const VizPage: Page = ({ pageData }: { pageData: VizPageData }) => {
   const {
     infoSnapshot,
     contentSnapshot,

@@ -78,3 +78,11 @@ export {
 } from './common';
 
 export type { AnalyticsEvent, AnalyticsEventId } from './Analytics';
+
+export {
+  sortOptions,
+  defaultSortOption,
+  defaultSortOrder,
+  defaultSortField,
+} from './Sorting';
+export type { SortField, SortOption, SortOrder } from './Sorting';

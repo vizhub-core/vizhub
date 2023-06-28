@@ -1,5 +1,4 @@
-import { select } from 'd3-selection';
-import 'd3-transition';
+import { select, transition } from 'd3-selection';
 import { utcDay } from 'd3-time';
 import { utcFormat } from 'd3-time-format';
 import { scaleBand, scaleLinear } from 'd3-scale';

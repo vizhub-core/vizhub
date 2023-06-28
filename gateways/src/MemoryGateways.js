@@ -6,7 +6,10 @@
 // database gateways implementation found in the
 // `database` package.
 import { resourceNotFoundError, invalidDecrementError } from './errors';
+import { defaultSortOrder, defaultSortOption } from 'entities';
 import { ok, err } from './Result';
+import { pageSize } from './Gateways';
+import { ascending, descending } from 'd3-array';
 
 // A stub similar to ShareDB snapshots.
 export const fakeSnapshot = (data) => ({
@@ -111,6 +114,30 @@ export const MemoryGateways = () => {
         .map(fakeSnapshot)
     );
 
+  const getInfos = async ({
+    owner,
+    forkedFrom,
+    sortField = defaultSortOption.sortField,
+    pageNumber = 0,
+    sortOrder = defaultSortOrder,
+  }) => {
+    const comparator = sortOrder === 'ascending' ? ascending : descending;
+    return ok(
+      Object.values(documents.Info)
+        .sort((a, b) => comparator(a[sortField], b[sortField]))
+        .filter(
+          (d, i) =>
+            // Return true if this document is in the current page specified by pageNumber
+            // and matches the owner and forkedFrom filters.
+            (owner === undefined || d.owner === owner) &&
+            (forkedFrom === undefined || d.forkedFrom === forkedFrom) &&
+            i >= pageNumber * pageSize &&
+            i < (pageNumber + 1) * pageSize
+        )
+        .map(fakeSnapshot)
+    );
+  };
+
   const incrementForksCount = async (id) => {
     documents.Info[id].forksCount++;
     return ok('success');
@@ -205,7 +232,11 @@ export const MemoryGateways = () => {
   // Populate non-CRUD methods.
   let memoryGateways = {
     getForks,
+
+    // TODO delete this
     getInfosByOwner,
+
+    getInfos,
     incrementForksCount,
     decrementForksCount,
     incrementUpvotesCount,

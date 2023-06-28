@@ -109,6 +109,10 @@ export interface Info {
   // If this viz is currently in the "trash",
   // this field represents when it was put there.
   trashed?: Timestamp;
+
+  // A popularity score for this viz.
+  // Populated by the scoreHackerHot algorithm.
+  scoreHackerHotLastUpdated?: number;
 }
 
 // Configuration

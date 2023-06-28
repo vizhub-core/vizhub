@@ -1,11 +1,15 @@
 import { GetViz } from 'interactors';
 import { Info, VizId, Snapshot, Content, User } from 'entities';
 import { parseAuth0Sub } from '../../parseAuth0User';
-import { VizPage } from './index';
+import { VizPage, VizPageData } from './index';
 import { renderREADME } from './renderREADME';
 import { getFileText } from '../../accessors/getFileText';
 
-VizPage.getPageData = async ({ gateways, params, auth0User }) => {
+VizPage.getPageData = async ({
+  gateways,
+  params,
+  auth0User,
+}): Promise<VizPageData> => {
   const id: VizId = params.id;
   const { getUser, getInfo } = gateways;
   const getViz = GetViz(gateways);
@@ -76,16 +80,7 @@ VizPage.getPageData = async ({ gateways, params, auth0User }) => {
     forkedFromOwnerUserSnapshot = forkedFromOwnerUserResult.value;
   }
 
-  const result: {
-    infoSnapshot: Snapshot<Info>;
-    contentSnapshot: Snapshot<Content>;
-    ownerUserSnapshot: Snapshot<User>;
-    forkedFromInfoSnapshot: Snapshot<Info> | null;
-    forkedFromOwnerUserSnapshot: Snapshot<User> | null;
-    title: string;
-    authenticatedUserSnapshot: Snapshot<User> | null;
-    initialReadmeHTML: string;
-  } = {
+  return {
     infoSnapshot,
     contentSnapshot,
     ownerUserSnapshot,
@@ -95,7 +90,6 @@ VizPage.getPageData = async ({ gateways, params, auth0User }) => {
     authenticatedUserSnapshot,
     initialReadmeHTML,
   };
-  return result;
 };
 
 export { VizPage };
