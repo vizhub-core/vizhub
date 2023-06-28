@@ -79,5 +79,10 @@ export {
 
 export type { AnalyticsEvent, AnalyticsEventId } from './Analytics';
 
-export { sortOptions, defaultSortOption, defaultSortOrder } from './Sorting';
+export {
+  sortOptions,
+  defaultSortOption,
+  defaultSortOrder,
+  defaultSortField,
+} from './Sorting';
 export type { SortField, SortOption, SortOrder } from './Sorting';

@@ -27,6 +27,9 @@ export const sortOptions: Array<SortOption> = [
 // The default for sorting views of many visualizations (popular).
 export const defaultSortOption: SortOption = sortOptions[0];
 
+// Convenience unpacking of the default sort option.
+export const defaultSortField: SortField = defaultSortOption.sortField;
+
 export type SortField =
   | 'updated'
   | 'forksCount'

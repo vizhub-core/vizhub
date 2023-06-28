@@ -7,6 +7,7 @@
 // https://github.com/vizhub-core/vizhub/blob/main/prototypes/open-core-first-attempt/packages/vizhub-core/src/server/index.js
 // https://gitlab.com/curran/vizhub-ee/-/blob/main/prototypes/commitDataModelV1/src/gateways/DatabaseGateways.js
 import { descending } from 'd3-array';
+import { defaultSortField, defaultSortOrder } from 'entities';
 import {
   resourceNotFoundError,
   invalidDecrementError,
@@ -198,9 +199,9 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
   const getInfos = ({
     owner,
     forkedFrom,
-    sortField,
+    sortField = defaultSortField,
     pageNumber = 0,
-    sortOrder,
+    sortOrder = defaultSortOrder,
   }) =>
     new Promise((resolve) => {
       const entityName = 'Info';
@@ -211,12 +212,11 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
         ...(forkedFrom && { forkedFrom }),
         $limit: pageSize,
         $skip: pageNumber * pageSize,
+        $sort: { [sortField]: sortOrder === 'ascending' ? 1 : -1 },
       };
 
       // TODO add test for basic access control - exclude non-public infos
-      // if (!includePrivate) {
-      // mongoQuery['visibility'] = 'public';
-      // }
+      mongoQuery['visibility'] = 'public';
 
       const query = shareDBConnection.createFetchQuery(
         toCollectionName(entityName),

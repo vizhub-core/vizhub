@@ -19,8 +19,8 @@ import { Gateways, Result } from '../src';
 //  * Pagination (don't try to fetch all infos at once - that would be too big)
 //  * Sorting - Allow the user to sort by various fields
 export const getInfosTest = () => {
-  describe('getInfos', () => {
-    it.only('should get a single info', async () => {
+  describe.only('getInfos', () => {
+    it('should get a single info', async () => {
       const gateways: Gateways = await initGateways();
       const { saveInfo, getInfos } = gateways;
       await saveInfo(primordialViz.info);
