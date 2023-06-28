@@ -287,6 +287,7 @@ async function createServer(
     console.log(
       '                               http://localhost:5173/joe/viz1'
     );
+    console.log('                               http://localhost:5173/explore');
   });
 }
 

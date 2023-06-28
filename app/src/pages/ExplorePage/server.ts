@@ -1,9 +1,8 @@
 import { ExplorePage } from './index';
 import { parseAuth0Sub } from '../../parseAuth0User';
 
-ExplorePage.getPageData = async ({ gateways, params, auth0User }) => {
-  const { userName } = params;
-  const { getInfos } = gateways;
+ExplorePage.getPageData = async ({ gateways, auth0User }) => {
+  const { getInfos, getUser } = gateways;
 
   let infoSnapshots;
   const infoSnapshotsResult = await getInfos({});
