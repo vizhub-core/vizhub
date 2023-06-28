@@ -1,7 +1,11 @@
 import { HomePage } from './index';
 import { parseAuth0Sub } from '../../parseAuth0User';
+import { PageData } from '../Page';
 
-HomePage.getPageData = async ({ gateways, auth0User }) => {
+HomePage.getPageData = async ({
+  gateways,
+  auth0User,
+}): Promise<HomePageData> => {
   const { getUser } = gateways;
   // If the user is currently authenticated...
   let authenticatedUserSnapshot = null;
@@ -15,13 +19,18 @@ HomePage.getPageData = async ({ gateways, auth0User }) => {
     authenticatedUserSnapshot = authenticatedUserResult.value;
   }
 
-  return {
+  const pageData: PageData & {
+    description: string;
+    image: string;
+  } = {
     title: 'VizHub 3 Beta',
+    authenticatedUserSnapshot,
     description: 'Viz your data',
     image:
       'https://vizhub.com/api/visualization/preview/77a2f42571494263931b8c4d38b7d63c.png',
-    authenticatedUserSnapshot,
   };
+
+  return pageData;
 };
 
 export { HomePage };

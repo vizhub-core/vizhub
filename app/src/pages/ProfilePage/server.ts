@@ -4,11 +4,6 @@ import { Info, Snapshot, User } from 'entities';
 import { Gateways } from 'gateways';
 import { PageData } from '../Page';
 
-export type ProfilePageData = PageData & {
-  profileUserSnapshot: Snapshot<User>;
-  infoSnapshots: Array<Snapshot<Info>>;
-};
-
 ProfilePage.getPageData = async ({
   gateways,
   params,
@@ -51,11 +46,15 @@ ProfilePage.getPageData = async ({
       authenticatedUserSnapshot = authenticatedUserResult.value;
     }
 
-    const pageData: ProfilePageData = {
+    const pageData: PageData & {
+      profileUserSnapshot: Snapshot<User>;
+      infoSnapshots: Array<Snapshot<Info>>;
+    } = {
       title: `${userName} on VizHub`,
+      authenticatedUserSnapshot,
+
       profileUserSnapshot,
       infoSnapshots,
-      authenticatedUserSnapshot,
     };
 
     return pageData;

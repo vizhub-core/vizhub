@@ -34,8 +34,25 @@ export type PageData = {
   // The page title.
   title: string;
 
+  // The description of the page.
+  // This is used for SEO meta tags.
+  // Should be plain text, no HTML or Markdown.
+  description?: string;
+
+  // The image URL for the page.
+  image?: string;
+
   // The authenticated user, if any.
   authenticatedUserSnapshot: Snapshot<User> | null;
+
+  // The URL of the page, exposed to the client.
+  // This allows the client to know if a client-side navigation happened.
+  url?: string;
+
+  // The version of the build, exposed to the client.
+  // This is useful mostly for debugging deployments.
+  // (if the version fails to update, we know the deployment failed)
+  version?: string;
 };
 
 // An example Auth0User object:

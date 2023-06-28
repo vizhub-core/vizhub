@@ -6,13 +6,14 @@ import { EditorDemo } from './EditorDemo';
 import './styles.scss';
 import { SmartHeader } from '../../smartComponents/SmartHeader';
 import { AuthenticatedUserProvider } from '../../contexts/AuthenticatedUserContext';
+import { Page } from '../Page';
 
 const vizKit = VizKit({ baseUrl: './api' });
 
 // Decoupled navigation from interaction, to support
 // testing the UI in isolation, for example in Storybook.
 // Inspired by https://github.com/vitejs/vite-plugin-react/blob/main/playground/ssr-react/src/pages/Home.jsx
-export const HomePage = ({ pageData }) => {
+export const HomePage: Page = ({ pageData }) => {
   const navigate = useNavigate();
 
   // Send an analytics event to track this page view.

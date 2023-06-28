@@ -13,7 +13,6 @@ import { WebSocketServer } from 'ws';
 import WebSocketJSONStream from '@teamwork/websocket-json-stream';
 import { matchPath } from 'react-router-dom';
 import * as Sentry from '@sentry/node';
-import { seoMetaTags } from './seoMetaTags.js';
 
 // TODO import this from package.json
 const version = '3.0.0-beta.8';
@@ -106,6 +105,8 @@ async function createServer(
       })
     );
   }
+  // Strange workaround to include TypeScript here.
+  const { seoMetaTags } = await vite.ssrLoadModule('/src/seoMetaTags');
 
   // Handle the API requests.
   // When an API endpoint changes, we do need to restart the server
@@ -218,13 +219,11 @@ async function createServer(
         return send404(res);
       }
 
-      // Expose the page URL (on page load) in `pageData`.
+      // Expose the relative page URL (on page load) in `pageData`.
       // This allows the client to know if a client-side navigation happened.
       pageData.url = url;
 
       // Expose the current version to the client.
-      // This is useful mostly for debugging AWS deployments.
-      // (if the version fails to update, we know the deployment failed)
       pageData.version = version;
 
       const titleSanitized = xss(pageData.title);
@@ -238,7 +237,7 @@ async function createServer(
           seoMetaTags({
             titleSanitized,
             descriptionSanitized,
-            url,
+            relativeUrl: url,
             image,
           })
         )
