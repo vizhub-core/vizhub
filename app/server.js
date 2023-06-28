@@ -15,7 +15,7 @@ import { matchPath } from 'react-router-dom';
 import * as Sentry from '@sentry/node';
 
 // TODO import this from package.json
-const version = '3.0.0-beta.8';
+const version = '3.0.0-beta.9';
 
 const env = process.env;
 
