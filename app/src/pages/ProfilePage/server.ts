@@ -1,17 +1,23 @@
 import { ProfilePage } from './index';
 import { parseAuth0Sub } from '../../parseAuth0User';
 import { Info, Snapshot, User } from 'entities';
+import { Gateways } from 'gateways';
+import { PageData } from '../Page';
 
-export type ProfilePageData = {
-  title: string;
+export type ProfilePageData = PageData & {
   profileUserSnapshot: Snapshot<User>;
   infoSnapshots: Array<Snapshot<Info>>;
-  authenticatedUserSnapshot: Snapshot<User> | null;
 };
 
-// @ts-ignore
-// TODO figure out how to pacify TypeScript
-ProfilePage.getPageData = async ({ gateways, params, auth0User }) => {
+ProfilePage.getPageData = async ({
+  gateways,
+  params,
+  auth0User,
+}: {
+  gateways: Gateways;
+  params: { userName: string };
+  auth0User: any;
+}) => {
   const { userName } = params;
   const { getUserByUserName, getInfosByOwner, getUser } = gateways;
 

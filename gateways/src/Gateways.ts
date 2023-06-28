@@ -186,7 +186,7 @@ export interface Gateways {
   // getUserByUserName
   //
   // Gets the user that matches the given userName.
-  getUserByEmails(userName: UserName): Promise<Result<Snapshot<User>>>;
+  getUserByUserName(userName: UserName): Promise<Result<Snapshot<User>>>;
 
   // getFolderAncestors
   //
