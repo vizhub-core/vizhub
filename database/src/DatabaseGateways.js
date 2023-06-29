@@ -161,29 +161,11 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
   });
 
   const getForks = (id) =>
-    new Promise((resolve, reject) => {
-      const entityName = 'Info';
-      const query = shareDBConnection.createFetchQuery(
-        toCollectionName(entityName),
-        { forkedFrom: id },
-        {},
-        (error, results) => {
-          // Avoid memory leak.
-          // See https://github.com/share/sharedb/blob/4067b0c5d194a1e4078d52dadd668492dafe017b/lib/client/connection.js#L541
-          query.destroy();
-
-          if (error) return resolve(err(error));
-          resolve(ok(results.map((doc) => doc.toSnapshot())));
-        }
-      );
-    });
-
-  const getInfosByOwner = (owner) =>
     new Promise((resolve) => {
       const entityName = 'Info';
       const query = shareDBConnection.createFetchQuery(
         toCollectionName(entityName),
-        { owner },
+        { forkedFrom: id },
         {},
         (error, results) => {
           // Avoid memory leak.
@@ -377,7 +359,7 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
   };
 
   const getUserByUserName = (userName) =>
-    new Promise((resolve, reject) => {
+    new Promise((resolve) => {
       const entityName = 'User';
       const query = shareDBConnection.createFetchQuery(
         toCollectionName(entityName),
@@ -395,7 +377,7 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
     });
 
   const getUserByEmails = (emails) =>
-    new Promise((resolve, reject) => {
+    new Promise((resolve) => {
       const entityName = 'User';
       const query = shareDBConnection.createFetchQuery(
         toCollectionName(entityName),
@@ -417,8 +399,23 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
       );
     });
 
+  const getUsersByIds = (ids) =>
+    new Promise((resolve) => {
+      const entityName = 'User';
+      const query = shareDBConnection.createFetchQuery(
+        toCollectionName(entityName),
+        { _id: { $in: ids } },
+        {},
+        (error, results) => {
+          query.destroy();
+          if (error) return resolve(err(error));
+          resolve(ok(results.map((doc) => doc.toSnapshot())));
+        }
+      );
+    });
+
   const getPermissions = (user, resources) =>
-    new Promise((resolve, reject) => {
+    new Promise((resolve) => {
       const entityName = 'Permission';
       const query = shareDBConnection.createFetchQuery(
         toCollectionName(entityName),
@@ -442,10 +439,6 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
 
   let databaseGateways = {
     getForks,
-
-    // TODO remove this
-    getInfosByOwner,
-
     getInfos,
     incrementForksCount,
     decrementForksCount,
@@ -455,6 +448,7 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
     getFolderAncestors,
     getUserByUserName,
     getUserByEmails,
+    getUsersByIds,
     getPermissions,
   };
 

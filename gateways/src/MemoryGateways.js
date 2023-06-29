@@ -107,13 +107,6 @@ export const MemoryGateways = () => {
         .map(fakeSnapshot)
     );
 
-  const getInfosByOwner = async (owner) =>
-    ok(
-      Object.values(documents.Info)
-        .filter((info) => info.owner === owner)
-        .map(fakeSnapshot)
-    );
-
   const getInfos = async ({
     owner,
     forkedFrom,
@@ -219,6 +212,13 @@ export const MemoryGateways = () => {
     return user ? ok(fakeSnapshot(user)) : err(resourceNotFoundError(emails));
   };
 
+  const getUsersByIds = async (ids) => {
+    const users = Object.values(documents.User).filter((user) =>
+      ids.includes(user.id)
+    );
+    return ok(users.map(fakeSnapshot));
+  };
+
   const getPermissions = async (user, resources) => {
     const allPermissions = Object.values(documents.Permission);
     const permissions = allPermissions
@@ -232,10 +232,6 @@ export const MemoryGateways = () => {
   // Populate non-CRUD methods.
   let memoryGateways = {
     getForks,
-
-    // TODO delete this
-    getInfosByOwner,
-
     getInfos,
     incrementForksCount,
     decrementForksCount,
@@ -245,6 +241,7 @@ export const MemoryGateways = () => {
     getFolderAncestors,
     getUserByUserName,
     getUserByEmails,
+    getUsersByIds,
     getPermissions,
   };
 

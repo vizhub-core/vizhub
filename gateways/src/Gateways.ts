@@ -207,9 +207,6 @@ export interface Gateways {
     resources: Array<ResourceId>
   ): Promise<Result<Array<Snapshot<Permission>>>>;
 
-  // TODO Deprecate this method in favor of getInfos
-  getInfosByOwner(owner: UserId): Promise<Result<Array<Snapshot<Info>>>>;
-
   // getInfos
   //
   // Gets all infos that match the given parameters, sorted by
@@ -247,4 +244,9 @@ export interface Gateways {
     // The order to sort the results by (ascending or descending).
     sortOrder?: SortOrder;
   }): Promise<Result<Array<Snapshot<Info>>>>;
+
+  // getUsersByIds
+  //
+  // Gets all users that match the given ids.
+  getUsersByIds(ids: Array<UserId>): Promise<Result<Array<Snapshot<User>>>>;
 }
