@@ -3,7 +3,7 @@ import { parseAuth0Sub } from '../../parseAuth0User';
 
 ProfilePage.getPageData = async ({ gateways, params, auth0User }) => {
   const { userName } = params;
-  const { getUserByUserName, getInfosByOwner, getUser } = gateways;
+  const { getUserByUserName, getInfos, getUser } = gateways;
 
   const userResult = await getUserByUserName(userName);
   if (userResult.outcome === 'success') {
@@ -12,7 +12,7 @@ ProfilePage.getPageData = async ({ gateways, params, auth0User }) => {
     const owner = profileUserSnapshot.data.id;
 
     let infoSnapshots;
-    const infoSnapshotsResult = await getInfosByOwner(owner);
+    const infoSnapshotsResult = await getInfos({ owner });
     if (infoSnapshotsResult.outcome === 'success') {
       infoSnapshots = infoSnapshotsResult.value;
     } else {

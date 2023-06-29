@@ -107,13 +107,6 @@ export const MemoryGateways = () => {
         .map(fakeSnapshot)
     );
 
-  const getInfosByOwner = async (owner) =>
-    ok(
-      Object.values(documents.Info)
-        .filter((info) => info.owner === owner)
-        .map(fakeSnapshot)
-    );
-
   const getInfos = async ({
     owner,
     forkedFrom,
@@ -239,10 +232,6 @@ export const MemoryGateways = () => {
   // Populate non-CRUD methods.
   let memoryGateways = {
     getForks,
-
-    // TODO delete this
-    getInfosByOwner,
-
     getInfos,
     incrementForksCount,
     decrementForksCount,

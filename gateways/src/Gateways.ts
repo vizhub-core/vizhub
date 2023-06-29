@@ -207,9 +207,6 @@ export interface Gateways {
     resources: Array<ResourceId>
   ): Promise<Result<Array<Snapshot<Permission>>>>;
 
-  // TODO Deprecate this method in favor of getInfos
-  getInfosByOwner(owner: UserId): Promise<Result<Array<Snapshot<Info>>>>;
-
   // getInfos
   //
   // Gets all infos that match the given parameters, sorted by

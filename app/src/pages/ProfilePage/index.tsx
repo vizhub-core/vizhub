@@ -21,7 +21,7 @@ export const ProfilePage: Page = ({
     pageData;
 
   // Subscribe to real-time updates in case something changes like display name.
-  const profileUser = useShareDBDocData(profileUserSnapshot, 'User');
+  const profileUser: User = useShareDBDocData(profileUserSnapshot, 'User');
   const { userName, displayName, picture } = profileUser;
 
   return (
@@ -36,7 +36,7 @@ export const ProfilePage: Page = ({
               <VizPreviewPresenter
                 key={infoSnapshot.data.id}
                 infoSnapshot={infoSnapshot}
-                ownerUser={profileUser}
+                ownerUserSnapshot={profileUserSnapshot}
               />
             ))
           }
