@@ -10,6 +10,8 @@ import Navbar from 'react-bootstrap/cjs/Navbar.js';
 import Container from 'react-bootstrap/cjs/Container.js';
 import Dropdown from 'react-bootstrap/cjs/Dropdown.js';
 import Image from 'react-bootstrap/cjs/Image.js';
+import Row from 'react-bootstrap/cjs/Row.js';
+import Col from 'react-bootstrap/cjs/Col.js';
 
 export {
   InputGroup,
@@ -22,4 +24,6 @@ export {
   Container,
   Dropdown,
   Image,
+  Row,
+  Col,
 };
