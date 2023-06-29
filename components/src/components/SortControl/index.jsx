@@ -20,7 +20,7 @@ export const SortControl = ({ sortId, setSortId, sortOptions }) => {
   );
 
   return (
-    <Form.Group className="mb-3" controlId="sort" as={Row}>
+    <Form.Group className="mx-0" controlId="sort" as={Row}>
       <Form.Label column sm="auto">
         Sort by
       </Form.Label>
