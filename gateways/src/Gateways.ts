@@ -247,4 +247,9 @@ export interface Gateways {
     // The order to sort the results by (ascending or descending).
     sortOrder?: SortOrder;
   }): Promise<Result<Array<Snapshot<Info>>>>;
+
+  // getUsersByIds
+  //
+  // Gets all users that match the given ids.
+  getUsersByIds(ids: Array<UserId>): Promise<Result<Array<Snapshot<User>>>>;
 }

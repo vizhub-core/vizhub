@@ -161,7 +161,7 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
   });
 
   const getForks = (id) =>
-    new Promise((resolve, reject) => {
+    new Promise((resolve) => {
       const entityName = 'Info';
       const query = shareDBConnection.createFetchQuery(
         toCollectionName(entityName),
@@ -377,7 +377,7 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
   };
 
   const getUserByUserName = (userName) =>
-    new Promise((resolve, reject) => {
+    new Promise((resolve) => {
       const entityName = 'User';
       const query = shareDBConnection.createFetchQuery(
         toCollectionName(entityName),
@@ -395,7 +395,7 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
     });
 
   const getUserByEmails = (emails) =>
-    new Promise((resolve, reject) => {
+    new Promise((resolve) => {
       const entityName = 'User';
       const query = shareDBConnection.createFetchQuery(
         toCollectionName(entityName),
@@ -417,8 +417,23 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
       );
     });
 
+  const getUsersByIds = (ids) =>
+    new Promise((resolve) => {
+      const entityName = 'User';
+      const query = shareDBConnection.createFetchQuery(
+        toCollectionName(entityName),
+        { _id: { $in: ids } },
+        {},
+        (error, results) => {
+          query.destroy();
+          if (error) return resolve(err(error));
+          resolve(ok(results.map((doc) => doc.toSnapshot())));
+        }
+      );
+    });
+
   const getPermissions = (user, resources) =>
-    new Promise((resolve, reject) => {
+    new Promise((resolve) => {
       const entityName = 'Permission';
       const query = shareDBConnection.createFetchQuery(
         toCollectionName(entityName),
@@ -455,6 +470,7 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
     getFolderAncestors,
     getUserByUserName,
     getUserByEmails,
+    getUsersByIds,
     getPermissions,
   };
 
