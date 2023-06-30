@@ -1,10 +1,17 @@
-import { Info, Snapshot, User, UserId, VizId } from 'entities';
+import {
+  Info,
+  Snapshot,
+  User,
+  UserId,
+  defaultSortOption,
+  sortOptions,
+} from 'entities';
 import { ExplorePageBody } from 'components';
 import { SmartHeader } from '../../smartComponents/SmartHeader';
 import { AuthenticatedUserProvider } from '../../contexts/AuthenticatedUserContext';
 import { VizPreviewPresenter } from '../VizPreviewPresenter';
 import { Page, PageData } from '../Page';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
 export type ExplorePageData = PageData & {
   // The first page of results
@@ -35,6 +42,9 @@ export const ExplorePage: Page = ({
     [ownerUserSnapshots]
   );
 
+  // TODO URL param for sort
+  const [sortId, setSortId] = useState(defaultSortOption.id);
+
   return (
     <AuthenticatedUserProvider
       authenticatedUserSnapshot={authenticatedUserSnapshot}
@@ -54,6 +64,9 @@ export const ExplorePage: Page = ({
               );
             })
           }
+          sortId={sortId}
+          setSortId={setSortId}
+          sortOptions={sortOptions}
         />
       </div>
     </AuthenticatedUserProvider>
