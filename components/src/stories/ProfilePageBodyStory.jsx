@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { ProfilePageBody } from '../components/ProfilePageBody';
 import { renderVizPreviews } from './renderVizPreviews';
-import { args as sortControlArgs } from './SortControlStory';
+import { args as sortControlArgs } from './SortControlStoryHorizontal';
 
 const args = {
   userName: 'schmoe',

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { ExplorePageBody } from '../components/ExplorePageBody';
 import { renderVizPreviews } from './renderVizPreviews';
-import { args as sortControlArgs } from './SortControlStory';
+import { args as sortControlArgs } from './SortControlStoryHorizontal';
 
 const args = {
   renderVizPreviews,

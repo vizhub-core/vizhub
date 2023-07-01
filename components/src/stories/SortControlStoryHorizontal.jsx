@@ -3,7 +3,12 @@ import { SortControl } from '../components/SortControl';
 
 // A stub of a "smart" component that manages state.
 // This will be swapped out with a ShareDB-based state system in the app.
-const SortControlWrapper = ({ initialSortId, sortOptions, onChange }) => {
+export const SortControlWrapper = ({
+  initialSortId,
+  sortOptions,
+  onChange,
+  isVertical,
+}) => {
   const [sortId, setSortId] = useState(initialSortId);
   const handleSetSortId = (newSortId) => {
     setSortId(newSortId);
@@ -14,6 +19,7 @@ const SortControlWrapper = ({ initialSortId, sortOptions, onChange }) => {
       sortId={sortId}
       setSortId={handleSetSortId}
       sortOptions={sortOptions}
+      isVertical={isVertical}
     />
   );
 };

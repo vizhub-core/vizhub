@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { Form, Dropdown, Row, Col } from '../bootstrap';
 
-export const SortControl = ({ sortId, setSortId, sortOptions }) => {
+export const SortControl = ({ sortId, setSortId, sortOptions, isVertical }) => {
   // Possible sorts that are not the current sort.
   const otherSortOptions = useMemo(
     () => (sortOptions ? sortOptions.filter(({ id }) => id !== sortId) : []),
@@ -20,7 +20,7 @@ export const SortControl = ({ sortId, setSortId, sortOptions }) => {
   );
 
   return (
-    <Form.Group className="mx-0" controlId="sort" as={Row}>
+    <Form.Group className="mx-0" controlId="sort" as={isVertical ? 'div' : Row}>
       <Form.Label column sm="auto">
         Sort by
       </Form.Label>
