@@ -85,4 +85,4 @@ export {
   defaultSortOrder,
   defaultSortField,
 } from './Sorting';
-export type { SortField, SortOption, SortOrder } from './Sorting';
+export type { SortField, SortOption, SortOrder, SortId } from './Sorting';

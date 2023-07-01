@@ -40,9 +40,12 @@ export type SortOrder = 'ascending' | 'descending';
 
 export const defaultSortOrder: SortOrder = 'ascending';
 
+// Used in URL param do define which sort option is selected.
+// Has backwards compatibility with old URLs from V2.
+export type SortId = string;
+
 export type SortOption = {
-  // Used in URL param - backwards compatibility with old URLs
-  id: string;
+  id: SortId;
   // Used in UI
   label: string;
   // Used in DB query

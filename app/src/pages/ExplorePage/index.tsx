@@ -1,17 +1,9 @@
-import {
-  Info,
-  Snapshot,
-  User,
-  UserId,
-  defaultSortOption,
-  sortOptions,
-} from 'entities';
-import { ExplorePageBody } from 'components';
-import { SmartHeader } from '../../smartComponents/SmartHeader';
+import { useMemo } from 'react';
+import { Info, Snapshot, User, UserId } from 'entities';
 import { AuthenticatedUserProvider } from '../../contexts/AuthenticatedUserContext';
-import { VizPreviewPresenter } from '../VizPreviewPresenter';
+import { SortProvider } from '../../contexts/SortContext';
 import { Page, PageData } from '../Page';
-import { useEffect, useMemo, useState } from 'react';
+import { Body } from './Body';
 
 export type ExplorePageData = PageData & {
   // The first page of results
@@ -42,37 +34,16 @@ export const ExplorePage: Page = ({
     [ownerUserSnapshots]
   );
 
-  // TODO URL param for sort
-  const [sortId, setSortId] = useState(defaultSortOption.id);
-
-  useEffect(() => {
-    console.log('sortId changed to', sortId);
-  }, [sortId]);
-
   return (
     <AuthenticatedUserProvider
       authenticatedUserSnapshot={authenticatedUserSnapshot}
     >
-      <div className="vh-page overflow-auto">
-        <SmartHeader />
-        <ExplorePageBody
-          renderVizPreviews={() =>
-            infoSnapshots.map((infoSnapshot: Snapshot<Info>) => {
-              const info: Info = infoSnapshot.data;
-              return (
-                <VizPreviewPresenter
-                  key={info.id}
-                  infoSnapshot={infoSnapshot}
-                  ownerUserSnapshot={ownerUserSnapshotMap.get(info.owner)}
-                />
-              );
-            })
-          }
-          sortId={sortId}
-          setSortId={setSortId}
-          sortOptions={sortOptions}
+      <SortProvider>
+        <Body
+          infoSnapshots={infoSnapshots}
+          ownerUserSnapshotMap={ownerUserSnapshotMap}
         />
-      </div>
+      </SortProvider>
     </AuthenticatedUserProvider>
   );
 };

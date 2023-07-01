@@ -1,11 +1,9 @@
-import { Info, Snapshot, User, defaultSortOption, sortOptions } from 'entities';
-import { ProfilePageBody } from 'components';
-import { SmartHeader } from '../../smartComponents/SmartHeader';
+import { Info, Snapshot, User } from 'entities';
 import { AuthenticatedUserProvider } from '../../contexts/AuthenticatedUserContext';
+import { SortProvider } from '../../contexts/SortContext';
 import { useShareDBDocData } from '../../useShareDBDocData';
-import { VizPreviewPresenter } from '../VizPreviewPresenter';
 import { Page, PageData } from '../Page';
-import { useEffect, useState } from 'react';
+import { Body } from './Body';
 
 export type ProfilePageData = PageData & {
   profileUserSnapshot: Snapshot<User>;
@@ -23,39 +21,19 @@ export const ProfilePage: Page = ({
 
   // Subscribe to real-time updates in case something changes like display name.
   const profileUser: User = useShareDBDocData(profileUserSnapshot, 'User');
-  const { userName, displayName, picture } = profileUser;
-
-  // TODO URL param for sort
-  const [sortId, setSortId] = useState(defaultSortOption.id);
-
-  useEffect(() => {
-    console.log('sortId changed to', sortId);
-  }, [sortId]);
 
   return (
     <AuthenticatedUserProvider
       authenticatedUserSnapshot={authenticatedUserSnapshot}
     >
-      <div className="vh-page overflow-auto">
-        <SmartHeader />
-        <ProfilePageBody
-          renderVizPreviews={() =>
-            infoSnapshots.map((infoSnapshot) => (
-              <VizPreviewPresenter
-                key={infoSnapshot.data.id}
-                infoSnapshot={infoSnapshot}
-                ownerUserSnapshot={profileUserSnapshot}
-              />
-            ))
-          }
-          displayName={displayName}
-          userName={userName}
-          picture={picture}
-          sortId={sortId}
-          setSortId={setSortId}
-          sortOptions={sortOptions}
+      <SortProvider>
+        <Body
+          infoSnapshots={infoSnapshots}
+          profileUser={profileUser}
+          // TODO remove this prop for https://github.com/vizhub-core/vizhub3/issues/162
+          profileUserSnapshot={profileUserSnapshot}
         />
-      </div>
+      </SortProvider>
     </AuthenticatedUserProvider>
   );
 };
