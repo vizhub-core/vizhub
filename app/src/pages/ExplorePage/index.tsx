@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Info, Snapshot, User, UserId } from 'entities';
+import { Info, Snapshot, SortId, User, UserId } from 'entities';
 import { AuthenticatedUserProvider } from '../../contexts/AuthenticatedUserContext';
 import { SortProvider } from '../../contexts/SortContext';
 import { Page, PageData } from '../Page';
@@ -11,6 +11,12 @@ export type ExplorePageData = PageData & {
 
   // The users that are owners of these Infos
   ownerUserSnapshots: Array<Snapshot<User>>;
+};
+
+// The type for the query parameters for this page
+export type ExplorePageQuery = {
+  // The sort order for the results
+  sort?: SortId;
 };
 
 // Inspired by https://github.com/vitejs/vite-plugin-react/blob/main/playground/ssr-react/src/pages/Home.jsx

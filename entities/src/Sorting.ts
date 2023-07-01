@@ -24,6 +24,10 @@ export const sortOptions: Array<SortOption> = [
   },
 ];
 
+export const sortOptionsMap = new Map<SortId, SortOption>(
+  sortOptions.map((option) => [option.id, option])
+);
+
 // The default for sorting views of many visualizations (popular).
 export const defaultSortOption: SortOption = sortOptions[0];
 
@@ -42,7 +46,7 @@ export const defaultSortOrder: SortOrder = 'ascending';
 
 // Used in URL param do define which sort option is selected.
 // Has backwards compatibility with old URLs from V2.
-export type SortId = string;
+export type SortId = 'popular' | 'mostRecent' | 'mostForked' | 'mostUpvoted';
 
 export type SortOption = {
   id: SortId;
