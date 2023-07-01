@@ -1,11 +1,10 @@
 import { ExplorePage, ExplorePageData, ExplorePageQuery } from './index';
 import { parseAuth0Sub } from '../../parseAuth0User';
 import {
-  defaultSortField,
   Snapshot,
   SortField,
   SortId,
-  sortOptionsMap,
+  getSortField,
   User,
   UserId,
 } from 'entities';
@@ -23,11 +22,10 @@ ExplorePage.getPageData = async ({
 }): Promise<ExplorePageData> => {
   const { getInfos, getUser } = gateways;
 
-  const sort: SortId | undefined = query.sort;
+  const sortId: SortId | undefined = query.sort;
 
   // Get the sort field from the sort query parameter.
-  const sortField: SortField =
-    (sort && sortOptionsMap.get(sort)?.sortField) || defaultSortField;
+  const sortField: SortField = getSortField(sortId);
 
   let infoSnapshots;
   const infoSnapshotsResult = await getInfos({ sortField });

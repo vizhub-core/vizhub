@@ -1,5 +1,11 @@
-import { createContext, useEffect, useMemo, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import {
+  createContext,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { SortId, defaultSortOption } from 'entities';
 
 // This context provides the current sortId and a function to change it.
@@ -11,15 +17,18 @@ export const SortContext = createContext<{
 
 export const SortProvider = ({ children }) => {
   // TODO URL param for sort
-  const [sortId, setSortId] = useState(defaultSortOption.id);
 
-  const location = useLocation();
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  console.log('location', location);
+  const sortId: SortId | null = searchParams.get('sort');
+  const setSortId = useCallback(
+    (newSortId: SortId) => {
+      setSearchParams((query) => ({ ...query, sort: newSortId }));
+    },
+    [setSearchParams]
+  );
 
-  useEffect(() => {
-    console.log('sortId', sortId);
-  }, [sortId]);
+  console.log('sortId', sortId);
 
   const value = useMemo(() => ({ sortId, setSortId }), [sortId, setSortId]);
 

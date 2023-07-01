@@ -24,9 +24,13 @@ export const sortOptions: Array<SortOption> = [
   },
 ];
 
-export const sortOptionsMap = new Map<SortId, SortOption>(
+const sortOptionsMap = new Map<SortId, SortOption>(
   sortOptions.map((option) => [option.id, option])
 );
+
+// Convenience function for getting the sort field from the sort ID.
+export const getSortField = (sortId: SortId | undefined): SortField =>
+  (sortId && sortOptionsMap.get(sortId)?.sortField) || defaultSortField;
 
 // The default for sorting views of many visualizations (popular).
 export const defaultSortOption: SortOption = sortOptions[0];
