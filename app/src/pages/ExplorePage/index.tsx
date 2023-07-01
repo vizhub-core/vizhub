@@ -23,6 +23,7 @@ export const ExplorePage: Page = ({
     pageData;
 
   // Memoize a map of infoId -> ownerUser
+  // TODO solve this for pagination case
   const ownerUserSnapshotMap = useMemo(
     () =>
       new Map<UserId, Snapshot<User>>(

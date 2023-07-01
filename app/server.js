@@ -158,7 +158,7 @@ async function createServer(
   // in dev on each page request, so we don't need to restart the server all the time.
   app.use('*', async (req, res) => {
     try {
-      const { originalUrl, baseUrl } = req;
+      const { originalUrl, baseUrl, query } = req;
 
       // This part is directly copied from:
       // https://github.com/vitejs/vite-plugin-react/blob/main/playground/ssr-react/server.js
@@ -203,6 +203,7 @@ async function createServer(
       const pageData = matchedPage.getPageData
         ? await matchedPage.getPageData({
             params,
+            query,
             env,
             gateways,
             auth0User,

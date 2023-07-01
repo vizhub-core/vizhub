@@ -5,11 +5,17 @@ import { Snapshot, User, UserId } from 'entities';
 ExplorePage.getPageData = async ({
   gateways,
   auth0User,
+  query,
 }): Promise<ExplorePageData> => {
   const { getInfos, getUser } = gateways;
 
+  console.log('ExplorePage.getPageData()');
+  console.log('query:', query);
+
   let infoSnapshots;
-  const infoSnapshotsResult = await getInfos({});
+  const infoSnapshotsResult = await getInfos({
+    // TODO sortField: getURLSortField(url),
+  });
   if (infoSnapshotsResult.outcome === 'success') {
     infoSnapshots = infoSnapshotsResult.value;
   } else {
