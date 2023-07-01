@@ -11,7 +11,7 @@ import { SmartHeader } from '../../smartComponents/SmartHeader';
 import { AuthenticatedUserProvider } from '../../contexts/AuthenticatedUserContext';
 import { VizPreviewPresenter } from '../VizPreviewPresenter';
 import { Page, PageData } from '../Page';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 export type ExplorePageData = PageData & {
   // The first page of results
@@ -44,6 +44,10 @@ export const ExplorePage: Page = ({
 
   // TODO URL param for sort
   const [sortId, setSortId] = useState(defaultSortOption.id);
+
+  useEffect(() => {
+    console.log('sortId changed to', sortId);
+  }, [sortId]);
 
   return (
     <AuthenticatedUserProvider

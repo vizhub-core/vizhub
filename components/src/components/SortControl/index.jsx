@@ -1,7 +1,12 @@
 import { useMemo } from 'react';
 import { Form, Dropdown, Row, Col } from '../bootstrap';
 
-export const SortControl = ({ sortId, setSortId, sortOptions, isVertical }) => {
+export const SortControl = ({
+  sortId,
+  setSortId,
+  sortOptions,
+  isVertical = false,
+}) => {
   // Possible sorts that are not the current sort.
   const otherSortOptions = useMemo(
     () => (sortOptions ? sortOptions.filter(({ id }) => id !== sortId) : []),

@@ -1,10 +1,11 @@
-import { Info, Snapshot, User } from 'entities';
+import { Info, Snapshot, User, defaultSortOption, sortOptions } from 'entities';
 import { ProfilePageBody } from 'components';
 import { SmartHeader } from '../../smartComponents/SmartHeader';
 import { AuthenticatedUserProvider } from '../../contexts/AuthenticatedUserContext';
 import { useShareDBDocData } from '../../useShareDBDocData';
 import { VizPreviewPresenter } from '../VizPreviewPresenter';
 import { Page, PageData } from '../Page';
+import { useEffect, useState } from 'react';
 
 export type ProfilePageData = PageData & {
   profileUserSnapshot: Snapshot<User>;
@@ -23,6 +24,13 @@ export const ProfilePage: Page = ({
   // Subscribe to real-time updates in case something changes like display name.
   const profileUser: User = useShareDBDocData(profileUserSnapshot, 'User');
   const { userName, displayName, picture } = profileUser;
+
+  // TODO URL param for sort
+  const [sortId, setSortId] = useState(defaultSortOption.id);
+
+  useEffect(() => {
+    console.log('sortId changed to', sortId);
+  }, [sortId]);
 
   return (
     <AuthenticatedUserProvider
@@ -43,6 +51,9 @@ export const ProfilePage: Page = ({
           displayName={displayName}
           userName={userName}
           picture={picture}
+          sortId={sortId}
+          setSortId={setSortId}
+          sortOptions={sortOptions}
         />
       </div>
     </AuthenticatedUserProvider>
