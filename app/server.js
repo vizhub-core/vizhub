@@ -158,10 +158,7 @@ async function createServer(
   // in dev on each page request, so we don't need to restart the server all the time.
   app.use('*', async (req, res) => {
     try {
-      // const userInfo = await req.oidc.fetchUserInfo();
-      // console.log(userInfo);
-
-      const url = req.originalUrl;
+      const { originalUrl, baseUrl, query } = req;
 
       // This part is directly copied from:
       // https://github.com/vitejs/vite-plugin-react/blob/main/playground/ssr-react/server.js
@@ -170,7 +167,7 @@ async function createServer(
       if (!isProd) {
         // always read fresh template in dev
         template = fs.readFileSync(resolve('index.html'), 'utf-8');
-        template = await vite.transformIndexHtml(url, template);
+        template = await vite.transformIndexHtml(originalUrl, template);
         entry = await vite.ssrLoadModule('/src/entry-server.tsx');
       } else {
         template = indexProd;
@@ -185,7 +182,7 @@ async function createServer(
       let matchedPage;
 
       for (const page of pages) {
-        match = matchPath({ path: page.path }, url);
+        match = matchPath({ path: page.path }, baseUrl);
         if (match) {
           matchedPage = page;
           break;
@@ -206,6 +203,7 @@ async function createServer(
       const pageData = matchedPage.getPageData
         ? await matchedPage.getPageData({
             params,
+            query,
             env,
             gateways,
             auth0User,
@@ -220,7 +218,10 @@ async function createServer(
 
       // Expose the relative page URL (on page load) in `pageData`.
       // This allows the client to know if a client-side navigation happened.
-      pageData.url = url;
+      pageData.url = originalUrl;
+
+      // This has the query string stripped off.
+      pageData.baseUrl = baseUrl;
 
       // Expose the current version to the client.
       pageData.version = version;
@@ -236,7 +237,7 @@ async function createServer(
           seoMetaTags({
             titleSanitized,
             descriptionSanitized,
-            relativeUrl: url,
+            relativeUrl: originalUrl,
             image,
           })
         )
