@@ -8,6 +8,10 @@ import { useContext } from 'react';
 export const Body = ({ infoSnapshots, ownerUserSnapshotMap }) => {
   const { sortId, setSortId } = useContext(SortContext);
 
+  // TODO fetch infoSnapshots based on sortId, and ownerUserSnapshots,
+  // with pagination.
+  // console.log('sortId', sortId);
+
   return (
     <div className="vh-page overflow-auto">
       <SmartHeader />

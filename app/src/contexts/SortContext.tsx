@@ -28,8 +28,6 @@ export const SortProvider = ({ children }) => {
     [setSearchParams]
   );
 
-  console.log('sortId', sortId);
-
   const value = useMemo(() => ({ sortId, setSortId }), [sortId, setSortId]);
 
   return <SortContext.Provider value={value}>{children}</SortContext.Provider>;
