@@ -103,7 +103,7 @@ export const Body = ({ pageData }) => {
         sortId,
         infoSnapshots: infoSnapshots,
       });
-    }, 1000);
+    }, 10000);
     // // TODO Invoke API to fetch next page
     // console.log('TODO: fetch next page');
 
@@ -138,6 +138,9 @@ export const Body = ({ pageData }) => {
         setSortId={setSortId}
         sortOptions={sortOptions}
         onMoreClick={fetchNextPage}
+        isLoadingNextPage={
+          paginationState.nextPageStatus === NEXT_PAGE_REQUESTED
+        }
       />
     </div>
   );
