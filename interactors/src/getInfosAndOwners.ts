@@ -7,19 +7,25 @@ import {
   getSortField,
   SortField,
   Snapshot,
+  VizId,
 } from 'entities';
 
 export const GetInfosAndOwners = (gateways: Gateways) => {
   const { getInfos } = gateways;
 
+  // TODO add owner, forkedFrom to support filtering, as needed.
   return async ({
     noNeedToFetchUsers,
     sortId,
     pageNumber,
+    owner,
+    forkedFrom,
   }: {
     noNeedToFetchUsers: Array<UserId>;
     sortId: SortId;
     pageNumber: number;
+    owner?: UserId;
+    forkedFrom?: VizId;
   }): Promise<
     Result<{
       infoSnapshots: Array<Snapshot<Info>>;
@@ -29,15 +35,12 @@ export const GetInfosAndOwners = (gateways: Gateways) => {
     // Get the sort field from the sort query parameter.
     const sortField: SortField = getSortField(sortId);
 
-    // Reference of signure of getInfos:
-    //   getInfos({
-    // owner,
-    // forkedFrom,
-    // sortField,
-    // pageNumber,
-    // sortOrder,
-
-    const infoSnapshotsResult = await getInfos({ sortField, pageNumber });
+    const infoSnapshotsResult = await getInfos({
+      owner,
+      forkedFrom,
+      sortField,
+      pageNumber,
+    });
     if (infoSnapshotsResult.outcome === 'failure') return infoSnapshotsResult;
     const infoSnapshots = infoSnapshotsResult.value;
 

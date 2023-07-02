@@ -17,8 +17,6 @@ export const getInfosAndOwnersEndpoint = ({ app, gateways }) => {
         return res.send(err(missingParameterError('eventIds')));
       }
 
-      // const infos = await getInfos({
-
       res.send(
         await getInfosAndOwners({ noNeedToFetchUsers, sortId, pageNumber })
       );

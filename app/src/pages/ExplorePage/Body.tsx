@@ -25,6 +25,10 @@ type PaginationState = {
 
   // The owner users for each info, indexed by userId
   ownerUsers: { [userId: string]: Snapshot<User> };
+
+  // If there was an error fetching the next page, it will be reported here
+  // TODO: Handle errors better - check types match
+  error?: Error;
 };
 
 type PaginationAction =
@@ -33,8 +37,9 @@ type PaginationAction =
       type: 'ResolveNextPage';
       sortId: SortId;
       infoSnapshots: Array<Snapshot<Info>>;
+      ownerUserSnapshots: Array<Snapshot<User>>;
     }
-  | { type: 'failure' };
+  | { type: 'ReportError'; error: Error };
 
 // Inspired by https://github.com/vizhub-core/vizhub/blob/f0d1fbc6cd0f8d124d6424ec8bd948785209d6c4/vizhub-v3/vizhub-app/src/presenters/HomePagePresenter/useVizInfos.js#L19
 
@@ -56,7 +61,21 @@ const reducer = (state: PaginationState, action: PaginationAction) => {
             action.infoSnapshots,
           ],
         },
+        ownerUsers: {
+          ...state.ownerUsers,
+          ...action.ownerUserSnapshots.reduce(
+            (accumulator, snapshot) => ({
+              ...accumulator,
+              [snapshot.data.id]: snapshot,
+            }),
+            {}
+          ),
+        },
       };
+
+    // When the request comes back with an error
+    case 'ReportError':
+      return { ...state, error: action.error };
 
     default:
       throw new Error('This should never happen.');
@@ -92,22 +111,25 @@ export const Body = ({ pageData }) => {
   const fetchNextPage = useCallback(() => {
     paginationDispatch({ type: 'RequestNextPage' });
 
-    // TODO: Remove this timeout, and replace with API call
-    setTimeout(() => {
-      paginationDispatch({
-        type: 'ResolveNextPage',
+    async function fetchNextPage() {
+      const result = await vizKit.rest.getInfosAndOwners({
+        noNeedToFetchUsers: Object.keys(paginationState.ownerUsers),
         sortId,
-        infoSnapshots: pageData.infoSnapshots,
+        pageNumber: paginationState.pages[sortId].length,
       });
-    }, 1000);
-    // TODO Invoke API to fetch next page
-    console.log('TODO: fetch next page');
-
-    vizKit.rest.getInfosAndOwners({
-      noNeedToFetchUsers: Object.keys(paginationState.ownerUsers),
-      sortId,
-      pageNumber: paginationState.pages[sortId].length + 1,
-    });
+      if (result.outcome === 'success') {
+        const { infoSnapshots, ownerUserSnapshots } = result.value;
+        paginationDispatch({
+          type: 'ResolveNextPage',
+          sortId,
+          infoSnapshots,
+          ownerUserSnapshots,
+        });
+      } else {
+        paginationDispatch({ type: 'ReportError', error: result.error });
+      }
+    }
+    fetchNextPage();
   }, [paginationState, sortId, pageData.infoSnapshots]);
 
   const allInfoSnapshots = useMemo(
