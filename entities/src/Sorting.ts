@@ -50,7 +50,7 @@ export type SortField =
 
 export type SortOrder = 'ascending' | 'descending';
 
-export const defaultSortOrder: SortOrder = 'ascending';
+export const defaultSortOrder: SortOrder = 'descending';
 
 // Used in URL param do define which sort option is selected.
 // Has backwards compatibility with old URLs from V2.
