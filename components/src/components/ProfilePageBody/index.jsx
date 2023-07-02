@@ -29,12 +29,12 @@ export const ProfilePageBody = ({
               <div className="vh-profile-page__user-name">{userName}</div>
             </div>
           </div>
-          {/* Null guard while feature in development - can remove later once it's working */}
           {sortOptions ? (
             <SortControl
               sortId={sortId}
               setSortId={setSortId}
               sortOptions={sortOptions}
+              isVertical={true}
             />
           ) : null}
         </div>

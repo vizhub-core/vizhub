@@ -1,11 +1,17 @@
-import { sortOptions } from 'entities';
+import { Info, Snapshot, User, sortOptions } from 'entities';
 import { ProfilePageBody } from 'components';
 import { SmartHeader } from '../../smartComponents/SmartHeader';
 import { VizPreviewPresenter } from '../VizPreviewPresenter';
 import { useContext } from 'react';
 import { SortContext } from '../../contexts/SortContext';
 
-export const Body = ({ infoSnapshots, profileUser, profileUserSnapshot }) => {
+export const Body = ({
+  infoSnapshots,
+  profileUser,
+}: {
+  infoSnapshots: Array<Snapshot<Info>>;
+  profileUser: User;
+}) => {
   const { userName, displayName, picture } = profileUser;
 
   const { sortId, setSortId } = useContext(SortContext);
@@ -19,7 +25,7 @@ export const Body = ({ infoSnapshots, profileUser, profileUserSnapshot }) => {
             <VizPreviewPresenter
               key={infoSnapshot.data.id}
               infoSnapshot={infoSnapshot}
-              ownerUserSnapshot={profileUserSnapshot}
+              ownerUser={profileUser}
             />
           ))
         }

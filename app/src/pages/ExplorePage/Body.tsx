@@ -5,28 +5,21 @@ import { SortContext } from '../../contexts/SortContext';
 import { VizPreviewPresenter } from '../VizPreviewPresenter';
 import { useContext } from 'react';
 
-export const Body = ({ infoSnapshots, ownerUserSnapshotMap }) => {
+export const Body = ({ infoSnapshots, ownerUserMap }) => {
   const { sortId, setSortId } = useContext(SortContext);
-
-  // TODO fetch infoSnapshots based on sortId, and ownerUserSnapshots,
-  // with pagination.
-  // console.log('sortId', sortId);
 
   return (
     <div className="vh-page overflow-auto">
       <SmartHeader />
       <ExplorePageBody
         renderVizPreviews={() =>
-          infoSnapshots.map((infoSnapshot: Snapshot<Info>) => {
-            const info: Info = infoSnapshot.data;
-            return (
-              <VizPreviewPresenter
-                key={info.id}
-                infoSnapshot={infoSnapshot}
-                ownerUserSnapshot={ownerUserSnapshotMap.get(info.owner)}
-              />
-            );
-          })
+          infoSnapshots.map((infoSnapshot: Snapshot<Info>) => (
+            <VizPreviewPresenter
+              key={infoSnapshot.data.id}
+              infoSnapshot={infoSnapshot}
+              ownerUser={ownerUserMap.get(infoSnapshot.data.owner)}
+            />
+          ))
         }
         sortId={sortId}
         setSortId={setSortId}

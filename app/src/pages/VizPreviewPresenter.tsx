@@ -1,15 +1,16 @@
-import { Info, User } from 'entities';
+import { Info, Snapshot, User } from 'entities';
 import { VizPreview } from 'components/src/components/VizPreview';
 import { useShareDBDocData } from '../useShareDBDocData';
 import { getUserDisplayName } from '../accessors/getUserDisplayName';
 
-export const VizPreviewPresenter = ({ infoSnapshot, ownerUserSnapshot }) => {
+export const VizPreviewPresenter = ({
+  infoSnapshot,
+  ownerUser,
+}: {
+  infoSnapshot: Snapshot<Info>;
+  ownerUser: User;
+}) => {
   const info: Info = useShareDBDocData(infoSnapshot, 'Info');
-
-  // TODO consider elevating this to a higher level component
-  // Currently we have to pass in the ownerUserSnapshot,
-  // and each VizPreviewPresenter has to subscribe to its own instance.
-  const ownerUser: User = useShareDBDocData(ownerUserSnapshot, 'User');
 
   // TODO make this work for real
   // See https://github.com/vizhub-core/vizhub3/issues/65

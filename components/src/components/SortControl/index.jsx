@@ -29,7 +29,7 @@ export const SortControl = ({
       <Form.Label column sm="auto">
         Sort by
       </Form.Label>
-      <Col className="px-0">
+      <div className="px-0 col">
         <Dropdown onSelect={setSortId}>
           <Dropdown.Toggle id="dropdown-sort">
             {sortsById.get(sortId)?.label}
@@ -42,7 +42,7 @@ export const SortControl = ({
             ))}
           </Dropdown.Menu>
         </Dropdown>
-      </Col>
+      </div>
     </Form.Group>
   );
 };
