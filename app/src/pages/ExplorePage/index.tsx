@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { useMemo } from 'react';
 import { Info, Snapshot, SortId, User, UserId } from 'entities';
 import { AuthenticatedUserProvider } from '../../contexts/AuthenticatedUserContext';
 import { SortProvider } from '../../contexts/SortContext';
@@ -12,6 +12,8 @@ export type ExplorePageData = PageData & {
   // The users that are owners of these Infos
   ownerUserSnapshots: Array<Snapshot<User>>;
 
+  // The initial sort order for the results,
+  // before the user has changed it client-side
   sortId: SortId;
 };
 
@@ -27,38 +29,12 @@ export const ExplorePage: Page = ({
 }: {
   pageData: ExplorePageData;
 }) => {
-  const { infoSnapshots, authenticatedUserSnapshot, ownerUserSnapshots } =
-    pageData;
-
-  // Memoize a map of infoId -> ownerUser
-  // TODO solve this for pagination case
-  // TODO solve for changing sort order
-  const ownerUserMap: Map<UserId, User> = useMemo(
-    () =>
-      new Map(
-        ownerUserSnapshots.map((snapshot: Snapshot<User>) => [
-          snapshot.data.id,
-          snapshot.data,
-        ])
-      ),
-    [ownerUserSnapshots]
-  );
-
-  const fetchNextPage = useCallback(() => {
-    // TODO Invoke API to fetch next page
-    console.log('TODO: fetch next page');
-  }, []);
-
   return (
     <AuthenticatedUserProvider
-      authenticatedUserSnapshot={authenticatedUserSnapshot}
+      authenticatedUserSnapshot={pageData.authenticatedUserSnapshot}
     >
       <SortProvider>
-        <Body
-          infoSnapshots={infoSnapshots}
-          ownerUserMap={ownerUserMap}
-          fetchNextPage={fetchNextPage}
-        />
+        <Body pageData={pageData} />
       </SortProvider>
     </AuthenticatedUserProvider>
   );
