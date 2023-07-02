@@ -188,8 +188,6 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
     new Promise((resolve) => {
       const entityName = 'Info';
 
-      console.log('getInfos/sortField', sortField);
-
       // Restrict search to given owner and/or forkedFrom.
       const mongoQuery = {
         ...(owner && { owner }),

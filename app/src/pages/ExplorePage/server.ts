@@ -7,6 +7,8 @@ import {
   getSortField,
   User,
   UserId,
+  asSortId,
+  defaultSortOption,
 } from 'entities';
 import { Gateways } from 'gateways';
 import { Auth0User } from '../Page';
@@ -22,7 +24,8 @@ ExplorePage.getPageData = async ({
 }): Promise<ExplorePageData> => {
   const { getInfos, getUser } = gateways;
 
-  const sortId: SortId | undefined = query.sort;
+  const sortId: SortId | undefined =
+    asSortId(query.sort) || defaultSortOption.id;
 
   // Get the sort field from the sort query parameter.
   const sortField: SortField = getSortField(sortId);
@@ -70,6 +73,7 @@ ExplorePage.getPageData = async ({
     authenticatedUserSnapshot,
     infoSnapshots,
     ownerUserSnapshots,
+    sortId,
   };
 };
 
