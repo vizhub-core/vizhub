@@ -27,12 +27,7 @@ export const ProfilePage: Page = ({
       authenticatedUserSnapshot={authenticatedUserSnapshot}
     >
       <SortProvider>
-        <Body
-          infoSnapshots={infoSnapshots}
-          profileUser={profileUser}
-          // TODO remove this prop for https://github.com/vizhub-core/vizhub3/issues/162
-          profileUserSnapshot={profileUserSnapshot}
-        />
+        <Body infoSnapshots={infoSnapshots} profileUser={profileUser} />
       </SortProvider>
     </AuthenticatedUserProvider>
   );
