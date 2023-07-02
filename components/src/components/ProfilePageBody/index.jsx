@@ -34,6 +34,7 @@ export const ProfilePageBody = ({
               sortId={sortId}
               setSortId={setSortId}
               sortOptions={sortOptions}
+              isVertical={true}
             />
           ) : null}
         </div>
