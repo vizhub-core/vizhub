@@ -19,8 +19,14 @@ export const SortProvider = ({ children }) => {
   // Update URL param when sortId changes.
   const setSortId = useCallback(
     (newSortId: SortId) => {
+      // TODO client side update
       setSearchParams((urlSearchParams: URLSearchParams) => {
         urlSearchParams.set('sort', newSortId);
+        console.log(urlSearchParams.toString());
+
+        // Do a hard navigation to the new URL.
+        // Temporary until client side update is implemented.
+        window.location.search = `?sort=${newSortId}`;
         return urlSearchParams;
       });
     },
