@@ -4,6 +4,7 @@ import { SmartHeader } from '../../smartComponents/SmartHeader';
 import { VizPreviewPresenter } from '../VizPreviewPresenter';
 import { useContext } from 'react';
 import { SortContext } from '../../contexts/SortContext';
+import { getUserDisplayName } from '../../accessors/getUserDisplayName';
 
 export const Body = ({
   infoSnapshots,
@@ -12,7 +13,7 @@ export const Body = ({
   infoSnapshots: Array<Snapshot<Info>>;
   profileUser: User;
 }) => {
-  const { userName, displayName, picture } = profileUser;
+  const { userName, picture } = profileUser;
 
   const { sortId, setSortId } = useContext(SortContext);
 
@@ -29,7 +30,7 @@ export const Body = ({
             />
           ))
         }
-        displayName={displayName}
+        displayName={getUserDisplayName(profileUser)}
         userName={userName}
         picture={picture}
         sortId={sortId}
