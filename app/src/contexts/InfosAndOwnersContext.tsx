@@ -92,7 +92,19 @@ const reducer = (state: PaginationState, action: PaginationAction) => {
   }
 };
 
-export const InfosAndOwnersProvider = ({ pageData, children }) => {
+// Pages that use this context should have this shape of pageData.
+export type InfosAndOwnersPageData = {
+  infoSnapshots: Array<Snapshot<Info>>;
+  ownerUserSnapshots: Array<Snapshot<User>>;
+};
+
+export const InfosAndOwnersProvider = ({
+  pageData,
+  children,
+}: {
+  pageData: InfosAndOwnersPageData;
+  children: React.ReactNode;
+}) => {
   const { sortId } = useContext(SortContext);
 
   // The initial pagination state, from server-rendered first page.

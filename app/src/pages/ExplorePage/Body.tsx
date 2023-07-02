@@ -7,14 +7,15 @@ import { useContext } from 'react';
 import { InfosAndOwnersContext } from '../../contexts/InfosAndOwnersContext';
 
 export const Body = () => {
-  // const { infoSnapshots, ownerUserSnapshots } = pageData;
   const { sortId, setSortId } = useContext(SortContext);
+
   const {
     allInfoSnapshots,
     fetchNextPage,
     ownerUserSnapshotsById,
     isLoadingNextPage,
   } = useContext(InfosAndOwnersContext);
+
   return (
     <div className="vh-page overflow-auto">
       <SmartHeader />

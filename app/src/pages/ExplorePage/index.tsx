@@ -4,19 +4,23 @@ import { AuthenticatedUserProvider } from '../../contexts/AuthenticatedUserConte
 import { SortProvider } from '../../contexts/SortContext';
 import { Page, PageData } from '../Page';
 import { Body } from './Body';
-import { InfosAndOwnersProvider } from '../../contexts/InfosAndOwnersContext';
+import {
+  InfosAndOwnersPageData,
+  InfosAndOwnersProvider,
+} from '../../contexts/InfosAndOwnersContext';
 
-export type ExplorePageData = PageData & {
-  // The first page of results
-  infoSnapshots: Array<Snapshot<Info>>;
+export type ExplorePageData = PageData &
+  InfosAndOwnersPageData & {
+    // The first page of results
+    infoSnapshots: Array<Snapshot<Info>>;
 
-  // The users that are owners of these Infos
-  ownerUserSnapshots: Array<Snapshot<User>>;
+    // The users that are owners of these Infos
+    ownerUserSnapshots: Array<Snapshot<User>>;
 
-  // The initial sort order for the results,
-  // before the user has changed it client-side
-  sortId: SortId;
-};
+    // The initial sort order for the results,
+    // before the user has changed it client-side
+    sortId: SortId;
+  };
 
 // The type for the query parameters for this page
 export type ExplorePageQuery = {
