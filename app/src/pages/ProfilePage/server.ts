@@ -1,9 +1,12 @@
 import { ProfilePage, ProfilePageData } from './index';
 import { parseAuth0Sub } from '../../parseAuth0User';
+import { GetInfosAndOwners } from 'interactors';
+import { SortId, asSortId, defaultSortOption } from 'entities';
 
-ProfilePage.getPageData = async ({ gateways, params, auth0User }) => {
+ProfilePage.getPageData = async ({ gateways, params, query, auth0User }) => {
   const { userName } = params;
-  const { getUserByUserName, getInfos, getUser } = gateways;
+  const { getUserByUserName, getUser } = gateways;
+  const getInfosAndOwners = GetInfosAndOwners(gateways);
 
   const userResult = await getUserByUserName(userName);
   if (userResult.outcome === 'success') {
@@ -11,15 +14,19 @@ ProfilePage.getPageData = async ({ gateways, params, auth0User }) => {
 
     const owner = profileUserSnapshot.data.id;
 
-    let infoSnapshots;
-    const infoSnapshotsResult = await getInfos({ owner });
-    if (infoSnapshotsResult.outcome === 'success') {
-      infoSnapshots = infoSnapshotsResult.value;
-    } else {
-      infoSnapshots = [];
-      console.log('Error when fetching infos by owner:');
-      console.log(infoSnapshotsResult.error);
+    const sortId: SortId | null = asSortId(query.sort) || defaultSortOption.id;
+
+    const infosAndOwnersResult = await getInfosAndOwners({
+      noNeedToFetchUsers: [owner],
+      sortId,
+      pageNumber: 0,
+    });
+    if (infosAndOwnersResult.outcome === 'failure') {
+      console.log('Error when fetching infos and owners:');
+      console.log(infosAndOwnersResult.error);
+      return null;
     }
+    const { infoSnapshots } = infosAndOwnersResult.value;
 
     // If the user is currently authenticated...
     let authenticatedUserSnapshot = null;
@@ -39,6 +46,7 @@ ProfilePage.getPageData = async ({ gateways, params, auth0User }) => {
       title: `${userName} on VizHub`,
       authenticatedUserSnapshot,
       profileUserSnapshot,
+      ownerUserSnapshots: [profileUserSnapshot],
       infoSnapshots,
     };
 

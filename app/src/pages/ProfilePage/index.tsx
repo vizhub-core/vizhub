@@ -4,11 +4,16 @@ import { SortProvider } from '../../contexts/SortContext';
 import { useShareDBDocData } from '../../useShareDBDocData';
 import { Page, PageData } from '../Page';
 import { Body } from './Body';
+import {
+  InfosAndOwnersPageData,
+  InfosAndOwnersProvider,
+} from '../../contexts/InfosAndOwnersContext';
 
-export type ProfilePageData = PageData & {
-  profileUserSnapshot: Snapshot<User>;
-  infoSnapshots: Array<Snapshot<Info>>;
-};
+export type ProfilePageData = PageData &
+  InfosAndOwnersPageData & {
+    profileUserSnapshot: Snapshot<User>;
+    infoSnapshots: Array<Snapshot<Info>>;
+  };
 
 // Inspired by https://github.com/vitejs/vite-plugin-react/blob/main/playground/ssr-react/src/pages/Home.jsx
 export const ProfilePage: Page = ({
@@ -16,8 +21,7 @@ export const ProfilePage: Page = ({
 }: {
   pageData: ProfilePageData;
 }) => {
-  const { profileUserSnapshot, infoSnapshots, authenticatedUserSnapshot } =
-    pageData;
+  const { profileUserSnapshot, authenticatedUserSnapshot } = pageData;
 
   // Subscribe to real-time updates in case something changes like display name.
   const profileUser: User = useShareDBDocData(profileUserSnapshot, 'User');
@@ -27,7 +31,9 @@ export const ProfilePage: Page = ({
       authenticatedUserSnapshot={authenticatedUserSnapshot}
     >
       <SortProvider>
-        <Body infoSnapshots={infoSnapshots} profileUser={profileUser} />
+        <InfosAndOwnersProvider pageData={pageData}>
+          <Body profileUser={profileUser} />
+        </InfosAndOwnersProvider>
       </SortProvider>
     </AuthenticatedUserProvider>
   );
