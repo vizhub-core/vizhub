@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { Info, Snapshot, SortId, User, UserId } from 'entities';
 import { AuthenticatedUserProvider } from '../../contexts/AuthenticatedUserContext';
 import { SortProvider } from '../../contexts/SortContext';
@@ -44,12 +44,21 @@ export const ExplorePage: Page = ({
     [ownerUserSnapshots]
   );
 
+  const fetchNextPage = useCallback(() => {
+    // TODO Invoke API to fetch next page
+    console.log('TODO: fetch next page');
+  }, []);
+
   return (
     <AuthenticatedUserProvider
       authenticatedUserSnapshot={authenticatedUserSnapshot}
     >
       <SortProvider>
-        <Body infoSnapshots={infoSnapshots} ownerUserMap={ownerUserMap} />
+        <Body
+          infoSnapshots={infoSnapshots}
+          ownerUserMap={ownerUserMap}
+          fetchNextPage={fetchNextPage}
+        />
       </SortProvider>
     </AuthenticatedUserProvider>
   );

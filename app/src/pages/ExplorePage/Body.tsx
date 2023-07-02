@@ -5,7 +5,7 @@ import { SortContext } from '../../contexts/SortContext';
 import { VizPreviewPresenter } from '../VizPreviewPresenter';
 import { useContext } from 'react';
 
-export const Body = ({ infoSnapshots, ownerUserMap }) => {
+export const Body = ({ infoSnapshots, ownerUserMap, fetchNextPage }) => {
   const { sortId, setSortId } = useContext(SortContext);
 
   return (
@@ -24,6 +24,7 @@ export const Body = ({ infoSnapshots, ownerUserMap }) => {
         sortId={sortId}
         setSortId={setSortId}
         sortOptions={sortOptions}
+        onMoreClick={fetchNextPage}
       />
     </div>
   );
