@@ -12,6 +12,7 @@ import {
 } from 'entities';
 import { Gateways } from 'gateways';
 import { Auth0User } from '../Page';
+import { GetInfosAndOwners } from 'interactors';
 
 ExplorePage.getPageData = async ({
   gateways,
@@ -23,38 +24,16 @@ ExplorePage.getPageData = async ({
   query: ExplorePageQuery;
 }): Promise<ExplorePageData> => {
   const { getInfos, getUser } = gateways;
+  const getInfosAndOwners = GetInfosAndOwners(gateways);
 
   const sortId: SortId | undefined =
     asSortId(query.sort) || defaultSortOption.id;
 
-  // Get the sort field from the sort query parameter.
-  const sortField: SortField = getSortField(sortId);
-
-  let infoSnapshots;
-  const infoSnapshotsResult = await getInfos({ sortField });
-  if (infoSnapshotsResult.outcome === 'success') {
-    infoSnapshots = infoSnapshotsResult.value;
-  } else {
-    infoSnapshots = [];
-    console.log('Error when fetching infos by owner:');
-    console.log(infoSnapshotsResult.error);
-  }
-
-  // Figure out the set of unique users that are owners of these infos.
-  const ownerUsers: Array<UserId> = Array.from(
-    new Set(infoSnapshots.map((snapshot) => snapshot.data.owner))
-  );
-
-  // Fetch the user snapshots for these owners.
-  const ownerUserSnapshotsResult = await gateways.getUsersByIds(ownerUsers);
-  let ownerUserSnapshots: Array<Snapshot<User>>;
-  if (ownerUserSnapshotsResult.outcome === 'success') {
-    ownerUserSnapshots = ownerUserSnapshotsResult.value;
-  } else {
-    ownerUserSnapshots = [];
-    console.log('Error when fetching users by ids:');
-    console.log(ownerUserSnapshotsResult.error);
-  }
+  const { infoSnapshots, ownerUserSnapshots } = await getInfosAndOwners({
+    noNeedToFetchUsers: [],
+    sortId,
+    pageNumber: 0,
+  });
 
   // If the user is currently authenticated...
   let authenticatedUserSnapshot = null;

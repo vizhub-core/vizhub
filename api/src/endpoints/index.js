@@ -1,12 +1,14 @@
 import { healthCheck } from './healthCheck';
 import { privateBetaEmailSubmit } from './privateBetaEmailSubmit';
 import { recordAnalyticsEvents } from './recordAnalyticsEvents';
-import { getInfosAndOwners } from './getInfosAndOwners';
+import { getInfosAndOwnersEndpoint } from './getInfosAndOwnersEndpoint';
 
 // TODO Glob import
 export const endpoints = [
+  // TODO rename these to all end with Endpoint
   healthCheck,
   privateBetaEmailSubmit,
   recordAnalyticsEvents,
-  getInfosAndOwners,
+
+  getInfosAndOwnersEndpoint,
 ];

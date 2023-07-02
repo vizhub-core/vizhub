@@ -1,9 +1,9 @@
 import { err, missingParameterError } from 'gateways';
-import { RecordAnalyticsEvents } from 'interactors';
+import { GetInfosAndOwners } from 'interactors';
 
 // Requests a page of infos and their correponding owner users.
-export const getInfosAndOwners = ({ app, gateways }) => {
-  const { getInfos } = gateways;
+export const getInfosAndOwnersEndpoint = ({ app, gateways }) => {
+  const getInfosAndOwners = GetInfosAndOwners(gateways);
   app.post('/api/get-infos-and-owners', async (req, res) => {
     if (req.body) {
       const { noNeedToFetchUsers, sortId, pageNumber } = req.body;
@@ -19,7 +19,9 @@ export const getInfosAndOwners = ({ app, gateways }) => {
 
       // const infos = await getInfos({
 
-      res.send();
+      res.send(
+        await getInfosAndOwners({ noNeedToFetchUsers, sortId, pageNumber })
+      );
     }
   });
 };
