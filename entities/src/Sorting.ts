@@ -24,6 +24,18 @@ export const sortOptions: Array<SortOption> = [
   },
 ];
 
+const sortOptionsMap = new Map<SortId, SortOption>(
+  sortOptions.map((option) => [option.id, option])
+);
+
+// Convenience function for getting the sort field from the sort ID.
+export const getSortField = (sortId: SortId | undefined): SortField =>
+  (sortId && sortOptionsMap.get(sortId)?.sortField) || defaultSortField;
+
+// Convenience function for validating sort id.
+export const asSortId = (sortId: string): SortId | null =>
+  sortOptionsMap.has(sortId as SortId) ? (sortId as SortId) : null;
+
 // The default for sorting views of many visualizations (popular).
 export const defaultSortOption: SortOption = sortOptions[0];
 
@@ -38,11 +50,14 @@ export type SortField =
 
 export type SortOrder = 'ascending' | 'descending';
 
-export const defaultSortOrder: SortOrder = 'ascending';
+export const defaultSortOrder: SortOrder = 'descending';
+
+// Used in URL param do define which sort option is selected.
+// Has backwards compatibility with old URLs from V2.
+export type SortId = 'popular' | 'mostRecent' | 'mostForked' | 'mostUpvoted';
 
 export type SortOption = {
-  // Used in URL param - backwards compatibility with old URLs
-  id: string;
+  id: SortId;
   // Used in UI
   label: string;
   // Used in DB query

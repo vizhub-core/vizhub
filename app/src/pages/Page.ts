@@ -15,9 +15,13 @@ export type Page = {
     env,
     gateways,
     auth0User,
+    query,
   }: {
     // The URL parameters for this page, e.g. { userName: 'curran' }.
     params: { [key: string]: string };
+
+    // The query parameters for this page, e.g. { sort: 'popular' }.
+    query: { [key: string]: string };
 
     // Environment variables
     env?: { [key: string]: string };

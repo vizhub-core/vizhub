@@ -1,15 +1,37 @@
-import { ExplorePage, ExplorePageData } from './index';
+import { ExplorePage, ExplorePageData, ExplorePageQuery } from './index';
 import { parseAuth0Sub } from '../../parseAuth0User';
-import { Snapshot, User, UserId } from 'entities';
+import {
+  Snapshot,
+  SortField,
+  SortId,
+  getSortField,
+  User,
+  UserId,
+  asSortId,
+  defaultSortOption,
+} from 'entities';
+import { Gateways } from 'gateways';
+import { Auth0User } from '../Page';
 
 ExplorePage.getPageData = async ({
   gateways,
   auth0User,
+  query,
+}: {
+  gateways: Gateways;
+  auth0User: Auth0User | null;
+  query: ExplorePageQuery;
 }): Promise<ExplorePageData> => {
   const { getInfos, getUser } = gateways;
 
+  const sortId: SortId | undefined =
+    asSortId(query.sort) || defaultSortOption.id;
+
+  // Get the sort field from the sort query parameter.
+  const sortField: SortField = getSortField(sortId);
+
   let infoSnapshots;
-  const infoSnapshotsResult = await getInfos({});
+  const infoSnapshotsResult = await getInfos({ sortField });
   if (infoSnapshotsResult.outcome === 'success') {
     infoSnapshots = infoSnapshotsResult.value;
   } else {
@@ -51,6 +73,7 @@ ExplorePage.getPageData = async ({
     authenticatedUserSnapshot,
     infoSnapshots,
     ownerUserSnapshots,
+    sortId,
   };
 };
 
