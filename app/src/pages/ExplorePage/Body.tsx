@@ -22,6 +22,9 @@ type PaginationState = {
 
   // The results for each page, indexed by sortId and page number
   pages: { [sortId: string]: Array<Array<Snapshot<Info>>> };
+
+  // The owner users for each info, indexed by userId
+  ownerUsers: { [userId: string]: Snapshot<User> };
 };
 
 type PaginationAction =
@@ -61,21 +64,7 @@ const reducer = (state: PaginationState, action: PaginationAction) => {
 };
 
 export const Body = ({ pageData }) => {
-  const { infoSnapshots, ownerUserSnapshots } = pageData;
-
-  // Memoize a map of infoId -> ownerUser
-  // TODO solve this for pagination case
-  // TODO solve for changing sort order
-  const ownerUserMap: Map<UserId, User> = useMemo(
-    () =>
-      new Map(
-        ownerUserSnapshots.map((snapshot: Snapshot<User>) => [
-          snapshot.data.id,
-          snapshot.data,
-        ])
-      ),
-    [ownerUserSnapshots]
-  );
+  // const { infoSnapshots, ownerUserSnapshots } = pageData;
 
   const { sortId, setSortId } = useContext(SortContext);
 
@@ -83,9 +72,16 @@ export const Body = ({ pageData }) => {
   const initialPaginationState: PaginationState = useMemo(
     () => ({
       nextPageStatus: SETTLED,
-      pages: { [sortId]: [infoSnapshots] },
+      pages: { [sortId]: [pageData.infoSnapshots] },
+      ownerUsers: pageData.ownerUserSnapshots.reduce(
+        (accumulator, snapshot) => ({
+          ...accumulator,
+          [snapshot.data.id]: snapshot,
+        }),
+        {}
+      ),
     }),
-    [sortId, infoSnapshots]
+    [sortId, pageData]
   );
 
   const [paginationState, paginationDispatch] = useReducer(
@@ -101,20 +97,18 @@ export const Body = ({ pageData }) => {
       paginationDispatch({
         type: 'ResolveNextPage',
         sortId,
-        infoSnapshots: infoSnapshots,
+        infoSnapshots: pageData.infoSnapshots,
       });
-    }, 10000);
-    // // TODO Invoke API to fetch next page
-    // console.log('TODO: fetch next page');
+    }, 1000);
+    // TODO Invoke API to fetch next page
+    console.log('TODO: fetch next page');
 
-    // const noNeedToFetchUsers = Array.from(ownerUserMap.keys());
-    // console.log('noNeedToFetchUsers', noNeedToFetchUsers);
-    // console.log();
-
-    // // vizKit.rest.getInfosAndOwners({
-    // //   noNeedToFetchUsers,
-    // // });
-  }, []);
+    vizKit.rest.getInfosAndOwners({
+      noNeedToFetchUsers: Object.keys(paginationState.ownerUsers),
+      sortId,
+      pageNumber: paginationState.pages[sortId].length + 1,
+    });
+  }, [paginationState, sortId, pageData.infoSnapshots]);
 
   const allInfoSnapshots = useMemo(
     () => paginationState.pages[sortId].flat(),
@@ -130,7 +124,9 @@ export const Body = ({ pageData }) => {
             <VizPreviewPresenter
               key={infoSnapshot.data.id}
               infoSnapshot={infoSnapshot}
-              ownerUser={ownerUserMap.get(infoSnapshot.data.owner)}
+              ownerUser={
+                paginationState.ownerUsers[infoSnapshot.data.owner].data
+              }
             />
           ))
         }
