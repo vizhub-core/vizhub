@@ -4,6 +4,7 @@ import { AuthenticatedUserProvider } from '../../contexts/AuthenticatedUserConte
 import { SortProvider } from '../../contexts/SortContext';
 import { Page, PageData } from '../Page';
 import { Body } from './Body';
+import { InfosAndOwnersProvider } from '../../contexts/InfosAndOwnersContext';
 
 export type ExplorePageData = PageData & {
   // The first page of results
@@ -34,7 +35,9 @@ export const ExplorePage: Page = ({
       authenticatedUserSnapshot={pageData.authenticatedUserSnapshot}
     >
       <SortProvider>
-        <Body pageData={pageData} />
+        <InfosAndOwnersProvider pageData={pageData}>
+          <Body />
+        </InfosAndOwnersProvider>
       </SortProvider>
     </AuthenticatedUserProvider>
   );
