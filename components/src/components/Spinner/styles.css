@@ -9,7 +9,7 @@
 
 /* Fade in after a delay */
 /* https://stackoverflow.com/questions/29846224/css-animation-with-delay-and-opacity */
-.vh-spinner svg {
+.vh-spinner.fade-in svg {
   animation: 3s linear 0s normal forwards 1 fadein;
 }
 
