@@ -11,6 +11,8 @@ export type ExplorePageData = PageData & {
 
   // The users that are owners of these Infos
   ownerUserSnapshots: Array<Snapshot<User>>;
+
+  sortId: SortId;
 };
 
 // The type for the query parameters for this page
@@ -25,11 +27,16 @@ export const ExplorePage: Page = ({
 }: {
   pageData: ExplorePageData;
 }) => {
-  const { infoSnapshots, authenticatedUserSnapshot, ownerUserSnapshots } =
-    pageData;
+  const {
+    infoSnapshots,
+    authenticatedUserSnapshot,
+    ownerUserSnapshots,
+    sortId,
+  } = pageData;
 
   // Memoize a map of infoId -> ownerUser
   // TODO solve this for pagination case
+  // TODO solve for changing sort order
   const ownerUserSnapshotMap = useMemo(
     () =>
       new Map<UserId, Snapshot<User>>(
