@@ -29,11 +29,17 @@ ExplorePage.getPageData = async ({
   const sortId: SortId | undefined =
     asSortId(query.sort) || defaultSortOption.id;
 
-  const { infoSnapshots, ownerUserSnapshots } = await getInfosAndOwners({
+  const infosAndOwnersResult = await getInfosAndOwners({
     noNeedToFetchUsers: [],
     sortId,
     pageNumber: 0,
   });
+  if (infosAndOwnersResult.outcome === 'failure') {
+    console.log('Error when fetching infos and owners:');
+    console.log(infosAndOwnersResult.error);
+    return null;
+  }
+  const { infoSnapshots, ownerUserSnapshots } = infosAndOwnersResult.value;
 
   // If the user is currently authenticated...
   let authenticatedUserSnapshot = null;
