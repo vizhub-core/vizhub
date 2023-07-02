@@ -2,7 +2,7 @@ import { SortId, UserId } from 'entities';
 
 // Modeled after https://github.com/octokit/octokit.js/#constructor-options
 // See also https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#uploading_json_data
-export const VizKit = ({ baseUrl, ssrFetch }) => {
+export const VizKit = ({ baseUrl, ssrFetch = null }) => {
   // fetch needs special treatment because our AWS AppRunner environment
   // only supports up to Node 16, which is missing native `fetch`.
   // Once our infra supports Node 18, we can drop 'node-fetch' and delete this.

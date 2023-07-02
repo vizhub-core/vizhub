@@ -5,6 +5,7 @@ import { Spinner } from '../Spinner';
 import './styles.scss';
 
 export const ExplorePageBody = ({
+  // Viz preview list props.
   renderVizPreviews,
   onMoreClick,
   isLoadingNextPage,
