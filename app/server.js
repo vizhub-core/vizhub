@@ -181,8 +181,11 @@ async function createServer(
       let match;
       let matchedPage;
 
+      // If the URL is `/`, match it to the home page.
+      const urlToMatch = baseUrl || '/';
+
       for (const page of pages) {
-        match = matchPath({ path: page.path }, baseUrl);
+        match = matchPath({ path: page.path }, urlToMatch);
         if (match) {
           matchedPage = page;
           break;
