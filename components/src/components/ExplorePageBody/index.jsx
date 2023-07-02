@@ -1,11 +1,13 @@
 import { Container, Button } from '../bootstrap';
 import { SortControl } from '../SortControl';
 import { VizPreviewCollection } from '../VizPreviewCollection';
+import { Spinner } from '../Spinner';
 import './styles.scss';
 
 export const ExplorePageBody = ({
   renderVizPreviews,
   onMoreClick,
+  isLoadingNextPage,
 
   // Sort control props.
   sortId,
@@ -28,7 +30,11 @@ export const ExplorePageBody = ({
         </div>
         <VizPreviewCollection>{renderVizPreviews()}</VizPreviewCollection>
         <div className="mt-3 mb-3 d-flex justify-content-center">
-          <Button onClick={onMoreClick}>More</Button>
+          {isLoadingNextPage ? (
+            <Spinner fadeIn={false} />
+          ) : (
+            <Button onClick={onMoreClick}>More</Button>
+          )}
         </div>
       </Container>
     </div>

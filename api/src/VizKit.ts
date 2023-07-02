@@ -1,4 +1,5 @@
-// TODO move into separate package.
+import { SortId, UserId } from 'entities';
+
 // Modeled after https://github.com/octokit/octokit.js/#constructor-options
 // See also https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#uploading_json_data
 export const VizKit = ({ baseUrl, ssrFetch }) => {
@@ -14,6 +15,7 @@ export const VizKit = ({ baseUrl, ssrFetch }) => {
 
   return {
     rest: {
+      // TODO reduce duplication between these methods
       privateBetaEmailSubmit: async (email) =>
         await (
           await fetch(`${baseUrl}/private-beta-email-submit`, {
@@ -24,7 +26,7 @@ export const VizKit = ({ baseUrl, ssrFetch }) => {
             body: JSON.stringify({ email }),
           })
         ).json(),
-      // TODO reduce duplication
+
       recordAnalyticsEvents: async (eventId) =>
         await (
           await fetch(`${baseUrl}/record-analytics-event`, {
@@ -33,6 +35,28 @@ export const VizKit = ({ baseUrl, ssrFetch }) => {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({ eventId }),
+          })
+        ).json(),
+
+      getInfosAndOwners: async ({
+        noNeedToFetchUsers,
+        sortId,
+        pageNumber,
+      }: {
+        // An array of user ids that we already have in the client
+        noNeedToFetchUsers: Array<UserId>;
+        // The sort id that we want to fetch
+        sortId: SortId;
+        // The page number that we want to fetch
+        pageNumber: number;
+      }) =>
+        await (
+          await fetch(`${baseUrl}/get-infos-and-owners`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ noNeedToFetchUsers, sortId, pageNumber }),
           })
         ).json(),
     },
