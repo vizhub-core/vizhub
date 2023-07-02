@@ -27,22 +27,18 @@ export const ExplorePage: Page = ({
 }: {
   pageData: ExplorePageData;
 }) => {
-  const {
-    infoSnapshots,
-    authenticatedUserSnapshot,
-    ownerUserSnapshots,
-    sortId,
-  } = pageData;
+  const { infoSnapshots, authenticatedUserSnapshot, ownerUserSnapshots } =
+    pageData;
 
   // Memoize a map of infoId -> ownerUser
   // TODO solve this for pagination case
   // TODO solve for changing sort order
-  const ownerUserSnapshotMap = useMemo(
+  const ownerUserMap: Map<UserId, User> = useMemo(
     () =>
-      new Map<UserId, Snapshot<User>>(
+      new Map(
         ownerUserSnapshots.map((snapshot: Snapshot<User>) => [
           snapshot.data.id,
-          snapshot,
+          snapshot.data,
         ])
       ),
     [ownerUserSnapshots]
@@ -53,10 +49,7 @@ export const ExplorePage: Page = ({
       authenticatedUserSnapshot={authenticatedUserSnapshot}
     >
       <SortProvider>
-        <Body
-          infoSnapshots={infoSnapshots}
-          ownerUserSnapshotMap={ownerUserSnapshotMap}
-        />
+        <Body infoSnapshots={infoSnapshots} ownerUserMap={ownerUserMap} />
       </SortProvider>
     </AuthenticatedUserProvider>
   );
