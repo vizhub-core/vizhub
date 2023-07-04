@@ -1,9 +1,10 @@
 import { ForksPage, ForksPageData, ForksPageQuery } from './index';
 import { parseAuth0Sub } from '../../parseAuth0User';
-import { SortId, VizId, asSortId, defaultSortOption } from 'entities';
+import { Info, SortId, VizId, asSortId, defaultSortOption } from 'entities';
 import { Gateways } from 'gateways';
 import { Auth0User } from '../Page';
 import { GetInfosAndOwners } from 'interactors';
+import xss from 'xss';
 
 ForksPage.getPageData = async ({
   gateways,
@@ -55,11 +56,10 @@ ForksPage.getPageData = async ({
     return null;
   }
   const forkedFromInfoSnapshot = forkedFromInfoResult.value;
+  const forkedFromInfo: Info = forkedFromInfoSnapshot.data;
 
   // Get the owner of the forked-from viz
-  const forkedFromOwnerResult = await getUser(
-    forkedFromInfoSnapshot.data.owner
-  );
+  const forkedFromOwnerResult = await getUser(forkedFromInfo.owner);
   if (forkedFromOwnerResult.outcome === 'failure') {
     console.log('Error when fetching forked-from owner:');
     console.log(forkedFromOwnerResult.error);
@@ -68,7 +68,7 @@ ForksPage.getPageData = async ({
   const forkedFromOwnerUserSnapshot = forkedFromOwnerResult.value;
 
   return {
-    title: `Forks of TODO add viz name here`,
+    title: `Forks of ${xss(forkedFromInfo.title)}`,
     authenticatedUserSnapshot,
     infoSnapshots,
     ownerUserSnapshots,
