@@ -13,7 +13,6 @@ import {
 export const GetInfosAndOwners = (gateways: Gateways) => {
   const { getInfos } = gateways;
 
-  // TODO add owner, forkedFrom to support filtering, as needed.
   return async ({
     noNeedToFetchUsers,
     sortId,

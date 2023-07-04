@@ -1,5 +1,4 @@
-import { useMemo } from 'react';
-import { Info, Snapshot, SortId, User, UserId } from 'entities';
+import { Info, Snapshot, SortId, User } from 'entities';
 import { AuthenticatedUserProvider } from '../../contexts/AuthenticatedUserContext';
 import { SortProvider } from '../../contexts/SortContext';
 import { Page, PageData } from '../Page';
@@ -9,7 +8,7 @@ import {
   InfosAndOwnersProvider,
 } from '../../contexts/InfosAndOwnersContext';
 
-export type ExplorePageData = PageData &
+export type ForksPageData = PageData &
   InfosAndOwnersPageData & {
     // The first page of results
     infoSnapshots: Array<Snapshot<Info>>;
@@ -20,20 +19,22 @@ export type ExplorePageData = PageData &
     // The initial sort order for the results,
     // before the user has changed it client-side
     sortId: SortId;
+
+    // The Info that was forked from
+    forkedFromInfoSnapshot: Snapshot<Info>;
+
+    // The User that owns the Info that was forked from
+    forkedFromOwnerUserSnapshot: Snapshot<User>;
   };
 
 // The type for the query parameters for this page
-export type ExplorePageQuery = {
+export type ForksPageQuery = {
   // The sort order for the results
   sort?: SortId;
 };
 
 // Inspired by https://github.com/vitejs/vite-plugin-react/blob/main/playground/ssr-react/src/pages/Home.jsx
-export const ExplorePage: Page = ({
-  pageData,
-}: {
-  pageData: ExplorePageData;
-}) => (
+export const ForksPage: Page = ({ pageData }: { pageData: ForksPageData }) => (
   <AuthenticatedUserProvider
     authenticatedUserSnapshot={pageData.authenticatedUserSnapshot}
   >
@@ -41,11 +42,15 @@ export const ExplorePage: Page = ({
       <InfosAndOwnersProvider
         infoSnapshots={pageData.infoSnapshots}
         ownerUserSnapshots={pageData.ownerUserSnapshots}
+        forkedFrom={pageData.forkedFrom}
       >
-        <Body />
+        <Body
+          forkedFromInfo={pageData.forkedFromInfoSnapshot.data}
+          forkedFromOwnerUser={pageData.forkedFromOwnerUserSnapshot.data}
+        />
       </InfosAndOwnersProvider>
     </SortProvider>
   </AuthenticatedUserProvider>
 );
 
-ExplorePage.path = '/explore';
+ForksPage.path = '/:userName/:id/forks';

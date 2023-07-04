@@ -1,5 +1,5 @@
 import { GetViz } from 'interactors';
-import { Info, VizId, Snapshot, Content, User } from 'entities';
+import { Info, VizId, Snapshot } from 'entities';
 import { parseAuth0Sub } from '../../parseAuth0User';
 import { VizPage, VizPageData } from './index';
 import { renderREADME } from './renderREADME';

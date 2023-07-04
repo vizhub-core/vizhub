@@ -5,7 +5,7 @@ import {
   useMemo,
   useReducer,
 } from 'react';
-import { Info, Snapshot, SortId, User, UserId } from 'entities';
+import { Info, Snapshot, SortId, User, UserId, VizId } from 'entities';
 import { VizKit } from 'api/src/VizKit';
 import { SortContext } from './SortContext';
 
@@ -16,7 +16,7 @@ export const InfosAndOwnersContext = createContext<{
   isLoadingNextPage: boolean;
 }>(null);
 
-const vizKit = VizKit({ baseUrl: './api' });
+const vizKit = VizKit({ baseUrl: '/api' });
 
 // State machine
 // SETTLED --> NEXT_PAGE_REQUESTED --|
@@ -94,15 +94,28 @@ const reducer = (state: PaginationState, action: PaginationAction) => {
 
 // Pages that use this context should have this shape of pageData.
 export type InfosAndOwnersPageData = {
+  // First page of info snapshots
   infoSnapshots: Array<Snapshot<Info>>;
+
+  // Owner users for each info in first page
   ownerUserSnapshots: Array<Snapshot<User>>;
+
+  // Optional, query filter for forks page
+  // Passed as forkedFrom option into gateways.getInfos
+  forkedFrom?: VizId;
 };
 
 export const InfosAndOwnersProvider = ({
-  pageData,
+  infoSnapshots,
+  ownerUserSnapshots,
+  forkedFrom,
+  owner,
   children,
 }: {
-  pageData: InfosAndOwnersPageData;
+  infoSnapshots: Array<Snapshot<Info>>;
+  ownerUserSnapshots: Array<Snapshot<User>>;
+  forkedFrom?: VizId;
+  owner?: UserId;
   children: React.ReactNode;
 }) => {
   const { sortId } = useContext(SortContext);
@@ -111,8 +124,8 @@ export const InfosAndOwnersProvider = ({
   const initialPaginationState: PaginationState = useMemo(
     () => ({
       nextPageStatus: SETTLED,
-      pages: { [sortId]: [pageData.infoSnapshots] },
-      ownerUserSnapshotsById: pageData.ownerUserSnapshots.reduce(
+      pages: { [sortId]: [infoSnapshots] },
+      ownerUserSnapshotsById: ownerUserSnapshots.reduce(
         (accumulator, snapshot) => ({
           ...accumulator,
           [snapshot.data.id]: snapshot,
@@ -120,7 +133,7 @@ export const InfosAndOwnersProvider = ({
         {}
       ),
     }),
-    [sortId, pageData]
+    [sortId, infoSnapshots, ownerUserSnapshots]
   );
 
   const [paginationState, paginationDispatch] = useReducer(
@@ -133,6 +146,8 @@ export const InfosAndOwnersProvider = ({
 
     async function fetchNextPage() {
       const result = await vizKit.rest.getInfosAndOwners({
+        forkedFrom,
+        owner,
         noNeedToFetchUsers: Object.keys(paginationState.ownerUserSnapshotsById),
         sortId,
         pageNumber: paginationState.pages[sortId].length,
@@ -150,7 +165,7 @@ export const InfosAndOwnersProvider = ({
       }
     }
     fetchNextPage();
-  }, [paginationState, sortId, pageData.infoSnapshots]);
+  }, [paginationState, sortId]);
 
   const allInfoSnapshots = useMemo(
     () => paginationState.pages[sortId].flat(),
