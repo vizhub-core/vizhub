@@ -19,6 +19,12 @@ export type ForksPageData = PageData &
     // The initial sort order for the results,
     // before the user has changed it client-side
     sortId: SortId;
+
+    // The Info that was forked from
+    forkedFromInfoSnapshot: Snapshot<Info>;
+
+    // The User that owns the Info that was forked from
+    forkedFromOwnerUserSnapshot: Snapshot<User>;
   };
 
 // The type for the query parameters for this page
@@ -38,7 +44,10 @@ export const ForksPage: Page = ({ pageData }: { pageData: ForksPageData }) => (
         ownerUserSnapshots={pageData.ownerUserSnapshots}
         forkedFrom={pageData.forkedFrom}
       >
-        <Body />
+        <Body
+          forkedFromInfo={pageData.forkedFromInfoSnapshot.data}
+          forkedFromOwnerUser={pageData.forkedFromOwnerUserSnapshot.data}
+        />
       </InfosAndOwnersProvider>
     </SortProvider>
   </AuthenticatedUserProvider>

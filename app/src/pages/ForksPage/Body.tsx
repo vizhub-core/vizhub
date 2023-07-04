@@ -1,12 +1,19 @@
-import { Info, Snapshot, sortOptions } from 'entities';
+import { Info, Snapshot, User, sortOptions } from 'entities';
 import { ForksPageBody } from 'components';
 import { SmartHeader } from '../../smartComponents/SmartHeader';
 import { SortContext } from '../../contexts/SortContext';
 import { VizPreviewPresenter } from '../VizPreviewPresenter';
 import { useContext } from 'react';
 import { InfosAndOwnersContext } from '../../contexts/InfosAndOwnersContext';
+import { getVizPageHref } from '../../accessors/getVizPageHref';
 
-export const Body = () => {
+export const Body = ({
+  forkedFromInfo,
+  forkedFromOwnerUser,
+}: {
+  forkedFromInfo: Info;
+  forkedFromOwnerUser: User;
+}) => {
   const { sortId, setSortId } = useContext(SortContext);
 
   const {
@@ -34,6 +41,8 @@ export const Body = () => {
         sortOptions={sortOptions}
         onMoreClick={fetchNextPage}
         isLoadingNextPage={isLoadingNextPage}
+        forkedFromTitle={forkedFromInfo.title}
+        forkedFromHref={getVizPageHref(forkedFromOwnerUser, forkedFromInfo)}
       />
     </div>
   );

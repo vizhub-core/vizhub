@@ -14,12 +14,20 @@ export const ForksPageBody = ({
   sortId,
   setSortId,
   sortOptions,
+
+  // The title of the viz that was forked from.
+  forkedFromTitle,
+
+  // The href to the viz that was forked from.
+  forkedFromHref,
 }) => {
   return (
     <div className="vh-page vh-explore-page">
       <Container className="mt-3 mb-3">
         <div className="d-flex mb-3 justify-content-between align-items-end">
-          <h1 className="mb-0">Forks of ...TODO viz name here</h1>
+          <h1 className="mb-0">
+            Forks of <a href={forkedFromHref}>{forkedFromTitle}</a>
+          </h1>
           <SortControl
             sortId={sortId}
             setSortId={setSortId}

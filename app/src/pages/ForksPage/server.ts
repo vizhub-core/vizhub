@@ -17,7 +17,7 @@ ForksPage.getPageData = async ({
   params: { id: string };
 }): Promise<ForksPageData> => {
   const forkedFrom: VizId = params.id;
-  const { getUser } = gateways;
+  const { getUser, getInfo } = gateways;
   const getInfosAndOwners = GetInfosAndOwners(gateways);
 
   const sortId: SortId | null = asSortId(query.sort) || defaultSortOption.id;
@@ -47,6 +47,26 @@ ForksPage.getPageData = async ({
     authenticatedUserSnapshot = authenticatedUserResult.value;
   }
 
+  // Get the Info snapshot for the forked-from viz
+  const forkedFromInfoResult = await getInfo(forkedFrom);
+  if (forkedFromInfoResult.outcome === 'failure') {
+    console.log('Error when fetching forked-from info:');
+    console.log(forkedFromInfoResult.error);
+    return null;
+  }
+  const forkedFromInfoSnapshot = forkedFromInfoResult.value;
+
+  // Get the owner of the forked-from viz
+  const forkedFromOwnerResult = await getUser(
+    forkedFromInfoSnapshot.data.owner
+  );
+  if (forkedFromOwnerResult.outcome === 'failure') {
+    console.log('Error when fetching forked-from owner:');
+    console.log(forkedFromOwnerResult.error);
+    return null;
+  }
+  const forkedFromOwnerUserSnapshot = forkedFromOwnerResult.value;
+
   return {
     title: `Forks of TODO add viz name here`,
     authenticatedUserSnapshot,
@@ -54,6 +74,8 @@ ForksPage.getPageData = async ({
     ownerUserSnapshots,
     sortId,
     forkedFrom,
+    forkedFromInfoSnapshot,
+    forkedFromOwnerUserSnapshot,
   };
 };
 
