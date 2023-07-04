@@ -103,10 +103,6 @@ export type InfosAndOwnersPageData = {
   // Optional, query filter for forks page
   // Passed as forkedFrom option into gateways.getInfos
   forkedFrom?: VizId;
-
-  // Optional, query filter for user profile page
-  // Passed as owner option into gateways.getInfos
-  owner?: UserId;
 };
 
 export const InfosAndOwnersProvider = ({

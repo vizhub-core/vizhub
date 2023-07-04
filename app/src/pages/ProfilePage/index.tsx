@@ -34,6 +34,7 @@ export const ProfilePage: Page = ({
         <InfosAndOwnersProvider
           infoSnapshots={pageData.infoSnapshots}
           ownerUserSnapshots={pageData.ownerUserSnapshots}
+          owner={profileUser.id}
         >
           <Body profileUser={profileUser} />
         </InfosAndOwnersProvider>

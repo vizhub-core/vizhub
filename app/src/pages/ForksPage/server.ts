@@ -14,6 +14,7 @@ ForksPage.getPageData = async ({
   gateways: Gateways;
   auth0User: Auth0User | null;
   query: ForksPageQuery;
+  params: { id: string };
 }): Promise<ForksPageData> => {
   const forkedFrom: VizId = params.id;
   const { getUser } = gateways;
