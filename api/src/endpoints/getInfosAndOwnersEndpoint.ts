@@ -6,7 +6,8 @@ export const getInfosAndOwnersEndpoint = ({ app, gateways }) => {
   const getInfosAndOwners = GetInfosAndOwners(gateways);
   app.post('/api/get-infos-and-owners', async (req, res) => {
     if (req.body) {
-      const { noNeedToFetchUsers, sortId, pageNumber } = req.body;
+      const { forkedFrom, owner, noNeedToFetchUsers, sortId, pageNumber } =
+        req.body;
       if (noNeedToFetchUsers === undefined) {
         return res.send(err(missingParameterError('eventIds')));
       }
@@ -18,7 +19,13 @@ export const getInfosAndOwnersEndpoint = ({ app, gateways }) => {
       }
 
       res.send(
-        await getInfosAndOwners({ noNeedToFetchUsers, sortId, pageNumber })
+        await getInfosAndOwners({
+          forkedFrom,
+          owner,
+          noNeedToFetchUsers,
+          sortId,
+          pageNumber,
+        })
       );
     }
   });
