@@ -31,7 +31,10 @@ export const ProfilePage: Page = ({
       authenticatedUserSnapshot={authenticatedUserSnapshot}
     >
       <SortProvider>
-        <InfosAndOwnersProvider pageData={pageData}>
+        <InfosAndOwnersProvider
+          infoSnapshots={pageData.infoSnapshots}
+          ownerUserSnapshots={pageData.ownerUserSnapshots}
+        >
           <Body profileUser={profileUser} />
         </InfosAndOwnersProvider>
       </SortProvider>

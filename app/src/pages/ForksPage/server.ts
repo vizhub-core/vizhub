@@ -1,12 +1,13 @@
 import { ForksPage, ForksPageData, ForksPageQuery } from './index';
 import { parseAuth0Sub } from '../../parseAuth0User';
-import { SortId, asSortId, defaultSortOption } from 'entities';
+import { SortId, VizId, asSortId, defaultSortOption } from 'entities';
 import { Gateways } from 'gateways';
 import { Auth0User } from '../Page';
 import { GetInfosAndOwners } from 'interactors';
 
 ForksPage.getPageData = async ({
   gateways,
+  params,
   auth0User,
   query,
 }: {
@@ -14,12 +15,14 @@ ForksPage.getPageData = async ({
   auth0User: Auth0User | null;
   query: ForksPageQuery;
 }): Promise<ForksPageData> => {
+  const forkedFrom: VizId = params.id;
   const { getUser } = gateways;
   const getInfosAndOwners = GetInfosAndOwners(gateways);
 
   const sortId: SortId | null = asSortId(query.sort) || defaultSortOption.id;
 
   const infosAndOwnersResult = await getInfosAndOwners({
+    forkedFrom,
     noNeedToFetchUsers: [],
     sortId,
     pageNumber: 0,
@@ -44,11 +47,12 @@ ForksPage.getPageData = async ({
   }
 
   return {
-    title: `Explore VizHub`,
+    title: `Forks of TODO add viz name here`,
     authenticatedUserSnapshot,
     infoSnapshots,
     ownerUserSnapshots,
     sortId,
+    forkedFrom,
   };
 };
 

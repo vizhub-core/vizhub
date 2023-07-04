@@ -33,18 +33,19 @@ export const ExplorePage: Page = ({
   pageData,
 }: {
   pageData: ExplorePageData;
-}) => {
-  return (
-    <AuthenticatedUserProvider
-      authenticatedUserSnapshot={pageData.authenticatedUserSnapshot}
-    >
-      <SortProvider>
-        <InfosAndOwnersProvider pageData={pageData}>
-          <Body />
-        </InfosAndOwnersProvider>
-      </SortProvider>
-    </AuthenticatedUserProvider>
-  );
-};
+}) => (
+  <AuthenticatedUserProvider
+    authenticatedUserSnapshot={pageData.authenticatedUserSnapshot}
+  >
+    <SortProvider>
+      <InfosAndOwnersProvider
+        infoSnapshots={pageData.infoSnapshots}
+        ownerUserSnapshots={pageData.ownerUserSnapshots}
+      >
+        <Body />
+      </InfosAndOwnersProvider>
+    </SortProvider>
+  </AuthenticatedUserProvider>
+);
 
 ExplorePage.path = '/explore';

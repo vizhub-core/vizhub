@@ -1,5 +1,4 @@
-import { useMemo } from 'react';
-import { Info, Snapshot, SortId, User, UserId } from 'entities';
+import { Info, Snapshot, SortId, User } from 'entities';
 import { AuthenticatedUserProvider } from '../../contexts/AuthenticatedUserContext';
 import { SortProvider } from '../../contexts/SortContext';
 import { Page, PageData } from '../Page';
@@ -29,18 +28,20 @@ export type ForksPageQuery = {
 };
 
 // Inspired by https://github.com/vitejs/vite-plugin-react/blob/main/playground/ssr-react/src/pages/Home.jsx
-export const ForksPage: Page = ({ pageData }: { pageData: ForksPageData }) => {
-  return (
-    <AuthenticatedUserProvider
-      authenticatedUserSnapshot={pageData.authenticatedUserSnapshot}
-    >
-      <SortProvider>
-        <InfosAndOwnersProvider pageData={pageData}>
-          <Body />
-        </InfosAndOwnersProvider>
-      </SortProvider>
-    </AuthenticatedUserProvider>
-  );
-};
+export const ForksPage: Page = ({ pageData }: { pageData: ForksPageData }) => (
+  <AuthenticatedUserProvider
+    authenticatedUserSnapshot={pageData.authenticatedUserSnapshot}
+  >
+    <SortProvider>
+      <InfosAndOwnersProvider
+        infoSnapshots={pageData.infoSnapshots}
+        ownerUserSnapshots={pageData.ownerUserSnapshots}
+        forkedFrom={pageData.forkedFrom}
+      >
+        <Body />
+      </InfosAndOwnersProvider>
+    </SortProvider>
+  </AuthenticatedUserProvider>
+);
 
 ForksPage.path = '/:userName/:id/forks';
