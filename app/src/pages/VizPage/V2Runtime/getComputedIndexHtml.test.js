@@ -25,49 +25,22 @@ describe('getComputedIndexHTML', () => {
       },
     ]);
   });
+
+  it('should refer to global d3 in bundle for d3 package', async () => {
+    const files = [
+      {
+        name: 'index.js',
+        text: 'import { select } from "d3"; console.log(select);',
+      },
+    ];
+    expect(removeSourceMap(await bundle(files))).toEqual([
+      {
+        name: 'bundle.js',
+        text: "(function (d3) {\n\t'use strict';\n\n\tconsole.log(d3.select);\n\n}(d3));\n",
+      },
+    ]);
+  });
 });
-
-// import assert from 'assert';
-// import { testData } from 'vizhub-entities';
-// import { JSDOM } from 'jsdom';
-// import {
-//   VisualizationViewModel,
-//   DatasetViewModel,
-//   bundle,
-//   setJSDOM,
-// } from '../src';
-// import sinon from 'sinon';
-
-// setJSDOM(JSDOM);
-
-// const { visualization, dataset } = testData;
-
-// global.fetch = sinon.fake.resolves({
-//   ok: true,
-//   url: '',
-//   text: () =>
-//     Promise.resolve(
-//       'const globals={};const noop={};const dispatch_dev={};const validate_slots={};const SvelteComponentDev={};const init={};const safe_not_equal={}; export { globals, noop, dispatch_dev, validate_slots, SvelteComponentDev, init, safe_not_equal }'
-//     ),
-// });
-
-//   describe('Bundler', () => {
-
-//     it('should refer to global d3 in bundle for d3 package', async () => {
-//       const files = [
-//         {
-//           name: 'index.js',
-//           text: 'import { select } from "d3"; console.log(select);',
-//         },
-//       ];
-//       assert.deepEqual(removeSourceMap(await bundle(files)), [
-//         {
-//           name: 'bundle.js',
-//           text:
-//             "(function (d3) {\n\t'use strict';\n\n\tconsole.log(d3.select);\n\n}(d3));\n",
-//         },
-//       ]);
-//     });
 
 //     it('should refer to global React in bundle for React package', async () => {
 //       const files = [
