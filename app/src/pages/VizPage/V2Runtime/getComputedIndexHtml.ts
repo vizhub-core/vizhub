@@ -63,6 +63,10 @@ export const getComputedIndexHtml = (files: FilesV2) => {
   try {
     if (isPackageJSONEnabled) {
       const htmlTemplate = template(files);
+      if (!htmlTemplate) {
+        return '';
+      }
+
       const htmlWithBundleScriptTemplate = injectBundleScript(
         htmlTemplate,
         files
