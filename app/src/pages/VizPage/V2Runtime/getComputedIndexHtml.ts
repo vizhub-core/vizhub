@@ -10,9 +10,6 @@ import { getText } from './getText';
 
 const isPackageJSONEnabled = true;
 
-const template = (files: FilesV2) => getText(files, 'index.html');
-const bundle = (files: FilesV2) => getText(files, 'bundle.js');
-
 let parser;
 
 // If we're in the browser, use native DOMParser.
@@ -27,10 +24,12 @@ export const setJSDOM = (JSDOM) => {
 };
 
 const injectBundleScript = (htmlTemplate, files) => {
+  console.log('htmlTemplate', htmlTemplate);
   const doc = parser.parseFromString(htmlTemplate, 'text/html');
-
-  if (bundle(files) && !doc.querySelector('[src="bundle.js"]')) {
+  console.log('doc', doc);
+  if (getText(files, 'bundle.js') && !doc.querySelector('[src="bundle.js"]')) {
     const bundleScriptTag = doc.createElement('script');
+    // This will be fed through MagicSandbox.
     bundleScriptTag.src = 'bundle.js';
     doc.body.appendChild(bundleScriptTag);
     return `<!DOCTYPE html>${doc.documentElement.outerHTML}`;
@@ -62,7 +61,8 @@ const injectDependenciesScript = (htmlTemplate, files) => {
 export const getComputedIndexHtml = (files: FilesV2) => {
   try {
     if (isPackageJSONEnabled) {
-      const htmlTemplate = template(files);
+      const htmlTemplate = getText(files, 'index.html');
+
       if (!htmlTemplate) {
         return '';
       }
@@ -77,7 +77,7 @@ export const getComputedIndexHtml = (files: FilesV2) => {
       );
       return indexHtml;
     } else {
-      return template(files);
+      return getText(files, 'index.html');
     }
   } catch (err) {
     console.log(err);
