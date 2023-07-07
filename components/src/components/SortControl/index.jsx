@@ -32,7 +32,7 @@ export const SortControl = ({
       <div className="px-0 col">
         <Dropdown onSelect={setSortId}>
           <Dropdown.Toggle id="dropdown-sort">
-            {sortsById.get(sortId)?.label}
+            {sortsById.get(sortId)?.label + ' '}
           </Dropdown.Toggle>
           <Dropdown.Menu>
             {otherSortOptions.map((sortOption) => (
