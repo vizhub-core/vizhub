@@ -1,14 +1,17 @@
-// From https://github.com/vizhub-core/vizhub/blob/main/vizhub-v2/packages/presenters/src/getComputedIndexHtml.js#L10
-import { getFileText } from '../../../accessors/getFileText';
+// From https://github.com/vizhub-core/vizhub/blob/main/vizhub-v2/packages/presenters/src/getComputedIndexHtml.js
+
 import {
   dependencies,
   getConfiguredLibraries,
   dependencySource,
 } from './packageJson';
-import { isPackageJSONEnabled } from './featureFlags';
+import { FilesV2 } from 'entities';
+import { getText } from './getText';
 
-const template = (files) => getFileText(files, 'index.html');
-const bundle = (files) => getFileText(files, 'bundle.js');
+const isPackageJSONEnabled = true;
+
+const template = (files: FilesV2) => getText(files, 'index.html');
+const bundle = (files: FilesV2) => getText(files, 'bundle.js');
 
 let parser;
 
@@ -56,7 +59,7 @@ const injectDependenciesScript = (htmlTemplate, files) => {
   return `<!DOCTYPE html>${doc.documentElement.outerHTML}`;
 };
 
-export const getComputedIndexHtml = (files) => {
+export const getComputedIndexHtml = (files: FilesV2) => {
   try {
     if (isPackageJSONEnabled) {
       const htmlTemplate = template(files);

@@ -9,7 +9,7 @@ const removeSourceMap = (files) => {
   return files;
 };
 
-describe('getComputedIndexHTML', () => {
+describe('bundle', () => {
   it('should bundle files using Rollup', async () => {
     const files = [
       {

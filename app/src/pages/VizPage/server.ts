@@ -1,9 +1,10 @@
 import { GetViz } from 'interactors';
 import { Info, VizId, Snapshot } from 'entities';
 import { parseAuth0Sub } from '../../parseAuth0User';
+import { getFileText } from '../../accessors/getFileText';
 import { VizPage, VizPageData } from './index';
 import { renderREADME } from './renderREADME';
-import { getFileText } from '../../accessors/getFileText';
+import { computeSrcDoc } from './V2Runtime/computeSrcDoc';
 
 VizPage.getPageData = async ({
   gateways,
@@ -52,7 +53,7 @@ VizPage.getPageData = async ({
   }
 
   // Render Markdown server-side.
-  // TODO cache it.
+  // TODO cache it per commit.
   const content = contentSnapshot.data;
   const initialReadmeHTML = renderREADME(getFileText(content, 'README.md'));
 
@@ -80,6 +81,10 @@ VizPage.getPageData = async ({
     forkedFromOwnerUserSnapshot = forkedFromOwnerUserResult.value;
   }
 
+  // Compute srcdoc for iframe using `computeSrcDoc` function.
+  // TODO cache it per commit.
+  const srcdoc = computeSrcDoc(content.files);
+
   return {
     infoSnapshot,
     contentSnapshot,
@@ -89,6 +94,7 @@ VizPage.getPageData = async ({
     title,
     authenticatedUserSnapshot,
     initialReadmeHTML,
+    srcdoc,
   };
 };
 

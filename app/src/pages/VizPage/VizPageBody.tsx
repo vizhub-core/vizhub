@@ -1,4 +1,4 @@
-import { useContext, useMemo } from 'react';
+import { useCallback, useContext, useMemo } from 'react';
 import { VizPageHead } from 'components/src/components/VizPageHead';
 import { ForkModal } from 'components/src/components/ForkModal';
 import { VizPageViewer } from 'components/src/components/VizPageViewer';
@@ -14,6 +14,7 @@ import { getForksPageHref } from '../../accessors/getForksPageHref';
 import { getProfilePageHref } from '../../accessors/getProfilePageHref';
 import { getVizPageHref } from '../../accessors/getVizPageHref';
 import { getLicense } from '../../accessors/getLicense';
+import { getHeight } from '../../accessors/getHeight';
 
 export const VizPageBody = ({
   info,
@@ -29,6 +30,7 @@ export const VizPageBody = ({
   initialReadmeHTML,
   forkedFromInfo,
   forkedFromOwnerUser,
+  srcdoc,
 }: {
   info: Info;
   content: Content;
@@ -43,6 +45,7 @@ export const VizPageBody = ({
   initialReadmeHTML: string;
   forkedFromInfo: Info | null;
   forkedFromOwnerUser: User | null;
+  srcdoc: string;
 }) => {
   // The currently authenticated user, if any.
   const authenticatedUser: User | null = useContext(AuthenticatedUserContext);
@@ -67,6 +70,24 @@ export const VizPageBody = ({
 
   // The license to display for this viz.
   const license = useMemo(() => getLicense(content), [content]);
+
+  // The width and height of the iframe.
+  const width = 960;
+  const height = useMemo(() => getHeight(content.height), [content.height]);
+
+  const renderVizRunner = useCallback(() => {
+    return (
+      <iframe
+        srcDoc={srcdoc}
+        style={{
+          width: width + 'px',
+          height: height + 'px',
+          transform: `scale(${Math.max(height / height, 1)})`,
+          transformOrigin: '0 0',
+        }}
+      />
+    );
+  }, [srcdoc, width, height]);
 
   return (
     <div className="vh-page overflow-auto">
@@ -100,6 +121,7 @@ export const VizPageBody = ({
         upvotesCount={info.upvotesCount}
         license={license}
         defaultVizHeight={defaultVizHeight}
+        renderVizRunner={renderVizRunner}
       />
       <ForkModal
         initialTitle={'Fork of ' + info.title}

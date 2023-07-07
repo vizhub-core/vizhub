@@ -88,3 +88,6 @@ export {
   defaultSortField,
 } from './Sorting';
 export type { SortField, SortOption, SortOrder, SortId } from './Sorting';
+
+// V2 types - useful for migration and for V2 runtime
+export type { VizV2, InfoV2, ContentV2, FilesV2, FileV2 } from './V2';
