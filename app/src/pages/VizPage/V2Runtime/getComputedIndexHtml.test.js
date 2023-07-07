@@ -42,76 +42,87 @@ describe('getComputedIndexHTML', () => {
   });
 });
 
-//     it('should refer to global React in bundle for React package', async () => {
-//       const files = [
-//         {
-//           name: 'index.js',
-//           text: 'import React from "react"; console.log(React);',
-//         },
-//       ];
-//       assert.deepEqual(removeSourceMap(await bundle(files)), [
-//         {
-//           name: 'bundle.js',
-//           text:
-//             "(function (React) {\n\t'use strict';\n\n\tReact = React && Object.prototype.hasOwnProperty.call(React, 'default') ? React['default'] : React;\n\n\tconsole.log(React);\n\n}(React));\n",
-//         },
-//       ]);
-//     });
+it('should refer to global React in bundle for React package', async () => {
+  const files = [
+    {
+      name: 'index.js',
+      text: 'import React from "react"; console.log(React);',
+    },
+  ];
+  expect(removeSourceMap(await bundle(files))).toEqual([
+    {
+      name: 'bundle.js',
+      text: "(function (React) {\n\t'use strict';\n\n\tReact = React && Object.prototype.hasOwnProperty.call(React, 'default') ? React['default'] : React;\n\n\tconsole.log(React);\n\n}(React));\n",
+    },
+  ]);
+});
 
-//     it('should transpile JSX', async () => {
-//       const files = [{ name: 'index.js', text: '<div>Hello JSX!</div>' }];
-//       assert.deepEqual(removeSourceMap(await bundle(files)), [
-//         {
-//           name: 'bundle.js',
-//           text:
-//             "(function () {\n\t'use strict';\n\n\tReact.createElement( 'div', null, \"Hello JSX!\" );\n\n}());\n",
-//         },
-//       ]);
-//     });
+it('should refer to global ReactDOM in bundle for ReactDOM package', async () => {
+  const files = [
+    {
+      name: 'index.js',
+      text: 'import ReactDOM from "react-dom"; console.log(ReactDOM);',
+    },
+  ];
+  expect(removeSourceMap(await bundle(files))).toEqual([
+    {
+      name: 'bundle.js',
+      text: "(function (ReactDOM) {\n\t'use strict';\n\n\tReactDOM = ReactDOM && Object.prototype.hasOwnProperty.call(ReactDOM, 'default') ? ReactDOM['default'] : ReactDOM;\n\n\tconsole.log(ReactDOM);\n\n}(ReactDOM));\n",
+    },
+  ]);
+});
 
-//     it('should not transpile ES6', async () => {
-//       const files = [
-//         {
-//           name: 'index.js',
-//           text: 'const fn = a => a * a; console.log(fn(4));',
-//         },
-//       ];
-//       assert.deepEqual(removeSourceMap(await bundle(files)), [
-//         {
-//           name: 'bundle.js',
-//           text:
-//             "(function () {\n\t'use strict';\n\n\tconst fn = a => a * a; console.log(fn(4));\n\n}());\n",
-//         },
-//       ]);
-//     });
+it('should transpile JSX', async () => {
+  const files = [{ name: 'index.js', text: '<div>Hello JSX!</div>' }];
+  expect(removeSourceMap(await bundle(files))).toEqual([
+    {
+      name: 'bundle.js',
+      text: "(function () {\n\t'use strict';\n\n\tReact.createElement( 'div', null, \"Hello JSX!\" );\n\n}());\n",
+    },
+  ]);
+});
 
-//     it('should allow generators', async () => {
-//       const files = [
-//         {
-//           name: 'index.js',
-//           text: 'console.log(function* () { yield 5; }().next().value)',
-//         },
-//       ];
-//       assert.deepEqual(removeSourceMap(await bundle(files)), [
-//         {
-//           name: 'bundle.js',
-//           text:
-//             "(function () {\n\t'use strict';\n\n\tconsole.log(function* () { yield 5; }().next().value);\n\n}());\n",
-//         },
-//       ]);
-//     });
+it('should not transpile ES6', async () => {
+  const files = [
+    {
+      name: 'index.js',
+      text: 'const fn = a => a * a; console.log(fn(4));',
+    },
+  ];
+  expect(removeSourceMap(await bundle(files))).toEqual([
+    {
+      name: 'bundle.js',
+      text: "(function () {\n\t'use strict';\n\n\tconst fn = a => a * a; console.log(fn(4));\n\n}());\n",
+    },
+  ]);
+});
 
-//     it('should allow characters outside of the Latin1 range', async () => {
-//       const files = [{ name: 'index.js', text: 'console.log("Привет")' }];
-//       assert.deepEqual(removeSourceMap(await bundle(files)), [
-//         {
-//           name: 'bundle.js',
-//           text:
-//             '(function () {\n\t\'use strict\';\n\n\tconsole.log("Привет");\n\n}());\n',
-//         },
-//       ]);
-//     });
-//   });
+it('should allow generators', async () => {
+  const files = [
+    {
+      name: 'index.js',
+      text: 'console.log(function* () { yield 5; }().next().value)',
+    },
+  ];
+  expect(removeSourceMap(await bundle(files))).toEqual([
+    {
+      name: 'bundle.js',
+      text: "(function () {\n\t'use strict';\n\n\tconsole.log(function* () { yield 5; }().next().value);\n\n}());\n",
+    },
+  ]);
+});
+
+it('should allow characters outside of the Latin1 range', async () => {
+  const files = [{ name: 'index.js', text: 'console.log("Привет")' }];
+  expect(removeSourceMap(await bundle(files))).toEqual([
+    {
+      name: 'bundle.js',
+      text: '(function () {\n\t\'use strict\';\n\n\tconsole.log("Привет");\n\n}());\n',
+    },
+  ]);
+});
+//   TODO Svelt Support
+//   See https://github.com/vizhub-core/vizhub3/issues/185
 //   //describe('Svelte', () => {
 //   //  it('should bundle files using Rollup', async () => {
 //   //    const files = [
