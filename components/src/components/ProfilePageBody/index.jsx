@@ -22,7 +22,7 @@ export const ProfilePageBody = ({
 }) => {
   return (
     <div className="vh-page vh-profile-page">
-      <Container className="mt-3 mb-3">
+      <div className="p-4 py-3">
         <div className="d-flex mb-3 justify-content-between align-items-end">
           <div className="d-flex">
             <img
@@ -50,7 +50,7 @@ export const ProfilePageBody = ({
             <Button onClick={onMoreClick}>More</Button>
           )}
         </div>
-      </Container>
+      </div>
     </div>
   );
 };

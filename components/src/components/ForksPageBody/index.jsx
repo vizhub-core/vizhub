@@ -23,7 +23,7 @@ export const ForksPageBody = ({
 }) => {
   return (
     <div className="vh-page vh-explore-page">
-      <Container className="mt-3 mb-3">
+      <div className="px-4 py-3">
         <div className="d-flex mb-3 justify-content-between align-items-end">
           <h1 className="mb-0">
             Forks of <a href={forkedFromHref}>{forkedFromTitle}</a>
@@ -42,7 +42,7 @@ export const ForksPageBody = ({
             <Button onClick={onMoreClick}>More</Button>
           )}
         </div>
-      </Container>
+      </div>
     </div>
   );
 };

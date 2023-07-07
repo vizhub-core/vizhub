@@ -28,6 +28,10 @@ const sortOptionsMap = new Map<SortId, SortOption>(
   sortOptions.map((option) => [option.id, option])
 );
 
+// The default for sorting views of many visualizations.
+// TODO change this to popular after https://github.com/vizhub-core/vizhub3/issues/148
+export const defaultSortOption: SortOption = sortOptionsMap.get('mostForked');
+
 // Convenience function for getting the sort field from the sort ID.
 export const getSortField = (sortId: SortId | undefined): SortField =>
   (sortId && sortOptionsMap.get(sortId)?.sortField) || defaultSortField;
@@ -35,9 +39,6 @@ export const getSortField = (sortId: SortId | undefined): SortField =>
 // Convenience function for validating sort id.
 export const asSortId = (sortId: string): SortId | null =>
   sortOptionsMap.has(sortId as SortId) ? (sortId as SortId) : null;
-
-// The default for sorting views of many visualizations (popular).
-export const defaultSortOption: SortOption = sortOptions[0];
 
 // Convenience unpacking of the default sort option.
 export const defaultSortField: SortField = defaultSortOption.sortField;
