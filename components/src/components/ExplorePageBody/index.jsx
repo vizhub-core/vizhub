@@ -17,7 +17,7 @@ export const ExplorePageBody = ({
 }) => {
   return (
     <div className="vh-page vh-explore-page">
-      <Container className="mt-3 mb-3">
+      <div className="px-4 py-3">
         <div className="d-flex mb-3 justify-content-between align-items-end">
           <h1 className="mb-0">Explore</h1>
           {/* Null guard while feature in development - can remove later once it's working */}
@@ -37,7 +37,7 @@ export const ExplorePageBody = ({
             <Button onClick={onMoreClick}>More</Button>
           )}
         </div>
-      </Container>
+      </div>
     </div>
   );
 };
