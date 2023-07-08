@@ -33,7 +33,7 @@ function forEachInObjectOrMap(object, map, callback) {
   // if neither was supplied, do nothing.
 }
 
-module.exports = function rollupPluginHypothetical(options) {
+export default function rollupPluginHypothetical(options) {
   options = options || {};
   var files0 = options.files;
   var files0AsMap = options.filesMap;
@@ -187,7 +187,7 @@ module.exports = function rollupPluginHypothetical(options) {
       }
     },
   };
-};
+}
 
 function unixStylePath(p) {
   return p.split('\\').join('/');
