@@ -29,6 +29,7 @@ export const VizPage: Page = ({ pageData }: { pageData: VizPageData }) => {
     initialReadmeHTML,
     forkedFromInfoSnapshot,
     forkedFromOwnerUserSnapshot,
+    srcdoc,
   } = pageData;
   const info: Info = useShareDBDocData(infoSnapshot, 'Info');
   const content: Content = useShareDBDocData(contentSnapshot, 'Content');

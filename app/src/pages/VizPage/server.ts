@@ -1,10 +1,14 @@
 import { GetViz } from 'interactors';
 import { Info, VizId, Snapshot } from 'entities';
+import { JSDOM } from 'jsdom';
 import { parseAuth0Sub } from '../../parseAuth0User';
 import { getFileText } from '../../accessors/getFileText';
 import { VizPage, VizPageData } from './index';
 import { renderREADME } from './renderREADME';
+import { setJSDOM } from './V2Runtime/getComputedIndexHtml';
 import { computeSrcDoc } from './V2Runtime/computeSrcDoc';
+
+setJSDOM(JSDOM);
 
 VizPage.getPageData = async ({
   gateways,
@@ -83,7 +87,7 @@ VizPage.getPageData = async ({
 
   // Compute srcdoc for iframe using `computeSrcDoc` function.
   // TODO cache it per commit.
-  const srcdoc = computeSrcDoc(content.files);
+  const srcdoc = computeSrcDoc(content);
 
   return {
     infoSnapshot,

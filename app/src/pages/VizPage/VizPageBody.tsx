@@ -121,7 +121,6 @@ export const VizPageBody = ({
         upvotesCount={info.upvotesCount}
         license={license}
         defaultVizHeight={defaultVizHeight}
-        renderVizRunner={renderVizRunner}
       />
       <ForkModal
         initialTitle={'Fork of ' + info.title}
