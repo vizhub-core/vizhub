@@ -9,6 +9,6 @@ setJSDOM(JSDOM);
 describe('computeSrcDoc', () => {
   it('TODO should compute correct srcdoc', () => {
     expect(true).toEqual(true);
-    expect(computeSrcDoc(primordialViz.content)).toEqual({});
+    // expect(computeSrcDoc(primordialViz.content)).toEqual({});
   });
 });

@@ -25,7 +25,7 @@ export const setJSDOM = (JSDOM) => {
 
 const injectBundleScript = (htmlTemplate, files) => {
   const doc = parser.parseFromString(htmlTemplate, 'text/html');
-  console.log('doc', doc);
+  // console.log('doc', doc);
   if (getText(files, 'bundle.js') && !doc.querySelector('[src="bundle.js"]')) {
     const bundleScriptTag = doc.createElement('script');
     // This will be fed through MagicSandbox.
@@ -65,19 +65,19 @@ export const getComputedIndexHtml = (files: FilesV2) => {
       return '';
     }
 
-    console.log('htmlTemplate', htmlTemplate);
+    // console.log('htmlTemplate', htmlTemplate);
 
     const htmlWithBundleScriptTemplate = injectBundleScript(
       htmlTemplate,
       files
     );
 
-    console.log('htmlWithBundleScriptTemplate', htmlWithBundleScriptTemplate);
+    // console.log('htmlWithBundleScriptTemplate', htmlWithBundleScriptTemplate);
     const indexHtml = injectDependenciesScript(
       htmlWithBundleScriptTemplate,
       files
     );
-    console.log('indexHtml', indexHtml);
+    // console.log('indexHtml', indexHtml);
     return indexHtml;
   } catch (err) {
     console.log(err);

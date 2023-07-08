@@ -22,7 +22,7 @@ describe('getComputedIndexHtml', () => {
       { name: 'index.html', text },
       { name: 'index.js', text: 'console.log("Hello")' },
     ];
-    console.log(JSON.stringify(getComputedIndexHtml(files), null, 2));
+    // console.log(JSON.stringify(getComputedIndexHtml(files), null, 2));
     expect(getComputedIndexHtml(files)).toEqual(text);
   });
 });
