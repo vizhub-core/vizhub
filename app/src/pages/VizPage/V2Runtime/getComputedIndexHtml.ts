@@ -57,27 +57,32 @@ const injectDependenciesScript = (htmlTemplate, files) => {
   return `<!DOCTYPE html>${doc.documentElement.outerHTML}`;
 };
 
+// Compute the index.html file from the files.
+// Includes:
+// - bundle.js script tag
+// - dependencies script tag(s)
 export const getComputedIndexHtml = (files: FilesV2) => {
   try {
+    // Isolate the index.html file.
     const htmlTemplate = getText(files, 'index.html');
 
+    // If there is no index.html file, return an empty string.
     if (!htmlTemplate) {
       return '';
     }
 
-    // console.log('htmlTemplate', htmlTemplate);
-
+    // Inject bundle.js script tag if needed.
     const htmlWithBundleScriptTemplate = injectBundleScript(
       htmlTemplate,
       files
     );
 
-    // console.log('htmlWithBundleScriptTemplate', htmlWithBundleScriptTemplate);
+    // Inject dependencies script tag(s) if needed, based on package.json.
     const indexHtml = injectDependenciesScript(
       htmlWithBundleScriptTemplate,
       files
     );
-    // console.log('indexHtml', indexHtml);
+
     return indexHtml;
   } catch (err) {
     console.log(err);

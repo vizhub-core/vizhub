@@ -87,7 +87,7 @@ VizPage.getPageData = async ({
 
   // Compute srcdoc for iframe using `computeSrcDoc` function.
   // TODO cache it per commit.
-  const srcdoc = computeSrcDoc(content);
+  const srcdoc = await computeSrcDoc(content);
 
   return {
     infoSnapshot,

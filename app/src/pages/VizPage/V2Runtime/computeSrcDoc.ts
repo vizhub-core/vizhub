@@ -8,7 +8,7 @@ import { v3FilesToV2Files } from './v3FilesToV2Files';
 
 // Inspired by https://github.com/vizhub-core/vizhub/blob/main/vizhub-v2/packages/presenters/src/computeSrcDoc.js
 
-export const computeSrcDoc = (content: Content) => {
+export const computeSrcDoc = async (content: Content) => {
   // Migrate V3 files to V2 files.
   let filesV2: FilesV2 = v3FilesToV2Files(content.files);
 
@@ -17,13 +17,19 @@ export const computeSrcDoc = (content: Content) => {
   // ... but only if there is an `index.js` file.
   const indexJS = getFileText(content, 'index.js');
   if (indexJS) {
-    filesV2 = [...filesV2, ...bundle(filesV2)];
+    const filesV2BundleJSOnly = await bundle(filesV2);
+    // Bundle the files using Rollup.
+    // This will add a `bundle.js` file to the files.
+    // Includes ES module bundling and JSX support.
+    filesV2 = [...filesV2, ...filesV2BundleJSOnly];
   }
 
+  // Compute the index.html file from the files.
   const template = getComputedIndexHtml(filesV2);
 
-  console.log('here', template);
+  // Transform files to match what MagicSandbox expects.
   const files = transformFiles(filesV2);
 
+  // Use MagicSandbox to inject the bundle.js script tag.
   return magicSandbox(template, files);
 };

@@ -7,10 +7,11 @@ import { JSDOM } from 'jsdom';
 setJSDOM(JSDOM);
 
 describe('computeSrcDoc', () => {
-  it('TODO should compute correct srcdoc', () => {
+  it('TODO should compute correct srcdoc', async () => {
     expect(true).toEqual(true);
     // console.log('`' + computeSrcDoc(primordialViz.content) + '`');
-    expect(computeSrcDoc(primordialViz.content)).toEqual(`<script>(function() {
+    expect(await computeSrcDoc(primordialViz.content))
+      .toEqual(`<script>(function() {
       var XHR = window.XMLHttpRequest;
       window.XMLHttpRequest = function() {
         this.xhr = new XHR();
