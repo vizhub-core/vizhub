@@ -4,14 +4,20 @@ import hypothetical from './hypothetical';
 import { getLibraries } from './getLibraries';
 
 // if HTML parser encounter </script> it stops parsing current script
-// in order to avoid that, </script> should be splitted
+// in order to avoid that, </script> should be split into parts.
 const escapeClosingScriptTag = (code) =>
   code.split('</script>').join('" + "<" + "/script>" + "');
 
 const transformFilesToObject = (files) =>
   files
     .filter(
-      (file) => file.name.endsWith('.js') || file.name.endsWith('.svelte')
+      (file) => file.name.endsWith('.js')
+      // TODO: add support for other file types
+      // file.name.endsWith('.svelte') ||
+      // file.name.endsWith('.jsx') ||
+      // file.name.endsWith('.ts') ||
+      // file.name.endsWith('.tsx') ||
+      // file.name.endsWith('.vue')
     )
     .reduce((accumulator, file) => {
       accumulator['./' + file.name] = file.text;
