@@ -1,4 +1,5 @@
 import { Content, FilesV2 } from 'entities';
+import { getFileText } from '../../../accessors/getFileText';
 import magicSandbox from './magicSandbox';
 import { getComputedIndexHtml } from './getComputedIndexHtml';
 import { transformFiles } from './transformFiles';
@@ -9,17 +10,20 @@ import { v3FilesToV2Files } from './v3FilesToV2Files';
 
 export const computeSrcDoc = (content: Content) => {
   // Migrate V3 files to V2 files.
-  const files: FilesV2 = v3FilesToV2Files(content.files);
+  let filesV2: FilesV2 = v3FilesToV2Files(content.files);
 
   // Since we do not include `bundle.js` in the migrated content,
   // we need to add it back in, computed from the files on the fly.
-  files.push({
-    name: 'bundle.js',
-    text: bundle(files),
-  });
+  // ... but only if there is an `index.js` file.
+  const indexJS = getFileText(content, 'index.js');
+  if (indexJS) {
+    filesV2 = [...filesV2, ...bundle(filesV2)];
+  }
 
-  return magicSandbox(
-    getComputedIndexHtml(files),
-    transformFiles(content.files)
-  );
+  const template = getComputedIndexHtml(filesV2);
+
+  console.log('here', template);
+  const files = transformFiles(filesV2);
+
+  return magicSandbox(template, files);
 };

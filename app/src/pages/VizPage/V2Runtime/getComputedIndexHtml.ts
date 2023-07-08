@@ -24,7 +24,6 @@ export const setJSDOM = (JSDOM) => {
 };
 
 const injectBundleScript = (htmlTemplate, files) => {
-  console.log('htmlTemplate', htmlTemplate);
   const doc = parser.parseFromString(htmlTemplate, 'text/html');
   console.log('doc', doc);
   if (getText(files, 'bundle.js') && !doc.querySelector('[src="bundle.js"]')) {
@@ -60,25 +59,26 @@ const injectDependenciesScript = (htmlTemplate, files) => {
 
 export const getComputedIndexHtml = (files: FilesV2) => {
   try {
-    if (isPackageJSONEnabled) {
-      const htmlTemplate = getText(files, 'index.html');
+    const htmlTemplate = getText(files, 'index.html');
 
-      if (!htmlTemplate) {
-        return '';
-      }
-
-      const htmlWithBundleScriptTemplate = injectBundleScript(
-        htmlTemplate,
-        files
-      );
-      const indexHtml = injectDependenciesScript(
-        htmlWithBundleScriptTemplate,
-        files
-      );
-      return indexHtml;
-    } else {
-      return getText(files, 'index.html');
+    if (!htmlTemplate) {
+      return '';
     }
+
+    console.log('htmlTemplate', htmlTemplate);
+
+    const htmlWithBundleScriptTemplate = injectBundleScript(
+      htmlTemplate,
+      files
+    );
+
+    console.log('htmlWithBundleScriptTemplate', htmlWithBundleScriptTemplate);
+    const indexHtml = injectDependenciesScript(
+      htmlWithBundleScriptTemplate,
+      files
+    );
+    console.log('indexHtml', indexHtml);
+    return indexHtml;
   } catch (err) {
     console.log(err);
   }
