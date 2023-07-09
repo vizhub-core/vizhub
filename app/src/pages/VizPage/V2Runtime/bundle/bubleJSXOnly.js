@@ -1,5 +1,7 @@
 // Derived from https://github.com/rollup/rollup-plugin-buble/blob/master/src/index.js
-import { transform } from 'buble-jsx-only';
+// import { transform } from 'buble-jsx-only';
+
+import { transform } from 'buble';
 import { createFilter } from 'rollup-pluginutils';
 
 export default function buble(options) {
