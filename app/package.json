@@ -30,6 +30,7 @@
     "@sentry/node": "^7.56.0",
     "@teamwork/websocket-json-stream": "^2.0.0",
     "@types/react-router-dom": "^5.3.3",
+    "buble": "^0.20.0",
     "buble-jsx-only": "^0.21.0",
     "codemirror": "^6.0.1",
     "d3-transition": "^3.0.1",
