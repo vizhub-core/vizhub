@@ -152,6 +152,9 @@ export interface File {
 // Homage to bl.ocks.org.
 export const defaultVizHeight = 500;
 
+// This is fixed.
+export const defaultVizWidth = 950;
+
 // Content
 //  * Heavyweight content of a viz.
 //  * Contains the full content of all files in the viz.
