@@ -1,4 +1,4 @@
-import { useCallback, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { UpvoteWidget } from 'components';
 import './styles.scss';
 
@@ -18,26 +18,34 @@ export const VizPageViewer = ({
   ownerUserHref,
   upvotesCount,
   license,
-  defaultVizHeight,
+  defaultVizWidth,
 }) => {
-  // This SVG elemeng is used only for its dynamic resizing behavior.
+  // This SVG element is used only for its dynamic resizing behavior.
   // It's invisible, nothing is rendered into it.
   const svgRef = useRef();
+
+  const [iframeScale, setIframeScale] = useState(1);
 
   const handleUpvoteClick = useCallback(() => {
     console.log('upvote clicked');
     alert('TODO handle upvoting');
   }, []);
 
+  useEffect(() => {
+    const resizeObserver = new ResizeObserver(() => {
+      const { clientWidth } = svgRef.current;
+      setIframeScale(clientWidth / defaultVizWidth);
+    });
+    resizeObserver.observe(svgRef.current);
+    return () => resizeObserver.disconnect();
+  }, []);
+
   return (
     <div className="vh-viz-page-viewer">
       <div className="viewer-content">
         <div className="viz-frame">
-          <svg
-            ref={svgRef}
-            viewBox={`0 0 960 ${vizHeight || defaultVizHeight}`}
-          />
-          {renderVizRunner(svgRef)}
+          <svg ref={svgRef} viewBox={`0 0 ${defaultVizWidth} ${vizHeight}`} />
+          {renderVizRunner(iframeScale)}
         </div>
         <div className="title-bar">
           <h4>{vizTitle}</h4>
