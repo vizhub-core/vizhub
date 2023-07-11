@@ -7,6 +7,7 @@
     "test": "",
     "build": "vite build --ssr src/index.ts --sourcemap",
     "migrate": "npm run build && NODE_OPTIONS=--enable-source-maps node dist/index.js",
+    "migrate-dry": "npm run build && NODE_OPTIONS=--enable-source-maps node dist/index.js -- dry",
     "prettier": "prettier {*.*,**/*.*} --single-quote --write",
     "tsc": "tsc --noEmit"
   },

@@ -88,6 +88,10 @@ const migrate = async () => {
     console.log('  startTime', startTimeDate.toLocaleString());
     console.log('  endTime  ', endTimeDate.toLocaleString());
 
+    console.log('process.argv', process.argv);
+
+    process.exit(0);
+
     // Iterate over vizzes in the V2 database that may have been created
     // or updated during the time period defined by startTime and endTime.
     const numVizzesProcessed = await v2Vizzes(
