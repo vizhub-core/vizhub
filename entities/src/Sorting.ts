@@ -5,7 +5,7 @@ export const sortOptions: Array<SortOption> = [
   {
     id: 'popular',
     label: 'Most popular',
-    sortField: 'scoreHackerHotLastUpdated',
+    sortField: 'popularity',
   },
   {
     id: 'mostRecent',
@@ -30,7 +30,7 @@ const sortOptionsMap = new Map<SortId, SortOption>(
 
 // The default for sorting views of many visualizations.
 // TODO change this to popular after https://github.com/vizhub-core/vizhub3/issues/148
-export const defaultSortOption: SortOption = sortOptionsMap.get('mostForked');
+export const defaultSortOption: SortOption = sortOptionsMap.get('popular');
 
 // Convenience function for getting the sort field from the sort ID.
 export const getSortField = (sortId: SortId | undefined): SortField =>
@@ -47,7 +47,7 @@ export type SortField =
   | 'updated'
   | 'forksCount'
   | 'upvotesCount'
-  | 'scoreHackerHotLastUpdated';
+  | 'popularity';
 
 export type SortOrder = 'ascending' | 'descending';
 
