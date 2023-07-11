@@ -14,6 +14,12 @@ export const tobytes = (array) => Buffer.from(new Float32Array(array).buffer);
 export const redisSetup = async (startFresh) => {
   console.log(`  Connecting to v3 Redis`);
   console.log(`    Using v3 Redis URI "${v3RedisURI}".`);
+  console.log(`    Check VIZHUB_V3_REDIS_URI and VIZHUB_V3_REDIS_PASSWORD.`);
+  console.log(`    For example, in .bashrc, add:`);
+  console.log(
+    `    export VIZHUB_V3_REDIS_URI=redis://redis-39227.c10.us-east-9-4.ec2.cloud.redislabs.com`
+  );
+  console.log(`    export VIZHUB_V3_REDIS_PASSWORD=...`);
 
   const redisClient = createClient({
     password: v3RedisPassword,

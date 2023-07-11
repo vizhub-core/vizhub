@@ -88,10 +88,6 @@ const migrate = async () => {
     console.log('  startTime', startTimeDate.toLocaleString());
     console.log('  endTime  ', endTimeDate.toLocaleString());
 
-    console.log('process.argv', process.argv);
-
-    process.exit(0);
-
     // Iterate over vizzes in the V2 database that may have been created
     // or updated during the time period defined by startTime and endTime.
     const numVizzesProcessed = await v2Vizzes(
@@ -110,6 +106,15 @@ const migrate = async () => {
 
         // Migrate the viz! Does not includes Upvotes or Users.
         logDetail(`Processing viz #${i}: ${info.id} ${info.title} `);
+
+        // If it's a dry-run, bail out here.
+        if (process.argv.includes('--dry')) {
+          console.log('  Dry run, exiting now... All connections work!');
+          process.exit(0);
+        }
+
+        process.exit(0);
+
         const isVizV2Valid: boolean = await processViz({
           vizV2,
           gateways,
