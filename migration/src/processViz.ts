@@ -1,4 +1,4 @@
-import { Info } from 'entities';
+import { Info, FilesV2 } from 'entities';
 import { logDetail } from './logDetail';
 import { generateEmbeddingOpenAI } from './generateEmbeddingOpenAI';
 import { computeForkedFrom } from './computeForkedFrom';
@@ -8,14 +8,14 @@ import { Collection } from 'mongodb-legacy';
 import { updateMigratedViz } from './updateMigratedViz';
 import { migratePrimordialViz } from './migratePrimordialViz';
 import { createMigratedViz } from './createMigratedViz';
-import { FilesV2 } from './VizV2';
 import { storeEmbedding, getEmbedding } from './redisSetup';
+import { VizV2 } from './VizV2';
 
 // Hardcoded ID of the primordial viz (actually in the V2 database)
 const primordialVizId = '86a75dc8bdbe4965ba353a79d4bd44c8';
 
 // Processes a single viz.
-// Returns true if the viz is valid (worth of migration), false if not.
+// Returns true if the viz is valid (worthy of migration), false if not.
 // Assumption: the same viz can be processed multiple times without issue.
 // e.g. if the process is interrupted, it can be restarted, or
 // if the process is run multiple times, it will not cause issues, or
@@ -27,7 +27,7 @@ export const processViz = async ({
   redisClient,
   contentCollection,
 }: {
-  vizV2: any;
+  vizV2: VizV2;
   gateways: Gateways;
   i: number;
   redisClient: any;
@@ -35,7 +35,14 @@ export const processViz = async ({
 }): Promise<boolean> => {
   // Setup
 
-  const { id, createdTimestamp } = vizV2.info;
+  const { id, createdTimestamp, privacy } = vizV2.info;
+
+  // If the viz is private, skip it for now.
+  if (privacy === 'private') {
+    console.log('  Private viz, skipping this viz.');
+    return false;
+  }
+
   const isPrimordialViz = id === primordialVizId;
 
   // Sometimes titles have leading or trailing spaces, so trim that.

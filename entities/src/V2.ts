@@ -6,6 +6,7 @@ export type InfoV2 = {
   description: string;
   owner: string;
   collaborators: Array<any>;
+  privacy: PrivacyV2;
   files: Array<any>;
   createdTimestamp: number;
   lastUpdatedTimestamp: number;
@@ -19,6 +20,8 @@ export type InfoV2 = {
   scoreRedditHotLastUpdated: number;
   scoreHackerHotLastUpdated: number;
 };
+
+export type PrivacyV2 = 'public' | 'private';
 
 export type ContentV2 = {
   id: VizId;
