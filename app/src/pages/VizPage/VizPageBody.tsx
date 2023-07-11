@@ -1,19 +1,19 @@
-import { useContext, useMemo } from 'react';
+import { useCallback, useContext, useMemo } from 'react';
 import { VizPageHead } from 'components/src/components/VizPageHead';
 import { ForkModal } from 'components/src/components/ForkModal';
 import { VizPageViewer } from 'components/src/components/VizPageViewer';
-import { defaultVizHeight } from 'entities';
+import { defaultVizWidth, defaultVizHeight } from 'entities';
 import { AuthenticatedUserContext } from '../../contexts/AuthenticatedUserContext';
 import { SmartHeader } from '../../smartComponents/SmartHeader';
 import { getUserDisplayName } from '../../accessors/getUserDisplayName';
 import { Content, Info, User } from 'entities';
-import { renderVizRunner } from './renderVizRunner';
 import { useRenderMarkdownHTML } from './useRenderMarkdownHTML';
 import { formatTimestamp } from '../../accessors/formatTimestamp';
 import { getForksPageHref } from '../../accessors/getForksPageHref';
 import { getProfilePageHref } from '../../accessors/getProfilePageHref';
 import { getVizPageHref } from '../../accessors/getVizPageHref';
 import { getLicense } from '../../accessors/getLicense';
+import { getHeight } from '../../accessors/getHeight';
 
 export const VizPageBody = ({
   info,
@@ -29,6 +29,7 @@ export const VizPageBody = ({
   initialReadmeHTML,
   forkedFromInfo,
   forkedFromOwnerUser,
+  srcdoc,
 }: {
   info: Info;
   content: Content;
@@ -43,6 +44,7 @@ export const VizPageBody = ({
   initialReadmeHTML: string;
   forkedFromInfo: Info | null;
   forkedFromOwnerUser: User | null;
+  srcdoc: string;
 }) => {
   // The currently authenticated user, if any.
   const authenticatedUser: User | null = useContext(AuthenticatedUserContext);
@@ -68,6 +70,25 @@ export const VizPageBody = ({
   // The license to display for this viz.
   const license = useMemo(() => getLicense(content), [content]);
 
+  // The height of the viz, in pixels, falling back to default.
+  const vizHeight = useMemo(() => getHeight(content.height), [content.height]);
+
+  const renderVizRunner = useCallback(
+    (iframeScale: number) => {
+      return (
+        <iframe
+          width={defaultVizWidth}
+          height={vizHeight}
+          srcDoc={srcdoc}
+          style={{
+            transform: `scale(${iframeScale})`,
+          }}
+        />
+      );
+    },
+    [srcdoc, vizHeight]
+  );
+
   return (
     <div className="vh-page overflow-auto">
       <SmartHeader />
@@ -81,7 +102,8 @@ export const VizPageBody = ({
       />
       <VizPageViewer
         vizTitle={info.title}
-        vizHeight={content.height}
+        vizHeight={vizHeight}
+        defaultVizWidth={defaultVizWidth}
         renderVizRunner={renderVizRunner}
         renderMarkdownHTML={renderMarkdownHTML}
         authorDisplayName={getUserDisplayName(ownerUser)}
@@ -99,7 +121,6 @@ export const VizPageBody = ({
         ownerUserHref={getProfilePageHref(ownerUser)}
         upvotesCount={info.upvotesCount}
         license={license}
-        defaultVizHeight={defaultVizHeight}
       />
       <ForkModal
         initialTitle={'Fork of ' + info.title}

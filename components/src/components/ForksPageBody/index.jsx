@@ -4,7 +4,7 @@ import { VizPreviewCollection } from '../VizPreviewCollection';
 import { Spinner } from '../Spinner';
 import './styles.scss';
 
-export const ExplorePageBody = ({
+export const ForksPageBody = ({
   // Viz preview list props.
   renderVizPreviews,
   onMoreClick,
@@ -14,20 +14,25 @@ export const ExplorePageBody = ({
   sortId,
   setSortId,
   sortOptions,
+
+  // The title of the viz that was forked from.
+  forkedFromTitle,
+
+  // The href to the viz that was forked from.
+  forkedFromHref,
 }) => {
   return (
     <div className="vh-page vh-explore-page">
       <div className="px-4 py-3">
         <div className="d-flex mb-3 justify-content-between align-items-end">
-          <h1 className="mb-0">Explore</h1>
-          {/* Null guard while feature in development - can remove later once it's working */}
-          {sortOptions ? (
-            <SortControl
-              sortId={sortId}
-              setSortId={setSortId}
-              sortOptions={sortOptions}
-            />
-          ) : null}
+          <h1 className="mb-0">
+            Forks of <a href={forkedFromHref}>{forkedFromTitle}</a>
+          </h1>
+          <SortControl
+            sortId={sortId}
+            setSortId={setSortId}
+            sortOptions={sortOptions}
+          />
         </div>
         <VizPreviewCollection>{renderVizPreviews()}</VizPreviewCollection>
         <div className="mt-3 mb-3 d-flex justify-content-center">

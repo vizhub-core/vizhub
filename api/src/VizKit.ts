@@ -1,4 +1,4 @@
-import { SortId, UserId } from 'entities';
+import { SortId, UserId, Viz, VizId } from 'entities';
 
 // Modeled after https://github.com/octokit/octokit.js/#constructor-options
 // See also https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#uploading_json_data
@@ -39,10 +39,14 @@ export const VizKit = ({ baseUrl, ssrFetch = null }) => {
         ).json(),
 
       getInfosAndOwners: async ({
+        forkedFrom,
+        owner,
         noNeedToFetchUsers,
         sortId,
         pageNumber,
       }: {
+        forkedFrom: VizId;
+        owner: UserId;
         // An array of user ids that we already have in the client
         noNeedToFetchUsers: Array<UserId>;
         // The sort id that we want to fetch
@@ -56,7 +60,13 @@ export const VizKit = ({ baseUrl, ssrFetch = null }) => {
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ noNeedToFetchUsers, sortId, pageNumber }),
+            body: JSON.stringify({
+              forkedFrom,
+              owner,
+              noNeedToFetchUsers,
+              sortId,
+              pageNumber,
+            }),
           })
         ).json(),
     },

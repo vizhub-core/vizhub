@@ -17,6 +17,7 @@ ProfilePage.getPageData = async ({ gateways, params, query, auth0User }) => {
     const sortId: SortId | null = asSortId(query.sort) || defaultSortOption.id;
 
     const infosAndOwnersResult = await getInfosAndOwners({
+      owner,
       noNeedToFetchUsers: [owner],
       sortId,
       pageNumber: 0,

@@ -1,14 +1,14 @@
-// From https://github.com/vizhub-core/vizhub/blob/main/vizhub-v2/packages/presenters/src/getComputedIndexHtml.js#L10
-import { getFileText } from '../../../accessors/getFileText';
+// From https://github.com/vizhub-core/vizhub/blob/main/vizhub-v2/packages/presenters/src/getComputedIndexHtml.js
+
 import {
   dependencies,
   getConfiguredLibraries,
   dependencySource,
 } from './packageJson';
-import { isPackageJSONEnabled } from './featureFlags';
+import { FilesV2 } from 'entities';
+import { getText } from './getText';
 
-const template = (files) => getFileText(files, 'index.html');
-const bundle = (files) => getFileText(files, 'bundle.js');
+const isPackageJSONEnabled = true;
 
 let parser;
 
@@ -25,9 +25,10 @@ export const setJSDOM = (JSDOM) => {
 
 const injectBundleScript = (htmlTemplate, files) => {
   const doc = parser.parseFromString(htmlTemplate, 'text/html');
-
-  if (bundle(files) && !doc.querySelector('[src="bundle.js"]')) {
+  // console.log('doc', doc);
+  if (getText(files, 'bundle.js') && !doc.querySelector('[src="bundle.js"]')) {
     const bundleScriptTag = doc.createElement('script');
+    // This will be fed through MagicSandbox.
     bundleScriptTag.src = 'bundle.js';
     doc.body.appendChild(bundleScriptTag);
     return `<!DOCTYPE html>${doc.documentElement.outerHTML}`;
@@ -56,22 +57,33 @@ const injectDependenciesScript = (htmlTemplate, files) => {
   return `<!DOCTYPE html>${doc.documentElement.outerHTML}`;
 };
 
-export const getComputedIndexHtml = (files) => {
+// Compute the index.html file from the files.
+// Includes:
+// - bundle.js script tag
+// - dependencies script tag(s)
+export const getComputedIndexHtml = (files: FilesV2) => {
   try {
-    if (isPackageJSONEnabled) {
-      const htmlTemplate = template(files);
-      const htmlWithBundleScriptTemplate = injectBundleScript(
-        htmlTemplate,
-        files
-      );
-      const indexHtml = injectDependenciesScript(
-        htmlWithBundleScriptTemplate,
-        files
-      );
-      return indexHtml;
-    } else {
-      return template(files);
+    // Isolate the index.html file.
+    const htmlTemplate = getText(files, 'index.html');
+
+    // If there is no index.html file, return an empty string.
+    if (!htmlTemplate) {
+      return '';
     }
+
+    // Inject bundle.js script tag if needed.
+    const htmlWithBundleScriptTemplate = injectBundleScript(
+      htmlTemplate,
+      files
+    );
+
+    // Inject dependencies script tag(s) if needed, based on package.json.
+    const indexHtml = injectDependenciesScript(
+      htmlWithBundleScriptTemplate,
+      files
+    );
+
+    return indexHtml;
   } catch (err) {
     console.log(err);
   }

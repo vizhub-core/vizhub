@@ -114,6 +114,7 @@ export const getInfosTest = () => {
         id: `viz${i}`,
         forkedFrom: primordialViz.info.id,
         scoreHackerHotLastUpdated: i * 3 + 100,
+        forksCount: 100 - i,
       }));
 
       // Randomize order to test sorting.
