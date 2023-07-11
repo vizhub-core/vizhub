@@ -1,7 +1,7 @@
 import { timeMinute, timeFormat } from 'd3';
 import { Gateways } from 'gateways';
-import { Content, Info, Op, Viz, timestampToDate } from 'entities';
-import { FilesV2, VizV2 } from './VizV2';
+import { Content, Info, Op, Viz, timestampToDate, FilesV2 } from 'entities';
+import { VizV2 } from './VizV2';
 import { logDetail } from './logDetail';
 import { computeV3Files } from './computeV3Files';
 import { CommitViz, SaveViz } from 'interactors';
@@ -32,7 +32,11 @@ export const updateMigratedViz = async ({
   infoMigrated: Info | undefined;
   goodFiles: FilesV2;
 }) => {
-  // console.log('in updateMigratedViz');
+  console.log('in updateMigratedViz');
+  const { scoreHackerHotLastUpdated } = vizV2.info;
+  console.log(
+    'TODO include scoreHackerHotLastUpdated ' + scoreHackerHotLastUpdated
+  );
   // console.log('vizV2.info', vizV2.info);
   // console.log('vizV2.content', vizV2.content);
   // console.log(JSON.stringify(vizV2, null, 2));
