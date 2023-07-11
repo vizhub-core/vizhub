@@ -17,3 +17,4 @@ export { VerifyVizAccess } from './verifyVizAccess';
 export { generateUpvoteId } from './generateUpvoteId';
 export { GetCommitAtTimestamp } from './getCommitAtTimestamp';
 export { GetInfosAndOwners } from './getInfosAndOwners';
+export { ScoreViz } from './scoreViz';

@@ -32,11 +32,6 @@ export const updateMigratedViz = async ({
   infoMigrated: Info | undefined;
   goodFiles: FilesV2;
 }) => {
-  console.log('in updateMigratedViz');
-  const { scoreHackerHotLastUpdated } = vizV2.info;
-  console.log(
-    'TODO include scoreHackerHotLastUpdated ' + scoreHackerHotLastUpdated
-  );
   // console.log('vizV2.info', vizV2.info);
   // console.log('vizV2.content', vizV2.content);
   // console.log(JSON.stringify(vizV2, null, 2));

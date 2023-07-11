@@ -10,6 +10,7 @@ import { migratePrimordialViz } from './migratePrimordialViz';
 import { createMigratedViz } from './createMigratedViz';
 import { storeEmbedding, getEmbedding } from './redisSetup';
 import { VizV2 } from './VizV2';
+import { ScoreViz } from 'interactors';
 
 // Hardcoded ID of the primordial viz (actually in the V2 database)
 const primordialVizId = '86a75dc8bdbe4965ba353a79d4bd44c8';
@@ -158,7 +159,6 @@ export const processViz = async ({
     }
   }
 
-  // TODO bring this back
   // This gets called in all cases:
   // - if the viz has not been migrated yet, it gets called after the viz is created.
   // - if the viz has already been migrated, it gets called after the viz is updated.
@@ -169,6 +169,11 @@ export const processViz = async ({
     infoMigrated,
     goodFiles,
   });
+
+  // Score the viz
+  const scoreViz = ScoreViz(gateways);
+  console.log('  Scoring viz...');
+  await scoreViz({ viz: id });
 
   return true;
 };
