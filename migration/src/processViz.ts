@@ -1,7 +1,6 @@
 import { Info } from 'entities';
 import { logDetail } from './logDetail';
 import { generateEmbeddingOpenAI } from './generateEmbeddingOpenAI';
-import { storeEmbedding } from './storeEmbedding';
 import { computeForkedFrom } from './computeForkedFrom';
 import { isolateGoodFiles } from './isolateGoodFiles';
 import { Gateways } from 'gateways';
@@ -10,6 +9,7 @@ import { updateMigratedViz } from './updateMigratedViz';
 import { migratePrimordialViz } from './migratePrimordialViz';
 import { createMigratedViz } from './createMigratedViz';
 import { FilesV2 } from './VizV2';
+import { storeEmbedding, getEmbedding } from './redisSetup';
 
 // Hardcoded ID of the primordial viz (actually in the V2 database)
 const primordialVizId = '86a75dc8bdbe4965ba353a79d4bd44c8';
@@ -79,10 +79,18 @@ export const processViz = async ({
   // If we are here, it means we are going to migrate this viz,
   // either because it has not been migrated yet,
   // or because it has been updated since the last migration.
+  let embedding;
 
+  // TODO If the embedding is already stored in Redis, don't re-compute it.
+  // This wreckage is a previous attempt at this.
+  // The solutio may lie in using https://www.npmjs.com/package/redis-parser
+  // logDetail('  Checking if embedding is already stored in Redis...');
+  // const embeddingResult = await getEmbedding({ redisClient, id });
+  // if (embeddingResult.outcome === 'failure') {
   // Generate the embedding for the viz (latest version).
+  // logDetail('  Embedding not found in Redis,');
   logDetail('  Generating embedding');
-  const embedding = await generateEmbeddingOpenAI(goodFiles);
+  embedding = await generateEmbeddingOpenAI(goodFiles);
 
   // Store the embedding in Redis.
   logDetail('    Storing embedding in Redis...');
@@ -93,6 +101,10 @@ export const processViz = async ({
     timestamp: createdTimestamp,
   });
   logDetail('    Stored embedding!');
+  // } else {
+  //   logDetail('  Embedding found in Redis!');
+  //   embedding = embeddingResult.value;
+  // }
 
   // Compute the forkedFrom and forkedFromIsBackfilled fields.
   const { forkedFrom, forkedFromIsBackfilled } = await computeForkedFrom({

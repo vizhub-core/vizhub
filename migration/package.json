@@ -32,6 +32,7 @@
     "openai": "^3.3.0",
     "ot-json0": "^1.1.0",
     "redis": "^4.6.7",
+    "redis-parser": "^3.0.0",
     "sharedb-mongo": "^4.0.0",
     "uuid": "^9.0.0"
   },

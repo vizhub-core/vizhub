@@ -1,4 +1,6 @@
 import { createClient } from 'redis';
+import { err, ok, resourceNotFoundError } from 'gateways';
+
 import { embeddingSize } from './generateEmbeddingOpenAI';
 
 const v3RedisURI = process.env.VIZHUB_V3_REDIS_URI;
@@ -10,6 +12,53 @@ export const idx = 'idx:vizhub';
 // This function accepts as input an array of numbers
 // and returns as output a byte representation that Redis accepts.
 export const tobytes = (array) => Buffer.from(new Float32Array(array).buffer);
+
+// const frombytes = (redisResult) => {
+//   console.log('here');
+//   console.log(typeof redisResult);
+//   console.log(Buffer.from(redisResult));
+
+//   const array = new Float32Array(Buffer.from(redisResult));
+//   console.log('array', array);
+//   return array;
+//   // const array = new Float32Array(buffer.length / 4);
+//   // for (let i = 0; i < array.length; i++) {
+//   //   array[i] = buffer.readFloatLE(i * 4);
+//   // }
+//   // return array;
+// };
+
+// Stores an embedding in Redis.
+// See also: https://redis.io/commands/hset
+export const storeEmbedding = async ({
+  redisClient,
+  id,
+  embedding,
+  timestamp,
+}) => {
+  await redisClient.sendCommand([
+    'HSET',
+    id,
+    'v',
+    tobytes(embedding),
+    'timestamp',
+    '' + timestamp,
+  ]);
+};
+
+export const getEmbedding = async ({ redisClient, id }) => {
+  const redisResult = await redisClient.hGet(id, 'v');
+  console.log(frombytes(redisResult));
+  // const redisEmbedding = await redisClient.sendCommand(['HGET', id, 'v']);
+  // if (redisEmbedding) {
+  //   console.log('redisEmbedding', redisEmbedding);
+  //   process.exit();
+  //   const embedding = frombytes(redisEmbedding);
+  //   return ok(embedding);
+  // } else {
+  //   return err(resourceNotFoundError(id));
+  // }
+};
 
 export const redisSetup = async (startFresh) => {
   console.log(`  Connecting to v3 Redis`);

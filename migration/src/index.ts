@@ -113,8 +113,6 @@ const migrate = async () => {
           process.exit(0);
         }
 
-        process.exit(0);
-
         const isVizV2Valid: boolean = await processViz({
           vizV2,
           gateways,
