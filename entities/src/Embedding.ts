@@ -3,7 +3,7 @@
 export interface Embedding {
   id: EmbeddingId;
   type: EmbeddingType;
-  vectpr: Array<number>;
+  vector: Array<number>;
 }
 
 export type EmbeddingId = string;

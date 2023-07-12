@@ -22,6 +22,7 @@ import {
   MergeRequest,
   BetaProgramSignup,
   EDITOR,
+  Embedding,
 } from 'entities';
 
 export const ts1: Timestamp = 1638100000;
@@ -331,4 +332,10 @@ export const sampleMergeRequest: MergeRequest = {
 export const sampleBetaProgramSignup: BetaProgramSignup = {
   id: '74893257843',
   email: 'test@test.com',
+};
+
+export const sampleEmbedding: Embedding = {
+  id: '74893257843',
+  type: 'Viz',
+  vector: [1, 2, 3],
 };
