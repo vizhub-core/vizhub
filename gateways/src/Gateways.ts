@@ -220,6 +220,7 @@ export interface Gateways {
   getInfos({
     owner,
     forkedFrom,
+    vizIds,
     sortField,
     pageNumber,
     sortOrder,
@@ -228,6 +229,8 @@ export interface Gateways {
     //
     // Owner to filter by
     // Optional, useful for profile page
+    // Works in conjunction with `forkedFrom`
+    // If `owner` is specified, `vizIds` is ignored
     // Assumption, either owner or forkedFrom is specified, not both
     // TODO consider use case of specifying both - "Show my forks of this viz"
     //
@@ -240,8 +243,26 @@ export interface Gateways {
     //
     // forkedFrom to filter by
     // Optional, useful for forks page
+    // Works in conjunction with `owner`
+    // If `forkedFrom` is specified, `vizIds` is ignored
     // Assumption, either owner or forkedFrom is specified, not both
     forkedFrom?: VizId;
+
+    // vizIds
+    //
+    // VizIds to include in the results
+    // Can be more than one page worth of IDs
+    // `pageNumber` and `pageSize` are used to determine which IDs to fetch data for
+    // Optional, useful for search results page
+    // If this is specified, `owner` and `forkedFrom` are ignored
+    vizIds?: Array<VizId>;
+
+    // sortField
+    //
+    // The field to sort the results by.
+    // Only respected if `owner` and/or `forkedFrom` is specified.
+    // Inored if `vizIds` is specified, because the ordering is
+    // determined by the order of the vizIds in the `vizIds` array.
     sortField?: SortField;
 
     // The page number to return, considering `pageSize` results per page.
