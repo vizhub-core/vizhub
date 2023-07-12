@@ -44,6 +44,7 @@ export const crudEntityNames = [
   'MergeRequest',
   'BetaProgramSignup',
   'AnalyticsEvent',
+  'Embedding',
 ];
 
 // These entities are stored directly in Mongo,
@@ -53,6 +54,7 @@ export const noSnapshot = {
   Commit: true,
   Milestone: true,
   BetaProgramSignup: true,
+  Embedding: true,
 };
 
 // An in-memory implementation for gateways,
@@ -77,8 +79,8 @@ export const MemoryGateways = () => {
     id in documents[entityName]
       ? ok(
           (noSnapshot[entityName] ? noop : fakeSnapshot)(
-            documents[entityName][id]
-          )
+            documents[entityName][id],
+          ),
         )
       : err(resourceNotFoundError(id));
 
@@ -104,7 +106,7 @@ export const MemoryGateways = () => {
     ok(
       Object.values(documents.Info)
         .filter(({ forkedFrom }) => forkedFrom === id)
-        .map(fakeSnapshot)
+        .map(fakeSnapshot),
     );
 
   const getInfos = async ({
@@ -125,9 +127,9 @@ export const MemoryGateways = () => {
             (owner === undefined || d.owner === owner) &&
             (forkedFrom === undefined || d.forkedFrom === forkedFrom) &&
             i >= pageNumber * pageSize &&
-            i < (pageNumber + 1) * pageSize
+            i < (pageNumber + 1) * pageSize,
         )
-        .map(fakeSnapshot)
+        .map(fakeSnapshot),
     );
   };
 
@@ -197,7 +199,7 @@ export const MemoryGateways = () => {
 
   const getUserByUserName = async (userName) => {
     const user = Object.values(documents.User).find(
-      (user) => user.userName === userName
+      (user) => user.userName === userName,
     );
     return user ? ok(fakeSnapshot(user)) : err(resourceNotFoundError(userName));
   };
@@ -207,14 +209,14 @@ export const MemoryGateways = () => {
       (user) =>
         emails.includes(user.primaryEmail) ||
         (user.secondaryEmails &&
-          user.secondaryEmails.find((email) => emails.includes(email)))
+          user.secondaryEmails.find((email) => emails.includes(email))),
     );
     return user ? ok(fakeSnapshot(user)) : err(resourceNotFoundError(emails));
   };
 
   const getUsersByIds = async (ids) => {
     const users = Object.values(documents.User).filter((user) =>
-      ids.includes(user.id)
+      ids.includes(user.id),
     );
     return ok(users.map(fakeSnapshot));
   };
@@ -224,7 +226,7 @@ export const MemoryGateways = () => {
     const permissions = allPermissions
       .filter((permission) => permission.user === user)
       .filter((permission) =>
-        resources.some((resource) => resource === permission.resource)
+        resources.some((resource) => resource === permission.resource),
       );
     return ok(permissions.map(fakeSnapshot));
   };

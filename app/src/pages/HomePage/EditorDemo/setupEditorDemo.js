@@ -64,7 +64,7 @@ export const setupEditorDemo = ({ codemirrorContainer, iframe }) => {
           updateCount +
             ' hot reload' +
             (updateCount !== 1 ? 's' : '') +
-            ' in the last second'
+            ' in the last second',
         );
       }
       updateCount = 0;

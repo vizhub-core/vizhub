@@ -16,7 +16,7 @@ export const getLibraries = (files) => {
       globals[packageName] = globalName;
     } else {
       console.warn(
-        `There is no global name for ${packageName}.\n Please add it to "vizhub.${packageName}.global" section in package.json.`
+        `There is no global name for ${packageName}.\n Please add it to "vizhub.${packageName}.global" section in package.json.`,
       );
     }
 

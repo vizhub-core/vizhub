@@ -15,10 +15,10 @@ export const saveVizTest = () => {
       expect(result.value).toEqual('success');
 
       expect((await getInfo(primordialViz.info.id)).value.data).toEqual(
-        primordialViz.info
+        primordialViz.info,
       );
       expect((await getContent(primordialViz.info.id)).value.data).toEqual(
-        primordialViz.content
+        primordialViz.content,
       );
     });
   });

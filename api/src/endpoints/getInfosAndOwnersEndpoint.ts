@@ -25,7 +25,7 @@ export const getInfosAndOwnersEndpoint = ({ app, gateways }) => {
           noNeedToFetchUsers,
           sortId,
           pageNumber,
-        })
+        }),
       );
     }
   });

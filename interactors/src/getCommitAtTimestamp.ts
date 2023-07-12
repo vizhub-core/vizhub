@@ -6,7 +6,7 @@ export const GetCommitAtTimestamp = (gateways: Gateways) => {
 
   return async (
     info: Info,
-    timestamp: Timestamp
+    timestamp: Timestamp,
   ): Promise<Result<CommitId>> => {
     // Get ancestor commits going back to info.start
     const commitsResult = await getCommitAncestors(info.end, false, info.start);

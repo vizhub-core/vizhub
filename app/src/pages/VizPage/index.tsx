@@ -36,11 +36,11 @@ export const VizPage: Page = ({ pageData }: { pageData: VizPageData }) => {
   const ownerUser: User = useShareDBDocData(ownerUserSnapshot, 'User');
   const forkedFromInfo: Info = useShareDBDocData(
     forkedFromInfoSnapshot,
-    'Info'
+    'Info',
   );
   const forkedFromOwnerUser: User = useShareDBDocData(
     forkedFromOwnerUserSnapshot,
-    'User'
+    'User',
   );
 
   // TODO move this to URL
@@ -71,7 +71,7 @@ export const VizPage: Page = ({ pageData }: { pageData: VizPageData }) => {
   // Send an analytics event to track this page view.
   useEffect(() => {
     vizKit.rest.recordAnalyticsEvents(
-      `event.pageview.viz.owner:${ownerUser.id}.viz:${info.id}`
+      `event.pageview.viz.owner:${ownerUser.id}.viz:${info.id}`,
     );
   }, []);
 

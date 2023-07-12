@@ -112,7 +112,7 @@ export interface Info {
 
   // A popularity score for this viz.
   // Populated by the scoreHackerHot algorithm.
-  scoreHackerHotLastUpdated?: number;
+  popularity?: number;
 }
 
 // Configuration

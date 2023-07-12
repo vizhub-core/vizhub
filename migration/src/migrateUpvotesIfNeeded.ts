@@ -14,7 +14,7 @@ export const migrateUpvotesIfNeeded = async ({
   const upvoteViz = UpvoteViz(gateways);
   if (vizV2.info.upvotes && vizV2.info.upvotes.length > 0) {
     logDetail(
-      `    Migrating ${vizV2.info.upvotes.length} upvotes ('+' = migrated, '-' = skipped)`
+      `    Migrating ${vizV2.info.upvotes.length} upvotes ('+' = migrated, '-' = skipped)`,
     );
     process.stdout.write(`    `);
 
@@ -55,7 +55,7 @@ export const migrateUpvotesIfNeeded = async ({
         }
         process.stdout.write('+');
         await upvoteViz({ viz, user, timestamp });
-      })
+      }),
     );
     process.stdout.write('\n');
   }

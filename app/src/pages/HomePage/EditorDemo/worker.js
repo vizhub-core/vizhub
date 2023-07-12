@@ -1,5 +1,5 @@
 importScripts(
-  'https://cdn.jsdelivr.net/npm/rollup@2.79.0/dist/rollup.browser.js'
+  'https://cdn.jsdelivr.net/npm/rollup@2.79.0/dist/rollup.browser.js',
 );
 
 // A Rollup plugin for a virtual file system.
@@ -32,7 +32,7 @@ const getGlobals = (pkg, errors) => {
         accumulator[packageName] = config.global;
         return accumulator;
       },
-      {}
+      {},
     );
   }
   return null;

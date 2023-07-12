@@ -16,7 +16,7 @@ import * as Sentry from '@sentry/node';
 import { seoMetaTags } from './src/seoMetaTags.js';
 
 // TODO import this from package.json
-const version = '3.0.0-beta.13';
+const version = '3.0.0-beta.14';
 
 const env = process.env;
 
@@ -32,7 +32,7 @@ const send404 = (res) => {
 async function createServer(
   root = process.cwd(),
   isProd = env.NODE_ENV === 'production',
-  hmrPort
+  hmrPort,
 ) {
   const indexProd = isProd
     ? fs.readFileSync(resolve('dist/client/index.html'), 'utf-8')
@@ -103,7 +103,7 @@ async function createServer(
     app.use(
       (await import('serve-static')).default(resolve('dist/client'), {
         index: false,
-      })
+      }),
     );
   }
 
@@ -144,7 +144,7 @@ async function createServer(
     authentication({ app, env, gateways });
   } else {
     console.log(
-      'Environment variable VIZHUB3_AUTH0_SECRET is not set. See README for details.'
+      'Environment variable VIZHUB3_AUTH0_SECRET is not set. See README for details.',
     );
     console.log('Starting dev server without authentication enabled...');
   }
@@ -242,7 +242,7 @@ async function createServer(
             descriptionSanitized,
             relativeUrl: originalUrl,
             image,
-          })
+          }),
         )
         .replace(`<!--app-html-->`, render(pageData))
         .replace(
@@ -270,7 +270,7 @@ async function createServer(
             // https://github.com/yahoo/serialize-javascript/blob/7f3ac252d86b802454cb43782820aea2e0f6dc25/index.js#L25
             // https://pragmaticwebsecurity.com/articles/spasecurity/json-stringify-xss.html
             // https://redux.js.org/usage/server-rendering/#security-considerations
-            .replace(/</g, '\\u003c')};</script>`
+            .replace(/</g, '\\u003c')};</script>`,
         );
 
       res.status(200).set({ 'Content-Type': 'text/html' }).end(html);
@@ -288,7 +288,7 @@ async function createServer(
     console.log('VizHub App Server listening at http://localhost:5173');
     console.log('                               http://localhost:5173/joe');
     console.log(
-      '                               http://localhost:5173/joe/viz1'
+      '                               http://localhost:5173/joe/viz1',
     );
     console.log('                               http://localhost:5173/explore');
   });

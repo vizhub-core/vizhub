@@ -4,7 +4,7 @@ import { Content } from 'entities';
 // Returns null if not found.
 export const getFileText = (
   content: Content,
-  fileName: string
+  fileName: string,
 ): string | null => {
   if (content && content.files) {
     for (const fileId of Object.keys(content.files)) {

@@ -15,5 +15,5 @@ hydrateRoot(
   document.getElementById('app'),
   <BrowserRouter>
     <App pageData={pageData} />
-  </BrowserRouter>
+  </BrowserRouter>,
 );

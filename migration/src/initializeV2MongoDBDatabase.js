@@ -6,6 +6,10 @@ const v2MongoURI = process.env.VIZHUB_V2_MONGO_URI;
 export const initializeV2MongoDBDatabase = async () => {
   console.log(`  Connecting to v2 MongoDB`);
   console.log(`    Using v2 Mongo URI "${v2MongoURI}".`);
+  console.log(`    Check VIZHUB_V2_MONGO_URI. For example, in .bashrc, add:`);
+  console.log(
+    `    export VIZHUB_V2_MONGO_URI=mongodb://18.209.175.20:27017/vizhub`,
+  );
 
   const timeout = setTimeout(() => {
     console.log('\n    Having trouble connecting to the database...');

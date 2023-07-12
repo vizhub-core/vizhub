@@ -4,7 +4,7 @@ import { ForkViz } from 'interactors';
 import { VizV2 } from './VizV2';
 import { GetCommitAtTimestamp } from 'interactors';
 
-const debug = true;
+const debug = false;
 
 // If we're here, then the viz has not yet been migrated.
 // The task before us is to create a new viz in V3 by forking the viz in V3.
@@ -28,7 +28,7 @@ export const createMigratedViz = async ({
   const forkedFromInfo = forkedFromInfoResult.value.data;
   const commitIdResult = await getCommitAtTimestamp(
     forkedFromInfo,
-    vizV2.info.createdTimestamp
+    vizV2.info.createdTimestamp,
   );
   if (commitIdResult.outcome === 'failure') return commitIdResult;
   const forkedFromCommitId: CommitId = commitIdResult.value;

@@ -25,7 +25,7 @@ importScripts(
   jsDelivrCombine([
     `marked@${markedVersion}/marked.min.js`,
     `xss@${xssVersion}/dist/xss.min.js`,
-  ])
+  ]),
 );
 
 // TODO update this to use Vite's build, not JSDelivr

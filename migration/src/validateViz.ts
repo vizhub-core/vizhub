@@ -44,7 +44,7 @@ export const validateViz = async ({
     console.log('JSON.stringify(content)', JSON.stringify(content, null, 2));
     console.log(
       'JSON.stringify(reconstructedContent)',
-      JSON.stringify(reconstructedContent, null, 2)
+      JSON.stringify(reconstructedContent, null, 2),
     );
     return false;
   }

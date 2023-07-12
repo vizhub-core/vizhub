@@ -42,7 +42,7 @@ function Option({ item, state }) {
   const { optionProps, isSelected, isDisabled } = useOption(
     { key: item.key },
     state,
-    ref
+    ref,
   );
 
   // Determine whether we should show a keyboard

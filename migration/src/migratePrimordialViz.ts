@@ -1,9 +1,8 @@
-import { Commit, Content, Files, Info, Viz, VizId } from 'entities';
+import { Commit, Content, Files, Info, Viz, VizId, FilesV2 } from 'entities';
 import { SaveViz, generateId } from 'interactors';
 import { computeV3Files } from './computeV3Files';
 import { diff } from 'ot';
 import { Gateways } from 'gateways';
-import { FilesV2 } from './VizV2';
 
 // Default height in pixels for vizzes.
 // In V3 data model, height is always explicit.
@@ -96,7 +95,7 @@ export const migratePrimordialViz = async ({
   const saveCommitResult = await gateways.saveCommit(primordialCommit);
   if (saveCommitResult.outcome === 'failure') {
     throw new Error(
-      'Failed to save primordial commit! ' + saveCommitResult.error
+      'Failed to save primordial commit! ' + saveCommitResult.error,
     );
   }
 

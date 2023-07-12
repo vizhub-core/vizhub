@@ -13,7 +13,7 @@ export const Body = ({ profileUser }: { profileUser: User }) => {
   const { sortId, setSortId } = useContext(SortContext);
 
   const { allInfoSnapshots, fetchNextPage, isLoadingNextPage } = useContext(
-    InfosAndOwnersContext
+    InfosAndOwnersContext,
   );
 
   return (

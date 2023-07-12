@@ -6,7 +6,7 @@ import { VizId, Snapshot, Info, Content } from 'entities';
 export const GetViz =
   ({ getInfo, getContent }: Gateways) =>
   async (
-    id: VizId
+    id: VizId,
   ): Promise<
     Result<{
       infoSnapshot: Snapshot<Info>;
