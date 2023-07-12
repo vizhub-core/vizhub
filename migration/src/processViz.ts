@@ -8,7 +8,7 @@ import { Collection } from 'mongodb-legacy';
 import { updateMigratedViz } from './updateMigratedViz';
 import { migratePrimordialViz } from './migratePrimordialViz';
 import { createMigratedViz } from './createMigratedViz';
-import { storeEmbedding } from './redisSetup';
+import { getEmbedding, storeEmbedding } from './redisSetup';
 import { VizV2 } from './VizV2';
 import { ScoreViz } from 'interactors';
 import { storeVizEmbedding } from './embeddings';
@@ -90,39 +90,37 @@ export const processViz = async ({
   // or because it has been updated since the last migration.
   let embedding;
 
-  // TODO If the embedding is already stored in Redis, don't re-compute it.
-  // This wreckage is a previous attempt at this.
-  // The solutio may lie in using https://www.npmjs.com/package/redis-parser
-  // logDetail('  Checking if embedding is already stored in Redis...');
-  // const embeddingResult = await getEmbedding({ redisClient, id });
-  // if (embeddingResult.outcome === 'failure') {
-  // Generate the embedding for the viz (latest version).
-  // logDetail('  Embedding not found in Redis,');
-  logDetail('  Generating embedding');
-  embedding = await generateEmbeddingOpenAI(goodFiles);
+  // If the embedding is already stored in Redis, don't re-compute it.
+  logDetail('  Checking if embedding is already stored in Redis...');
+  const existingEmbedding = await getEmbedding({ redisClient, id });
+  if (existingEmbedding === null) {
+    // Generate the embedding for the viz (latest version).
+    logDetail('  Embedding not found in Redis,');
+    logDetail('  Generating embedding');
+    embedding = await generateEmbeddingOpenAI(goodFiles);
 
-  // Store the embedding in Redis.
-  logDetail('    Storing embedding in Redis...');
-  await storeEmbedding({
-    redisClient,
-    id,
-    embedding,
-    timestamp: createdTimestamp,
-  });
-  logDetail('    Stored embedding in Redis!');
+    // Store the embedding in Redis.
+    logDetail('    Storing embedding in Redis...');
+    await storeEmbedding({
+      redisClient,
+      id,
+      embedding,
+      timestamp: createdTimestamp,
+    });
+    logDetail('    Stored embedding in Redis!');
+  } else {
+    logDetail('  Embedding found in Redis!');
+    embedding = existingEmbedding;
+  }
 
   // Store the embedding in MongoDB.
-  logDetail('    Storing embedding in MongoDB...');
-  await storeVizEmbedding({
-    gateways,
-    id,
-    vector: embedding,
-  });
-  logDetail('    Stored embedding in MongoDB!');
-  // } else {
-  //   logDetail('  Embedding found in Redis!');
-  //   embedding = embeddingResult.value;
-  // }
+  // logDetail('    Storing embedding in MongoDB...');
+  // await storeVizEmbedding({
+  //   gateways,
+  //   id,
+  //   vector: embedding,
+  // });
+  // logDetail('    Stored embedding in MongoDB!');
 
   // Compute the forkedFrom and forkedFromIsBackfilled fields.
   const { forkedFrom, forkedFromIsBackfilled } = await computeForkedFrom({

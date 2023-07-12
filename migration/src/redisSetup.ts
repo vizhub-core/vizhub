@@ -1,4 +1,4 @@
-import { createClient } from 'redis';
+import { commandOptions, createClient } from 'redis';
 
 import { embeddingSize } from './generateEmbeddingOpenAI';
 
@@ -69,20 +69,14 @@ export const redisSetup = async (startFresh) => {
 // and returns as output a byte representation that Redis accepts.
 export const tobytes = (array) => Buffer.from(new Float32Array(array).buffer);
 
-// const frombytes = (redisResult) => {
-//   console.log('here');
-//   console.log(typeof redisResult);
-//   console.log(Buffer.from(redisResult));
-
-//   const array = new Float32Array(Buffer.from(redisResult));
-//   console.log('array', array);
-//   return array;
-//   // const array = new Float32Array(buffer.length / 4);
-//   // for (let i = 0; i < array.length; i++) {
-//   //   array[i] = buffer.readFloatLE(i * 4);
-//   // }
-//   // return array;
-// };
+// The inverse of tobytes, for parsing results out of hget.
+const frombytes = (buffer) => {
+  const array = new Float32Array(buffer.length / 4);
+  for (let i = 0; i < array.length; i++) {
+    array[i] = buffer.readFloatLE(i * 4);
+  }
+  return array;
+};
 
 // Stores an embedding in Redis.
 // See also: https://redis.io/commands/hset
@@ -102,16 +96,18 @@ export const storeEmbedding = async ({
   ]);
 };
 
-// export const getEmbedding = async ({ redisClient, id }) => {
-//   const redisResult = await redisClient.hGet(id, 'v');
-//   // console.log(frombytes(redisResult));
-//   // const redisEmbedding = await redisClient.sendCommand(['HGET', id, 'v']);
-//   // if (redisEmbedding) {
-//   //   console.log('redisEmbedding', redisEmbedding);
-//   //   process.exit();
-//   //   const embedding = frombytes(redisEmbedding);
-//   //   return ok(embedding);
-//   // } else {
-//   //   return err(resourceNotFoundError(id));
-//   // }
-// };
+// Gets an embedding from Redis.
+export const getEmbedding = async ({
+  redisClient,
+  id,
+}): Promise<Float32Array | null> => {
+  const redisResult = await redisClient.hGet(
+    commandOptions({ returnBuffers: true }),
+    id,
+    'v',
+  );
+  if (redisResult === null) {
+    return null;
+  }
+  return frombytes(redisResult);
+};
