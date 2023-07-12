@@ -113,7 +113,7 @@ export const getInfosTest = () => {
         ...primordialViz.info,
         id: `viz${i}`,
         forkedFrom: primordialViz.info.id,
-        scoreHackerHotLastUpdated: i * 3 + 100,
+        popularity: i * 3 + 100,
         forksCount: 100 - i,
       }));
 
