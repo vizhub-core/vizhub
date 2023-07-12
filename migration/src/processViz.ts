@@ -8,7 +8,7 @@ import { Collection } from 'mongodb-legacy';
 import { updateMigratedViz } from './updateMigratedViz';
 import { migratePrimordialViz } from './migratePrimordialViz';
 import { createMigratedViz } from './createMigratedViz';
-import { storeEmbedding, getEmbedding } from './redisSetup';
+import { storeEmbedding } from './redisSetup';
 import { VizV2 } from './VizV2';
 import { ScoreViz } from 'interactors';
 import { storeVizEmbedding } from './embeddings';
@@ -138,7 +138,7 @@ export const processViz = async ({
 
   if (!isAlreadyMigrated) {
     console.log(
-      '   This viz has not been migrated yet. Migrating viz for the first time...'
+      '   This viz has not been migrated yet. Migrating viz for the first time...',
     ); // Handle the primordial viz.
     if (isPrimordialViz) {
       console.log('   This is the primordial viz first migration!');

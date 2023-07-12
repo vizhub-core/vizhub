@@ -23,7 +23,7 @@ export const computePopularity = (info: Info): number => {
   const effectiveUpvotes = numUpvotes;
 
   const scoreHackerHotLastUpdated = infinityIfNaN(
-    hackerHotScore(effectiveUpvotes, lastUpdatedDate)
+    hackerHotScore(effectiveUpvotes, lastUpdatedDate),
   );
 
   return scoreHackerHotLastUpdated;

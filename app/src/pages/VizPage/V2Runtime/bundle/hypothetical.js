@@ -75,7 +75,7 @@ export default function rollupPluginHypothetical(options) {
             unixStyleF +
             '" normalized to "' +
             p +
-            '"!'
+            '"!',
         );
       }
       if (!isAbsolute(p) && !pathIsExternal) {
@@ -115,7 +115,7 @@ export default function rollupPluginHypothetical(options) {
                 importee +
                 '" normalized to "' +
                 normalizedImportee +
-                '"!'
+                '"!',
             );
           }
           importee = normalizedImportee;
@@ -129,7 +129,7 @@ export default function rollupPluginHypothetical(options) {
                 importer +
                 '" results in "' +
                 joinedImportee +
-                '"!'
+                '"!',
             );
           }
           importee = joinedImportee;

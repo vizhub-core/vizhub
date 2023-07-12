@@ -31,7 +31,7 @@ export const getInfosTest = () => {
       const infos = result.value;
       expect(infos.length).toEqual(1);
       expect(new Set(infos.map(({ data: { id } }) => id))).toEqual(
-        new Set([primordialViz.info.id])
+        new Set([primordialViz.info.id]),
       );
     });
 
@@ -57,7 +57,7 @@ export const getInfosTest = () => {
       const infos = result.value;
       expect(infos.length).toEqual(2);
       expect(new Set(infos.map(({ data: { id } }) => id))).toEqual(
-        new Set([primordialViz.info.id, 'viz2'])
+        new Set([primordialViz.info.id, 'viz2']),
       );
     });
 
@@ -90,7 +90,7 @@ export const getInfosTest = () => {
       assert(firstPageResult.outcome === 'success');
       expect(firstPageResult.value.length).toEqual(pageSize);
       expect(
-        new Set(firstPageResult.value.map(({ data: { id } }) => id))
+        new Set(firstPageResult.value.map(({ data: { id } }) => id)),
       ).toEqual(firstPage);
 
       // // Check that the second page is correct
@@ -100,7 +100,7 @@ export const getInfosTest = () => {
       assert(secondPageResult.outcome === 'success');
       expect(secondPageResult.value.length).toEqual(5);
       expect(
-        new Set(secondPageResult.value.map(({ data: { id } }) => id))
+        new Set(secondPageResult.value.map(({ data: { id } }) => id)),
       ).toEqual(secondPage);
     });
 
@@ -128,8 +128,8 @@ export const getInfosTest = () => {
       infos.sort((a, b) =>
         comparator(
           a[defaultSortOption.sortField],
-          b[defaultSortOption.sortField]
-        )
+          b[defaultSortOption.sortField],
+        ),
       );
       expect(resultInfos).toEqual(infos);
     });

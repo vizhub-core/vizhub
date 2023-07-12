@@ -14,7 +14,7 @@ export const redisSetup = async (startFresh) => {
   console.log(`    Check VIZHUB_V3_REDIS_URI and VIZHUB_V3_REDIS_PASSWORD.`);
   console.log(`    For example, in .bashrc, add:`);
   console.log(
-    `    export VIZHUB_V3_REDIS_URI=redis://redis-39227.c10.us-east-9-4.ec2.cloud.redislabs.com`
+    `    export VIZHUB_V3_REDIS_URI=redis://redis-39227.c10.us-east-9-4.ec2.cloud.redislabs.com`,
   );
   console.log(`    export VIZHUB_V3_REDIS_PASSWORD=...`);
 
@@ -102,16 +102,16 @@ export const storeEmbedding = async ({
   ]);
 };
 
-export const getEmbedding = async ({ redisClient, id }) => {
-  const redisResult = await redisClient.hGet(id, 'v');
-  console.log(frombytes(redisResult));
-  // const redisEmbedding = await redisClient.sendCommand(['HGET', id, 'v']);
-  // if (redisEmbedding) {
-  //   console.log('redisEmbedding', redisEmbedding);
-  //   process.exit();
-  //   const embedding = frombytes(redisEmbedding);
-  //   return ok(embedding);
-  // } else {
-  //   return err(resourceNotFoundError(id));
-  // }
-};
+// export const getEmbedding = async ({ redisClient, id }) => {
+//   const redisResult = await redisClient.hGet(id, 'v');
+//   // console.log(frombytes(redisResult));
+//   // const redisEmbedding = await redisClient.sendCommand(['HGET', id, 'v']);
+//   // if (redisEmbedding) {
+//   //   console.log('redisEmbedding', redisEmbedding);
+//   //   process.exit();
+//   //   const embedding = frombytes(redisEmbedding);
+//   //   return ok(embedding);
+//   // } else {
+//   //   return err(resourceNotFoundError(id));
+//   // }
+// };

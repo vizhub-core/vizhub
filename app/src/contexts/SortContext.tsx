@@ -30,7 +30,7 @@ export const SortProvider = ({ children }) => {
         return urlSearchParams;
       });
     },
-    [setSearchParams]
+    [setSearchParams],
   );
 
   const value = useMemo(() => ({ sortId, setSortId }), [sortId, setSortId]);

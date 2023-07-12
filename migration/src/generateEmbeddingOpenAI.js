@@ -34,7 +34,7 @@ function truncateIfNeeded(str) {
   if (tokens.length > maxTokens) {
     str = decode(tokens.slice(0, maxTokens));
     console.log(
-      `Warning: text is too long. Truncating ${tokens.length} to ${maxTokens} tokens.`
+      `Warning: text is too long. Truncating ${tokens.length} to ${maxTokens} tokens.`,
     );
   }
   return str;

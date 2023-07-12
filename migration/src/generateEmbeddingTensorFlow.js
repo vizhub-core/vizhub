@@ -11,12 +11,12 @@ export const generateEmbeddingTensorFlow = async (goodFiles) => {
     // where someone apparently pasted data into the file name field
     .map(
       ({ name, text }) =>
-        name?.substring(0, 100) + ' ' + text?.substring(0, 4000)
+        name?.substring(0, 100) + ' ' + text?.substring(0, 4000),
     )
     .join(' ')
     .replace(
       /\n|\/\/|<|!|>|\/|{|}|=|;|@|\.|"|\(|\)|`|\+|:|,|'|\||\$|-|\[|\]|\?|#|\*|\\n|_|\d\d+|’|%/g,
-      ' '
+      ' ',
     )
     // https://stackoverflow.com/questions/1981349/regex-to-replace-multiple-spaces-with-a-single-space
     .replace(/\s\s+/g, ' ');

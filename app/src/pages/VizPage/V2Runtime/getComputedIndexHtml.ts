@@ -74,13 +74,13 @@ export const getComputedIndexHtml = (files: FilesV2) => {
     // Inject bundle.js script tag if needed.
     const htmlWithBundleScriptTemplate = injectBundleScript(
       htmlTemplate,
-      files
+      files,
     );
 
     // Inject dependencies script tag(s) if needed, based on package.json.
     const indexHtml = injectDependenciesScript(
       htmlWithBundleScriptTemplate,
-      files
+      files,
     );
 
     return indexHtml;

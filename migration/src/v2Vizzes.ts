@@ -9,7 +9,7 @@ export const v2Vizzes = async (
     startTime,
     endTime,
   }: { infoCollection: any; startTime: Timestamp; endTime: Timestamp },
-  callback
+  callback,
 ) => {
   const infoIterator = infoCollection.find({
     $and: [

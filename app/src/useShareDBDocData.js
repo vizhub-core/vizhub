@@ -39,7 +39,7 @@ export const useShareDBDocData = (snapshot, entityName) => {
       const connection = getConnection();
       const shareDBDoc = connection.get(
         toCollectionName(entityName),
-        snapshot.data.id
+        snapshot.data.id,
       );
       shareDBDoc.ingestSnapshot(snapshot, logShareDBError);
       shareDBDoc.subscribe(logShareDBError);

@@ -36,12 +36,12 @@ export const seoMetaTags = ({
     <meta property="og:description" content="${descriptionSanitized}"/>`
         : ''
     }${
-    image
-      ? `\n    <meta name="twitter:image" content="${image}"/>
+      image
+        ? `\n    <meta name="twitter:image" content="${image}"/>
     <meta name="twitter:card" content="summary_large_image"/>
     <meta property="og:image" content="${image}"/>`
-      : ''
-  }
+        : ''
+    }
     <meta name="twitter:domain" content="vizhub.com"/>
     <meta property="og:site_name" content="VizHub"/>
     <meta property="og:type" content="article"/>`;

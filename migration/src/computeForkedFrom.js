@@ -47,7 +47,7 @@ export const computeForkedFrom = async ({
         logDetail(
           `      Guessed ${guessIsCorrect ? 'correctly' : 'incorrectly'} that ${
             vizV2.info.id
-          } is forked from ${mostSimilar}`
+          } is forked from ${mostSimilar}`,
         );
         if (guessIsCorrect) {
           guessesCorrect++;
@@ -72,7 +72,7 @@ export const computeForkedFrom = async ({
         timestamp: vizV2.info.createdTimestamp,
       });
       logDetail(
-        `        Guessed that ${vizV2.info.id} is forked from ${mostSimilar}`
+        `        Guessed that ${vizV2.info.id} is forked from ${mostSimilar}`,
       );
       forkedFrom = mostSimilar;
       forkedFromIsBackfilled = true;

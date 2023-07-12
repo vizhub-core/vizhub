@@ -7,6 +7,7 @@ export const VizKit = ({ baseUrl, ssrFetch = null }) => {
   // only supports up to Node 16, which is missing native `fetch`.
   // Once our infra supports Node 18, we can drop 'node-fetch' and delete this.
   let fetch;
+  // @ts-ignore
   if (import.meta.env.SSR) {
     fetch = ssrFetch;
   } else {

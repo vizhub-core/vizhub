@@ -77,7 +77,7 @@ const migrate = async () => {
     // Define a one-week batch of vizzes to migrate.
     const startTimeDate = timeWeek.offset(
       firstVizCreationDateFloored,
-      batchNumber
+      batchNumber,
     );
     const endTimeDate = timeWeek.offset(startTimeDate, 1);
 
@@ -124,7 +124,7 @@ const migrate = async () => {
         // If the viz is invalid, skip it.
         if (!isVizV2Valid) {
           console.log(
-            `  Skipping invalid V2 viz #${i}: ${info.id} ${info.title} `
+            `  Skipping invalid V2 viz #${i}: ${info.id} ${info.title} `,
           );
           return;
         }
@@ -162,8 +162,8 @@ const migrate = async () => {
                 userId,
                 gateways,
                 userCollection,
-              })
-            )
+              }),
+            ),
           );
           process.stdout.write('\n');
         }
@@ -178,8 +178,8 @@ const migrate = async () => {
                 userId,
                 gateways,
                 userCollection,
-              })
-            )
+              }),
+            ),
           );
           process.stdout.write('\n');
         }
@@ -196,7 +196,7 @@ const migrate = async () => {
         }
         logDetail(`Validation passed!`);
         // await reportProgress({ i, n });
-      }
+      },
     );
 
     console.log(`\n\nFinished iterating ${numVizzesProcessed} vizzes!`);

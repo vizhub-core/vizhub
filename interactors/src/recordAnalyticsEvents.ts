@@ -19,7 +19,7 @@ export const RecordAnalyticsEvents = (gateways, testing = false) => {
 
   const initQueueProcessor = (
     { getAnalyticsEvent, saveAnalyticsEvent },
-    testing
+    testing,
   ) => {
     // Ensure a single setInterval call, even if multiple instances of SendEvent.
     if (initialized) return;
@@ -39,9 +39,9 @@ export const RecordAnalyticsEvents = (gateways, testing = false) => {
               ...innerAccumulator,
               [eventID]: true,
             }),
-            accumulator
+            accumulator,
           );
-        }, {})
+        }, {}),
       );
       if (allEventIds.length > 0) {
         // This is intentional, to test that the system is working in production
@@ -53,7 +53,7 @@ export const RecordAnalyticsEvents = (gateways, testing = false) => {
         // Note that a given record may be incremented more than once.
         const existingAnalyticsEvents = (
           await Promise.all(
-            allEventIds.map((eventId) => getAnalyticsEvent(eventId))
+            allEventIds.map((eventId) => getAnalyticsEvent(eventId)),
           )
         )
           .filter((result) => result.outcome === 'success')
@@ -64,7 +64,7 @@ export const RecordAnalyticsEvents = (gateways, testing = false) => {
           existingAnalyticsEvents.map((analyticsEvent) => [
             analyticsEvent.id,
             analyticsEvent,
-          ])
+          ]),
         );
 
         // For each queue entry, increment its records (mutating recordsByID).
@@ -85,8 +85,8 @@ export const RecordAnalyticsEvents = (gateways, testing = false) => {
         // Save the updated events.
         await Promise.all(
           allEventIds.map((eventId) =>
-            saveAnalyticsEvent(analyticsEvents.get(eventId))
-          )
+            saveAnalyticsEvent(analyticsEvents.get(eventId)),
+          ),
         );
       }
     };

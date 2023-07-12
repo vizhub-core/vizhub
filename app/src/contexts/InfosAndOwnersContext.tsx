@@ -78,7 +78,7 @@ const reducer = (state: PaginationState, action: PaginationAction) => {
               ...accumulator,
               [snapshot.data.id]: snapshot,
             }),
-            {}
+            {},
           ),
         },
       };
@@ -130,15 +130,15 @@ export const InfosAndOwnersProvider = ({
           ...accumulator,
           [snapshot.data.id]: snapshot,
         }),
-        {}
+        {},
       ),
     }),
-    [sortId, infoSnapshots, ownerUserSnapshots]
+    [sortId, infoSnapshots, ownerUserSnapshots],
   );
 
   const [paginationState, paginationDispatch] = useReducer(
     reducer,
-    initialPaginationState
+    initialPaginationState,
   );
 
   const fetchNextPage = useCallback(() => {
@@ -169,7 +169,7 @@ export const InfosAndOwnersProvider = ({
 
   const allInfoSnapshots = useMemo(
     () => paginationState.pages[sortId].flat(),
-    [paginationState.pages, sortId]
+    [paginationState.pages, sortId],
   );
 
   const value = useMemo(
@@ -179,7 +179,7 @@ export const InfosAndOwnersProvider = ({
       ownerUserSnapshotsById: paginationState.ownerUserSnapshotsById,
       isLoadingNextPage: paginationState.nextPageStatus === NEXT_PAGE_REQUESTED,
     }),
-    [allInfoSnapshots, fetchNextPage, paginationState]
+    [allInfoSnapshots, fetchNextPage, paginationState],
   );
 
   return (

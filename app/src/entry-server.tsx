@@ -14,5 +14,5 @@ export const render = (pageData) =>
       <SSRProvider>
         <App pageData={pageData} />
       </SSRProvider>
-    </StaticRouter>
+    </StaticRouter>,
   );

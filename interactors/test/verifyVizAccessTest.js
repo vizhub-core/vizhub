@@ -49,7 +49,7 @@ export const verifyVizAccessTest = () => {
           info: primordialViz.info,
           action: READ,
           expected: true,
-        })
+        }),
       );
       it(
         'read private viz, non-owner non-collaborator',
@@ -59,7 +59,7 @@ export const verifyVizAccessTest = () => {
           folders: [sampleFolder],
           action: READ,
           expected: false,
-        })
+        }),
       );
       it(
         'read private viz, non-owner non-collaborator, no folder',
@@ -72,7 +72,7 @@ export const verifyVizAccessTest = () => {
           },
           action: READ,
           expected: false,
-        })
+        }),
       );
       it(
         'write viz, owner',
@@ -81,7 +81,7 @@ export const verifyVizAccessTest = () => {
           info: primordialViz.info,
           action: WRITE,
           expected: true,
-        })
+        }),
       );
       it(
         'delete viz, owner',
@@ -90,7 +90,7 @@ export const verifyVizAccessTest = () => {
           info: primordialViz.info,
           action: DELETE,
           expected: true,
-        })
+        }),
       );
       it(
         'write viz, non-owner non-collaborator',
@@ -100,7 +100,7 @@ export const verifyVizAccessTest = () => {
           folders: [sampleFolder],
           action: WRITE,
           expected: false,
-        })
+        }),
       );
       it(
         'delete viz, non-owner non-collaborator',
@@ -110,7 +110,7 @@ export const verifyVizAccessTest = () => {
           folders: [sampleFolder],
           action: DELETE,
           expected: false,
-        })
+        }),
       );
     });
     describe('cases requiring Permissions queries', () => {
@@ -123,7 +123,7 @@ export const verifyVizAccessTest = () => {
           permissions: [samplePermission],
           folders: [sampleFolder],
           expected: true,
-        })
+        }),
       );
       it(
         'read private viz, collaborator (editor), no folder',
@@ -138,7 +138,7 @@ export const verifyVizAccessTest = () => {
           permissions: [samplePermission],
           folders: [sampleFolder],
           expected: true,
-        })
+        }),
       );
       it(
         'read private viz, collaborator (viewer)',
@@ -149,7 +149,7 @@ export const verifyVizAccessTest = () => {
           permissions: [{ ...samplePermission, role: VIEWER }],
           folders: [sampleFolder],
           expected: true,
-        })
+        }),
       );
       it(
         'read private viz, collaborator (admin)',
@@ -160,7 +160,7 @@ export const verifyVizAccessTest = () => {
           permissions: [{ ...samplePermission, role: ADMIN }],
           folders: [sampleFolder],
           expected: true,
-        })
+        }),
       );
       it(
         'write private viz, collaborator (editor)',
@@ -171,7 +171,7 @@ export const verifyVizAccessTest = () => {
           permissions: [samplePermission],
           folders: [sampleFolder],
           expected: true,
-        })
+        }),
       );
       it(
         'write private viz, collaborator (viewer)',
@@ -182,7 +182,7 @@ export const verifyVizAccessTest = () => {
           permissions: [{ ...samplePermission, role: VIEWER }],
           folders: [sampleFolder],
           expected: false,
-        })
+        }),
       );
       it(
         'write private viz, collaborator (admin)',
@@ -193,7 +193,7 @@ export const verifyVizAccessTest = () => {
           permissions: [{ ...samplePermission, role: ADMIN }],
           folders: [sampleFolder],
           expected: true,
-        })
+        }),
       );
       it(
         'delete private viz, collaborator (editor)',
@@ -204,7 +204,7 @@ export const verifyVizAccessTest = () => {
           permissions: [samplePermission],
           folders: [sampleFolder],
           expected: false,
-        })
+        }),
       );
       it(
         'delete private viz, collaborator (viewer)',
@@ -215,7 +215,7 @@ export const verifyVizAccessTest = () => {
           permissions: [{ ...samplePermission, role: VIEWER }],
           folders: [sampleFolder],
           expected: false,
-        })
+        }),
       );
       it(
         'delete private viz, collaborator (admin)',
@@ -226,7 +226,7 @@ export const verifyVizAccessTest = () => {
           permissions: [{ ...samplePermission, role: ADMIN }],
           folders: [sampleFolder],
           expected: true,
-        })
+        }),
       );
     });
     describe('cases of Permissions on folders', () => {
@@ -239,7 +239,7 @@ export const verifyVizAccessTest = () => {
           permissions: [{ ...samplePermission, resource: sampleFolder.id }],
           folders: [sampleFolder],
           expected: true,
-        })
+        }),
       );
       it(
         'write private viz, collaborator (editor) on parent folder',
@@ -250,7 +250,7 @@ export const verifyVizAccessTest = () => {
           permissions: [{ ...samplePermission, resource: sampleFolder.id }],
           folders: [sampleFolder],
           expected: true,
-        })
+        }),
       );
       it(
         'delete private viz, collaborator (editor) on parent folder',
@@ -261,7 +261,7 @@ export const verifyVizAccessTest = () => {
           permissions: [{ ...samplePermission, resource: sampleFolder.id }],
           folders: [sampleFolder],
           expected: false,
-        })
+        }),
       );
       it(
         'delete private viz, collaborator (admin) on parent folder',
@@ -274,7 +274,7 @@ export const verifyVizAccessTest = () => {
           ],
           folders: [sampleFolder],
           expected: true,
-        })
+        }),
       );
 
       it(
@@ -290,7 +290,7 @@ export const verifyVizAccessTest = () => {
           permissions: [{ ...samplePermission, resource: sampleFolder.id }],
           folders: [sampleFolder, folder2],
           expected: true,
-        })
+        }),
       );
 
       it(
@@ -306,7 +306,7 @@ export const verifyVizAccessTest = () => {
           permissions: [{ ...samplePermission, resource: sampleFolder.id }],
           folders: [sampleFolder, folder2, folder3],
           expected: true,
-        })
+        }),
       );
     });
   });

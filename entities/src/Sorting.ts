@@ -25,7 +25,7 @@ export const sortOptions: Array<SortOption> = [
 ];
 
 const sortOptionsMap = new Map<SortId, SortOption>(
-  sortOptions.map((option) => [option.id, option])
+  sortOptions.map((option) => [option.id, option]),
 );
 
 // The default for sorting views of many visualizations.

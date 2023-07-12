@@ -10,7 +10,7 @@ export const SortControl = ({
   // Possible sorts that are not the current sort.
   const otherSortOptions = useMemo(
     () => (sortOptions ? sortOptions.filter(({ id }) => id !== sortId) : []),
-    [sortOptions, sortId]
+    [sortOptions, sortId],
   );
 
   // Used for looking up a sort label by id.
@@ -19,9 +19,9 @@ export const SortControl = ({
       new Map(
         sortOptions
           ? sortOptions.map((sortOption) => [sortOption.id, sortOption])
-          : []
+          : [],
       ),
-    [sortOptions]
+    [sortOptions],
   );
 
   return (
