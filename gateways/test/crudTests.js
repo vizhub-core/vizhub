@@ -20,6 +20,7 @@ import {
   sampleDeployment,
   sampleMergeRequest,
   sampleBetaProgramSignup,
+  sampleEmbedding,
 } from './fixtures';
 
 export const crudTests = (entityName, sampleEntity) => {
@@ -96,4 +97,5 @@ export const sampleEntities = {
   Deployment: sampleDeployment,
   MergeRequest: sampleMergeRequest,
   BetaProgramSignup: sampleBetaProgramSignup,
+  Embedding: sampleEmbedding,
 };

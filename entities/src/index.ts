@@ -82,6 +82,8 @@ export {
 
 export type { AnalyticsEvent, AnalyticsEventId } from './Analytics';
 
+export type { Embedding, EmbeddingId, EmbeddingType } from './Embedding';
+
 export {
   sortOptions,
   getSortField,

@@ -1,7 +1,6 @@
-import { Info } from 'entities';
+import { Info, FilesV2 } from 'entities';
 import { logDetail } from './logDetail';
 import { generateEmbeddingOpenAI } from './generateEmbeddingOpenAI';
-import { storeEmbedding } from './storeEmbedding';
 import { computeForkedFrom } from './computeForkedFrom';
 import { isolateGoodFiles } from './isolateGoodFiles';
 import { Gateways } from 'gateways';
@@ -9,13 +8,16 @@ import { Collection } from 'mongodb-legacy';
 import { updateMigratedViz } from './updateMigratedViz';
 import { migratePrimordialViz } from './migratePrimordialViz';
 import { createMigratedViz } from './createMigratedViz';
-import { FilesV2 } from './VizV2';
+import { storeEmbedding, getEmbedding } from './redisSetup';
+import { VizV2 } from './VizV2';
+import { ScoreViz } from 'interactors';
+import { storeVizEmbedding } from './embeddings';
 
 // Hardcoded ID of the primordial viz (actually in the V2 database)
 const primordialVizId = '86a75dc8bdbe4965ba353a79d4bd44c8';
 
 // Processes a single viz.
-// Returns true if the viz is valid (worth of migration), false if not.
+// Returns true if the viz is valid (worthy of migration), false if not.
 // Assumption: the same viz can be processed multiple times without issue.
 // e.g. if the process is interrupted, it can be restarted, or
 // if the process is run multiple times, it will not cause issues, or
@@ -27,7 +29,7 @@ export const processViz = async ({
   redisClient,
   contentCollection,
 }: {
-  vizV2: any;
+  vizV2: VizV2;
   gateways: Gateways;
   i: number;
   redisClient: any;
@@ -35,7 +37,14 @@ export const processViz = async ({
 }): Promise<boolean> => {
   // Setup
 
-  const { id, createdTimestamp } = vizV2.info;
+  const { id, createdTimestamp, privacy } = vizV2.info;
+
+  // If the viz is private, skip it for now.
+  if (privacy === 'private') {
+    console.log('  Private viz, skipping this viz.');
+    return false;
+  }
+
   const isPrimordialViz = id === primordialVizId;
 
   // Sometimes titles have leading or trailing spaces, so trim that.
@@ -79,10 +88,18 @@ export const processViz = async ({
   // If we are here, it means we are going to migrate this viz,
   // either because it has not been migrated yet,
   // or because it has been updated since the last migration.
+  let embedding;
 
+  // TODO If the embedding is already stored in Redis, don't re-compute it.
+  // This wreckage is a previous attempt at this.
+  // The solutio may lie in using https://www.npmjs.com/package/redis-parser
+  // logDetail('  Checking if embedding is already stored in Redis...');
+  // const embeddingResult = await getEmbedding({ redisClient, id });
+  // if (embeddingResult.outcome === 'failure') {
   // Generate the embedding for the viz (latest version).
+  // logDetail('  Embedding not found in Redis,');
   logDetail('  Generating embedding');
-  const embedding = await generateEmbeddingOpenAI(goodFiles);
+  embedding = await generateEmbeddingOpenAI(goodFiles);
 
   // Store the embedding in Redis.
   logDetail('    Storing embedding in Redis...');
@@ -92,7 +109,20 @@ export const processViz = async ({
     embedding,
     timestamp: createdTimestamp,
   });
-  logDetail('    Stored embedding!');
+  logDetail('    Stored embedding in Redis!');
+
+  // Store the embedding in MongoDB.
+  logDetail('    Storing embedding in MongoDB...');
+  await storeVizEmbedding({
+    gateways,
+    id,
+    vector: embedding,
+  });
+  logDetail('    Stored embedding in MongoDB!');
+  // } else {
+  //   logDetail('  Embedding found in Redis!');
+  //   embedding = embeddingResult.value;
+  // }
 
   // Compute the forkedFrom and forkedFromIsBackfilled fields.
   const { forkedFrom, forkedFromIsBackfilled } = await computeForkedFrom({
@@ -139,7 +169,6 @@ export const processViz = async ({
     }
   }
 
-  // TODO bring this back
   // This gets called in all cases:
   // - if the viz has not been migrated yet, it gets called after the viz is created.
   // - if the viz has already been migrated, it gets called after the viz is updated.
@@ -150,6 +179,14 @@ export const processViz = async ({
     infoMigrated,
     goodFiles,
   });
+
+  // Score the viz
+  const scoreViz = ScoreViz(gateways);
+  console.log('  Scoring viz...');
+  await scoreViz({ viz: id });
+
+  // Compute the embedding for the viz (latest version).
+  // const embedding = await generateEmbeddingOpenAI(goodFiles);
 
   return true;
 };

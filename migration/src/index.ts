@@ -106,6 +106,13 @@ const migrate = async () => {
 
         // Migrate the viz! Does not includes Upvotes or Users.
         logDetail(`Processing viz #${i}: ${info.id} ${info.title} `);
+
+        // If it's a dry-run, bail out here.
+        if (process.argv.includes('--dry')) {
+          console.log('  Dry run, exiting now... All connections work!');
+          process.exit(0);
+        }
+
         const isVizV2Valid: boolean = await processViz({
           vizV2,
           gateways,
