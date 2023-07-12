@@ -60,7 +60,7 @@ export const VizPageBody = ({
             },
           ]
         : [],
-    [authenticatedUser]
+    [authenticatedUser],
   );
 
   // A function that renders markdown to HTML.
@@ -86,7 +86,7 @@ export const VizPageBody = ({
         />
       );
     },
-    [srcdoc, vizHeight]
+    [srcdoc, vizHeight],
   );
 
   return (

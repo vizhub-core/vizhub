@@ -67,6 +67,6 @@ export const authentication = ({ app, env, gateways }) => {
         callback: '/login/callback',
       },
       afterCallback,
-    })
+    }),
   );
 };

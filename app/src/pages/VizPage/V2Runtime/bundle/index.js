@@ -11,7 +11,7 @@ const escapeClosingScriptTag = (code) =>
 const transformFilesToObject = (files) =>
   files
     .filter(
-      (file) => file.name.endsWith('.js')
+      (file) => file.name.endsWith('.js'),
       // TODO: add support for other file types
       // file.name.endsWith('.svelte') ||
       // file.name.endsWith('.jsx') ||
@@ -60,7 +60,7 @@ export const bundle = async (files) => {
   //
   if (output.length !== 1) {
     throw new Error(
-      'Expected Rollup output length to be 1. This Error is a VizHub bug if it happens.'
+      'Expected Rollup output length to be 1. This Error is a VizHub bug if it happens.',
     );
   }
   const { code, map } = output[0];

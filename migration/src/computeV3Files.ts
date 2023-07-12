@@ -1,13 +1,12 @@
-import { Content, Files } from 'entities';
+import { Content, Files, FileV2, FilesV2 } from 'entities';
 import { v4 as uuid } from 'uuid';
-import { FileV2, FilesV2 } from './VizV2';
 
 // A file ID is an 8 character uuid (random characters).
 const generateFileId = () => uuid().substr(0, 8);
 
 export const computeV3Files = (
   goodFiles: FilesV2,
-  oldContentV3?: Content
+  oldContentV3?: Content,
 ): Files => {
   let getFileId: (file?: FileV2) => string = generateFileId;
 
@@ -18,10 +17,10 @@ export const computeV3Files = (
     const keys = Object.keys(oldContentV3.files);
 
     const fileIdByName = new Map<string, string>(
-      keys.map((fileId) => [oldContentV3.files[fileId].name, fileId])
+      keys.map((fileId) => [oldContentV3.files[fileId].name, fileId]),
     );
     const fileIdByText = new Map<string, string>(
-      keys.map((fileId) => [oldContentV3.files[fileId].text, fileId])
+      keys.map((fileId) => [oldContentV3.files[fileId].text, fileId]),
     );
 
     // Try to match on the name, in case text was changed (most common case).
@@ -35,7 +34,7 @@ export const computeV3Files = (
 
   const filesOutOfOrder = goodFiles.reduce(
     (accumulator, file) => ({ ...accumulator, [getFileId(file)]: file }),
-    {}
+    {},
   );
 
   const files = {};

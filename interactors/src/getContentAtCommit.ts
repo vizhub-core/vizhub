@@ -46,7 +46,7 @@ export const GetContentAtCommit =
       } catch (error: any) {
         if (debug) {
           console.log(
-            'handling error from `json1.apply` in getContentAtCommit'
+            'handling error from `json1.apply` in getContentAtCommit',
           );
           console.log('content', content);
           console.log('commit.ops', commit.ops);
@@ -58,8 +58,8 @@ export const GetContentAtCommit =
             commit.id,
             error.message +
               '\nin getContentAtCommit\ncommit.ops: \n' +
-              JSON.stringify(commit.ops, null, 2)
-          )
+              JSON.stringify(commit.ops, null, 2),
+          ),
         );
       }
 

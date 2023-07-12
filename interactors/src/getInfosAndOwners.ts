@@ -45,18 +45,18 @@ export const GetInfosAndOwners = (gateways: Gateways) => {
 
     // Figure out the set of unique users that are owners of these infos.
     const ownerUsers: Array<UserId> = Array.from(
-      new Set(infoSnapshots.map((snapshot) => snapshot.data.owner))
+      new Set(infoSnapshots.map((snapshot) => snapshot.data.owner)),
     );
 
     // Remove any users that we don't need to fetch.
     const noNeedToFetchUsersSet = new Set(noNeedToFetchUsers);
     const ownerUsersToFetch = ownerUsers.filter(
-      (ownerUser) => !noNeedToFetchUsersSet.has(ownerUser)
+      (ownerUser) => !noNeedToFetchUsersSet.has(ownerUser),
     );
 
     // Fetch the user snapshots for these owners.
     const ownerUserSnapshotsResult = await gateways.getUsersByIds(
-      ownerUsersToFetch
+      ownerUsersToFetch,
     );
     if (ownerUserSnapshotsResult.outcome === 'failure')
       return ownerUserSnapshotsResult;

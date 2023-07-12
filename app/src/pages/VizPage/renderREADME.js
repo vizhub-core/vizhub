@@ -21,7 +21,7 @@ marked
   .use(
     gfmHeadingId({
       prefix: 'heading-',
-    })
+    }),
   )
   // Opt out of the default behavior of mangling emails (gets rid of warning).
   .use({ mangle: false, renderer });
@@ -32,7 +32,7 @@ marked
 const responsiveYouTube = (html) =>
   html.replace(
     /<iframe(.+)youtube(.+)<\/iframe>/g,
-    (match) => `<div class='responsive-youtube'>${match}</div>`
+    (match) => `<div class='responsive-youtube'>${match}</div>`,
   );
 
 // Renders README text as HTML.
@@ -58,6 +58,6 @@ export const renderREADME = (readmeText) =>
               'allowfullscreen',
             ],
           },
-        })
+        }),
       )
     : '';

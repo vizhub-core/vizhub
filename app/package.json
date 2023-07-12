@@ -27,7 +27,7 @@
   "dependencies": {
     "@codemirror/lang-javascript": "^6.1.9",
     "@replit/codemirror-interact": "^6.1.0",
-    "@sentry/node": "^7.56.0",
+    "@sentry/node": "^7.57.0",
     "@teamwork/websocket-json-stream": "^2.0.0",
     "@types/react-router-dom": "^5.3.3",
     "buble": "^0.20.0",
@@ -38,13 +38,13 @@
     "jose": "^4.14.4",
     "jsdom": "^22.1.0",
     "jsesc": "^3.0.2",
-    "marked": "^5.1.0",
+    "marked": "^5.1.1",
     "marked-gfm-heading-id": "^3.0.4",
     "mongodb-legacy": "^5.0.0",
     "path-posix": "^1.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.14.0",
+    "react-router-dom": "^6.14.1",
     "rollup-pluginutils": "^2.8.2",
     "sharedb": "^4.0.0",
     "sharedb-mongo": "^4.0.0",
@@ -54,14 +54,14 @@
     "xss": "^1.0.14"
   },
   "devDependencies": {
-    "@vitejs/plugin-react": "^4.0.1",
+    "@vitejs/plugin-react": "^4.0.3",
     "compression": "^1.7.4",
     "express": "^4.18.2",
-    "prettier": "^2.8.8",
+    "prettier": "^3.0.0",
     "rollup-plugin-visualizer": "^5.9.2",
     "sass": "^1.63.6",
     "serve-static": "^1.15.0",
-    "vite": "^4.3.9",
-    "vitest": "^0.32.2"
+    "vite": "^4.4.3",
+    "vitest": "^0.33.0"
   }
 }

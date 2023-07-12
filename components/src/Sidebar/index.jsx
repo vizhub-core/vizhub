@@ -30,7 +30,7 @@ function ListBox(props) {
             <ListBoxSection key={item.key} section={item} state={state} />
           ) : (
             <Option key={item.key} item={item} state={state} />
-          )
+          ),
         )}
       </ul>
     </>
@@ -43,7 +43,7 @@ function Option({ item, state }) {
   const { optionProps, isSelected, isDisabled } = useOption(
     { key: item.key },
     state,
-    ref
+    ref,
   );
 
   // Determine whether we should show a keyboard

@@ -79,7 +79,7 @@ export default function (template, files) {
         // if we found one, replace it with the code and return.
         template = template.replace(
           re,
-          '<style>' + files[file].content + '</style>'
+          '<style>' + files[file].content + '</style>',
         );
         return;
       }

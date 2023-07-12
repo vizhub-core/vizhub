@@ -17,10 +17,10 @@ export const getUserByEmailsTest = () => {
       const { saveUser, getUserByEmails } = gateways;
       await saveUser(userJoe);
       expect((await getUserByEmails(['joe@hugecorp.com'])).value.data).toEqual(
-        userJoe
+        userJoe,
       );
       expect(
-        (await getUserByEmails(['joe@joes-diner.com'])).value.data
+        (await getUserByEmails(['joe@joes-diner.com'])).value.data,
       ).toEqual(userJoe);
     });
   });

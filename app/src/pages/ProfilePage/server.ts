@@ -33,7 +33,7 @@ ProfilePage.getPageData = async ({ gateways, params, query, auth0User }) => {
     let authenticatedUserSnapshot = null;
     if (auth0User) {
       const authenticatedUserResult = await getUser(
-        parseAuth0Sub(auth0User.sub)
+        parseAuth0Sub(auth0User.sub),
       );
       if (authenticatedUserResult.outcome === 'failure') {
         console.log('Error when fetching authenticated user:');

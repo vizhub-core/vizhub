@@ -5,16 +5,19 @@ export const OwnerControl = ({ owner, setOwner, possibleOwners }) => {
   // Possible owners that are not the current owner.
   const otherPossibleOwners = useMemo(
     () => possibleOwners.filter(({ id }) => id !== owner.id),
-    [possibleOwners, owner]
+    [possibleOwners, owner],
   );
 
   // Used for looking up a possible owner by id.
   const ownersById = useMemo(
     () =>
       new Map(
-        possibleOwners.map((possibleOwner) => [possibleOwner.id, possibleOwner])
+        possibleOwners.map((possibleOwner) => [
+          possibleOwner.id,
+          possibleOwner,
+        ]),
       ),
-    [possibleOwners]
+    [possibleOwners],
   );
 
   return (

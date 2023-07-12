@@ -113,7 +113,7 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
       await collection.updateOne(
         { _id: entity.id },
         { $set: doc },
-        { upsert: true }
+        { upsert: true },
       );
 
       return ok('success');
@@ -174,7 +174,7 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
 
           if (error) return resolve(err(error));
           resolve(ok(results.map((doc) => doc.toSnapshot())));
-        }
+        },
       );
     });
 
@@ -208,7 +208,7 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
           query.destroy();
           if (error) return resolve(err(error));
           resolve(ok(results.map((doc) => doc.toSnapshot())));
-        }
+        },
       );
     });
 
@@ -262,7 +262,7 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
     // If two commits happen during the same second, the correct ordering
     // cannot be determined by timestamps alone.
     let ancestors = result.ancestors.sort((a, b) =>
-      descending(a.order, b.order)
+      descending(a.order, b.order),
     );
     // Derive the final result as an array of pure Commit objects,
     // including the one that matches commitId.
@@ -337,7 +337,7 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
 
     const [result] = results;
     const ancestors = result.ancestors.sort((a, b) =>
-      descending(a.order, b.order)
+      descending(a.order, b.order),
     );
     ancestors.push(result);
 
@@ -352,7 +352,7 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
         parent,
         owner,
         visibility,
-      })
+      }),
     );
 
     return ok(folders);
@@ -372,7 +372,7 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
             return resolve(err(resourceNotFoundError(userName)));
           }
           resolve(ok(results[0].toSnapshot()));
-        }
+        },
       );
     });
 
@@ -395,7 +395,7 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
             return resolve(err(resourceNotFoundError(emails)));
           }
           resolve(ok(results[0].toSnapshot()));
-        }
+        },
       );
     });
 
@@ -410,7 +410,7 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
           query.destroy();
           if (error) return resolve(err(error));
           resolve(ok(results.map((doc) => doc.toSnapshot())));
-        }
+        },
       );
     });
 
@@ -427,7 +427,7 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
           query.destroy();
           if (error) return resolve(err(error));
           resolve(ok(results.map((doc) => doc.toSnapshot())));
-        }
+        },
       );
     });
 
@@ -458,7 +458,7 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
       ...crud(
         entityName,
         toCollectionName(entityName),
-        noSnapshot[entityName] ? 'mongodb' : 'sharedb'
+        noSnapshot[entityName] ? 'mongodb' : 'sharedb',
       ),
     };
   }

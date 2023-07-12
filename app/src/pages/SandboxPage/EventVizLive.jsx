@@ -6,7 +6,7 @@ import { useShareDBDocData } from '../../useShareDBDocData';
 export const EventVizLive = ({ analyticsEventSnapshot, vizModule, title }) => {
   const analyticsEvent = useShareDBDocData(
     analyticsEventSnapshot,
-    'AnalyticsEvent'
+    'AnalyticsEvent',
   );
 
   return (

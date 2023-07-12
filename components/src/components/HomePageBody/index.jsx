@@ -14,7 +14,7 @@ export const HomePageBody = ({ onEmailSubmit, children }) => {
       event.preventDefault();
       onEmailSubmit(email);
     },
-    [email]
+    [email],
   );
 
   return (

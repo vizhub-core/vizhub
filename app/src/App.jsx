@@ -12,7 +12,7 @@ export const App = ({ pageData }) => {
   const location = useLocation();
   const url = useMemo(
     () => location.pathname + location.search,
-    [location.pathname, location.search]
+    [location.pathname, location.search],
   );
   if (!import.meta.env.SSR && url !== pageData.url) {
     console.log('Might need to fetch page data from client');

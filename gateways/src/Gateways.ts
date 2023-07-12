@@ -86,7 +86,7 @@ export interface Gateways {
 
   saveVizAuthorship(vizAuthorship: VizAuthorship): Promise<Result<Success>>;
   getVizAuthorship(
-    id: VizAuthorshipId
+    id: VizAuthorshipId,
   ): Promise<Result<Snapshot<VizAuthorship>>>;
   deleteVizAuthorship(id: VizAuthorshipId): Promise<Result<Success>>;
 
@@ -112,7 +112,7 @@ export interface Gateways {
 
   saveOrgMembership(orgMembership: OrgMembership): Promise<Result<Success>>;
   getOrgMembership(
-    id: OrgMembershipId
+    id: OrgMembershipId,
   ): Promise<Result<Snapshot<OrgMembership>>>;
   deleteOrgMembership(id: OrgMembershipId): Promise<Result<Success>>;
 
@@ -125,13 +125,13 @@ export interface Gateways {
   deleteCollection(id: CollectionId): Promise<Result<Success>>;
 
   saveCollectionMembership(
-    collectionMembership: CollectionMembership
+    collectionMembership: CollectionMembership,
   ): Promise<Result<Success>>;
   getCollectionMembership(
-    id: CollectionMembershipId
+    id: CollectionMembershipId,
   ): Promise<Result<Snapshot<CollectionMembership>>>;
   deleteCollectionMembership(
-    id: CollectionMembershipId
+    id: CollectionMembershipId,
   ): Promise<Result<Success>>;
 
   saveCommit(commit: Commit): Promise<Result<Success>>;
@@ -186,7 +186,7 @@ export interface Gateways {
   getCommitAncestors(
     id: CommitId,
     toNearestMilestone?: boolean,
-    start?: CommitId
+    start?: CommitId,
   ): Promise<Result<Array<Commit>>>;
 
   // getUserByEmails
@@ -210,7 +210,7 @@ export interface Gateways {
   // and any of the given resources.
   getPermissions(
     user: UserId,
-    resources: Array<ResourceId>
+    resources: Array<ResourceId>,
   ): Promise<Result<Array<Snapshot<Permission>>>>;
 
   // getInfos

@@ -28,7 +28,7 @@ export const createMigratedViz = async ({
   const forkedFromInfo = forkedFromInfoResult.value.data;
   const commitIdResult = await getCommitAtTimestamp(
     forkedFromInfo,
-    vizV2.info.createdTimestamp
+    vizV2.info.createdTimestamp,
   );
   if (commitIdResult.outcome === 'failure') return commitIdResult;
   const forkedFromCommitId: CommitId = commitIdResult.value;

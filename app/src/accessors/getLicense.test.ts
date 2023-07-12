@@ -26,7 +26,7 @@ describe('getLicense', () => {
             text: '{"license": "GPL-3.0"}',
           },
         },
-      })
+      }),
     ).toBe('GPL-3.0');
   });
 
@@ -41,7 +41,7 @@ describe('getLicense', () => {
             text: '{"license": "GPL',
           },
         },
-      })
+      }),
     ).toBe(defaultLicense);
   });
 });
