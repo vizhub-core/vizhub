@@ -54,6 +54,7 @@ export const noSnapshot = {
   Commit: true,
   Milestone: true,
   BetaProgramSignup: true,
+  Embedding: true,
 };
 
 // An in-memory implementation for gateways,

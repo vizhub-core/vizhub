@@ -11,6 +11,7 @@ import { createMigratedViz } from './createMigratedViz';
 import { storeEmbedding, getEmbedding } from './redisSetup';
 import { VizV2 } from './VizV2';
 import { ScoreViz } from 'interactors';
+import { storeVizEmbedding } from './embeddings';
 
 // Hardcoded ID of the primordial viz (actually in the V2 database)
 const primordialVizId = '86a75dc8bdbe4965ba353a79d4bd44c8';
@@ -108,7 +109,16 @@ export const processViz = async ({
     embedding,
     timestamp: createdTimestamp,
   });
-  logDetail('    Stored embedding!');
+  logDetail('    Stored embedding in Redis!');
+
+  // Store the embedding in MongoDB.
+  logDetail('    Storing embedding in MongoDB...');
+  await storeVizEmbedding({
+    gateways,
+    id,
+    vector: embedding,
+  });
+  logDetail('    Stored embedding in MongoDB!');
   // } else {
   //   logDetail('  Embedding found in Redis!');
   //   embedding = embeddingResult.value;
@@ -174,6 +184,9 @@ export const processViz = async ({
   const scoreViz = ScoreViz(gateways);
   console.log('  Scoring viz...');
   await scoreViz({ viz: id });
+
+  // Compute the embedding for the viz (latest version).
+  // const embedding = await generateEmbeddingOpenAI(goodFiles);
 
   return true;
 };

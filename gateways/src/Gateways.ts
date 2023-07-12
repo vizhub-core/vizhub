@@ -42,6 +42,8 @@ import {
   ResourceId,
   SortField,
   SortOrder,
+  Embedding,
+  EmbeddingId,
 } from 'entities';
 import { Result, Success } from './Result';
 
@@ -151,6 +153,10 @@ export interface Gateways {
   saveAnalyticsEvent(analyticsEvent: AnalyticsEvent): Promise<Result<Success>>;
   getAnalyticsEvent(id: AnalyticsEventId): Promise<Result<AnalyticsEvent>>;
   deleteAnalyticsEvent(id: AnalyticsEventId): Promise<Result<Success>>;
+
+  saveEmbedding(embedding: Embedding): Promise<Result<Success>>;
+  getEmbedding(id: EmbeddingId): Promise<Result<Snapshot<Embedding>>>;
+  deleteEmbedding(id: EmbeddingId): Promise<Result<Success>>;
 
   // ***************************************************************
   // ******************** Non-CRUD Operations **********************
