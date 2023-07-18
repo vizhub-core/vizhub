@@ -8,7 +8,6 @@ import xss from 'xss';
 
 SearchPage.getPageData = async ({
   gateways,
-  params,
   auth0User,
   query,
 }: {
@@ -17,22 +16,7 @@ SearchPage.getPageData = async ({
   query: SearchPageQuery;
   params: { id: string };
 }): Promise<SearchPageData> => {
-  // const forkedFrom: VizId = params.id;
   const { getUser } = gateways;
-  // const getInfosAndOwners = GetInfosAndOwners(gateways);
-
-  // const infosAndOwnersResult = await getInfosAndOwners({
-  //   vizIds: [],
-  //   noNeedToFetchUsers: [],
-  //   sortId,
-  //   pageNumber: 0,
-  // });
-  // if (infosAndOwnersResult.outcome === 'failure') {
-  //   console.log('Error when fetching infos and owners:');
-  //   console.log(infosAndOwnersResult.error);
-  //   return null;
-  // }
-  // const { infoSnapshots, ownerUserSnapshots } = infosAndOwnersResult.value;
 
   // If the user is currently authenticated...
   let authenticatedUserSnapshot = null;
@@ -46,20 +30,10 @@ SearchPage.getPageData = async ({
     authenticatedUserSnapshot = authenticatedUserResult.value;
   }
 
-  // // Get the owner of the forked-from viz
-  // const forkedFromOwnerResult = await getUser(forkedFromInfo.owner);
-  // if (forkedFromOwnerResult.outcome === 'failure') {
-  //   console.log('Error when fetching forked-from owner:');
-  //   console.log(forkedFromOwnerResult.error);
-  //   return null;
-  // }
-  // const forkedFromOwnerUserSnapshot = forkedFromOwnerResult.value;
-
   return {
     title: `VizHub Search Results`,
     authenticatedUserSnapshot,
-    infoSnapshots: [],
-    ownerUserSnapshots: [],
+    query: query.query,
   };
 };
 
