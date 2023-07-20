@@ -3,6 +3,7 @@ import { Page, PageData } from '../Page';
 import { Body } from './Body';
 
 export type SearchPageData = PageData & {
+  // The query string input by the user
   query: string;
 };
 
