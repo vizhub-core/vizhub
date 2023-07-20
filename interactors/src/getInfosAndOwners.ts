@@ -19,12 +19,14 @@ export const GetInfosAndOwners = (gateways: Gateways) => {
     pageNumber,
     owner,
     forkedFrom,
+    vizIds,
   }: {
     noNeedToFetchUsers: Array<UserId>;
-    sortId: SortId;
+    sortId?: SortId;
     pageNumber: number;
     owner?: UserId;
     forkedFrom?: VizId;
+    vizIds?: Array<VizId>;
   }): Promise<
     Result<{
       infoSnapshots: Array<Snapshot<Info>>;
@@ -32,13 +34,16 @@ export const GetInfosAndOwners = (gateways: Gateways) => {
     }>
   > => {
     // Get the sort field from the sort query parameter.
-    const sortField: SortField = getSortField(sortId);
+    const sortField: SortField | undefined = sortId
+      ? getSortField(sortId)
+      : undefined;
 
     const infoSnapshotsResult = await getInfos({
       owner,
       forkedFrom,
       sortField,
       pageNumber,
+      vizIds,
     });
     if (infoSnapshotsResult.outcome === 'failure') return infoSnapshotsResult;
     const infoSnapshots = infoSnapshotsResult.value;
