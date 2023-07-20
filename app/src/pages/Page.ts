@@ -12,10 +12,10 @@ export type Page = {
   // A server-side-only function that returns the data for this page.
   getPageData?: ({
     params,
+    query,
     env,
     gateways,
     auth0User,
-    query,
   }: {
     // The URL parameters for this page, e.g. { userName: 'curran' }.
     params: { [key: string]: string };

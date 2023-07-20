@@ -1,20 +1,10 @@
-import { SearchPage, SearchPageData, SearchPageQuery } from './index';
+import { SearchPage, SearchPageData } from './index';
 import { parseAuth0Sub } from '../../parseAuth0User';
-import { Info, SortId, VizId, asSortId, defaultSortOption } from 'entities';
-import { Gateways } from 'gateways';
-import { Auth0User } from '../Page';
-import { GetInfosAndOwners } from 'interactors';
-import xss from 'xss';
 
 SearchPage.getPageData = async ({
   gateways,
   auth0User,
   query,
-}: {
-  gateways: Gateways;
-  auth0User: Auth0User | null;
-  query: SearchPageQuery;
-  params: { id: string };
 }): Promise<SearchPageData> => {
   const { getUser } = gateways;
 
