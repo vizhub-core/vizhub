@@ -1,4 +1,4 @@
-import { select } from 'd3-selection';
+import { select, transition } from 'd3-selection';
 import { utcDay } from 'd3-time';
 import { utcFormat } from 'd3-time-format';
 import { scaleBand, scaleLinear } from 'd3-scale';
@@ -46,7 +46,7 @@ export const viz = (node, { analyticsEvent }) => {
 
   const yScale = scaleLinear(
     [0, max(data, yValue)],
-    [height - bottom, top]
+    [height - bottom, top],
   ).nice(yTicks);
   svg
     .selectAll('g.x-axis')
@@ -58,7 +58,7 @@ export const viz = (node, { analyticsEvent }) => {
       axisBottom(xScale)
         .tickFormat((d, i) => (i % 2 === 0 ? formatTick(d) : ''))
         .tickSize(-(height - top - bottom))
-        .tickPadding(10)
+        .tickPadding(10),
     )
     .call((selection) => {
       selection.select('.domain').remove();
@@ -74,7 +74,7 @@ export const viz = (node, { analyticsEvent }) => {
     .call(
       axisLeft(yScale)
         .tickSize(-(width - right - left))
-        .ticks(yTicks)
+        .ticks(yTicks),
     )
     .call((selection) => {
       selection.select('.domain').remove();
@@ -83,10 +83,21 @@ export const viz = (node, { analyticsEvent }) => {
   svg
     .selectAll('rect')
     .data(data)
-    .join('rect')
+    .join(
+      (enter) =>
+        enter
+          .append('rect')
+          .attr('y', (d) => yScale(yValue(d)))
+          .attr('height', (d) => height - bottom - yScale(yValue(d))),
+      (update) =>
+        update.call((selection) =>
+          selection
+            .transition()
+            .attr('y', (d) => yScale(yValue(d)))
+            .attr('height', (d) => height - bottom - yScale(yValue(d))),
+        ),
+    )
     .attr('x', (d) => xScale(xValue(d)))
-    .attr('y', (d) => yScale(yValue(d)))
     .attr('width', xScale.bandwidth())
-    .attr('height', (d) => height - bottom - yScale(yValue(d)))
     .attr('fill', '#AAA');
 };

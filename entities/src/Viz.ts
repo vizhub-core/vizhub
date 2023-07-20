@@ -36,8 +36,8 @@ export interface Info {
   // The user or organization that owns this viz.
   owner: UserId | OrgId;
 
-  // Every Viz exists within a Folder.
-  folder: FolderId;
+  // A Viz may or may not exist within a Folder.
+  folder: FolderId | null;
 
   // The title of the viz.
   title: string;
@@ -101,10 +101,6 @@ export interface Info {
   isFrozen: boolean;
 
   // How many forks this viz has.
-  // TODO
-  //  * Update this in:
-  //    * ForkViz
-  //    * DeleteViz
   forksCount: number;
 
   // How many upvotes this viz has.
@@ -113,6 +109,10 @@ export interface Info {
   // If this viz is currently in the "trash",
   // this field represents when it was put there.
   trashed?: Timestamp;
+
+  // A popularity score for this viz.
+  // Populated by the scoreHackerHot algorithm.
+  popularity?: number;
 }
 
 // Configuration
@@ -148,6 +148,13 @@ export interface File {
   text: string;
 }
 
+// The default height of a viz in pixels.
+// Homage to bl.ocks.org.
+export const defaultVizHeight = 500;
+
+// This is fixed.
+export const defaultVizWidth = 950;
+
 // Content
 //  * Heavyweight content of a viz.
 //  * Contains the full content of all files in the viz.
@@ -169,6 +176,8 @@ export interface Content {
   // height
   // * The customized height of the viz in pixels
   // * Not defined if the user has not customized it
+  // * If not defined, the default height is used,
+  //   which is specified by defaultVizHeight.
   height?: number;
 
   // license

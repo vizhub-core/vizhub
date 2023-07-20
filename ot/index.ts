@@ -16,6 +16,8 @@ export const apply: (any, Op) => any = otType.apply;
 
 // Computes a diff between two objects, expressed as an OT op.
 export const diff = (a: any, b: any): Op =>
+  // TODO consider using makeInvertible from https://github.com/ottypes/json1/blob/master/spec.md
+  // so that we can traverse the commit graph in both directions.
   jsondiff(a, b, diffMatchPatch, json1Presence, textUnicode);
 
 // A valid op that makes no change.

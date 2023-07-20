@@ -1,21 +1,23 @@
 import { useMemo } from 'react';
 import { Form, Dropdown } from '../bootstrap';
-import '../index.scss';
 
 export const OwnerControl = ({ owner, setOwner, possibleOwners }) => {
   // Possible owners that are not the current owner.
   const otherPossibleOwners = useMemo(
     () => possibleOwners.filter(({ id }) => id !== owner.id),
-    [possibleOwners, owner]
+    [possibleOwners, owner],
   );
 
   // Used for looking up a possible owner by id.
   const ownersById = useMemo(
     () =>
       new Map(
-        possibleOwners.map((possibleOwner) => [possibleOwner.id, possibleOwner])
+        possibleOwners.map((possibleOwner) => [
+          possibleOwner.id,
+          possibleOwner,
+        ]),
       ),
-    [possibleOwners]
+    [possibleOwners],
   );
 
   return (
@@ -23,7 +25,7 @@ export const OwnerControl = ({ owner, setOwner, possibleOwners }) => {
       <Form.Label>Owner</Form.Label>
       <Dropdown onSelect={setOwner}>
         <Dropdown.Toggle id="dropdown-owner">
-          {ownersById.get(owner).label}
+          {ownersById.get(owner)?.label}
         </Dropdown.Toggle>
         <Dropdown.Menu>
           {otherPossibleOwners.map((possibleOwner) => (

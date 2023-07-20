@@ -10,9 +10,6 @@ export const args = {
   initialVisibility: 'public',
   initialOwner,
   possibleOwners,
-  onClose: () => {
-    console.log('onClose');
-  },
   onFork: (forkData) => {
     console.log('onFork');
     console.log(forkData);

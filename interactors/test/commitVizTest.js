@@ -1,7 +1,13 @@
 // See also
 //  * https://gitlab.com/curran/vizhub-ee/-/blob/main/vizhub-ee-interactors/test/CommitVizTest.ts
 import { describe, it, expect } from 'vitest';
-import { primordialViz, primordialCommit, ts3, userJoe } from 'gateways/test';
+import {
+  primordialViz,
+  primordialCommit,
+  ts3,
+  userJoe,
+  sampleReadmeText,
+} from 'gateways/test';
 import { initGateways } from './initGateways';
 import { SaveViz, CommitViz, setPredictableGenerateId } from '../src';
 
@@ -30,8 +36,8 @@ export const commitVizTest = () => {
 
       const gateways = initGateways();
       const { getInfo, saveCommit, getCommit } = gateways;
-      const commitViz = await CommitViz(gateways);
-      const saveViz = await SaveViz(gateways);
+      const commitViz = CommitViz(gateways);
+      const saveViz = SaveViz(gateways);
 
       await saveCommit(primordialCommit);
 
@@ -67,7 +73,9 @@ export const commitVizTest = () => {
         committed: true,
         commitAuthors: [],
       });
-
+      // console.log(
+      //   JSON.stringify((await getCommit(newCommitId)).value, null, 2)
+      // );
       expect((await getCommit(newCommitId)).value).toEqual({
         id: newCommitId,
         parent: primordialViz.info.start,
@@ -76,12 +84,24 @@ export const commitVizTest = () => {
         timestamp: ts3,
         ops: [
           'files',
-          '7548392',
-          'text',
-          {
-            es: [11, ' Beautiful World'],
-          },
+          [
+            '7548392',
+            'text',
+            {
+              es: [11, ' Beautiful World'],
+            },
+          ],
+          [
+            '9693462',
+            {
+              r: {
+                name: 'README.md',
+                text: sampleReadmeText,
+              },
+            },
+          ],
         ],
+
         milestone: null,
       });
     });

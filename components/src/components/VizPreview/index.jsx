@@ -1,6 +1,5 @@
-import PropTypes from 'prop-types';
-import '../index.scss';
-import './viz-preview.scss';
+import { UpvoteWidget } from '../UpvoteWidget';
+import './styles.scss';
 
 // Shows a preview of a viz.
 // See also
@@ -11,10 +10,11 @@ export const VizPreview = ({
   lastUpdatedDateFormatted,
   ownerName,
   ownerAvatarURL,
-  onClick,
+  href,
+  upvotesCount,
 }) => {
   return (
-    <div className="vh-viz-preview" onClick={onClick}>
+    <a className="vh-viz-preview" href={href} rel="noreferrer noopener">
       <div
         className="thumbnail"
         style={{
@@ -27,21 +27,16 @@ export const VizPreview = ({
         <div className="title">{title}</div>
       </div>
       <div className="meta-container">
-        {ownerName ? (
-          <>
-            <img
-              className="owner-avatar-image"
-              src={ownerAvatarURL}
-              alt={ownerName}
-            />
-            <div className="owner-name">{ownerName}</div>
-          </>
-        ) : null}
+        <div className="owner">
+          <img
+            className="owner-avatar-image"
+            src={ownerAvatarURL}
+            alt={ownerName}
+          />
+          <div className="owner-name">{ownerName}</div>
+        </div>
+        <UpvoteWidget upvotesCount={upvotesCount} />
       </div>
-    </div>
+    </a>
   );
-};
-
-VizPreview.propTypes = {
-  onClick: PropTypes.func,
 };

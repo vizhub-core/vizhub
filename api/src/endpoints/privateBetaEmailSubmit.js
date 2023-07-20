@@ -6,6 +6,7 @@ export const privateBetaEmailSubmit = ({ app, gateways }) => {
   const recordAnalyticsEvents = RecordAnalyticsEvents(gateways);
 
   app.post('/api/private-beta-email-submit', async (req, res) => {
+    console.log('reveiced request to submit email');
     if (req.body && req.body.email) {
       const email = req.body.email;
       const result = await saveBetaProgramSignup({
@@ -13,14 +14,20 @@ export const privateBetaEmailSubmit = ({ app, gateways }) => {
         email,
       });
       if (result.outcome !== 'success') {
-        console.log(result.error);
+        throw result.error;
       }
 
-      await recordAnalyticsEvents({ eventId: 'private-beta-email-submit' });
+      await recordAnalyticsEvents({
+        eventId: 'event.private-beta-email-submit',
+      });
 
       res.send(ok('success'));
     } else {
       res.send(err(missingParameterError('email')));
     }
+  });
+
+  app.get('/api/private-beta-email-submit-debug', async (req, res) => {
+    throw new Error('private-beta-email-submit-debug');
   });
 };

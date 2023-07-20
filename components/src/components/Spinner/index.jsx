@@ -1,6 +1,6 @@
 // From https://github.com/vizhub-core/vizhub/commit/6ca078935b9771dc6e05a6065bcfd522a4724dcf
 import React from 'react';
-import './spinner.css';
+import './styles.css';
 
 // const minRadius = 4;
 // const maxRadius = 10;
@@ -34,8 +34,12 @@ const dots = [
 
 // From https://bl.ocks.org/curran/685fa8300650c4324d571c6b0ecc55de
 // And vizhub-v2/packages/neoFrontend/src/LoadingScreen/index.js
-export const Spinner = ({ height = 40, fill = 'currentcolor' }) => (
-  <div className="vh-spinner">
+export const Spinner = ({
+  height = 40,
+  fill = 'currentcolor',
+  fadeIn = true,
+}) => (
+  <div className={`vh-spinner${fadeIn ? ' fade-in' : ''}`}>
     <svg height={height} viewBox="0 0 100 100" style={{ opacity: 1 }}>
       <g transform="translate(50, 50)" fill={fill}>
         <g className="vh-spinner-dots">

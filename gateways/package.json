@@ -4,7 +4,7 @@
   "type": "module",
   "main": "src/index.ts",
   "scripts": {
-    "tsc": "tsc src/*.ts test/*.ts --noEmit",
+    "tsc": "tsc --noEmit",
     "test": "vitest run",
     "watch-tsc": "npm run tsc -- --watch",
     "watch-test-watch": "vitest",
@@ -22,11 +22,13 @@
   },
   "homepage": "https://github.com/vizhub-core/vizhub3#readme",
   "dependencies": {
-    "vitest": "^0.28.5"
+    "@types/d3-array": "^3.0.5",
+    "d3-array": "^3.2.4",
+    "vitest": "^0.33.0"
   },
   "devDependencies": {
-    "concurrently": "^7.6.0",
-    "prettier": "^2.8.4",
-    "typescript": "^4.9.5"
+    "concurrently": "^8.2.0",
+    "prettier": "^3.0.0",
+    "typescript": "^5.1.6"
   }
 }

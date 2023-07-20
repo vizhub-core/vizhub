@@ -43,7 +43,7 @@ export const incrementDecrementTest = () => {
       const result = await decrementForksCount(primordialViz.info.id);
       expect(result.outcome).toEqual('failure');
       expect(result.error.message).toEqual(
-        'Cannot decrement zero-value field `forksCount` on viz `viz1`'
+        'Cannot decrement zero-value field `forksCount` on viz `viz1`',
       );
       expect(result.error.code).toEqual('invalidCommitOp');
     });
@@ -93,7 +93,7 @@ export const incrementDecrementTest = () => {
       const result = await decrementUpvotesCount(primordialViz.info.id);
       expect(result.outcome).toEqual('failure');
       expect(result.error.message).toEqual(
-        'Cannot decrement zero-value field `upvotesCount` on viz `viz1`'
+        'Cannot decrement zero-value field `upvotesCount` on viz `viz1`',
       );
       expect(result.error.code).toEqual('invalidCommitOp');
     });

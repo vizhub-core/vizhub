@@ -24,6 +24,6 @@
     "sharedb-client-browser": "^4.2.1"
   },
   "devDependencies": {
-    "prettier": "^2.8.4"
+    "prettier": "^3.0.0"
   }
 }

@@ -6,10 +6,13 @@
 // database gateways implementation found in the
 // `database` package.
 import { resourceNotFoundError, invalidDecrementError } from './errors';
+import { defaultSortOrder, defaultSortOption } from 'entities';
 import { ok, err } from './Result';
+import { pageSize } from './Gateways';
+import { ascending, descending } from 'd3-array';
 
 // A stub similar to ShareDB snapshots.
-const fakeSnapshot = (data) => ({
+export const fakeSnapshot = (data) => ({
   data,
   v: 1,
   type: 'json1',
@@ -41,6 +44,7 @@ export const crudEntityNames = [
   'MergeRequest',
   'BetaProgramSignup',
   'AnalyticsEvent',
+  'Embedding',
 ];
 
 // These entities are stored directly in Mongo,
@@ -50,6 +54,7 @@ export const noSnapshot = {
   Commit: true,
   Milestone: true,
   BetaProgramSignup: true,
+  Embedding: true,
 };
 
 // An in-memory implementation for gateways,
@@ -74,8 +79,8 @@ export const MemoryGateways = () => {
     id in documents[entityName]
       ? ok(
           (noSnapshot[entityName] ? noop : fakeSnapshot)(
-            documents[entityName][id]
-          )
+            documents[entityName][id],
+          ),
         )
       : err(resourceNotFoundError(id));
 
@@ -101,8 +106,32 @@ export const MemoryGateways = () => {
     ok(
       Object.values(documents.Info)
         .filter(({ forkedFrom }) => forkedFrom === id)
-        .map(fakeSnapshot)
+        .map(fakeSnapshot),
     );
+
+  const getInfos = async ({
+    owner,
+    forkedFrom,
+    sortField = defaultSortOption.sortField,
+    pageNumber = 0,
+    sortOrder = defaultSortOrder,
+  }) => {
+    const comparator = sortOrder === 'ascending' ? ascending : descending;
+    return ok(
+      Object.values(documents.Info)
+        .sort((a, b) => comparator(a[sortField], b[sortField]))
+        .filter(
+          (d, i) =>
+            // Return true if this document is in the current page specified by pageNumber
+            // and matches the owner and forkedFrom filters.
+            (owner === undefined || d.owner === owner) &&
+            (forkedFrom === undefined || d.forkedFrom === forkedFrom) &&
+            i >= pageNumber * pageSize &&
+            i < (pageNumber + 1) * pageSize,
+        )
+        .map(fakeSnapshot),
+    );
+  };
 
   const incrementForksCount = async (id) => {
     documents.Info[id].forksCount++;
@@ -168,14 +197,28 @@ export const MemoryGateways = () => {
     return ok(folders.reverse());
   };
 
+  const getUserByUserName = async (userName) => {
+    const user = Object.values(documents.User).find(
+      (user) => user.userName === userName,
+    );
+    return user ? ok(fakeSnapshot(user)) : err(resourceNotFoundError(userName));
+  };
+
   const getUserByEmails = async (emails) => {
     const user = Object.values(documents.User).find(
       (user) =>
         emails.includes(user.primaryEmail) ||
         (user.secondaryEmails &&
-          user.secondaryEmails.find((email) => emails.includes(email)))
+          user.secondaryEmails.find((email) => emails.includes(email))),
     );
     return user ? ok(fakeSnapshot(user)) : err(resourceNotFoundError(emails));
+  };
+
+  const getUsersByIds = async (ids) => {
+    const users = Object.values(documents.User).filter((user) =>
+      ids.includes(user.id),
+    );
+    return ok(users.map(fakeSnapshot));
   };
 
   const getPermissions = async (user, resources) => {
@@ -183,7 +226,7 @@ export const MemoryGateways = () => {
     const permissions = allPermissions
       .filter((permission) => permission.user === user)
       .filter((permission) =>
-        resources.some((resource) => resource === permission.resource)
+        resources.some((resource) => resource === permission.resource),
       );
     return ok(permissions.map(fakeSnapshot));
   };
@@ -191,13 +234,16 @@ export const MemoryGateways = () => {
   // Populate non-CRUD methods.
   let memoryGateways = {
     getForks,
+    getInfos,
     incrementForksCount,
     decrementForksCount,
     incrementUpvotesCount,
     decrementUpvotesCount,
     getCommitAncestors,
     getFolderAncestors,
+    getUserByUserName,
     getUserByEmails,
+    getUsersByIds,
     getPermissions,
   };
 

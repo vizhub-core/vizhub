@@ -1,0 +1,87 @@
+:root {
+  /* Homage to bl.ocks.org. */
+  --vh-viz-viewer-max-width: 960px;
+}
+.vh-viz-page-viewer {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  min-width: 0;
+  height: 100%;
+  overflow: auto;
+
+  .viewer-content {
+    /* Scale horizontally when width < max-width. */
+    width: 100%;
+
+    /* Ensure that the _inner_ content has max-width: vh-content-max-width, */
+    /* while the _outer_ content shrinks to preserve 10px horizontal padding. */
+    max-width: calc(
+      var(--vh-viz-viewer-max-width) + 2 * var(--vh-padding-little)
+    );
+    padding: var(--vh-padding-little);
+
+    .viz-frame {
+      position: relative;
+      svg {
+        background-color: white;
+        border-radius: var(--vh-border-radius);
+        box-shadow: var(--vh-box-shadow);
+
+        /* This in conjunction with viewBox causes */
+        /* the rectangle to fill the appropriate width */
+        /* _and_ preserve aspect ratio.*/
+        width: 100%;
+      }
+
+      iframe {
+        position: absolute;
+        left: 0;
+        top: 0;
+        border: 0;
+        transform-origin: 0 0;
+      }
+    }
+    .title-bar {
+      display: flex;
+      justify-content: space-between;
+      padding: var(--vh-padding-lots) 0px;
+      border-bottom: 1px solid var(--vh-rule-color);
+    }
+    .meta-info {
+      display: flex;
+      justify-content: space-between;
+      padding: var(--vh-padding-lots) 0px;
+      font-size: var(--vh-font-size-small);
+      &-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: bold;
+        color: currentColor;
+        text-decoration: none;
+        img {
+          box-shadow: var(--vh-box-shadow);
+        }
+      }
+      &-left:hover {
+        color: var(--bs-link-color);
+        text-decoration: underline;
+      }
+      &-right {
+        display: flex;
+        flex-direction: column;
+        font-size: 12px;
+        align-items: end;
+      }
+    }
+    .license {
+      color: silver;
+      font-size: 10px;
+      padding: var(--vh-padding-lots) 0px;
+      border-top: 1px solid var(--vh-rule-color);
+      text-align: center;
+    }
+  }
+}

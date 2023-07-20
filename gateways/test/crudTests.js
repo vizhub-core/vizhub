@@ -20,6 +20,7 @@ import {
   sampleDeployment,
   sampleMergeRequest,
   sampleBetaProgramSignup,
+  sampleEmbedding,
 } from './fixtures';
 
 export const crudTests = (entityName, sampleEntity) => {
@@ -38,7 +39,7 @@ export const crudTests = (entityName, sampleEntity) => {
       const getResult = await gateways[getMethod](sampleEntity.id);
       expect(getResult.outcome).toEqual('success');
       expect(
-        noSnapshot[entityName] ? getResult.value : getResult.value.data
+        noSnapshot[entityName] ? getResult.value : getResult.value.data,
       ).toEqual(sampleEntity);
     });
 
@@ -49,7 +50,7 @@ export const crudTests = (entityName, sampleEntity) => {
       expect(getResult.outcome).toEqual('failure');
       expect(getResult.error.code).toEqual('resourceNotFound');
       expect(getResult.error.message).toEqual(
-        'Resource not found with id: bogus-id'
+        'Resource not found with id: bogus-id',
       );
     });
 
@@ -61,9 +62,7 @@ export const crudTests = (entityName, sampleEntity) => {
       expect(getResultBefore.outcome).toEqual('success');
 
       const deleteResult = await gateways[deleteMethod](sampleEntity.id);
-      //           console.log(deleteResult);
       expect(deleteResult.outcome).toEqual('success');
-      //     expect(deleteResult.value).toEqual('success');
 
       const getResultAfter = await gateways[getMethod](sampleEntity.id);
       expect(getResultAfter.outcome).toEqual('failure');
@@ -98,4 +97,5 @@ export const sampleEntities = {
   Deployment: sampleDeployment,
   MergeRequest: sampleMergeRequest,
   BetaProgramSignup: sampleBetaProgramSignup,
+  Embedding: sampleEmbedding,
 };

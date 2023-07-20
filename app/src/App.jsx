@@ -3,11 +3,18 @@
 // https://github.com/vizhub-core/vizhub/blob/main/vizhub-v2/packages/neoFrontend/src/App.js
 import { Route, Routes, useLocation } from 'react-router-dom';
 import { pages } from './pages/client';
+import { useMemo } from 'react';
 
 export const App = ({ pageData }) => {
+  // TODO handle client-side navigation.
+  // See https://github.com/vizhub-core/vizhub3/issues/98
   // Every time App renders client-side, there may have been a navigation.
   const location = useLocation();
-  if (!import.meta.env.SSR && location.pathname !== pageData.url) {
+  const url = useMemo(
+    () => location.pathname + location.search,
+    [location.pathname, location.search],
+  );
+  if (!import.meta.env.SSR && url !== pageData.url) {
     console.log('Might need to fetch page data from client');
   }
 

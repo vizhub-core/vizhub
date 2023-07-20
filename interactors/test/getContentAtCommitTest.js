@@ -66,7 +66,8 @@ export const getContentAtCommitTest = () => {
       expect(result.error.message)
         .toEqual(`Invalid op in commit with id: commit2
 Invalid document snapshot: undefined
-Ops: 
+in getContentAtCommit
+commit.ops: 
 [
   "random",
   {
@@ -87,7 +88,7 @@ Ops:
       expect(result.outcome).toEqual('failure');
       expect(result.error.code).toEqual(VizHubErrorCode.resourceNotFound);
       expect(result.error.message).toEqual(
-        'Resource not found with id: bogus-id'
+        'Resource not found with id: bogus-id',
       );
     });
 
@@ -103,13 +104,13 @@ Ops:
       expect(result.outcome).toEqual('failure');
       expect(result.error.code).toEqual(VizHubErrorCode.resourceNotFound);
       expect(result.error.message).toEqual(
-        'Resource not found with id: commit1'
+        'Resource not found with id: commit1',
       );
     });
 
     it('getContentAtCommit, using Milestones, missing milestone error case', async () => {
       const gateways = initGateways();
-      const { saveCommit, saveMilestone } = gateways;
+      const { saveCommit } = gateways;
       const getContentAtCommit = GetContentAtCommit(gateways);
       // Exclude sampleMilestone from saving,
       // which will trigger the error.
@@ -120,7 +121,7 @@ Ops:
       expect(result.outcome).toEqual('failure');
       expect(result.error.code).toEqual(VizHubErrorCode.resourceNotFound);
       expect(result.error.message).toEqual(
-        'Resource not found with id: 4327589043278'
+        'Resource not found with id: 4327589043278',
       );
     });
 
@@ -213,7 +214,7 @@ Ops:
 
       // This invocation should generate the milestones.
       expect((await getContentAtCommit(previousCommit.id)).value).toEqual(
-        previousContent
+        previousContent,
       );
       // Verifies there is a milestone at the given commitId.
       const verifyMilestone = async (id) => {
@@ -242,13 +243,13 @@ Ops:
       // This invocation should use milestone 100
       await deleteCommit('new-commit-99');
       expect((await getContentAtCommit('new-commit-100')).value).toEqual(
-        contentForCommit(100)
+        contentForCommit(100),
       );
 
       // This invocation should use milestone 60
       await deleteCommit('new-commit-59');
       expect((await getContentAtCommit('new-commit-70')).value).toEqual(
-        contentForCommit(70)
+        contentForCommit(70),
       );
 
       // This invocation should fail if we delete milestone 60
@@ -259,7 +260,7 @@ Ops:
       expect(result.outcome).toEqual('failure');
       expect(result.error.code).toEqual(VizHubErrorCode.resourceNotFound);
       expect(result.error.message).toEqual(
-        `Resource not found with id: ${milestoneToDelete}`
+        `Resource not found with id: ${milestoneToDelete}`,
       );
     });
   });

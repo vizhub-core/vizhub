@@ -7,6 +7,7 @@
 // https://github.com/vizhub-core/vizhub/blob/main/prototypes/open-core-first-attempt/packages/vizhub-core/src/server/index.js
 // https://gitlab.com/curran/vizhub-ee/-/blob/main/prototypes/commitDataModelV1/src/gateways/DatabaseGateways.js
 import { descending } from 'd3-array';
+import { defaultSortField, defaultSortOrder } from 'entities';
 import {
   resourceNotFoundError,
   invalidDecrementError,
@@ -17,11 +18,13 @@ import {
 } from 'gateways';
 import { otType, diff } from 'ot';
 import { toCollectionName } from './toCollectionName';
+import { pageSize } from 'gateways/src/Gateways';
 
 // An in-database implementation for gateways,
 // for use in production.
 export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
   // A generic "save" implementation for ShareDB.
+  // TODORedLock
   const shareDBSave = (collectionName) => (entity) =>
     new Promise((resolve) => {
       const shareDBDoc = shareDBConnection.get(collectionName, entity.id);
@@ -90,6 +93,8 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
           // Leverage the `ena` operator,
           // which is an isolated addition of a number.
           // See https://github.com/ottypes/json1/blob/master/spec.md#parts-of-an-operation
+          // Note that because this operation respects OT,
+          // we do not need to use any lock.
           const op = [field, { ena: number }];
           shareDBDoc.submitOp(op, callback);
         }
@@ -97,6 +102,7 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
     });
 
   // A generic "save" implementation for MongoDB.
+  // TODORedLock
   const mongoDBSave = (collectionName) => {
     const collection = mongoDBDatabase.collection(collectionName);
     return async (entity) => {
@@ -107,7 +113,7 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
       await collection.updateOne(
         { _id: entity.id },
         { $set: doc },
-        { upsert: true }
+        { upsert: true },
       );
 
       return ok('success');
@@ -155,7 +161,7 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
   });
 
   const getForks = (id) =>
-    new Promise((resolve, reject) => {
+    new Promise((resolve) => {
       const entityName = 'Info';
       const query = shareDBConnection.createFetchQuery(
         toCollectionName(entityName),
@@ -168,7 +174,41 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
 
           if (error) return resolve(err(error));
           resolve(ok(results.map((doc) => doc.toSnapshot())));
-        }
+        },
+      );
+    });
+
+  const getInfos = ({
+    owner,
+    forkedFrom,
+    sortField = defaultSortField,
+    pageNumber = 0,
+    sortOrder = defaultSortOrder,
+  }) =>
+    new Promise((resolve) => {
+      const entityName = 'Info';
+
+      // Restrict search to given owner and/or forkedFrom.
+      const mongoQuery = {
+        ...(owner && { owner }),
+        ...(forkedFrom && { forkedFrom }),
+        $limit: pageSize,
+        $skip: pageNumber * pageSize,
+        $sort: { [sortField]: sortOrder === 'ascending' ? 1 : -1 },
+      };
+
+      // TODO add test for basic access control - exclude non-public infos
+      mongoQuery['visibility'] = 'public';
+
+      const query = shareDBConnection.createFetchQuery(
+        toCollectionName(entityName),
+        mongoQuery,
+        {},
+        (error, results) => {
+          query.destroy();
+          if (error) return resolve(err(error));
+          resolve(ok(results.map((doc) => doc.toSnapshot())));
+        },
       );
     });
 
@@ -184,17 +224,20 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
       connectToField: '_id',
       as: 'ancestors',
       depthField: 'order',
-      restrictSearchWithMatch: toNearestMilestone
-        ? { milestone: { $ne: null } }
-        : {},
+      restrictSearchWithMatch: {},
     };
 
+    // If we want to get the ancestors up to the nearest milestone,
+    // we need to restrict the search to only those commits that
+    // do not have a milestone.
+    // Note that the results DO NOT include the commit with the milestone.
     if (toNearestMilestone) {
-      $graphLookup.restrictSearchWithMatch = { milestone: { $ne: null } };
+      $graphLookup.restrictSearchWithMatch.milestone = { $eq: null };
     }
 
+    // TODO thoroughly test this. It may be buggy.
     if (start) {
-      $graphLookup.restrictSearchWithMatch = { _id: start };
+      $graphLookup.restrictSearchWithMatch._id = start;
     }
 
     const results = await (
@@ -218,8 +261,8 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
     // Note: Sorting by timestamp does not work, because they are not granular enough.
     // If two commits happen during the same second, the correct ordering
     // cannot be determined by timestamps alone.
-    const ancestors = result.ancestors.sort((a, b) =>
-      descending(a.order, b.order)
+    let ancestors = result.ancestors.sort((a, b) =>
+      descending(a.order, b.order),
     );
     // Derive the final result as an array of pure Commit objects,
     // including the one that matches commitId.
@@ -229,6 +272,31 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
     }
     ancestors.push(result);
 
+    if (toNearestMilestone) {
+      // Handle the case that the commit we searched from itself has a milestone.
+      const mostRecentCommit = ancestors[ancestors.length - 1];
+      if (mostRecentCommit.milestone) {
+        // In this case, we only need to return the most recent commit.
+        // The other commits are not needed, as they only connect this milestone
+        // to the previous milestone.
+        // TODO consider optimizing this case? We could do a find({ _id: id }) before
+        // we attempt the aggregate step and check if the commit has a milestone.
+        ancestors = [mostRecentCommit];
+      } else {
+        // Note that the results DO NOT include the commit with the milestone.
+        // For that we may need to perform an additional query.
+        // we only need to perform this additional query if the last returned commit
+        // has a parent. If it doesn't, then there are no milestones in the DB.
+        const firstCommitWithoutMilestone = ancestors[0];
+        if (firstCommitWithoutMilestone.parent) {
+          const commitWithMilestone = await collection.findOne({
+            _id: firstCommitWithoutMilestone.parent,
+          });
+          ancestors.unshift(commitWithMilestone);
+        }
+      }
+    }
+
     // Remove Mongo's internal id.
     for (const commit of ancestors) {
       delete commit._id;
@@ -237,6 +305,9 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
     return ok(ancestors);
   };
 
+  // TODO consider making this a ShareDB query.
+  // Use case: breadcrumbs that change in real time
+  //   when a viz/folder is moved.
   const getFolderAncestors = async (id) => {
     const entityName = 'Folder';
     const from = toCollectionName(entityName);
@@ -266,7 +337,7 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
 
     const [result] = results;
     const ancestors = result.ancestors.sort((a, b) =>
-      descending(a.order, b.order)
+      descending(a.order, b.order),
     );
     ancestors.push(result);
 
@@ -281,14 +352,32 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
         parent,
         owner,
         visibility,
-      })
+      }),
     );
 
     return ok(folders);
   };
 
+  const getUserByUserName = (userName) =>
+    new Promise((resolve) => {
+      const entityName = 'User';
+      const query = shareDBConnection.createFetchQuery(
+        toCollectionName(entityName),
+        { userName },
+        {},
+        (error, results) => {
+          query.destroy();
+          if (error) return resolve(err(error));
+          if (results.length === 0) {
+            return resolve(err(resourceNotFoundError(userName)));
+          }
+          resolve(ok(results[0].toSnapshot()));
+        },
+      );
+    });
+
   const getUserByEmails = (emails) =>
-    new Promise((resolve, reject) => {
+    new Promise((resolve) => {
       const entityName = 'User';
       const query = shareDBConnection.createFetchQuery(
         toCollectionName(entityName),
@@ -306,12 +395,27 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
             return resolve(err(resourceNotFoundError(emails)));
           }
           resolve(ok(results[0].toSnapshot()));
-        }
+        },
+      );
+    });
+
+  const getUsersByIds = (ids) =>
+    new Promise((resolve) => {
+      const entityName = 'User';
+      const query = shareDBConnection.createFetchQuery(
+        toCollectionName(entityName),
+        { _id: { $in: ids } },
+        {},
+        (error, results) => {
+          query.destroy();
+          if (error) return resolve(err(error));
+          resolve(ok(results.map((doc) => doc.toSnapshot())));
+        },
       );
     });
 
   const getPermissions = (user, resources) =>
-    new Promise((resolve, reject) => {
+    new Promise((resolve) => {
       const entityName = 'Permission';
       const query = shareDBConnection.createFetchQuery(
         toCollectionName(entityName),
@@ -323,7 +427,7 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
           query.destroy();
           if (error) return resolve(err(error));
           resolve(ok(results.map((doc) => doc.toSnapshot())));
-        }
+        },
       );
     });
 
@@ -335,13 +439,16 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
 
   let databaseGateways = {
     getForks,
+    getInfos,
     incrementForksCount,
     decrementForksCount,
     incrementUpvotesCount,
     decrementUpvotesCount,
     getCommitAncestors,
     getFolderAncestors,
+    getUserByUserName,
     getUserByEmails,
+    getUsersByIds,
     getPermissions,
   };
 
@@ -351,7 +458,7 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
       ...crud(
         entityName,
         toCollectionName(entityName),
-        noSnapshot[entityName] ? 'mongodb' : 'sharedb'
+        noSnapshot[entityName] ? 'mongodb' : 'sharedb',
       ),
     };
   }

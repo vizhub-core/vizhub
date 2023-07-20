@@ -1,8 +1,5 @@
 import { useState, useCallback } from 'react';
 import { InputGroup, Form, Button } from '../bootstrap';
-
-import 'vizhub-ui/dist/vizhub-ui.css';
-import '../index.scss';
 import './styles.scss';
 
 export const HomePageBody = ({ onEmailSubmit, children }) => {
@@ -17,7 +14,7 @@ export const HomePageBody = ({ onEmailSubmit, children }) => {
       event.preventDefault();
       onEmailSubmit(email);
     },
-    [email]
+    [email],
   );
 
   return (
@@ -27,7 +24,7 @@ export const HomePageBody = ({ onEmailSubmit, children }) => {
           <div className="callout large">Accelerate</div>
           <div className="callout">Dataviz Delivery</div>
           <p className="description">
-            <strong>Develop bespoke data visualizations</strong> faster and more
+            <strong>Develop custom data visualizations</strong> faster and more
             collaboratively than ever with <strong>VizHub 3</strong>. Built for
             client services.
           </p>

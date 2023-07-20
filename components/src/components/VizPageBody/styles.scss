@@ -1,0 +1,11 @@
+.vh-viz-page-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  .split-pane {
+    display: flex;
+    height: 100%;
+  }
+}

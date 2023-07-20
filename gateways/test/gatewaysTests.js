@@ -6,9 +6,12 @@ import { crudTests, sampleEntities } from './crudTests';
 import { getForksTest } from './getForksTest';
 import { getCommitAncestorsTest } from './getCommitAncestorsTest';
 import { getUserByEmailsTest } from './getUserByEmailsTest';
+import { getUserByUserNameTest } from './getUserByUserNameTest';
 import { incrementDecrementTest } from './incrementDecrementTest';
 import { getFolderAncestorsTest } from './getFolderAncestorsTest';
 import { getPermissionsTest } from './getPermissionsTest';
+import { getInfosTest } from './getInfosTest';
+import { getUsersByIdsTest } from './getUsersByIdsTest';
 
 export const gatewaysTests = () => {
   describe(`CRUD`, () => {
@@ -20,7 +23,10 @@ export const gatewaysTests = () => {
   getForksTest();
   getCommitAncestorsTest();
   getUserByEmailsTest();
+  getUserByUserNameTest();
   incrementDecrementTest();
   getFolderAncestorsTest();
   getPermissionsTest();
+  getInfosTest();
+  getUsersByIdsTest();
 };

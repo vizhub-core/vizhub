@@ -1,6 +1,5 @@
 import { useCallback } from 'react';
 import { Form } from '../bootstrap';
-import '../index.scss';
 
 const visibilities = {
   public: 'Anyone can see this viz',

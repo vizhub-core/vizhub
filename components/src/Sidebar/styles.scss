@@ -1,0 +1,26 @@
+.sidebar {
+  width: 200px;
+  background-color: #3d4b65;
+  color: white;
+  overflow: auto;
+
+  .entry {
+    margin: 8px;
+    padding: 3px 8px;
+    border-radius: 5px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .entry:hover,
+  .entry:focus {
+    background-color: #5f687a;
+  }
+  .entry.active {
+    background-color: #5f687a;
+    outline: 1px solid white;
+  }
+  .entry.hide-sidebar {
+    font-size: 0.75em;
+    text-decoration: underline;
+  }
+}

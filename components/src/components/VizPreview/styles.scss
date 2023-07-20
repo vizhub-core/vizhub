@@ -1,0 +1,88 @@
+.vh-viz-preview {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: white;
+  box-shadow: var(--vh-box-shadow);
+  border-radius: var(--vh-border-radius);
+  cursor: pointer;
+
+  /* Aspect ratio, original thumbnail size: 230 X 120*/
+  width: 300px;
+
+  user-select: none;
+
+  .thumbnail {
+    width: 100%;
+    height: 156px;
+    border-top-right-radius: inherit;
+    border-top-left-radius: inherit;
+    background-position: left top;
+    transition: background-position 3s;
+    background-size: cover;
+  }
+  .thumbnail:hover {
+    background-position: right bottom;
+  }
+  .content-container {
+    display: flex;
+    flex-direction: column;
+    padding: var(--vh-padding-lots);
+    border-top: 1px solid var(--vh-rule-color);
+    border-bottom: 1px solid var(--vh-rule-color);
+
+    /* Handle single-line titles. */
+    flex: 1;
+    justify-content: flex-start;
+
+    .last-updated-date {
+      color: var(--vh-foreground-color-light);
+      font-size: var(--vh-small-font-size);
+      padding-bottom: 4px;
+    }
+    .title {
+      font-weight: bold;
+
+      /* Truncate text at 2 lines. */
+      /* Inspired by https://developer.mozilla.org/en-US/docs/Web/CSS/-webkit-line-clamp */
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+    }
+  }
+  .meta-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--vh-padding-little);
+    font-size: var(--small-font-size);
+
+    .owner {
+      display: flex;
+      align-items: center;
+      .owner-avatar-image {
+        width: 32px;
+        height: 32px;
+        border-radius: 16px;
+        box-shadow: var(--vh-box-shadow);
+      }
+      .owner-name {
+        margin-left: 12px;
+      }
+    }
+  }
+}
+
+.vh-viz-preview:hover {
+  transform: translateY(-1px);
+}
+
+.vh-viz-preview:active {
+  transform: translateY(1px);
+}
+
+a.vh-viz-preview {
+  text-decoration: none;
+  color: currentcolor;
+}

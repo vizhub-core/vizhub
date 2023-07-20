@@ -22,6 +22,7 @@ import {
   MergeRequest,
   BetaProgramSignup,
   EDITOR,
+  Embedding,
 } from 'entities';
 
 export const ts1: Timestamp = 1638100000;
@@ -38,6 +39,8 @@ export const userJoe: User = {
   primaryEmail: 'joe@shmoe.com',
   secondaryEmails: ['joe@hugecorp.com', 'joe@joes-diner.com'],
   plan: 'free',
+  picture:
+    'https://avatars.githubusercontent.com/u/68416?s=80&u=31d283c06af36e3cc7f6da3aac1e302064d68f81&v=4',
 };
 
 export const userJane: User = {
@@ -71,6 +74,19 @@ export const folder3: Folder = {
   parent: folder2.id,
 };
 
+// Sample README.md text.
+// Used in tests.
+// Also useful for manual QA.
+// Has examples of:
+// - Links (these should open in a new tab)
+// - Headers (these should be converted to H1s with ids prefixed by "heading-")
+export const sampleReadmeText = [
+  'Test [Markdown](https://www.markdownguide.org/).',
+  '# Introduction',
+  '',
+  'This is a test.',
+].join('\n');
+
 // The first ever viz.
 // Special because it's the only one not forked from another.
 export const primordialViz: Viz = {
@@ -100,6 +116,10 @@ export const primordialViz: Viz = {
       '7548392': {
         name: 'index.html',
         text: '<body>Hello</body>',
+      },
+      '9693462': {
+        name: 'README.md',
+        text: sampleReadmeText,
       },
     },
     title: 'Primordial Viz',
@@ -168,6 +188,17 @@ export const primordialCommit: Commit = {
   timestamp: ts1,
   ops: diff({}, primordialViz.content),
   milestone: null,
+};
+
+// The first ever commit with a (fake) milestone.
+// Used only for testing milestone related queries.
+export const primordialCommitWithMilestone: Commit = {
+  id: primordialCommitId,
+  viz: primordialViz.info.id,
+  authors: [userJoe.id],
+  timestamp: ts1,
+  ops: diff({}, primordialViz.content),
+  milestone: 'some-milestone-id',
 };
 
 export const commit2: Commit = {
@@ -301,4 +332,10 @@ export const sampleMergeRequest: MergeRequest = {
 export const sampleBetaProgramSignup: BetaProgramSignup = {
   id: '74893257843',
   email: 'test@test.com',
+};
+
+export const sampleEmbedding: Embedding = {
+  id: '74893257843',
+  type: 'Viz',
+  vector: [1, 2, 3],
 };

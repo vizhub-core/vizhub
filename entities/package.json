@@ -5,7 +5,7 @@
   "main": "src/index.ts",
   "scripts": {
     "test": "",
-    "tsc": "tsc src/index.ts --noEmit",
+    "tsc": "tsc --noEmit",
     "prettier": "prettier {*.*,**/*.*} --single-quote --write"
   },
   "repository": {
@@ -20,7 +20,7 @@
   "homepage": "https://github.com/vizhub-core/vizhub3#readme",
   "dependencies": {},
   "devDependencies": {
-    "typescript": "^4.9.5",
-    "prettier": "^2.8.4"
+    "typescript": "^5.1.6",
+    "prettier": "^3.0.0"
   }
 }

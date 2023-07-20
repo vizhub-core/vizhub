@@ -65,6 +65,10 @@ export type {
   Upvote,
   UpvoteId,
 } from './Viz';
+export { defaultVizWidth, defaultVizHeight } from './Viz';
+
+// V2 types - useful for migration and for V2 runtime
+export type { InfoV2, ContentV2, FilesV2, FileV2 } from './V2';
 
 export type { Timestamp, Markdown, Visibility, Snapshot } from './common';
 
@@ -77,3 +81,15 @@ export {
 } from './common';
 
 export type { AnalyticsEvent, AnalyticsEventId } from './Analytics';
+
+export type { Embedding, EmbeddingId, EmbeddingType } from './Embedding';
+
+export {
+  sortOptions,
+  getSortField,
+  asSortId,
+  defaultSortOption,
+  defaultSortOrder,
+  defaultSortField,
+} from './Sorting';
+export type { SortField, SortOption, SortOrder, SortId } from './Sorting';

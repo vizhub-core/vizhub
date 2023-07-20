@@ -23,12 +23,17 @@ export const getForksTest = () => {
     });
 
     // There should be 2 forks: 'viz2' and 'viz3'
+    // TODO consider query aspects:
+    //  * Hydrate ShareDB query in client
+    //  * Server-visible-only query
+    //  * Pagination
+    //  * Sorting
     const getForksResult = await getForks(primordialViz.info.id);
     expect(getForksResult.outcome).toEqual('success');
     const forks = getForksResult.value;
     expect(forks.length).toEqual(2);
     expect(new Set(forks.map(({ data: { id } }) => id))).toEqual(
-      new Set(['viz2', 'viz3'])
+      new Set(['viz2', 'viz3']),
     );
 
     // Fork #3
@@ -41,8 +46,10 @@ export const getForksTest = () => {
     // Now there should be 3 forks: 'viz2', 'viz3', and 'viz4'
     expect(
       new Set(
-        (await getForks(primordialViz.info.id)).value.map(({ data }) => data.id)
-      )
+        (await getForks(primordialViz.info.id)).value.map(
+          ({ data }) => data.id,
+        ),
+      ),
     ).toEqual(new Set(['viz2', 'viz3', 'viz4']));
   });
 };

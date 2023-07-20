@@ -1,15 +1,13 @@
-import PropTypes from 'prop-types';
-import { Nav, Navbar, Container, Dropdown, Image, Button } from '../bootstrap';
-import { LogoSVG } from './LogoSVG';
-import '../index.scss';
-import './header.css';
+import { Nav, Navbar, Container, Dropdown, Button } from '../bootstrap';
+import { LogoSVG } from '../Icons/LogoSVG';
+import './styles.css';
 
 export const Header = ({
   authenticatedUserAvatarURL,
-  onLoginClick,
-  onLogoutClick,
+  loginHref,
+  logoutHref,
+  profileHref,
   onCreateVizClick,
-  onProfileClick,
   onForumClick,
   onVizHubClick,
 }) => (
@@ -53,17 +51,13 @@ export const Header = ({
                   Create Viz
                 </Dropdown.Item>
                 <Dropdown.Divider />
-                <Dropdown.Item onClick={onProfileClick}>Profile</Dropdown.Item>
+                <Dropdown.Item href={profileHref}>Profile</Dropdown.Item>
                 <Dropdown.Divider />
-                <Dropdown.Item onClick={onLogoutClick}>Log out</Dropdown.Item>
+                <Dropdown.Item href={logoutHref}>Log out</Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
           ) : (
-            <Button
-              size="sm"
-              className="vh-header-button"
-              onClick={onLoginClick}
-            >
+            <Button as="a" href={loginHref} className="vh-header-button">
               Log in
             </Button>
           )}
@@ -72,13 +66,3 @@ export const Header = ({
     </Container>
   </Navbar>
 );
-
-Header.propTypes = {
-  user: PropTypes.shape({}),
-  onLogin: PropTypes.func,
-  onLogout: PropTypes.func,
-  onCreateViz: PropTypes.func,
-  onProfile: PropTypes.func,
-  onForum: PropTypes.func,
-  onVizHub: PropTypes.func,
-};

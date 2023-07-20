@@ -63,9 +63,8 @@ export const forkVizTest = () => {
       });
 
       expect(result.outcome).toEqual('success');
-      expect(result.value).toEqual(newVizId);
 
-      expect((await getInfo(newVizId)).value.data).toEqual({
+      const expectedInfo = {
         ...primordialViz.info,
         id: newVizId,
         owner: newOwner,
@@ -80,7 +79,11 @@ export const forkVizTest = () => {
 
         // Verify upvotesCount is reset to 0 on the fork.
         upvotesCount: 0,
-      });
+      };
+
+      expect(result.value).toEqual(expectedInfo);
+
+      expect((await getInfo(newVizId)).value.data).toEqual(expectedInfo);
 
       const newContent = { ...primordialViz.content, id: newVizId };
 
@@ -115,7 +118,7 @@ export const forkVizTest = () => {
       expect(result.outcome).toEqual('failure');
       expect(result.error.code).toEqual(VizHubErrorCode.resourceNotFound);
       expect(result.error.message).toEqual(
-        `Resource not found with id: bogus-id`
+        `Resource not found with id: bogus-id`,
       );
     });
 
@@ -147,9 +150,8 @@ export const forkVizTest = () => {
       });
 
       expect(result.outcome).toEqual('success');
-      expect(result.value).toEqual(newVizId);
 
-      expect((await getInfo(newVizId)).value.data).toEqual({
+      const expectedInfo = {
         ...primordialVizV2.info,
         id: newVizId,
         owner: newOwner,
@@ -160,7 +162,10 @@ export const forkVizTest = () => {
         end: newCommitId,
         forksCount: 0,
         upvotesCount: 0,
-      });
+      };
+      expect(result.value).toEqual(expectedInfo);
+
+      expect((await getInfo(newVizId)).value.data).toEqual(expectedInfo);
 
       const newContent = { ...primordialVizV2.content, id: newVizId };
 
@@ -206,9 +211,8 @@ export const forkVizTest = () => {
       });
 
       expect(result.outcome).toEqual('success');
-      expect(result.value).toEqual(newVizId);
 
-      expect((await getInfo(newVizId)).value.data).toEqual({
+      const expectedInfo = {
         ...primordialVizV2Uncommitted.info,
         id: newVizId,
         owner: newOwner,
@@ -220,7 +224,10 @@ export const forkVizTest = () => {
         committed: true,
         forksCount: 0,
         upvotesCount: 0,
-      });
+      };
+      expect(result.value).toEqual(expectedInfo);
+
+      expect((await getInfo(newVizId)).value.data).toEqual(expectedInfo);
 
       const newContent = {
         ...primordialVizV2Uncommitted.content,
@@ -248,7 +255,7 @@ export const forkVizTest = () => {
         milestone: null,
       });
       expect((await getContentAtCommit(newCommitId2)).value).toEqual(
-        newContent
+        newContent,
       );
     });
   });

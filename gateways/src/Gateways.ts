@@ -5,6 +5,7 @@ import {
   Content,
   User,
   UserId,
+  UserName,
   Upvote,
   UpvoteId,
   VizAuthorship,
@@ -39,8 +40,15 @@ import {
   AnalyticsEvent,
   AnalyticsEventId,
   ResourceId,
+  SortField,
+  SortOrder,
+  Embedding,
+  EmbeddingId,
 } from 'entities';
 import { Result, Success } from './Result';
+
+// The maximum number of Info documents to return in a single page from `getInfos()`
+export const pageSize = 50;
 
 export interface Gateways {
   // ***************************************************************
@@ -78,7 +86,7 @@ export interface Gateways {
 
   saveVizAuthorship(vizAuthorship: VizAuthorship): Promise<Result<Success>>;
   getVizAuthorship(
-    id: VizAuthorshipId
+    id: VizAuthorshipId,
   ): Promise<Result<Snapshot<VizAuthorship>>>;
   deleteVizAuthorship(id: VizAuthorshipId): Promise<Result<Success>>;
 
@@ -104,7 +112,7 @@ export interface Gateways {
 
   saveOrgMembership(orgMembership: OrgMembership): Promise<Result<Success>>;
   getOrgMembership(
-    id: OrgMembershipId
+    id: OrgMembershipId,
   ): Promise<Result<Snapshot<OrgMembership>>>;
   deleteOrgMembership(id: OrgMembershipId): Promise<Result<Success>>;
 
@@ -117,13 +125,13 @@ export interface Gateways {
   deleteCollection(id: CollectionId): Promise<Result<Success>>;
 
   saveCollectionMembership(
-    collectionMembership: CollectionMembership
+    collectionMembership: CollectionMembership,
   ): Promise<Result<Success>>;
   getCollectionMembership(
-    id: CollectionMembershipId
+    id: CollectionMembershipId,
   ): Promise<Result<Snapshot<CollectionMembership>>>;
   deleteCollectionMembership(
-    id: CollectionMembershipId
+    id: CollectionMembershipId,
   ): Promise<Result<Success>>;
 
   saveCommit(commit: Commit): Promise<Result<Success>>;
@@ -145,6 +153,10 @@ export interface Gateways {
   saveAnalyticsEvent(analyticsEvent: AnalyticsEvent): Promise<Result<Success>>;
   getAnalyticsEvent(id: AnalyticsEventId): Promise<Result<AnalyticsEvent>>;
   deleteAnalyticsEvent(id: AnalyticsEventId): Promise<Result<Success>>;
+
+  saveEmbedding(embedding: Embedding): Promise<Result<Success>>;
+  getEmbedding(id: EmbeddingId): Promise<Result<Snapshot<Embedding>>>;
+  deleteEmbedding(id: EmbeddingId): Promise<Result<Success>>;
 
   // ***************************************************************
   // ******************** Non-CRUD Operations **********************
@@ -174,13 +186,18 @@ export interface Gateways {
   getCommitAncestors(
     id: CommitId,
     toNearestMilestone?: boolean,
-    start?: CommitId
+    start?: CommitId,
   ): Promise<Result<Array<Commit>>>;
 
   // getUserByEmails
   //
   // Gets the user that matches any of the given emails.
   getUserByEmails(emails: Array<EmailAddress>): Promise<Result<Snapshot<User>>>;
+
+  // getUserByUserName
+  //
+  // Gets the user that matches the given userName.
+  getUserByUserName(userName: UserName): Promise<Result<Snapshot<User>>>;
 
   // getFolderAncestors
   //
@@ -193,6 +210,73 @@ export interface Gateways {
   // and any of the given resources.
   getPermissions(
     user: UserId,
-    resources: Array<ResourceId>
+    resources: Array<ResourceId>,
   ): Promise<Result<Array<Snapshot<Permission>>>>;
+
+  // getInfos
+  //
+  // Gets all infos that match the given parameters, sorted by
+  // the given sort order, and limited to the given page size and offset.
+  getInfos({
+    owner,
+    forkedFrom,
+    vizIds,
+    sortField,
+    pageNumber,
+    sortOrder,
+  }: {
+    // owner
+    //
+    // Owner to filter by
+    // Optional, useful for profile page
+    // Works in conjunction with `forkedFrom`
+    // If `owner` is specified, `vizIds` is ignored
+    // Assumption, either owner or forkedFrom is specified, not both
+    // TODO consider use case of specifying both - "Show my forks of this viz"
+    //
+    // Forks page menu options:
+    // 1. Show all forks of this viz
+    // 2. Show my forks of this viz
+    owner?: UserId;
+
+    // forkedFrom
+    //
+    // forkedFrom to filter by
+    // Optional, useful for forks page
+    // Works in conjunction with `owner`
+    // If `forkedFrom` is specified, `vizIds` is ignored
+    // Assumption, either owner or forkedFrom is specified, not both
+    forkedFrom?: VizId;
+
+    // vizIds
+    //
+    // VizIds to include in the results
+    // Can be more than one page worth of IDs
+    // `pageNumber` and `pageSize` are used to determine which IDs to fetch data for
+    // Optional, useful for search results page
+    // If this is specified, `owner` and `forkedFrom` are ignored.
+    // Use cases: when we need to get infos from the primary database (e.g. MongoDB + ShareDB)
+    // but based on similarity search using a different database technology (e.g. Redis or `pgvector`)
+    // TODO add tests for this case
+    vizIds?: Array<VizId>;
+
+    // sortField
+    //
+    // The field to sort the results by.
+    // Only respected if `owner` and/or `forkedFrom` is specified.
+    // Inored if `vizIds` is specified, because the ordering is
+    // determined by the order of the vizIds in the `vizIds` array.
+    sortField?: SortField;
+
+    // The page number to return, considering `pageSize` results per page.
+    pageNumber?: number;
+
+    // The order to sort the results by (ascending or descending).
+    sortOrder?: SortOrder;
+  }): Promise<Result<Array<Snapshot<Info>>>>;
+
+  // getUsersByIds
+  //
+  // Gets all users that match the given ids.
+  getUsersByIds(ids: Array<UserId>): Promise<Result<Array<Snapshot<User>>>>;
 }
