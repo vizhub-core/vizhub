@@ -254,7 +254,10 @@ export interface Gateways {
     // Can be more than one page worth of IDs
     // `pageNumber` and `pageSize` are used to determine which IDs to fetch data for
     // Optional, useful for search results page
-    // If this is specified, `owner` and `forkedFrom` are ignored
+    // If this is specified, `owner` and `forkedFrom` are ignored.
+    // Use cases: when we need to get infos from the primary database (e.g. MongoDB + ShareDB)
+    // but based on similarity search using a different database technology (e.g. Redis or `pgvector`)
+    // TODO add tests for this case
     vizIds?: Array<VizId>;
 
     // sortField
