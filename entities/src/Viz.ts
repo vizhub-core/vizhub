@@ -153,7 +153,7 @@ export interface File {
 export const defaultVizHeight = 500;
 
 // This is fixed.
-export const defaultVizWidth = 950;
+export const defaultVizWidth = 960;
 
 // Content
 //  * Heavyweight content of a viz.
