@@ -5,7 +5,7 @@ import { useShareDBDocData } from '../../useShareDBDocData';
 import { AuthenticatedUserProvider } from '../../contexts/AuthenticatedUserContext';
 import { VizPageBody } from './VizPageBody';
 import { Page, PageData } from '../Page';
-import './styles.css';
+import './styles.scss';
 
 const vizKit = VizKit({ baseUrl: '/api' });
 

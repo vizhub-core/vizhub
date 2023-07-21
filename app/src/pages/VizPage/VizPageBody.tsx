@@ -1,12 +1,11 @@
 import { useCallback, useContext, useMemo } from 'react';
+import { defaultVizWidth, Content, Info, User } from 'entities';
 import { VizPageHead } from 'components/src/components/VizPageHead';
 import { ForkModal } from 'components/src/components/ForkModal';
 import { VizPageViewer } from 'components/src/components/VizPageViewer';
-import { defaultVizWidth, defaultVizHeight } from 'entities';
 import { AuthenticatedUserContext } from '../../contexts/AuthenticatedUserContext';
 import { SmartHeader } from '../../smartComponents/SmartHeader';
 import { getUserDisplayName } from '../../accessors/getUserDisplayName';
-import { Content, Info, User } from 'entities';
 import { useRenderMarkdownHTML } from './useRenderMarkdownHTML';
 import { formatTimestamp } from '../../accessors/formatTimestamp';
 import { getForksPageHref } from '../../accessors/getForksPageHref';
@@ -101,9 +100,9 @@ export const VizPageBody = ({
         showForkButton={!!authenticatedUser}
       />
       <div className="vh-viz-page-body">
-        {showEditor ? 'Sidebar' : null}
+        {showEditor ? <div className="left">Sidebar</div> : null}
 
-        <div className="right">
+        <div className={`right${showEditor ? ' editor-open' : ''}`}>
           <VizPageViewer
             vizTitle={info.title}
             vizHeight={vizHeight}

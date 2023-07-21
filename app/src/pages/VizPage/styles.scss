@@ -1,12 +1,33 @@
+/*
+  Breakpoint for when to only show one thing at a time,
+  and when to show both the editor and the viz.
+*/
+$mobile-breakpoint: 550px;
+
 .vh-viz-page-body {
   flex: 1;
   display: flex;
+
+  .left {
+    width: 200px;
+
+    @media (max-width: $mobile-breakpoint) {
+      width: 100%;
+    }
+
+    background-color: blue;
+  }
   .right {
     flex: 1;
     position: relative;
     .vh-viz-page-viewer {
       width: 100%;
       position: absolute;
+    }
+  }
+  .right.editor-open {
+    @media (max-width: $mobile-breakpoint) {
+      display: none;
     }
   }
 }
