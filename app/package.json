@@ -50,6 +50,7 @@
     "sharedb-mongo": "^4.0.0",
     "vizhub-libraries": "^1.8.0",
     "vizhub-ui": "^3.1.0",
+    "vzcode": "^0.5.0",
     "ws": "^8.13.0",
     "xss": "^1.0.14"
   },
