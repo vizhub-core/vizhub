@@ -90,7 +90,7 @@ export const VizPageBody = ({
   );
 
   return (
-    <div className="vh-page overflow-auto">
+    <div className="vh-page">
       <SmartHeader />
       <VizPageHead
         showEditor={showEditor}
@@ -100,28 +100,34 @@ export const VizPageBody = ({
         onForkClick={toggleForkModal}
         showForkButton={!!authenticatedUser}
       />
-      <VizPageViewer
-        vizTitle={info.title}
-        vizHeight={vizHeight}
-        defaultVizWidth={defaultVizWidth}
-        renderVizRunner={renderVizRunner}
-        renderMarkdownHTML={renderMarkdownHTML}
-        authorDisplayName={getUserDisplayName(ownerUser)}
-        authorAvatarURL={ownerUser.picture}
-        createdDateFormatted={formatTimestamp(info.created)}
-        updatedDateFormatted={formatTimestamp(info.updated)}
-        forkedFromVizTitle={forkedFromInfo ? forkedFromInfo.title : null}
-        forkedFromVizHref={
-          forkedFromInfo
-            ? getVizPageHref(forkedFromOwnerUser, forkedFromInfo)
-            : null
-        }
-        forksCount={info.forksCount}
-        forksPageHref={getForksPageHref(ownerUser, info)}
-        ownerUserHref={getProfilePageHref(ownerUser)}
-        upvotesCount={info.upvotesCount}
-        license={license}
-      />
+      <div className="vh-viz-page-body overflow-auto">
+        {showEditor ? <div className="left">Sidebar</div> : null}
+
+        <div className="right">
+          <VizPageViewer
+            vizTitle={info.title}
+            vizHeight={vizHeight}
+            defaultVizWidth={defaultVizWidth}
+            renderVizRunner={renderVizRunner}
+            renderMarkdownHTML={renderMarkdownHTML}
+            authorDisplayName={getUserDisplayName(ownerUser)}
+            authorAvatarURL={ownerUser.picture}
+            createdDateFormatted={formatTimestamp(info.created)}
+            updatedDateFormatted={formatTimestamp(info.updated)}
+            forkedFromVizTitle={forkedFromInfo ? forkedFromInfo.title : null}
+            forkedFromVizHref={
+              forkedFromInfo
+                ? getVizPageHref(forkedFromOwnerUser, forkedFromInfo)
+                : null
+            }
+            forksCount={info.forksCount}
+            forksPageHref={getForksPageHref(ownerUser, info)}
+            ownerUserHref={getProfilePageHref(ownerUser)}
+            upvotesCount={info.upvotesCount}
+            license={license}
+          />
+        </div>
+      </div>
       <ForkModal
         initialTitle={'Fork of ' + info.title}
         initialVisibility={info.visibility}

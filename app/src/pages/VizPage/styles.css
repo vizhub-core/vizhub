@@ -1,11 +1,19 @@
+.vh-viz-page-body {
+  display: flex;
+
+  .right {
+    flex: 1;
+    display: flex;
+  }
+}
+
 .vh-markdown-body img {
   width: 100%;
 }
 
 .vh-markdown-body img,
 .vh-markdown-body iframe {
-  /* TODO source this from upstream */
-  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.15);
+  box-shadow: var(--vh-box-shadow);
   border-radius: 3px;
 }
 
