@@ -1,4 +1,5 @@
 import { useCallback, useContext, useMemo } from 'react';
+import { Sidebar } from 'vzcode/src/client/Sidebar';
 import { defaultVizWidth, Content, Info, User } from 'entities';
 import { VizPageHead } from 'components/src/components/VizPageHead';
 import { ForkModal } from 'components/src/components/ForkModal';
@@ -100,7 +101,11 @@ export const VizPageBody = ({
         showForkButton={!!authenticatedUser}
       />
       <div className="vh-viz-page-body">
-        {showEditor ? <div className="left">Sidebar</div> : null}
+        {showEditor ? (
+          <div className="left">
+            <Sidebar />
+          </div>
+        ) : null}
 
         <div className={`right${showEditor ? ' editor-open' : ''}`}>
           <VizPageViewer
