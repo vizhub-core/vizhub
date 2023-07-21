@@ -1,9 +1,13 @@
 .vh-viz-page-body {
+  flex: 1;
   display: flex;
-
   .right {
     flex: 1;
-    display: flex;
+    position: relative;
+    .vh-viz-page-viewer {
+      width: 100%;
+      position: absolute;
+    }
   }
 }
 

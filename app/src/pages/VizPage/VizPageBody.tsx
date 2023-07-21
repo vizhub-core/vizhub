@@ -100,8 +100,8 @@ export const VizPageBody = ({
         onForkClick={toggleForkModal}
         showForkButton={!!authenticatedUser}
       />
-      <div className="vh-viz-page-body overflow-auto">
-        {showEditor ? <div className="left">Sidebar</div> : null}
+      <div className="vh-viz-page-body">
+        {showEditor ? 'Sidebar' : null}
 
         <div className="right">
           <VizPageViewer
