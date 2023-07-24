@@ -27,7 +27,7 @@
   "dependencies": {
     "@codemirror/lang-javascript": "^6.1.9",
     "@replit/codemirror-interact": "^6.1.0",
-    "@sentry/node": "^7.57.0",
+    "@sentry/node": "^7.60.0",
     "@teamwork/websocket-json-stream": "^2.0.0",
     "@types/react-router-dom": "^5.3.3",
     "buble": "^0.20.0",
@@ -44,12 +44,13 @@
     "path-posix": "^1.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.14.1",
+    "react-router-dom": "^6.14.2",
     "rollup-pluginutils": "^2.8.2",
     "sharedb": "^4.0.0",
     "sharedb-mongo": "^4.0.0",
     "vizhub-libraries": "^1.8.0",
     "vizhub-ui": "^3.1.0",
+    "vzcode": "^0.6.0",
     "ws": "^8.13.0",
     "xss": "^1.0.14"
   },
@@ -59,9 +60,9 @@
     "express": "^4.18.2",
     "prettier": "^3.0.0",
     "rollup-plugin-visualizer": "^5.9.2",
-    "sass": "^1.63.6",
+    "sass": "^1.64.1",
     "serve-static": "^1.15.0",
-    "vite": "^4.4.3",
+    "vite": "^4.4.7",
     "vitest": "^0.33.0"
   }
 }

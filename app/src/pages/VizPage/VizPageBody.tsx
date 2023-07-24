@@ -1,12 +1,12 @@
 import { useCallback, useContext, useMemo } from 'react';
+import { Sidebar } from 'vzcode/src/client/Sidebar';
+import { defaultVizWidth, Content, Info, User } from 'entities';
 import { VizPageHead } from 'components/src/components/VizPageHead';
 import { ForkModal } from 'components/src/components/ForkModal';
 import { VizPageViewer } from 'components/src/components/VizPageViewer';
-import { defaultVizWidth, defaultVizHeight } from 'entities';
 import { AuthenticatedUserContext } from '../../contexts/AuthenticatedUserContext';
 import { SmartHeader } from '../../smartComponents/SmartHeader';
 import { getUserDisplayName } from '../../accessors/getUserDisplayName';
-import { Content, Info, User } from 'entities';
 import { useRenderMarkdownHTML } from './useRenderMarkdownHTML';
 import { formatTimestamp } from '../../accessors/formatTimestamp';
 import { getForksPageHref } from '../../accessors/getForksPageHref';
@@ -90,7 +90,7 @@ export const VizPageBody = ({
   );
 
   return (
-    <div className="vh-page overflow-auto">
+    <div className="vh-page">
       <SmartHeader />
       <VizPageHead
         showEditor={showEditor}
@@ -100,28 +100,38 @@ export const VizPageBody = ({
         onForkClick={toggleForkModal}
         showForkButton={!!authenticatedUser}
       />
-      <VizPageViewer
-        vizTitle={info.title}
-        vizHeight={vizHeight}
-        defaultVizWidth={defaultVizWidth}
-        renderVizRunner={renderVizRunner}
-        renderMarkdownHTML={renderMarkdownHTML}
-        authorDisplayName={getUserDisplayName(ownerUser)}
-        authorAvatarURL={ownerUser.picture}
-        createdDateFormatted={formatTimestamp(info.created)}
-        updatedDateFormatted={formatTimestamp(info.updated)}
-        forkedFromVizTitle={forkedFromInfo ? forkedFromInfo.title : null}
-        forkedFromVizHref={
-          forkedFromInfo
-            ? getVizPageHref(forkedFromOwnerUser, forkedFromInfo)
-            : null
-        }
-        forksCount={info.forksCount}
-        forksPageHref={getForksPageHref(ownerUser, info)}
-        ownerUserHref={getProfilePageHref(ownerUser)}
-        upvotesCount={info.upvotesCount}
-        license={license}
-      />
+      <div className="vh-viz-page-body">
+        {showEditor ? (
+          <div className="left">
+            <Sidebar files={content.files} />
+          </div>
+        ) : null}
+
+        <div className={`right${showEditor ? ' editor-open' : ''}`}>
+          <VizPageViewer
+            vizTitle={info.title}
+            vizHeight={vizHeight}
+            defaultVizWidth={defaultVizWidth}
+            renderVizRunner={renderVizRunner}
+            renderMarkdownHTML={renderMarkdownHTML}
+            authorDisplayName={getUserDisplayName(ownerUser)}
+            authorAvatarURL={ownerUser.picture}
+            createdDateFormatted={formatTimestamp(info.created)}
+            updatedDateFormatted={formatTimestamp(info.updated)}
+            forkedFromVizTitle={forkedFromInfo ? forkedFromInfo.title : null}
+            forkedFromVizHref={
+              forkedFromInfo
+                ? getVizPageHref(forkedFromOwnerUser, forkedFromInfo)
+                : null
+            }
+            forksCount={info.forksCount}
+            forksPageHref={getForksPageHref(ownerUser, info)}
+            ownerUserHref={getProfilePageHref(ownerUser)}
+            upvotesCount={info.upvotesCount}
+            license={license}
+          />
+        </div>
+      </div>
       <ForkModal
         initialTitle={'Fork of ' + info.title}
         initialVisibility={info.visibility}
