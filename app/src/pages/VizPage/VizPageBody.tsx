@@ -103,7 +103,7 @@ export const VizPageBody = ({
       <div className="vh-viz-page-body">
         {showEditor ? (
           <div className="left">
-            <Sidebar />
+            <Sidebar files={content.files} />
           </div>
         ) : null}
 

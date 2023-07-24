@@ -18,9 +18,11 @@
     "url": "https://github.com/vizhub-core/vizhub3/issues"
   },
   "homepage": "https://github.com/vizhub-core/vizhub3#readme",
-  "dependencies": {},
+  "dependencies": {
+    "vzcode": "^0.5.0"
+  },
   "devDependencies": {
-    "typescript": "^5.1.6",
-    "prettier": "^3.0.0"
+    "prettier": "^3.0.0",
+    "typescript": "^5.1.6"
   }
 }
