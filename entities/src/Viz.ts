@@ -3,6 +3,9 @@ import { OrgId } from './Orgs';
 import { CommitId } from './RevisionHistory';
 import { FolderId } from './Folders';
 import { Timestamp, Visibility } from './common';
+import { FileId, File, Files } from 'vzcode';
+
+export type { FileId, File, Files };
 
 // VizId
 //  * Unique identifier string for a Viz.
@@ -118,35 +121,6 @@ export interface Info {
 // Configuration
 // * An object that can be serialized as JSON
 export type Configuration = any;
-
-// FileId
-//   * A unique ID for a file within a Viz.
-//   * This is a random string.
-export type FileId = string;
-
-// Files
-//  * A collection of files in a viz.
-//  * Keys are _not_ file names or array indices,
-//    because based on past experience, that
-//    leads to very difficult frontnend logic around
-//    OT in the case that a file is renamed or deleted.
-//  * When the file name changes, or files are added/deleted,
-//    this ID stays the same, simplifying things re:OT.
-export interface Files {
-  [fileId: FileId]: File;
-}
-
-// File
-//  * A file within a viz.
-export interface File {
-  // The file name.
-  // e.g. "index.html".
-  name: string;
-
-  // The text content of the file.
-  // e.g. "<body>Hello</body>"
-  text: string;
-}
 
 // The default height of a viz in pixels.
 // Homage to bl.ocks.org.
