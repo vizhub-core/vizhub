@@ -1,0 +1,3 @@
+[submodule "vzcode"]
+	path = vzcode
+	url = git@github.com:vizhub-core/vzcode.git
