@@ -146,8 +146,11 @@ export const VizPageBody = ({
                 shareDBDoc={contentShareDBDoc}
                 filesPath={filesPath}
                 activeFileId={activeFileId}
+                // TODO make presence work
                 // localPresence={localPresence}
                 // docPresence={docPresence}
+
+                // TODO make dynamic themes work
                 // theme={theme}
               />
             ) : null}

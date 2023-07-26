@@ -27,7 +27,7 @@
   "dependencies": {
     "@codemirror/lang-javascript": "^6.1.9",
     "@replit/codemirror-interact": "^6.1.0",
-    "@sentry/node": "^7.60.0",
+    "@sentry/node": "^7.60.1",
     "@teamwork/websocket-json-stream": "^2.0.0",
     "@types/react-router-dom": "^5.3.3",
     "@types/sharedb": "^3.3.2",
@@ -39,7 +39,7 @@
     "jose": "^4.14.4",
     "jsdom": "^22.1.0",
     "jsesc": "^3.0.2",
-    "marked": "^5.1.1",
+    "marked": "^5.1.2",
     "marked-gfm-heading-id": "^3.0.4",
     "mongodb-legacy": "^5.0.0",
     "path-posix": "^1.0.0",
