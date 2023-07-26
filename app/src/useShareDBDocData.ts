@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import ShareDBClient from 'sharedb-client-browser/dist/sharedb-client-umd.cjs';
 import { otType } from 'ot';
 import { toCollectionName } from 'database/src/toCollectionName';
 import { Snapshot } from 'entities';
+import { ShareDBDoc } from 'vzcode';
 
 // Register our custom JSON1 OT type that supports presence.
 // See https://github.com/vizhub-core/json1-presence
@@ -26,51 +27,54 @@ const getConnection = (() => {
   };
 })();
 
+// Just logs any ShareDB errors to the console.
 const logShareDBError = (error) => {
   if (error) console.log(error);
 };
 
-// TODO better types? Integrate with upstream how?
-// https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/sharedb/lib/sharedb.d.ts#L110
-export type ShareDBDoc<T> = {
-  data: T;
-  ingestSnapshot: (snapshot: Snapshot<T>, logShareDBError) => void;
-  subscribe: (logShareDBError) => void;
-  on: (event: string, updateState: () => void) => void;
-  off: (event: string, updateState: () => void) => void;
-};
-
 // Subscribes to live updates via ShareDB.
-// `snapshot` may be null, in which case `null` is returned.
-export const useShareDBDocData = <T>(snapshot: Snapshot<T>, entityName) => {
-  const [data, setData] = useState<T>(snapshot ? snapshot.data : null);
-  const [shareDBDoc, setShareDBDoc] = useState<ShareDBDoc<T>>(null);
+// `snapshot` can be null, which happens sometimes when
+// something doesn't exist, e.g. the `forkedFromInfo` of the primordial viz.
+export const useShareDBDocData = <T>(
+  snapshot: Snapshot<T> | null,
+  entityName,
+) => {
+  const [data, setData] = useState<T | null>(snapshot ? snapshot.data : null);
 
-  useEffect(() => {
-    if (snapshot) {
-      const connection = getConnection();
-      const shareDBDoc = connection.get(
-        toCollectionName(entityName),
-        snapshot.data.id,
-      );
-      shareDBDoc.ingestSnapshot(snapshot, logShareDBError);
-      shareDBDoc.subscribe(logShareDBError);
+  // Get access to the ShareDB document.
+  // `null` if we're server-side or if `snapshot` is `null`.
+  const shareDBDoc: ShareDBDoc<T> | null = useMemo(() => {
+    // Bail if we're server-side
+    if (typeof window === 'undefined') return null;
 
-      const updateState = () => {
-        setData(shareDBDoc.data);
-      };
+    // Bail if we don't have a snapshot
+    if (!snapshot) return null;
 
-      shareDBDoc.on('op batch', updateState);
+    // Otherwise make a ShareDB document!
+    const connection = getConnection();
+    const shareDBDoc = connection.get(
+      toCollectionName(entityName),
+      snapshot.data.id,
+    );
+    shareDBDoc.ingestSnapshot(snapshot, logShareDBError);
 
-      setShareDBDoc(shareDBDoc);
+    // Subscribe to live updates.
+    shareDBDoc.subscribe(logShareDBError);
 
-      // TODO test cleanup for leaks
-      // use doc.unsubscribe? doc.destroy?
-      return () => {
-        shareDBDoc.off('op batch', updateState);
-      };
-    }
+    return shareDBDoc;
   }, [snapshot]);
+
+  // Update state when ShareDB document changes.
+  useEffect(() => {
+    if (!shareDBDoc) return;
+    const updateState = () => {
+      setData(shareDBDoc.data);
+    };
+    shareDBDoc.on('op batch', updateState);
+    return () => {
+      shareDBDoc.off('op batch', updateState);
+    };
+  }, [shareDBDoc]);
 
   return { data, shareDBDoc };
 };

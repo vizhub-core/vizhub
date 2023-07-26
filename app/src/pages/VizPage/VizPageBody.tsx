@@ -17,7 +17,10 @@ import { getProfilePageHref } from '../../accessors/getProfilePageHref';
 import { getVizPageHref } from '../../accessors/getVizPageHref';
 import { getLicense } from '../../accessors/getLicense';
 import { getHeight } from '../../accessors/getHeight';
-import type { Doc } from 'sharedb';
+import { ShareDBDoc } from 'vzcode';
+
+// The fixed path of the files in the ShareDB<Content> document.
+const filesPath = ['files'];
 
 export const VizPageBody = ({
   info,
@@ -58,7 +61,7 @@ export const VizPageBody = ({
   setActiveFileId: (activeFileId: FileId | null) => void;
   tabList: Array<FileId>;
   setTabList: (tabList: Array<FileId>) => void;
-  contentShareDBDoc: Doc<Content>;
+  contentShareDBDoc: ShareDBDoc<Content>;
 }) => {
   // The currently authenticated user, if any.
   const authenticatedUser: User | null = useContext(AuthenticatedUserContext);
@@ -89,18 +92,16 @@ export const VizPageBody = ({
 
   // Render the viz runner iframe.
   const renderVizRunner = useCallback(
-    (iframeScale: number) => {
-      return (
-        <iframe
-          width={defaultVizWidth}
-          height={vizHeight}
-          srcDoc={srcdoc}
-          style={{
-            transform: `scale(${iframeScale})`,
-          }}
-        />
-      );
-    },
+    (iframeScale: number) => (
+      <iframe
+        width={defaultVizWidth}
+        height={vizHeight}
+        srcDoc={srcdoc}
+        style={{
+          transform: `scale(${iframeScale})`,
+        }}
+      />
+    ),
     [srcdoc, vizHeight],
   );
 
@@ -143,9 +144,10 @@ export const VizPageBody = ({
             {files && activeFileId ? (
               <CodeEditor
                 shareDBDoc={contentShareDBDoc}
+                filesPath={filesPath}
+                activeFileId={activeFileId}
                 // localPresence={localPresence}
                 // docPresence={docPresence}
-                // activeFileId={activeFileId}
                 // theme={theme}
               />
             ) : null}
