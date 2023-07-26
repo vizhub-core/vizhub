@@ -1,6 +1,9 @@
 import { useCallback, useContext, useMemo } from 'react';
 import { Sidebar } from 'vzcode/src/client/Sidebar';
-import { defaultVizWidth, Content, Info, User } from 'entities';
+import { useTabsState } from 'vzcode/src/client/useTabsState';
+import { TabList } from 'vzcode/src/client/TabList';
+import { CodeEditor } from 'vzcode/src/client/CodeEditor';
+import { defaultVizWidth, Content, Info, User, FileId, Files } from 'entities';
 import { VizPageHead } from 'components/src/components/VizPageHead';
 import { ForkModal } from 'components/src/components/ForkModal';
 import { VizPageViewer } from 'components/src/components/VizPageViewer';
@@ -14,6 +17,10 @@ import { getProfilePageHref } from '../../accessors/getProfilePageHref';
 import { getVizPageHref } from '../../accessors/getVizPageHref';
 import { getLicense } from '../../accessors/getLicense';
 import { getHeight } from '../../accessors/getHeight';
+import { ShareDBDoc } from 'vzcode';
+
+// The fixed path of the files in the ShareDB<Content> document.
+const filesPath = ['files'];
 
 export const VizPageBody = ({
   info,
@@ -30,6 +37,11 @@ export const VizPageBody = ({
   forkedFromInfo,
   forkedFromOwnerUser,
   srcdoc,
+  activeFileId,
+  setActiveFileId,
+  tabList,
+  setTabList,
+  contentShareDBDoc,
 }: {
   info: Info;
   content: Content;
@@ -45,6 +57,11 @@ export const VizPageBody = ({
   forkedFromInfo: Info | null;
   forkedFromOwnerUser: User | null;
   srcdoc: string;
+  activeFileId: FileId | null;
+  setActiveFileId: (activeFileId: FileId | null) => void;
+  tabList: Array<FileId>;
+  setTabList: (tabList: Array<FileId>) => void;
+  contentShareDBDoc: ShareDBDoc<Content>;
 }) => {
   // The currently authenticated user, if any.
   const authenticatedUser: User | null = useContext(AuthenticatedUserContext);
@@ -73,21 +90,30 @@ export const VizPageBody = ({
   // The height of the viz, in pixels, falling back to default.
   const vizHeight = useMemo(() => getHeight(content.height), [content.height]);
 
+  // Render the viz runner iframe.
   const renderVizRunner = useCallback(
-    (iframeScale: number) => {
-      return (
-        <iframe
-          width={defaultVizWidth}
-          height={vizHeight}
-          srcDoc={srcdoc}
-          style={{
-            transform: `scale(${iframeScale})`,
-          }}
-        />
-      );
-    },
+    (iframeScale: number) => (
+      <iframe
+        width={defaultVizWidth}
+        height={vizHeight}
+        srcDoc={srcdoc}
+        style={{
+          transform: `scale(${iframeScale})`,
+        }}
+      />
+    ),
     [srcdoc, vizHeight],
   );
+
+  // Logic for opening and closing tabs.
+  const { closeTab, openTab } = useTabsState(
+    activeFileId,
+    setActiveFileId,
+    tabList,
+    setTabList,
+  );
+
+  const files: Files = content.files;
 
   return (
     <div className="vh-page">
@@ -101,9 +127,33 @@ export const VizPageBody = ({
         showForkButton={!!authenticatedUser}
       />
       <div className="vh-viz-page-body">
-        {showEditor ? (
+        {showEditor && files ? (
           <div className="left">
-            <Sidebar files={content.files} />
+            <Sidebar files={files} handleFileClick={openTab} />
+          </div>
+        ) : null}
+        {showEditor && activeFileId ? (
+          <div className="middle">
+            <TabList
+              files={files}
+              tabList={tabList}
+              activeFileId={activeFileId}
+              setActiveFileId={setActiveFileId}
+              closeTab={closeTab}
+            />
+            {files && activeFileId ? (
+              <CodeEditor
+                shareDBDoc={contentShareDBDoc}
+                filesPath={filesPath}
+                activeFileId={activeFileId}
+                // TODO make presence work
+                // localPresence={localPresence}
+                // docPresence={docPresence}
+
+                // TODO make dynamic themes work
+                // theme={theme}
+              />
+            ) : null}
           </div>
         ) : null}
 

@@ -25,8 +25,10 @@ export const UNLISTED: Visibility = 'unlisted';
 
 // A ShareDB Snapshot. See:
 // https://share.github.io/sharedb/api/snapshot
-export interface Snapshot<Type> {
+export interface Snapshot<T> {
   type: string;
-  data: Type;
+
+  // Whatever T is, it needs to have an id field.
+  data: T & { id: string };
   v: number;
 }

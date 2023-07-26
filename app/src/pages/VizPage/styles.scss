@@ -17,6 +17,11 @@ $mobile-breakpoint: 550px;
 
     background-color: blue;
   }
+  .middle {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+  }
   .right {
     flex: 1;
     position: relative;

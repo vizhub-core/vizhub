@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Content, Info, Snapshot, User } from 'entities';
+import { Content, FileId, Info, Snapshot, User } from 'entities';
 import { VizKit } from 'api/src/VizKit';
 import { useShareDBDocData } from '../../useShareDBDocData';
 import { AuthenticatedUserProvider } from '../../contexts/AuthenticatedUserContext';
@@ -31,22 +31,33 @@ export const VizPage: Page = ({ pageData }: { pageData: VizPageData }) => {
     forkedFromOwnerUserSnapshot,
     srcdoc,
   } = pageData;
-  const info: Info = useShareDBDocData(infoSnapshot, 'Info');
-  const content: Content = useShareDBDocData(contentSnapshot, 'Content');
-  const ownerUser: User = useShareDBDocData(ownerUserSnapshot, 'User');
+  const info: Info = useShareDBDocData(infoSnapshot, 'Info').data;
+
+  const { data: content, shareDBDoc: contentShareDBDoc } =
+    useShareDBDocData<Content>(contentSnapshot, 'Content');
+
+  const ownerUser: User = useShareDBDocData(ownerUserSnapshot, 'User').data;
   const forkedFromInfo: Info = useShareDBDocData(
     forkedFromInfoSnapshot,
     'Info',
-  );
-  const forkedFromOwnerUser: User = useShareDBDocData(
+  ).data;
+  const forkedFromOwnerUser: User = useShareDBDocData<User>(
     forkedFromOwnerUserSnapshot,
     'User',
-  );
+  ).data;
 
-  // TODO move this to URL
-  // https://github.com/vizhub-core/vizhub3/issues/107
-  // ?edit=files
+  // `showEditor`
+  // True if the sidebar should be shown.
   const [showEditor, setShowEditor] = useState(false);
+
+  // `activeFileId`
+  // The id of the currently open file tab.
+  const [activeFileId, setActiveFileId] = useState<FileId | null>(null);
+
+  // `tabList`
+  // The ordered list of tabs in the code editor.
+  const [tabList, setTabList] = useState<Array<FileId>>([]);
+
   const [showForkModal, setShowForkModal] = useState(false);
 
   const onExportClick = useCallback(() => {
@@ -81,16 +92,20 @@ export const VizPage: Page = ({ pageData }: { pageData: VizPageData }) => {
     >
       <VizPageBody
         {...{
-          // Entities
           info,
           content,
+          contentShareDBDoc,
           ownerUser,
           forkedFromInfo,
           forkedFromOwnerUser,
 
-          // UI state
           showEditor,
           setShowEditor,
+          activeFileId,
+          setActiveFileId,
+          tabList,
+          setTabList,
+
           onExportClick,
           onShareClick,
           showForkModal,
@@ -98,7 +113,6 @@ export const VizPage: Page = ({ pageData }: { pageData: VizPageData }) => {
           onFork,
           initialReadmeHTML,
 
-          // Runtime state
           srcdoc,
         }}
       />
