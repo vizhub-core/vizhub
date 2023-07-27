@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Content, FileId, Info, Snapshot, User } from 'entities';
+import { Content, FileId, Info, Snapshot, User, VizId } from 'entities';
 import { VizKit } from 'api/src/VizKit';
 import {
   useData,
   useShareDBDoc,
   useShareDBDocData,
+  useShareDBDocPresence,
 } from '../../useShareDBDocData';
 import { AuthenticatedUserProvider } from '../../contexts/AuthenticatedUserContext';
 import { VizPageBody } from './VizPageBody';
@@ -36,9 +37,12 @@ export const VizPage: Page = ({ pageData }: { pageData: VizPageData }) => {
     srcdoc,
   } = pageData;
   const info: Info = useShareDBDocData(infoSnapshot, 'Info');
+  const id: VizId = info.id;
 
   const contentShareDBDoc = useShareDBDoc<Content>(contentSnapshot, 'Content');
   const content: Content = useData(contentSnapshot, contentShareDBDoc);
+
+  const contentShareDBDocPresence = useShareDBDocPresence(id, 'Content');
 
   const ownerUser: User = useShareDBDocData(ownerUserSnapshot, 'User');
   const forkedFromInfo: Info = useShareDBDocData(
@@ -99,6 +103,7 @@ export const VizPage: Page = ({ pageData }: { pageData: VizPageData }) => {
           info,
           content,
           contentShareDBDoc,
+          contentShareDBDocPresence,
           ownerUser,
           forkedFromInfo,
           forkedFromOwnerUser,

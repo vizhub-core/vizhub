@@ -4,6 +4,7 @@ import { otType } from 'ot';
 import { toCollectionName } from 'database/src/toCollectionName';
 import { Snapshot } from 'entities';
 import { ShareDBDoc } from 'vzcode';
+import { randomId } from 'vzcode/src/randomId';
 
 // Register our custom JSON1 OT type that supports presence.
 // See https://github.com/vizhub-core/json1-presence
@@ -100,3 +101,29 @@ export const useShareDBDocData = <T>(
   snapshot: Snapshot<T> | null,
   entityName,
 ): T | null => useData(snapshot, useShareDBDoc(snapshot, entityName));
+
+// Set up presence.
+// See https://github.com/share/sharedb/blob/master/examples/rich-text-presence/client.js#L53
+export const useShareDBDocPresence = (id: string, entityName: string) => {
+  const shareDBDocPresence = useMemo(() => {
+    // Bail if we're server-side
+    if (typeof window === 'undefined') return null;
+    // Otherwise make a ShareDB document!
+    const connection = getConnection();
+    console.log('args to getDocPresence', toCollectionName(entityName), id);
+    const docPresence = connection.getDocPresence(
+      toCollectionName(entityName),
+      id,
+    );
+    console.log('randomId()', randomId());
+    return {
+      // Local ShareDB presence, for broadcasting our cursor position
+      // so other clients can see it.
+      // See https://share.github.io/sharedb/api/local-presence
+      localPresence: docPresence.create(randomId()),
+      docPresence,
+    };
+  }, [id, entityName]);
+
+  return shareDBDocPresence;
+};
