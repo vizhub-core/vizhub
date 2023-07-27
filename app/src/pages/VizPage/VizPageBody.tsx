@@ -25,6 +25,8 @@ const filesPath = ['files'];
 export const VizPageBody = ({
   info,
   content,
+  contentShareDBDoc,
+  contentShareDBDocPresence,
   ownerUser,
   showEditor,
   setShowEditor,
@@ -41,10 +43,11 @@ export const VizPageBody = ({
   setActiveFileId,
   tabList,
   setTabList,
-  contentShareDBDoc,
 }: {
   info: Info;
   content: Content;
+  contentShareDBDoc: ShareDBDoc<Content>;
+  contentShareDBDocPresence: any;
   ownerUser: User;
   showEditor: boolean;
   setShowEditor: (showEditor: boolean) => void;
@@ -61,7 +64,6 @@ export const VizPageBody = ({
   setActiveFileId: (activeFileId: FileId | null) => void;
   tabList: Array<FileId>;
   setTabList: (tabList: Array<FileId>) => void;
-  contentShareDBDoc: ShareDBDoc<Content>;
 }) => {
   // The currently authenticated user, if any.
   const authenticatedUser: User | null = useContext(AuthenticatedUserContext);
@@ -115,6 +117,10 @@ export const VizPageBody = ({
 
   const files: Files = content.files;
 
+  // These are undefined during SSR, defined in the browser.
+  const localPresence = contentShareDBDocPresence?.localPresence;
+  const docPresence = contentShareDBDocPresence?.docPresence;
+
   return (
     <div className="vh-page">
       <SmartHeader />
@@ -146,9 +152,8 @@ export const VizPageBody = ({
                 shareDBDoc={contentShareDBDoc}
                 filesPath={filesPath}
                 activeFileId={activeFileId}
-                // TODO make presence work
-                // localPresence={localPresence}
-                // docPresence={docPresence}
+                localPresence={localPresence}
+                docPresence={docPresence}
 
                 // TODO make dynamic themes work
                 // theme={theme}
