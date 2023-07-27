@@ -110,12 +110,16 @@ export const useShareDBDocPresence = (id: string, entityName: string) => {
     if (typeof window === 'undefined') return null;
     // Otherwise make a ShareDB document!
     const connection = getConnection();
-    console.log('args to getDocPresence', toCollectionName(entityName), id);
     const docPresence = connection.getDocPresence(
       toCollectionName(entityName),
       id,
     );
-    console.log('randomId()', randomId());
+
+    // Subscribe to receive remote presence updates.
+    docPresence.subscribe(function (error) {
+      if (error) throw error;
+    });
+
     return {
       // Local ShareDB presence, for broadcasting our cursor position
       // so other clients can see it.
