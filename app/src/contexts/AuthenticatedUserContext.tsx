@@ -10,7 +10,7 @@ export const AuthenticatedUserProvider = ({
   children,
 }) => (
   <AuthenticatedUserContext.Provider
-    value={useShareDBDocData<User>(authenticatedUserSnapshot, 'User').data}
+    value={useShareDBDocData<User>(authenticatedUserSnapshot, 'User')}
   >
     {children}
   </AuthenticatedUserContext.Provider>

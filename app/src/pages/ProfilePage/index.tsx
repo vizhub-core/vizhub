@@ -27,7 +27,7 @@ export const ProfilePage: Page = ({
   const profileUser: User = useShareDBDocData<User>(
     profileUserSnapshot,
     'User',
-  ).data;
+  );
 
   return (
     <AuthenticatedUserProvider

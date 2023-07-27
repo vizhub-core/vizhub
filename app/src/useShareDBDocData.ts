@@ -32,15 +32,13 @@ const logShareDBError = (error) => {
   if (error) console.log(error);
 };
 
-// Subscribes to live updates via ShareDB.
-// `snapshot` can be null, which happens sometimes when
+// Returns a ShareDB document for the given entity.
+// The `snapshot` can be null, which happens sometimes when
 // something doesn't exist, e.g. the `forkedFromInfo` of the primordial viz.
-export const useShareDBDocData = <T>(
+export const useShareDBDoc = <T>(
   snapshot: Snapshot<T> | null,
-  entityName,
-) => {
-  const [data, setData] = useState<T | null>(snapshot ? snapshot.data : null);
-
+  entityName: string,
+): ShareDBDoc<T> | null => {
   // Get access to the ShareDB document.
   // `null` if we're server-side or if `snapshot` is `null`.
   const shareDBDoc: ShareDBDoc<T> | null = useMemo(() => {
@@ -64,6 +62,21 @@ export const useShareDBDocData = <T>(
     return shareDBDoc;
   }, [snapshot]);
 
+  return shareDBDoc;
+};
+
+// Returns the data from a ShareDB document.
+// Updates the data when the ShareDB document changes.
+export const useData = <T>(
+  snapshot: Snapshot<T> | null,
+  shareDBDoc: ShareDBDoc<T> | null,
+): T | null => {
+  // We initialize `data` to the snapshot data, so that
+  // we can render the initial state of the document.
+  // Note that during server-side rendering, `shareDBDoc` is null,
+  // so we use the snapshot data instead of `shareDBDoc.data`.
+  const [data, setData] = useState<T | null>(snapshot ? snapshot.data : null);
+
   // Update state when ShareDB document changes.
   useEffect(() => {
     if (!shareDBDoc) return;
@@ -76,5 +89,14 @@ export const useShareDBDocData = <T>(
     };
   }, [shareDBDoc]);
 
-  return { data, shareDBDoc };
+  return data;
 };
+
+// Subscribes to live updates via ShareDB.
+// Exposes the dynamic data of the ShareDB document.
+// `snapshot` can be null, which happens sometimes when
+// something doesn't exist, e.g. the `forkedFromInfo` of the primordial viz.
+export const useShareDBDocData = <T>(
+  snapshot: Snapshot<T> | null,
+  entityName,
+): T | null => useData(snapshot, useShareDBDoc(snapshot, entityName));
