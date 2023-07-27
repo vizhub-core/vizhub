@@ -8,7 +8,7 @@ export const EventVizLive = ({ analyticsEventSnapshot, vizModule, title }) => {
   const analyticsEvent = useShareDBDocData<AnalyticsEvent>(
     analyticsEventSnapshot,
     'AnalyticsEvent',
-  ).data;
+  );
 
   return (
     <EventViz

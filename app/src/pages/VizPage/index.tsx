@@ -1,7 +1,11 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Content, FileId, Info, Snapshot, User } from 'entities';
 import { VizKit } from 'api/src/VizKit';
-import { useShareDBDocData } from '../../useShareDBDocData';
+import {
+  useData,
+  useShareDBDoc,
+  useShareDBDocData,
+} from '../../useShareDBDocData';
 import { AuthenticatedUserProvider } from '../../contexts/AuthenticatedUserContext';
 import { VizPageBody } from './VizPageBody';
 import { Page, PageData } from '../Page';
@@ -31,20 +35,20 @@ export const VizPage: Page = ({ pageData }: { pageData: VizPageData }) => {
     forkedFromOwnerUserSnapshot,
     srcdoc,
   } = pageData;
-  const info: Info = useShareDBDocData(infoSnapshot, 'Info').data;
+  const info: Info = useShareDBDocData(infoSnapshot, 'Info');
 
-  const { data: content, shareDBDoc: contentShareDBDoc } =
-    useShareDBDocData<Content>(contentSnapshot, 'Content');
+  const contentShareDBDoc = useShareDBDoc<Content>(contentSnapshot, 'Content');
+  const content: Content = useData(contentSnapshot, contentShareDBDoc);
 
-  const ownerUser: User = useShareDBDocData(ownerUserSnapshot, 'User').data;
+  const ownerUser: User = useShareDBDocData(ownerUserSnapshot, 'User');
   const forkedFromInfo: Info = useShareDBDocData(
     forkedFromInfoSnapshot,
     'Info',
-  ).data;
+  );
   const forkedFromOwnerUser: User = useShareDBDocData<User>(
     forkedFromOwnerUserSnapshot,
     'User',
-  ).data;
+  );
 
   // `showEditor`
   // True if the sidebar should be shown.
