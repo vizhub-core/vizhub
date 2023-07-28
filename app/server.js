@@ -118,7 +118,7 @@ async function createServer(
   }
 
   // Unpack the entry point.
-  const { initializeGateways, api, authentication } = entry;
+  const { initializeGateways, api, authentication, accessControl } = entry;
 
   // This API is required for the ShareDB WebSocket server.
   const server = http.createServer(app);
@@ -132,8 +132,20 @@ async function createServer(
 
   // Listen for ShareDB connections over WebSocket.
   const wss = new WebSocketServer({ server });
-  wss.on('connection', (ws) => {
-    shareDBBackend.listen(new WebSocketJSONStream(ws));
+  // wss.on('connection', (ws) => {
+  //   shareDBBackend.listen(new WebSocketJSONStream(ws));
+  // });
+
+  // Set up new connections to interact with ShareDB.
+  wss.on('connection', (ws, req) => {
+    const stream = new WebSocketJSONStream(ws);
+
+    // Prevent server crashes on errors.
+    stream.on('error', (error) => {
+      console.log('WebSocket stream error: ' + error.message);
+    });
+
+    shareDBBackend.listen(stream, req);
   });
 
   // Set up the API endpoints.
@@ -148,6 +160,11 @@ async function createServer(
     );
     console.log('Starting dev server without authentication enabled...');
   }
+
+  // Access control at ShareDB level.
+  shareDBBackend.use('connect', accessControl.identifyAgent);
+  // shareDBBackend.use('apply', accessControl.vizWrite);
+  // shareDBBackend.use('readSnapshots', accessControl.vizRead);
 
   // Debug for testing sentry
   app.get('/debug-sentry', function mainHandler(req, res) {
