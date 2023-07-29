@@ -1,4 +1,23 @@
 import { parse } from 'cookie';
+import { JWK, JWKS, JWE, errors } from 'jose';
+import http from 'http';
+// import test from 'express-openid-connect/lib/appSession.js';
+
+// From https://gist.github.com/edwardb96/ee287a1b0a90dbdad1eec1551dcd4878
+// Via https://github.com/auth0/express-openid-connect/issues/151#issuecomment-715588934
+// See also https://github.com/auth0/express-openid-connect/blob/master/lib/appSession.js
+// function decrypt(jwe) {
+//   // const keystore = new JWKS.KeyStore(JWK.asKey(env.VIZHUB3_AUTH0_SECRET));
+
+//   const alg = 'dir';
+//   const enc = 'A256GCM';
+//   return JWE.decrypt(jwe, keystore, {
+//     complete: true,
+//     contentEncryptionAlgorithms: [enc],
+//     keyManagementAlgorithms: [alg],
+//   });
+// }
+
 // import { getUserIDFromJWT } from 'vizhub-controllers';
 
 // Populates request.agent.userId or request.agent.isServer.
@@ -8,16 +27,30 @@ import { parse } from 'cookie';
 export const identifyAgent = (request, done) => {
   //   // If the connection is coming from the browser,
   if (request.req) {
-    const cookie = request.req.headers.cookie;
-    if (cookie) {
-      console.log('parse(cookie)', parse(cookie));
-      //       const { vizHubJWT } = parse(cookie);
-      //       // and the user is authenticated,
-      //       // expose the user id to downstream middleware via agent.session.
-      //       if (vizHubJWT) {
-      //         request.agent.userId = getUserIDFromJWT(vizHubJWT);
-      //       }
-    }
+    // const req = request.req;
+    // const res = new http.ServerResponse(req);
+    // app.handle(req, res, () => {
+    //   console.log('here');
+    //   console.log('req.oidc', req.oidc);
+    // });
+    console.log('req in identifyAgent', request.req);
+    // console.log(Object.keys(request));
+    // authMiddleware(req, res, () => {
+    //   // console.log('here');
+    //   // console.log(Object.keys(req));
+    // });
+    // const cookie = request.req.headers.cookie;
+
+    // if (cookie) {
+    // console.log('parse(cookie)', parse(cookie));
+
+    // console.log('request after', Object.keys(request.req));
+    //       const { vizHubJWT } = parse(cookie);
+    //       // and the user is authenticated,
+    //       // expose the user id to downstream middleware via agent.session.
+    //       if (vizHubJWT) {
+    //         request.agent.userId = getUserIDFromJWT(vizHubJWT);
+    //       }
   } else {
     // Otherwise set a flag that clarifies that
     // the connection is coming from the server (e.g. for creating User entries).

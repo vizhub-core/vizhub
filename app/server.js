@@ -131,13 +131,38 @@ async function createServer(
   });
 
   // Listen for ShareDB connections over WebSocket.
-  const wss = new WebSocketServer({ server });
+  // const wss = new WebSocketServer({ server });
+  const wss = new WebSocketServer({ noServer: true });
+
   // wss.on('connection', (ws) => {
   //   shareDBBackend.listen(new WebSocketJSONStream(ws));
   // });
 
+  // From https://github.com/adamjmcgrath/eoidc-testing-example/blob/ws/index.js
+  server.on('upgrade', (req, socket, head) => {
+    console.log('Handling upgrade');
+    let res = new http.ServerResponse(req);
+    res.assignSocket(socket);
+    res.on('finish', () => res.socket.destroy());
+    // app.handle(req, res, () => {
+    // if (req.oidc.isAuthenticated()) {
+    try {
+      wss.handleUpgrade(req, socket, head, (ws) => {
+        wss.emit('connection', ws, req, { user: req.oidc?.user });
+      });
+    } catch (e) {
+      console.log('ERROR', e);
+    }
+    // } else {
+    //   socket.write('HTTP/1.1 401 Unauthorized\r\n\r\n');
+    //   socket.destroy();
+    // }
+    // });
+  });
+
   // Set up new connections to interact with ShareDB.
-  wss.on('connection', (ws, req) => {
+  wss.on('connection', (ws, req, data) => {
+    console.log('data in connection ', data);
     const stream = new WebSocketJSONStream(ws);
 
     // Prevent server crashes on errors.
@@ -145,15 +170,17 @@ async function createServer(
       console.log('WebSocket stream error: ' + error.message);
     });
 
-    shareDBBackend.listen(stream, req);
+    shareDBBackend.listen(stream, data);
   });
 
   // Set up the API endpoints.
   await api({ app, isProd, gateways });
 
   // Set up authentication.
+  let authMiddleware;
   if (env.VIZHUB3_AUTH0_SECRET) {
-    authentication({ app, env, gateways });
+    authMiddleware = authentication({ env, gateways });
+    app.use(authMiddleware);
   } else {
     console.log(
       'Environment variable VIZHUB3_AUTH0_SECRET is not set. See README for details.',
