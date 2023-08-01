@@ -1,4 +1,7 @@
-export const parseAuth0Sub = (sub) =>
+import { UserId } from 'entities';
+
+// Gets the VizHub user ID from the Auth0 user `sub` property.
+export const parseAuth0Sub = (sub: string): UserId =>
   sub.startsWith('github') ? sub.substring(7) : sub;
 
 export const parseAuth0User = (auth0User) => ({
