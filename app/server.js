@@ -131,38 +131,38 @@ async function createServer(
   });
 
   // Listen for ShareDB connections over WebSocket.
-  // const wss = new WebSocketServer({ server });
-  const wss = new WebSocketServer({ noServer: true });
+  const wss = new WebSocketServer({ server });
+  // const wss = new WebSocketServer({ noServer: true });
+
+  // From https://github.com/adamjmcgrath/eoidc-testing-example/blob/ws/index.js
+  // server.on('upgrade', (req, socket, head) => {
+  //   console.log('Handling upgrade');
+  //   let res = new http.ServerResponse(req);
+  //   res.assignSocket(socket);
+  //   res.on('finish', () => res.socket.destroy());
+  //   app.handle(req, res, () => {
+  //     // if (req.oidc.isAuthenticated()) {
+  //     try {
+  //       wss.handleUpgrade(req, socket, head, (ws) => {
+  //         wss.emit('connection', ws, req, { user: req.oidc?.user });
+  //       });
+  //     } catch (e) {
+  //       console.log('ERROR', e);
+  //     }
+  //     // } else {
+  //     //   socket.write('HTTP/1.1 401 Unauthorized\r\n\r\n');
+  //     //   socket.destroy();
+  //     // }
+  //   });
+  // });
 
   // wss.on('connection', (ws) => {
   //   shareDBBackend.listen(new WebSocketJSONStream(ws));
   // });
 
-  // From https://github.com/adamjmcgrath/eoidc-testing-example/blob/ws/index.js
-  server.on('upgrade', (req, socket, head) => {
-    console.log('Handling upgrade');
-    let res = new http.ServerResponse(req);
-    res.assignSocket(socket);
-    res.on('finish', () => res.socket.destroy());
-    // app.handle(req, res, () => {
-    // if (req.oidc.isAuthenticated()) {
-    try {
-      wss.handleUpgrade(req, socket, head, (ws) => {
-        wss.emit('connection', ws, req, { user: req.oidc?.user });
-      });
-    } catch (e) {
-      console.log('ERROR', e);
-    }
-    // } else {
-    //   socket.write('HTTP/1.1 401 Unauthorized\r\n\r\n');
-    //   socket.destroy();
-    // }
-    // });
-  });
-
   // Set up new connections to interact with ShareDB.
-  wss.on('connection', (ws, req, data) => {
-    console.log('data in connection ', data);
+  wss.on('connection', (ws, req) => {
+    console.log('req in connection ', Object.keys(req));
     const stream = new WebSocketJSONStream(ws);
 
     // Prevent server crashes on errors.
@@ -170,7 +170,7 @@ async function createServer(
       console.log('WebSocket stream error: ' + error.message);
     });
 
-    shareDBBackend.listen(stream, data);
+    shareDBBackend.listen(stream, req);
   });
 
   // Set up the API endpoints.
@@ -189,7 +189,7 @@ async function createServer(
   }
 
   // Access control at ShareDB level.
-  shareDBBackend.use('connect', accessControl.identifyAgent);
+  shareDBBackend.use('connect', accessControl.identifyAgent(authMiddleware));
   // shareDBBackend.use('apply', accessControl.vizWrite);
   // shareDBBackend.use('readSnapshots', accessControl.vizRead);
 

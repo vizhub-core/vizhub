@@ -24,26 +24,36 @@ import http from 'http';
 //
 // This ShareDB middleware triggers when new connections are made,
 // whether from the browser or from the server.
-export const identifyAgent = (request, done) => {
+export const identifyAgent = (authMiddleware) => (request, done) => {
   //   // If the connection is coming from the browser,
   if (request.req) {
+    // console.log('req in identifyAgent', Object.keys(request.req));
+    // console.log('request.req.headers', request.req.headers);
     // const req = request.req;
     // const res = new http.ServerResponse(req);
-    // app.handle(req, res, () => {
-    //   console.log('here');
-    //   console.log('req.oidc', req.oidc);
-    // });
-    console.log('req in identifyAgent', request.req);
+    const req = {
+      ...request.req,
+      get: (key) => {
+        console.log('called get with ' + key);
+        const headers = request.req.headers;
+        console.log('returning ' + headers[key]);
+        return headers[key];
+      },
+    };
+    authMiddleware(req, {}, () => {
+      console.log('here');
+      console.log('req.oidc', req.oidc);
+      console.log('req.oidc.user', req.oidc.user);
+    });
+    // console.log('req.oidc2', req.oidc);
     // console.log(Object.keys(request));
-    // authMiddleware(req, res, () => {
-    //   // console.log('here');
+    // authMiddleware(req, {}, () => {
+    //   console.log('here');
     //   // console.log(Object.keys(req));
     // });
     // const cookie = request.req.headers.cookie;
-
     // if (cookie) {
     // console.log('parse(cookie)', parse(cookie));
-
     // console.log('request after', Object.keys(request.req));
     //       const { vizHubJWT } = parse(cookie);
     //       // and the user is authenticated,
