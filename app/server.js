@@ -191,7 +191,7 @@ async function createServer(
   // Access control at ShareDB level.
   shareDBBackend.use('connect', accessControl.identifyAgent(authMiddleware));
   shareDBBackend.use('apply', accessControl.vizWrite(gateways));
-  // shareDBBackend.use('readSnapshots', accessControl.vizRead);
+  shareDBBackend.use('readSnapshots', accessControl.vizRead(gateways));
 
   // Debug for testing sentry
   app.get('/debug-sentry', function mainHandler(req, res) {
