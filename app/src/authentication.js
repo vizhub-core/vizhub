@@ -4,7 +4,7 @@ import { UpdateOrCreateUser, RecordAnalyticsEvents } from 'interactors';
 import { parseAuth0Sub } from './parseAuth0User';
 
 // Deals with authentication via Auth0.
-export const authentication = ({ app, env, gateways }) => {
+export const authentication = ({ env, gateways }) => {
   const updateOrCreateUser = UpdateOrCreateUser(gateways);
   const recordAnalyticsEvents = RecordAnalyticsEvents(gateways);
 
@@ -54,19 +54,18 @@ export const authentication = ({ app, env, gateways }) => {
     return session;
   };
 
-  app.use(
-    auth({
-      authRequired: false,
-      auth0Logout: true,
-      secret: env.VIZHUB3_AUTH0_SECRET,
-      baseURL: env.VIZHUB3_AUTH0_BASE_URL,
-      clientID: env.VIZHUB3_AUTH0_CLIENT_ID,
-      issuerBaseURL: env.VIZHUB3_AUTH0_ISSUER_BASE_URL,
-      routes: {
-        // This is particular for the GitHub auth provider
-        callback: '/login/callback',
-      },
-      afterCallback,
-    }),
-  );
+  const authMiddleware = auth({
+    authRequired: false,
+    auth0Logout: true,
+    secret: env.VIZHUB3_AUTH0_SECRET,
+    baseURL: env.VIZHUB3_AUTH0_BASE_URL,
+    clientID: env.VIZHUB3_AUTH0_CLIENT_ID,
+    issuerBaseURL: env.VIZHUB3_AUTH0_ISSUER_BASE_URL,
+    routes: {
+      // This is particular for the GitHub auth provider
+      callback: '/login/callback',
+    },
+    afterCallback,
+  });
+  return authMiddleware;
 };
