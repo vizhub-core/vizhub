@@ -82,12 +82,20 @@ export const identifyAgent = (authMiddleware) => (request, next) => {
 
 // Determines whether or not a given user is allowed to perform
 // a given action on a given viz.
-// Returns true if the user is allowed to perform the action.
-// Returns false if the user is not allowed to perform the action.
-const vizWriteAsync = (gateways: Gateways) => {
-  const { getInfo, getPermissions, getFolderAncestors } = gateways;
+export const vizWrite = (gateways) => {
+  const { getInfo } = gateways;
   const verifyVizAccess = VerifyVizAccess(gateways);
-  return async (context) => {
+
+  // The way ShareDB middleware works is like this:
+  // 1. The middleware is invoked with a request object.
+  // 2. The middleware can do whatever it wants with the request object.
+  // 3. The middleware must invoke the next() function.
+  // 4. The middleware can optionally pass an error message to next().
+  // 5. The next() function invokes the next middleware in the chain.
+  // 6. Pass a string, not an Error, into next(). Otherwise ShareDB will
+  //    log the error to the server console.
+  // see https://share.github.io/sharedb/middleware/op-submission
+  return async (context, next) => {
     // console.log('vizWriteAsync', request);
     // Unpack the ShareDB request object.
     const {
@@ -101,7 +109,7 @@ const vizWriteAsync = (gateways: Gateways) => {
     // all interactions there are mediated by interactors,
     // which take access control into account.
     if (isServer) {
-      return;
+      return next();
     }
 
     // Vet ops against viz content documents.
@@ -116,16 +124,18 @@ const vizWriteAsync = (gateways: Gateways) => {
         info,
         action: WRITE,
       });
-      // console.log('verifyResult in vizWriteAsync', verifyResult);
       if (verifyResult.outcome === 'failure') {
         throw verifyResult.error;
       }
       const canWrite = verifyResult.value;
       if (!canWrite) {
-        throw new Error('This visualization is unforked. Fork to save edits.');
+        return next('This visualization is unforked. Fork to save edits.');
+      } else {
+        return next();
       }
     } else {
       // console.log('Allowing op on collection ', collection);
+      return next();
     }
 
     // const info = await getInfo();
@@ -189,10 +199,4 @@ const vizWriteAsync = (gateways: Gateways) => {
     //     throw new Error('This visualization is unforked. Fork to save edits.');
     //   }
   };
-};
-
-export const vizWrite = (gateways) => (request, next) => {
-  vizWriteAsync(gateways)(request)
-    .then(() => next())
-    .catch((error) => next(error.message));
 };
