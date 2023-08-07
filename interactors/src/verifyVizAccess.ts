@@ -10,6 +10,7 @@ import {
   READ,
   WRITE,
   DELETE,
+  UNLISTED,
 } from 'entities';
 
 // Delete is allowed only for admins.
@@ -23,14 +24,30 @@ const canWrite = (permission) =>
 // * Determines whether or not a given user is allowed to perform
 //   a given action on a given viz.
 export const VerifyVizAccess = (gateways: Gateways) => {
-  const { getInfo, getPermissions, getFolderAncestors } = gateways;
+  const { getPermissions, getFolderAncestors } = gateways;
 
   return async (options: {
-    userId: UserId;
+    userId: UserId | undefined;
     info: Info;
     action: Action;
   }): Promise<Result<boolean>> => {
     const { userId, info, action } = options;
+
+    // If user is undefined, then the user is not logged in,
+    // and therefore can only read public or unlisted vizzes.
+    if (userId === undefined) {
+      // If the action is read, then the user can read public or unlisted vizzes.
+      if (action === READ) {
+        return ok(info.visibility === PUBLIC || info.visibility === UNLISTED);
+      }
+      // If the action is write or delete, then the user cannot perform that action.
+      if (action === WRITE || action === DELETE) {
+        return ok(false);
+      }
+
+      // Defensive programming to make sure we don't forget to handle a case.
+      throw new Error(`Unknown action: ${action}`);
+    }
 
     // If visibility is public, then anyone can read.
     if (action === READ && info.visibility === PUBLIC) {

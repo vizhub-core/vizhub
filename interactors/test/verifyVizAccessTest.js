@@ -1,6 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { VIEWER, ADMIN, READ, WRITE, DELETE } from 'entities';
-import { VizHubErrorCode } from 'gateways';
+import { VIEWER, ADMIN, READ, WRITE, DELETE, PRIVATE } from 'entities';
 import {
   primordialViz,
   userJoe,
@@ -55,7 +54,7 @@ export const verifyVizAccessTest = () => {
         'read private viz, non-owner non-collaborator',
         verify({
           userId: userJane.id,
-          info: { ...primordialViz.info, visibility: 'private' },
+          info: { ...primordialViz.info, visibility: PRIVATE },
           folders: [sampleFolder],
           action: READ,
           expected: false,
@@ -108,6 +107,51 @@ export const verifyVizAccessTest = () => {
           userId: userJane.id,
           info: primordialViz.info,
           folders: [sampleFolder],
+          action: DELETE,
+          expected: false,
+        }),
+      );
+      it(
+        'read public viz, undefined user',
+        verify({
+          userId: undefined,
+          info: primordialViz.info,
+          action: READ,
+          expected: true,
+        }),
+      );
+      it(
+        'read unlisted viz, undefined user',
+        verify({
+          userId: undefined,
+          info: primordialViz.info,
+          action: READ,
+          expected: true,
+        }),
+      );
+      it(
+        'read private viz, undefined user',
+        verify({
+          userId: undefined,
+          info: { ...primordialViz.info, visibility: PRIVATE },
+          action: READ,
+          expected: false,
+        }),
+      );
+      it(
+        'write viz, undefined user',
+        verify({
+          userId: undefined,
+          info: primordialViz.info,
+          action: WRITE,
+          expected: false,
+        }),
+      );
+      it(
+        'delete viz, undefined user',
+        verify({
+          userId: undefined,
+          info: primordialViz.info,
           action: DELETE,
           expected: false,
         }),

@@ -162,7 +162,7 @@ async function createServer(
 
   // Set up new connections to interact with ShareDB.
   wss.on('connection', (ws, req) => {
-    console.log('req in connection ', Object.keys(req));
+    // console.log('req in connection ', Object.keys(req));
     const stream = new WebSocketJSONStream(ws);
 
     // Prevent server crashes on errors.
@@ -190,7 +190,7 @@ async function createServer(
 
   // Access control at ShareDB level.
   shareDBBackend.use('connect', accessControl.identifyAgent(authMiddleware));
-  shareDBBackend.use('apply', accessControl.vizWrite);
+  shareDBBackend.use('apply', accessControl.vizWrite(gateways));
   // shareDBBackend.use('readSnapshots', accessControl.vizRead);
 
   // Debug for testing sentry
