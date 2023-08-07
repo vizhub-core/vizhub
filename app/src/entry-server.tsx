@@ -6,6 +6,7 @@ export { pages } from './pages/server';
 export { api } from 'api/src/api';
 export { initializeGateways } from 'database';
 export { authentication } from './authentication';
+export * as accessControl from './accessControl';
 
 export const render = (pageData) =>
   renderToString(
