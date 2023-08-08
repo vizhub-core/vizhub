@@ -12,7 +12,7 @@ ShareDBClient.types.register(otType);
 
 const { Connection } = ShareDBClient;
 
-const getConnection = (() => {
+export const getConnection = (() => {
   // Singleton ShareDB connection over WebSockets.
   let connection;
   return () => {

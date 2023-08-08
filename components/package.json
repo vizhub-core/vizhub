@@ -18,14 +18,14 @@
     "react-bootstrap": "^2.8.0",
     "react-dom": "^18.2.0",
     "react-stately": "^3.24.0",
-    "vizhub-ui": "^3.1.0"
+    "vizhub-ui": "^3.2.0"
   },
   "devDependencies": {
-    "@types/react": "^18.2.17",
+    "@types/react": "^18.2.19",
     "@types/react-dom": "^18.2.7",
-    "@vitejs/plugin-react": "^4.0.3",
-    "prettier": "^3.0.0",
-    "sass": "^1.64.1",
-    "vite": "^4.4.7"
+    "@vitejs/plugin-react": "^4.0.4",
+    "prettier": "^3.0.1",
+    "sass": "^1.64.2",
+    "vite": "^4.4.9"
   }
 }

@@ -1,15 +1,17 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Content, FileId, Info, Snapshot, User, VizId } from 'entities';
 import { VizKit } from 'api/src/VizKit';
+import { VizToast } from 'components/src/components/VizToast';
+import { VizPageBody } from './VizPageBody';
+import { Page, PageData } from '../Page';
 import {
+  getConnection,
   useData,
   useShareDBDoc,
   useShareDBDocData,
   useShareDBDocPresence,
 } from '../../useShareDBDocData';
 import { AuthenticatedUserProvider } from '../../contexts/AuthenticatedUserContext';
-import { VizPageBody } from './VizPageBody';
-import { Page, PageData } from '../Page';
 import './styles.scss';
 
 const vizKit = VizKit({ baseUrl: '/api' });
@@ -94,6 +96,34 @@ export const VizPage: Page = ({ pageData }: { pageData: VizPageData }) => {
     );
   }, []);
 
+  // Show ShareDB errors as toast
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  // const hideToast = useCallback(() => {
+  //   setToastMessage(null);
+  // }, []);
+
+  useEffect(() => {
+    const connection = getConnection();
+    const handleError = (error) => {
+      // console.error('ShareDB connection error:', error.message);
+      setToastMessage(error.message);
+      // Show toast using React bootstrap
+      // https://react-bootstrap.github.io/components/toasts/
+      // https://react-bootstrap.github.io/components/toasts/#dismissing
+      // https://react-bootstrap.github.io/components/toasts/#autohide
+      // https://react-bootstrap.github.io/components/toasts/#controlled
+      // https://react-bootstrap.github.io/components/toasts/#placement
+      // https://react-bootstrap.github.io/components/toasts/#customizing
+      // https://react-bootstrap.github.io/components/toasts/#customizing-transitions
+      // https://react-bootstrap.github.io/components/toasts/#customizing-transitions
+    };
+
+    connection.on('error', handleError);
+    return () => {
+      connection.off('error', handleError);
+    };
+  }, []);
+
   return (
     <AuthenticatedUserProvider
       authenticatedUserSnapshot={pageData.authenticatedUserSnapshot}
@@ -125,8 +155,70 @@ export const VizPage: Page = ({ pageData }: { pageData: VizPageData }) => {
           srcdoc,
         }}
       />
+      {toastMessage ? <VizToast message={toastMessage} /> : null}
     </AuthenticatedUserProvider>
   );
 };
 
 VizPage.path = '/:userName/:id';
+
+// Toast example
+// function BasicExample() {
+//   return (
+//     <Toast>
+//       <Toast.Header>
+//         <img src="holder.js/20x20?text=%20" className="rounded me-2" alt="" />
+//         <strong className="me-auto">Bootstrap</strong>
+//         <small>11 mins ago</small>
+//       </Toast.Header>
+//       <Toast.Body>Hello, world! This is a toast message.</Toast.Body>
+//     </Toast>
+//   );
+// }
+
+// function DismissibleExample() {
+//   const [showA, setShowA] = useState(true);
+//   const [showB, setShowB] = useState(true);
+
+//   const toggleShowA = () => setShowA(!showA);
+//   const toggleShowB = () => setShowB(!showB);
+
+//   return (
+//     <Row>
+//       <Col md={6} className="mb-2">
+//         <Button onClick={toggleShowA} className="mb-2">
+//           Toggle Toast <strong>with</strong> Animation
+//         </Button>
+//         <Toast show={showA} onClose={toggleShowA}>
+//           <Toast.Header>
+//             <img
+//               src="holder.js/20x20?text=%20"
+//               className="rounded me-2"
+//               alt=""
+//             />
+//             <strong className="me-auto">Bootstrap</strong>
+//             <small>11 mins ago</small>
+//           </Toast.Header>
+//           <Toast.Body>Woohoo, you're reading this text in a Toast!</Toast.Body>
+//         </Toast>
+//       </Col>
+//       <Col md={6} className="mb-2">
+//         <Button onClick={toggleShowB} className="mb-2">
+//           Toggle Toast <strong>without</strong> Animation
+//         </Button>
+//         <Toast onClose={toggleShowB} show={showB} animation={false}>
+//           <Toast.Header>
+//             <img
+//               src="holder.js/20x20?text=%20"
+//               className="rounded me-2"
+//               alt=""
+//             />
+//             <strong className="me-auto">Bootstrap</strong>
+//             <small>11 mins ago</small>
+//           </Toast.Header>
+//           <Toast.Body>Woohoo, you're reading this text in a Toast!</Toast.Body>
+//         </Toast>
+//       </Col>
+//     </Row>
+//   );
+// }
