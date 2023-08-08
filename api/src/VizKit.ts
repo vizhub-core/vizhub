@@ -1,4 +1,4 @@
-import { SortId, UserId, Viz, VizId, Content } from 'entities';
+import { SortId, UserId, Viz, VizId, Content, Visibility } from 'entities';
 
 // Modeled after https://github.com/octokit/octokit.js/#constructor-options
 // See also https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#uploading_json_data
@@ -72,7 +72,10 @@ export const VizKit = ({ baseUrl, ssrFetch = null }) => {
         ).json(),
       forkViz: async ({
         forkedFrom,
-        newContent,
+        content,
+        title,
+        owner,
+        visibility,
       }: {
         // The viz that we want to fork.
         forkedFrom: VizId;
@@ -80,7 +83,16 @@ export const VizKit = ({ baseUrl, ssrFetch = null }) => {
         // If null, forked viz will use the same content as the forkedFrom viz.
         // If not null, forked viz will use this content instead.
         // Not null when the user has made changes to the unforked viz.
-        newContent: Content | null;
+        content: Content | null;
+
+        // The title of the new viz.
+        title: string;
+
+        // The owner of the new viz.
+        owner: UserId;
+
+        // The visibility of the new viz.
+        visibility: Visibility;
       }) =>
         await (
           await fetch(`${baseUrl}/fork-viz`, {
@@ -90,7 +102,10 @@ export const VizKit = ({ baseUrl, ssrFetch = null }) => {
             },
             body: JSON.stringify({
               forkedFrom,
-              newContent,
+              content,
+              title,
+              owner,
+              visibility,
             }),
           })
         ).json(),

@@ -11,6 +11,7 @@ import { Action, Info, READ, VizId, WRITE } from 'entities';
 // whether from the browser or from the server.
 export const identifyAgent = (authMiddleware) => (request, next) => {
   // If the connection is coming from the browser,
+  console.log('identifyAgent ', !!request.req);
   if (request.req) {
     // Create something that looks enough like the Express `req` object
     // that we can pass it to the authMiddleware.
@@ -100,6 +101,11 @@ const vizVerify = (gateways: Gateways, action: Action) => {
       // `snapshots` is populated for read ops (ShareDB "readSnapshots" middleware)
       snapshots,
     } = context;
+
+    console.log('Inside access control', {
+      isServer,
+      userId,
+    });
 
     // Let the server do whatever it wants, because
     // all interactions there are mediated by interactors,

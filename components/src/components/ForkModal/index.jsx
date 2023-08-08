@@ -22,7 +22,7 @@ export const ForkModal = ({
 
   const handleForkClick = useCallback(() => {
     onFork({ title, visibility, owner });
-  }, [title, visibility, owner]);
+  }, [title, visibility, owner, onFork]);
 
   return show ? (
     <Modal show={show} onHide={onClose} animation={false}>

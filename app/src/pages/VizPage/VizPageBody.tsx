@@ -3,7 +3,16 @@ import { Sidebar } from 'vzcode/src/client/Sidebar';
 import { useTabsState } from 'vzcode/src/client/useTabsState';
 import { TabList } from 'vzcode/src/client/TabList';
 import { CodeEditor } from 'vzcode/src/client/CodeEditor';
-import { defaultVizWidth, Content, Info, User, FileId, Files } from 'entities';
+import {
+  defaultVizWidth,
+  Content,
+  Info,
+  User,
+  FileId,
+  Files,
+  UserId,
+  Visibility,
+} from 'entities';
 import { VizPageHead } from 'components/src/components/VizPageHead';
 import { ForkModal } from 'components/src/components/ForkModal';
 import { VizPageViewer } from 'components/src/components/VizPageViewer';
@@ -55,7 +64,15 @@ export const VizPageBody = ({
   onShareClick: () => void;
   showForkModal: boolean;
   toggleForkModal: () => void;
-  onFork: () => void;
+  onFork: ({
+    owner,
+    title,
+    visibility,
+  }: {
+    owner: UserId;
+    title: string;
+    visibility: Visibility;
+  }) => void;
   initialReadmeHTML: string;
   forkedFromInfo: Info | null;
   forkedFromOwnerUser: User | null;
