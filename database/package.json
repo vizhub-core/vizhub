@@ -28,7 +28,7 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
-    "prettier": "^3.0.0",
-    "vitest": "^0.33.0"
+    "prettier": "^3.0.1",
+    "vitest": "^0.34.1"
   }
 }
