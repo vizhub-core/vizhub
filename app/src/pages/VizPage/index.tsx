@@ -85,9 +85,25 @@ export const VizPage: Page = ({ pageData }: { pageData: VizPageData }) => {
     setShowForkModal((showForkModal) => !showForkModal);
   }, []);
 
+  // Show ShareDB errors as toast
+  const [hasUnforkedEdits, setHasUnforkedEdits] = useState<boolean>(false);
+  // const hideToast = useCallback(() => {
+  //   setToastMessage(null);
+  // }, []);
+
   // When the user clicks "Fork" from within the fork modal.
   const onFork = useCallback(() => {
     console.log('TODO onFork - fork the viz, navigate, show toast');
+
+    vizKit.rest
+      .forkViz({
+        forkedFrom: id,
+        newContent: hasUnforkedEdits ? content : null,
+      })
+      .then((forkedVizId) => {
+        console.log('forkedVizId', forkedVizId);
+        // window.location.href = `/${forkedVizId}`;
+      });
   }, []);
 
   // Send an analytics event to track this page view.
@@ -97,17 +113,14 @@ export const VizPage: Page = ({ pageData }: { pageData: VizPageData }) => {
     );
   }, []);
 
-  // Show ShareDB errors as toast
-  const [showToast, setShowToast] = useState<boolean>(false);
-  // const hideToast = useCallback(() => {
-  //   setToastMessage(null);
-  // }, []);
-
   // Handle permissions errors
   useEffect(() => {
     const connection = getConnection();
     const handleError = (error) => {
-      setShowToast(true);
+      // TODO check that the error is related to access permissions
+      console.log(error);
+
+      setHasUnforkedEdits(true);
 
       // Also allow the user to make edits without forking.
       // Their edits are not synched to the server, but are kept in memory.
@@ -152,7 +165,7 @@ export const VizPage: Page = ({ pageData }: { pageData: VizPageData }) => {
           srcdoc,
         }}
       />
-      {showToast ? (
+      {hasUnforkedEdits ? (
         <VizToast title="Limited Editing Permissions">
           <ul className="mb-0">
             <li>You do not have permissions to edit this viz</li>
