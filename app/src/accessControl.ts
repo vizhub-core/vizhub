@@ -133,7 +133,9 @@ const vizVerify = (gateways: Gateways, action: Action) => {
       }
       const canWrite = verifyResult.value;
       if (!canWrite) {
-        return next('This visualization is unforked. Fork to save edits.');
+        return next(
+          'You do not have permissions to edit this viz.\nThis viz is now disconnected from remote updates so that you can make edits locally, but they will not be saved unless you fork this viz.',
+        );
       } else {
         return next();
       }
