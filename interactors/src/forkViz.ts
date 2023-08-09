@@ -40,8 +40,8 @@ export const ForkViz = (gateways: Gateways) => {
     timestamp: Timestamp; // The timestamp at which this viz is forked.
     newOwner: UserId; // The owner of the new viz.
     content?: Content; // The content of the new viz (optional).
-    title: string; // The title of the new viz.
-    visibility: Visibility; // The visibility of the new viz.
+    title?: string; // The title of the new viz (optional, defaults to old title).
+    visibility?: Visibility; // The visibility of the new viz.
     forkedFromCommitId?: CommitId; // The ID of the commit being forked from (optional).
     newVizId?: VizId; // The ID of the new viz (optional).
   }): Promise<Result<Info>> => {
@@ -82,20 +82,6 @@ export const ForkViz = (gateways: Gateways) => {
       parentCommitId = parentCommitIdResult.value;
     }
 
-    // TODO  These need to be saved into the viz after the initial forking
-    // content,
-    // title,
-    // visibility,
-    // Sketch:
-    // const saveVizResult = await saveViz({
-    //   info: { ...forkedInfo, title, visibility },
-    //   content,
-    // });
-    // Maybe commit viz as well? Reference interactors tests.
-    // content,
-    //   title,
-    //   visibility,
-
     const newInfo: Info = {
       ...info,
       id: newVizId,
@@ -110,12 +96,23 @@ export const ForkViz = (gateways: Gateways) => {
       committed: true,
     };
 
+    // If the title is specified, use it.
+    if (title !== undefined) {
+      newInfo.title = title;
+    }
+
+    // If the visibility is specified, use it.
+    if (visibility !== undefined) {
+      newInfo.visibility = visibility;
+    }
+
     const oldContentResult = await getContentAtCommit(parentCommitId);
     if (oldContentResult.outcome === 'failure') return oldContentResult;
     const oldContent = oldContentResult.value;
 
     const newContent: Content = {
       ...oldContent,
+      ...content,
       id: newVizId,
     };
 
