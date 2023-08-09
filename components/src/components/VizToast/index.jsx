@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
-import Toast from 'react-bootstrap/Toast';
-import ToastContainer from 'react-bootstrap/ToastContainer';
+import { Toast, ToastContainer } from '../bootstrap';
 
 export const VizToast = ({
   title,
@@ -37,7 +36,6 @@ export const VizToast = ({
           <strong className="me-auto">{title}</strong>
           {delay ? <small>hiding in {count}</small> : null}
         </Toast.Header>
-
         <Toast.Body>{children}</Toast.Body>
       </Toast>
     </ToastContainer>
