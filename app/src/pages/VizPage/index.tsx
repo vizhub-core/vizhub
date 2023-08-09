@@ -11,7 +11,6 @@ import {
 } from 'entities';
 import { Result } from 'gateways';
 import { VizKit } from 'api/src/VizKit';
-import { VizToast } from 'components/src/components/VizToast';
 import {
   getConnection,
   useData,
@@ -26,6 +25,7 @@ import { setCookie } from './cookies';
 import './styles.scss';
 import { getCookie } from './cookies';
 import { deleteCookie } from './cookies';
+import { Toasts } from './Toasts';
 
 const vizKit = VizKit({ baseUrl: '/api' });
 
@@ -160,6 +160,7 @@ export const VizPage: Page = ({ pageData }: { pageData: VizPageData }) => {
           const url = `/${ownerUserName}/${vizId}`;
 
           // Populate cookie to show toast on the other side, after redirect.
+          // See Toasts.tsx
           setCookie('showForkToast', 'true', 1);
 
           window.location.href = url;
@@ -167,19 +168,6 @@ export const VizPage: Page = ({ pageData }: { pageData: VizPageData }) => {
     },
     [id, content, hasUnforkedEdits],
   );
-
-  // State for showing a toast after successful fork
-  const [showForkToast, setShowForkToast] = useState(false);
-
-  // Show the toast after redirecting to the forked viz
-  useEffect(() => {
-    if (getCookie('showForkToast')) {
-      setShowForkToast(true);
-
-      // Clear the cookie after showing the toast
-      deleteCookie('showForkToast');
-    }
-  }, []);
 
   // Send an analytics event to track this page view.
   useEffect(() => {
@@ -242,26 +230,10 @@ export const VizPage: Page = ({ pageData }: { pageData: VizPageData }) => {
           srcdoc,
         }}
       />
-      {hasUnforkedEdits ? (
-        <VizToast title="Limited Editing Permissions">
-          <ul className="mb-0">
-            <li>You do not have permissions to edit this viz</li>
-            <li>Local edits are possible but won't be saved</li>
-            <li>Disconnected from remote updates</li>
-            <li>
-              <a href="" onClick={handleForkLinkClick}>
-                Fork the viz
-              </a>{' '}
-              to save your local changes
-            </li>
-          </ul>
-        </VizToast>
-      ) : null}
-      {showForkToast ? (
-        <VizToast title="Forked Successfully">
-          Congratulations! You have successfully forked this viz.
-        </VizToast>
-      ) : null}
+      <Toasts
+        hasUnforkedEdits={hasUnforkedEdits}
+        handleForkLinkClick={handleForkLinkClick}
+      />
     </AuthenticatedUserProvider>
   );
 };
