@@ -1,6 +1,7 @@
 import {
   CommitId,
   Content,
+  Info,
   Timestamp,
   User,
   UserId,
@@ -15,9 +16,12 @@ export const forkVizEndpoint = ({ app, gateways }) => {
   app.post('/api/fork-viz', async (req, res) => {
     if (req.body) {
       const {
+        // These two are used in the initial forking
         forkedFrom,
-        content,
         owner,
+
+        // These need to be saved into the viz after the initial forking
+        content,
         title,
         visibility,
       }: {
@@ -27,6 +31,28 @@ export const forkVizEndpoint = ({ app, gateways }) => {
         title: string;
         visibility: Visibility;
       } = req.body;
+
+      // Validate parameters
+      if (forkedFrom === undefined) {
+        res.send(err(missingParameterError('forkedFrom')));
+        return;
+      }
+      if (owner === undefined) {
+        res.send(err(missingParameterError('owner')));
+        return;
+      }
+      if (content === undefined) {
+        res.send(err(missingParameterError('content')));
+        return;
+      }
+      if (title === undefined) {
+        res.send(err(missingParameterError('title')));
+        return;
+      }
+      if (visibility === undefined) {
+        res.send(err(missingParameterError('visibility')));
+        return;
+      }
 
       const forkVizOptions: {
         newOwner: UserId; // The owner of the new viz.
@@ -44,20 +70,20 @@ export const forkVizEndpoint = ({ app, gateways }) => {
 
       console.log('forkVizOptions', forkVizOptions);
 
-      // TODO access control here - make sure the authenticated user
+      // TODO address potential access control here - make sure the authenticated user
       // matches the owner of the viz being forked.
-
-      // TODO validate the request body here.
-
-      // await forkViz(forkVizOptions);
+      // Sketch:
+      // if(authenticaedUser !== owner) {
+      //   return res.send(err('You do not have permission to fork this viz.'));
+      // }
 
       const forkVizResult = await forkViz(forkVizOptions);
       if (forkVizResult.outcome === 'failure') {
         return res.send(err(forkVizResult.error));
       }
-      const forkedVizId = forkVizResult.value;
+      const forkedInfo: Info = forkVizResult.value;
 
-      console.log('forkedVizId', forkedVizId);
+      console.log('forkedInfo', forkedInfo);
 
       // const { forkedFrom, owner, noNeedToFetchUsers, sortId, pageNumber } =
       //   req.body;

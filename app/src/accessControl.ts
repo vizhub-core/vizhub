@@ -8,6 +8,9 @@ import { parseAuth0Sub } from './parseAuth0User';
 import { Gateways } from 'gateways';
 import { Action, Info, READ, VizId, WRITE } from 'entities';
 
+// Useful for debugging agent identification.
+const debug = false;
+
 // For client-side connections (in the browser), leverage the
 // existing auth middleware to populate the ShareDB agent's user ID.
 // This is later referenced by access control rules.
@@ -115,10 +118,12 @@ const vizVerify = (gateways: Gateways, action: Action) => {
       snapshots,
     } = context;
 
-    console.log('Inside access control', {
-      isServer,
-      userId,
-    });
+    if (debug) {
+      console.log('Inside access control', {
+        isServer,
+        userId,
+      });
+    }
 
     // Let the server do whatever it wants, because
     // all interactions there are mediated by interactors,
