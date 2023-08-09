@@ -7,6 +7,7 @@ import { SandboxPage } from './SandboxPage';
 import { ExplorePage } from './ExplorePage';
 import { ForksPage } from './ForksPage';
 import { SearchPage } from './SearchPage';
+import { PricingPage } from './PricingPage';
 
 // Note: order matters (profile page should come last)
 // Need to update `server.js` as well
@@ -18,6 +19,7 @@ export const pages = [
   BetaConfirmPage,
   SandboxPage,
   ExplorePage,
+  PricingPage,
   SearchPage,
   ProfilePage,
 ];
