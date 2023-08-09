@@ -6,30 +6,39 @@ const plans = {
     name: 'Free',
     pricing: { price: 0, unit: 'forever' },
     bullets: [
-      'Public vizzes',
-      'Star public vizzes',
+      'Unlimited public vizzes',
+      'Unlimited collaborators',
+      'Multiplayer code editing',
+      // 'ES modules and JSX support',
+      'Export to vanilla JavaScript',
+      // 'Search open source content',
+      // 'Star public vizzes',
       // 'Public folders',
       // 'Public collections',
       // 'Public organizations',
       //'Pinned vizzes',
       //"See vizzes you've upvoted",
-      'Search public content',
       // 'Comments with mentions',
-      'Interactive code editor',
       // 'Continuous hot reloading',
-      'ES modules and JSX support',
-      'Export to standard JavaScript',
       // 'Import from CSV and JSON',
       // 'Import from other vizzes',
       //'Automatic code formatting',
-      'Multiplayer editing',
       // 'Pull requests',
       // 'Revision history',
       // 'Social media sharing',
       // 'Branded embedding',
       // 'Order physical canvas prints',
       //'Migrate content from bl.ocks.org',
-      'VizHub Forum access',
+      <>
+        Access the{' '}
+        <a
+          href="https://vizhub.com/forum/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          VizHub Forum
+        </a>
+      </>,
     ],
     callToAction: {
       text: 'Sign up for free',
@@ -38,11 +47,11 @@ const plans = {
   },
   pro: {
     name: 'Pro',
-    pricing: { price: 15, unit: 'per user per month' },
+    pricing: { price: 15, unit: 'per editor* per month' },
     previousPlanBullet: 'Everything in Free',
     bullets: [
       'Private vizzes',
-      'Invite collaborators to private vizzes',
+      'Collaborators on private vizzes',
       // 'Private & unlisted vizzes',
       // 'Private & unlisted folders',
       // 'Private & unlisted collections',
@@ -115,9 +124,10 @@ const ArrowLeftShortSVG = () => (
 const PlanCard = ({
   plan: { name, previousPlanBullet, bullets, pricing, callToAction },
   onClick,
+  children,
 }) => (
   <div className="col">
-    <div className="card mb-4 rounded-3">
+    <div className="card mb-4 p-4 rounded-3">
       <div className="card-header py-3">
         <h4 className="my-0 fw-normal">{name}</h4>
       </div>
@@ -126,10 +136,10 @@ const PlanCard = ({
         {pricing.unit ? (
           <small className="text-muted">{pricing.unit}</small>
         ) : null}
-        <ul className="list-unstyled mt-3 mb-4 mx-2 text-start">
+        <ul className="list-unstyled mt-3 mb-3 mx-2 text-start">
           {previousPlanBullet ? (
             <li>
-              <span className="mx-2">
+              <span className="me-2">
                 <ArrowLeftShortSVG />
               </span>
               {previousPlanBullet}
@@ -137,13 +147,14 @@ const PlanCard = ({
           ) : null}
           {bullets.map((bullet) => (
             <li key={bullet}>
-              <span className="mx-2">
+              <span className="me-2">
                 <CheckSVG />
               </span>
               {bullet}
             </li>
           ))}
         </ul>
+        {children}
         <button
           type="button"
           className={`w-100 btn btn-lg ${
@@ -161,14 +172,19 @@ const PlanCard = ({
 export const PricingPageBody = ({
   onFreeClick,
   onProClick,
-  onEnterpriseClick,
+  // onEnterpriseClick,
 }) => {
   return (
     <div className="vh-page vh-pricing-page">
       <div className="container py-4">
         <div className="row row-cols-1 row-cols-lg-2 mb-3 text-center">
           <PlanCard plan={plans.free} onClick={onFreeClick} />
-          <PlanCard plan={plans.pro} onClick={onProClick} />
+          <PlanCard plan={plans.pro} onClick={onProClick}>
+            <div className="mb-3">
+              *An <strong>editor</strong> is a user granted permission to edit
+              at least one private viz that you own.
+            </div>
+          </PlanCard>
           {/* <PlanCard plan={plans.enterprise} onClick={onEnterpriseClick} /> */}
         </div>
       </div>
