@@ -8,7 +8,7 @@ import {
   Visibility,
   VizId,
 } from 'entities';
-import { err, missingParameterError } from 'gateways';
+import { err, missingParameterError, ok } from 'gateways';
 import { ForkViz } from 'interactors';
 
 export const forkVizEndpoint = ({ app, gateways }) => {
@@ -66,10 +66,6 @@ export const forkVizEndpoint = ({ app, gateways }) => {
         timestamp: Date.now(),
       };
 
-      console.log(req.body);
-
-      console.log('forkVizOptions', forkVizOptions);
-
       // TODO address potential access control here - make sure the authenticated user
       // matches the owner of the viz being forked.
       // Sketch:
@@ -83,29 +79,7 @@ export const forkVizEndpoint = ({ app, gateways }) => {
       }
       const forkedInfo: Info = forkVizResult.value;
 
-      console.log('forkedInfo', forkedInfo);
-
-      // const { forkedFrom, owner, noNeedToFetchUsers, sortId, pageNumber } =
-      //   req.body;
-      // if (noNeedToFetchUsers === undefined) {
-      //   return res.send(err(missingParameterError('eventIds')));
-      // }
-      // if (sortId === undefined) {
-      //   return res.send(err(missingParameterError('eventIds')));
-      // }
-      // if (pageNumber === undefined) {
-      //   return res.send(err(missingParameterError('eventIds')));
-      // }
-
-      // res.send(
-      //   await getInfosAndOwners({
-      //     forkedFrom,
-      //     owner,
-      //     noNeedToFetchUsers,
-      //     sortId,
-      //     pageNumber,
-      //   }),
-      // );
+      res.send(ok(forkedInfo.id));
     }
   });
 };
