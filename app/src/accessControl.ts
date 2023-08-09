@@ -8,10 +8,11 @@ import { parseAuth0Sub } from './parseAuth0User';
 import { Gateways } from 'gateways';
 import { Action, Info, READ, VizId, WRITE } from 'entities';
 
-// whether from the browser or from the server.
-export const identifyAgent = (authMiddleware) => (request, next) => {
+// For client-side connections (in the browser), leverage the
+// existing auth middleware to populate the ShareDB agent's user ID.
+// This is later referenced by access control rules.
+export const identifyClientAgent = (authMiddleware) => (request, next) => {
   // If the connection is coming from the browser,
-  console.log('identifyAgent ', !!request.req);
   if (request.req) {
     // Create something that looks enough like the Express `req` object
     // that we can pass it to the authMiddleware.
@@ -32,8 +33,20 @@ export const identifyAgent = (authMiddleware) => (request, next) => {
       }
     });
   } else {
+    // Do nothing. This case is handled by identifyServerAgent
+  }
+
+  next();
+};
+
+export const identifyServerAgent = (request, next) => {
+  // If the connection is coming from the browser,
+  if (request.req) {
+    // do nothing.
+    // This case is handled by identifyClientAgent
+  } else {
     // Otherwise set a flag that clarifies that
-    // the connection is coming from the server (e.g. for creating User entries).
+    // the connection is coming from the server.
     request.agent.isServer = true;
   }
 
