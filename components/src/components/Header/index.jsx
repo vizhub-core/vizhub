@@ -10,6 +10,7 @@ export const Header = ({
   onCreateVizClick,
   onForumClick,
   onVizHubClick,
+  pricingHref,
 }) => (
   <Navbar bg="dark" variant="dark" expand="md">
     <Container fluid>
@@ -24,6 +25,7 @@ export const Header = ({
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="me-auto" />
         <Nav className="align-items-md-center">
+          <Nav.Link href={pricingHref}>Pricing</Nav.Link>
           <Nav.Link
             onClick={onForumClick}
             href="https://vizhub.com/forum/"
@@ -32,6 +34,7 @@ export const Header = ({
           >
             Forum
           </Nav.Link>
+
           {authenticatedUserAvatarURL ? (
             <Dropdown align="end">
               <Dropdown.Toggle
