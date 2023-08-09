@@ -7,9 +7,11 @@ import { otType } from 'ot';
 
 ShareDB.types.register(otType);
 
-export const initializeShareDB = async ({ mongoDBConnection }) => {
+export const initializeShareDB = async ({
+  mongoDBConnection,
+  attachMiddleware,
+}) => {
   // TODO Redis PubSub
-
   const shareDBBackend = new ShareDB({
     // Enable presence
     // See https://github.com/share/sharedb/blob/master/examples/rich-text-presence/server.js#L9
@@ -21,6 +23,8 @@ export const initializeShareDB = async ({ mongoDBConnection }) => {
       },
     }),
   });
+
+  attachMiddleware(shareDBBackend);
 
   const shareDBConnection = shareDBBackend.connect();
 

@@ -1,9 +1,16 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Content, FileId, Info, Snapshot, User, VizId } from 'entities';
+import {
+  Content,
+  FileId,
+  Info,
+  Snapshot,
+  User,
+  UserId,
+  Visibility,
+  VizId,
+} from 'entities';
+import { Result } from 'gateways';
 import { VizKit } from 'api/src/VizKit';
-import { VizToast } from 'components/src/components/VizToast';
-import { VizPageBody } from './VizPageBody';
-import { Page, PageData } from '../Page';
 import {
   getConnection,
   useData,
@@ -12,9 +19,18 @@ import {
   useShareDBDocPresence,
 } from '../../useShareDBDocData';
 import { AuthenticatedUserProvider } from '../../contexts/AuthenticatedUserContext';
+import { Page, PageData } from '../Page';
+import { VizPageBody } from './VizPageBody';
+import { setCookie } from './cookies';
 import './styles.scss';
+import { getCookie } from './cookies';
+import { deleteCookie } from './cookies';
+import { Toasts } from './Toasts';
 
 const vizKit = VizKit({ baseUrl: '/api' });
+
+// Useful for debugging fork flow.
+const debug = false;
 
 export type VizPageData = PageData & {
   infoSnapshot: Snapshot<Info>;
@@ -80,15 +96,78 @@ export const VizPage: Page = ({ pageData }: { pageData: VizPageData }) => {
 
   // When the user clicks the "Fork" icon to open the fork modal.
   // When the user hits the "x" to close the modal.
-  const toggleForkModal = useCallback((event) => {
-    event?.preventDefault();
+  const toggleForkModal = useCallback(() => {
     setShowForkModal((showForkModal) => !showForkModal);
   }, []);
 
+  const handleForkLinkClick = useCallback(
+    (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+      event.preventDefault();
+      toggleForkModal();
+    },
+    [toggleForkModal],
+  );
+
+  // Show ShareDB errors as toast
+  const [hasUnforkedEdits, setHasUnforkedEdits] = useState<boolean>(false);
+  // const hideToast = useCallback(() => {
+  //   setToastMessage(null);
+  // }, []);
+
   // When the user clicks "Fork" from within the fork modal.
-  const onFork = useCallback(() => {
-    console.log('TODO onFork - fork the viz, navigate, show toast');
-  }, []);
+  const onFork = useCallback(
+    ({
+      owner,
+      title,
+      visibility,
+    }: {
+      // These values come from the fork modal
+      owner: UserId;
+      title: string;
+      visibility: Visibility;
+    }) => {
+      if (debug) {
+        console.log(
+          'Passing these into forkViz',
+          JSON.stringify(
+            {
+              forkedFrom: id,
+              owner,
+              title,
+              visibility,
+              content: hasUnforkedEdits ? content : undefined,
+            },
+            null,
+            2,
+          ),
+        );
+      }
+      vizKit.rest
+        .forkViz({
+          forkedFrom: id,
+          owner,
+          title,
+          visibility,
+          content: hasUnforkedEdits ? content : undefined,
+        })
+        .then((result: Result<{ vizId: VizId; ownerUserName: string }>) => {
+          if (result.outcome === 'failure') {
+            console.log('TODO handle failure to fork');
+            console.log(result.error);
+            return;
+          }
+          const { vizId, ownerUserName } = result.value;
+          const url = `/${ownerUserName}/${vizId}`;
+
+          // Populate cookie to show toast on the other side, after redirect.
+          // See Toasts.tsx
+          setCookie('showForkToast', 'true', 1);
+
+          window.location.href = url;
+        });
+    },
+    [id, content, hasUnforkedEdits],
+  );
 
   // Send an analytics event to track this page view.
   useEffect(() => {
@@ -97,17 +176,16 @@ export const VizPage: Page = ({ pageData }: { pageData: VizPageData }) => {
     );
   }, []);
 
-  // Show ShareDB errors as toast
-  const [showToast, setShowToast] = useState<boolean>(false);
-  // const hideToast = useCallback(() => {
-  //   setToastMessage(null);
-  // }, []);
-
   // Handle permissions errors
   useEffect(() => {
     const connection = getConnection();
     const handleError = (error) => {
-      setShowToast(true);
+      // TODO check that the error is related to access permissions
+      // This has no information - console.log('error.code', error.code);
+      // Don't want to test against exact message
+      // Best solution is to add a custom error code to the server
+
+      setHasUnforkedEdits(true);
 
       // Also allow the user to make edits without forking.
       // Their edits are not synched to the server, but are kept in memory.
@@ -152,21 +230,10 @@ export const VizPage: Page = ({ pageData }: { pageData: VizPageData }) => {
           srcdoc,
         }}
       />
-      {showToast ? (
-        <VizToast title="Limited Editing Permissions">
-          <ul className="mb-0">
-            <li>You do not have permissions to edit this viz</li>
-            <li>Local edits are possible but won't be saved</li>
-            <li>Disconnected from remote updates</li>
-            <li>
-              <a href="" onClick={toggleForkModal}>
-                Fork the viz
-              </a>{' '}
-              to save your local changes
-            </li>
-          </ul>
-        </VizToast>
-      ) : null}
+      <Toasts
+        hasUnforkedEdits={hasUnforkedEdits}
+        handleForkLinkClick={handleForkLinkClick}
+      />
     </AuthenticatedUserProvider>
   );
 };
