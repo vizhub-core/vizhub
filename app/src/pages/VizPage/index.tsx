@@ -22,6 +22,7 @@ import {
 } from '../../useShareDBDocData';
 import { AuthenticatedUserProvider } from '../../contexts/AuthenticatedUserContext';
 import './styles.scss';
+import { Result } from 'gateways';
 
 const vizKit = VizKit({ baseUrl: '/api' });
 
@@ -126,9 +127,19 @@ export const VizPage: Page = ({ pageData }: { pageData: VizPageData }) => {
           title,
           visibility,
         })
-        .then((result) => {
-          console.log('result', result);
-          // window.location.href = `/${forkedVizId}`;
+        .then((result: Result<{ vizId: VizId; ownerUserName: string }>) => {
+          if (result.outcome === 'failure') {
+            console.log('TODO handle failure to fork');
+            console.log(result.error);
+            return;
+          }
+          const { vizId, ownerUserName } = result.value;
+          const url = `/${ownerUserName}/${vizId}`;
+
+          // TODO populate cookie to show toast on the other side
+          // TODO show toast on the other side
+
+          window.location.href = url;
         });
     },
     [id, content, hasUnforkedEdits],

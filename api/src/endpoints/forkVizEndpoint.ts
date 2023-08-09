@@ -8,11 +8,18 @@ import {
   Visibility,
   VizId,
 } from 'entities';
-import { err, missingParameterError, ok } from 'gateways';
-import { ForkViz } from 'interactors';
+import { Gateways, err, missingParameterError, ok } from 'gateways';
+import { ForkViz, SaveViz } from 'interactors';
 
-export const forkVizEndpoint = ({ app, gateways }) => {
+export const forkVizEndpoint = ({
+  app,
+  gateways,
+}: {
+  app: any;
+  gateways: Gateways;
+}) => {
   const forkViz = ForkViz(gateways);
+  const saveViz = SaveViz(gateways);
   app.post('/api/fork-viz', async (req, res) => {
     if (req.body) {
       const {
@@ -79,7 +86,28 @@ export const forkVizEndpoint = ({ app, gateways }) => {
       }
       const forkedInfo: Info = forkVizResult.value;
 
-      res.send(ok(forkedInfo.id));
+      // Get the owner user so that the URL can be constructed.
+      const ownerResult = await gateways.getUser(owner);
+      if (ownerResult.outcome === 'failure') {
+        return res.send(err(ownerResult.error));
+      }
+      const ownerUser: User = ownerResult.value.data;
+
+      // TODO  These need to be saved into the viz after the initial forking
+      // content,
+      // title,
+      // visibility,
+      // Sketch:
+      // const saveVizResult = await saveViz({
+      //   info: { ...forkedInfo, title, visibility },
+      //   content,
+      // });
+
+      // Return the viz ID and the owner user name.
+      // This is enough information to construct the URL.
+      const vizId: VizId = forkedInfo.id;
+      const ownerUserName: string = ownerUser.userName;
+      res.send(ok({ vizId, ownerUserName }));
     }
   });
 };
