@@ -16,7 +16,7 @@ import * as Sentry from '@sentry/node';
 import { seoMetaTags } from './src/seoMetaTags.js';
 
 // TODO import this from package.json
-const version = '3.0.0-beta.15';
+const version = '3.0.0-beta.16';
 
 const env = process.env;
 
@@ -127,8 +127,62 @@ async function createServer(
   const { gateways, shareDBBackend } = await initializeGateways({
     isProd,
     env,
-    server,
+    // server,
+    attachMiddleware: (shareDBBackend) => {
+      shareDBBackend.use('connect', accessControl.identifyServerAgent);
+    },
   });
+
+  // Set up authentication.
+  let authMiddleware;
+  if (env.VIZHUB3_AUTH0_SECRET) {
+    authMiddleware = authentication({ env, gateways });
+    app.use(authMiddleware);
+  } else {
+    console.log(
+      'Environment variable VIZHUB3_AUTH0_SECRET is not set. See README for details.',
+    );
+    console.log('Starting dev server without authentication enabled...');
+  }
+
+  // Access control at ShareDB level.
+  shareDBBackend.use(
+    'connect',
+    accessControl.identifyClientAgent(authMiddleware),
+  );
+  shareDBBackend.use('apply', accessControl.vizWrite(gateways));
+  shareDBBackend.use('readSnapshots', accessControl.vizRead(gateways));
+
+  // TODO investigate if any of these AI suggestions carry any weight
+  // shareDBBackend.use('query', accessControl.vizRead(gateways));
+  // shareDBBackend.use('submit', accessControl.vizWrite(gateways));
+  // shareDBBackend.use('submitRequest', accessControl.vizWrite(gateways));
+  // shareDBBackend.use('submitPresence', accessControl.vizWrite(gateways));
+  // shareDBBackend.use('submitResponse', accessControl.vizWrite(gateways));
+  // shareDBBackend.use('submitSnapshot', accessControl.vizWrite(gateways));
+  // shareDBBackend.use('submitOp', accessControl.vizWrite(gateways));
+  // shareDBBackend.use('afterSubmit', accessControl.vizWrite(gateways));
+  // shareDBBackend.use('receive', accessControl.vizWrite(gateways));
+  // shareDBBackend.use('receiveRequest', accessControl.vizWrite(gateways));
+  // shareDBBackend.use('receivePresence', accessControl.vizWrite(gateways));
+  // shareDBBackend.use('receiveResponse', accessControl.vizWrite(gateways));
+  // shareDBBackend.use('receiveSnapshot', accessControl.vizWrite(gateways));
+  // shareDBBackend.use('receiveOp', accessControl.vizWrite(gateways));
+  // shareDBBackend.use('afterReceive', accessControl.vizWrite(gateways));
+  // shareDBBackend.use('querySnapshots', accessControl.vizRead(gateways));
+  // shareDBBackend.use('queryOps', accessControl.vizRead(gateways));
+  // shareDBBackend.use('queryPresence', accessControl.vizRead(gateways));
+  // shareDBBackend.use('queryFetch', accessControl.vizRead(gateways));
+  // shareDBBackend.use('queryPoll', accessControl.vizRead(gateways));
+  // shareDBBackend.use('queryListen', accessControl.vizRead(gateways));
+  // shareDBBackend.use('querySubscribe', accessControl.vizRead(gateways));
+  // shareDBBackend.use('queryUnsubscribe', accessControl.vizRead(gateways));
+  // shareDBBackend.use('queryCreateFetchQuery', accessControl.vizRead(gateways));
+  // shareDBBackend.use('queryCreatePollQuery', accessControl.vizRead(gateways));
+  // shareDBBackend.use('queryCreateListenQuery', accessControl.vizRead(gateways));
+  // shareDBBackend.use('queryCreateSubscribeQuery', accessControl.vizRead(gateways));
+  // shareDBBackend.use('queryCreateUnsubscribeQuery', accessControl.vizRead(gateways));
+  // shareDBBackend.use('queryCreatePresenceQuery', accessControl.vizRead(gateways));
 
   // Listen for ShareDB connections over WebSocket.
   const wss = new WebSocketServer({ server });
@@ -175,23 +229,6 @@ async function createServer(
 
   // Set up the API endpoints.
   await api({ app, isProd, gateways });
-
-  // Set up authentication.
-  let authMiddleware;
-  if (env.VIZHUB3_AUTH0_SECRET) {
-    authMiddleware = authentication({ env, gateways });
-    app.use(authMiddleware);
-  } else {
-    console.log(
-      'Environment variable VIZHUB3_AUTH0_SECRET is not set. See README for details.',
-    );
-    console.log('Starting dev server without authentication enabled...');
-  }
-
-  // Access control at ShareDB level.
-  shareDBBackend.use('connect', accessControl.identifyAgent(authMiddleware));
-  shareDBBackend.use('apply', accessControl.vizWrite(gateways));
-  shareDBBackend.use('readSnapshots', accessControl.vizRead(gateways));
 
   // Debug for testing sentry
   app.get('/debug-sentry', function mainHandler(req, res) {

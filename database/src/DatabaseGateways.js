@@ -29,7 +29,9 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
     new Promise((resolve) => {
       const shareDBDoc = shareDBConnection.get(collectionName, entity.id);
       shareDBDoc.fetch((error) => {
-        if (error) return resolve(err(error));
+        if (error) {
+          return resolve(err(error));
+        }
 
         const callback = (error) => {
           if (error) return resolve(err(error));
@@ -49,8 +51,12 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
     new Promise((resolve) => {
       const shareDBDoc = shareDBConnection.get(collectionName, id);
       shareDBDoc.fetch((error) => {
-        if (error) return resolve(err(error));
-        if (!shareDBDoc.type) return resolve(err(resourceNotFoundError(id)));
+        if (error) {
+          return resolve(err(error));
+        }
+        if (!shareDBDoc.type) {
+          return resolve(err(resourceNotFoundError(id)));
+        }
         resolve(ok(shareDBDoc.toSnapshot()));
       });
     });
