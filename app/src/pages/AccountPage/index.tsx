@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { PricingPageBody } from 'components/src/components/PricingPageBody';
+import { AccountPageBody } from 'components/src/components/AccountPageBody';
 import { VizKit } from 'api/src/VizKit';
 import { SmartHeader } from '../../smartComponents/SmartHeader';
 import { AuthenticatedUserProvider } from '../../contexts/AuthenticatedUserContext';
@@ -11,7 +11,7 @@ import './styles.scss';
 
 const vizKit = VizKit({ baseUrl: './api' });
 
-export type PricingPageData = PageData & {
+export type AccountPageData = PageData & {
   description: string;
   image: string;
 };
@@ -19,14 +19,14 @@ export type PricingPageData = PageData & {
 // Decoupled navigation from interaction, to support
 // testing the UI in isolation, for example in Storybook.
 // Inspired by https://github.com/vitejs/vite-plugin-react/blob/main/playground/ssr-react/src/pages/Home.jsx
-export const PricingPage: Page = ({ pageData }) => {
+export const AccountPage: Page = ({ pageData }) => {
   // Send an analytics event to track this page view.
   useEffect(() => {
-    vizKit.rest.recordAnalyticsEvents('event.pageview.pricing');
+    vizKit.rest.recordAnalyticsEvents('event.pageview.Account');
   }, []);
 
   const handleProClick = useCallback(() => {
-    vizKit.rest.recordAnalyticsEvents('event.click.pricing.pro');
+    vizKit.rest.recordAnalyticsEvents('event.click.Account.pro');
     // Pretend that the user goes through a checkout process...
 
     // Set the cookie to show upgrade success toast on the account page.
@@ -43,10 +43,10 @@ export const PricingPage: Page = ({ pageData }) => {
     >
       <div className="vh-page overflow-auto">
         <SmartHeader />
-        <PricingPageBody onProClick={handleProClick} />
+        <AccountPageBody onProClick={handleProClick} />
       </div>
     </AuthenticatedUserProvider>
   );
 };
 
-PricingPage.path = '/pricing';
+AccountPage.path = '/Account';

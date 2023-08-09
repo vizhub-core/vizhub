@@ -73,7 +73,7 @@ const plans = {
       //'Automatic data updating API',
     ],
     callToAction: {
-      text: 'Get started',
+      text: 'Subscribe',
       isOutline: false,
     },
   },
