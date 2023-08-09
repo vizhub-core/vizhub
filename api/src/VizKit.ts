@@ -80,19 +80,19 @@ export const VizKit = ({ baseUrl, ssrFetch = null }) => {
         // The viz that we want to fork.
         forkedFrom: VizId;
 
-        // If null, forked viz will use the same content as the forkedFrom viz.
-        // If not null, forked viz will use this content instead.
-        // Not null when the user has made changes to the unforked viz.
-        content: Content | null;
-
-        // The title of the new viz.
-        title: string;
-
         // The owner of the new viz.
         owner: UserId;
 
-        // The visibility of the new viz.
-        visibility: Visibility;
+        // The title of the new viz (optional, defaults to old title)
+        title?: string;
+
+        // If null, forked viz will use the same content as the forkedFrom viz.
+        // If not null, forked viz will use this content instead.
+        // Not null when the user has made changes to the unforked viz.
+        content?: Content;
+
+        // The visibility of the new viz (optional, defaults to old visibility)
+        visibility?: Visibility;
       }) =>
         await (
           await fetch(`${baseUrl}/fork-viz`, {

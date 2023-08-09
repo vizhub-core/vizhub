@@ -26,6 +26,9 @@ import { Result } from 'gateways';
 
 const vizKit = VizKit({ baseUrl: '/api' });
 
+// Useful for debugging fork flow.
+const debug = false;
+
 export type VizPageData = PageData & {
   infoSnapshot: Snapshot<Info>;
   contentSnapshot: Snapshot<Content>;
@@ -120,6 +123,22 @@ export const VizPage: Page = ({ pageData }: { pageData: VizPageData }) => {
       title: string;
       visibility: Visibility;
     }) => {
+      if (debug) {
+        console.log(
+          'Passing these into forkViz',
+          JSON.stringify(
+            {
+              forkedFrom: id,
+              owner,
+              title,
+              visibility,
+              content: hasUnforkedEdits ? content : undefined,
+            },
+            null,
+            2,
+          ),
+        );
+      }
       vizKit.rest
         .forkViz({
           forkedFrom: id,

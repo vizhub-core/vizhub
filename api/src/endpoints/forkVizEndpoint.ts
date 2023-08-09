@@ -9,7 +9,10 @@ import {
   VizId,
 } from 'entities';
 import { Gateways, err, missingParameterError, ok } from 'gateways';
-import { ForkViz, SaveViz } from 'interactors';
+import { ForkViz } from 'interactors';
+
+// Used for debugging forking flow.
+const debug = false;
 
 export const forkVizEndpoint = ({
   app,
@@ -73,12 +76,12 @@ export const forkVizEndpoint = ({
         visibility,
       };
 
-      // TODO address potential access control here - make sure the authenticated user
-      // matches the owner of the viz being forked.
-      // Sketch:
-      // if(authenticaedUser !== owner) {
-      //   return res.send(err('You do not have permission to fork this viz.'));
-      // }
+      if (debug) {
+        console.log(
+          'Got these options for forkViz: ',
+          JSON.stringify(forkVizOptions, null, 2),
+        );
+      }
 
       const forkVizResult = await forkViz(forkVizOptions);
       if (forkVizResult.outcome === 'failure') {
