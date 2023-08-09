@@ -19,24 +19,22 @@ export const forkVizEndpoint = ({
   gateways: Gateways;
 }) => {
   const forkViz = ForkViz(gateways);
-  const saveViz = SaveViz(gateways);
   app.post('/api/fork-viz', async (req, res) => {
     if (req.body) {
       const {
-        // These two are used in the initial forking
         forkedFrom,
         owner,
-
-        // These need to be saved into the viz after the initial forking
-        content,
         title,
         visibility,
+        content,
       }: {
         forkedFrom: VizId;
-        content: Content | null;
         owner: UserId;
         title: string;
         visibility: Visibility;
+
+        // Provided only if there are unforked edits.
+        content?: Content;
       } = req.body;
 
       // Validate parameters
@@ -46,10 +44,6 @@ export const forkVizEndpoint = ({
       }
       if (owner === undefined) {
         res.send(err(missingParameterError('owner')));
-        return;
-      }
-      if (content === undefined) {
-        res.send(err(missingParameterError('content')));
         return;
       }
       if (title === undefined) {
@@ -62,15 +56,21 @@ export const forkVizEndpoint = ({
       }
 
       const forkVizOptions: {
-        newOwner: UserId; // The owner of the new viz.
         forkedFrom: VizId; // The ID of the viz being forked.
         timestamp: Timestamp; // The timestamp at which this viz is forked.
+        newOwner: UserId; // The owner of the new viz.
+        content?: Content; // The content of the new viz (optional).
+        title: string; // The title of the new viz.
+        visibility: Visibility; // The visibility of the new viz.
         forkedFromCommitId?: CommitId; // The ID of the commit being forked from (optional).
         newVizId?: VizId; // The ID of the new viz (optional).
       } = {
-        newOwner: owner,
         forkedFrom,
         timestamp: Date.now(),
+        newOwner: owner,
+        content,
+        title,
+        visibility,
       };
 
       // TODO address potential access control here - make sure the authenticated user
@@ -92,16 +92,6 @@ export const forkVizEndpoint = ({
         return res.send(err(ownerResult.error));
       }
       const ownerUser: User = ownerResult.value.data;
-
-      // TODO  These need to be saved into the viz after the initial forking
-      // content,
-      // title,
-      // visibility,
-      // Sketch:
-      // const saveVizResult = await saveViz({
-      //   info: { ...forkedInfo, title, visibility },
-      //   content,
-      // });
 
       // Return the viz ID and the owner user name.
       // This is enough information to construct the URL.

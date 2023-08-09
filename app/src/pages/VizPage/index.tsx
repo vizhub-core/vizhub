@@ -115,6 +115,7 @@ export const VizPage: Page = ({ pageData }: { pageData: VizPageData }) => {
       title,
       visibility,
     }: {
+      // These values come from the fork modal
       owner: UserId;
       title: string;
       visibility: Visibility;
@@ -122,10 +123,10 @@ export const VizPage: Page = ({ pageData }: { pageData: VizPageData }) => {
       vizKit.rest
         .forkViz({
           forkedFrom: id,
-          content: hasUnforkedEdits ? content : null,
           owner,
           title,
           visibility,
+          content: hasUnforkedEdits ? content : undefined,
         })
         .then((result: Result<{ vizId: VizId; ownerUserName: string }>) => {
           if (result.outcome === 'failure') {

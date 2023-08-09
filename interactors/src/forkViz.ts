@@ -8,6 +8,7 @@ import {
   CommitId,
   Timestamp,
   UserId,
+  Visibility,
 } from 'entities';
 import { generateId } from './generateId';
 import { SaveViz } from './saveViz';
@@ -35,13 +36,24 @@ export const ForkViz = (gateways: Gateways) => {
   const commitViz = CommitViz(gateways);
 
   return async (options: {
-    newOwner: UserId; // The owner of the new viz.
     forkedFrom: VizId; // The ID of the viz being forked.
     timestamp: Timestamp; // The timestamp at which this viz is forked.
+    newOwner: UserId; // The owner of the new viz.
+    content?: Content; // The content of the new viz (optional).
+    title: string; // The title of the new viz.
+    visibility: Visibility; // The visibility of the new viz.
     forkedFromCommitId?: CommitId; // The ID of the commit being forked from (optional).
     newVizId?: VizId; // The ID of the new viz (optional).
   }): Promise<Result<Info>> => {
-    const { newOwner, forkedFrom, timestamp, forkedFromCommitId } = options;
+    const {
+      forkedFrom,
+      timestamp,
+      newOwner,
+      content,
+      title,
+      visibility,
+      forkedFromCommitId,
+    } = options;
     const commitId: CommitId = generateId();
     const newVizId: VizId = options.newVizId || generateId();
 
@@ -69,6 +81,20 @@ export const ForkViz = (gateways: Gateways) => {
         return err(parentCommitIdResult.error);
       parentCommitId = parentCommitIdResult.value;
     }
+
+    // TODO  These need to be saved into the viz after the initial forking
+    // content,
+    // title,
+    // visibility,
+    // Sketch:
+    // const saveVizResult = await saveViz({
+    //   info: { ...forkedInfo, title, visibility },
+    //   content,
+    // });
+    // Maybe commit viz as well? Reference interactors tests.
+    // content,
+    //   title,
+    //   visibility,
 
     const newInfo: Info = {
       ...info,
