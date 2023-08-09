@@ -38,7 +38,7 @@ HomePage.getPageData = async ({
       'Users can develop and run programs built with web technologies',
       'such as HTML, CSS, JavaScript, and JSX (React).',
       'To join the private beta, you can sign up at beta.vizhub.com.',
-    ].join('\n'),
+    ].join(''),
     image:
       'https://vizhub.com/api/visualization/preview/77a2f42571494263931b8c4d38b7d63c.png',
   };

@@ -14,6 +14,7 @@ export const SmartHeader = () => {
     <Header
       loginHref={'/login'}
       logoutHref={'/logout'}
+      pricingHref={'/pricing'}
       profileHref={`/${authenticatedUser?.userName}`}
       authenticatedUserAvatarURL={authenticatedUser?.picture}
       onVizHubClick={handleVizHubClick}
