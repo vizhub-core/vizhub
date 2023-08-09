@@ -7,27 +7,27 @@ const plans = {
     pricing: { price: 0, unit: 'forever' },
     bullets: [
       'Public vizzes',
-      'Public folders',
-      'Public collections',
-      'Public organizations',
+      'Star public vizzes',
+      // 'Public folders',
+      // 'Public collections',
+      // 'Public organizations',
       //'Pinned vizzes',
-      //'Upvote vizzes',
       //"See vizzes you've upvoted",
       'Search public content',
-      'Comments with mentions',
+      // 'Comments with mentions',
       'Interactive code editor',
-      'Continuous hot reloading',
+      // 'Continuous hot reloading',
       'ES modules and JSX support',
       'Export to standard JavaScript',
-      'Import from CSV and JSON',
-      'Import from other vizzes',
+      // 'Import from CSV and JSON',
+      // 'Import from other vizzes',
       //'Automatic code formatting',
       'Multiplayer editing',
-      'Pull requests',
-      'Revision history',
-      'Social media sharing',
-      'Branded embedding',
-      'Order physical canvas prints',
+      // 'Pull requests',
+      // 'Revision history',
+      // 'Social media sharing',
+      // 'Branded embedding',
+      // 'Order physical canvas prints',
       //'Migrate content from bl.ocks.org',
       'VizHub Forum access',
     ],
@@ -41,24 +41,26 @@ const plans = {
     pricing: { price: 15, unit: 'per user per month' },
     previousPlanBullet: 'Everything in Free',
     bullets: [
-      'Private & unlisted vizzes',
-      'Private & unlisted folders',
-      'Private & unlisted collections',
-      'Private organizations',
-      'Search private content',
-      'No-code viz configuration editor',
-      'Programmatically edit files',
-      'Advanced access control',
+      'Private vizzes',
+      'Invite collaborators to private vizzes',
+      // 'Private & unlisted vizzes',
+      // 'Private & unlisted folders',
+      // 'Private & unlisted collections',
+      // 'Private organizations',
+      // 'Search private content',
+      // 'No-code viz configuration editor',
+      // 'Programmatically edit files',
+      // 'Advanced access control',
       //'Organization analytics',
-      'Password protected sharing',
+      // 'Password protected sharing',
       //'Encrypted vizzes',
-      'In-platform meetings',
+      // 'In-platform meetings',
       //'Record and live-stream meetings',
-      'GitHub integration',
-      'White-label embedding',
-      'VizHub Pages (microsite hosting)',
-      'Custom domains',
-      'High resolution image export',
+      // 'GitHub integration',
+      // 'White-label embedding',
+      // 'VizHub Pages (microsite hosting)',
+      // 'Custom domains',
+      // 'High resolution image export',
       //'Automatic data updating API',
     ],
     callToAction: {
@@ -66,22 +68,22 @@ const plans = {
       isOutline: false,
     },
   },
-  enterprise: {
-    name: 'Enterprise',
-    pricing: { price: 45, unit: 'per user per month' },
-    previousPlanBullet: 'Everything in Pro',
-    bullets: [
-      'Self hosting',
-      'Single sign-on',
-      'HIPAAcompliance',
-      'FedRAMP compliance',
-      'Dedicated support',
-    ],
-    callToAction: {
-      text: 'Contact us',
-      isOutline: true,
-    },
-  },
+  // enterprise: {
+  //   name: 'Enterprise',
+  //   pricing: { price: 45, unit: 'per user per month' },
+  //   previousPlanBullet: 'Everything in Pro',
+  //   bullets: [
+  //     'Self hosting',
+  //     'Single sign-on',
+  //     'HIPAAcompliance',
+  //     'FedRAMP compliance',
+  //     'Dedicated support',
+  //   ],
+  //   callToAction: {
+  //     text: 'Contact us',
+  //     isOutline: true,
+  //   },
+  // },
 };
 
 // TODO move to icons
@@ -164,10 +166,10 @@ export const PricingPageBody = ({
   return (
     <div className="vh-page vh-pricing-page">
       <div className="container py-4">
-        <div className="row row-cols-1 row-cols-lg-3 mb-3 text-center">
+        <div className="row row-cols-1 row-cols-lg-2 mb-3 text-center">
           <PlanCard plan={plans.free} onClick={onFreeClick} />
           <PlanCard plan={plans.pro} onClick={onProClick} />
-          <PlanCard plan={plans.enterprise} onClick={onEnterpriseClick} />
+          {/* <PlanCard plan={plans.enterprise} onClick={onEnterpriseClick} /> */}
         </div>
       </div>
     </div>
