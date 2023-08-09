@@ -9,10 +9,9 @@ import {
   Visibility,
   VizId,
 } from 'entities';
+import { Result } from 'gateways';
 import { VizKit } from 'api/src/VizKit';
 import { VizToast } from 'components/src/components/VizToast';
-import { VizPageBody } from './VizPageBody';
-import { Page, PageData } from '../Page';
 import {
   getConnection,
   useData,
@@ -21,8 +20,12 @@ import {
   useShareDBDocPresence,
 } from '../../useShareDBDocData';
 import { AuthenticatedUserProvider } from '../../contexts/AuthenticatedUserContext';
+import { Page, PageData } from '../Page';
+import { VizPageBody } from './VizPageBody';
+import { setCookie } from './cookies';
 import './styles.scss';
-import { Result } from 'gateways';
+import { getCookie } from './cookies';
+import { deleteCookie } from './cookies';
 
 const vizKit = VizKit({ baseUrl: '/api' });
 
@@ -156,14 +159,27 @@ export const VizPage: Page = ({ pageData }: { pageData: VizPageData }) => {
           const { vizId, ownerUserName } = result.value;
           const url = `/${ownerUserName}/${vizId}`;
 
-          // TODO populate cookie to show toast on the other side
-          // TODO show toast on the other side
+          // Populate cookie to show toast on the other side, after redirect.
+          setCookie('showForkToast', 'true', 1);
 
           window.location.href = url;
         });
     },
     [id, content, hasUnforkedEdits],
   );
+
+  // State for showing a toast after successful fork
+  const [showForkToast, setShowForkToast] = useState(false);
+
+  // Show the toast after redirecting to the forked viz
+  useEffect(() => {
+    if (getCookie('showForkToast')) {
+      setShowForkToast(true);
+
+      // Clear the cookie after showing the toast
+      deleteCookie('showForkToast');
+    }
+  }, []);
 
   // Send an analytics event to track this page view.
   useEffect(() => {
@@ -239,6 +255,11 @@ export const VizPage: Page = ({ pageData }: { pageData: VizPageData }) => {
               to save your local changes
             </li>
           </ul>
+        </VizToast>
+      ) : null}
+      {showForkToast ? (
+        <VizToast title="Forked Successfully">
+          Congratulations! You have successfully forked this viz.
         </VizToast>
       ) : null}
     </AuthenticatedUserProvider>
