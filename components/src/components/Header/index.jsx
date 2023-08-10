@@ -7,6 +7,7 @@ export const Header = ({
   loginHref,
   logoutHref,
   profileHref,
+  accountHref,
   onCreateVizClick,
   onForumClick,
   onVizHubClick,
@@ -55,6 +56,8 @@ export const Header = ({
                 </Dropdown.Item>
                 <Dropdown.Divider />
                 <Dropdown.Item href={profileHref}>Profile</Dropdown.Item>
+                <Dropdown.Divider />
+                <Dropdown.Item href={accountHref}>Account</Dropdown.Item>
                 <Dropdown.Divider />
                 <Dropdown.Item href={logoutHref}>Log out</Dropdown.Item>
               </Dropdown.Menu>

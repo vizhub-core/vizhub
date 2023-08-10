@@ -212,6 +212,8 @@ export const VizPageBody = ({
         show={showForkModal}
         onClose={toggleForkModal}
         onFork={onFork}
+        currentPlan={authenticatedUser?.plan}
+        pricingHref={'/pricing'}
       />
     </div>
   );
