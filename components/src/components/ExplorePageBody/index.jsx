@@ -1,4 +1,4 @@
-import { Container, Button } from '../bootstrap';
+import { Button } from '../bootstrap';
 import { SortControl } from '../SortControl';
 import { VizPreviewCollection } from '../VizPreviewCollection';
 import { Spinner } from '../Spinner';
