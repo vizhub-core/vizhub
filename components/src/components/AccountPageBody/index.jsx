@@ -3,7 +3,9 @@ import { Button } from '../bootstrap';
 import './styles.scss';
 
 export const AccountPageBody = ({
+  isUserAuthenticated,
   pricingHref,
+  loginHref,
   onUnsubscribeClick,
   currentPlan,
 }) => {
@@ -12,6 +14,14 @@ export const AccountPageBody = ({
       <div className="px-4 py-3">
         <div className="d-flex flex-column">
           <h1>Your Account</h1>
+          {!isUserAuthenticated ? (
+            <div>
+              <p>You are not logged in.</p>
+              <Button as="a" href={loginHref}>
+                Login
+              </Button>
+            </div>
+          ) : null}
           {currentPlan === 'free' ? (
             <div>
               <p>You are currently on the free plan.</p>

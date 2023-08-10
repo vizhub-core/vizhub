@@ -1,10 +1,10 @@
 import { AccountPageBody } from '../components/AccountPageBody';
+import { args as freeArgs } from './AccountPageBodyFreeStory';
 
-export const args = {
-  currentPlan: 'free',
-  pricingHref: 'pricingHref',
-  loginHref: 'loginHref',
-  isUserAuthenticated: true,
+const args = {
+  ...freeArgs,
+  currentPlan: undefined,
+  isUserAuthenticated: false,
 };
 
 const Story = () => {
