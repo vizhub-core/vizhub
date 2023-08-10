@@ -1,6 +1,6 @@
 import { VizToast } from 'components/src/components/VizToast';
 import { useCallback, useEffect, useState } from 'react';
-import { deleteCookie, getCookie } from './cookies';
+import { deleteCookie, getCookie } from '../cookies';
 
 export const Toasts = ({
   hasUnforkedEdits,

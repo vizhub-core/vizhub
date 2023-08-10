@@ -20,11 +20,9 @@ import {
 } from '../../useShareDBDocData';
 import { AuthenticatedUserProvider } from '../../contexts/AuthenticatedUserContext';
 import { Page, PageData } from '../Page';
+import { setCookie } from '../cookies';
 import { VizPageBody } from './VizPageBody';
-import { setCookie } from './cookies';
 import './styles.scss';
-import { getCookie } from './cookies';
-import { deleteCookie } from './cookies';
 import { Toasts } from './Toasts';
 
 const vizKit = VizKit({ baseUrl: '/api' });
