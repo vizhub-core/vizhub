@@ -4,6 +4,7 @@ export const args = {
   loginHref: 'loginHref',
   logoutHref: 'logoutHref',
   profileHref: 'profileHref',
+  pricingHref: 'pricingHref',
   onForumClick: () => {
     console.log('onForumClick');
   },

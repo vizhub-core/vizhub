@@ -1,114 +1,80 @@
-import { SortId, UserId, Viz, VizId, Content, Visibility } from 'entities';
+import { SortId, UserId, VizId, Content, Visibility } from 'entities';
 
 // Modeled after https://github.com/octokit/octokit.js/#constructor-options
 // See also https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#uploading_json_data
+
 export const VizKit = ({ baseUrl, ssrFetch = null }) => {
-  // fetch needs special treatment because our AWS AppRunner environment
-  // only supports up to Node 16, which is missing native `fetch`.
-  // Once our infra supports Node 18, we can drop 'node-fetch' and delete this.
-  let fetch;
-  // @ts-ignore
+  let fetch: typeof window.fetch | typeof ssrFetch;
+
   if (import.meta.env.SSR) {
     fetch = ssrFetch;
   } else {
     fetch = window.fetch;
   }
 
+  const postJSON = async (
+    url: string,
+    data: { [key: string]: any } | null = null,
+  ) => {
+    if (!fetch) throw new Error('fetch is not defined');
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+    return await response.json();
+  };
+
   return {
     rest: {
-      // TODO reduce duplication between these methods
-      privateBetaEmailSubmit: async (email) =>
-        await (
-          await fetch(`${baseUrl}/private-beta-email-submit`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ email }),
-          })
-        ).json(),
+      privateBetaEmailSubmit: async (email: string) =>
+        await postJSON(`${baseUrl}/private-beta-email-submit`, { email }),
 
-      recordAnalyticsEvents: async (eventId) =>
-        await (
-          await fetch(`${baseUrl}/record-analytics-event`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ eventId }),
-          })
-        ).json(),
+      recordAnalyticsEvents: async (eventId: string) =>
+        await postJSON(`${baseUrl}/record-analytics-event`, { eventId }),
 
-      getInfosAndOwners: async ({
-        forkedFrom,
-        owner,
-        noNeedToFetchUsers,
-        sortId,
-        pageNumber,
-      }: {
+      getInfosAndOwners: async (options: {
         forkedFrom: VizId;
         owner: UserId;
+
         // An array of user ids that we already have in the client
         noNeedToFetchUsers: Array<UserId>;
-        // The sort id that we want to fetch
+
+        // The sort id that we want to use for sorting results
         sortId: SortId;
-        // The page number that we want to fetch
+
+        // The page number that we want to use for pagination
         pageNumber: number;
-      }) =>
-        await (
-          await fetch(`${baseUrl}/get-infos-and-owners`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              forkedFrom,
-              owner,
-              noNeedToFetchUsers,
-              sortId,
-              pageNumber,
-            }),
-          })
-        ).json(),
-      forkViz: async ({
-        forkedFrom,
-        content,
-        title,
-        owner,
-        visibility,
-      }: {
-        // The viz that we want to fork.
+      }) => await postJSON(`${baseUrl}/get-infos-and-owners`, options),
+
+      forkViz: async (options: {
+        // The viz that we want to fork
         forkedFrom: VizId;
 
-        // The owner of the new viz.
+        // The new owner of the forked viz
         owner: UserId;
 
-        // The title of the new viz (optional, defaults to old title)
+        // The title of the forked viz
         title?: string;
 
-        // If null, forked viz will use the same content as the forkedFrom viz.
-        // If not null, forked viz will use this content instead.
-        // Not null when the user has made changes to the unforked viz.
+        // The new content of the forked viz
+        // If undefined, the forked viz will have the same content as the original viz
+        // This is only populated when the user has made changes to the viz
+        // but doesn't have the access permissions to actually change the original viz.
+        // In this case, forking is a way for the user to save their changes.
         content?: Content;
 
-        // The visibility of the new viz (optional, defaults to old visibility)
+        // The visibility of the forked viz
         visibility?: Visibility;
-      }) =>
-        await (
-          await fetch(`${baseUrl}/fork-viz`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              forkedFrom,
-              content,
-              title,
-              owner,
-              visibility,
-            }),
-          })
-        ).json(),
+      }) => await postJSON(`${baseUrl}/fork-viz`, options),
+
+      fakeCheckoutSuccess: async (userId: UserId) =>
+        await postJSON(`${baseUrl}/fake-checkout-success`, { userId }),
+
+      fakeUnsubscribeSuccess: async (userId: UserId) =>
+        await postJSON(`${baseUrl}/fake-unsubscribe-success`, { userId }),
     },
   };
 };

@@ -372,6 +372,8 @@ async function createServer(
       '                               http://localhost:5173/joe/viz1',
     );
     console.log('                               http://localhost:5173/explore');
+    console.log('                               http://localhost:5173/pricing');
+
     console.log(
       '                               http://localhost:5173/search?query=map',
     );

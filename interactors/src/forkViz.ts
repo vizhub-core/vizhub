@@ -15,9 +15,6 @@ import { SaveViz } from './saveViz';
 import { GetContentAtCommit } from './getContentAtCommit';
 import { CommitViz } from './commitViz';
 
-// Feature flag for verbose logging.
-const debug = false;
-
 // forkViz
 //  * Forks a viz (makes a copy of it)
 //  * Returns the id of the newly minted viz

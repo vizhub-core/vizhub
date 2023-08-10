@@ -17,7 +17,15 @@ import { Gateways } from 'gateways';
 // For security purposes, it's important to note that _all_ server-side connections
 // are _only_ used via interactors from the `interactors` package. This means that those
 // interactors need to be aware of access control rules.
-export const initializeGateways = async ({ isProd, env, attachMiddleware }) => {
+export const initializeGateways = async ({
+  isProd,
+  env,
+  attachMiddleware,
+}: {
+  isProd: boolean;
+  env: { [key: string]: string | undefined };
+  attachMiddleware?: (shareDBBackend: any) => void;
+}) => {
   const { mongoDBConnection, mongoDBDatabase } = await initializeMongoDB({
     isProd,
     env,

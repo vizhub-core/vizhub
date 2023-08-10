@@ -8,7 +8,7 @@ import {
 import { FilesV2 } from 'entities';
 import { getText } from './getText';
 
-const isPackageJSONEnabled = true;
+// const isPackageJSONEnabled = true;
 
 let parser;
 
