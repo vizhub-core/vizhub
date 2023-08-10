@@ -72,6 +72,9 @@ export const VizKit = ({ baseUrl, ssrFetch = null }) => {
 
       fakeCheckoutSuccess: async (userId: UserId) =>
         await postJSON(`${baseUrl}/fake-checkout-success`, { userId }),
+
+      fakeUnsubscribeSuccess: async (userId: UserId) =>
+        await postJSON(`${baseUrl}/fake-unsubscribe-success`, { userId }),
     },
   };
 };

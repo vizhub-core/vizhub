@@ -56,10 +56,10 @@ const Body = () => {
     setCookie('showDowngradeSuccessToast', 'true', 1);
 
     // Invoke the fake WebHook to simulate a successful payment.
-    // await vizKit.rest.fakeUnsubscribeSuccess(authenticatedUser.id);
+    await vizKit.rest.fakeUnsubscribeSuccess(authenticatedUser.id);
 
     // Refresh the page
-    // window.location.reload();
+    window.location.reload();
   }, []);
 
   return (
