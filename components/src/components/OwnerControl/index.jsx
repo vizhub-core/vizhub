@@ -21,9 +21,9 @@ export const OwnerControl = ({ owner, setOwner, possibleOwners }) => {
   );
 
   return (
-    <Form.Group className="mb-3" controlId="owner">
+    <Form.Group controlId="owner">
       <Form.Label>Owner</Form.Label>
-      <Dropdown onSelect={setOwner}>
+      <Dropdown onSelect={setOwner} className="mb-1">
         <Dropdown.Toggle id="dropdown-owner">
           {ownersById.get(owner)?.label}
         </Dropdown.Toggle>
@@ -35,7 +35,9 @@ export const OwnerControl = ({ owner, setOwner, possibleOwners }) => {
           ))}
         </Dropdown.Menu>
       </Dropdown>
-      <Form.Text className="text-muted">Which account owns this viz</Form.Text>
+      <Form.Text className="text-muted">
+        Select which account will own the new viz.
+      </Form.Text>
     </Form.Group>
   );
 };

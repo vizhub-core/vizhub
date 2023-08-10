@@ -15,8 +15,10 @@ import Row from 'react-bootstrap/cjs/Row.js';
 import Col from 'react-bootstrap/cjs/Col.js';
 import Toast from 'react-bootstrap/cjs/Toast.js';
 import ToastContainer from 'react-bootstrap/cjs/ToastContainer.js';
+import Alert from 'react-bootstrap/cjs/Alert.js';
 
 export {
+  Alert,
   InputGroup,
   Form,
   FormControl,

@@ -11,6 +11,8 @@ export const ForkModal = ({
   initialVisibility,
   initialOwner,
   possibleOwners,
+  currentPlan,
+  pricingHref,
 }) => {
   const [title, setTitle] = useState(initialTitle);
   const [visibility, setVisibility] = useState(initialVisibility);
@@ -44,6 +46,8 @@ export const ForkModal = ({
         <VisibilityControl
           visibility={visibility}
           setVisibility={setVisibility}
+          currentPlan={currentPlan}
+          pricingHref={pricingHref}
         />
         <OwnerControl
           owner={owner}
