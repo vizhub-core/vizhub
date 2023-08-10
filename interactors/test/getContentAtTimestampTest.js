@@ -1,13 +1,7 @@
 // See also
 //  * https://gitlab.com/curran/vizhub-ee/-/blob/main/vizhub-ee-interactors/test/GetContentAtTimestampTest.ts
 import { describe, it, expect } from 'vitest';
-import {
-  primordialCommit,
-  primordialViz,
-  commit2,
-  primordialVizV2,
-  ts3,
-} from 'gateways/test';
+import { primordialCommit, primordialViz, ts3 } from 'gateways/test';
 import { initGateways } from './initGateways';
 import { GetContentAtTimestamp } from '../src';
 

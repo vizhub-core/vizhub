@@ -1,15 +1,13 @@
 import { VizToast } from 'components/src/components/VizToast';
 import { useCallback, useEffect, useState } from 'react';
-import { deleteCookie, getCookie } from './cookies';
+import { deleteCookie, getCookie } from '../cookies';
 
-export const Toasts = ({
+export const VizPageToasts = ({
   hasUnforkedEdits,
   handleForkLinkClick,
 }: {
   hasUnforkedEdits: boolean;
   handleForkLinkClick: (event: React.MouseEvent<HTMLAnchorElement>) => void;
-  delay?: number;
-  autohide?: boolean;
 }) => {
   // State for showing a toast after successful fork
   const [showForkToast, setShowForkToast] = useState(false);

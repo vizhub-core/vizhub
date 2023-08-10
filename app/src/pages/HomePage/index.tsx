@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { HomePageBody } from 'components';
 import { VizKit } from 'api/src/VizKit';
 import { SmartHeader } from '../../smartComponents/SmartHeader';
@@ -19,16 +18,12 @@ export type HomePageData = PageData & {
 // testing the UI in isolation, for example in Storybook.
 // Inspired by https://github.com/vitejs/vite-plugin-react/blob/main/playground/ssr-react/src/pages/Home.jsx
 export const HomePage: Page = ({ pageData }) => {
-  const navigate = useNavigate();
-
   // Send an analytics event to track this page view.
   useEffect(() => {
     vizKit.rest.recordAnalyticsEvents('event.pageview.home');
   }, []);
 
   const handleEmailSubmit = async (email) => {
-    navigate('/beta-confirm');
-
     const result = await vizKit.rest.privateBetaEmailSubmit(email);
     if (result.outcome === 'success') {
       console.log('Successfully submitted email!');
@@ -36,6 +31,8 @@ export const HomePage: Page = ({ pageData }) => {
       console.log('Error when submitting email.');
       console.log(result.error);
     }
+
+    window.location.href = '/beta-confirm';
   };
 
   return (

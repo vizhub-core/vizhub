@@ -1,5 +1,5 @@
 import { Gateways, Result } from 'gateways';
-import { VizId, Content, Timestamp, Commit, Info } from 'entities';
+import { VizId, Content, Timestamp } from 'entities';
 import { GetContentAtCommit } from './getContentAtCommit';
 import { GetCommitAtTimestamp } from './getCommitAtTimestamp';
 

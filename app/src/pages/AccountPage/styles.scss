@@ -1,0 +1,16 @@
+.demo-blurb-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+  .demo-blurb {
+    flex: 1;
+    max-width: 1200px;
+    .demo-blurb-title {
+      font-family: Poppins;
+      font-size: 2.5em;
+    }
+    .demo-blurb-description {
+      font-size: 1.5em;
+    }
+  }
+}

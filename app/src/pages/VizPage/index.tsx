@@ -20,12 +20,10 @@ import {
 } from '../../useShareDBDocData';
 import { AuthenticatedUserProvider } from '../../contexts/AuthenticatedUserContext';
 import { Page, PageData } from '../Page';
+import { setCookie } from '../cookies';
 import { VizPageBody } from './VizPageBody';
-import { setCookie } from './cookies';
 import './styles.scss';
-import { getCookie } from './cookies';
-import { deleteCookie } from './cookies';
-import { Toasts } from './Toasts';
+import { VizPageToasts } from './VizPageToasts';
 
 const vizKit = VizKit({ baseUrl: '/api' });
 
@@ -182,8 +180,9 @@ export const VizPage: Page = ({ pageData }: { pageData: VizPageData }) => {
     const handleError = (error) => {
       // TODO check that the error is related to access permissions
       // This has no information - console.log('error.code', error.code);
-      // Don't want to test against exact message
+      // Don't want to test against exact message? Or we could if it's a variable?
       // Best solution is to add a custom error code to the server
+      console.log('error.message', error.message);
 
       setHasUnforkedEdits(true);
 
@@ -230,7 +229,7 @@ export const VizPage: Page = ({ pageData }: { pageData: VizPageData }) => {
           srcdoc,
         }}
       />
-      <Toasts
+      <VizPageToasts
         hasUnforkedEdits={hasUnforkedEdits}
         handleForkLinkClick={handleForkLinkClick}
       />
