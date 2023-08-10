@@ -23,7 +23,7 @@ import { Page, PageData } from '../Page';
 import { setCookie } from '../cookies';
 import { VizPageBody } from './VizPageBody';
 import './styles.scss';
-import { Toasts } from './Toasts';
+import { VizPageToasts } from './VizPageToasts';
 
 const vizKit = VizKit({ baseUrl: '/api' });
 
@@ -229,7 +229,7 @@ export const VizPage: Page = ({ pageData }: { pageData: VizPageData }) => {
           srcdoc,
         }}
       />
-      <Toasts
+      <VizPageToasts
         hasUnforkedEdits={hasUnforkedEdits}
         handleForkLinkClick={handleForkLinkClick}
       />

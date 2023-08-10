@@ -10,6 +10,7 @@ import { Page, PageData } from '../Page';
 import { setCookie } from '../cookies';
 // import { EditorDemo } from './EditorDemo';
 import './styles.scss';
+import { AccountPageToasts } from './AccountPageToasts';
 
 const vizKit = VizKit({ baseUrl: './api' });
 
@@ -99,6 +100,7 @@ export const AccountPage: Page = ({ pageData }) => {
         <SmartHeader />
         <Body />
       </div>
+      <AccountPageToasts />
     </AuthenticatedUserProvider>
   );
 };
