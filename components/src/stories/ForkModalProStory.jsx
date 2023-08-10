@@ -14,6 +14,8 @@ export const args = {
     console.log('onFork');
     console.log(forkData);
   },
+  currentPlan: 'pro',
+  pricingHref: 'pricingHref',
 };
 
 const Story = () => {

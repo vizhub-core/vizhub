@@ -46,7 +46,7 @@ export const VizPageToasts = ({
       {showForkToast ? (
         <VizToast
           title="Forked Successfully"
-          delay={3000}
+          delay={6000}
           autohide
           onClose={handleForkToastClose}
           closeButton={true}

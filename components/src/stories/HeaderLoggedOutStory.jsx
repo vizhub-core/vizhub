@@ -5,6 +5,7 @@ export const args = {
   logoutHref: 'logoutHref',
   profileHref: 'profileHref',
   pricingHref: 'pricingHref',
+  accountHref: 'accountHref',
   onForumClick: () => {
     console.log('onForumClick');
   },
