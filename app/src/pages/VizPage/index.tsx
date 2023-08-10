@@ -180,8 +180,9 @@ export const VizPage: Page = ({ pageData }: { pageData: VizPageData }) => {
     const handleError = (error) => {
       // TODO check that the error is related to access permissions
       // This has no information - console.log('error.code', error.code);
-      // Don't want to test against exact message
+      // Don't want to test against exact message? Or we could if it's a variable?
       // Best solution is to add a custom error code to the server
+      console.log('error.message', error.message);
 
       setHasUnforkedEdits(true);
 

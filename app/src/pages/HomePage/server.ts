@@ -1,6 +1,5 @@
 import { HomePage, HomePageData } from './index';
 import { parseAuth0Sub } from '../../parseAuth0User';
-import { PageData } from '../Page';
 
 HomePage.getPageData = async ({
   gateways,

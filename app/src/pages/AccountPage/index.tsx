@@ -21,8 +21,45 @@ export type AccountPageData = PageData & {
 const Body = () => {
   const authenticatedUser = useContext(AuthenticatedUserContext);
 
-  const handleUnsubscribeClick = useCallback(() => {
+  // const handleProClick = useCallback(() => {
+  //   vizKit.rest.recordAnalyticsEvents('event.click.pricing.pro');
+  //   // Pretend that the user goes through a checkout process...
+
+  //   if (!authenticatedUser) {
+  //     console.log('TODO handle unauthenticated user - redirect to login?');
+  //     return;
+  //   }
+
+  //   // Set the cookie to show upgrade success toast on the account page.
+  //   setCookie('showUpgradeSuccessToast', 'true', 1);
+
+  //   // Invoke the fake WebHook to simulate a successful payment.
+  //   vizKit.rest.fakeCheckoutSuccess(authenticatedUser.id);
+
+  //   // Navigate to the account page.
+  //   const url = '/account';
+  //   window.location.href = url;
+  // }, [authenticatedUser]);
+
+  const handleUnsubscribeClick = useCallback(async () => {
     console.log('unsubscribe clicked');
+    vizKit.rest.recordAnalyticsEvents('event.click.Account.unsubscribe');
+    // Pretend that the user goes through a checkout process...
+
+    // Should never happen, but just in case...
+    if (!authenticatedUser) {
+      console.log('No authenticatedUser - this should never happen');
+      return;
+    }
+
+    // Set the cookie to show upgrade success toast on the account page.
+    setCookie('showDowngradeSuccessToast', 'true', 1);
+
+    // Invoke the fake WebHook to simulate a successful payment.
+    // await vizKit.rest.fakeUnsubscribeSuccess(authenticatedUser.id);
+
+    // Refresh the page
+    // window.location.reload();
   }, []);
 
   return (
@@ -52,18 +89,6 @@ export const AccountPage: Page = ({ pageData }) => {
   // Send an analytics event to track this page view.
   useEffect(() => {
     vizKit.rest.recordAnalyticsEvents('event.pageview.Account');
-  }, []);
-
-  const handleProClick = useCallback(() => {
-    vizKit.rest.recordAnalyticsEvents('event.click.Account.pro');
-    // Pretend that the user goes through a checkout process...
-
-    // Set the cookie to show upgrade success toast on the account page.
-    setCookie('showUpgradeSuccessToast', 'true', 1);
-
-    // Navigate to the account page.
-    const url = '/account';
-    window.location.href = url;
   }, []);
 
   return (

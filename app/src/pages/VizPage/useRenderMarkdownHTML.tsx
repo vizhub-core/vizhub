@@ -1,9 +1,9 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 // import { renderREADME } from './renderREADME';
 // import { Content } from 'entities';
 // import { getFileText } from '../../accessors/getFileText';
 
-export const useRenderMarkdownHTML = (initialReadmeHTML) => {
+export const useRenderMarkdownHTML = (initialReadmeHTML: string) => {
   // TODO get all this working
   // const [worker, setWorker] = useState(null);
 
@@ -36,8 +36,12 @@ export const useRenderMarkdownHTML = (initialReadmeHTML) => {
 
   // return () => <div __dangerouslySetInnerHTML={{ __html: readmeHTML }}></div>;
   return () => {
-    const [readmeHTML, setReadmeHTML] = useState(initialReadmeHTML);
+    // TODO dynamic rendering
+    // const [readmeHTML, setReadmeHTML] = useState(initialReadmeHTML);
+    const readmeHTML = initialReadmeHTML;
+
     const markup = useMemo(() => ({ __html: readmeHTML }), [readmeHTML]);
+
     return <div dangerouslySetInnerHTML={markup} />;
   };
 };
