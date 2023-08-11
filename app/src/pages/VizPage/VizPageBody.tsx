@@ -1,4 +1,4 @@
-import { useCallback, useContext, useMemo } from 'react';
+import { useCallback, useContext, useEffect, useMemo } from 'react';
 import { Sidebar } from 'vzcode/src/client/Sidebar';
 import { useTabsState } from 'vzcode/src/client/useTabsState';
 import { TabList } from 'vzcode/src/client/TabList';
@@ -137,6 +137,21 @@ export const VizPageBody = ({
   // These are undefined during SSR, defined in the browser.
   const localPresence = contentShareDBDocPresence?.localPresence;
   const docPresence = contentShareDBDocPresence?.docPresence;
+
+  // Re-run the program after users
+  // stop typing for 1 second.
+  useEffect(() => {
+    // Debounce the updates by 100ms.
+    const timeout = setTimeout(() => {
+      // Update the files in the ShareDB<Content> document.
+
+      console.log('TODO execute');
+    }, 1000);
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [files]);
 
   return (
     <div className="vh-page">
