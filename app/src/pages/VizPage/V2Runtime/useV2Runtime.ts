@@ -1,5 +1,13 @@
 import { useEffect, useRef } from 'react';
+// import V2RuntimeWorker from './v2RuntimeWorker?worker';
 
+let v2RuntimeWorker: Worker;
+
+if (typeof window !== 'undefined') {
+  v2RuntimeWorker = new Worker(
+    new URL('./v2RuntimeWorker.js', import.meta.url),
+  );
+}
 // This hook is used to update the srcdoc of the iframe
 export const useV2Runtime = ({ setSrcdoc, files }) => {
   // This ref is used to skip the first mount.
@@ -22,7 +30,10 @@ export const useV2Runtime = ({ setSrcdoc, files }) => {
     // Debounce the updates.
     const timeout = setTimeout(() => {
       // Update the files in the ShareDB<Content> document.
-
+      v2RuntimeWorker.postMessage({
+        type: 'updateFiles',
+        files,
+      });
       setSrcdoc('TODO compute this from worker');
     }, 800);
 
