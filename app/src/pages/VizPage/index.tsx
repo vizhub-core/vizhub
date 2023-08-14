@@ -1,15 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import {
-  Content,
-  FileId,
-  Info,
-  Snapshot,
-  User,
-  UserId,
-  Visibility,
-  VizId,
-} from 'entities';
-import { Result } from 'gateways';
+import { Content, FileId, Info, Snapshot, User, VizId } from 'entities';
 import { VizKit } from 'api/src/VizKit';
 import {
   getConnection,
@@ -20,15 +10,12 @@ import {
 } from '../../useShareDBDocData';
 import { AuthenticatedUserProvider } from '../../contexts/AuthenticatedUserContext';
 import { Page, PageData } from '../Page';
-import { setCookie } from '../cookies';
 import { VizPageBody } from './VizPageBody';
 import './styles.scss';
 import { VizPageToasts } from './VizPageToasts';
+import { useOnFork } from './useOnFork';
 
 const vizKit = VizKit({ baseUrl: '/api' });
-
-// Useful for debugging fork flow.
-const debug = false;
 
 export type VizPageData = PageData & {
   infoSnapshot: Snapshot<Info>;
@@ -113,59 +100,12 @@ export const VizPage: Page = ({ pageData }: { pageData: VizPageData }) => {
   // }, []);
 
   // When the user clicks "Fork" from within the fork modal.
-  const onFork = useCallback(
-    ({
-      owner,
-      title,
-      visibility,
-    }: {
-      // These values come from the fork modal
-      owner: UserId;
-      title: string;
-      visibility: Visibility;
-    }) => {
-      if (debug) {
-        console.log(
-          'Passing these into forkViz',
-          JSON.stringify(
-            {
-              forkedFrom: id,
-              owner,
-              title,
-              visibility,
-              content: hasUnforkedEdits ? content : undefined,
-            },
-            null,
-            2,
-          ),
-        );
-      }
-      vizKit.rest
-        .forkViz({
-          forkedFrom: id,
-          owner,
-          title,
-          visibility,
-          content: hasUnforkedEdits ? content : undefined,
-        })
-        .then((result: Result<{ vizId: VizId; ownerUserName: string }>) => {
-          if (result.outcome === 'failure') {
-            console.log('TODO handle failure to fork');
-            console.log(result.error);
-            return;
-          }
-          const { vizId, ownerUserName } = result.value;
-          const url = `/${ownerUserName}/${vizId}`;
-
-          // Populate cookie to show toast on the other side, after redirect.
-          // See Toasts.tsx
-          setCookie('showForkToast', 'true', 1);
-
-          window.location.href = url;
-        });
-    },
-    [id, content, hasUnforkedEdits],
-  );
+  const onFork = useOnFork({
+    vizKit,
+    id,
+    content,
+    hasUnforkedEdits,
+  });
 
   // Send an analytics event to track this page view.
   useEffect(() => {
