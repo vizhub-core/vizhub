@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useMemo } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { Sidebar } from 'vzcode/src/client/Sidebar';
 import { useTabsState } from 'vzcode/src/client/useTabsState';
 import { TabList } from 'vzcode/src/client/TabList';
@@ -27,6 +27,7 @@ import { getVizPageHref } from '../../accessors/getVizPageHref';
 import { getLicense } from '../../accessors/getLicense';
 import { getHeight } from '../../accessors/getHeight';
 import { ShareDBDoc } from 'vzcode';
+import { useV2Runtime } from './V2Runtime/useV2Runtime';
 
 // The fixed path of the files in the ShareDB<Content> document.
 const filesPath = ['files'];
@@ -47,7 +48,7 @@ export const VizPageBody = ({
   initialReadmeHTML,
   forkedFromInfo,
   forkedFromOwnerUser,
-  srcdoc,
+  initialSrcdoc,
   activeFileId,
   setActiveFileId,
   tabList,
@@ -76,7 +77,7 @@ export const VizPageBody = ({
   initialReadmeHTML: string;
   forkedFromInfo: Info | null;
   forkedFromOwnerUser: User | null;
-  srcdoc: string;
+  initialSrcdoc: string;
   activeFileId: FileId | null;
   setActiveFileId: (activeFileId: FileId | null) => void;
   tabList: Array<FileId>;
@@ -109,21 +110,6 @@ export const VizPageBody = ({
   // The height of the viz, in pixels, falling back to default.
   const vizHeight = useMemo(() => getHeight(content.height), [content.height]);
 
-  // Render the viz runner iframe.
-  const renderVizRunner = useCallback(
-    (iframeScale: number) => (
-      <iframe
-        width={defaultVizWidth}
-        height={vizHeight}
-        srcDoc={srcdoc}
-        style={{
-          transform: `scale(${iframeScale})`,
-        }}
-      />
-    ),
-    [srcdoc, vizHeight],
-  );
-
   // Logic for opening and closing tabs.
   const { closeTab, openTab } = useTabsState(
     activeFileId,
@@ -138,20 +124,28 @@ export const VizPageBody = ({
   const localPresence = contentShareDBDocPresence?.localPresence;
   const docPresence = contentShareDBDocPresence?.docPresence;
 
-  // Re-run the program after users
-  // stop typing for 1 second.
-  useEffect(() => {
-    // Debounce the updates by 100ms.
-    const timeout = setTimeout(() => {
-      // Update the files in the ShareDB<Content> document.
+  // The source code to display in the viz runner iframe.
+  const [srcdoc, setSrcdoc] = useState(initialSrcdoc);
 
-      console.log('TODO execute');
-    }, 1000);
+  useV2Runtime({
+    files,
+    setSrcdoc,
+  });
 
-    return () => {
-      clearTimeout(timeout);
-    };
-  }, [files]);
+  // Render the viz runner iframe.
+  const renderVizRunner = useCallback(
+    (iframeScale: number) => (
+      <iframe
+        width={defaultVizWidth}
+        height={vizHeight}
+        srcDoc={srcdoc}
+        style={{
+          transform: `scale(${iframeScale})`,
+        }}
+      />
+    ),
+    [srcdoc, vizHeight],
+  );
 
   return (
     <div className="vh-page">

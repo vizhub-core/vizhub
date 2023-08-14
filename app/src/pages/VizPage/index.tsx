@@ -166,7 +166,7 @@ export const VizPage: Page = ({ pageData }: { pageData: VizPageData }) => {
           onFork,
           initialReadmeHTML,
 
-          srcdoc: initialSrcdoc,
+          initialSrcdoc,
         }}
       />
       <VizPageToasts
