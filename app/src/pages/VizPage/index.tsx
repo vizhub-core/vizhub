@@ -38,7 +38,7 @@ export type VizPageData = PageData & {
   forkedFromOwnerUserSnapshot: Snapshot<User> | null;
   authenticatedUserSnapshot: Snapshot<User> | null;
   initialReadmeHTML: string;
-  srcdoc: string;
+  initialSrcdoc: string;
 };
 
 // Inspired by https://github.com/vitejs/vite-plugin-react/blob/main/playground/ssr-react/src/pages/Home.jsx
@@ -50,7 +50,7 @@ export const VizPage: Page = ({ pageData }: { pageData: VizPageData }) => {
     initialReadmeHTML,
     forkedFromInfoSnapshot,
     forkedFromOwnerUserSnapshot,
-    srcdoc,
+    initialSrcdoc,
   } = pageData;
   const info: Info = useShareDBDocData(infoSnapshot, 'Info');
   const id: VizId = info.id;
@@ -226,7 +226,7 @@ export const VizPage: Page = ({ pageData }: { pageData: VizPageData }) => {
           onFork,
           initialReadmeHTML,
 
-          srcdoc,
+          srcdoc: initialSrcdoc,
         }}
       />
       <VizPageToasts

@@ -88,7 +88,8 @@ VizPage.getPageData = async ({
 
     // Compute srcdoc for iframe using `computeSrcDoc` function.
     // TODO cache it per commit.
-    const srcdoc = await computeSrcDoc(content);
+    const initialSrcdoc = await computeSrcDoc(content);
+
     return {
       infoSnapshot,
       contentSnapshot,
@@ -98,7 +99,7 @@ VizPage.getPageData = async ({
       title,
       authenticatedUserSnapshot,
       initialReadmeHTML,
-      srcdoc,
+      initialSrcdoc,
     };
   } catch (e) {
     console.log('error fetching viz with id ', id);
