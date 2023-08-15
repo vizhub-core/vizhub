@@ -1,4 +1,4 @@
-import { srcdoc } from './srcdoc';
+// import { srcdoc } from './srcdoc';
 import { V3RuntimeFiles } from './types';
 
 // Nothing happening.
@@ -132,25 +132,30 @@ export const setupV3Runtime = ({
       worker.postMessage({ files, enableSourcemap: true });
     });
 
-  let isFirstRun = true;
+  // TODO SSR first run
+  // let isFirstRun = true;
   const run = ({ src, pkg, warnings }): Promise<void> =>
     new Promise((resolve) => {
-      if (isFirstRun) {
-        isFirstRun = false;
-        // TODO reset srcdoc when dependencies change
-        iframe.srcdoc = srcdoc({ pkg, src });
-        resolve();
-      } else {
-        window.onmessage = ({ data }) => {
-          if (data.type === 'runDone') {
-            resolve();
-          }
-        };
-        iframe.contentWindow.postMessage(
-          { type: 'runJS', src },
-          '*',
-        );
+      // if (isFirstRun) {
+      //   isFirstRun = false;
+      //   // TODO reset srcdoc when dependencies change
+      //   iframe.srcdoc = srcdoc({ pkg, src });
+      //   resolve();
+      // } else {
+      window.onmessage = ({ data }) => {
+        if (data.type === 'runDone') {
+          resolve();
+        }
+      };
+      iframe.contentWindow.postMessage(
+        { type: 'runJS', src },
+        '*',
+      );
+      if (warnings.length > 0) {
+        // TODO show warnings nicely
+        console.log(warnings);
       }
+      // }
     });
 
   // Kick off the initial render

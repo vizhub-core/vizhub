@@ -29,10 +29,18 @@ export const useRuntime = ({
   useEffect(() => {
     if (runtimeVersion === 3) {
       // Lazy load the v3 runtime.
-      import('./v3Runtime').then(({ v3Runtime }) => {
-        // console.log(v3Runtime);
-        v3Runtime(iframeRef, content);
-      });
+      import('./v3Runtime/setupV3Runtime').then(
+        ({ setupV3Runtime }) => {
+          // console.log(v3Runtime);
+
+          const iframe = iframeRef.current;
+          const initialFiles = toV3RuntimeFiles(
+            content.files,
+          );
+
+          setupV3Runtime({ iframe, initialFiles });
+        },
+      );
     }
   }, [runtimeVersion]);
 

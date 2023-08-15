@@ -1,5 +1,22 @@
 // Generates iframe srcdoc for first run.
-export const srcdoc = ({ pkg, src }) => {
+export const srcdoc = ({
+  pkg,
+  src,
+}: {
+  pkg: {
+    dependencies: {
+      [key: string]: string;
+    };
+    vizhub: {
+      libraries: {
+        [key: string]: {
+          path: string;
+        };
+      };
+    };
+  };
+  src: string;
+}) => {
   const {
     dependencies,
     vizhub: { libraries },
