@@ -133,6 +133,7 @@ export const setupV3Runtime = ({
         if (warnings.length > 0) {
           return console.log(warnings);
         }
+
         resolve({ src, pkg, warnings });
       };
       worker.postMessage({ files, enableSourcemap: true });
