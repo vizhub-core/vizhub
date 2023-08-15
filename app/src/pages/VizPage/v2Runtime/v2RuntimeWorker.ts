@@ -1,9 +1,5 @@
-// import { computeSrcDoc } from './computeSrcDoc';
-
+import { computeSrcDoc } from './computeSrcDoc.ts';
 onmessage = async ({ data }) => {
-  const { content } = data;
-  // postMessage(await computeSrcDoc(data.content));
-  postMessage({
-    srcdoc: 'message from worker',
-  });
+  const srcdoc = await computeSrcDoc(data.content);
+  postMessage({ srcdoc });
 };

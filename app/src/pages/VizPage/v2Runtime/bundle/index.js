@@ -39,6 +39,7 @@ export const bundle = async (files) => {
     plugins: [
       hypothetical({
         files: transformFilesToObject(files),
+        cwd: false,
       }),
       bubleJSXOnly({
         target: {
