@@ -8,14 +8,15 @@ export const getFolderAncestorsTest = () => {
       const gateways = await initGateways();
       const { saveFolder, getFolderAncestors } = gateways;
       await saveFolder(sampleFolder);
-      expect((await getFolderAncestors(sampleFolder.id)).value).toEqual([
-        sampleFolder,
-      ]);
+      expect(
+        (await getFolderAncestors(sampleFolder.id)).value,
+      ).toEqual([sampleFolder]);
     });
 
     it('getFolderAncestors error case not found', async () => {
       const gateways = await initGateways();
-      const result = await gateways.getFolderAncestors('bogus-id');
+      const result =
+        await gateways.getFolderAncestors('bogus-id');
       expect(result.outcome).toEqual('failure');
       expect(result.error.code).toEqual('resourceNotFound');
       expect(result.error.message).toEqual(
@@ -45,7 +46,11 @@ export const getFolderAncestorsTest = () => {
 
       const result = await getFolderAncestors(folder3.id);
       expect(result.value.length).toEqual(3);
-      expect(result.value).toEqual([sampleFolder, folder2, folder3]);
+      expect(result.value).toEqual([
+        sampleFolder,
+        folder2,
+        folder3,
+      ]);
     });
   });
 };

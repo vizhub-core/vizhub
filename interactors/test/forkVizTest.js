@@ -33,19 +33,23 @@ export const forkVizTest = () => {
       const newVizId = '101';
 
       const gateways = initGateways();
-      const { saveCommit, getInfo, getContent, getCommit } = gateways;
+      const { saveCommit, getInfo, getContent, getCommit } =
+        gateways;
       const saveViz = SaveViz(gateways);
       const forkViz = ForkViz(gateways);
-      const getContentAtCommit = GetContentAtCommit(gateways);
+      const getContentAtCommit =
+        GetContentAtCommit(gateways);
 
       await saveCommit(primordialCommit);
       await saveViz(primordialViz);
 
       const getForksCount = async () =>
-        (await getInfo(primordialViz.info.id)).value.data.forksCount;
+        (await getInfo(primordialViz.info.id)).value.data
+          .forksCount;
 
       const getUpvotesCount = async () =>
-        (await getInfo(primordialViz.info.id)).value.data.upvotesCount;
+        (await getInfo(primordialViz.info.id)).value.data
+          .upvotesCount;
 
       // Sanity check
       expect(await getForksCount()).toEqual(0);
@@ -78,11 +82,18 @@ export const forkVizTest = () => {
         // Verify upvotesCount is reset to 0 on the fork.
         upvotesCount: 0,
       };
-      const expectedContent = { ...primordialViz.content, id: newVizId };
+      const expectedContent = {
+        ...primordialViz.content,
+        id: newVizId,
+      };
 
       expect(result.value).toEqual(expectedInfo);
-      expect((await getInfo(newVizId)).value.data).toEqual(expectedInfo);
-      expect((await getContent(newVizId)).value.data).toEqual(expectedContent);
+      expect((await getInfo(newVizId)).value.data).toEqual(
+        expectedInfo,
+      );
+      expect(
+        (await getContent(newVizId)).value.data,
+      ).toEqual(expectedContent);
       expect((await getCommit(newCommitId)).value).toEqual({
         id: newCommitId,
         parent: primordialViz.info.end,
@@ -92,9 +103,9 @@ export const forkVizTest = () => {
         ops: diff(primordialViz.content, expectedContent),
         milestone: null,
       });
-      expect((await getContentAtCommit(newCommitId)).value).toEqual(
-        expectedContent,
-      );
+      expect(
+        (await getContentAtCommit(newCommitId)).value,
+      ).toEqual(expectedContent);
 
       // Verify that forksCount has been incremented
       // TODO verify that forksCount is decremented when a fork is deleted/trashed.
@@ -113,7 +124,9 @@ export const forkVizTest = () => {
       });
 
       expect(result.outcome).toEqual('failure');
-      expect(result.error.code).toEqual(VizHubErrorCode.resourceNotFound);
+      expect(result.error.code).toEqual(
+        VizHubErrorCode.resourceNotFound,
+      );
       expect(result.error.message).toEqual(
         `Resource not found with id: bogus-id`,
       );
@@ -125,10 +138,12 @@ export const forkVizTest = () => {
       const newVizId = '101';
 
       const gateways = initGateways();
-      const { saveCommit, getInfo, getContent, getCommit } = gateways;
+      const { saveCommit, getInfo, getContent, getCommit } =
+        gateways;
       const saveViz = SaveViz(gateways);
       const forkViz = ForkViz(gateways);
-      const getContentAtCommit = GetContentAtCommit(gateways);
+      const getContentAtCommit =
+        GetContentAtCommit(gateways);
 
       await saveCommit(primordialCommit);
       await saveCommit(commit2);
@@ -160,11 +175,18 @@ export const forkVizTest = () => {
         forksCount: 0,
         upvotesCount: 0,
       };
-      const expectedContent = { ...primordialVizV2.content, id: newVizId };
+      const expectedContent = {
+        ...primordialVizV2.content,
+        id: newVizId,
+      };
 
       expect(result.value).toEqual(expectedInfo);
-      expect((await getInfo(newVizId)).value.data).toEqual(expectedInfo);
-      expect((await getContent(newVizId)).value.data).toEqual(expectedContent);
+      expect((await getInfo(newVizId)).value.data).toEqual(
+        expectedInfo,
+      );
+      expect(
+        (await getContent(newVizId)).value.data,
+      ).toEqual(expectedContent);
       expect((await getCommit(newCommitId)).value).toEqual({
         id: newCommitId,
         parent: commit2.id,
@@ -174,9 +196,9 @@ export const forkVizTest = () => {
         ops: diff(primordialVizV2.content, expectedContent),
         milestone: null,
       });
-      expect((await getContentAtCommit(newCommitId)).value).toEqual(
-        expectedContent,
-      );
+      expect(
+        (await getContentAtCommit(newCommitId)).value,
+      ).toEqual(expectedContent);
     });
 
     it('should commit uncommitted changes', async () => {
@@ -187,10 +209,12 @@ export const forkVizTest = () => {
       const newVizId = '101';
 
       const gateways = initGateways();
-      const { saveCommit, getInfo, getContent, getCommit } = gateways;
+      const { saveCommit, getInfo, getContent, getCommit } =
+        gateways;
       const saveViz = SaveViz(gateways);
       const forkViz = ForkViz(gateways);
-      const getContentAtCommit = GetContentAtCommit(gateways);
+      const getContentAtCommit =
+        GetContentAtCommit(gateways);
 
       await saveCommit(primordialCommit);
       await saveCommit(commit2);
@@ -227,29 +251,44 @@ export const forkVizTest = () => {
       };
 
       expect(result.value).toEqual(expectedInfo);
-      expect((await getInfo(newVizId)).value.data).toEqual(expectedInfo);
-      expect((await getContent(newVizId)).value.data).toEqual(expectedContent);
-      expect((await getCommit(newCommitId1)).value).toEqual({
-        id: newCommitId1,
-        parent: commit2.id,
-        viz: forkedFrom,
-        authors: [newOwner],
-        timestamp: primordialVizV2Uncommitted.info.updated,
-        ops: diff(primordialVizV2.content, primordialVizV2Uncommitted.content),
-        milestone: null,
-      });
-      expect((await getCommit(newCommitId2)).value).toEqual({
-        id: newCommitId2, // This is the fork commit
-        parent: newCommitId1, // The is from committing the uncommitted
-        viz: newVizId,
-        authors: [newOwner],
-        timestamp,
-        ops: diff(primordialVizV2Uncommitted.content, expectedContent),
-        milestone: null,
-      });
-      expect((await getContentAtCommit(newCommitId2)).value).toEqual(
-        expectedContent,
+      expect((await getInfo(newVizId)).value.data).toEqual(
+        expectedInfo,
       );
+      expect(
+        (await getContent(newVizId)).value.data,
+      ).toEqual(expectedContent);
+      expect((await getCommit(newCommitId1)).value).toEqual(
+        {
+          id: newCommitId1,
+          parent: commit2.id,
+          viz: forkedFrom,
+          authors: [newOwner],
+          timestamp:
+            primordialVizV2Uncommitted.info.updated,
+          ops: diff(
+            primordialVizV2.content,
+            primordialVizV2Uncommitted.content,
+          ),
+          milestone: null,
+        },
+      );
+      expect((await getCommit(newCommitId2)).value).toEqual(
+        {
+          id: newCommitId2, // This is the fork commit
+          parent: newCommitId1, // The is from committing the uncommitted
+          viz: newVizId,
+          authors: [newOwner],
+          timestamp,
+          ops: diff(
+            primordialVizV2Uncommitted.content,
+            expectedContent,
+          ),
+          milestone: null,
+        },
+      );
+      expect(
+        (await getContentAtCommit(newCommitId2)).value,
+      ).toEqual(expectedContent);
     });
 
     it('should use provided title, content, and visitility', async () => {
@@ -258,10 +297,12 @@ export const forkVizTest = () => {
       const newVizId = '101';
 
       const gateways = initGateways();
-      const { saveCommit, getInfo, getContent, getCommit } = gateways;
+      const { saveCommit, getInfo, getContent, getCommit } =
+        gateways;
       const saveViz = SaveViz(gateways);
       const forkViz = ForkViz(gateways);
-      const getContentAtCommit = GetContentAtCommit(gateways);
+      const getContentAtCommit =
+        GetContentAtCommit(gateways);
 
       await saveCommit(primordialCommit);
       await saveViz(primordialViz);
@@ -277,7 +318,8 @@ export const forkVizTest = () => {
         files: {
           ...primordialViz.content.files,
           7548392: {
-            name: primordialViz.content.files['7548392'].name,
+            name: primordialViz.content.files['7548392']
+              .name,
             // Simulates the user changing this text before forking.
             text: '<body>Hello Changed World</body>',
           },
@@ -321,8 +363,12 @@ export const forkVizTest = () => {
       };
 
       expect(result.value).toEqual(expectedInfo);
-      expect((await getInfo(newVizId)).value.data).toEqual(expectedInfo);
-      expect((await getContent(newVizId)).value.data).toEqual(expectedContent);
+      expect((await getInfo(newVizId)).value.data).toEqual(
+        expectedInfo,
+      );
+      expect(
+        (await getContent(newVizId)).value.data,
+      ).toEqual(expectedContent);
       expect((await getCommit(newCommitId)).value).toEqual({
         id: newCommitId,
         parent: primordialViz.info.end,
@@ -332,9 +378,9 @@ export const forkVizTest = () => {
         ops: diff(primordialViz.content, expectedContent),
         milestone: null,
       });
-      expect((await getContentAtCommit(newCommitId)).value).toEqual(
-        expectedContent,
-      );
+      expect(
+        (await getContentAtCommit(newCommitId)).value,
+      ).toEqual(expectedContent);
     });
   });
 };

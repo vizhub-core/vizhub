@@ -20,18 +20,24 @@ export const computeForkedFrom = async ({
   let forkedFromIsBackfilled = false;
   if (!isPrimordialViz) {
     // Figure out if we need to backfill forkedFrom.
-    logDetail('  Checking if we need to backfill forkedFrom...');
+    logDetail(
+      '  Checking if we need to backfill forkedFrom...',
+    );
 
     let isForkedFromValid = false;
     if (!vizV2.info.forkedFrom) {
-      logDetail('    Forked from is not defined. Need to backfill.');
+      logDetail(
+        '    Forked from is not defined. Need to backfill.',
+      );
     } else {
       isForkedFromValid = await isVizV2Valid({
         id: vizV2.info.forkedFrom,
         contentCollection,
       });
       if (isForkedFromValid) {
-        logDetail('    Forked from is legit. No need to backfill.');
+        logDetail(
+          '    Forked from is legit. No need to backfill.',
+        );
 
         // TODO Test how accurate this is
         const mostSimilar = await vectorSimilaritySearch({
@@ -43,9 +49,12 @@ export const computeForkedFrom = async ({
         //   `      Guessed that ${vizV2.info.id} is forked from ${mostSimilar}`
         // );
 
-        const guessIsCorrect = mostSimilar === vizV2.info.forkedFrom;
+        const guessIsCorrect =
+          mostSimilar === vizV2.info.forkedFrom;
         logDetail(
-          `      Guessed ${guessIsCorrect ? 'correctly' : 'incorrectly'} that ${
+          `      Guessed ${
+            guessIsCorrect ? 'correctly' : 'incorrectly'
+          } that ${
             vizV2.info.id
           } is forked from ${mostSimilar}`,
         );
@@ -55,16 +64,21 @@ export const computeForkedFrom = async ({
           guessesIncorrect++;
         }
       } else {
-        logDetail('    Forked points to a deleted viz. Need to backfill.');
+        logDetail(
+          '    Forked points to a deleted viz. Need to backfill.',
+        );
       }
     }
 
     if (isForkedFromValid) {
       forkedFrom = vizV2.info.forkedFrom;
-      forkedFromIsBackfilled = vizV2.info.forkedFromBackfilled;
+      forkedFromIsBackfilled =
+        vizV2.info.forkedFromBackfilled;
     } else {
       forkedFromIsBackfilled = true;
-      logDetail('      Backfilling forkedFrom using vector similarity search!');
+      logDetail(
+        '      Backfilling forkedFrom using vector similarity search!',
+      );
 
       const mostSimilar = await vectorSimilaritySearch({
         redisClient,

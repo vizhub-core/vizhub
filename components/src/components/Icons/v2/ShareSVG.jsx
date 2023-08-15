@@ -1,6 +1,9 @@
 import React from 'react';
 
-export const ShareSVG = ({ height = 11, fill = 'currentcolor' }) => (
+export const ShareSVG = ({
+  height = 11,
+  fill = 'currentcolor',
+}) => (
   <svg height={height} viewBox={'0 0 16 11'}>
     <path
       fill={fill}

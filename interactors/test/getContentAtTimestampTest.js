@@ -1,7 +1,11 @@
 // See also
 //  * https://gitlab.com/curran/vizhub-ee/-/blob/main/vizhub-ee-interactors/test/GetContentAtTimestampTest.ts
 import { describe, it, expect } from 'vitest';
-import { primordialCommit, primordialViz, ts3 } from 'gateways/test';
+import {
+  primordialCommit,
+  primordialViz,
+  ts3,
+} from 'gateways/test';
 import { initGateways } from './initGateways';
 import { GetContentAtTimestamp } from '../src';
 
@@ -10,11 +14,15 @@ export const getContentAtTimestampTest = () => {
     it('getContentAtTimestamp, 1 commit', async () => {
       const gateways = initGateways();
       const { saveInfo, saveCommit } = gateways;
-      const getContentAtTimestamp = GetContentAtTimestamp(gateways);
+      const getContentAtTimestamp =
+        GetContentAtTimestamp(gateways);
 
       await saveInfo(primordialViz.info);
       await saveCommit(primordialCommit);
-      const result = await getContentAtTimestamp(primordialViz.info.id, ts3);
+      const result = await getContentAtTimestamp(
+        primordialViz.info.id,
+        ts3,
+      );
 
       expect(result.outcome).toEqual('success');
       expect(result.value).toEqual(primordialViz.content);

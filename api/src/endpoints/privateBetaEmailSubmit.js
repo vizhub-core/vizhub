@@ -1,33 +1,46 @@
 import { err, missingParameterError, ok } from 'gateways';
-import { generateId, RecordAnalyticsEvents } from 'interactors';
+import {
+  generateId,
+  RecordAnalyticsEvents,
+} from 'interactors';
 
-export const privateBetaEmailSubmit = ({ app, gateways }) => {
+export const privateBetaEmailSubmit = ({
+  app,
+  gateways,
+}) => {
   const { saveBetaProgramSignup } = gateways;
-  const recordAnalyticsEvents = RecordAnalyticsEvents(gateways);
+  const recordAnalyticsEvents =
+    RecordAnalyticsEvents(gateways);
 
-  app.post('/api/private-beta-email-submit', async (req, res) => {
-    console.log('reveiced request to submit email');
-    if (req.body && req.body.email) {
-      const email = req.body.email;
-      const result = await saveBetaProgramSignup({
-        id: generateId(),
-        email,
-      });
-      if (result.outcome !== 'success') {
-        throw result.error;
+  app.post(
+    '/api/private-beta-email-submit',
+    async (req, res) => {
+      console.log('reveiced request to submit email');
+      if (req.body && req.body.email) {
+        const email = req.body.email;
+        const result = await saveBetaProgramSignup({
+          id: generateId(),
+          email,
+        });
+        if (result.outcome !== 'success') {
+          throw result.error;
+        }
+
+        await recordAnalyticsEvents({
+          eventId: 'event.private-beta-email-submit',
+        });
+
+        res.send(ok('success'));
+      } else {
+        res.send(err(missingParameterError('email')));
       }
+    },
+  );
 
-      await recordAnalyticsEvents({
-        eventId: 'event.private-beta-email-submit',
-      });
-
-      res.send(ok('success'));
-    } else {
-      res.send(err(missingParameterError('email')));
-    }
-  });
-
-  app.get('/api/private-beta-email-submit-debug', async (req, res) => {
-    throw new Error('private-beta-email-submit-debug');
-  });
+  app.get(
+    '/api/private-beta-email-submit-debug',
+    async (req, res) => {
+      throw new Error('private-beta-email-submit-debug');
+    },
+  );
 };

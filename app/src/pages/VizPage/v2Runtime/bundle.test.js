@@ -5,7 +5,9 @@ import { bundle } from './bundle';
 
 // Convenience for testing.
 const removeSourceMap = (files) => {
-  files[0].text = files[0].text.split('\n//# sourceMappingURL')[0];
+  files[0].text = files[0].text.split(
+    '\n//# sourceMappingURL',
+  )[0];
   return files;
 };
 
@@ -72,7 +74,9 @@ describe('bundle', () => {
   });
 
   it('should transpile JSX', async () => {
-    const files = [{ name: 'index.js', text: '<div>Hello JSX!</div>' }];
+    const files = [
+      { name: 'index.js', text: '<div>Hello JSX!</div>' },
+    ];
     expect(removeSourceMap(await bundle(files))).toEqual([
       {
         name: 'bundle.js',
@@ -112,7 +116,9 @@ describe('bundle', () => {
   });
 
   it('should allow characters outside of the Latin1 range', async () => {
-    const files = [{ name: 'index.js', text: 'console.log("Привет")' }];
+    const files = [
+      { name: 'index.js', text: 'console.log("Привет")' },
+    ];
     expect(removeSourceMap(await bundle(files))).toEqual([
       {
         name: 'bundle.js',

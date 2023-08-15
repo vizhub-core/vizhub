@@ -17,7 +17,9 @@ export const ArrowSVG = ({
     >
       <g
         fill={fill}
-        transform={`translate(${isVertical ? '10,5.5' : '5.5,10'}) rotate(${
+        transform={`translate(${
+          isVertical ? '10,5.5' : '5.5,10'
+        }) rotate(${
           left ? 0 : up ? 90 : down ? -90 : 180
         }) translate(-5.5,-10)`}
       >

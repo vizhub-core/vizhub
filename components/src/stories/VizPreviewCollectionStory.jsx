@@ -4,7 +4,9 @@ import { renderVizPreviews } from './renderVizPreviews';
 const Story = () => {
   return (
     <div className="layout-fullscreen">
-      <VizPreviewCollection>{renderVizPreviews()}</VizPreviewCollection>
+      <VizPreviewCollection>
+        {renderVizPreviews()}
+      </VizPreviewCollection>
     </div>
   );
 };

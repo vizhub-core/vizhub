@@ -19,14 +19,20 @@ export type PricingPageData = PageData & {
 };
 
 const Body = () => {
-  const authenticatedUser: User | null = useContext(AuthenticatedUserContext);
+  const authenticatedUser: User | null = useContext(
+    AuthenticatedUserContext,
+  );
 
   const handleProClick = useCallback(async () => {
-    vizKit.rest.recordAnalyticsEvents('event.click.pricing.pro');
+    vizKit.rest.recordAnalyticsEvents(
+      'event.click.pricing.pro',
+    );
     // Pretend that the user goes through a checkout process...
 
     if (!authenticatedUser) {
-      console.log('TODO handle unauthenticated user - redirect to login?');
+      console.log(
+        'TODO handle unauthenticated user - redirect to login?',
+      );
       return;
     }
 
@@ -34,7 +40,9 @@ const Body = () => {
     setCookie('showUpgradeSuccessToast', 'true', 1);
 
     // Invoke the fake WebHook to simulate a successful payment.
-    await vizKit.rest.fakeCheckoutSuccess(authenticatedUser.id);
+    await vizKit.rest.fakeCheckoutSuccess(
+      authenticatedUser.id,
+    );
 
     // Navigate to the account page.
     const url = '/account';
@@ -54,12 +62,16 @@ export const PricingPage: Page = ({
 }) => {
   // Send an analytics event to track this page view.
   useEffect(() => {
-    vizKit.rest.recordAnalyticsEvents('event.pageview.pricing');
+    vizKit.rest.recordAnalyticsEvents(
+      'event.pageview.pricing',
+    );
   }, []);
 
   return (
     <AuthenticatedUserProvider
-      authenticatedUserSnapshot={pageData.authenticatedUserSnapshot}
+      authenticatedUserSnapshot={
+        pageData.authenticatedUserSnapshot
+      }
     >
       <div className="vh-page overflow-auto">
         <SmartHeader />

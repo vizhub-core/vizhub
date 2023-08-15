@@ -8,7 +8,8 @@ import { UpdateOrCreateUser } from '../src';
 const claims = {
   nickname: 'curran',
   name: 'Curran Kelleher',
-  picture: 'https://avatars.githubusercontent.com/u/68416?v=4',
+  picture:
+    'https://avatars.githubusercontent.com/u/68416?v=4',
   updated_at: '2023-04-11T11:30:03.680Z',
   email: 'curran.kelleher@gmail.com',
   email_verified: true,
@@ -52,61 +53,76 @@ export const updateOrCreateUserTest = () => {
     it('should create a new user', async () => {
       const gateways = initGateways();
       const { getUser } = gateways;
-      const updateOrCreateUser = UpdateOrCreateUser(gateways);
+      const updateOrCreateUser =
+        UpdateOrCreateUser(gateways);
 
       const result = await updateOrCreateUser(options);
 
       expect(result.outcome).toEqual('success');
       expect(result.value).toEqual('success');
 
-      expect((await getUser(id)).value.data).toEqual(expectedUser);
+      expect((await getUser(id)).value.data).toEqual(
+        expectedUser,
+      );
     });
 
     it('should update an existing user', async () => {
       const gateways = initGateways();
       const { saveUser, getUser } = gateways;
-      const updateOrCreateUser = UpdateOrCreateUser(gateways);
+      const updateOrCreateUser =
+        UpdateOrCreateUser(gateways);
 
       const existingUser = {
         ...expectedUser,
         displayName: 'Schmurran Schmellemer',
-        picture: 'https://avatars.poopinyourpants.com/u/68416?v=4',
+        picture:
+          'https://avatars.poopinyourpants.com/u/68416?v=4',
       };
       await saveUser(existingUser);
 
       // Sanity check
-      expect((await getUser(id)).value.data).toEqual(existingUser);
+      expect((await getUser(id)).value.data).toEqual(
+        existingUser,
+      );
 
       const result = await updateOrCreateUser(options);
 
       expect(result.outcome).toEqual('success');
       expect(result.value).toEqual('success');
 
-      expect((await getUser(options.id)).value.data).toEqual(expectedUser);
+      expect(
+        (await getUser(options.id)).value.data,
+      ).toEqual(expectedUser);
     });
 
     it('should update an existing user and preserve plan', async () => {
       const gateways = initGateways();
       const { saveUser, getUser } = gateways;
-      const updateOrCreateUser = UpdateOrCreateUser(gateways);
+      const updateOrCreateUser =
+        UpdateOrCreateUser(gateways);
 
       const existingUser = {
         ...expectedUser,
         displayName: 'Schmurran Schmellemer',
-        picture: 'https://avatars.poopinyourpants.com/u/68416?v=4',
+        picture:
+          'https://avatars.poopinyourpants.com/u/68416?v=4',
         plan: 'pro',
       };
       await saveUser(existingUser);
 
       // Sanity check
-      expect((await getUser(id)).value.data).toEqual(existingUser);
+      expect((await getUser(id)).value.data).toEqual(
+        existingUser,
+      );
 
       const result = await updateOrCreateUser(options);
 
       expect(result.outcome).toEqual('success');
       expect(result.value).toEqual('success');
 
-      expect((await getUser(options.id)).value.data).toEqual({
+      expect(
+        (await getUser(options.id)).value.data,
+      ).toEqual({
         ...expectedUser,
         plan: 'pro',
       });

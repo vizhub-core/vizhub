@@ -9,7 +9,11 @@ import {
   sampleReadmeText,
 } from 'gateways/test';
 import { initGateways } from './initGateways';
-import { SaveViz, CommitViz, setPredictableGenerateId } from '../src';
+import {
+  SaveViz,
+  CommitViz,
+  setPredictableGenerateId,
+} from '../src';
 
 export const commitVizTest = () => {
   describe('commitViz', async () => {
@@ -53,7 +57,8 @@ export const commitVizTest = () => {
           ...primordialViz.content,
           files: {
             7548392: {
-              name: primordialViz.content.files['7548392'].name,
+              name: primordialViz.content.files['7548392']
+                .name,
               text: '<body>Hello Beautiful World</body>',
             },
           },
@@ -67,7 +72,9 @@ export const commitVizTest = () => {
       expect(result.outcome).toEqual('success');
       expect(result.value).toEqual(newCommitId);
 
-      expect((await getInfo(primordialViz.info.id)).value.data).toEqual({
+      expect(
+        (await getInfo(primordialViz.info.id)).value.data,
+      ).toEqual({
         ...uncommitted.info,
         end: newCommitId,
         committed: true,

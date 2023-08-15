@@ -10,7 +10,10 @@ export const VizPreviewPresenter = ({
   infoSnapshot: Snapshot<Info>;
   ownerUser: User;
 }) => {
-  const info: Info = useShareDBDocData<Info>(infoSnapshot, 'Info');
+  const info: Info = useShareDBDocData<Info>(
+    infoSnapshot,
+    'Info',
+  );
 
   // TODO make this work for real
   // See https://github.com/vizhub-core/vizhub3/issues/65

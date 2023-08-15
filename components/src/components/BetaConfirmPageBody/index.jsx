@@ -7,7 +7,8 @@ export const BetaConfirmPageBody = ({ onEmailSubmit }) => {
         <div className="blurb">
           <div className="callout large">Thanks!</div>
           <p className="description">
-            Thanks for your interest! You'll be hearing from us.
+            Thanks for your interest! You'll be hearing from
+            us.
           </p>
         </div>
       </div>

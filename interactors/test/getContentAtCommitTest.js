@@ -17,16 +17,23 @@ import {
   ts2,
 } from 'gateways/test';
 import { initGateways } from './initGateways';
-import { SaveViz, GetContentAtCommit, setPredictableGenerateId } from '../src';
+import {
+  SaveViz,
+  GetContentAtCommit,
+  setPredictableGenerateId,
+} from '../src';
 
 export const getContentAtCommitTest = () => {
   describe('getContentAtCommitTest', async () => {
     it('getContentAtCommit, 1 commit', async () => {
       const gateways = initGateways();
       const { saveCommit } = gateways;
-      const getContentAtCommit = GetContentAtCommit(gateways);
+      const getContentAtCommit =
+        GetContentAtCommit(gateways);
       await saveCommit(primordialCommit);
-      const result = await getContentAtCommit(primordialCommit.id);
+      const result = await getContentAtCommit(
+        primordialCommit.id,
+      );
       expect(result.outcome).toEqual('success');
       expect(result.value).toEqual(primordialViz.content);
     });
@@ -34,7 +41,8 @@ export const getContentAtCommitTest = () => {
     it('getContentAtCommit, 2 commits', async () => {
       const gateways = initGateways();
       const { saveCommit } = gateways;
-      const getContentAtCommit = GetContentAtCommit(gateways);
+      const getContentAtCommit =
+        GetContentAtCommit(gateways);
       await saveCommit(primordialCommit);
       await saveCommit(commit2);
       const result = await getContentAtCommit(commit2.id);
@@ -45,7 +53,8 @@ export const getContentAtCommitTest = () => {
     it('getContentAtCommit, 3 commits', async () => {
       const gateways = initGateways();
       const { saveCommit } = gateways;
-      const getContentAtCommit = GetContentAtCommit(gateways);
+      const getContentAtCommit =
+        GetContentAtCommit(gateways);
       await saveCommit(primordialCommit);
       await saveCommit(commit2);
       await saveCommit(commit3);
@@ -57,12 +66,17 @@ export const getContentAtCommitTest = () => {
     it('getContentAtCommit, invalid op error', async () => {
       const gateways = initGateways();
       const { saveCommit } = gateways;
-      const getContentAtCommit = GetContentAtCommit(gateways);
+      const getContentAtCommit =
+        GetContentAtCommit(gateways);
       await saveCommit(primordialCommit);
       await saveCommit(commit2InvalidOp);
-      const result = await getContentAtCommit(commit2InvalidOp.id);
+      const result = await getContentAtCommit(
+        commit2InvalidOp.id,
+      );
       expect(result.outcome).toEqual('failure');
-      expect(result.error.code).toEqual(VizHubErrorCode.invalidCommitOp);
+      expect(result.error.code).toEqual(
+        VizHubErrorCode.invalidCommitOp,
+      );
       expect(result.error.message)
         .toEqual(`Invalid op in commit with id: commit2
 Invalid document snapshot: undefined
@@ -83,10 +97,13 @@ commit.ops:
 
     it('getContentAtCommit, commit not found error', async () => {
       const gateways = initGateways();
-      const getContentAtCommit = GetContentAtCommit(gateways);
+      const getContentAtCommit =
+        GetContentAtCommit(gateways);
       const result = await getContentAtCommit('bogus-id');
       expect(result.outcome).toEqual('failure');
-      expect(result.error.code).toEqual(VizHubErrorCode.resourceNotFound);
+      expect(result.error.code).toEqual(
+        VizHubErrorCode.resourceNotFound,
+      );
       expect(result.error.message).toEqual(
         'Resource not found with id: bogus-id',
       );
@@ -95,14 +112,17 @@ commit.ops:
     it('getContentAtCommit, commit not found error for intermediate commit', async () => {
       const gateways = initGateways();
       const { saveCommit } = gateways;
-      const getContentAtCommit = GetContentAtCommit(gateways);
+      const getContentAtCommit =
+        GetContentAtCommit(gateways);
       //await saveCommit(primordialCommit); <-- This one is missing and will trigger the error
       await saveCommit(commit2);
       await saveCommit(commit3);
 
       const result = await getContentAtCommit(commit3.id);
       expect(result.outcome).toEqual('failure');
-      expect(result.error.code).toEqual(VizHubErrorCode.resourceNotFound);
+      expect(result.error.code).toEqual(
+        VizHubErrorCode.resourceNotFound,
+      );
       expect(result.error.message).toEqual(
         'Resource not found with id: commit1',
       );
@@ -111,7 +131,8 @@ commit.ops:
     it('getContentAtCommit, using Milestones, missing milestone error case', async () => {
       const gateways = initGateways();
       const { saveCommit } = gateways;
-      const getContentAtCommit = GetContentAtCommit(gateways);
+      const getContentAtCommit =
+        GetContentAtCommit(gateways);
       // Exclude sampleMilestone from saving,
       // which will trigger the error.
       //await saveMilestone(sampleMilestone);
@@ -119,7 +140,9 @@ commit.ops:
       await saveCommit(commit3);
       const result = await getContentAtCommit(commit3.id);
       expect(result.outcome).toEqual('failure');
-      expect(result.error.code).toEqual(VizHubErrorCode.resourceNotFound);
+      expect(result.error.code).toEqual(
+        VizHubErrorCode.resourceNotFound,
+      );
       expect(result.error.message).toEqual(
         'Resource not found with id: 4327589043278',
       );
@@ -128,7 +151,8 @@ commit.ops:
     it('getContentAtCommit, using Milestones', async () => {
       const gateways = initGateways();
       const { saveCommit, saveMilestone } = gateways;
-      const getContentAtCommit = GetContentAtCommit(gateways);
+      const getContentAtCommit =
+        GetContentAtCommit(gateways);
 
       // Exclude primordialCommit from saving,
       // to test that it's not read and instead
@@ -158,9 +182,12 @@ commit.ops:
       const saveViz = SaveViz(gateways);
 
       // Configure the interactor to save milestones every 20 commits.
-      const getContentAtCommit = GetContentAtCommit(gateways, {
-        milestoneFrequency: 20,
-      });
+      const getContentAtCommit = GetContentAtCommit(
+        gateways,
+        {
+          milestoneFrequency: 20,
+        },
+      );
 
       await saveCommit(primordialCommit);
 
@@ -208,29 +235,34 @@ commit.ops:
 
       // Verify there is no milestone at this point
       // and that our commits were set up as expected
-      const commit9 = (await getCommit('new-commit-9')).value;
+      const commit9 = (await getCommit('new-commit-9'))
+        .value;
       expect(commit9.parent).toEqual('new-commit-8');
       expect(commit9.milestone).toEqual(undefined);
 
       // This invocation should generate the milestones.
-      expect((await getContentAtCommit(previousCommit.id)).value).toEqual(
-        previousContent,
-      );
+      expect(
+        (await getContentAtCommit(previousCommit.id)).value,
+      ).toEqual(previousContent);
       // Verifies there is a milestone at the given commitId.
       const verifyMilestone = async (id) => {
         // Verify that commit.milestone is a string id
-        const milestone = (await getCommit(id)).value.milestone;
+        const milestone = (await getCommit(id)).value
+          .milestone;
         expect(typeof milestone).toEqual('string');
 
         // Verify that the milestone is stored
-        const milestoneResult = await getMilestone(milestone);
+        const milestoneResult =
+          await getMilestone(milestone);
         expect(milestoneResult.outcome).toEqual('success');
 
         // "new-commit-80" --> "80"
         const i = id.substring(11);
 
         // Verify that the stored milestone content is correct
-        expect(milestoneResult.value.content).toEqual(contentForCommit(i));
+        expect(milestoneResult.value.content).toEqual(
+          contentForCommit(i),
+        );
       };
 
       // Verify there are milestones at the expected commits.
@@ -242,23 +274,27 @@ commit.ops:
 
       // This invocation should use milestone 100
       await deleteCommit('new-commit-99');
-      expect((await getContentAtCommit('new-commit-100')).value).toEqual(
-        contentForCommit(100),
-      );
+      expect(
+        (await getContentAtCommit('new-commit-100')).value,
+      ).toEqual(contentForCommit(100));
 
       // This invocation should use milestone 60
       await deleteCommit('new-commit-59');
-      expect((await getContentAtCommit('new-commit-70')).value).toEqual(
-        contentForCommit(70),
-      );
+      expect(
+        (await getContentAtCommit('new-commit-70')).value,
+      ).toEqual(contentForCommit(70));
 
       // This invocation should fail if we delete milestone 60
-      const milestoneToDelete = (await getCommit('new-commit-60')).value
-        .milestone;
+      const milestoneToDelete = (
+        await getCommit('new-commit-60')
+      ).value.milestone;
       await deleteMilestone(milestoneToDelete);
-      const result = await getContentAtCommit('new-commit-70');
+      const result =
+        await getContentAtCommit('new-commit-70');
       expect(result.outcome).toEqual('failure');
-      expect(result.error.code).toEqual(VizHubErrorCode.resourceNotFound);
+      expect(result.error.code).toEqual(
+        VizHubErrorCode.resourceNotFound,
+      );
       expect(result.error.message).toEqual(
         `Resource not found with id: ${milestoneToDelete}`,
       );

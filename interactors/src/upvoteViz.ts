@@ -1,4 +1,10 @@
-import { Gateways, Result, ok, err, Success } from 'gateways';
+import {
+  Gateways,
+  Result,
+  ok,
+  err,
+  Success,
+} from 'gateways';
 import { VizId, Timestamp, UserId, Upvote } from 'entities';
 import { generateUpvoteId } from './generateUpvoteId';
 
@@ -26,10 +32,12 @@ export const UpvoteViz = (gateways: Gateways) => {
 
     // Save upvote
     const saveUpvoteResult = await saveUpvote(newUpvote);
-    if (saveUpvoteResult.outcome !== 'success') return saveUpvoteResult;
+    if (saveUpvoteResult.outcome !== 'success')
+      return saveUpvoteResult;
 
     // Increment upvote count (only if the upvote was saved)
-    const incrementResult = await incrementUpvotesCount(viz);
+    const incrementResult =
+      await incrementUpvotesCount(viz);
     if (incrementResult.outcome === 'failure') {
       return err(incrementResult.error);
     }

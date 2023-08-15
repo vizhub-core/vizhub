@@ -9,7 +9,10 @@ export const SortControl = ({
 }) => {
   // Possible sorts that are not the current sort.
   const otherSortOptions = useMemo(
-    () => (sortOptions ? sortOptions.filter(({ id }) => id !== sortId) : []),
+    () =>
+      sortOptions
+        ? sortOptions.filter(({ id }) => id !== sortId)
+        : [],
     [sortOptions, sortId],
   );
 
@@ -18,14 +21,21 @@ export const SortControl = ({
     () =>
       new Map(
         sortOptions
-          ? sortOptions.map((sortOption) => [sortOption.id, sortOption])
+          ? sortOptions.map((sortOption) => [
+              sortOption.id,
+              sortOption,
+            ])
           : [],
       ),
     [sortOptions],
   );
 
   return (
-    <Form.Group className="mx-0" controlId="sort" as={isVertical ? 'div' : Row}>
+    <Form.Group
+      className="mx-0"
+      controlId="sort"
+      as={isVertical ? 'div' : Row}
+    >
       <Form.Label column sm="auto">
         Sort by
       </Form.Label>
@@ -36,7 +46,10 @@ export const SortControl = ({
           </Dropdown.Toggle>
           <Dropdown.Menu>
             {otherSortOptions.map((sortOption) => (
-              <Dropdown.Item key={sortOption.id} eventKey={sortOption.id}>
+              <Dropdown.Item
+                key={sortOption.id}
+                eventKey={sortOption.id}
+              >
                 {sortOption.label}
               </Dropdown.Item>
             ))}

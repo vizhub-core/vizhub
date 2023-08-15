@@ -8,7 +8,9 @@ const handleVizHubClick = () => {
 };
 
 export const SmartHeader = () => {
-  const authenticatedUser = useContext(AuthenticatedUserContext);
+  const authenticatedUser = useContext(
+    AuthenticatedUserContext,
+  );
 
   return (
     <Header
@@ -17,7 +19,9 @@ export const SmartHeader = () => {
       pricingHref={'/pricing'}
       accountHref={'/account'}
       profileHref={`/${authenticatedUser?.userName}`}
-      authenticatedUserAvatarURL={authenticatedUser?.picture}
+      authenticatedUserAvatarURL={
+        authenticatedUser?.picture
+      }
       onVizHubClick={handleVizHubClick}
     />
   );

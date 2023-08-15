@@ -17,7 +17,8 @@ export const getUserByUserNameTest = () => {
       const gateways = await initGateways();
       const { saveUser, getUserByUserName } = gateways;
       await saveUser(userJoe);
-      const result = await getUserByUserName('unknown-user');
+      const result =
+        await getUserByUserName('unknown-user');
       expect(result.outcome).toEqual('failure');
       expect(result.error.code).toEqual('resourceNotFound');
       expect(result.error.message).toEqual(

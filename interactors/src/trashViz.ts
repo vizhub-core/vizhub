@@ -1,4 +1,10 @@
-import { Gateways, Result, Success, ok, err } from 'gateways';
+import {
+  Gateways,
+  Result,
+  Success,
+  ok,
+  err,
+} from 'gateways';
 import { VizId, Info, Timestamp } from 'entities';
 
 // trashViz
@@ -15,7 +21,8 @@ export const TrashViz = (gateways: Gateways) => {
     const { id, timestamp } = options;
     // TODORedLock
     const getInfoResult = await getInfo(id);
-    if (getInfoResult.outcome === 'failure') return err(getInfoResult.error);
+    if (getInfoResult.outcome === 'failure')
+      return err(getInfoResult.error);
     const info = getInfoResult.value.data;
 
     const newInfo: Info = {
@@ -24,7 +31,8 @@ export const TrashViz = (gateways: Gateways) => {
     };
 
     const saveResult = await saveInfo(newInfo);
-    if (saveResult.outcome === 'failure') return err(saveResult.error);
+    if (saveResult.outcome === 'failure')
+      return err(saveResult.error);
 
     return ok('success');
   };

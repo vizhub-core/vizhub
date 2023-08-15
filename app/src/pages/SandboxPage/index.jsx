@@ -23,14 +23,16 @@ export const SandboxPage = ({ pageData }) => {
   }, []);
 
   return analyticsEventSnapshots && vizModule ? (
-    analyticsEventSnapshots.map((analyticsEventSnapshot, i) => (
-      <EventVizLive
-        key={i}
-        analyticsEventSnapshot={analyticsEventSnapshot}
-        title={titles[analyticsEventSnapshot.data.id]}
-        vizModule={vizModule}
-      />
-    ))
+    analyticsEventSnapshots.map(
+      (analyticsEventSnapshot, i) => (
+        <EventVizLive
+          key={i}
+          analyticsEventSnapshot={analyticsEventSnapshot}
+          title={titles[analyticsEventSnapshot.data.id]}
+          vizModule={vizModule}
+        />
+      ),
+    )
   ) : (
     <Spinner />
   );

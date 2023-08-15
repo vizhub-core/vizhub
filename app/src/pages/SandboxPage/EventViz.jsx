@@ -1,6 +1,10 @@
 import { useEffect, useRef } from 'react';
 
-export const EventViz = ({ analyticsEvent, vizModule, title }) => {
+export const EventViz = ({
+  analyticsEvent,
+  vizModule,
+  title,
+}) => {
   const svgRef = useRef();
 
   useEffect(() => {

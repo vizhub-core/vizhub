@@ -5,8 +5,14 @@
 // implementation of gateways, as a precursor to the
 // database gateways implementation found in the
 // `database` package.
-import { resourceNotFoundError, invalidDecrementError } from './errors';
-import { defaultSortOrder, defaultSortOption } from 'entities';
+import {
+  resourceNotFoundError,
+  invalidDecrementError,
+} from './errors';
+import {
+  defaultSortOrder,
+  defaultSortOption,
+} from 'entities';
 import { ok, err } from './Result';
 import { pageSize } from './Gateways';
 import { ascending, descending } from 'd3-array';
@@ -116,16 +122,20 @@ export const MemoryGateways = () => {
     pageNumber = 0,
     sortOrder = defaultSortOrder,
   }) => {
-    const comparator = sortOrder === 'ascending' ? ascending : descending;
+    const comparator =
+      sortOrder === 'ascending' ? ascending : descending;
     return ok(
       Object.values(documents.Info)
-        .sort((a, b) => comparator(a[sortField], b[sortField]))
+        .sort((a, b) =>
+          comparator(a[sortField], b[sortField]),
+        )
         .filter(
           (d, i) =>
             // Return true if this document is in the current page specified by pageNumber
             // and matches the owner and forkedFrom filters.
             (owner === undefined || d.owner === owner) &&
-            (forkedFrom === undefined || d.forkedFrom === forkedFrom) &&
+            (forkedFrom === undefined ||
+              d.forkedFrom === forkedFrom) &&
             i >= pageNumber * pageSize &&
             i < (pageNumber + 1) * pageSize,
         )
@@ -159,7 +169,11 @@ export const MemoryGateways = () => {
     return ok('success');
   };
 
-  const getCommitAncestors = async (id, toNearestMilestone, start) => {
+  const getCommitAncestors = async (
+    id,
+    toNearestMilestone,
+    start,
+  ) => {
     let commit = documents.Commit[id];
     if (!commit) {
       return err(resourceNotFoundError(id));
@@ -201,7 +215,9 @@ export const MemoryGateways = () => {
     const user = Object.values(documents.User).find(
       (user) => user.userName === userName,
     );
-    return user ? ok(fakeSnapshot(user)) : err(resourceNotFoundError(userName));
+    return user
+      ? ok(fakeSnapshot(user))
+      : err(resourceNotFoundError(userName));
   };
 
   const getUserByEmails = async (emails) => {
@@ -209,24 +225,32 @@ export const MemoryGateways = () => {
       (user) =>
         emails.includes(user.primaryEmail) ||
         (user.secondaryEmails &&
-          user.secondaryEmails.find((email) => emails.includes(email))),
+          user.secondaryEmails.find((email) =>
+            emails.includes(email),
+          )),
     );
-    return user ? ok(fakeSnapshot(user)) : err(resourceNotFoundError(emails));
+    return user
+      ? ok(fakeSnapshot(user))
+      : err(resourceNotFoundError(emails));
   };
 
   const getUsersByIds = async (ids) => {
-    const users = Object.values(documents.User).filter((user) =>
-      ids.includes(user.id),
+    const users = Object.values(documents.User).filter(
+      (user) => ids.includes(user.id),
     );
     return ok(users.map(fakeSnapshot));
   };
 
   const getPermissions = async (user, resources) => {
-    const allPermissions = Object.values(documents.Permission);
+    const allPermissions = Object.values(
+      documents.Permission,
+    );
     const permissions = allPermissions
       .filter((permission) => permission.user === user)
       .filter((permission) =>
-        resources.some((resource) => resource === permission.resource),
+        resources.some(
+          (resource) => resource === permission.resource,
+        ),
       );
     return ok(permissions.map(fakeSnapshot));
   };
@@ -250,7 +274,10 @@ export const MemoryGateways = () => {
   // Populate CRUD methods.
   for (const entityName of crudEntityNames) {
     documents[entityName] = {};
-    memoryGateways = { ...memoryGateways, ...crud(entityName) };
+    memoryGateways = {
+      ...memoryGateways,
+      ...crud(entityName),
+    };
   }
 
   return memoryGateways;

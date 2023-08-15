@@ -40,7 +40,8 @@ export default function rollupPluginHypothetical(options) {
   var allowFallthrough = options.allowFallthrough || false;
   var allowRelativeExternalFallthrough =
     options.allowRelativeExternalFallthrough || false;
-  var allowExternalFallthrough = options.allowExternalFallthrough;
+  var allowExternalFallthrough =
+    options.allowExternalFallthrough;
   if (allowExternalFallthrough === undefined) {
     allowExternalFallthrough = true;
   }
@@ -49,7 +50,9 @@ export default function rollupPluginHypothetical(options) {
   if (impliedExtensions === undefined) {
     impliedExtensions = ['.js', '/'];
   } else {
-    impliedExtensions = Array.prototype.slice.call(impliedExtensions);
+    impliedExtensions = Array.prototype.slice.call(
+      impliedExtensions,
+    );
   }
   var cwd = options.cwd;
   if (cwd !== false) {
@@ -61,28 +64,36 @@ export default function rollupPluginHypothetical(options) {
 
   var files = new Map();
   if (leaveIdsAlone) {
-    forEachInObjectOrMap(files0, files0AsMap, function (contents, f) {
-      files.set(f, contents);
-    });
+    forEachInObjectOrMap(
+      files0,
+      files0AsMap,
+      function (contents, f) {
+        files.set(f, contents);
+      },
+    );
   } else {
-    forEachInObjectOrMap(files0, files0AsMap, function (contents, f) {
-      var unixStyleF = unixStylePath(f);
-      var pathIsExternal = isExternal(unixStyleF);
-      var p = path.normalize(unixStyleF);
-      if (pathIsExternal && !isExternal(p)) {
-        throw Error(
-          'Supplied external file path "' +
-            unixStyleF +
-            '" normalized to "' +
-            p +
-            '"!',
-        );
-      }
-      if (!isAbsolute(p) && !pathIsExternal) {
-        p = absolutify(p, cwd);
-      }
-      files.set(p, contents);
-    });
+    forEachInObjectOrMap(
+      files0,
+      files0AsMap,
+      function (contents, f) {
+        var unixStyleF = unixStylePath(f);
+        var pathIsExternal = isExternal(unixStyleF);
+        var p = path.normalize(unixStyleF);
+        if (pathIsExternal && !isExternal(p)) {
+          throw Error(
+            'Supplied external file path "' +
+              unixStyleF +
+              '" normalized to "' +
+              p +
+              '"!',
+          );
+        }
+        if (!isAbsolute(p) && !pathIsExternal) {
+          p = absolutify(p, cwd);
+        }
+        files.set(p, contents);
+      },
+    );
   }
 
   function basicResolve(importee) {
@@ -99,7 +110,8 @@ export default function rollupPluginHypothetical(options) {
         importee = unixStylePath(importee);
 
         // the entry file is never external.
-        var importeeIsExternal = Boolean(importer) && isExternal(importee);
+        var importeeIsExternal =
+          Boolean(importer) && isExternal(importee);
 
         var importeeIsRelativeToExternal =
           importer &&
@@ -120,7 +132,10 @@ export default function rollupPluginHypothetical(options) {
           }
           importee = normalizedImportee;
         } else if (importeeIsRelativeToExternal) {
-          var joinedImportee = path.join(path.dirname(importer), importee);
+          var joinedImportee = path.join(
+            path.dirname(importer),
+            importee,
+          );
           if (!isExternal(joinedImportee)) {
             throw Error(
               'Import "' +
@@ -135,7 +150,10 @@ export default function rollupPluginHypothetical(options) {
           importee = joinedImportee;
         } else {
           if (!isAbsolute(importee) && importer) {
-            importee = path.join(path.dirname(importer), importee);
+            importee = path.join(
+              path.dirname(importer),
+              importee,
+            );
           } else {
             importee = path.normalize(importee);
           }
@@ -147,17 +165,27 @@ export default function rollupPluginHypothetical(options) {
         if (files.has(importee)) {
           return importee;
         } else if (impliedExtensions) {
-          for (var i = 0, len = impliedExtensions.length; i < len; ++i) {
+          for (
+            var i = 0, len = impliedExtensions.length;
+            i < len;
+            ++i
+          ) {
             var extended = importee + impliedExtensions[i];
             if (files.has(extended)) {
               return extended;
             }
           }
         }
-        if (importeeIsExternal && !allowExternalFallthrough) {
+        if (
+          importeeIsExternal &&
+          !allowExternalFallthrough
+        ) {
           throw Error(dneMessage(importee));
         }
-        if (importeeIsRelativeToExternal && !allowRelativeExternalFallthrough) {
+        if (
+          importeeIsRelativeToExternal &&
+          !allowRelativeExternalFallthrough
+        ) {
           throw Error(dneMessage(importee));
         }
         if (
@@ -194,5 +222,9 @@ function unixStylePath(p) {
 }
 
 function dneMessage(id) {
-  return '"' + id + '" does not exist in the hypothetical file system!';
+  return (
+    '"' +
+    id +
+    '" does not exist in the hypothetical file system!'
+  );
 }

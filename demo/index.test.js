@@ -13,7 +13,9 @@ describe('Populating demo database', () => {
   });
 
   it('saving sample entities', async () => {
-    for (const [entityName, sampleEntity] of Object.entries(sampleEntities)) {
+    for (const [entityName, sampleEntity] of Object.entries(
+      sampleEntities,
+    )) {
       const saveMethod = `save${entityName}`;
       await gateways[saveMethod](sampleEntity);
     }

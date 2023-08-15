@@ -14,7 +14,11 @@ export const VizPreview = ({
   upvotesCount,
 }) => {
   return (
-    <a className="vh-viz-preview" href={href} rel="noreferrer noopener">
+    <a
+      className="vh-viz-preview"
+      href={href}
+      rel="noreferrer noopener"
+    >
       <div
         className="thumbnail"
         style={{
@@ -23,7 +27,9 @@ export const VizPreview = ({
         alt={title}
       ></div>
       <div className="content-container">
-        <div className="last-updated-date">{lastUpdatedDateFormatted}</div>
+        <div className="last-updated-date">
+          {lastUpdatedDateFormatted}
+        </div>
         <div className="title">{title}</div>
       </div>
       <div className="meta-container">

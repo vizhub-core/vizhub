@@ -14,33 +14,34 @@ const debug = false;
 // For client-side connections (in the browser), leverage the
 // existing auth middleware to populate the ShareDB agent's user ID.
 // This is later referenced by access control rules.
-export const identifyClientAgent = (authMiddleware) => (request, next) => {
-  // If the connection is coming from the browser,
-  if (request.req) {
-    // Create something that looks enough like the Express `req` object
-    // that we can pass it to the authMiddleware.
-    const req = {
-      ...request.req,
-      get: (key) => {
-        const headers = request.req.headers;
-        return headers[key];
-      },
-    };
+export const identifyClientAgent =
+  (authMiddleware) => (request, next) => {
+    // If the connection is coming from the browser,
+    if (request.req) {
+      // Create something that looks enough like the Express `req` object
+      // that we can pass it to the authMiddleware.
+      const req = {
+        ...request.req,
+        get: (key) => {
+          const headers = request.req.headers;
+          return headers[key];
+        },
+      };
 
-    // Invoke the authMiddleware to populate `req.oidc`.
-    authMiddleware(req, {}, () => {
-      const sub = req?.oidc?.user?.sub;
-      if (sub) {
-        // If the user is logged in, set the ShareDB agent's user ID.
-        request.agent.userId = parseAuth0Sub(sub);
-      }
-    });
-  } else {
-    // Do nothing. This case is handled by identifyServerAgent
-  }
+      // Invoke the authMiddleware to populate `req.oidc`.
+      authMiddleware(req, {}, () => {
+        const sub = req?.oidc?.user?.sub;
+        if (sub) {
+          // If the user is logged in, set the ShareDB agent's user ID.
+          request.agent.userId = parseAuth0Sub(sub);
+        }
+      });
+    } else {
+      // Do nothing. This case is handled by identifyServerAgent
+    }
 
-  next();
-};
+    next();
+  };
 
 export const identifyServerAgent = (request, next) => {
   // If the connection is coming from the browser,
@@ -134,7 +135,9 @@ const vizVerify = (gateways: Gateways, action: Action) => {
 
     // Vet ops against viz content documents.
     if (collection === CONTENT_COLLECTION) {
-      const id: VizId = snapshot ? snapshot.id : snapshots[0].id;
+      const id: VizId = snapshot
+        ? snapshot.id
+        : snapshots[0].id;
 
       if (snapshots && snapshots.length > 1) {
         throw new Error(
@@ -170,8 +173,10 @@ const vizVerify = (gateways: Gateways, action: Action) => {
   };
 };
 
-export const vizWrite = (gateways: Gateways) => vizVerify(gateways, WRITE);
-export const vizRead = (gateways: Gateways) => vizVerify(gateways, READ);
+export const vizWrite = (gateways: Gateways) =>
+  vizVerify(gateways, WRITE);
+export const vizRead = (gateways: Gateways) =>
+  vizVerify(gateways, READ);
 
 // V2 Code for reference
 // TODO handle access control for upvoting.

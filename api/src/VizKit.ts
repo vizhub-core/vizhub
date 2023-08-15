@@ -1,4 +1,10 @@
-import { SortId, UserId, VizId, Content, Visibility } from 'entities';
+import {
+  SortId,
+  UserId,
+  VizId,
+  Content,
+  Visibility,
+} from 'entities';
 
 // Modeled after https://github.com/octokit/octokit.js/#constructor-options
 // See also https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#uploading_json_data
@@ -30,10 +36,20 @@ export const VizKit = ({ baseUrl, ssrFetch = null }) => {
   return {
     rest: {
       privateBetaEmailSubmit: async (email: string) =>
-        await postJSON(`${baseUrl}/private-beta-email-submit`, { email }),
+        await postJSON(
+          `${baseUrl}/private-beta-email-submit`,
+          {
+            email,
+          },
+        ),
 
       recordAnalyticsEvents: async (eventId: string) =>
-        await postJSON(`${baseUrl}/record-analytics-event`, { eventId }),
+        await postJSON(
+          `${baseUrl}/record-analytics-event`,
+          {
+            eventId,
+          },
+        ),
 
       getInfosAndOwners: async (options: {
         forkedFrom: VizId;
@@ -47,7 +63,11 @@ export const VizKit = ({ baseUrl, ssrFetch = null }) => {
 
         // The page number that we want to use for pagination
         pageNumber: number;
-      }) => await postJSON(`${baseUrl}/get-infos-and-owners`, options),
+      }) =>
+        await postJSON(
+          `${baseUrl}/get-infos-and-owners`,
+          options,
+        ),
 
       forkViz: async (options: {
         // The viz that we want to fork
@@ -71,10 +91,17 @@ export const VizKit = ({ baseUrl, ssrFetch = null }) => {
       }) => await postJSON(`${baseUrl}/fork-viz`, options),
 
       fakeCheckoutSuccess: async (userId: UserId) =>
-        await postJSON(`${baseUrl}/fake-checkout-success`, { userId }),
+        await postJSON(`${baseUrl}/fake-checkout-success`, {
+          userId,
+        }),
 
       fakeUnsubscribeSuccess: async (userId: UserId) =>
-        await postJSON(`${baseUrl}/fake-unsubscribe-success`, { userId }),
+        await postJSON(
+          `${baseUrl}/fake-unsubscribe-success`,
+          {
+            userId,
+          },
+        ),
     },
   };
 };

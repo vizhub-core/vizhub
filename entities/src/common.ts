@@ -4,8 +4,9 @@
 export type Timestamp = number;
 export const dateToTimestamp = (date: Date): Timestamp =>
   Math.floor(date.getTime() / 1000);
-export const timestampToDate = (timestamp: Timestamp): Date =>
-  new Date(timestamp * 1000);
+export const timestampToDate = (
+  timestamp: Timestamp,
+): Date => new Date(timestamp * 1000);
 
 // A Markdown string.
 export type Markdown = string;

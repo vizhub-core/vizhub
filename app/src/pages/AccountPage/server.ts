@@ -10,13 +10,18 @@ AccountPage.getPageData = async ({
   // TODO reduce duplication between pages
   let authenticatedUserSnapshot = null;
   if (auth0User) {
-    const authenticatedUserResult = await getUser(parseAuth0Sub(auth0User.sub));
+    const authenticatedUserResult = await getUser(
+      parseAuth0Sub(auth0User.sub),
+    );
     if (authenticatedUserResult.outcome === 'failure') {
-      console.log('Error when fetching authenticated user:');
+      console.log(
+        'Error when fetching authenticated user:',
+      );
       console.log(authenticatedUserResult.error);
       return null;
     }
-    authenticatedUserSnapshot = authenticatedUserResult.value;
+    authenticatedUserSnapshot =
+      authenticatedUserResult.value;
   }
 
   const pageData: AccountPageData = {

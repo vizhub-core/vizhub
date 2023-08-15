@@ -14,7 +14,9 @@ export const vectorSimilaritySearch = async ({
     'FT.SEARCH',
     idx,
     // timestamp - 1 here so we don't include this viz itself.
-    `(@timestamp:[0,${timestamp - 1}])=>[KNN 4 @v $BLOB AS dist]`,
+    `(@timestamp:[0,${
+      timestamp - 1
+    }])=>[KNN 4 @v $BLOB AS dist]`,
     'PARAMS',
     '2',
     'BLOB',

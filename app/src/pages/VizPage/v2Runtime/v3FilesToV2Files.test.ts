@@ -4,7 +4,9 @@ import { v3FilesToV2Files } from './v3FilesToV2Files';
 
 describe('v3FilesToV2Files', () => {
   it('should compute correctly', () => {
-    expect(v3FilesToV2Files(primordialViz.content.files)).toEqual([
+    expect(
+      v3FilesToV2Files(primordialViz.content.files),
+    ).toEqual([
       {
         name: 'index.html',
         text: '<body>Hello</body>',

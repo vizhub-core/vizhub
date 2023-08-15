@@ -15,7 +15,9 @@ export const ForkModal = ({
   pricingHref,
 }) => {
   const [title, setTitle] = useState(initialTitle);
-  const [visibility, setVisibility] = useState(initialVisibility);
+  const [visibility, setVisibility] = useState(
+    initialVisibility,
+  );
   const [owner, setOwner] = useState(initialOwner);
 
   const handleTitleChange = useCallback((event) => {

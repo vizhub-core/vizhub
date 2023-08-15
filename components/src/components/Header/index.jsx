@@ -1,4 +1,10 @@
-import { Nav, Navbar, Container, Dropdown, Button } from '../bootstrap';
+import {
+  Nav,
+  Navbar,
+  Container,
+  Dropdown,
+  Button,
+} from '../bootstrap';
 import { LogoSVG } from '../Icons/LogoSVG';
 import './styles.css';
 
@@ -55,15 +61,25 @@ export const Header = ({
                   Create Viz
                 </Dropdown.Item>
                 <Dropdown.Divider />
-                <Dropdown.Item href={profileHref}>Profile</Dropdown.Item>
+                <Dropdown.Item href={profileHref}>
+                  Profile
+                </Dropdown.Item>
                 <Dropdown.Divider />
-                <Dropdown.Item href={accountHref}>Account</Dropdown.Item>
+                <Dropdown.Item href={accountHref}>
+                  Account
+                </Dropdown.Item>
                 <Dropdown.Divider />
-                <Dropdown.Item href={logoutHref}>Log out</Dropdown.Item>
+                <Dropdown.Item href={logoutHref}>
+                  Log out
+                </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
           ) : (
-            <Button as="a" href={loginHref} className="vh-header-button">
+            <Button
+              as="a"
+              href={loginHref}
+              className="vh-header-button"
+            >
               Log in
             </Button>
           )}

@@ -1,4 +1,9 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { UpvoteWidget } from 'components';
 import './styles.scss';
 
@@ -44,7 +49,10 @@ export const VizPageViewer = ({
     <div className="vh-viz-page-viewer">
       <div className="viewer-content">
         <div className="viz-frame">
-          <svg ref={svgRef} viewBox={`0 0 ${defaultVizWidth} ${vizHeight}`} />
+          <svg
+            ref={svgRef}
+            viewBox={`0 0 ${defaultVizWidth} ${vizHeight}`}
+          />
           {renderVizRunner(iframeScale)}
         </div>
         <div className="title-bar">
@@ -56,7 +64,10 @@ export const VizPageViewer = ({
         </div>
 
         <div className="meta-info">
-          <a href={ownerUserHref} className="meta-info-left">
+          <a
+            href={ownerUserHref}
+            className="meta-info-left"
+          >
             <img
               src={authorAvatarURL}
               width="40"
@@ -72,16 +83,21 @@ export const VizPageViewer = ({
               <>
                 <div>
                   Forked from{' '}
-                  <a href={forkedFromVizHref}>{forkedFromVizTitle}</a>
+                  <a href={forkedFromVizHref}>
+                    {forkedFromVizTitle}
+                  </a>
                 </div>
                 <a href={forksPageHref}>
-                  {forksCount} fork{forksCount === 1 ? '' : 's'}
+                  {forksCount} fork
+                  {forksCount === 1 ? '' : 's'}
                 </a>
               </>
             ) : null}
           </div>
         </div>
-        <div className="vh-markdown-body">{renderMarkdownHTML()}</div>
+        <div className="vh-markdown-body">
+          {renderMarkdownHTML()}
+        </div>
         <div className="license">{license} Licensed</div>
       </div>
     </div>

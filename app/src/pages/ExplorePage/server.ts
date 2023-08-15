@@ -1,6 +1,14 @@
-import { ExplorePage, ExplorePageData, ExplorePageQuery } from './index';
+import {
+  ExplorePage,
+  ExplorePageData,
+  ExplorePageQuery,
+} from './index';
 import { parseAuth0Sub } from '../../parseAuth0User';
-import { SortId, asSortId, defaultSortOption } from 'entities';
+import {
+  SortId,
+  asSortId,
+  defaultSortOption,
+} from 'entities';
 import { Gateways } from 'gateways';
 import { Auth0User } from '../Page';
 import { GetInfosAndOwners } from 'interactors';
@@ -17,7 +25,8 @@ ExplorePage.getPageData = async ({
   const { getUser } = gateways;
   const getInfosAndOwners = GetInfosAndOwners(gateways);
 
-  const sortId: SortId | null = asSortId(query.sort) || defaultSortOption.id;
+  const sortId: SortId | null =
+    asSortId(query.sort) || defaultSortOption.id;
 
   const infosAndOwnersResult = await getInfosAndOwners({
     noNeedToFetchUsers: [],
@@ -29,18 +38,24 @@ ExplorePage.getPageData = async ({
     console.log(infosAndOwnersResult.error);
     return null;
   }
-  const { infoSnapshots, ownerUserSnapshots } = infosAndOwnersResult.value;
+  const { infoSnapshots, ownerUserSnapshots } =
+    infosAndOwnersResult.value;
 
   // If the user is currently authenticated...
   let authenticatedUserSnapshot = null;
   if (auth0User) {
-    const authenticatedUserResult = await getUser(parseAuth0Sub(auth0User.sub));
+    const authenticatedUserResult = await getUser(
+      parseAuth0Sub(auth0User.sub),
+    );
     if (authenticatedUserResult.outcome === 'failure') {
-      console.log('Error when fetching authenticated user:');
+      console.log(
+        'Error when fetching authenticated user:',
+      );
       console.log(authenticatedUserResult.error);
       return null;
     }
-    authenticatedUserSnapshot = authenticatedUserResult.value;
+    authenticatedUserSnapshot =
+      authenticatedUserResult.value;
   }
 
   return {

@@ -1,6 +1,11 @@
 import { useRef, useState } from 'react';
 import { Item, useListState } from 'react-stately';
-import { mergeProps, useFocusRing, useListBox, useOption } from 'react-aria';
+import {
+  mergeProps,
+  useFocusRing,
+  useListBox,
+  useOption,
+} from 'react-aria';
 
 import './styles.scss';
 
@@ -10,7 +15,11 @@ function ListBox(props) {
 
   // Get props for the listbox element
   const ref = useRef(null);
-  const { listBoxProps, labelProps } = useListBox(props, state, ref);
+  const { listBoxProps, labelProps } = useListBox(
+    props,
+    state,
+    ref,
+  );
 
   return (
     <>
@@ -29,7 +38,11 @@ function ListBox(props) {
         }}
       >
         {[...state.collection].map((item) => (
-          <Option key={item.key} item={item} state={state} />
+          <Option
+            key={item.key}
+            item={item}
+            state={state}
+          />
         ))}
       </ul>
     </>
@@ -54,10 +67,18 @@ function Option({ item, state }) {
       {...mergeProps(optionProps, focusProps)}
       ref={ref}
       style={{
-        background: isSelected ? 'blueviolet' : 'transparent',
-        color: isDisabled ? '#aaa' : isSelected ? 'white' : null,
+        background: isSelected
+          ? 'blueviolet'
+          : 'transparent',
+        color: isDisabled
+          ? '#aaa'
+          : isSelected
+          ? 'white'
+          : null,
         padding: '2px 5px',
-        outline: isFocusVisible ? '2px solid orange' : 'none',
+        outline: isFocusVisible
+          ? '2px solid orange'
+          : 'none',
       }}
     >
       {item.rendered}

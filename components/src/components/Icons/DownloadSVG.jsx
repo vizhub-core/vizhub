@@ -1,4 +1,7 @@
-export const DownloadSVG = ({ height = 16, fill = 'currentcolor' }) => (
+export const DownloadSVG = ({
+  height = 16,
+  fill = 'currentcolor',
+}) => (
   <svg height={height} viewBox={'12 10 24 28'}>
     <path
       fill={fill}

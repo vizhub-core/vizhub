@@ -18,7 +18,8 @@
     /* Ensure that the _inner_ content has max-width: vh-content-max-width, */
     /* while the _outer_ content shrinks to preserve 10px horizontal padding. */
     max-width: calc(
-      var(--vh-viz-viewer-max-width) + 2 * var(--vh-padding-little)
+      var(--vh-viz-viewer-max-width) + 2 *
+        var(--vh-padding-little)
     );
     padding: var(--vh-padding-little);
 

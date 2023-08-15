@@ -1,4 +1,10 @@
-import { Gateways, Result, ok, err, invalidCommitOp } from 'gateways';
+import {
+  Gateways,
+  Result,
+  ok,
+  err,
+  invalidCommitOp,
+} from 'gateways';
 import { apply } from 'ot';
 import { Content, Commit, CommitId } from 'entities';
 import { generateId } from './generateId';
@@ -7,13 +13,24 @@ const debug = false;
 
 // https://gitlab.com/curran/vizhub-ee/-/blob/main/vizhub-ee-interactors/src/GetContentAtCommit.ts
 export const GetContentAtCommit =
-  (gateways: Gateways, options?: { milestoneFrequency: number }) =>
+  (
+    gateways: Gateways,
+    options?: { milestoneFrequency: number },
+  ) =>
   async (id: CommitId): Promise<Result<Content>> => {
-    const { getCommitAncestors, getMilestone, saveMilestone, saveCommit } =
-      gateways;
+    const {
+      getCommitAncestors,
+      getMilestone,
+      saveMilestone,
+      saveCommit,
+    } = gateways;
 
-    const commitsResult = await getCommitAncestors(id, true);
-    if (commitsResult.outcome === 'failure') return commitsResult;
+    const commitsResult = await getCommitAncestors(
+      id,
+      true,
+    );
+    if (commitsResult.outcome === 'failure')
+      return commitsResult;
     const commits = commitsResult.value;
     const { milestone } = commits[0];
 
@@ -21,14 +38,21 @@ export const GetContentAtCommit =
     if (debug) {
       console.log('in getContentAtCommit');
       console.log('id', id);
-      console.log('commits', JSON.stringify(commits, null, 2));
-      console.log('content', JSON.stringify(content, null, 2));
+      console.log(
+        'commits',
+        JSON.stringify(commits, null, 2),
+      );
+      console.log(
+        'content',
+        JSON.stringify(content, null, 2),
+      );
     }
     // Handle the case where we start from a milestone.
     if (milestone) {
       // Get the milestone (and report failure if missing)
       const milestoneResult = await getMilestone(milestone);
-      if (milestoneResult.outcome === 'failure') return milestoneResult;
+      if (milestoneResult.outcome === 'failure')
+        return milestoneResult;
 
       // Start from the milestone content
       content = milestoneResult.value.content;
@@ -86,8 +110,12 @@ export const GetContentAtCommit =
           return saveMilestoneResult;
 
         // Attach the milestone to the commit
-        const saveCommitResult = await saveCommit({ ...commit, milestone });
-        if (saveCommitResult.outcome === 'failure') return saveCommitResult;
+        const saveCommitResult = await saveCommit({
+          ...commit,
+          milestone,
+        });
+        if (saveCommitResult.outcome === 'failure')
+          return saveCommitResult;
       }
     }
 

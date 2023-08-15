@@ -27,7 +27,8 @@ import { CommitViz } from './commitViz';
 //  * See also
 //    https://gitlab.com/curran/vizhub-ee/-/blob/main/vizhub-ee-interactors/src/ForkVizEE.ts
 export const ForkViz = (gateways: Gateways) => {
-  const { saveCommit, getInfo, incrementForksCount } = gateways;
+  const { saveCommit, getInfo, incrementForksCount } =
+    gateways;
   const saveViz = SaveViz(gateways);
   const getContentAtCommit = GetContentAtCommit(gateways);
   const commitViz = CommitViz(gateways);
@@ -52,11 +53,13 @@ export const ForkViz = (gateways: Gateways) => {
       forkedFromCommitId,
     } = options;
     const commitId: CommitId = generateId();
-    const newVizId: VizId = options.newVizId || generateId();
+    const newVizId: VizId =
+      options.newVizId || generateId();
 
     // Get the info for the viz we are forking from.
     const infoResult = await getInfo(forkedFrom);
-    if (infoResult.outcome === 'failure') return err(infoResult.error);
+    if (infoResult.outcome === 'failure')
+      return err(infoResult.error);
     const info: Info = infoResult.value.data;
 
     // Choose a particular commit to fork from.
@@ -65,7 +68,8 @@ export const ForkViz = (gateways: Gateways) => {
     // TODO if timestamp is less than last updated,
     // then fork from the last updated commit.
 
-    let parentCommitId: CommitId = forkedFromCommitId || info.end;
+    let parentCommitId: CommitId =
+      forkedFromCommitId || info.end;
 
     // If we want to fork from the current version
     // AND
@@ -73,7 +77,8 @@ export const ForkViz = (gateways: Gateways) => {
     if (!forkedFromCommitId && !info.committed) {
       // then commit now, and fork from the resulting commit,
       // NOT from info.end which is outdated.
-      const parentCommitIdResult = await commitViz(forkedFrom);
+      const parentCommitIdResult =
+        await commitViz(forkedFrom);
       if (parentCommitIdResult.outcome === 'failure')
         return err(parentCommitIdResult.error);
       parentCommitId = parentCommitIdResult.value;
@@ -103,8 +108,10 @@ export const ForkViz = (gateways: Gateways) => {
       newInfo.visibility = visibility;
     }
 
-    const oldContentResult = await getContentAtCommit(parentCommitId);
-    if (oldContentResult.outcome === 'failure') return oldContentResult;
+    const oldContentResult =
+      await getContentAtCommit(parentCommitId);
+    if (oldContentResult.outcome === 'failure')
+      return oldContentResult;
     const oldContent = oldContentResult.value;
 
     const newContent: Content = {
@@ -131,13 +138,17 @@ export const ForkViz = (gateways: Gateways) => {
       return saveCommitResult;
     }
 
-    const saveVizResult = await saveViz({ info: newInfo, content: newContent });
+    const saveVizResult = await saveViz({
+      info: newInfo,
+      content: newContent,
+    });
     if (saveVizResult.outcome !== 'success') {
       return saveVizResult;
     }
 
     // Increment forksCount
-    const incrementResult = await incrementForksCount(forkedFrom);
+    const incrementResult =
+      await incrementForksCount(forkedFrom);
     if (incrementResult.outcome !== 'success') {
       return incrementResult;
     }

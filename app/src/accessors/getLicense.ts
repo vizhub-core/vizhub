@@ -5,7 +5,10 @@ export const defaultLicense = 'MIT';
 
 // Gets the package.json of the given viz content.
 const packageJSON = (content: Content): any | null => {
-  const packageJsonText = getFileText(content, 'package.json');
+  const packageJsonText = getFileText(
+    content,
+    'package.json',
+  );
   if (packageJsonText) {
     try {
       return JSON.parse(packageJsonText);
@@ -18,5 +21,7 @@ const packageJSON = (content: Content): any | null => {
 };
 
 // Gets the license of the given viz content.
-export const getLicense = (content: Content): string | null =>
+export const getLicense = (
+  content: Content,
+): string | null =>
   packageJSON(content)?.license || defaultLicense;

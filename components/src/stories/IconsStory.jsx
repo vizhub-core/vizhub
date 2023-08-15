@@ -51,11 +51,21 @@ const v3icons = [
 ];
 
 const displayIcons = (icons) => (
-  <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}>
+  <div
+    style={{
+      display: 'flex',
+      flexWrap: 'wrap',
+      alignItems: 'center',
+    }}
+  >
     {icons.map((IconSVG, i) => (
       <div
         key={i}
-        style={{ border: '1px solid gray', display: 'flex', margin: '10px' }}
+        style={{
+          border: '1px solid gray',
+          display: 'flex',
+          margin: '10px',
+        }}
       >
         <IconSVG height="100" />
       </div>

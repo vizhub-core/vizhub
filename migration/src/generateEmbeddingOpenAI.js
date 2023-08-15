@@ -30,7 +30,9 @@ const openAi = new OpenAIApi(configuration);
 function truncateIfNeeded(str) {
   if (!str) str = ' ';
   let tokens = encode(str);
-  console.log(`    Input for embedding has ${tokens.length} tokens.`);
+  console.log(
+    `    Input for embedding has ${tokens.length} tokens.`,
+  );
   if (tokens.length > maxTokens) {
     str = decode(tokens.slice(0, maxTokens));
     console.log(
@@ -50,16 +52,22 @@ const embed = async (input) => {
   return embedding;
 };
 
-export const generateEmbeddingOpenAI = async (goodFiles) => {
+export const generateEmbeddingOpenAI = async (
+  goodFiles,
+) => {
   const input = removeEmoji(goodFiles)
     .map(({ name, text }) => {
       // Substring on name as there was one particular case
       // f1ae79caa0d74e13bcfb7ba16355d65f
       // where someone apparently pasted data into the file name field
-      const nameSubstring = name?.substring(0, maxFileNameLength).trim();
+      const nameSubstring = name
+        ?.substring(0, maxFileNameLength)
+        .trim();
 
       // Substring on text to handle large files such as CSV or JSON data files.
-      const textSubstring = text?.substring(0, maxFileTextLength).trim();
+      const textSubstring = text
+        ?.substring(0, maxFileTextLength)
+        .trim();
 
       // Put the name and text together in a format that OpenAI can understand.
       return `File \`${nameSubstring}\`:\n\`\`\`${textSubstring}\`\`\``;

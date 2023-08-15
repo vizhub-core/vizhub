@@ -8,7 +8,9 @@ const args = {
 };
 
 const Story = () => {
-  const [sortId, setSortId] = useState(sortControlArgs.initialSortId);
+  const [sortId, setSortId] = useState(
+    sortControlArgs.initialSortId,
+  );
   return (
     <div className="layout-fullscreen">
       <ExplorePageBody

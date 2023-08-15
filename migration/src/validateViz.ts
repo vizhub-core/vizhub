@@ -20,10 +20,14 @@ export const validateViz = async ({
 
   const getVizResult = await getViz(id);
   if (getVizResult.outcome === 'failure') {
-    throw new Error(`Failed to get viz: ${getVizResult.error}`);
+    throw new Error(
+      `Failed to get viz: ${getVizResult.error}`,
+    );
   }
-  const { info, content }: { info: Info; content: Content } =
-    getVizResult.value;
+  const {
+    info,
+    content,
+  }: { info: Info; content: Content } = getVizResult.value;
 
   console.log('info.start', info.start);
   console.log('info.end', info.end);
@@ -31,17 +35,27 @@ export const validateViz = async ({
   console.log('info.updated', info.updated);
 
   // Test that `getContentAtCommit` works.
-  const getContentResult = await getContentAtCommit(info.end);
+  const getContentResult = await getContentAtCommit(
+    info.end,
+  );
   if (getContentResult.outcome === 'failure') {
-    console.log(`Failed to get content: ${getContentResult.error}`);
+    console.log(
+      `Failed to get content: ${getContentResult.error}`,
+    );
     return false;
   }
-  const reconstructedContent: Content = getContentResult.value;
+  const reconstructedContent: Content =
+    getContentResult.value;
   const matches = eq(content, reconstructedContent);
   if (!matches) {
     console.log('getContentAtCommit failed');
-    console.log(`reconstructedContent does not match content`);
-    console.log('JSON.stringify(content)', JSON.stringify(content, null, 2));
+    console.log(
+      `reconstructedContent does not match content`,
+    );
+    console.log(
+      'JSON.stringify(content)',
+      JSON.stringify(content, null, 2),
+    );
     console.log(
       'JSON.stringify(reconstructedContent)',
       JSON.stringify(reconstructedContent, null, 2),

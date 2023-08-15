@@ -1,6 +1,11 @@
 import { useRef, useCallback } from 'react';
 import { Item, useListState } from 'react-stately';
-import { mergeProps, useFocusRing, useListBox, useOption } from 'react-aria';
+import {
+  mergeProps,
+  useFocusRing,
+  useListBox,
+  useOption,
+} from 'react-aria';
 import './styles.scss';
 
 // From https://react-spectrum.adobe.com/react-aria/useListBox.html
@@ -11,7 +16,11 @@ function ListBox(props) {
 
   // Get props for the listbox element
   const ref = useRef(null);
-  const { listBoxProps, labelProps } = useListBox(props, state, ref);
+  const { listBoxProps, labelProps } = useListBox(
+    props,
+    state,
+    ref,
+  );
 
   return (
     <>
@@ -27,9 +36,17 @@ function ListBox(props) {
       >
         {[...state.collection].map((item) =>
           item.type === 'section' ? (
-            <ListBoxSection key={item.key} section={item} state={state} />
+            <ListBoxSection
+              key={item.key}
+              section={item}
+              state={state}
+            />
           ) : (
-            <Option key={item.key} item={item} state={state} />
+            <Option
+              key={item.key}
+              item={item}
+              state={state}
+            />
           ),
         )}
       </ul>
@@ -58,20 +75,32 @@ function Option({ item, state }) {
   //   }}
 
   return (
-    <li {...mergeProps(optionProps, focusProps)} ref={ref} className="entry">
+    <li
+      {...mergeProps(optionProps, focusProps)}
+      ref={ref}
+      className="entry"
+    >
       {item.rendered}
     </li>
   );
 }
 
-export const Sidebar = ({ entries, storyKey, setStoryKey, setShowSidebar }) => {
+export const Sidebar = ({
+  entries,
+  storyKey,
+  setStoryKey,
+  setShowSidebar,
+}) => {
   const handleSelectionChange = useCallback((selection) => {
     setStoryKey(Array.from(selection)[0]);
   }, []);
 
   return (
     <div className="sidebar">
-      <div className="entry hide-sidebar" onClick={() => setShowSidebar(false)}>
+      <div
+        className="entry hide-sidebar"
+        onClick={() => setShowSidebar(false)}
+      >
         hide sidebar
       </div>
       <ListBox

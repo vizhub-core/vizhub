@@ -30,8 +30,12 @@ export const ProfilePageBody = ({
               src={picture}
             />
             <div className="d-flex flex-column justify-content-center">
-              <div className="vh-profile-page__full-name">{displayName}</div>
-              <div className="vh-profile-page__user-name">{userName}</div>
+              <div className="vh-profile-page__full-name">
+                {displayName}
+              </div>
+              <div className="vh-profile-page__user-name">
+                {userName}
+              </div>
             </div>
           </div>
           {sortOptions ? (
@@ -42,7 +46,9 @@ export const ProfilePageBody = ({
             />
           ) : null}
         </div>
-        <VizPreviewCollection>{renderVizPreviews()}</VizPreviewCollection>
+        <VizPreviewCollection>
+          {renderVizPreviews()}
+        </VizPreviewCollection>
         <div className="mt-3 mb-3 d-flex justify-content-center">
           {isLoadingNextPage ? (
             <Spinner fadeIn={false} />

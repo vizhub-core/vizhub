@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { ShareModal } from '../components/ShareModal';
 
 export const args = {
-  linkToCopy: 'https://vizhub.com/curran/2ee9f785faee42e6b697c527cd196025',
+  linkToCopy:
+    'https://vizhub.com/curran/2ee9f785faee42e6b697c527cd196025',
   onClose: () => {
     console.log('onClose');
   },

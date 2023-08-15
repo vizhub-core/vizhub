@@ -1,4 +1,12 @@
-import { Commit, Content, Files, Info, Viz, VizId, FilesV2 } from 'entities';
+import {
+  Commit,
+  Content,
+  Files,
+  Info,
+  Viz,
+  VizId,
+  FilesV2,
+} from 'entities';
 import { SaveViz, generateId } from 'interactors';
 import { computeV3Files } from './computeV3Files';
 import { diff } from 'ot';
@@ -92,10 +100,13 @@ export const migratePrimordialViz = async ({
   };
 
   // Save the primordial commit.
-  const saveCommitResult = await gateways.saveCommit(primordialCommit);
+  const saveCommitResult = await gateways.saveCommit(
+    primordialCommit,
+  );
   if (saveCommitResult.outcome === 'failure') {
     throw new Error(
-      'Failed to save primordial commit! ' + saveCommitResult.error,
+      'Failed to save primordial commit! ' +
+        saveCommitResult.error,
     );
   }
 
@@ -103,8 +114,13 @@ export const migratePrimordialViz = async ({
   const saveViz = SaveViz(gateways);
   const saveVizResult = await saveViz(vizV3);
   if (saveVizResult.outcome === 'failure') {
-    throw new Error('Failed to save primordial viz! ' + saveVizResult.error);
+    throw new Error(
+      'Failed to save primordial viz! ' +
+        saveVizResult.error,
+    );
   }
 
-  console.log('    Saved primordial commit and viz for the first time!');
+  console.log(
+    '    Saved primordial commit and viz for the first time!',
+  );
 };

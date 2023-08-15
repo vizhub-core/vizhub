@@ -1,10 +1,15 @@
 import { useMemo } from 'react';
 import { Form, Dropdown } from '../bootstrap';
 
-export const OwnerControl = ({ owner, setOwner, possibleOwners }) => {
+export const OwnerControl = ({
+  owner,
+  setOwner,
+  possibleOwners,
+}) => {
   // Possible owners that are not the current owner.
   const otherPossibleOwners = useMemo(
-    () => possibleOwners.filter(({ id }) => id !== owner.id),
+    () =>
+      possibleOwners.filter(({ id }) => id !== owner.id),
     [possibleOwners, owner],
   );
 
@@ -29,7 +34,10 @@ export const OwnerControl = ({ owner, setOwner, possibleOwners }) => {
         </Dropdown.Toggle>
         <Dropdown.Menu>
           {otherPossibleOwners.map((possibleOwner) => (
-            <Dropdown.Item key={possibleOwner.id} eventKey={possibleOwner.id}>
+            <Dropdown.Item
+              key={possibleOwner.id}
+              eventKey={possibleOwner.id}
+            >
               {possibleOwner.label}
             </Dropdown.Item>
           ))}

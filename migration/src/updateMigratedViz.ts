@@ -1,6 +1,13 @@
 import { timeMinute, timeFormat } from 'd3';
 import { Gateways } from 'gateways';
-import { Content, Info, Op, Viz, timestampToDate, FilesV2 } from 'entities';
+import {
+  Content,
+  Info,
+  Op,
+  Viz,
+  timestampToDate,
+  FilesV2,
+} from 'entities';
 import { VizV2 } from './VizV2';
 import { logDetail } from './logDetail';
 import { computeV3Files } from './computeV3Files';
@@ -40,13 +47,18 @@ export const updateMigratedViz = async ({
   }
 
   // Get the migrated content as well.
-  const contentMigratedResult = await gateways.getContent(infoMigrated.id);
+  const contentMigratedResult = await gateways.getContent(
+    infoMigrated.id,
+  );
   if (contentMigratedResult.outcome === 'failure') {
-    console.log('Error while getting content for viz in V3.');
+    console.log(
+      'Error while getting content for viz in V3.',
+    );
     console.log(contentMigratedResult.error);
     process.exit();
   }
-  const contentMigrated: Content = contentMigratedResult.value.data;
+  const contentMigrated: Content =
+    contentMigratedResult.value.data;
 
   // We only need to consider the delta between the V2 and V3 versions,
   // which is isolated in the ops that happen between the last updated timestamps
@@ -62,8 +74,14 @@ export const updateMigratedViz = async ({
 
   if (debug) {
     console.log('in updateMigratedViz');
-    console.log('lastUpdatedV2', dateFormat(lastUpdatedV2Date));
-    console.log('lastUpdatedV3', dateFormat(lastUpdatedV3Date));
+    console.log(
+      'lastUpdatedV2',
+      dateFormat(lastUpdatedV2Date),
+    );
+    console.log(
+      'lastUpdatedV3',
+      dateFormat(lastUpdatedV3Date),
+    );
   }
 
   // Revision History from ShareDB Ops
@@ -82,7 +100,9 @@ export const updateMigratedViz = async ({
   const ops: Array<Op> = vizV2.ops;
   const opHistoryIsValid = ops.length > 0 && ops[0].v === 0;
   if (!opHistoryIsValid) {
-    logDetail('  Op history is not valid. Creating simple commits.');
+    logDetail(
+      '  Op history is not valid. Creating simple commits.',
+    );
     // Since we don't have valid revision history,
     // let's just created a boring set of commits for this viz:
     //  * One commit to modify the content at last updated date
@@ -136,7 +156,9 @@ export const updateMigratedViz = async ({
 
       console.log('==== Attempting to commit viz...');
     }
-    const commitVizResult = await commitViz(infoMigrated.id);
+    const commitVizResult = await commitViz(
+      infoMigrated.id,
+    );
     if (commitVizResult.outcome === 'failure') {
       console.log('Error while committing viz.');
       console.log(commitVizResult.error);
@@ -145,7 +167,9 @@ export const updateMigratedViz = async ({
     if (debug) {
       console.log('==== Successfully committed viz!');
     }
-    logDetail('  Created simple commits! Migrated viz is now up to date.');
+    logDetail(
+      '  Created simple commits! Migrated viz is now up to date.',
+    );
   }
 };
 

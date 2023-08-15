@@ -13,7 +13,9 @@ export const SearchPage: Page = ({
   pageData: SearchPageData;
 }) => (
   <AuthenticatedUserProvider
-    authenticatedUserSnapshot={pageData.authenticatedUserSnapshot}
+    authenticatedUserSnapshot={
+      pageData.authenticatedUserSnapshot
+    }
   >
     <Body query={pageData.query} />
   </AuthenticatedUserProvider>

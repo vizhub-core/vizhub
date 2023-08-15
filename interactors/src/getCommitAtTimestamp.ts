@@ -1,7 +1,14 @@
 import { Gateways, Result, ok } from 'gateways';
-import { Timestamp, Commit, Info, CommitId } from 'entities';
+import {
+  Timestamp,
+  Commit,
+  Info,
+  CommitId,
+} from 'entities';
 
-export const GetCommitAtTimestamp = (gateways: Gateways) => {
+export const GetCommitAtTimestamp = (
+  gateways: Gateways,
+) => {
   const { getCommitAncestors } = gateways;
 
   return async (
@@ -9,8 +16,13 @@ export const GetCommitAtTimestamp = (gateways: Gateways) => {
     timestamp: Timestamp,
   ): Promise<Result<CommitId>> => {
     // Get ancestor commits going back to info.start
-    const commitsResult = await getCommitAncestors(info.end, false, info.start);
-    if (commitsResult.outcome === 'failure') return commitsResult;
+    const commitsResult = await getCommitAncestors(
+      info.end,
+      false,
+      info.start,
+    );
+    if (commitsResult.outcome === 'failure')
+      return commitsResult;
     const commits = commitsResult.value;
 
     // Isolate the most recent commit that comes

@@ -39,6 +39,7 @@ export const bundle = async (files) => {
     plugins: [
       hypothetical({
         files: transformFilesToObject(files),
+        cwd: false,
       }),
       bubleJSXOnly({
         target: {
@@ -49,7 +50,8 @@ export const bundle = async (files) => {
     external: Object.keys(libraries),
   };
   const rollupBundle = await rollup(inputOptions);
-  const { output } = await rollupBundle.generate(outputOptions);
+  const { output } =
+    await rollupBundle.generate(outputOptions);
 
   // Monkey patch magic-string internals
   // to support characters outside of the Latin1 range, e.g. Cyrillic.
@@ -68,7 +70,8 @@ export const bundle = async (files) => {
   const escapedCode = escapeClosingScriptTag(code);
 
   const toString = map.toString.bind(map);
-  map.toString = () => unescape(encodeURIComponent(toString()));
+  map.toString = () =>
+    unescape(encodeURIComponent(toString()));
 
   // Inspired by https://github.com/rollup/rollup/issues/121
   const codeWithSourceMap =

@@ -7,7 +7,9 @@ export const VizPageToasts = ({
   handleForkLinkClick,
 }: {
   hasUnforkedEdits: boolean;
-  handleForkLinkClick: (event: React.MouseEvent<HTMLAnchorElement>) => void;
+  handleForkLinkClick: (
+    event: React.MouseEvent<HTMLAnchorElement>,
+  ) => void;
 }) => {
   // State for showing a toast after successful fork
   const [showForkToast, setShowForkToast] = useState(false);
@@ -29,10 +31,17 @@ export const VizPageToasts = ({
   return (
     <>
       {hasUnforkedEdits ? (
-        <VizToast title="Limited Editing Permissions" isWarning={true}>
+        <VizToast
+          title="Limited Editing Permissions"
+          isWarning={true}
+        >
           <ul className="mb-0">
-            <li>You do not have permissions to edit this viz</li>
-            <li>Local edits are possible but won't be saved</li>
+            <li>
+              You do not have permissions to edit this viz
+            </li>
+            <li>
+              Local edits are possible but won't be saved
+            </li>
             <li>Disconnected from remote updates</li>
             <li>
               <a href="" onClick={handleForkLinkClick}>

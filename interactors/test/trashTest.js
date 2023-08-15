@@ -25,7 +25,9 @@ export const trashTest = () => {
       expect(trashVizResult.outcome).toEqual('success');
       expect(trashVizResult.value).toEqual('success');
 
-      expect((await getInfo(primordialViz.info.id)).value.data).toEqual({
+      expect(
+        (await getInfo(primordialViz.info.id)).value.data,
+      ).toEqual({
         ...primordialViz.info,
         trashed: ts3,
       });

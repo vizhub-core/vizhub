@@ -28,13 +28,15 @@ export const getForksTest = () => {
     //  * Server-visible-only query
     //  * Pagination
     //  * Sorting
-    const getForksResult = await getForks(primordialViz.info.id);
+    const getForksResult = await getForks(
+      primordialViz.info.id,
+    );
     expect(getForksResult.outcome).toEqual('success');
     const forks = getForksResult.value;
     expect(forks.length).toEqual(2);
-    expect(new Set(forks.map(({ data: { id } }) => id))).toEqual(
-      new Set(['viz2', 'viz3']),
-    );
+    expect(
+      new Set(forks.map(({ data: { id } }) => id)),
+    ).toEqual(new Set(['viz2', 'viz3']));
 
     // Fork #3
     await saveInfo({

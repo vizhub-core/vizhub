@@ -21,7 +21,8 @@ export const ProfilePage: Page = ({
 }: {
   pageData: ProfilePageData;
 }) => {
-  const { profileUserSnapshot, authenticatedUserSnapshot } = pageData;
+  const { profileUserSnapshot, authenticatedUserSnapshot } =
+    pageData;
 
   // Subscribe to real-time updates in case something changes like display name.
   const profileUser: User = useShareDBDocData<User>(

@@ -1,4 +1,10 @@
-import { useCallback, useContext, useMemo } from 'react';
+import {
+  RefObject,
+  useCallback,
+  useContext,
+  useMemo,
+  useRef,
+} from 'react';
 import { Sidebar } from 'vzcode/src/client/Sidebar';
 import { useTabsState } from 'vzcode/src/client/useTabsState';
 import { TabList } from 'vzcode/src/client/TabList';
@@ -27,6 +33,7 @@ import { getVizPageHref } from '../../accessors/getVizPageHref';
 import { getLicense } from '../../accessors/getLicense';
 import { getHeight } from '../../accessors/getHeight';
 import { ShareDBDoc } from 'vzcode';
+import { useRuntime } from './useRuntime';
 
 // The fixed path of the files in the ShareDB<Content> document.
 const filesPath = ['files'];
@@ -47,7 +54,7 @@ export const VizPageBody = ({
   initialReadmeHTML,
   forkedFromInfo,
   forkedFromOwnerUser,
-  srcdoc,
+  initialSrcdoc,
   activeFileId,
   setActiveFileId,
   tabList,
@@ -76,14 +83,16 @@ export const VizPageBody = ({
   initialReadmeHTML: string;
   forkedFromInfo: Info | null;
   forkedFromOwnerUser: User | null;
-  srcdoc: string;
+  initialSrcdoc: string;
   activeFileId: FileId | null;
   setActiveFileId: (activeFileId: FileId | null) => void;
   tabList: Array<FileId>;
   setTabList: (tabList: Array<FileId>) => void;
 }) => {
   // The currently authenticated user, if any.
-  const authenticatedUser: User | null = useContext(AuthenticatedUserContext);
+  const authenticatedUser: User | null = useContext(
+    AuthenticatedUserContext,
+  );
 
   // The list of possible owners of a fork of this viz.
   const possibleForkOwners = useMemo(
@@ -101,27 +110,20 @@ export const VizPageBody = ({
 
   // A function that renders markdown to HTML.
   // This supports server-rendering of markdown.
-  const renderMarkdownHTML = useRenderMarkdownHTML(initialReadmeHTML);
+  const renderMarkdownHTML = useRenderMarkdownHTML(
+    initialReadmeHTML,
+  );
 
   // The license to display for this viz.
-  const license = useMemo(() => getLicense(content), [content]);
+  const license = useMemo(
+    () => getLicense(content),
+    [content],
+  );
 
   // The height of the viz, in pixels, falling back to default.
-  const vizHeight = useMemo(() => getHeight(content.height), [content.height]);
-
-  // Render the viz runner iframe.
-  const renderVizRunner = useCallback(
-    (iframeScale: number) => (
-      <iframe
-        width={defaultVizWidth}
-        height={vizHeight}
-        srcDoc={srcdoc}
-        style={{
-          transform: `scale(${iframeScale})`,
-        }}
-      />
-    ),
-    [srcdoc, vizHeight],
+  const vizHeight = useMemo(
+    () => getHeight(content.height),
+    [content.height],
   );
 
   // Logic for opening and closing tabs.
@@ -135,8 +137,33 @@ export const VizPageBody = ({
   const files: Files = content.files;
 
   // These are undefined during SSR, defined in the browser.
-  const localPresence = contentShareDBDocPresence?.localPresence;
-  const docPresence = contentShareDBDocPresence?.docPresence;
+  const localPresence =
+    contentShareDBDocPresence?.localPresence;
+  const docPresence =
+    contentShareDBDocPresence?.docPresence;
+
+  // The ref to the viz runner iframe.
+  const iframeRef: RefObject<HTMLIFrameElement> =
+    useRef<HTMLIFrameElement>(null);
+
+  // Set up the runtime environment.
+  useRuntime({ content, iframeRef });
+
+  // Render the viz runner iframe.
+  const renderVizRunner = useCallback(
+    (iframeScale: number) => (
+      <iframe
+        ref={iframeRef}
+        width={defaultVizWidth}
+        height={vizHeight}
+        srcDoc={initialSrcdoc}
+        style={{
+          transform: `scale(${iframeScale})`,
+        }}
+      />
+    ),
+    [initialSrcdoc, vizHeight],
+  );
 
   return (
     <div className="vh-page">
@@ -152,7 +179,10 @@ export const VizPageBody = ({
       <div className="vh-viz-page-body">
         {showEditor && files ? (
           <div className="left">
-            <Sidebar files={files} handleFileClick={openTab} />
+            <Sidebar
+              files={files}
+              handleFileClick={openTab}
+            />
           </div>
         ) : null}
         {showEditor && activeFileId ? (
@@ -179,25 +209,43 @@ export const VizPageBody = ({
           </div>
         ) : null}
 
-        <div className={`right${showEditor ? ' editor-open' : ''}`}>
+        <div
+          className={`right${
+            showEditor ? ' editor-open' : ''
+          }`}
+        >
           <VizPageViewer
             vizTitle={info.title}
             vizHeight={vizHeight}
             defaultVizWidth={defaultVizWidth}
             renderVizRunner={renderVizRunner}
             renderMarkdownHTML={renderMarkdownHTML}
-            authorDisplayName={getUserDisplayName(ownerUser)}
+            authorDisplayName={getUserDisplayName(
+              ownerUser,
+            )}
             authorAvatarURL={ownerUser.picture}
-            createdDateFormatted={formatTimestamp(info.created)}
-            updatedDateFormatted={formatTimestamp(info.updated)}
-            forkedFromVizTitle={forkedFromInfo ? forkedFromInfo.title : null}
+            createdDateFormatted={formatTimestamp(
+              info.created,
+            )}
+            updatedDateFormatted={formatTimestamp(
+              info.updated,
+            )}
+            forkedFromVizTitle={
+              forkedFromInfo ? forkedFromInfo.title : null
+            }
             forkedFromVizHref={
               forkedFromInfo
-                ? getVizPageHref(forkedFromOwnerUser, forkedFromInfo)
+                ? getVizPageHref(
+                    forkedFromOwnerUser,
+                    forkedFromInfo,
+                  )
                 : null
             }
             forksCount={info.forksCount}
-            forksPageHref={getForksPageHref(ownerUser, info)}
+            forksPageHref={getForksPageHref(
+              ownerUser,
+              info,
+            )}
             ownerUserHref={getProfilePageHref(ownerUser)}
             upvotesCount={info.upvotesCount}
             license={license}

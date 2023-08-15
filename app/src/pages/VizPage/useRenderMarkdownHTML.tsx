@@ -3,7 +3,9 @@ import { useMemo } from 'react';
 // import { Content } from 'entities';
 // import { getFileText } from '../../accessors/getFileText';
 
-export const useRenderMarkdownHTML = (initialReadmeHTML: string) => {
+export const useRenderMarkdownHTML = (
+  initialReadmeHTML: string,
+) => {
   // TODO get all this working
   // const [worker, setWorker] = useState(null);
 
@@ -40,7 +42,10 @@ export const useRenderMarkdownHTML = (initialReadmeHTML: string) => {
     // const [readmeHTML, setReadmeHTML] = useState(initialReadmeHTML);
     const readmeHTML = initialReadmeHTML;
 
-    const markup = useMemo(() => ({ __html: readmeHTML }), [readmeHTML]);
+    const markup = useMemo(
+      () => ({ __html: readmeHTML }),
+      [readmeHTML],
+    );
 
     return <div dangerouslySetInnerHTML={markup} />;
   };

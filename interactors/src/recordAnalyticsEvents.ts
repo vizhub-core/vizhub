@@ -13,7 +13,10 @@ const maxEntries = 90;
 const processQueueIntervalMS = 1000 * 10;
 
 // Sends a new event for recording in the multiscale timeseries analytics store.
-export const RecordAnalyticsEvents = (gateways, testing = false) => {
+export const RecordAnalyticsEvents = (
+  gateways,
+  testing = false,
+) => {
   let queue: { eventIds: string[]; date: Date }[] = [];
   let initialized = false;
 
@@ -33,15 +36,18 @@ export const RecordAnalyticsEvents = (gateways, testing = false) => {
       queue = [];
       // Identify the set of event IDs touched (no duplicates).
       const allEventIds = Object.keys(
-        previousQueue.reduce((accumulator, { eventIds }) => {
-          return eventIds.reduce(
-            (innerAccumulator, eventID) => ({
-              ...innerAccumulator,
-              [eventID]: true,
-            }),
-            accumulator,
-          );
-        }, {}),
+        previousQueue.reduce(
+          (accumulator, { eventIds }) => {
+            return eventIds.reduce(
+              (innerAccumulator, eventID) => ({
+                ...innerAccumulator,
+                [eventID]: true,
+              }),
+              accumulator,
+            );
+          },
+          {},
+        ),
       );
       if (allEventIds.length > 0) {
         // This is intentional, to test that the system is working in production
@@ -53,14 +59,19 @@ export const RecordAnalyticsEvents = (gateways, testing = false) => {
         // Note that a given record may be incremented more than once.
         const existingAnalyticsEvents = (
           await Promise.all(
-            allEventIds.map((eventId) => getAnalyticsEvent(eventId)),
+            allEventIds.map((eventId) =>
+              getAnalyticsEvent(eventId),
+            ),
           )
         )
           .filter((result) => result.outcome === 'success')
           .map((d) => d.value.data);
 
         // Build a lookup table by id.
-        const analyticsEvents: Map<AnalyticsEventId, AnalyticsEvent> = new Map(
+        const analyticsEvents: Map<
+          AnalyticsEventId,
+          AnalyticsEvent
+        > = new Map(
           existingAnalyticsEvents.map((analyticsEvent) => [
             analyticsEvent.id,
             analyticsEvent,
@@ -70,13 +81,19 @@ export const RecordAnalyticsEvents = (gateways, testing = false) => {
         // For each queue entry, increment its records (mutating recordsByID).
         for (const { eventIds, date } of previousQueue) {
           for (const eventId of eventIds) {
-            const analyticsEvent = analyticsEvents.get(eventId) || {
+            const analyticsEvent = analyticsEvents.get(
+              eventId,
+            ) || {
               id: eventId,
               intervals: {},
             };
             const newAnalyticsEvent = {
               ...analyticsEvent,
-              intervals: increment(analyticsEvent.intervals, date, maxEntries),
+              intervals: increment(
+                analyticsEvent.intervals,
+                date,
+                maxEntries,
+              ),
             };
             analyticsEvents.set(eventId, newAnalyticsEvent);
           }
@@ -85,7 +102,9 @@ export const RecordAnalyticsEvents = (gateways, testing = false) => {
         // Save the updated events.
         await Promise.all(
           allEventIds.map((eventId) =>
-            saveAnalyticsEvent(analyticsEvents.get(eventId)),
+            saveAnalyticsEvent(
+              analyticsEvents.get(eventId),
+            ),
           ),
         );
       }
@@ -100,13 +119,18 @@ export const RecordAnalyticsEvents = (gateways, testing = false) => {
     }
   };
 
-  const processQueue = initQueueProcessor(gateways, testing);
+  const processQueue = initQueueProcessor(
+    gateways,
+    testing,
+  );
   const recordAnalyticsEvents = async (options: {
     eventId: AnalyticsEventId;
     timestamp?: Timestamp;
   }): Promise<Result<Success>> => {
     const { eventId, timestamp } = options;
-    const date = timestamp ? timestampToDate(timestamp) : new Date();
+    const date = timestamp
+      ? timestampToDate(timestamp)
+      : new Date();
 
     // Isolate each level of the nested id.
     const values: string[] = eventId.split('.');

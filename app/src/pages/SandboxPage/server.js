@@ -7,7 +7,8 @@ SandboxPage.getPageData = async ({ gateways }) => {
     event: 'Overall Activity',
     'event.pageview.home': 'Home Page Views',
     'event.login': 'Logins',
-    'event.private-beta-email-submit': 'Private Beta Signups',
+    'event.private-beta-email-submit':
+      'Private Beta Signups',
   };
 
   const analyticsEventSnapshots = (

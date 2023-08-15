@@ -38,7 +38,10 @@ export const VerifyVizAccess = (gateways: Gateways) => {
     if (userId === undefined) {
       // If the action is read, then the user can read public or unlisted vizzes.
       if (action === READ) {
-        return ok(info.visibility === PUBLIC || info.visibility === UNLISTED);
+        return ok(
+          info.visibility === PUBLIC ||
+            info.visibility === UNLISTED,
+        );
       }
       // If the action is write or delete, then the user cannot perform that action.
       if (action === WRITE || action === DELETE) {
@@ -65,24 +68,34 @@ export const VerifyVizAccess = (gateways: Gateways) => {
     // we look up all the folder ancestors of this viz.
     let resources: Array<ResourceId>;
     if (info.folder) {
-      const ancestorsResult = await getFolderAncestors(info.folder);
+      const ancestorsResult = await getFolderAncestors(
+        info.folder,
+      );
       if (ancestorsResult.outcome === 'failure') {
         return err(ancestorsResult.error);
       }
       const ancestors = ancestorsResult.value;
 
-      resources = [info.id, ...ancestors.map((folder) => folder.id)];
+      resources = [
+        info.id,
+        ...ancestors.map((folder) => folder.id),
+      ];
     } else {
       resources = [info.id];
     }
 
     // Then check if the user has permission to access any of those folders,
     // in addition to permissions on this viz.
-    const permissionsResult = await getPermissions(userId, resources);
+    const permissionsResult = await getPermissions(
+      userId,
+      resources,
+    );
     if (permissionsResult.outcome === 'failure') {
       return err(permissionsResult.error);
     }
-    const permissions = permissionsResult.value.map((d) => d.data);
+    const permissions = permissionsResult.value.map(
+      (d) => d.data,
+    );
 
     if (permissions.length > 0) {
       // If the user is a collaborator on any of these resources,

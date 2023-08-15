@@ -24,9 +24,15 @@ export const setJSDOM = (JSDOM) => {
 };
 
 const injectBundleScript = (htmlTemplate, files) => {
-  const doc = parser.parseFromString(htmlTemplate, 'text/html');
+  const doc = parser.parseFromString(
+    htmlTemplate,
+    'text/html',
+  );
   // console.log('doc', doc);
-  if (getText(files, 'bundle.js') && !doc.querySelector('[src="bundle.js"]')) {
+  if (
+    getText(files, 'bundle.js') &&
+    !doc.querySelector('[src="bundle.js"]')
+  ) {
     const bundleScriptTag = doc.createElement('script');
     // This will be fed through MagicSandbox.
     bundleScriptTag.src = 'bundle.js';
@@ -42,11 +48,16 @@ const injectDependenciesScript = (htmlTemplate, files) => {
 
   if (deps.length === 0) return htmlTemplate;
 
-  const doc = parser.parseFromString(htmlTemplate, 'text/html');
+  const doc = parser.parseFromString(
+    htmlTemplate,
+    'text/html',
+  );
   const libraries = getConfiguredLibraries(files);
 
   deps
-    .map(([name, version]) => dependencySource({ name, version }, libraries))
+    .map(([name, version]) =>
+      dependencySource({ name, version }, libraries),
+    )
     .forEach((url) => {
       const scriptTag = doc.createElement('script');
       scriptTag.src = url;

@@ -47,7 +47,8 @@ export const migrateUpvotesIfNeeded = async ({
         // If the upvote already exists, skip it
         const upvoteId = generateUpvoteId(user, viz);
         const upvoteExists =
-          (await gateways.getUpvote(upvoteId)).outcome === 'success';
+          (await gateways.getUpvote(upvoteId)).outcome ===
+          'success';
         if (upvoteExists) {
           // console.log('      Skipping upvote ', upvoteId);
           process.stdout.write('-');

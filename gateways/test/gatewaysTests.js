@@ -15,7 +15,9 @@ import { getUsersByIdsTest } from './getUsersByIdsTest';
 
 export const gatewaysTests = () => {
   describe(`CRUD`, () => {
-    for (const [entityName, sampleEntity] of Object.entries(sampleEntities)) {
+    for (const [entityName, sampleEntity] of Object.entries(
+      sampleEntities,
+    )) {
       crudTests(entityName, sampleEntity);
     }
   });

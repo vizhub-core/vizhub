@@ -6,7 +6,10 @@ export const ChevronSVG = ({
   up = false,
   down = false,
 }) => (
-  <svg height={height} viewBox={up || down ? '12 10 24 28' : '17 10 14 28'}>
+  <svg
+    height={height}
+    viewBox={up || down ? '12 10 24 28' : '17 10 14 28'}
+  >
     <path
       transform={`translate(24,24) rotate(${
         left ? -90 : up ? 0 : down ? 180 : 90

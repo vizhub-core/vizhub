@@ -5,11 +5,8 @@ import {
   Info,
   Snapshot,
   User,
-  UserId,
-  Visibility,
   VizId,
 } from 'entities';
-import { Result } from 'gateways';
 import { VizKit } from 'api/src/VizKit';
 import {
   getConnection,
@@ -20,15 +17,12 @@ import {
 } from '../../useShareDBDocData';
 import { AuthenticatedUserProvider } from '../../contexts/AuthenticatedUserContext';
 import { Page, PageData } from '../Page';
-import { setCookie } from '../cookies';
 import { VizPageBody } from './VizPageBody';
 import './styles.scss';
 import { VizPageToasts } from './VizPageToasts';
+import { useOnFork } from './useOnFork';
 
 const vizKit = VizKit({ baseUrl: '/api' });
-
-// Useful for debugging fork flow.
-const debug = false;
 
 export type VizPageData = PageData & {
   infoSnapshot: Snapshot<Info>;
@@ -38,11 +32,15 @@ export type VizPageData = PageData & {
   forkedFromOwnerUserSnapshot: Snapshot<User> | null;
   authenticatedUserSnapshot: Snapshot<User> | null;
   initialReadmeHTML: string;
-  srcdoc: string;
+  initialSrcdoc: string;
 };
 
 // Inspired by https://github.com/vitejs/vite-plugin-react/blob/main/playground/ssr-react/src/pages/Home.jsx
-export const VizPage: Page = ({ pageData }: { pageData: VizPageData }) => {
+export const VizPage: Page = ({
+  pageData,
+}: {
+  pageData: VizPageData;
+}) => {
   const {
     infoSnapshot,
     contentSnapshot,
@@ -50,17 +48,32 @@ export const VizPage: Page = ({ pageData }: { pageData: VizPageData }) => {
     initialReadmeHTML,
     forkedFromInfoSnapshot,
     forkedFromOwnerUserSnapshot,
-    srcdoc,
+    initialSrcdoc,
   } = pageData;
-  const info: Info = useShareDBDocData(infoSnapshot, 'Info');
+  const info: Info = useShareDBDocData(
+    infoSnapshot,
+    'Info',
+  );
   const id: VizId = info.id;
 
-  const contentShareDBDoc = useShareDBDoc<Content>(contentSnapshot, 'Content');
-  const content: Content = useData(contentSnapshot, contentShareDBDoc);
+  const contentShareDBDoc = useShareDBDoc<Content>(
+    contentSnapshot,
+    'Content',
+  );
+  const content: Content = useData(
+    contentSnapshot,
+    contentShareDBDoc,
+  );
 
-  const contentShareDBDocPresence = useShareDBDocPresence(id, 'Content');
+  const contentShareDBDocPresence = useShareDBDocPresence(
+    id,
+    'Content',
+  );
 
-  const ownerUser: User = useShareDBDocData(ownerUserSnapshot, 'User');
+  const ownerUser: User = useShareDBDocData(
+    ownerUserSnapshot,
+    'User',
+  );
   const forkedFromInfo: Info = useShareDBDocData(
     forkedFromInfoSnapshot,
     'Info',
@@ -76,7 +89,8 @@ export const VizPage: Page = ({ pageData }: { pageData: VizPageData }) => {
 
   // `activeFileId`
   // The id of the currently open file tab.
-  const [activeFileId, setActiveFileId] = useState<FileId | null>(null);
+  const [activeFileId, setActiveFileId] =
+    useState<FileId | null>(null);
 
   // `tabList`
   // The ordered list of tabs in the code editor.
@@ -99,7 +113,12 @@ export const VizPage: Page = ({ pageData }: { pageData: VizPageData }) => {
   }, []);
 
   const handleForkLinkClick = useCallback(
-    (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    (
+      event: React.MouseEvent<
+        HTMLAnchorElement,
+        MouseEvent
+      >,
+    ) => {
       event.preventDefault();
       toggleForkModal();
     },
@@ -107,65 +126,19 @@ export const VizPage: Page = ({ pageData }: { pageData: VizPageData }) => {
   );
 
   // Show ShareDB errors as toast
-  const [hasUnforkedEdits, setHasUnforkedEdits] = useState<boolean>(false);
+  const [hasUnforkedEdits, setHasUnforkedEdits] =
+    useState<boolean>(false);
   // const hideToast = useCallback(() => {
   //   setToastMessage(null);
   // }, []);
 
   // When the user clicks "Fork" from within the fork modal.
-  const onFork = useCallback(
-    ({
-      owner,
-      title,
-      visibility,
-    }: {
-      // These values come from the fork modal
-      owner: UserId;
-      title: string;
-      visibility: Visibility;
-    }) => {
-      if (debug) {
-        console.log(
-          'Passing these into forkViz',
-          JSON.stringify(
-            {
-              forkedFrom: id,
-              owner,
-              title,
-              visibility,
-              content: hasUnforkedEdits ? content : undefined,
-            },
-            null,
-            2,
-          ),
-        );
-      }
-      vizKit.rest
-        .forkViz({
-          forkedFrom: id,
-          owner,
-          title,
-          visibility,
-          content: hasUnforkedEdits ? content : undefined,
-        })
-        .then((result: Result<{ vizId: VizId; ownerUserName: string }>) => {
-          if (result.outcome === 'failure') {
-            console.log('TODO handle failure to fork');
-            console.log(result.error);
-            return;
-          }
-          const { vizId, ownerUserName } = result.value;
-          const url = `/${ownerUserName}/${vizId}`;
-
-          // Populate cookie to show toast on the other side, after redirect.
-          // See Toasts.tsx
-          setCookie('showForkToast', 'true', 1);
-
-          window.location.href = url;
-        });
-    },
-    [id, content, hasUnforkedEdits],
-  );
+  const onFork = useOnFork({
+    vizKit,
+    id,
+    content,
+    hasUnforkedEdits,
+  });
 
   // Send an analytics event to track this page view.
   useEffect(() => {
@@ -200,7 +173,9 @@ export const VizPage: Page = ({ pageData }: { pageData: VizPageData }) => {
 
   return (
     <AuthenticatedUserProvider
-      authenticatedUserSnapshot={pageData.authenticatedUserSnapshot}
+      authenticatedUserSnapshot={
+        pageData.authenticatedUserSnapshot
+      }
     >
       <VizPageBody
         {...{
@@ -226,7 +201,7 @@ export const VizPage: Page = ({ pageData }: { pageData: VizPageData }) => {
           onFork,
           initialReadmeHTML,
 
-          srcdoc,
+          initialSrcdoc,
         }}
       />
       <VizPageToasts

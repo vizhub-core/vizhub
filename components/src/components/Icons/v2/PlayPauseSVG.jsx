@@ -42,7 +42,9 @@ export const PlayPauseSVG = ({
           <path
             fill={blue}
             d={runTimerProgressArc({
-              endAngle: needsManualRun ? twoPI : runTimerProgress * twoPI || 0,
+              endAngle: needsManualRun
+                ? twoPI
+                : runTimerProgress * twoPI || 0,
             })}
           />
           <circle

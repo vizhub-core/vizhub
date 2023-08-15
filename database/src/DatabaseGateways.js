@@ -7,7 +7,10 @@
 // https://github.com/vizhub-core/vizhub/blob/main/prototypes/open-core-first-attempt/packages/vizhub-core/src/server/index.js
 // https://gitlab.com/curran/vizhub-ee/-/blob/main/prototypes/commitDataModelV1/src/gateways/DatabaseGateways.js
 import { descending } from 'd3-array';
-import { defaultSortField, defaultSortOrder } from 'entities';
+import {
+  defaultSortField,
+  defaultSortOrder,
+} from 'entities';
 import {
   resourceNotFoundError,
   invalidDecrementError,
@@ -22,12 +25,18 @@ import { pageSize } from 'gateways/src/Gateways';
 
 // An in-database implementation for gateways,
 // for use in production.
-export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
+export const DatabaseGateways = ({
+  shareDBConnection,
+  mongoDBDatabase,
+}) => {
   // A generic "save" implementation for ShareDB.
   // TODORedLock
   const shareDBSave = (collectionName) => (entity) =>
     new Promise((resolve) => {
-      const shareDBDoc = shareDBConnection.get(collectionName, entity.id);
+      const shareDBDoc = shareDBConnection.get(
+        collectionName,
+        entity.id,
+      );
       shareDBDoc.fetch((error) => {
         if (error) {
           return resolve(err(error));
@@ -41,7 +50,10 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
         if (!shareDBDoc.type) {
           shareDBDoc.create(entity, otType.uri, callback);
         } else {
-          shareDBDoc.submitOp(diff(shareDBDoc.data, entity), callback);
+          shareDBDoc.submitOp(
+            diff(shareDBDoc.data, entity),
+            callback,
+          );
         }
       });
     });
@@ -49,7 +61,10 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
   // A generic "get" implementation for ShareDB.
   const shareDBGet = (collectionName) => (id) =>
     new Promise((resolve) => {
-      const shareDBDoc = shareDBConnection.get(collectionName, id);
+      const shareDBDoc = shareDBConnection.get(
+        collectionName,
+        id,
+      );
       shareDBDoc.fetch((error) => {
         if (error) {
           return resolve(err(error));
@@ -64,9 +79,15 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
   // A generic "delete" implementation for ShareDB.
   const shareDBDelete = (collectionName) => (id) =>
     new Promise((resolve) => {
-      const shareDBDoc = shareDBConnection.get(collectionName, id);
+      const shareDBDoc = shareDBConnection.get(
+        collectionName,
+        id,
+      );
       shareDBDoc.del((error) => {
-        if (error && error.code === 'ERR_DOC_DOES_NOT_EXIST') {
+        if (
+          error &&
+          error.code === 'ERR_DOC_DOES_NOT_EXIST'
+        ) {
           return resolve(err(resourceNotFoundError(id)));
         }
         if (error) return resolve(err(error));
@@ -79,38 +100,48 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
   //  * `id` - the id of the document
   //  * `field` - the field to add to
   //  * `number` - the number to add to the field value
-  const shareDBAdd = (collectionName, field, number) => (id) =>
-    new Promise((resolve) => {
-      const shareDBDoc = shareDBConnection.get(collectionName, id);
-      shareDBDoc.fetch((error) => {
-        if (error) return resolve(err(error));
-
-        const callback = (error) => {
+  const shareDBAdd =
+    (collectionName, field, number) => (id) =>
+      new Promise((resolve) => {
+        const shareDBDoc = shareDBConnection.get(
+          collectionName,
+          id,
+        );
+        shareDBDoc.fetch((error) => {
           if (error) return resolve(err(error));
-          resolve(ok('success'));
-        };
 
-        if (!shareDBDoc.type) {
-          return resolve(err(resourceNotFoundError(id)));
-        } else {
-          if (number < 0 && shareDBDoc.data[field] === 0) {
-            return resolve(err(invalidDecrementError(id, field)));
+          const callback = (error) => {
+            if (error) return resolve(err(error));
+            resolve(ok('success'));
+          };
+
+          if (!shareDBDoc.type) {
+            return resolve(err(resourceNotFoundError(id)));
+          } else {
+            if (
+              number < 0 &&
+              shareDBDoc.data[field] === 0
+            ) {
+              return resolve(
+                err(invalidDecrementError(id, field)),
+              );
+            }
+            // Leverage the `ena` operator,
+            // which is an isolated addition of a number.
+            // See https://github.com/ottypes/json1/blob/master/spec.md#parts-of-an-operation
+            // Note that because this operation respects OT,
+            // we do not need to use any lock.
+            const op = [field, { ena: number }];
+            shareDBDoc.submitOp(op, callback);
           }
-          // Leverage the `ena` operator,
-          // which is an isolated addition of a number.
-          // See https://github.com/ottypes/json1/blob/master/spec.md#parts-of-an-operation
-          // Note that because this operation respects OT,
-          // we do not need to use any lock.
-          const op = [field, { ena: number }];
-          shareDBDoc.submitOp(op, callback);
-        }
+        });
       });
-    });
 
   // A generic "save" implementation for MongoDB.
   // TODORedLock
   const mongoDBSave = (collectionName) => {
-    const collection = mongoDBDatabase.collection(collectionName);
+    const collection =
+      mongoDBDatabase.collection(collectionName);
     return async (entity) => {
       // Expose our id field as _id so MongoDB uses it as an id
       const doc = { ...entity, _id: entity.id };
@@ -128,7 +159,8 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
 
   // A generic "get" implementation for MongoDB.
   const mongoDBGet = (collectionName) => {
-    const collection = mongoDBDatabase.collection(collectionName);
+    const collection =
+      mongoDBDatabase.collection(collectionName);
     return async (id) => {
       const entity = await collection.findOne({ _id: id });
       if (entity === null) {
@@ -141,9 +173,12 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
 
   // A generic "delete" implementation for MongoDB.
   const mongoDBDelete = (collectionName) => {
-    const collection = mongoDBDatabase.collection(collectionName);
+    const collection =
+      mongoDBDatabase.collection(collectionName);
     return async (id) => {
-      const results = await collection.deleteOne({ _id: id });
+      const results = await collection.deleteOne({
+        _id: id,
+      });
       if (results.deletedCount === 0) {
         return err(resourceNotFoundError(id));
       }
@@ -179,7 +214,9 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
           query.destroy();
 
           if (error) return resolve(err(error));
-          resolve(ok(results.map((doc) => doc.toSnapshot())));
+          resolve(
+            ok(results.map((doc) => doc.toSnapshot())),
+          );
         },
       );
     });
@@ -200,7 +237,9 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
         ...(forkedFrom && { forkedFrom }),
         $limit: pageSize,
         $skip: pageNumber * pageSize,
-        $sort: { [sortField]: sortOrder === 'ascending' ? 1 : -1 },
+        $sort: {
+          [sortField]: sortOrder === 'ascending' ? 1 : -1,
+        },
       };
 
       // TODO add test for basic access control - exclude non-public infos
@@ -213,12 +252,18 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
         (error, results) => {
           query.destroy();
           if (error) return resolve(err(error));
-          resolve(ok(results.map((doc) => doc.toSnapshot())));
+          resolve(
+            ok(results.map((doc) => doc.toSnapshot())),
+          );
         },
       );
     });
 
-  const getCommitAncestors = async (id, toNearestMilestone, start) => {
+  const getCommitAncestors = async (
+    id,
+    toNearestMilestone,
+    start,
+  ) => {
     const entityName = 'Commit';
     const from = toCollectionName(entityName);
     const collection = mongoDBDatabase.collection(from);
@@ -238,7 +283,9 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
     // do not have a milestone.
     // Note that the results DO NOT include the commit with the milestone.
     if (toNearestMilestone) {
-      $graphLookup.restrictSearchWithMatch.milestone = { $eq: null };
+      $graphLookup.restrictSearchWithMatch.milestone = {
+        $eq: null,
+      };
     }
 
     // TODO thoroughly test this. It may be buggy.
@@ -247,7 +294,10 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
     }
 
     const results = await (
-      await collection.aggregate([{ $match: { _id: id } }, { $graphLookup }])
+      await collection.aggregate([
+        { $match: { _id: id } },
+        { $graphLookup },
+      ])
     ).toArray();
 
     if (results.length === 0) {
@@ -256,7 +306,9 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
 
     // Sanity check.
     if (results.length > 1) {
-      throw new Error('Results.length should be exactly 1.');
+      throw new Error(
+        'Results.length should be exactly 1.',
+      );
     }
 
     const [result] = results;
@@ -280,7 +332,8 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
 
     if (toNearestMilestone) {
       // Handle the case that the commit we searched from itself has a milestone.
-      const mostRecentCommit = ancestors[ancestors.length - 1];
+      const mostRecentCommit =
+        ancestors[ancestors.length - 1];
       if (mostRecentCommit.milestone) {
         // In this case, we only need to return the most recent commit.
         // The other commits are not needed, as they only connect this milestone
@@ -295,9 +348,10 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
         // has a parent. If it doesn't, then there are no milestones in the DB.
         const firstCommitWithoutMilestone = ancestors[0];
         if (firstCommitWithoutMilestone.parent) {
-          const commitWithMilestone = await collection.findOne({
-            _id: firstCommitWithoutMilestone.parent,
-          });
+          const commitWithMilestone =
+            await collection.findOne({
+              _id: firstCommitWithoutMilestone.parent,
+            });
           ancestors.unshift(commitWithMilestone);
         }
       }
@@ -329,7 +383,10 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
     };
 
     const results = await (
-      await collection.aggregate([{ $match: { _id: id } }, { $graphLookup }])
+      await collection.aggregate([
+        { $match: { _id: id } },
+        { $graphLookup },
+      ])
     ).toArray();
 
     if (results.length === 0) {
@@ -338,7 +395,9 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
 
     // Sanity check.
     if (results.length > 1) {
-      throw new Error('Results.length should be exactly 1.');
+      throw new Error(
+        'Results.length should be exactly 1.',
+      );
     }
 
     const [result] = results;
@@ -375,7 +434,9 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
           query.destroy();
           if (error) return resolve(err(error));
           if (results.length === 0) {
-            return resolve(err(resourceNotFoundError(userName)));
+            return resolve(
+              err(resourceNotFoundError(userName)),
+            );
           }
           resolve(ok(results[0].toSnapshot()));
         },
@@ -390,7 +451,11 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
         {
           $or: [
             { primaryEmail: { $in: emails } },
-            { secondaryEmails: { $elemMatch: { $in: emails } } },
+            {
+              secondaryEmails: {
+                $elemMatch: { $in: emails },
+              },
+            },
           ],
         },
         {},
@@ -398,7 +463,9 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
           query.destroy();
           if (error) return resolve(err(error));
           if (results.length === 0) {
-            return resolve(err(resourceNotFoundError(emails)));
+            return resolve(
+              err(resourceNotFoundError(emails)),
+            );
           }
           resolve(ok(results[0].toSnapshot()));
         },
@@ -415,7 +482,9 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
         (error, results) => {
           query.destroy();
           if (error) return resolve(err(error));
-          resolve(ok(results.map((doc) => doc.toSnapshot())));
+          resolve(
+            ok(results.map((doc) => doc.toSnapshot())),
+          );
         },
       );
     });
@@ -426,22 +495,43 @@ export const DatabaseGateways = ({ shareDBConnection, mongoDBDatabase }) => {
       const query = shareDBConnection.createFetchQuery(
         toCollectionName(entityName),
         {
-          $and: [{ user }, { resource: { $in: resources } }],
+          $and: [
+            { user },
+            { resource: { $in: resources } },
+          ],
         },
         {},
         (error, results) => {
           query.destroy();
           if (error) return resolve(err(error));
-          resolve(ok(results.map((doc) => doc.toSnapshot())));
+          resolve(
+            ok(results.map((doc) => doc.toSnapshot())),
+          );
         },
       );
     });
 
   const from = toCollectionName('Info');
-  const incrementForksCount = shareDBAdd(from, 'forksCount', 1);
-  const decrementForksCount = shareDBAdd(from, 'forksCount', -1);
-  const incrementUpvotesCount = shareDBAdd(from, 'upvotesCount', 1);
-  const decrementUpvotesCount = shareDBAdd(from, 'upvotesCount', -1);
+  const incrementForksCount = shareDBAdd(
+    from,
+    'forksCount',
+    1,
+  );
+  const decrementForksCount = shareDBAdd(
+    from,
+    'forksCount',
+    -1,
+  );
+  const incrementUpvotesCount = shareDBAdd(
+    from,
+    'upvotesCount',
+    1,
+  );
+  const decrementUpvotesCount = shareDBAdd(
+    from,
+    'upvotesCount',
+    -1,
+  );
 
   let databaseGateways = {
     getForks,

@@ -17,10 +17,16 @@ export const computeV3Files = (
     const keys = Object.keys(oldContentV3.files);
 
     const fileIdByName = new Map<string, string>(
-      keys.map((fileId) => [oldContentV3.files[fileId].name, fileId]),
+      keys.map((fileId) => [
+        oldContentV3.files[fileId].name,
+        fileId,
+      ]),
     );
     const fileIdByText = new Map<string, string>(
-      keys.map((fileId) => [oldContentV3.files[fileId].text, fileId]),
+      keys.map((fileId) => [
+        oldContentV3.files[fileId].text,
+        fileId,
+      ]),
     );
 
     // Try to match on the name, in case text was changed (most common case).
@@ -33,7 +39,10 @@ export const computeV3Files = (
   }
 
   const filesOutOfOrder = goodFiles.reduce(
-    (accumulator, file) => ({ ...accumulator, [getFileId(file)]: file }),
+    (accumulator, file) => ({
+      ...accumulator,
+      [getFileId(file)]: file,
+    }),
     {},
   );
 

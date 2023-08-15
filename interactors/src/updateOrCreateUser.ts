@@ -23,7 +23,8 @@ export const UpdateOrCreateUser =
     email: string;
     picture: string;
   }): Promise<Result<Success>> => {
-    const { id, userName, displayName, email, picture } = options;
+    const { id, userName, displayName, email, picture } =
+      options;
     const { saveUser, getUser } = gateways;
 
     // Attempt to find an existing user with those emails.

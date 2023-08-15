@@ -1,5 +1,8 @@
 import { describe, afterAll } from 'vitest';
-import { setInitGateways, gatewaysTests } from 'gateways/test';
+import {
+  setInitGateways,
+  gatewaysTests,
+} from 'gateways/test';
 import { interactorsTests } from 'interactors/test';
 import { DatabaseGateways } from '../src';
 import { initializeMongoDB } from '../src/initializeMongoDB';
@@ -8,10 +11,12 @@ import { initializeShareDB } from '../src/initializeShareDB';
 describe('DatabaseGateways', async () => {
   // Make the MongoDB connection only once, for all tests,
   // as it takes some time.
-  const { mongoDBDatabase, mongoDBConnection } = await initializeMongoDB({
-    env: { VIZHUB3_MONGO_LOCAL: 'true' },
-    mongoLocalURI: 'mongodb://localhost:27017/vizhub-testing',
-  });
+  const { mongoDBDatabase, mongoDBConnection } =
+    await initializeMongoDB({
+      env: { VIZHUB3_MONGO_LOCAL: 'true' },
+      mongoLocalURI:
+        'mongodb://localhost:27017/vizhub-testing',
+    });
 
   // Swap out the initGateways function used by gatewaysTests
   // so that it uses an instance of DatabaseGateways

@@ -26,7 +26,8 @@ export const ForksPageBody = ({
       <div className="px-4 py-3">
         <div className="d-flex mb-3 justify-content-between align-items-end">
           <h1 className="mb-0">
-            Forks of <a href={forkedFromHref}>{forkedFromTitle}</a>
+            Forks of{' '}
+            <a href={forkedFromHref}>{forkedFromTitle}</a>
           </h1>
           <SortControl
             sortId={sortId}
@@ -34,7 +35,9 @@ export const ForksPageBody = ({
             sortOptions={sortOptions}
           />
         </div>
-        <VizPreviewCollection>{renderVizPreviews()}</VizPreviewCollection>
+        <VizPreviewCollection>
+          {renderVizPreviews()}
+        </VizPreviewCollection>
         <div className="mt-3 mb-3 d-flex justify-content-center">
           {isLoadingNextPage ? (
             <Spinner fadeIn={false} />

@@ -31,11 +31,17 @@ const migrate = async () => {
     await initializeV2MongoDBDatabase();
 
   // V2 collections
-  const infoCollection = v2MongoDBDatabase.collection('documentInfo');
-  const contentCollection = v2MongoDBDatabase.collection('documentContent');
+  const infoCollection =
+    v2MongoDBDatabase.collection('documentInfo');
+  const contentCollection = v2MongoDBDatabase.collection(
+    'documentContent',
+  );
   // const infoOpCollection = v2MongoDBDatabase.collection('o_documentInfo');
-  const contentOpCollection = v2MongoDBDatabase.collection('o_documentContent');
-  const userCollection = v2MongoDBDatabase.collection('user');
+  const contentOpCollection = v2MongoDBDatabase.collection(
+    'o_documentContent',
+  );
+  const userCollection =
+    v2MongoDBDatabase.collection('user');
 
   // The target database
   const { gateways, mongoDBDatabase, mongoDBConnection } =
@@ -65,7 +71,9 @@ const migrate = async () => {
   console.log('    Connected successfully to v3 Redis!');
 
   // Floor the month using d3-time
-  const firstVizCreationDateFloored = timeWeek.floor(firstVizCreationDate);
+  const firstVizCreationDateFloored = timeWeek.floor(
+    firstVizCreationDate,
+  );
 
   // TODO persist this in Redis, so that we can resume from where we left off.
   let batchNumber = 0;
@@ -84,9 +92,18 @@ const migrate = async () => {
     const startTime = dateToTimestamp(startTimeDate);
     const endTime = dateToTimestamp(endTimeDate);
 
-    console.log('\nStarting migration batch #', batchNumber);
-    console.log('  startTime', startTimeDate.toLocaleString());
-    console.log('  endTime  ', endTimeDate.toLocaleString());
+    console.log(
+      '\nStarting migration batch #',
+      batchNumber,
+    );
+    console.log(
+      '  startTime',
+      startTimeDate.toLocaleString(),
+    );
+    console.log(
+      '  endTime  ',
+      endTimeDate.toLocaleString(),
+    );
 
     // Iterate over vizzes in the V2 database that may have been created
     // or updated during the time period defined by startTime and endTime.
@@ -105,11 +122,15 @@ const migrate = async () => {
         });
 
         // Migrate the viz! Does not includes Upvotes or Users.
-        logDetail(`Processing viz #${i}: ${info.id} ${info.title} `);
+        logDetail(
+          `Processing viz #${i}: ${info.id} ${info.title} `,
+        );
 
         // If it's a dry-run, bail out here.
         if (process.argv.includes('--dry')) {
-          console.log('  Dry run, exiting now... All connections work!');
+          console.log(
+            '  Dry run, exiting now... All connections work!',
+          );
           process.exit(0);
         }
 
@@ -153,7 +174,10 @@ const migrate = async () => {
         process.stdout.write('\n');
 
         // Migrate the users that upvoted this viz.
-        if (vizV2.info.upvotes && vizV2.info.upvotes.length > 0) {
+        if (
+          vizV2.info.upvotes &&
+          vizV2.info.upvotes.length > 0
+        ) {
           logDetail(`  Migrating upvoter users`);
           process.stdout.write('    ');
           await Promise.all(
@@ -169,7 +193,10 @@ const migrate = async () => {
         }
 
         // Migrate the users that are collaborators on this viz.
-        if (vizV2.info.collaborators && vizV2.info.collaborators.length > 0) {
+        if (
+          vizV2.info.collaborators &&
+          vizV2.info.collaborators.length > 0
+        ) {
           logDetail(`  Migrating collaborator users`);
           process.stdout.write('    ');
           await Promise.all(
@@ -191,7 +218,9 @@ const migrate = async () => {
           gateways,
         });
         if (!isVizV3Valid) {
-          console.log('Migrated viz is invalid! TODO roll back... ');
+          console.log(
+            'Migrated viz is invalid! TODO roll back... ',
+          );
           process.exit(0);
         }
         logDetail(`Validation passed!`);
@@ -199,12 +228,16 @@ const migrate = async () => {
       },
     );
 
-    console.log(`\n\nFinished iterating ${numVizzesProcessed} vizzes!`);
+    console.log(
+      `\n\nFinished iterating ${numVizzesProcessed} vizzes!`,
+    );
 
     if (keepGoing) {
       batchNumber++;
 
-      console.log(`\n\nPerforming next batch #${batchNumber}...`);
+      console.log(
+        `\n\nPerforming next batch #${batchNumber}...`,
+      );
 
       await performBatch();
     }
