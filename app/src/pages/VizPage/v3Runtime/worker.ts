@@ -133,6 +133,8 @@ console.log(rollup);
 // };
 
 onmessage = async ({ data }) => {
+  console.log('Received message from main script');
+  console.log(data);
   // postMessage(await build(data));
   postMessage('message from worker');
 };

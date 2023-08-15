@@ -19,11 +19,10 @@ const PENDING_CLEAN = 'PENDING_CLEAN';
 const PENDING_DIRTY = 'PENDING_DIRTY';
 
 export const setupV3Runtime = ({
-  iframe,
-  initialFiles,
+  iframe, // initialFiles,
 }: {
   iframe: HTMLIFrameElement;
-  initialFiles: V3RuntimeFiles;
+  // initialFiles: V3RuntimeFiles;
 }) => {
   console.log('Setting up V3 runtime');
   const worker = new Worker();
@@ -52,10 +51,12 @@ export const setupV3Runtime = ({
     | typeof PENDING_CLEAN
     | typeof PENDING_DIRTY = IDLE;
 
-  let latestFiles: V3RuntimeFiles = initialFiles;
+  let latestFiles: V3RuntimeFiles | null = null;
 
   // This runs when any file is changed.
-  const handleCodeChange = (files: V3RuntimeFiles) => {
+  const handleCodeChange = (
+    files: V3RuntimeFiles,
+  ): void => {
     latestFiles = files;
     if (state === IDLE) {
       //      requestAnimationFrame(update);
@@ -87,12 +88,12 @@ export const setupV3Runtime = ({
     await run(await build(latestFiles));
     state = PENDING_CLEAN;
     updateCount++;
-    if (state === PENDING_DIRTY) {
-      requestAnimationFrame(update);
-      state = ENQUEUED;
-    } else {
-      state = IDLE;
-    }
+    // if (state === PENDING_DIRTY) {
+    //   requestAnimationFrame(update);
+    //   state = ENQUEUED;
+    // } else {
+    //   state = IDLE;
+    // }
   };
 
   let buildTimes = [];
@@ -103,7 +104,12 @@ export const setupV3Runtime = ({
 
   const build = (
     files: V3RuntimeFiles,
-  ): Promise<V3RuntimeFiles> =>
+  ): Promise<{
+    // TODO iterate these types - first pass only here
+    src: string;
+    pkg: string;
+    warnings: string[];
+  }> =>
     new Promise((resolve) => {
       worker.onmessage = ({ data }) => {
         const { errors, warnings, src, pkg, time } = data;
