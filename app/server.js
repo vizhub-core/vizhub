@@ -410,26 +410,27 @@ async function createServer(
   // The error handler must be before any other error middleware and after all controllers
   app.use(Sentry.Handlers.errorHandler());
 
-  server.listen(5173, () => {
-    console.log(
-      'VizHub App Server listening at http://localhost:5173',
-    );
-    console.log(
-      '                               http://localhost:5173/joe',
-    );
-    console.log(
-      '                               http://localhost:5173/joe/viz1',
-    );
-    console.log(
-      '                               http://localhost:5173/explore',
-    );
-    console.log(
-      '                               http://localhost:5173/pricing',
-    );
+  const PORT = 5173;
+  const BASE_URL = `http://localhost:${PORT}`;
+  const ENDPOINTS = [
+    '',
+    '/joe',
+    '/joe/viz1',
+    '/joe/v3-runtime-demo',
+    '/explore',
+    '/pricing',
+    '/search?query=map',
+  ];
 
+  server.listen(PORT, () => {
     console.log(
-      '                               http://localhost:5173/search?query=map',
+      `VizHub App Server listening at ${BASE_URL}`,
     );
+    ENDPOINTS.slice(1).forEach((endpoint) => {
+      console.log(
+        `                               ${BASE_URL}${endpoint}`,
+      );
+    });
   });
 }
 

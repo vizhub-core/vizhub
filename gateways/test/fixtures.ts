@@ -24,6 +24,7 @@ import {
   EDITOR,
   Embedding,
 } from 'entities';
+import { v3RuntimeDemoFiles } from './v3RuntimeDemoFiles';
 
 export const ts1: Timestamp = 1638100000;
 export const ts2: Timestamp = 1638200000;
@@ -182,6 +183,18 @@ export const primordialVizV3: Viz = {
         text: '<body>Hello Beautiful World</body>',
       },
     },
+  },
+};
+
+export const v3RuntimeDemoViz: Viz = {
+  info: {
+    ...primordialVizV2.info,
+    end: 'commit4',
+    updated: ts4,
+  },
+  content: {
+    ...primordialVizV2.content,
+    files: v3RuntimeDemoFiles,
   },
 };
 
