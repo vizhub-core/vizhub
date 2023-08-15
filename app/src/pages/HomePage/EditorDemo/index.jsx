@@ -8,7 +8,9 @@ export const EditorDemo = () => {
     import('./EditorDemoBody').then(setDemoModule);
   }, []);
 
-  const Component = demoModule ? demoModule.EditorDemoBody : Spinner;
+  const Component = demoModule
+    ? demoModule.EditorDemoBody
+    : Spinner;
   return (
     <div className="editor-demo">
       <Component />

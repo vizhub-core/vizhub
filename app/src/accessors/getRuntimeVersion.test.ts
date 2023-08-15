@@ -4,7 +4,9 @@ import { primordialViz } from 'gateways/test/fixtures';
 import { Content } from 'entities';
 describe('getRuntimeVersion', () => {
   it('should return 2 if index.html is present', () => {
-    expect(getRuntimeVersion(primordialViz.content)).toBe(2);
+    expect(getRuntimeVersion(primordialViz.content)).toBe(
+      2,
+    );
   });
   it('should return 3 if index.html is not present', () => {
     const v3Files = { ...primordialViz.content.files };

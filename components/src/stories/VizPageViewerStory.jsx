@@ -22,7 +22,8 @@ export const args = {
   renderVizRunner,
   renderMarkdownHTML,
   authorDisplayName: 'Author Name',
-  authorAvatarURL: 'https://avatars.githubusercontent.com/u/1234567?v=4',
+  authorAvatarURL:
+    'https://avatars.githubusercontent.com/u/1234567?v=4',
   createdDateFormatted: 'January 20, 1985',
   updatedDateFormatted: 'February 20, 1985',
   forkedFromVizTitle: 'Original Viz Title',

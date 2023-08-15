@@ -3,7 +3,10 @@ import React from 'react';
 const viewBoxWidth = 800;
 const viewBoxHeight = 237.402;
 
-export const LogoSVG = ({ height, fill = 'currentcolor' }) => (
+export const LogoSVG = ({
+  height,
+  fill = 'currentcolor',
+}) => (
   <svg
     height={height}
     width={(viewBoxWidth / viewBoxHeight) * height}

@@ -1,5 +1,12 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Content, FileId, Info, Snapshot, User, VizId } from 'entities';
+import {
+  Content,
+  FileId,
+  Info,
+  Snapshot,
+  User,
+  VizId,
+} from 'entities';
 import { VizKit } from 'api/src/VizKit';
 import {
   getConnection,
@@ -29,7 +36,11 @@ export type VizPageData = PageData & {
 };
 
 // Inspired by https://github.com/vitejs/vite-plugin-react/blob/main/playground/ssr-react/src/pages/Home.jsx
-export const VizPage: Page = ({ pageData }: { pageData: VizPageData }) => {
+export const VizPage: Page = ({
+  pageData,
+}: {
+  pageData: VizPageData;
+}) => {
   const {
     infoSnapshot,
     contentSnapshot,
@@ -39,15 +50,30 @@ export const VizPage: Page = ({ pageData }: { pageData: VizPageData }) => {
     forkedFromOwnerUserSnapshot,
     initialSrcdoc,
   } = pageData;
-  const info: Info = useShareDBDocData(infoSnapshot, 'Info');
+  const info: Info = useShareDBDocData(
+    infoSnapshot,
+    'Info',
+  );
   const id: VizId = info.id;
 
-  const contentShareDBDoc = useShareDBDoc<Content>(contentSnapshot, 'Content');
-  const content: Content = useData(contentSnapshot, contentShareDBDoc);
+  const contentShareDBDoc = useShareDBDoc<Content>(
+    contentSnapshot,
+    'Content',
+  );
+  const content: Content = useData(
+    contentSnapshot,
+    contentShareDBDoc,
+  );
 
-  const contentShareDBDocPresence = useShareDBDocPresence(id, 'Content');
+  const contentShareDBDocPresence = useShareDBDocPresence(
+    id,
+    'Content',
+  );
 
-  const ownerUser: User = useShareDBDocData(ownerUserSnapshot, 'User');
+  const ownerUser: User = useShareDBDocData(
+    ownerUserSnapshot,
+    'User',
+  );
   const forkedFromInfo: Info = useShareDBDocData(
     forkedFromInfoSnapshot,
     'Info',
@@ -63,7 +89,8 @@ export const VizPage: Page = ({ pageData }: { pageData: VizPageData }) => {
 
   // `activeFileId`
   // The id of the currently open file tab.
-  const [activeFileId, setActiveFileId] = useState<FileId | null>(null);
+  const [activeFileId, setActiveFileId] =
+    useState<FileId | null>(null);
 
   // `tabList`
   // The ordered list of tabs in the code editor.
@@ -86,7 +113,12 @@ export const VizPage: Page = ({ pageData }: { pageData: VizPageData }) => {
   }, []);
 
   const handleForkLinkClick = useCallback(
-    (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    (
+      event: React.MouseEvent<
+        HTMLAnchorElement,
+        MouseEvent
+      >,
+    ) => {
       event.preventDefault();
       toggleForkModal();
     },
@@ -94,7 +126,8 @@ export const VizPage: Page = ({ pageData }: { pageData: VizPageData }) => {
   );
 
   // Show ShareDB errors as toast
-  const [hasUnforkedEdits, setHasUnforkedEdits] = useState<boolean>(false);
+  const [hasUnforkedEdits, setHasUnforkedEdits] =
+    useState<boolean>(false);
   // const hideToast = useCallback(() => {
   //   setToastMessage(null);
   // }, []);
@@ -140,7 +173,9 @@ export const VizPage: Page = ({ pageData }: { pageData: VizPageData }) => {
 
   return (
     <AuthenticatedUserProvider
-      authenticatedUserSnapshot={pageData.authenticatedUserSnapshot}
+      authenticatedUserSnapshot={
+        pageData.authenticatedUserSnapshot
+      }
     >
       <VizPageBody
         {...{

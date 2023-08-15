@@ -2,10 +2,8 @@ import {
   RefObject,
   useCallback,
   useContext,
-  useEffect,
   useMemo,
   useRef,
-  useState,
 } from 'react';
 import { Sidebar } from 'vzcode/src/client/Sidebar';
 import { useTabsState } from 'vzcode/src/client/useTabsState';
@@ -35,7 +33,6 @@ import { getVizPageHref } from '../../accessors/getVizPageHref';
 import { getLicense } from '../../accessors/getLicense';
 import { getHeight } from '../../accessors/getHeight';
 import { ShareDBDoc } from 'vzcode';
-import { useV2Runtime } from './v2Runtime/useV2Runtime';
 import { useRuntime } from './useRuntime';
 
 // The fixed path of the files in the ShareDB<Content> document.
@@ -93,7 +90,9 @@ export const VizPageBody = ({
   setTabList: (tabList: Array<FileId>) => void;
 }) => {
   // The currently authenticated user, if any.
-  const authenticatedUser: User | null = useContext(AuthenticatedUserContext);
+  const authenticatedUser: User | null = useContext(
+    AuthenticatedUserContext,
+  );
 
   // The list of possible owners of a fork of this viz.
   const possibleForkOwners = useMemo(
@@ -111,13 +110,21 @@ export const VizPageBody = ({
 
   // A function that renders markdown to HTML.
   // This supports server-rendering of markdown.
-  const renderMarkdownHTML = useRenderMarkdownHTML(initialReadmeHTML);
+  const renderMarkdownHTML = useRenderMarkdownHTML(
+    initialReadmeHTML,
+  );
 
   // The license to display for this viz.
-  const license = useMemo(() => getLicense(content), [content]);
+  const license = useMemo(
+    () => getLicense(content),
+    [content],
+  );
 
   // The height of the viz, in pixels, falling back to default.
-  const vizHeight = useMemo(() => getHeight(content.height), [content.height]);
+  const vizHeight = useMemo(
+    () => getHeight(content.height),
+    [content.height],
+  );
 
   // Logic for opening and closing tabs.
   const { closeTab, openTab } = useTabsState(
@@ -130,8 +137,10 @@ export const VizPageBody = ({
   const files: Files = content.files;
 
   // These are undefined during SSR, defined in the browser.
-  const localPresence = contentShareDBDocPresence?.localPresence;
-  const docPresence = contentShareDBDocPresence?.docPresence;
+  const localPresence =
+    contentShareDBDocPresence?.localPresence;
+  const docPresence =
+    contentShareDBDocPresence?.docPresence;
 
   // The ref to the viz runner iframe.
   const iframeRef: RefObject<HTMLIFrameElement> =
@@ -170,7 +179,10 @@ export const VizPageBody = ({
       <div className="vh-viz-page-body">
         {showEditor && files ? (
           <div className="left">
-            <Sidebar files={files} handleFileClick={openTab} />
+            <Sidebar
+              files={files}
+              handleFileClick={openTab}
+            />
           </div>
         ) : null}
         {showEditor && activeFileId ? (
@@ -197,25 +209,43 @@ export const VizPageBody = ({
           </div>
         ) : null}
 
-        <div className={`right${showEditor ? ' editor-open' : ''}`}>
+        <div
+          className={`right${
+            showEditor ? ' editor-open' : ''
+          }`}
+        >
           <VizPageViewer
             vizTitle={info.title}
             vizHeight={vizHeight}
             defaultVizWidth={defaultVizWidth}
             renderVizRunner={renderVizRunner}
             renderMarkdownHTML={renderMarkdownHTML}
-            authorDisplayName={getUserDisplayName(ownerUser)}
+            authorDisplayName={getUserDisplayName(
+              ownerUser,
+            )}
             authorAvatarURL={ownerUser.picture}
-            createdDateFormatted={formatTimestamp(info.created)}
-            updatedDateFormatted={formatTimestamp(info.updated)}
-            forkedFromVizTitle={forkedFromInfo ? forkedFromInfo.title : null}
+            createdDateFormatted={formatTimestamp(
+              info.created,
+            )}
+            updatedDateFormatted={formatTimestamp(
+              info.updated,
+            )}
+            forkedFromVizTitle={
+              forkedFromInfo ? forkedFromInfo.title : null
+            }
             forkedFromVizHref={
               forkedFromInfo
-                ? getVizPageHref(forkedFromOwnerUser, forkedFromInfo)
+                ? getVizPageHref(
+                    forkedFromOwnerUser,
+                    forkedFromInfo,
+                  )
                 : null
             }
             forksCount={info.forksCount}
-            forksPageHref={getForksPageHref(ownerUser, info)}
+            forksPageHref={getForksPageHref(
+              ownerUser,
+              info,
+            )}
             ownerUserHref={getProfilePageHref(ownerUser)}
             upvotesCount={info.upvotesCount}
             license={license}

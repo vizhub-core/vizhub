@@ -14,12 +14,13 @@ export const saveVizTest = () => {
       expect(result.outcome).toEqual('success');
       expect(result.value).toEqual('success');
 
-      expect((await getInfo(primordialViz.info.id)).value.data).toEqual(
-        primordialViz.info,
-      );
-      expect((await getContent(primordialViz.info.id)).value.data).toEqual(
-        primordialViz.content,
-      );
+      expect(
+        (await getInfo(primordialViz.info.id)).value.data,
+      ).toEqual(primordialViz.info);
+      expect(
+        (await getContent(primordialViz.info.id)).value
+          .data,
+      ).toEqual(primordialViz.content);
     });
   });
 };

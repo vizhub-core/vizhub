@@ -4,19 +4,25 @@ import { deleteCookie, getCookie } from '../cookies';
 
 export const AccountPageToasts = () => {
   // State for showing a toast after successful upgrade
-  const [showUpgradeSuccessToast, setShowUpgradeSuccessToast] = useState(false);
+  const [
+    showUpgradeSuccessToast,
+    setShowUpgradeSuccessToast,
+  ] = useState(false);
 
   const handleUpgradeSuccessToastClose = useCallback(() => {
     setShowUpgradeSuccessToast(false);
   }, []);
 
   // State for showing a toast after successful downgrade
-  const [showDowngradeSuccessToast, setShowDowngradeSuccessToast] =
-    useState(false);
+  const [
+    showDowngradeSuccessToast,
+    setShowDowngradeSuccessToast,
+  ] = useState(false);
 
-  const handleDowngradeSuccessToastClose = useCallback(() => {
-    setShowDowngradeSuccessToast(false);
-  }, []);
+  const handleDowngradeSuccessToastClose =
+    useCallback(() => {
+      setShowDowngradeSuccessToast(false);
+    }, []);
 
   // Figure out based on the cookie if we should show the toast
   useEffect(() => {
@@ -42,7 +48,8 @@ export const AccountPageToasts = () => {
           onClose={handleUpgradeSuccessToastClose}
           closeButton={true}
         >
-          Congratulations! You have successfully upgraded your account.
+          Congratulations! You have successfully upgraded
+          your account.
         </VizToast>
       ) : null}
       {showDowngradeSuccessToast ? (
@@ -51,8 +58,9 @@ export const AccountPageToasts = () => {
           onClose={handleDowngradeSuccessToastClose}
           closeButton={true}
         >
-          You have successfully downgraded your account. We're sorry to see you
-          go! If you have a minute, please{' '}
+          You have successfully downgraded your account.
+          We're sorry to see you go! If you have a minute,
+          please{' '}
           <a href="https://docs.google.com/forms/d/e/1FAIpQLSclMCvEWSm35PddxPxASnqPRG6qEx5uOPt03FQlK1h19yHLLw/viewform?usp=sf_link">
             tell us why
           </a>

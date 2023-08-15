@@ -26,15 +26,17 @@ export const initializeGateways = async ({
   env: { [key: string]: string | undefined };
   attachMiddleware?: (shareDBBackend: any) => void;
 }) => {
-  const { mongoDBConnection, mongoDBDatabase } = await initializeMongoDB({
-    isProd,
-    env,
-  });
+  const { mongoDBConnection, mongoDBDatabase } =
+    await initializeMongoDB({
+      isProd,
+      env,
+    });
 
-  const { shareDBBackend, shareDBConnection } = await initializeShareDB({
-    mongoDBConnection,
-    attachMiddleware,
-  });
+  const { shareDBBackend, shareDBConnection } =
+    await initializeShareDB({
+      mongoDBConnection,
+      attachMiddleware,
+    });
 
   // For ease of development, the DatabaseGateways are implemented in JavaScript.
   // @ts-ignore
@@ -43,5 +45,10 @@ export const initializeGateways = async ({
     mongoDBDatabase,
   }) as Gateways;
 
-  return { gateways, shareDBBackend, mongoDBDatabase, mongoDBConnection };
+  return {
+    gateways,
+    shareDBBackend,
+    mongoDBDatabase,
+    mongoDBConnection,
+  };
 };

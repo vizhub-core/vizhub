@@ -10,11 +10,12 @@ export const getUsersByIdsTest = () => {
       const gateways = await initGateways();
       const { saveUser, getUsersByIds } = gateways;
       await saveUser(userJoe);
-      const result: Result<Array<Snapshot<User>>> = await getUsersByIds([
-        userJoe.id,
-      ]);
+      const result: Result<Array<Snapshot<User>>> =
+        await getUsersByIds([userJoe.id]);
       assert(result.outcome === 'success');
-      expect(result.value.map(({ data }) => data)).toEqual([userJoe]);
+      expect(result.value.map(({ data }) => data)).toEqual([
+        userJoe,
+      ]);
     });
   });
 };

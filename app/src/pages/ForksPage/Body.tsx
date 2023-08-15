@@ -1,4 +1,9 @@
-import { Info, Snapshot, User, sortOptions } from 'entities';
+import {
+  Info,
+  Snapshot,
+  User,
+  sortOptions,
+} from 'entities';
 import { ForksPageBody } from 'components';
 import { SmartHeader } from '../../smartComponents/SmartHeader';
 import { SortContext } from '../../contexts/SortContext';
@@ -28,13 +33,19 @@ export const Body = ({
       <SmartHeader />
       <ForksPageBody
         renderVizPreviews={() =>
-          allInfoSnapshots.map((infoSnapshot: Snapshot<Info>) => (
-            <VizPreviewPresenter
-              key={infoSnapshot.data.id}
-              infoSnapshot={infoSnapshot}
-              ownerUser={ownerUserSnapshotsById[infoSnapshot.data.owner].data}
-            />
-          ))
+          allInfoSnapshots.map(
+            (infoSnapshot: Snapshot<Info>) => (
+              <VizPreviewPresenter
+                key={infoSnapshot.data.id}
+                infoSnapshot={infoSnapshot}
+                ownerUser={
+                  ownerUserSnapshotsById[
+                    infoSnapshot.data.owner
+                  ].data
+                }
+              />
+            ),
+          )
         }
         sortId={sortId}
         setSortId={setSortId}
@@ -42,7 +53,10 @@ export const Body = ({
         onMoreClick={fetchNextPage}
         isLoadingNextPage={isLoadingNextPage}
         forkedFromTitle={forkedFromInfo.title}
-        forkedFromHref={getVizPageHref(forkedFromOwnerUser, forkedFromInfo)}
+        forkedFromHref={getVizPageHref(
+          forkedFromOwnerUser,
+          forkedFromInfo,
+        )}
       />
     </div>
   );

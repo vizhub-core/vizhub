@@ -2,7 +2,10 @@
 const viewBoxWidth = 800;
 const viewBoxHeight = 237.402;
 
-export const LogoSVG = ({ height = 32, fill = 'currentcolor' }) => (
+export const LogoSVG = ({
+  height = 32,
+  fill = 'currentcolor',
+}) => (
   <svg
     height={height}
     width={(viewBoxWidth / viewBoxHeight) * height}

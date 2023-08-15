@@ -22,17 +22,29 @@ export const VizPageHead = ({
   return (
     <div className="vh-viz-page-head">
       <div className="side">
-        <Button variant="light" size="sm" onClick={toggleShowEditor}>
+        <Button
+          variant="light"
+          size="sm"
+          onClick={toggleShowEditor}
+        >
           <ChevronSVG left={showEditor} />
           {showEditor ? 'Close' : 'Open'} Editor
         </Button>
       </div>
       <div className="side">
-        <Button variant="light" size="sm" onClick={onExportClick}>
+        <Button
+          variant="light"
+          size="sm"
+          onClick={onExportClick}
+        >
           <DownloadSVG />
           Export
         </Button>
-        <Button variant="light" size="sm" onClick={onShareClick}>
+        <Button
+          variant="light"
+          size="sm"
+          onClick={onShareClick}
+        >
           <ShareSVG />
           Share
         </Button>

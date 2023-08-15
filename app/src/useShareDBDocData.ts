@@ -18,9 +18,13 @@ export const getConnection = (() => {
   return () => {
     if (!connection) {
       const wsProtocol =
-        window.location.protocol === 'https:' ? 'wss://' : 'ws://';
+        window.location.protocol === 'https:'
+          ? 'wss://'
+          : 'ws://';
       // TODO consider using reconnecting WebSocket
-      const socket = new WebSocket(wsProtocol + window.location.host);
+      const socket = new WebSocket(
+        wsProtocol + window.location.host,
+      );
       connection = new Connection(socket);
     }
 
@@ -76,7 +80,9 @@ export const useData = <T>(
   // we can render the initial state of the document.
   // Note that during server-side rendering, `shareDBDoc` is null,
   // so we use the snapshot data instead of `shareDBDoc.data`.
-  const [data, setData] = useState<T | null>(snapshot ? snapshot.data : null);
+  const [data, setData] = useState<T | null>(
+    snapshot ? snapshot.data : null,
+  );
 
   // Update state when ShareDB document changes.
   useEffect(() => {
@@ -100,11 +106,15 @@ export const useData = <T>(
 export const useShareDBDocData = <T>(
   snapshot: Snapshot<T> | null,
   entityName,
-): T | null => useData(snapshot, useShareDBDoc(snapshot, entityName));
+): T | null =>
+  useData(snapshot, useShareDBDoc(snapshot, entityName));
 
 // Set up presence.
 // See https://github.com/share/sharedb/blob/master/examples/rich-text-presence/client.js#L53
-export const useShareDBDocPresence = (id: string, entityName: string) => {
+export const useShareDBDocPresence = (
+  id: string,
+  entityName: string,
+) => {
   const shareDBDocPresence = useMemo(() => {
     // Bail if we're server-side
     if (typeof window === 'undefined') return null;

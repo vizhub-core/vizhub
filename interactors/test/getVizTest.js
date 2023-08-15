@@ -19,7 +19,9 @@ export const getVizTest = () => {
       expect(result.value).toEqual({
         ...primordialViz,
         infoSnapshot: fakeSnapshot(primordialViz.info),
-        contentSnapshot: fakeSnapshot(primordialViz.content),
+        contentSnapshot: fakeSnapshot(
+          primordialViz.content,
+        ),
       });
     });
 

@@ -5,11 +5,13 @@ importScripts(
 // A Rollup plugin for a virtual file system.
 // Inspired by https://github.com/Permutatrix/rollup-plugin-hypothetical/blob/master/index.js
 
-const js = (name) => (name.endsWith('.js') ? name : name + '.js');
+const js = (name) =>
+  name.endsWith('.js') ? name : name + '.js';
 const virtual = (files) => ({
   name: 'virtual',
   resolveId: (id) => (id.startsWith('./') ? id : null),
-  load: (id) => (id.startsWith('./') ? files[js(id.substring(2))] : null),
+  load: (id) =>
+    id.startsWith('./') ? files[js(id.substring(2))] : null,
 });
 
 const parseJSON = (str) => {
@@ -22,7 +24,9 @@ const parseJSON = (str) => {
 };
 
 const getPkg = (files, errors) =>
-  'package.json' in files ? parseJSON(files['package.json'], errors) : null;
+  'package.json' in files
+    ? parseJSON(files['package.json'], errors)
+    : null;
 
 const getGlobals = (pkg, errors) => {
   const libraries = pkg?.vizhub?.libraries;
@@ -45,7 +49,10 @@ const getGlobals = (pkg, errors) => {
 // With cache: avg = 5.2 ms
 let cache;
 
-const build = async ({ files, enableSourcemap = false }) => {
+const build = async ({
+  files,
+  enableSourcemap = false,
+}) => {
   const startTime = Date.now();
   const warnings = [];
   const errors = [];
@@ -81,7 +88,9 @@ const build = async ({ files, enableSourcemap = false }) => {
   try {
     const bundle = await rollup.rollup(inputOptions);
     cache = bundle.cache;
-    const { code, map } = (await bundle.generate(outputOptions)).output[0];
+    const { code, map } = (
+      await bundle.generate(outputOptions)
+    ).output[0];
 
     // TODO benchmark performance and build size with vs. without sourcemaps
     // Idea: no sourcemaps when interacting, sourcemaps after interact is done.
@@ -98,7 +107,9 @@ const build = async ({ files, enableSourcemap = false }) => {
   } catch (error) {
     console.log('TODO handle this error');
     console.log(error);
-    const serializableError = JSON.parse(JSON.stringify(error));
+    const serializableError = JSON.parse(
+      JSON.stringify(error),
+    );
     serializableError.name = error.name;
     serializableError.message = error.message;
     errors.push(serializableError);

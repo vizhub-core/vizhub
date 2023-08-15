@@ -10,7 +10,9 @@ export const VizToast = ({
   isWarning = false,
   children,
 }) => {
-  const [count, setCount] = useState(delay ? delay / 1000 : null);
+  const [count, setCount] = useState(
+    delay ? delay / 1000 : null,
+  );
 
   // Tell the user how long until the toast hides
   useEffect(() => {
@@ -25,7 +27,11 @@ export const VizToast = ({
   }, [delay]);
 
   return (
-    <ToastContainer className="p-3" position="top-center" style={{ zIndex: 1 }}>
+    <ToastContainer
+      className="p-3"
+      position="top-center"
+      style={{ zIndex: 1 }}
+    >
       <Toast
         className={isWarning ? 'bg-warning' : ''}
         delay={delay}

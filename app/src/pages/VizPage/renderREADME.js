@@ -32,7 +32,8 @@ marked
 const responsiveYouTube = (html) =>
   html.replace(
     /<iframe(.+)youtube(.+)<\/iframe>/g,
-    (match) => `<div class='responsive-youtube'>${match}</div>`,
+    (match) =>
+      `<div class='responsive-youtube'>${match}</div>`,
   );
 
 // Renders README text as HTML.

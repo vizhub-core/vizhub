@@ -20,11 +20,14 @@ export type HomePageData = PageData & {
 export const HomePage: Page = ({ pageData }) => {
   // Send an analytics event to track this page view.
   useEffect(() => {
-    vizKit.rest.recordAnalyticsEvents('event.pageview.home');
+    vizKit.rest.recordAnalyticsEvents(
+      'event.pageview.home',
+    );
   }, []);
 
   const handleEmailSubmit = async (email) => {
-    const result = await vizKit.rest.privateBetaEmailSubmit(email);
+    const result =
+      await vizKit.rest.privateBetaEmailSubmit(email);
     if (result.outcome === 'success') {
       console.log('Successfully submitted email!');
     } else if (result.outcome === 'failure') {
@@ -37,7 +40,9 @@ export const HomePage: Page = ({ pageData }) => {
 
   return (
     <AuthenticatedUserProvider
-      authenticatedUserSnapshot={pageData.authenticatedUserSnapshot}
+      authenticatedUserSnapshot={
+        pageData.authenticatedUserSnapshot
+      }
     >
       <div className="vh-page overflow-auto">
         <SmartHeader />

@@ -2,7 +2,11 @@ import { EditorView, basicSetup } from 'codemirror';
 import { javascript } from '@codemirror/lang-javascript';
 import interact from '@replit/codemirror-interact';
 
-export const createEditor = ({ codemirrorContainer, doc, onChange }) =>
+export const createEditor = ({
+  codemirrorContainer,
+  doc,
+  onChange,
+}) =>
   new EditorView({
     doc,
     extensions: [

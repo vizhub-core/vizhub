@@ -4,14 +4,18 @@ import '@tensorflow/tfjs-node';
 let model;
 
 // TODO consider using OpenAI embeddings.
-export const generateEmbeddingTensorFlow = async (goodFiles) => {
+export const generateEmbeddingTensorFlow = async (
+  goodFiles,
+) => {
   const sentence = removeEmoji(goodFiles)
     // Substring on name as there was one particular case
     // f1ae79caa0d74e13bcfb7ba16355d65f
     // where someone apparently pasted data into the file name field
     .map(
       ({ name, text }) =>
-        name?.substring(0, 100) + ' ' + text?.substring(0, 4000),
+        name?.substring(0, 100) +
+        ' ' +
+        text?.substring(0, 4000),
     )
     .join(' ')
     .replace(
@@ -37,7 +41,9 @@ export const generateEmbeddingTensorFlow = async (goodFiles) => {
       embedding = embeddingResult.arraySync()[0];
     } catch (error) {
       console.log('Caught TensorFlow error. Retrying...');
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await new Promise((resolve) =>
+        setTimeout(resolve, 1000),
+      );
       await invokeTensorFlow();
     }
   };
@@ -45,7 +51,10 @@ export const generateEmbeddingTensorFlow = async (goodFiles) => {
 
   // Cause for concern - this will break everything downstream.
   if (embedding.length !== 512) {
-    console.log('Embedding has a strange length of ' + embedding.length);
+    console.log(
+      'Embedding has a strange length of ' +
+        embedding.length,
+    );
     process.exit();
   }
 

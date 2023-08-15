@@ -34,7 +34,9 @@ export const ExplorePage: Page = ({
   pageData: ExplorePageData;
 }) => (
   <AuthenticatedUserProvider
-    authenticatedUserSnapshot={pageData.authenticatedUserSnapshot}
+    authenticatedUserSnapshot={
+      pageData.authenticatedUserSnapshot
+    }
   >
     <SortProvider>
       <InfosAndOwnersProvider

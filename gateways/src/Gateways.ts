@@ -81,48 +81,78 @@ export interface Gateways {
   deleteUser(id: UserId): Promise<Result<Success>>;
 
   saveUpvote(upvote: Upvote): Promise<Result<Success>>;
-  getUpvote(id: UpvoteId): Promise<Result<Snapshot<Upvote>>>;
+  getUpvote(
+    id: UpvoteId,
+  ): Promise<Result<Snapshot<Upvote>>>;
   deleteUpvote(id: UpvoteId): Promise<Result<Success>>;
 
-  saveVizAuthorship(vizAuthorship: VizAuthorship): Promise<Result<Success>>;
+  saveVizAuthorship(
+    vizAuthorship: VizAuthorship,
+  ): Promise<Result<Success>>;
   getVizAuthorship(
     id: VizAuthorshipId,
   ): Promise<Result<Snapshot<VizAuthorship>>>;
-  deleteVizAuthorship(id: VizAuthorshipId): Promise<Result<Success>>;
+  deleteVizAuthorship(
+    id: VizAuthorshipId,
+  ): Promise<Result<Success>>;
 
   saveComment(comment: Comment): Promise<Result<Success>>;
-  getComment(id: CommentId): Promise<Result<Snapshot<Comment>>>;
+  getComment(
+    id: CommentId,
+  ): Promise<Result<Snapshot<Comment>>>;
   deleteComment(id: CommentId): Promise<Result<Success>>;
 
   saveMention(mention: Mention): Promise<Result<Success>>;
-  getMention(id: MentionId): Promise<Result<Snapshot<Mention>>>;
+  getMention(
+    id: MentionId,
+  ): Promise<Result<Snapshot<Mention>>>;
   deleteMention(id: MentionId): Promise<Result<Success>>;
 
   saveFolder(folder: Folder): Promise<Result<Success>>;
-  getFolder(id: FolderId): Promise<Result<Snapshot<Folder>>>;
+  getFolder(
+    id: FolderId,
+  ): Promise<Result<Snapshot<Folder>>>;
   deleteFolder(id: FolderId): Promise<Result<Success>>;
 
-  savePermission(permission: Permission): Promise<Result<Success>>;
-  getPermission(id: PermissionId): Promise<Result<Snapshot<Permission>>>;
-  deletePermission(id: PermissionId): Promise<Result<Success>>;
+  savePermission(
+    permission: Permission,
+  ): Promise<Result<Success>>;
+  getPermission(
+    id: PermissionId,
+  ): Promise<Result<Snapshot<Permission>>>;
+  deletePermission(
+    id: PermissionId,
+  ): Promise<Result<Success>>;
 
   saveOrg(org: Org): Promise<Result<Success>>;
   getOrg(id: OrgId): Promise<Result<Snapshot<Org>>>;
   deleteOrg(id: OrgId): Promise<Result<Success>>;
 
-  saveOrgMembership(orgMembership: OrgMembership): Promise<Result<Success>>;
+  saveOrgMembership(
+    orgMembership: OrgMembership,
+  ): Promise<Result<Success>>;
   getOrgMembership(
     id: OrgMembershipId,
   ): Promise<Result<Snapshot<OrgMembership>>>;
-  deleteOrgMembership(id: OrgMembershipId): Promise<Result<Success>>;
+  deleteOrgMembership(
+    id: OrgMembershipId,
+  ): Promise<Result<Success>>;
 
   saveTagging(tagging: Tagging): Promise<Result<Success>>;
-  getTagging(id: TaggingId): Promise<Result<Snapshot<Tagging>>>;
+  getTagging(
+    id: TaggingId,
+  ): Promise<Result<Snapshot<Tagging>>>;
   deleteTagging(id: TaggingId): Promise<Result<Success>>;
 
-  saveCollection(collection: Collection): Promise<Result<Success>>;
-  getCollection(id: CollectionId): Promise<Result<Snapshot<Collection>>>;
-  deleteCollection(id: CollectionId): Promise<Result<Success>>;
+  saveCollection(
+    collection: Collection,
+  ): Promise<Result<Success>>;
+  getCollection(
+    id: CollectionId,
+  ): Promise<Result<Snapshot<Collection>>>;
+  deleteCollection(
+    id: CollectionId,
+  ): Promise<Result<Success>>;
 
   saveCollectionMembership(
     collectionMembership: CollectionMembership,
@@ -138,34 +168,68 @@ export interface Gateways {
   getCommit(id: CommitId): Promise<Result<Commit>>;
   deleteCommit(id: CommitId): Promise<Result<Success>>;
 
-  saveMilestone(milestone: Milestone): Promise<Result<Success>>;
+  saveMilestone(
+    milestone: Milestone,
+  ): Promise<Result<Success>>;
   getMilestone(id: MilestoneId): Promise<Result<Milestone>>;
-  deleteMilestone(id: MilestoneId): Promise<Result<Success>>;
+  deleteMilestone(
+    id: MilestoneId,
+  ): Promise<Result<Success>>;
 
-  saveDeployment(deployment: Deployment): Promise<Result<Success>>;
-  getDeployment(id: DeploymentId): Promise<Result<Snapshot<Deployment>>>;
-  deleteDeployment(id: DeploymentId): Promise<Result<Success>>;
+  saveDeployment(
+    deployment: Deployment,
+  ): Promise<Result<Success>>;
+  getDeployment(
+    id: DeploymentId,
+  ): Promise<Result<Snapshot<Deployment>>>;
+  deleteDeployment(
+    id: DeploymentId,
+  ): Promise<Result<Success>>;
 
-  saveMergeRequest(mergeRequest: MergeRequest): Promise<Result<Success>>;
-  getMergeRequest(id: MergeRequestId): Promise<Result<Snapshot<MergeRequest>>>;
-  deleteMergeRequest(id: MergeRequestId): Promise<Result<Success>>;
+  saveMergeRequest(
+    mergeRequest: MergeRequest,
+  ): Promise<Result<Success>>;
+  getMergeRequest(
+    id: MergeRequestId,
+  ): Promise<Result<Snapshot<MergeRequest>>>;
+  deleteMergeRequest(
+    id: MergeRequestId,
+  ): Promise<Result<Success>>;
 
-  saveAnalyticsEvent(analyticsEvent: AnalyticsEvent): Promise<Result<Success>>;
-  getAnalyticsEvent(id: AnalyticsEventId): Promise<Result<AnalyticsEvent>>;
-  deleteAnalyticsEvent(id: AnalyticsEventId): Promise<Result<Success>>;
+  saveAnalyticsEvent(
+    analyticsEvent: AnalyticsEvent,
+  ): Promise<Result<Success>>;
+  getAnalyticsEvent(
+    id: AnalyticsEventId,
+  ): Promise<Result<AnalyticsEvent>>;
+  deleteAnalyticsEvent(
+    id: AnalyticsEventId,
+  ): Promise<Result<Success>>;
 
-  saveEmbedding(embedding: Embedding): Promise<Result<Success>>;
-  getEmbedding(id: EmbeddingId): Promise<Result<Snapshot<Embedding>>>;
-  deleteEmbedding(id: EmbeddingId): Promise<Result<Success>>;
+  saveEmbedding(
+    embedding: Embedding,
+  ): Promise<Result<Success>>;
+  getEmbedding(
+    id: EmbeddingId,
+  ): Promise<Result<Snapshot<Embedding>>>;
+  deleteEmbedding(
+    id: EmbeddingId,
+  ): Promise<Result<Success>>;
 
   // ***************************************************************
   // ******************** Non-CRUD Operations **********************
   // ***************************************************************
-  getForks(id: VizId): Promise<Result<Array<Snapshot<Info>>>>;
+  getForks(
+    id: VizId,
+  ): Promise<Result<Array<Snapshot<Info>>>>;
   incrementForksCount(id: VizId): Promise<Result<Success>>;
   decrementForksCount(id: VizId): Promise<Result<Success>>;
-  incrementUpvotesCount(id: VizId): Promise<Result<Success>>;
-  decrementUpvotesCount(id: VizId): Promise<Result<Success>>;
+  incrementUpvotesCount(
+    id: VizId,
+  ): Promise<Result<Success>>;
+  decrementUpvotesCount(
+    id: VizId,
+  ): Promise<Result<Success>>;
 
   // getCommitAncestors
   //
@@ -192,17 +256,23 @@ export interface Gateways {
   // getUserByEmails
   //
   // Gets the user that matches any of the given emails.
-  getUserByEmails(emails: Array<EmailAddress>): Promise<Result<Snapshot<User>>>;
+  getUserByEmails(
+    emails: Array<EmailAddress>,
+  ): Promise<Result<Snapshot<User>>>;
 
   // getUserByUserName
   //
   // Gets the user that matches the given userName.
-  getUserByUserName(userName: UserName): Promise<Result<Snapshot<User>>>;
+  getUserByUserName(
+    userName: UserName,
+  ): Promise<Result<Snapshot<User>>>;
 
   // getFolderAncestors
   //
   // Gets the parent folders of the given folder.
-  getFolderAncestors(id: FolderId): Promise<Result<Array<Folder>>>;
+  getFolderAncestors(
+    id: FolderId,
+  ): Promise<Result<Array<Folder>>>;
 
   // getPermissions
   //
@@ -278,5 +348,7 @@ export interface Gateways {
   // getUsersByIds
   //
   // Gets all users that match the given ids.
-  getUsersByIds(ids: Array<UserId>): Promise<Result<Array<Snapshot<User>>>>;
+  getUsersByIds(
+    ids: Array<UserId>,
+  ): Promise<Result<Array<Snapshot<User>>>>;
 }

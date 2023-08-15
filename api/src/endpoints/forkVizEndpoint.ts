@@ -8,7 +8,12 @@ import {
   Visibility,
   VizId,
 } from 'entities';
-import { Gateways, err, missingParameterError, ok } from 'gateways';
+import {
+  Gateways,
+  err,
+  missingParameterError,
+  ok,
+} from 'gateways';
 import { ForkViz } from 'interactors';
 
 // Used for debugging forking flow.

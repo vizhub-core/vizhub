@@ -1,4 +1,9 @@
-import { RefObject, useEffect, useMemo, useRef } from 'react';
+import {
+  RefObject,
+  useEffect,
+  useMemo,
+  useRef,
+} from 'react';
 import { getRuntimeVersion } from '../../accessors/getRuntimeVersion';
 import { Content } from 'entities';
 // import V2Worker from './v2Runtime/v2RuntimeWorker?worker';
@@ -17,7 +22,10 @@ export const useRuntime = ({
   const initialMount = useRef(true);
 
   // Either 2 or 3.
-  const runtimeVersion = useMemo(() => getRuntimeVersion(content), [content]);
+  const runtimeVersion = useMemo(
+    () => getRuntimeVersion(content),
+    [content],
+  );
 
   // The v3 runtime worker.
   // const v3RuntimeWorker = useRef<Worker>();
@@ -52,7 +60,9 @@ export const useRuntime = ({
         // Set process on global scope so computeSrcDoc doesn't break.
         globalThis.process = {};
 
-        const { computeSrcDoc } = await import('./v2Runtime/computeSrcDoc');
+        const { computeSrcDoc } = await import(
+          './v2Runtime/computeSrcDoc'
+        );
 
         // console.log(computeSrcDoc);
         const srcdoc = await computeSrcDoc(content);

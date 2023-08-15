@@ -21,13 +21,19 @@ export const Body = () => {
       <SmartHeader />
       <ExplorePageBody
         renderVizPreviews={() =>
-          allInfoSnapshots.map((infoSnapshot: Snapshot<Info>) => (
-            <VizPreviewPresenter
-              key={infoSnapshot.data.id}
-              infoSnapshot={infoSnapshot}
-              ownerUser={ownerUserSnapshotsById[infoSnapshot.data.owner].data}
-            />
-          ))
+          allInfoSnapshots.map(
+            (infoSnapshot: Snapshot<Info>) => (
+              <VizPreviewPresenter
+                key={infoSnapshot.data.id}
+                infoSnapshot={infoSnapshot}
+                ownerUser={
+                  ownerUserSnapshotsById[
+                    infoSnapshot.data.owner
+                  ].data
+                }
+              />
+            ),
+          )
         }
         sortId={sortId}
         setSortId={setSortId}

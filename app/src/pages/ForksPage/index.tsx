@@ -34,9 +34,15 @@ export type ForksPageQuery = {
 };
 
 // Inspired by https://github.com/vitejs/vite-plugin-react/blob/main/playground/ssr-react/src/pages/Home.jsx
-export const ForksPage: Page = ({ pageData }: { pageData: ForksPageData }) => (
+export const ForksPage: Page = ({
+  pageData,
+}: {
+  pageData: ForksPageData;
+}) => (
   <AuthenticatedUserProvider
-    authenticatedUserSnapshot={pageData.authenticatedUserSnapshot}
+    authenticatedUserSnapshot={
+      pageData.authenticatedUserSnapshot
+    }
   >
     <SortProvider>
       <InfosAndOwnersProvider
@@ -45,8 +51,12 @@ export const ForksPage: Page = ({ pageData }: { pageData: ForksPageData }) => (
         forkedFrom={pageData.forkedFrom}
       >
         <Body
-          forkedFromInfo={pageData.forkedFromInfoSnapshot.data}
-          forkedFromOwnerUser={pageData.forkedFromOwnerUserSnapshot.data}
+          forkedFromInfo={
+            pageData.forkedFromInfoSnapshot.data
+          }
+          forkedFromOwnerUser={
+            pageData.forkedFromOwnerUserSnapshot.data
+          }
         />
       </InfosAndOwnersProvider>
     </SortProvider>

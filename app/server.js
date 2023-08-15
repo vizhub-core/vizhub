@@ -20,13 +20,18 @@ const version = '3.0.0-beta.17';
 
 const env = process.env;
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const __dirname = path.dirname(
+  fileURLToPath(import.meta.url),
+);
 const resolve = (p) => path.resolve(__dirname, p);
 const isTest = env.VITEST;
 
 // TODO better 404 page
 const send404 = (res) => {
-  res.status(404).set({ 'Content-Type': 'text/html' }).end('Not found');
+  res
+    .status(404)
+    .set({ 'Content-Type': 'text/html' })
+    .end('Not found');
 };
 
 async function createServer(
@@ -35,7 +40,10 @@ async function createServer(
   hmrPort,
 ) {
   const indexProd = isProd
-    ? fs.readFileSync(resolve('dist/client/index.html'), 'utf-8')
+    ? fs.readFileSync(
+        resolve('dist/client/index.html'),
+        'utf-8',
+      )
     : '';
 
   const prodServerEntry = isProd
@@ -101,9 +109,12 @@ async function createServer(
 
     // Serve the build as static files.
     app.use(
-      (await import('serve-static')).default(resolve('dist/client'), {
-        index: false,
-      }),
+      (await import('serve-static')).default(
+        resolve('dist/client'),
+        {
+          index: false,
+        },
+      ),
     );
   }
 
@@ -112,26 +123,37 @@ async function createServer(
   // TODO think about how to make it so we don't need to restart the server
   let entry;
   if (!isProd) {
-    entry = await vite.ssrLoadModule('/src/entry-server.tsx');
+    entry = await vite.ssrLoadModule(
+      '/src/entry-server.tsx',
+    );
   } else {
     entry = await import('./dist/server/entry-server.js');
   }
 
   // Unpack the entry point.
-  const { initializeGateways, api, authentication, accessControl } = entry;
+  const {
+    initializeGateways,
+    api,
+    authentication,
+    accessControl,
+  } = entry;
 
   // This API is required for the ShareDB WebSocket server.
   const server = http.createServer(app);
 
   // Initialize gateways and database connections.
-  const { gateways, shareDBBackend } = await initializeGateways({
-    isProd,
-    env,
-    // server,
-    attachMiddleware: (shareDBBackend) => {
-      shareDBBackend.use('connect', accessControl.identifyServerAgent);
-    },
-  });
+  const { gateways, shareDBBackend } =
+    await initializeGateways({
+      isProd,
+      env,
+      // server,
+      attachMiddleware: (shareDBBackend) => {
+        shareDBBackend.use(
+          'connect',
+          accessControl.identifyServerAgent,
+        );
+      },
+    });
 
   // Set up authentication.
   let authMiddleware;
@@ -142,7 +164,9 @@ async function createServer(
     console.log(
       'Environment variable VIZHUB3_AUTH0_SECRET is not set. See README for details.',
     );
-    console.log('Starting dev server without authentication enabled...');
+    console.log(
+      'Starting dev server without authentication enabled...',
+    );
   }
 
   // Access control at ShareDB level.
@@ -150,8 +174,14 @@ async function createServer(
     'connect',
     accessControl.identifyClientAgent(authMiddleware),
   );
-  shareDBBackend.use('apply', accessControl.vizWrite(gateways));
-  shareDBBackend.use('readSnapshots', accessControl.vizRead(gateways));
+  shareDBBackend.use(
+    'apply',
+    accessControl.vizWrite(gateways),
+  );
+  shareDBBackend.use(
+    'readSnapshots',
+    accessControl.vizRead(gateways),
+  );
 
   // TODO investigate if any of these AI suggestions carry any weight
   // shareDBBackend.use('query', accessControl.vizRead(gateways));
@@ -221,7 +251,9 @@ async function createServer(
 
     // Prevent server crashes on errors.
     stream.on('error', (error) => {
-      console.log('WebSocket stream error: ' + error.message);
+      console.log(
+        'WebSocket stream error: ' + error.message,
+      );
     });
 
     shareDBBackend.listen(stream, req);
@@ -247,9 +279,17 @@ async function createServer(
 
       if (!isProd) {
         // always read fresh template in dev
-        template = fs.readFileSync(resolve('index.html'), 'utf-8');
-        template = await vite.transformIndexHtml(originalUrl, template);
-        entry = await vite.ssrLoadModule('/src/entry-server.tsx');
+        template = fs.readFileSync(
+          resolve('index.html'),
+          'utf-8',
+        );
+        template = await vite.transformIndexHtml(
+          originalUrl,
+          template,
+        );
+        entry = await vite.ssrLoadModule(
+          '/src/entry-server.tsx',
+        );
       } else {
         template = indexProd;
         entry = prodServerEntry;
@@ -311,7 +351,9 @@ async function createServer(
       pageData.version = version;
 
       const titleSanitized = xss(pageData.title);
-      const descriptionSanitized = xss(pageData.description);
+      const descriptionSanitized = xss(
+        pageData.description,
+      );
       const image = pageData.image;
 
       const html = template
@@ -354,7 +396,10 @@ async function createServer(
             .replace(/</g, '\\u003c')};</script>`,
         );
 
-      res.status(200).set({ 'Content-Type': 'text/html' }).end(html);
+      res
+        .status(200)
+        .set({ 'Content-Type': 'text/html' })
+        .end(html);
     } catch (e) {
       !isProd && vite.ssrFixStacktrace(e);
       console.log(e.stack);
@@ -366,13 +411,21 @@ async function createServer(
   app.use(Sentry.Handlers.errorHandler());
 
   server.listen(5173, () => {
-    console.log('VizHub App Server listening at http://localhost:5173');
-    console.log('                               http://localhost:5173/joe');
+    console.log(
+      'VizHub App Server listening at http://localhost:5173',
+    );
+    console.log(
+      '                               http://localhost:5173/joe',
+    );
     console.log(
       '                               http://localhost:5173/joe/viz1',
     );
-    console.log('                               http://localhost:5173/explore');
-    console.log('                               http://localhost:5173/pricing');
+    console.log(
+      '                               http://localhost:5173/explore',
+    );
+    console.log(
+      '                               http://localhost:5173/pricing',
+    );
 
     console.log(
       '                               http://localhost:5173/search?query=map',

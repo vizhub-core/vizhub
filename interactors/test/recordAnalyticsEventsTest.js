@@ -10,7 +10,10 @@ export const recordAnalyticsEventsTest = () => {
     it('should create a new analytics event', async () => {
       const gateways = initGateways();
       const { getAnalyticsEvent } = gateways;
-      const recordAnalyticsEvents = RecordAnalyticsEvents(gateways, true);
+      const recordAnalyticsEvents = RecordAnalyticsEvents(
+        gateways,
+        true,
+      );
 
       const result = await recordAnalyticsEvents({
         eventId: 'pageview.home',
@@ -34,12 +37,17 @@ export const recordAnalyticsEventsTest = () => {
         all: { all: 1 },
       };
 
-      expect((await getAnalyticsEvent('pageview.home')).value.data).toEqual({
+      expect(
+        (await getAnalyticsEvent('pageview.home')).value
+          .data,
+      ).toEqual({
         id: 'pageview.home',
         intervals,
       });
 
-      expect((await getAnalyticsEvent('pageview')).value.data).toEqual({
+      expect(
+        (await getAnalyticsEvent('pageview')).value.data,
+      ).toEqual({
         id: 'pageview',
         intervals,
       });
@@ -48,7 +56,10 @@ export const recordAnalyticsEventsTest = () => {
     it('should update existing analytics events', async () => {
       const gateways = initGateways();
       const { getAnalyticsEvent } = gateways;
-      const recordAnalyticsEvents = RecordAnalyticsEvents(gateways, true);
+      const recordAnalyticsEvents = RecordAnalyticsEvents(
+        gateways,
+        true,
+      );
 
       await recordAnalyticsEvents({
         eventId: 'pageview.home',
@@ -66,7 +77,10 @@ export const recordAnalyticsEventsTest = () => {
       await recordAnalyticsEvents.processQueue();
 
       const intervals = {
-        minutes: { '2021-11-28T11:46': 1, '2021-11-29T15:33': 1 },
+        minutes: {
+          '2021-11-28T11:46': 1,
+          '2021-11-29T15:33': 1,
+        },
         hours: { '2021-11-28T11': 1, '2021-11-29T15': 1 },
         days: { '2021-11-28': 1, '2021-11-29': 1 },
         weeks: { '2021-W47': 1, '2021-W48': 1 },
@@ -76,12 +90,17 @@ export const recordAnalyticsEventsTest = () => {
         all: { all: 2 },
       };
 
-      expect((await getAnalyticsEvent('pageview.home')).value.data).toEqual({
+      expect(
+        (await getAnalyticsEvent('pageview.home')).value
+          .data,
+      ).toEqual({
         id: 'pageview.home',
         intervals,
       });
 
-      expect((await getAnalyticsEvent('pageview')).value.data).toEqual({
+      expect(
+        (await getAnalyticsEvent('pageview')).value.data,
+      ).toEqual({
         id: 'pageview',
         intervals,
       });
@@ -90,7 +109,10 @@ export const recordAnalyticsEventsTest = () => {
     it('should update multiple nested analytics events', async () => {
       const gateways = initGateways();
       const { getAnalyticsEvent } = gateways;
-      const recordAnalyticsEvents = RecordAnalyticsEvents(gateways, true);
+      const recordAnalyticsEvents = RecordAnalyticsEvents(
+        gateways,
+        true,
+      );
 
       await recordAnalyticsEvents({
         eventId: 'pageview.home',
@@ -121,10 +143,16 @@ export const recordAnalyticsEventsTest = () => {
       //   JSON.stringify((await getAnalyticsEvent('pageview.viz')).value.data)
       // );
 
-      expect((await getAnalyticsEvent('pageview.home')).value.data).toEqual({
+      expect(
+        (await getAnalyticsEvent('pageview.home')).value
+          .data,
+      ).toEqual({
         id: 'pageview.home',
         intervals: {
-          minutes: { '2021-11-28T11:46': 1, '2021-11-29T15:33': 1 },
+          minutes: {
+            '2021-11-28T11:46': 1,
+            '2021-11-29T15:33': 1,
+          },
           hours: { '2021-11-28T11': 1, '2021-11-29T15': 1 },
           days: { '2021-11-28': 1, '2021-11-29': 1 },
           weeks: { '2021-W47': 1, '2021-W48': 1 },
@@ -135,7 +163,10 @@ export const recordAnalyticsEventsTest = () => {
         },
       });
 
-      expect((await getAnalyticsEvent('pageview.viz.1')).value.data).toEqual({
+      expect(
+        (await getAnalyticsEvent('pageview.viz.1')).value
+          .data,
+      ).toEqual({
         id: 'pageview.viz.1',
         intervals: {
           minutes: { '2021-11-29T15:33': 1 },
@@ -149,7 +180,10 @@ export const recordAnalyticsEventsTest = () => {
         },
       });
 
-      expect((await getAnalyticsEvent('pageview.viz.2')).value.data).toEqual({
+      expect(
+        (await getAnalyticsEvent('pageview.viz.2')).value
+          .data,
+      ).toEqual({
         id: 'pageview.viz.2',
         intervals: {
           minutes: { '2021-11-30T19:20': 1 },
@@ -163,10 +197,16 @@ export const recordAnalyticsEventsTest = () => {
         },
       });
 
-      expect((await getAnalyticsEvent('pageview.viz')).value.data).toEqual({
+      expect(
+        (await getAnalyticsEvent('pageview.viz')).value
+          .data,
+      ).toEqual({
         id: 'pageview.viz',
         intervals: {
-          minutes: { '2021-11-29T15:33': 1, '2021-11-30T19:20': 1 },
+          minutes: {
+            '2021-11-29T15:33': 1,
+            '2021-11-30T19:20': 1,
+          },
           hours: { '2021-11-29T15': 1, '2021-11-30T19': 1 },
           days: { '2021-11-29': 1, '2021-11-30': 1 },
           weeks: { '2021-W48': 2 },
@@ -177,7 +217,9 @@ export const recordAnalyticsEventsTest = () => {
         },
       });
 
-      expect((await getAnalyticsEvent('pageview')).value.data).toEqual({
+      expect(
+        (await getAnalyticsEvent('pageview')).value.data,
+      ).toEqual({
         id: 'pageview',
         intervals: {
           minutes: {
@@ -185,8 +227,16 @@ export const recordAnalyticsEventsTest = () => {
             '2021-11-29T15:33': 2,
             '2021-11-30T19:20': 1,
           },
-          hours: { '2021-11-28T11': 1, '2021-11-29T15': 2, '2021-11-30T19': 1 },
-          days: { '2021-11-28': 1, '2021-11-29': 2, '2021-11-30': 1 },
+          hours: {
+            '2021-11-28T11': 1,
+            '2021-11-29T15': 2,
+            '2021-11-30T19': 1,
+          },
+          days: {
+            '2021-11-28': 1,
+            '2021-11-29': 2,
+            '2021-11-30': 1,
+          },
           weeks: { '2021-W47': 1, '2021-W48': 3 },
           months: { '2021-11': 4 },
           quarters: { '2021-Q4': 4 },

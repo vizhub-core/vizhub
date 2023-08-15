@@ -2,7 +2,10 @@ import { useState, useCallback } from 'react';
 import { InputGroup, Form, Button } from '../bootstrap';
 import './styles.scss';
 
-export const HomePageBody = ({ onEmailSubmit, children }) => {
+export const HomePageBody = ({
+  onEmailSubmit,
+  children,
+}) => {
   const [email, setEmail] = useState('');
 
   const handleEmailChange = useCallback((event) => {
@@ -24,9 +27,12 @@ export const HomePageBody = ({ onEmailSubmit, children }) => {
           <div className="callout large">Accelerate</div>
           <div className="callout">Dataviz Delivery</div>
           <p className="description">
-            <strong>Develop custom data visualizations</strong> faster and more
-            collaboratively than ever with <strong>VizHub 3</strong>. Built for
-            client services.
+            <strong>
+              Develop custom data visualizations
+            </strong>{' '}
+            faster and more collaboratively than ever with{' '}
+            <strong>VizHub 3</strong>. Built for client
+            services.
           </p>
           <Form onSubmit={handleEmailSubmit}>
             <InputGroup className="vh-email-submission">

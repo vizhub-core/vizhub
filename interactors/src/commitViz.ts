@@ -18,7 +18,8 @@ export const CommitViz = (gateways: Gateways) => {
   return async (id: VizId): Promise<Result<CommitId>> => {
     // TODORedLock
     const getVizResult = await getViz(id);
-    if (getVizResult.outcome === 'failure') return getVizResult;
+    if (getVizResult.outcome === 'failure')
+      return getVizResult;
     const { info, content } = getVizResult.value;
     const { end } = info;
 
@@ -29,7 +30,8 @@ export const CommitViz = (gateways: Gateways) => {
     // Reconstruct the viz content as it was before the current
     // uncommitted changes were made. The new commit ops will diff
     // from this version to the current uncommitted version.
-    const previousContentResult = await getContentAtCommit(end);
+    const previousContentResult =
+      await getContentAtCommit(end);
     if (previousContentResult.outcome === 'failure')
       return previousContentResult;
     const previousContent = previousContentResult.value;
@@ -49,7 +51,10 @@ export const CommitViz = (gateways: Gateways) => {
       console.log('in commitViz');
       console.log('previousContent', previousContent);
       console.log('content', content);
-      console.log('newCommit', JSON.stringify(newCommit, null, 2));
+      console.log(
+        'newCommit',
+        JSON.stringify(newCommit, null, 2),
+      );
     }
 
     const newInfo: Info = {
@@ -63,10 +68,12 @@ export const CommitViz = (gateways: Gateways) => {
     // then don't save the Info.
     // This is why these are serial and not parallel.
     const saveCommitResult = await saveCommit(newCommit);
-    if (saveCommitResult.outcome !== 'success') return saveCommitResult;
+    if (saveCommitResult.outcome !== 'success')
+      return saveCommitResult;
 
     const saveInfoResult = await saveInfo(newInfo);
-    if (saveInfoResult.outcome !== 'success') return saveInfoResult;
+    if (saveInfoResult.outcome !== 'success')
+      return saveInfoResult;
 
     return ok(newCommitId);
   };

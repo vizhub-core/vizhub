@@ -1,9 +1,18 @@
 import { ProfilePage, ProfilePageData } from './index';
 import { parseAuth0Sub } from '../../parseAuth0User';
 import { GetInfosAndOwners } from 'interactors';
-import { SortId, asSortId, defaultSortOption } from 'entities';
+import {
+  SortId,
+  asSortId,
+  defaultSortOption,
+} from 'entities';
 
-ProfilePage.getPageData = async ({ gateways, params, query, auth0User }) => {
+ProfilePage.getPageData = async ({
+  gateways,
+  params,
+  query,
+  auth0User,
+}) => {
   const { userName } = params;
   const { getUserByUserName, getUser } = gateways;
   const getInfosAndOwners = GetInfosAndOwners(gateways);
@@ -14,7 +23,8 @@ ProfilePage.getPageData = async ({ gateways, params, query, auth0User }) => {
 
     const owner = profileUserSnapshot.data.id;
 
-    const sortId: SortId | null = asSortId(query.sort) || defaultSortOption.id;
+    const sortId: SortId | null =
+      asSortId(query.sort) || defaultSortOption.id;
 
     const infosAndOwnersResult = await getInfosAndOwners({
       owner,
@@ -36,11 +46,14 @@ ProfilePage.getPageData = async ({ gateways, params, query, auth0User }) => {
         parseAuth0Sub(auth0User.sub),
       );
       if (authenticatedUserResult.outcome === 'failure') {
-        console.log('Error when fetching authenticated user:');
+        console.log(
+          'Error when fetching authenticated user:',
+        );
         console.log(authenticatedUserResult.error);
         return null;
       }
-      authenticatedUserSnapshot = authenticatedUserResult.value;
+      authenticatedUserSnapshot =
+        authenticatedUserResult.value;
     }
 
     const pageData: ProfilePageData = {

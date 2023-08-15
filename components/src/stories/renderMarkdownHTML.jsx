@@ -2,7 +2,8 @@ export const renderMarkdownHTML = () => (
   <>
     <p>This is a test of Markdown rendering.</p>
     <p>
-      Support for <code>inline code snippets</code> and tables:
+      Support for <code>inline code snippets</code> and
+      tables:
     </p>
     <table>
       <thead>

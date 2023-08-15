@@ -20,7 +20,9 @@ export class VizHubError extends Error {
   }
 }
 
-export const resourceNotFoundError = (id: string): VizHubError =>
+export const resourceNotFoundError = (
+  id: string,
+): VizHubError =>
   new VizHubError(
     'Resource not found with id: ' + id,
     VizHubErrorCode.resourceNotFound,
@@ -31,17 +33,29 @@ export const invalidCommitOp = (
   message: string,
 ): VizHubError =>
   new VizHubError(
-    'Invalid op in commit with id: ' + commitId + '\n' + message,
+    'Invalid op in commit with id: ' +
+      commitId +
+      '\n' +
+      message,
     VizHubErrorCode.invalidCommitOp,
   );
 
-export const invalidDecrementError = (id: VizId, field: string): VizHubError =>
+export const invalidDecrementError = (
+  id: VizId,
+  field: string,
+): VizHubError =>
   new VizHubError(
-    'Cannot decrement zero-value field `' + field + '` on viz `' + id + '`',
+    'Cannot decrement zero-value field `' +
+      field +
+      '` on viz `' +
+      id +
+      '`',
     VizHubErrorCode.invalidCommitOp,
   );
 
-export const missingParameterError = (parameter: string): VizHubError =>
+export const missingParameterError = (
+  parameter: string,
+): VizHubError =>
   new VizHubError(
     'Missing parameter: ' + parameter,
     VizHubErrorCode.missingParameter,

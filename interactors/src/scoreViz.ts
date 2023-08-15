@@ -1,4 +1,10 @@
-import { Gateways, Result, ok, err, Success } from 'gateways';
+import {
+  Gateways,
+  Result,
+  ok,
+  err,
+  Success,
+} from 'gateways';
 import { VizId, Info } from 'entities';
 import { computePopularity } from './computePopularity';
 
@@ -8,7 +14,9 @@ import { computePopularity } from './computePopularity';
 export const ScoreViz = (gateways: Gateways) => {
   const { getInfo, saveInfo } = gateways;
 
-  return async (options: { viz: VizId }): Promise<Result<Success>> => {
+  return async (options: {
+    viz: VizId;
+  }): Promise<Result<Success>> => {
     const { viz } = options;
 
     // TODO Redlock

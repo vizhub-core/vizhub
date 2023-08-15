@@ -10,4 +10,8 @@ export {
   invalidDecrementError,
   missingParameterError,
 } from './errors';
-export { crudEntityNames, noSnapshot, MemoryGateways } from './MemoryGateways';
+export {
+  crudEntityNames,
+  noSnapshot,
+  MemoryGateways,
+} from './MemoryGateways';

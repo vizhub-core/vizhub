@@ -1,7 +1,11 @@
 // Inspired by
 // https://github.com/vitejs/vite-plugin-react/blob/main/playground/ssr-react/src/App.jsx
 // https://github.com/vizhub-core/vizhub/blob/main/vizhub-v2/packages/neoFrontend/src/App.js
-import { Route, Routes, useLocation } from 'react-router-dom';
+import {
+  Route,
+  Routes,
+  useLocation,
+} from 'react-router-dom';
 import { pages } from './pages/client';
 import { useMemo } from 'react';
 
@@ -15,7 +19,9 @@ export const App = ({ pageData }) => {
     [location.pathname, location.search],
   );
   if (!import.meta.env.SSR && url !== pageData.url) {
-    console.log('Might need to fetch page data from client');
+    console.log(
+      'Might need to fetch page data from client',
+    );
   }
 
   return (

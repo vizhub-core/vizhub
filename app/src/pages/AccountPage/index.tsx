@@ -20,7 +20,9 @@ export type AccountPageData = PageData & {
 };
 
 const Body = () => {
-  const authenticatedUser = useContext(AuthenticatedUserContext);
+  const authenticatedUser = useContext(
+    AuthenticatedUserContext,
+  );
 
   // const handleProClick = useCallback(() => {
   //   vizKit.rest.recordAnalyticsEvents('event.click.pricing.pro');
@@ -44,12 +46,16 @@ const Body = () => {
 
   const handleUnsubscribeClick = useCallback(async () => {
     console.log('unsubscribe clicked');
-    vizKit.rest.recordAnalyticsEvents('event.click.Account.unsubscribe');
+    vizKit.rest.recordAnalyticsEvents(
+      'event.click.Account.unsubscribe',
+    );
     // Pretend that the user goes through a checkout process...
 
     // Should never happen, but just in case...
     if (!authenticatedUser) {
-      console.log('No authenticatedUser - this should never happen');
+      console.log(
+        'No authenticatedUser - this should never happen',
+      );
       return;
     }
 
@@ -57,7 +63,9 @@ const Body = () => {
     setCookie('showDowngradeSuccessToast', 'true', 1);
 
     // Invoke the fake WebHook to simulate a successful payment.
-    await vizKit.rest.fakeUnsubscribeSuccess(authenticatedUser.id);
+    await vizKit.rest.fakeUnsubscribeSuccess(
+      authenticatedUser.id,
+    );
 
     // Refresh the page
     window.location.reload();
@@ -89,12 +97,16 @@ export const AccountPage: Page = ({ pageData }) => {
 
   // Send an analytics event to track this page view.
   useEffect(() => {
-    vizKit.rest.recordAnalyticsEvents('event.pageview.Account');
+    vizKit.rest.recordAnalyticsEvents(
+      'event.pageview.Account',
+    );
   }, []);
 
   return (
     <AuthenticatedUserProvider
-      authenticatedUserSnapshot={pageData.authenticatedUserSnapshot}
+      authenticatedUserSnapshot={
+        pageData.authenticatedUserSnapshot
+      }
     >
       <div className="vh-page overflow-auto">
         <SmartHeader />

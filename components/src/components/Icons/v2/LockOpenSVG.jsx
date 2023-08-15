@@ -1,6 +1,9 @@
 import React from 'react';
 
-export const LockOpenSVG = ({ height = 24, fill = 'currentcolor' }) => {
+export const LockOpenSVG = ({
+  height = 24,
+  fill = 'currentcolor',
+}) => {
   return (
     <svg height={height} viewBox="0 0 24 24">
       <path

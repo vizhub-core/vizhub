@@ -18,7 +18,10 @@ export const EditorDemoBody = () => {
           className="codemirror-container"
           ref={codemirrorContainerRef}
         ></div>
-        <iframe className="runner-iframe" ref={iframeRef}></iframe>
+        <iframe
+          className="runner-iframe"
+          ref={iframeRef}
+        ></iframe>
       </div>
     </div>
   );

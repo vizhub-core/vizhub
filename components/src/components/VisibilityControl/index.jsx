@@ -39,14 +39,19 @@ export const VisibilityControl = ({
           />
         ))}
       </div>
-      <Form.Text className="text-muted">{visibilities[visibility]}</Form.Text>
+      <Form.Text className="text-muted">
+        {visibilities[visibility]}
+      </Form.Text>
       {/* {currentPlan === 'free' ? (
         <Form.Text className="text-muted">
           <a href={pricingHref}>Upgrade to Pro</a> to make your viz private
         </Form.Text>
       ) : null} */}
       {currentPlan === 'free' ? (
-        <Alert variant="info" className="my-3 p-2 d-flex flex-column">
+        <Alert
+          variant="info"
+          className="my-3 p-2 d-flex flex-column"
+        >
           <strong>Want more privacy?</strong>
           <Button
             variant="primary"

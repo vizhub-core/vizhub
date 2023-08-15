@@ -37,7 +37,10 @@ export const userJoe: User = {
   userName: 'joe',
   displayName: 'Joe Shmoe',
   primaryEmail: 'joe@shmoe.com',
-  secondaryEmails: ['joe@hugecorp.com', 'joe@joes-diner.com'],
+  secondaryEmails: [
+    'joe@hugecorp.com',
+    'joe@joes-diner.com',
+  ],
   plan: 'free',
   picture:
     'https://avatars.githubusercontent.com/u/68416?s=80&u=31d283c06af36e3cc7f6da3aac1e302064d68f81&v=4',
@@ -135,7 +138,10 @@ export const primordialVizV2: Viz = {
   content: {
     ...primordialViz.content,
     files: {
-      '7548392': { name: 'index.html', text: '<body>Hello World</body>' },
+      '7548392': {
+        name: 'index.html',
+        text: '<body>Hello World</body>',
+      },
     },
   },
 };
@@ -222,7 +228,10 @@ export const commit3: Commit = {
   viz: 'viz1',
   authors: [userJoe.id],
   timestamp: ts3,
-  ops: diff(primordialVizV2.content, primordialVizV3.content),
+  ops: diff(
+    primordialVizV2.content,
+    primordialVizV3.content,
+  ),
   milestone: null,
 };
 
@@ -304,11 +313,12 @@ export const sampleCollection: Collection = {
   description: 'Starter examples',
 };
 
-export const sampleCollectionMembership: CollectionMembership = {
-  id: '5483297548392789453278',
-  viz: primordialViz.info.id,
-  order: 1,
-};
+export const sampleCollectionMembership: CollectionMembership =
+  {
+    id: '5483297548392789453278',
+    viz: primordialViz.info.id,
+    order: 1,
+  };
 
 export const sampleDeployment: Deployment = {
   id: '489372584903278',

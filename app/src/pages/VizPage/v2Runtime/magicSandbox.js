@@ -55,12 +55,18 @@ export default function (template, files) {
       // We first try to find instances of loading js files through a <script> tag.
       // We can't fall back on the raw_url because you can't load scripts with MIME type text.
       // This does have the benefit of live reloading when changing a script file.
-      var find = '<script.*?src=["\']' + escapeRegExp(file) + '["\'].*?>';
+      var find =
+        '<script.*?src=["\']' +
+        escapeRegExp(file) +
+        '["\'].*?>';
       var re = new RegExp(find, 'g');
       var matches = template.match(re);
       if (matches) {
         // if we found one, replace it with the code and return.
-        template = template.replace(re, '<script>' + files[file].content);
+        template = template.replace(
+          re,
+          '<script>' + files[file].content,
+        );
         // this won't work for code that has non-ascii characters in it... which is quite a lot of d3 code
         // template = template.replace(re, '<script src="data:text/javascript;base64,' + btoa(files[file].content) + '">')
         // this works with non-ascii characters but would take more acrobatics to support the defer keyword
@@ -72,7 +78,10 @@ export default function (template, files) {
     if (file.indexOf('.css') > 0) {
       // We support loading of css files with relative paths if they are included in the gist.
       // This has the added benefit of live reloading the iframe when editing the style
-      find = '<link.*?href=["\']' + escapeRegExp(file) + '["\'].*?>';
+      find =
+        '<link.*?href=["\']' +
+        escapeRegExp(file) +
+        '["\'].*?>';
       re = new RegExp(find, 'g');
       matches = template.match(re);
       if (matches) {
@@ -103,8 +112,12 @@ export default function (template, files) {
 
   // We need to have the file names and their contents available inside the iframe
   // if we want to be able to return them in our short-circuited XHR requests.
-  var filesString = encodeURIComponent(JSON.stringify(referencedFiles));
-  var fileNamesString = JSON.stringify(Object.keys(referencedFiles));
+  var filesString = encodeURIComponent(
+    JSON.stringify(referencedFiles),
+  );
+  var fileNamesString = JSON.stringify(
+    Object.keys(referencedFiles),
+  );
   template =
     '<meta charset="utf-8"><script>' +
     // 'var __files = ' + filesString + ';' +

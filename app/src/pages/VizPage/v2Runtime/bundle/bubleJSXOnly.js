@@ -6,7 +6,10 @@ import { createFilter } from 'rollup-pluginutils';
 
 export default function buble(options) {
   if (!options) options = {};
-  var filter = createFilter(options.include, options.exclude);
+  var filter = createFilter(
+    options.include,
+    options.exclude,
+  );
 
   if (!options.transforms) options.transforms = {};
   options.transforms.modules = false;

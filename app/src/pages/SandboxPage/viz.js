@@ -20,7 +20,9 @@ const maxEntries = 30;
 const yTicks = 5;
 
 export const viz = (node, { analyticsEvent }) => {
-  const svg = select(node).attr('width', width).attr('height', height);
+  const svg = select(node)
+    .attr('width', width)
+    .attr('height', height);
 
   const timeseries = analyticsEvent.intervals[recordKey];
 
@@ -56,7 +58,9 @@ export const viz = (node, { analyticsEvent }) => {
     .attr('transform', `translate(0,${height - bottom})`)
     .call(
       axisBottom(xScale)
-        .tickFormat((d, i) => (i % 2 === 0 ? formatTick(d) : ''))
+        .tickFormat((d, i) =>
+          i % 2 === 0 ? formatTick(d) : '',
+        )
         .tickSize(-(height - top - bottom))
         .tickPadding(10),
     )
@@ -88,13 +92,19 @@ export const viz = (node, { analyticsEvent }) => {
         enter
           .append('rect')
           .attr('y', (d) => yScale(yValue(d)))
-          .attr('height', (d) => height - bottom - yScale(yValue(d))),
+          .attr(
+            'height',
+            (d) => height - bottom - yScale(yValue(d)),
+          ),
       (update) =>
         update.call((selection) =>
           selection
             .transition()
             .attr('y', (d) => yScale(yValue(d)))
-            .attr('height', (d) => height - bottom - yScale(yValue(d))),
+            .attr(
+              'height',
+              (d) => height - bottom - yScale(yValue(d)),
+            ),
         ),
     )
     .attr('x', (d) => xScale(xValue(d)))

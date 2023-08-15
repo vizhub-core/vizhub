@@ -29,7 +29,9 @@ export const ExplorePageBody = ({
             />
           ) : null}
         </div>
-        <VizPreviewCollection>{renderVizPreviews()}</VizPreviewCollection>
+        <VizPreviewCollection>
+          {renderVizPreviews()}
+        </VizPreviewCollection>
         <div className="mt-3 mb-3 d-flex justify-content-center">
           {isLoadingNextPage ? (
             <Spinner fadeIn={false} />

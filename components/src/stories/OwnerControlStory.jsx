@@ -3,7 +3,11 @@ import { OwnerControl } from '../components/OwnerControl';
 
 // A stub of a "smart" component that manages state.
 // This will be swapped out with a ShareDB-based state system in the app.
-const OwnerControlWrapper = ({ initialOwner, possibleOwners, onChange }) => {
+const OwnerControlWrapper = ({
+  initialOwner,
+  possibleOwners,
+  onChange,
+}) => {
   const [owner, setOwner] = useState(initialOwner);
   const handleSetOwner = (newOwner) => {
     setOwner(newOwner);

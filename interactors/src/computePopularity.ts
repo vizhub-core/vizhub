@@ -3,7 +3,8 @@
 import { Info, timestampToDate } from 'entities';
 import decay from 'decay';
 const hackerHotScore = decay.hackerHot();
-const infinityIfNaN = (number) => (isNaN(number) ? -Infinity : number);
+const infinityIfNaN = (number) =>
+  isNaN(number) ? -Infinity : number;
 
 export const computePopularity = (info: Info): number => {
   const { updated, upvotesCount, forksCount } = info;

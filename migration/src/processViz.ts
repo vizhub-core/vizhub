@@ -52,7 +52,8 @@ export const processViz = async ({
 
   // Figure out if the viz has already been migrated.
   const infoMigratedResult = await gateways.getInfo(id);
-  const isAlreadyMigrated = infoMigratedResult.outcome === 'success';
+  const isAlreadyMigrated =
+    infoMigratedResult.outcome === 'success';
   logDetail(`  Already migrated: ${isAlreadyMigrated}`);
   let infoMigrated: Info | undefined;
   if (isAlreadyMigrated) {
@@ -62,22 +63,30 @@ export const processViz = async ({
   // If the viz has already been migrated, figure out if it has been updated since then.
   let updatedSinceLastMigration: boolean = false;
   if (isAlreadyMigrated) {
-    const infoMigrated: Info = infoMigratedResult.value.data;
+    const infoMigrated: Info =
+      infoMigratedResult.value.data;
     updatedSinceLastMigration =
-      vizV2.info.lastUpdatedTimestamp > infoMigrated.updated;
+      vizV2.info.lastUpdatedTimestamp >
+      infoMigrated.updated;
   }
-  logDetail(`  Updated since last migration: ${updatedSinceLastMigration}`);
+  logDetail(
+    `  Updated since last migration: ${updatedSinceLastMigration}`,
+  );
 
   // If the viz has already been migrated and has not been updated since,
   // then do nothing and report that it is valid.
   if (isAlreadyMigrated && !updatedSinceLastMigration) {
-    logDetail('  Already migrated and not updated since, skipping this viz.');
+    logDetail(
+      '  Already migrated and not updated since, skipping this viz.',
+    );
     return true;
   }
 
   // Isolate the "good files" that we want to use for embedding.
   // This excludes invalid files and `bundle.js` (since it's auto-generated).
-  const goodFiles: FilesV2 = isolateGoodFiles(vizV2.content);
+  const goodFiles: FilesV2 = isolateGoodFiles(
+    vizV2.content,
+  );
 
   // If there are no good files, skip this viz! It's not worth migrating.
   if (!goodFiles) {
@@ -91,8 +100,13 @@ export const processViz = async ({
   let embedding;
 
   // If the embedding is already stored in Redis, don't re-compute it.
-  logDetail('  Checking if embedding is already stored in Redis...');
-  const existingEmbedding = await getEmbedding({ redisClient, id });
+  logDetail(
+    '  Checking if embedding is already stored in Redis...',
+  );
+  const existingEmbedding = await getEmbedding({
+    redisClient,
+    id,
+  });
   if (existingEmbedding === null) {
     // Generate the embedding for the viz (latest version).
     logDetail('  Embedding not found in Redis,');
@@ -123,23 +137,29 @@ export const processViz = async ({
   // logDetail('    Stored embedding in MongoDB!');
 
   // Compute the forkedFrom and forkedFromIsBackfilled fields.
-  const { forkedFrom, forkedFromIsBackfilled } = await computeForkedFrom({
-    isPrimordialViz,
-    vizV2,
-    contentCollection,
-    embedding,
-    redisClient,
-  });
+  const { forkedFrom, forkedFromIsBackfilled } =
+    await computeForkedFrom({
+      isPrimordialViz,
+      vizV2,
+      contentCollection,
+      embedding,
+      redisClient,
+    });
 
   console.log('  forkedFrom:', forkedFrom);
-  console.log('  forkedFromIsBackfilled:', forkedFromIsBackfilled);
+  console.log(
+    '  forkedFromIsBackfilled:',
+    forkedFromIsBackfilled,
+  );
 
   if (!isAlreadyMigrated) {
     console.log(
       '   This viz has not been migrated yet. Migrating viz for the first time...',
     ); // Handle the primordial viz.
     if (isPrimordialViz) {
-      console.log('   This is the primordial viz first migration!');
+      console.log(
+        '   This is the primordial viz first migration!',
+      );
       await migratePrimordialViz({
         vizV2,
         title,
@@ -151,7 +171,9 @@ export const processViz = async ({
       // After this operation, we are done with this viz.
       return true;
     } else {
-      console.log('   This is the first migration of a non-primordial viz!');
+      console.log(
+        '   This is the first migration of a non-primordial viz!',
+      );
       // This viz has not been migrated yet.
       // So we need to create the viz in V3 by forking, then update it.
       const creationResult = await createMigratedViz({

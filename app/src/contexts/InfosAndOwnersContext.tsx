@@ -5,14 +5,23 @@ import {
   useMemo,
   useReducer,
 } from 'react';
-import { Info, Snapshot, SortId, User, UserId, VizId } from 'entities';
+import {
+  Info,
+  Snapshot,
+  SortId,
+  User,
+  UserId,
+  VizId,
+} from 'entities';
 import { VizKit } from 'api/src/VizKit';
 import { SortContext } from './SortContext';
 
 export const InfosAndOwnersContext = createContext<{
   allInfoSnapshots: Array<Snapshot<Info>>;
   fetchNextPage: () => void;
-  ownerUserSnapshotsById: { [userId: UserId]: Snapshot<User> };
+  ownerUserSnapshotsById: {
+    [userId: UserId]: Snapshot<User>;
+  };
   isLoadingNextPage: boolean;
 }>(null);
 
@@ -28,13 +37,17 @@ const NEXT_PAGE_REQUESTED = 'NEXT_PAGE_NEEDED';
 type PaginationState = {
   // If a request for the next page is in flight, this will be NEXT_PAGE_REQUESTED
   // Otherwise, it will be SETTLED
-  nextPageStatus: typeof SETTLED | typeof NEXT_PAGE_REQUESTED;
+  nextPageStatus:
+    | typeof SETTLED
+    | typeof NEXT_PAGE_REQUESTED;
 
   // The results for each page, indexed by sortId and page number
   pages: { [sortId: string]: Array<Array<Snapshot<Info>>> };
 
   // The owner users for each info, indexed by userId
-  ownerUserSnapshotsById: { [userId: string]: Snapshot<User> };
+  ownerUserSnapshotsById: {
+    [userId: string]: Snapshot<User>;
+  };
 
   // If there was an error fetching the next page, it will be reported here
   // TODO: Handle errors better - check types match
@@ -53,11 +66,17 @@ type PaginationAction =
 
 // Inspired by https://github.com/vizhub-core/vizhub/blob/f0d1fbc6cd0f8d124d6424ec8bd948785209d6c4/vizhub-v3/vizhub-app/src/presenters/HomePagePresenter/useVizInfos.js#L19
 
-const reducer = (state: PaginationState, action: PaginationAction) => {
+const reducer = (
+  state: PaginationState,
+  action: PaginationAction,
+) => {
   switch (action.type) {
     // When the request goes out
     case 'RequestNextPage':
-      return { ...state, nextPageStatus: NEXT_PAGE_REQUESTED };
+      return {
+        ...state,
+        nextPageStatus: NEXT_PAGE_REQUESTED,
+      };
 
     // When the request comes back with data
     case 'ResolveNextPage':
@@ -148,12 +167,15 @@ export const InfosAndOwnersProvider = ({
       const result = await vizKit.rest.getInfosAndOwners({
         forkedFrom,
         owner,
-        noNeedToFetchUsers: Object.keys(paginationState.ownerUserSnapshotsById),
+        noNeedToFetchUsers: Object.keys(
+          paginationState.ownerUserSnapshotsById,
+        ),
         sortId,
         pageNumber: paginationState.pages[sortId].length,
       });
       if (result.outcome === 'success') {
-        const { infoSnapshots, ownerUserSnapshots } = result.value;
+        const { infoSnapshots, ownerUserSnapshots } =
+          result.value;
         paginationDispatch({
           type: 'ResolveNextPage',
           sortId,
@@ -179,8 +201,11 @@ export const InfosAndOwnersProvider = ({
     () => ({
       allInfoSnapshots,
       fetchNextPage,
-      ownerUserSnapshotsById: paginationState.ownerUserSnapshotsById,
-      isLoadingNextPage: paginationState.nextPageStatus === NEXT_PAGE_REQUESTED,
+      ownerUserSnapshotsById:
+        paginationState.ownerUserSnapshotsById,
+      isLoadingNextPage:
+        paginationState.nextPageStatus ===
+        NEXT_PAGE_REQUESTED,
     }),
     [allInfoSnapshots, fetchNextPage, paginationState],
   );

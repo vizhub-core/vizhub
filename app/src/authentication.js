@@ -1,12 +1,16 @@
 import { auth } from 'express-openid-connect';
 import { decodeJwt } from 'jose';
-import { UpdateOrCreateUser, RecordAnalyticsEvents } from 'interactors';
+import {
+  UpdateOrCreateUser,
+  RecordAnalyticsEvents,
+} from 'interactors';
 import { parseAuth0Sub } from './parseAuth0User';
 
 // Deals with authentication via Auth0.
 export const authentication = ({ env, gateways }) => {
   const updateOrCreateUser = UpdateOrCreateUser(gateways);
-  const recordAnalyticsEvents = RecordAnalyticsEvents(gateways);
+  const recordAnalyticsEvents =
+    RecordAnalyticsEvents(gateways);
 
   // See https://github.com/auth0/express-openid-connect/blob/master/EXAMPLES.md#9-validate-claims-from-an-id-token-before-logging-a-user-in
   const afterCallback = async (req, res, session) => {
@@ -49,7 +53,9 @@ export const authentication = ({ env, gateways }) => {
       console.log(result.error);
     }
 
-    await recordAnalyticsEvents({ eventId: `event.login.${id}` });
+    await recordAnalyticsEvents({
+      eventId: `event.login.${id}`,
+    });
 
     return session;
   };

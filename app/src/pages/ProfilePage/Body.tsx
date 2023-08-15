@@ -7,14 +7,20 @@ import { SortContext } from '../../contexts/SortContext';
 import { getUserDisplayName } from '../../accessors/getUserDisplayName';
 import { InfosAndOwnersContext } from '../../contexts/InfosAndOwnersContext';
 
-export const Body = ({ profileUser }: { profileUser: User }) => {
+export const Body = ({
+  profileUser,
+}: {
+  profileUser: User;
+}) => {
   const { userName, picture } = profileUser;
 
   const { sortId, setSortId } = useContext(SortContext);
 
-  const { allInfoSnapshots, fetchNextPage, isLoadingNextPage } = useContext(
-    InfosAndOwnersContext,
-  );
+  const {
+    allInfoSnapshots,
+    fetchNextPage,
+    isLoadingNextPage,
+  } = useContext(InfosAndOwnersContext);
 
   return (
     <div className="vh-page overflow-auto">

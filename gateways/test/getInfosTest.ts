@@ -1,5 +1,10 @@
 import { it, expect, describe, assert } from 'vitest';
-import { ascending, descending, range, shuffle } from 'd3-array';
+import {
+  ascending,
+  descending,
+  range,
+  shuffle,
+} from 'd3-array';
 import {
   Info,
   Snapshot,
@@ -25,14 +30,15 @@ export const getInfosTest = () => {
       const { saveInfo, getInfos } = gateways;
       await saveInfo(primordialViz.info);
 
-      const result: Result<Array<Snapshot<Info>>> = await getInfos({});
+      const result: Result<Array<Snapshot<Info>>> =
+        await getInfos({});
       assert(result.outcome === 'success');
 
       const infos = result.value;
       expect(infos.length).toEqual(1);
-      expect(new Set(infos.map(({ data: { id } }) => id))).toEqual(
-        new Set([primordialViz.info.id]),
-      );
+      expect(
+        new Set(infos.map(({ data: { id } }) => id)),
+      ).toEqual(new Set([primordialViz.info.id]));
     });
 
     it('should get two infos', async () => {
@@ -47,18 +53,19 @@ export const getInfosTest = () => {
         forkedFrom: primordialViz.info.id,
       });
 
-      const result: Result<Array<Snapshot<Info>>> = await getInfos({
-        // owner: userJoe.id,
-        // forkedFrom: primordialViz.info.id,
-        // sortField: 'popularity',
-        // pageNumber:0
-      });
+      const result: Result<Array<Snapshot<Info>>> =
+        await getInfos({
+          // owner: userJoe.id,
+          // forkedFrom: primordialViz.info.id,
+          // sortField: 'popularity',
+          // pageNumber:0
+        });
       assert(result.outcome === 'success');
       const infos = result.value;
       expect(infos.length).toEqual(2);
-      expect(new Set(infos.map(({ data: { id } }) => id))).toEqual(
-        new Set([primordialViz.info.id, 'viz2']),
-      );
+      expect(
+        new Set(infos.map(({ data: { id } }) => id)),
+      ).toEqual(new Set([primordialViz.info.id, 'viz2']));
     });
 
     it('should fetch by pageNumber', async () => {
@@ -88,9 +95,15 @@ export const getInfosTest = () => {
         // pageNumber:0 implicitly
       });
       assert(firstPageResult.outcome === 'success');
-      expect(firstPageResult.value.length).toEqual(pageSize);
+      expect(firstPageResult.value.length).toEqual(
+        pageSize,
+      );
       expect(
-        new Set(firstPageResult.value.map(({ data: { id } }) => id)),
+        new Set(
+          firstPageResult.value.map(
+            ({ data: { id } }) => id,
+          ),
+        ),
       ).toEqual(firstPage);
 
       // // Check that the second page is correct
@@ -100,7 +113,11 @@ export const getInfosTest = () => {
       assert(secondPageResult.outcome === 'success');
       expect(secondPageResult.value.length).toEqual(5);
       expect(
-        new Set(secondPageResult.value.map(({ data: { id } }) => id)),
+        new Set(
+          secondPageResult.value.map(
+            ({ data: { id } }) => id,
+          ),
+        ),
       ).toEqual(secondPage);
     });
 
@@ -122,9 +139,13 @@ export const getInfosTest = () => {
 
       const result = await getInfos({});
       assert(result.outcome === 'success');
-      const resultInfos = result.value.map((snapshot) => snapshot.data);
+      const resultInfos = result.value.map(
+        (snapshot) => snapshot.data,
+      );
       const comparator =
-        defaultSortOrder === 'ascending' ? ascending : descending;
+        defaultSortOrder === 'ascending'
+          ? ascending
+          : descending;
       infos.sort((a, b) =>
         comparator(
           a[defaultSortOption.sortField],
@@ -153,10 +174,17 @@ export const getInfosTest = () => {
       const sortField: SortField = 'forksCount';
       const sortOrder: SortOrder = 'descending';
 
-      const result = await getInfos({ sortField, sortOrder });
+      const result = await getInfos({
+        sortField,
+        sortOrder,
+      });
       assert(result.outcome === 'success');
-      const resultInfos = result.value.map((snapshot) => snapshot.data);
-      infos.sort((a, b) => descending(a[sortField], b[sortField]));
+      const resultInfos = result.value.map(
+        (snapshot) => snapshot.data,
+      );
+      infos.sort((a, b) =>
+        descending(a[sortField], b[sortField]),
+      );
       expect(resultInfos).toEqual(infos);
     });
 

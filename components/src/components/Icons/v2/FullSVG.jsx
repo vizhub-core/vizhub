@@ -1,6 +1,9 @@
 import React from 'react';
 
-export const FullSVG = ({ height = 16, fill = 'currentcolor' }) => (
+export const FullSVG = ({
+  height = 16,
+  fill = 'currentcolor',
+}) => (
   <svg height={height} viewBox="0 0 20 16">
     <path
       fill={fill}

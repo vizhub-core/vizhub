@@ -10,11 +10,14 @@ const args = {
   onMoreClick: () => {
     console.log('More clicked');
   },
-  picture: 'https://avatars.githubusercontent.com/u/98681?v=4',
+  picture:
+    'https://avatars.githubusercontent.com/u/98681?v=4',
 };
 
 const Story = () => {
-  const [sortId, setSortId] = useState(sortControlArgs.initialSortId);
+  const [sortId, setSortId] = useState(
+    sortControlArgs.initialSortId,
+  );
 
   return (
     <div className="layout-fullscreen">

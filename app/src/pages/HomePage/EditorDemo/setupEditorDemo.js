@@ -18,8 +18,13 @@ const PENDING_CLEAN = 'PENDING_CLEAN';
 // while this run is taking place.
 const PENDING_DIRTY = 'PENDING_DIRTY';
 
-export const setupEditorDemo = ({ codemirrorContainer, iframe }) => {
-  const worker = new Worker(new URL('./worker.js', import.meta.url));
+export const setupEditorDemo = ({
+  codemirrorContainer,
+  iframe,
+}) => {
+  const worker = new Worker(
+    new URL('./worker.js', import.meta.url),
+  );
 
   // Valid State Transitions:
   //
@@ -86,7 +91,8 @@ export const setupEditorDemo = ({ codemirrorContainer, iframe }) => {
 
   let buildTimes = [];
   const profileBuildTimes = true;
-  const avg = (arr) => arr.reduce((a, b) => a + b, 0) / arr.length;
+  const avg = (arr) =>
+    arr.reduce((a, b) => a + b, 0) / arr.length;
   const n = 100;
 
   const build = (files) =>
@@ -98,7 +104,11 @@ export const setupEditorDemo = ({ codemirrorContainer, iframe }) => {
           buildTimes.push(time);
           // Every n times, log the rolling average.
           if (buildTimes.length % n === 0) {
-            console.log('Average build time: ' + avg(buildTimes) + ' ms');
+            console.log(
+              'Average build time: ' +
+                avg(buildTimes) +
+                ' ms',
+            );
             buildTimes = [];
           }
         }
@@ -128,7 +138,10 @@ export const setupEditorDemo = ({ codemirrorContainer, iframe }) => {
             resolve();
           }
         };
-        iframe.contentWindow.postMessage({ type: 'runJS', src }, '*');
+        iframe.contentWindow.postMessage(
+          { type: 'runJS', src },
+          '*',
+        );
       }
     });
 

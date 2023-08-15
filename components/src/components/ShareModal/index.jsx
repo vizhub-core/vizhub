@@ -44,7 +44,9 @@ export const ShareModal = ({
         <Modal.Title>Share</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <div className="vh-form-note contextual">SHARE WITH</div>
+        <div className="vh-form-note contextual">
+          SHARE WITH
+        </div>
         <Nav
           variant="pills"
           defaultActiveKey={section}
@@ -60,7 +62,10 @@ export const ShareModal = ({
             <Nav.Link eventKey="snippet">Snippet</Nav.Link>
           </Nav.Item>
         </Nav>
-        <Section linkToCopy={linkToCopy} onLinkCopy={onLinkCopy} />
+        <Section
+          linkToCopy={linkToCopy}
+          onLinkCopy={onLinkCopy}
+        />
       </Modal.Body>
       <Modal.Footer>
         <Button variant="primary" onClick={onClose}>

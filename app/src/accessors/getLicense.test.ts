@@ -6,7 +6,9 @@ import { Content } from 'entities';
 // The two tests marked with concurrent will be run in parallel
 describe('getLicense', () => {
   it('should return default license if file is missing', () => {
-    expect(getLicense(primordialViz.content)).toBe(defaultLicense);
+    expect(getLicense(primordialViz.content)).toBe(
+      defaultLicense,
+    );
   });
   it('should return default license if content is missing', () => {
     expect(getLicense(null)).toBe(defaultLicense);

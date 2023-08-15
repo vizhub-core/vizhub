@@ -8,7 +8,11 @@ export const v2Vizzes = async (
     infoCollection,
     startTime,
     endTime,
-  }: { infoCollection: any; startTime: Timestamp; endTime: Timestamp },
+  }: {
+    infoCollection: any;
+    startTime: Timestamp;
+    endTime: Timestamp;
+  },
   callback,
 ) => {
   const infoIterator = infoCollection.find({
@@ -67,7 +71,9 @@ export const v2Vizzes = async (
     if (id === undefined) {
       // This happens A LOT
       // Could be deleted documents? Not sure...
-      console.log('Something is up - wierd document missing id. Skipping...');
+      console.log(
+        'Something is up - wierd document missing id. Skipping...',
+      );
       //console.log(info);
       continue;
     }

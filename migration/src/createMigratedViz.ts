@@ -20,22 +20,28 @@ export const createMigratedViz = async ({
 }): Promise<Result<Info>> => {
   const { getInfo } = gateways;
   const forkViz = ForkViz(gateways);
-  const getCommitAtTimestamp = GetCommitAtTimestamp(gateways);
+  const getCommitAtTimestamp =
+    GetCommitAtTimestamp(gateways);
 
   // Figure out the commitId of the forkedFrom viz at the time the vizV2 was created.
   const forkedFromInfoResult = await getInfo(forkedFrom);
-  if (forkedFromInfoResult.outcome === 'failure') return forkedFromInfoResult;
+  if (forkedFromInfoResult.outcome === 'failure')
+    return forkedFromInfoResult;
   const forkedFromInfo = forkedFromInfoResult.value.data;
   const commitIdResult = await getCommitAtTimestamp(
     forkedFromInfo,
     vizV2.info.createdTimestamp,
   );
-  if (commitIdResult.outcome === 'failure') return commitIdResult;
+  if (commitIdResult.outcome === 'failure')
+    return commitIdResult;
   const forkedFromCommitId: CommitId = commitIdResult.value;
 
   if (debug) {
     console.log('     in createMigratedViz');
-    console.log('     forkedFromCommitId:', forkedFromCommitId);
+    console.log(
+      '     forkedFromCommitId:',
+      forkedFromCommitId,
+    );
     console.log({
       newOwner: vizV2.info.owner,
       forkedFrom,
