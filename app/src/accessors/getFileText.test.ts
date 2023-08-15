@@ -7,7 +7,9 @@ describe('getFileText', () => {
     expect(getFileText(primordialViz.content, 'nonexistent.js')).toBe(null);
   });
   it('should return null if content is missing', () => {
-    expect(getFileText(null, 'nonexistent.js')).toBe(null);
+    expect(getFileText(null as unknown as Content, 'nonexistent.js')).toBe(
+      null,
+    );
   });
   it('should return null if content is missing files', () => {
     expect(getFileText({} as Content, 'nonexistent.js')).toBe(null);

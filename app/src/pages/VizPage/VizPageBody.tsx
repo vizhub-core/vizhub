@@ -1,4 +1,12 @@
-import { useCallback, useContext, useMemo } from 'react';
+import {
+  RefObject,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { Sidebar } from 'vzcode/src/client/Sidebar';
 import { useTabsState } from 'vzcode/src/client/useTabsState';
 import { TabList } from 'vzcode/src/client/TabList';
@@ -27,6 +35,8 @@ import { getVizPageHref } from '../../accessors/getVizPageHref';
 import { getLicense } from '../../accessors/getLicense';
 import { getHeight } from '../../accessors/getHeight';
 import { ShareDBDoc } from 'vzcode';
+import { useV2Runtime } from './v2Runtime/useV2Runtime';
+import { useRuntime } from './useRuntime';
 
 // The fixed path of the files in the ShareDB<Content> document.
 const filesPath = ['files'];
@@ -47,7 +57,7 @@ export const VizPageBody = ({
   initialReadmeHTML,
   forkedFromInfo,
   forkedFromOwnerUser,
-  srcdoc,
+  initialSrcdoc,
   activeFileId,
   setActiveFileId,
   tabList,
@@ -76,7 +86,7 @@ export const VizPageBody = ({
   initialReadmeHTML: string;
   forkedFromInfo: Info | null;
   forkedFromOwnerUser: User | null;
-  srcdoc: string;
+  initialSrcdoc: string;
   activeFileId: FileId | null;
   setActiveFileId: (activeFileId: FileId | null) => void;
   tabList: Array<FileId>;
@@ -109,21 +119,6 @@ export const VizPageBody = ({
   // The height of the viz, in pixels, falling back to default.
   const vizHeight = useMemo(() => getHeight(content.height), [content.height]);
 
-  // Render the viz runner iframe.
-  const renderVizRunner = useCallback(
-    (iframeScale: number) => (
-      <iframe
-        width={defaultVizWidth}
-        height={vizHeight}
-        srcDoc={srcdoc}
-        style={{
-          transform: `scale(${iframeScale})`,
-        }}
-      />
-    ),
-    [srcdoc, vizHeight],
-  );
-
   // Logic for opening and closing tabs.
   const { closeTab, openTab } = useTabsState(
     activeFileId,
@@ -137,6 +132,29 @@ export const VizPageBody = ({
   // These are undefined during SSR, defined in the browser.
   const localPresence = contentShareDBDocPresence?.localPresence;
   const docPresence = contentShareDBDocPresence?.docPresence;
+
+  // The ref to the viz runner iframe.
+  const iframeRef: RefObject<HTMLIFrameElement> =
+    useRef<HTMLIFrameElement>(null);
+
+  // Set up the runtime environment.
+  useRuntime({ content, iframeRef });
+
+  // Render the viz runner iframe.
+  const renderVizRunner = useCallback(
+    (iframeScale: number) => (
+      <iframe
+        ref={iframeRef}
+        width={defaultVizWidth}
+        height={vizHeight}
+        srcDoc={initialSrcdoc}
+        style={{
+          transform: `scale(${iframeScale})`,
+        }}
+      />
+    ),
+    [initialSrcdoc, vizHeight],
+  );
 
   return (
     <div className="vh-page">

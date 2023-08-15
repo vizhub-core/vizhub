@@ -161,7 +161,10 @@ export const InfosAndOwnersProvider = ({
           ownerUserSnapshots,
         });
       } else {
-        paginationDispatch({ type: 'ReportError', error: result.error });
+        paginationDispatch({
+          type: 'ReportError',
+          error: result.error,
+        });
       }
     }
     fetchNextPage();

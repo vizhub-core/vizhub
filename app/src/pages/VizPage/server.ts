@@ -5,8 +5,8 @@ import { parseAuth0Sub } from '../../parseAuth0User';
 import { getFileText } from '../../accessors/getFileText';
 import { VizPage, VizPageData } from './index';
 import { renderREADME } from './renderREADME';
-import { setJSDOM } from './V2Runtime/getComputedIndexHtml';
-import { computeSrcDoc } from './V2Runtime/computeSrcDoc';
+import { setJSDOM } from './v2Runtime/getComputedIndexHtml';
+import { computeSrcDoc } from './v2Runtime/computeSrcDoc';
 
 setJSDOM(JSDOM);
 
@@ -88,7 +88,8 @@ VizPage.getPageData = async ({
 
     // Compute srcdoc for iframe using `computeSrcDoc` function.
     // TODO cache it per commit.
-    const srcdoc = await computeSrcDoc(content);
+    const initialSrcdoc = await computeSrcDoc(content);
+
     return {
       infoSnapshot,
       contentSnapshot,
@@ -98,7 +99,7 @@ VizPage.getPageData = async ({
       title,
       authenticatedUserSnapshot,
       initialReadmeHTML,
-      srcdoc,
+      initialSrcdoc,
     };
   } catch (e) {
     console.log('error fetching viz with id ', id);
