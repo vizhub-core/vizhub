@@ -14,17 +14,23 @@ export const useRuntime = ({
   // This ref is used to skip the first mount.
   const initialMount = useRef(true);
 
+  // Either 2 or 3.
   const runtimeVersion = useMemo(() => getRuntimeVersion(content), [content]);
 
-  const v2RuntimeWorker = useRef<Worker | null>(null);
+  // The v2 runtime worker.
+  const v2RuntimeWorker = useRef<Worker>();
 
-  const v3RuntimeWorker = useRef<Worker | null>(null);
+  // The v3 runtime worker.
+  const v3RuntimeWorker = useRef<Worker>();
 
   // Load the v2 runtime worker.
   useEffect(() => {
     if (runtimeVersion === 2) {
       v2RuntimeWorker.current = new Worker(
         new URL('./v2Runtime/v2RuntimeWorker.ts', import.meta.url),
+        {
+          type: 'module',
+        },
       );
     }
   }, [runtimeVersion]);
@@ -38,6 +44,7 @@ export const useRuntime = ({
     }
   }, [runtimeVersion]);
 
+  // Send messages to v2 runtime worker.
   useEffect(() => {
     // We don't need to execute a "run" on first render,
     // because SSR handles the initial run by injecting
@@ -53,14 +60,7 @@ export const useRuntime = ({
     if (runtimeVersion === 2) {
       // Debounce the updates.
       const timeout = setTimeout(() => {
-        v2RuntimeWorker.current.postMessage({
-          type: 'computeSrcdoc',
-          files: content.files,
-        });
-
-        if (iframeRef.current) {
-          iframeRef.current.srcdoc = 'TODO compute this from worker';
-        }
+        v2RuntimeWorker.current.postMessage({ content });
       }, 800);
 
       return () => {
@@ -68,20 +68,42 @@ export const useRuntime = ({
       };
     }
 
-    if (runtimeVersion === 3) {
-      // Debounce the updates.
-      // TODO throttle uppdates during interactions
-      // ref VZCode server
-      const timeout = setTimeout(() => {
-        v3RuntimeWorker.current.postMessage({
-          type: 'run',
-          files: content.files,
-        });
-      }, 800);
+    // TODO ref editorDemo
+    // if (runtimeVersion === 3) {
+    //   // Debounce the updates.
+    //   // TODO throttle uppdates during interactions
+    //   // ref VZCode server
+    //   const timeout = setTimeout(() => {
+    //     v3RuntimeWorker.current.postMessage({
+    //       type: 'run',
+    //       files: content.files,
+    //     });
+    //   }, 800);
 
-      return () => {
-        clearTimeout(timeout);
-      };
-    }
+    //   return () => {
+    //     clearTimeout(timeout);
+    //   };
+    // }
   }, [content.files, runtimeVersion]);
+
+  // Receive messages from v2 runtime worker.
+  useEffect(() => {
+    if (runtimeVersion === 2) {
+      const handleMessage = (event) => {
+        if (event.data.type === 'error') {
+          console.error(event.data.error);
+        } else {
+          if (iframeRef.current) {
+            iframeRef.current.srcdoc = event.data.srcdoc;
+          }
+        }
+      };
+      v2RuntimeWorker.current.onmessage = handleMessage;
+
+      // Support dynamic switching between v2 and v3.
+      return () => {
+        v2RuntimeWorker.current.onmessage = null;
+      };
+    }
+  }, [runtimeVersion]);
 };
