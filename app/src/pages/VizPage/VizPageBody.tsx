@@ -1,4 +1,12 @@
-import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import {
+  RefObject,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { Sidebar } from 'vzcode/src/client/Sidebar';
 import { useTabsState } from 'vzcode/src/client/useTabsState';
 import { TabList } from 'vzcode/src/client/TabList';
@@ -27,7 +35,8 @@ import { getVizPageHref } from '../../accessors/getVizPageHref';
 import { getLicense } from '../../accessors/getLicense';
 import { getHeight } from '../../accessors/getHeight';
 import { ShareDBDoc } from 'vzcode';
-import { useV2Runtime } from './V2Runtime/useV2Runtime';
+import { useV2Runtime } from './v2Runtime/useV2Runtime';
+import { useRuntime } from './useRuntime';
 
 // The fixed path of the files in the ShareDB<Content> document.
 const filesPath = ['files'];
@@ -124,27 +133,27 @@ export const VizPageBody = ({
   const localPresence = contentShareDBDocPresence?.localPresence;
   const docPresence = contentShareDBDocPresence?.docPresence;
 
-  // The source code to display in the viz runner iframe.
-  const [srcdoc, setSrcdoc] = useState(initialSrcdoc);
+  // The ref to the viz runner iframe.
+  const iframeRef: RefObject<HTMLIFrameElement> =
+    useRef<HTMLIFrameElement>(null);
 
-  useV2Runtime({
-    files,
-    setSrcdoc,
-  });
+  // Set up the runtime environment.
+  useRuntime({ content, iframeRef });
 
   // Render the viz runner iframe.
   const renderVizRunner = useCallback(
     (iframeScale: number) => (
       <iframe
+        ref={iframeRef}
         width={defaultVizWidth}
         height={vizHeight}
-        srcDoc={srcdoc}
+        srcDoc={initialSrcdoc}
         style={{
           transform: `scale(${iframeScale})`,
         }}
       />
     ),
-    [srcdoc, vizHeight],
+    [initialSrcdoc, vizHeight],
   );
 
   return (

@@ -5,8 +5,8 @@ import { parseAuth0Sub } from '../../parseAuth0User';
 import { getFileText } from '../../accessors/getFileText';
 import { VizPage, VizPageData } from './index';
 import { renderREADME } from './renderREADME';
-import { setJSDOM } from './V2Runtime/getComputedIndexHtml';
-import { computeSrcDoc } from './V2Runtime/computeSrcDoc';
+import { setJSDOM } from './v2Runtime/getComputedIndexHtml';
+import { computeSrcDoc } from './v2Runtime/computeSrcDoc';
 
 setJSDOM(JSDOM);
 
