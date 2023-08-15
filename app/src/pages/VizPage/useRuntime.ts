@@ -19,24 +19,8 @@ export const useRuntime = ({
   // Either 2 or 3.
   const runtimeVersion = useMemo(() => getRuntimeVersion(content), [content]);
 
-  // The v2 runtime worker.
-  // const v2RuntimeWorker = useRef<Worker>();
-
   // The v3 runtime worker.
   // const v3RuntimeWorker = useRef<Worker>();
-
-  // Load the v2 runtime worker.
-  useEffect(() => {
-    if (runtimeVersion === 2) {
-      // v2RuntimeWorker.current = new Worker(
-      //   new URL('./v2Runtime/v2RuntimeWorker.ts', import.meta.url),
-      //   {
-      //     type: 'module',
-      //   },
-      // );
-      // v2RuntimeWorker.current = new V2Worker();
-    }
-  }, [runtimeVersion]);
 
   // // Load the v3 runtime worker.
   // useEffect(() => {
@@ -47,7 +31,7 @@ export const useRuntime = ({
   //   }
   // }, [runtimeVersion]);
 
-  // Send messages to v2 runtime worker.
+  // Compute V2 updates on the main thread.
   useEffect(() => {
     // We don't need to execute a "run" on first render,
     // because SSR handles the initial run by injecting
