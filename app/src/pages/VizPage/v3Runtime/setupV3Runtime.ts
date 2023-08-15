@@ -1,6 +1,5 @@
-import { createEditor } from './createEditor';
-import { files } from './files';
 import { srcdoc } from './srcdoc';
+import { V3RuntimeFiles } from './types';
 
 // Nothing happening.
 const IDLE = 'IDLE';
@@ -18,7 +17,13 @@ const PENDING_CLEAN = 'PENDING_CLEAN';
 // while this run is taking place.
 const PENDING_DIRTY = 'PENDING_DIRTY';
 
-export const setupV3Runtime = ({ iframe }) => {
+export const setupV3Runtime = ({
+  iframe,
+  initialFiles,
+}: {
+  iframe: HTMLIFrameElement;
+  initialFiles: V3RuntimeFiles;
+}) => {
   const worker = new Worker(
     new URL('./worker.js', import.meta.url),
   );
@@ -41,12 +46,16 @@ export const setupV3Runtime = ({ iframe }) => {
   //  * PENDING_DIRTY --> ENQUEUED
   //    When the pending update finishes running
   //    and files were changed in the mean time.
-  let state = IDLE;
+  let state:
+    | typeof IDLE
+    | typeof ENQUEUED
+    | typeof PENDING_CLEAN
+    | typeof PENDING_DIRTY = IDLE;
 
-  let latestFiles = files;
+  let latestFiles: V3RuntimeFiles = initialFiles;
 
   // This runs when any file is changed.
-  const handleCodeChange = (files) => {
+  const handleCodeChange = (files: V3RuntimeFiles) => {
     latestFiles = files;
     if (state === IDLE) {
       //      requestAnimationFrame(update);
@@ -88,11 +97,13 @@ export const setupV3Runtime = ({ iframe }) => {
 
   let buildTimes = [];
   const profileBuildTimes = true;
-  const avg = (arr) =>
+  const avg = (arr: number[]) =>
     arr.reduce((a, b) => a + b, 0) / arr.length;
   const n = 100;
 
-  const build = (files) =>
+  const build = (
+    files: V3RuntimeFiles,
+  ): Promise<V3RuntimeFiles> =>
     new Promise((resolve) => {
       worker.onmessage = ({ data }) => {
         const { errors, warnings, src, pkg, time } = data;
@@ -122,8 +133,8 @@ export const setupV3Runtime = ({ iframe }) => {
     });
 
   let isFirstRun = true;
-  const run = ({ src, pkg, warnings }) =>
-    new Promise((resolve, reject) => {
+  const run = ({ src, pkg, warnings }): Promise<void> =>
+    new Promise((resolve) => {
       if (isFirstRun) {
         isFirstRun = false;
         // TODO reset srcdoc when dependencies change

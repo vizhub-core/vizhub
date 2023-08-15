@@ -4,10 +4,8 @@ import {
   useMemo,
   useRef,
 } from 'react';
-import { getRuntimeVersion } from '../../accessors/getRuntimeVersion';
 import { Content } from 'entities';
-// import V2Worker from './v2Runtime/v2RuntimeWorker?worker';
-// import { computeSrcDoc } from './v2Runtime/computeSrcDoc';
+import { getRuntimeVersion } from '../../accessors/getRuntimeVersion';
 
 // Sets up either the v2 or v3 runtime environment.
 // Meant to support dynamic switching between the two.
@@ -27,17 +25,16 @@ export const useRuntime = ({
     [content],
   );
 
-  // The v3 runtime worker.
-  // const v3RuntimeWorker = useRef<Worker>();
-
-  // // Load the v3 runtime worker.
-  // useEffect(() => {
-  //   if (runtimeVersion === 3) {
-  //     v3RuntimeWorker.current = new Worker(
-  //       new URL('./v2Runtime/v2RuntimeWorker.ts', import.meta.url),
-  //     );
-  //   }
-  // }, [runtimeVersion]);
+  // Set up the v3 runtime.
+  useEffect(() => {
+    if (runtimeVersion === 3) {
+      // Lazy load the v3 runtime.
+      import('./v3Runtime').then(({ v3Runtime }) => {
+        // console.log(v3Runtime);
+        v3Runtime(iframeRef, content);
+      });
+    }
+  }, [runtimeVersion]);
 
   // Compute V2 updates on the main thread.
   useEffect(() => {
@@ -60,6 +57,7 @@ export const useRuntime = ({
         // Set process on global scope so computeSrcDoc doesn't break.
         globalThis.process = {};
 
+        // Lazy load computeSrcDoc because it's a large chunk.
         const { computeSrcDoc } = await import(
           './v2Runtime/computeSrcDoc'
         );
@@ -75,43 +73,5 @@ export const useRuntime = ({
         clearTimeout(timeout);
       };
     }
-
-    // TODO ref editorDemo
-    // if (runtimeVersion === 3) {
-    //   // Debounce the updates.
-    //   // TODO throttle uppdates during interactions
-    //   // ref VZCode server
-    //   const timeout = setTimeout(() => {
-    //     v3RuntimeWorker.current.postMessage({
-    //       type: 'run',
-    //       files: content.files,
-    //     });
-    //   }, 800);
-
-    //   return () => {
-    //     clearTimeout(timeout);
-    //   };
-    // }
   }, [content.files, runtimeVersion]);
-
-  // Receive messages from v2 runtime worker.
-  // useEffect(() => {
-  //   if (runtimeVersion === 2) {
-  //     const handleMessage = (event) => {
-  //       if (event.data.type === 'error') {
-  //         console.error(event.data.error);
-  //       } else {
-  //         if (iframeRef.current) {
-  //           iframeRef.current.srcdoc = event.data.srcdoc;
-  //         }
-  //       }
-  //     };
-  //     v2RuntimeWorker.current.onmessage = handleMessage;
-
-  //     // Support dynamic switching between v2 and v3.
-  //     return () => {
-  //       v2RuntimeWorker.current.onmessage = null;
-  //     };
-  //   }
-  // }, [runtimeVersion]);
 };
