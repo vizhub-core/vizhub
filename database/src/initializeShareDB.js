@@ -24,7 +24,9 @@ export const initializeShareDB = async ({
     }),
   });
 
-  attachMiddleware(shareDBBackend);
+  if (attachMiddleware) {
+    attachMiddleware(shareDBBackend);
+  }
 
   const shareDBConnection = shareDBBackend.connect();
 
