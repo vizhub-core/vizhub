@@ -1,3 +1,4 @@
+import Worker from './worker.ts?worker';
 // import { srcdoc } from './srcdoc';
 import { V3RuntimeFiles } from './types';
 
@@ -24,9 +25,8 @@ export const setupV3Runtime = ({
   iframe: HTMLIFrameElement;
   initialFiles: V3RuntimeFiles;
 }) => {
-  const worker = new Worker(
-    new URL('./worker.js', import.meta.url),
-  );
+  console.log('Setting up V3 runtime');
+  const worker = new Worker();
 
   // Valid State Transitions:
   //

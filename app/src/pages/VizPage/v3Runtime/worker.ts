@@ -1,6 +1,6 @@
 import { V3RuntimeFiles } from './types';
 
-import * as rollup from '@rollup/browser';
+import { rollup } from '@rollup/browser';
 
 console.log(rollup);
 // importScripts(

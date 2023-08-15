@@ -6,6 +6,7 @@ import {
 } from 'react';
 import { Content } from 'entities';
 import { getRuntimeVersion } from '../../accessors/getRuntimeVersion';
+import { toV3RuntimeFiles } from './v3Runtime/toV3RuntimeFiles';
 
 // Sets up either the v2 or v3 runtime environment.
 // Meant to support dynamic switching between the two.
@@ -31,13 +32,10 @@ export const useRuntime = ({
       // Lazy load the v3 runtime.
       import('./v3Runtime/setupV3Runtime').then(
         ({ setupV3Runtime }) => {
-          // console.log(v3Runtime);
-
           const iframe = iframeRef.current;
           const initialFiles = toV3RuntimeFiles(
             content.files,
           );
-
           setupV3Runtime({ iframe, initialFiles });
         },
       );
