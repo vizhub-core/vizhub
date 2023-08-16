@@ -1,22 +1,10 @@
+import { BuildResult } from './types';
+
 // Generates iframe srcdoc for first run.
-export const srcdoc = ({
+export const computeSrcDocV3 = ({
   pkg,
   src,
-}: {
-  pkg: {
-    dependencies: {
-      [key: string]: string;
-    };
-    vizhub: {
-      libraries: {
-        [key: string]: {
-          path: string;
-        };
-      };
-    };
-  };
-  src: string;
-}) => {
+}: BuildResult) => {
   const {
     dependencies,
     vizhub: { libraries },
@@ -66,11 +54,12 @@ export const srcdoc = ({
           parent.postMessage({ type: 'runDone' }, "*");
         };
 
-        // TODO initialization handshake to avoid race condition bugs
-
         onmessage = (message) => {
           if(message.data.type === 'runJS') {
             runJS(message.data.src);
+          }
+          if(message.data.type === 'ping') {
+            parent.postMessage({ type: 'pong' }, "*");
           }
         }
       })();

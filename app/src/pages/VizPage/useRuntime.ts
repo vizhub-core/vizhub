@@ -21,8 +21,9 @@ export const useRuntime = ({
   // This ref is used to skip the first mount.
   const initialMount = useRef(true);
 
-  // Either 2 or 3.
-  const runtimeVersion = useMemo(
+  // `runtimeVersion` is used to determine which runtime
+  // to use. It's either 2 or 3.
+  const runtimeVersion: number = useMemo(
     () => getRuntimeVersion(content),
     [content],
   );
@@ -91,12 +92,12 @@ export const useRuntime = ({
         globalThis.process = {};
 
         // Lazy load computeSrcDoc because it's a large chunk.
-        const { computeSrcDoc } = await import(
-          './v2Runtime/computeSrcDoc'
+        const { computeSrcDocV2 } = await import(
+          './v2Runtime/computeSrcDocV2'
         );
 
         // console.log(computeSrcDoc);
-        const srcdoc = await computeSrcDoc(content);
+        const srcdoc = await computeSrcDocV2(content);
         if (iframeRef.current) {
           iframeRef.current.srcdoc = srcdoc;
         }

@@ -6,7 +6,11 @@ import { getFileText } from '../../accessors/getFileText';
 import { VizPage, VizPageData } from './index';
 import { renderREADME } from './renderREADME';
 import { setJSDOM } from './v2Runtime/getComputedIndexHtml';
-import { computeSrcDoc } from './v2Runtime/computeSrcDoc';
+import { computeSrcDocV2 } from './v2Runtime/computeSrcDocV2';
+import { computeSrcDocV3 } from './v3Runtime/computeSrcDocV3';
+import { getRuntimeVersion } from '../../accessors/getRuntimeVersion';
+import { build } from './v3Runtime/build';
+import { toV3RuntimeFiles } from './v3Runtime/toV3RuntimeFiles';
 
 setJSDOM(JSDOM);
 
@@ -102,9 +106,23 @@ VizPage.getPageData = async ({
         forkedFromOwnerUserResult.value;
     }
 
-    // Compute srcdoc for iframe using `computeSrcDoc` function.
+    // Compute srcdoc for iframe.
     // TODO cache it per commit.
-    const initialSrcdoc = await computeSrcDoc(content);
+
+    // `runtimeVersion` is used to determine which runtime
+    // to use. It's either 2 or 3.
+    const runtimeVersion: number =
+      getRuntimeVersion(content);
+
+    const initialSrcdoc =
+      runtimeVersion === 2
+        ? await computeSrcDocV2(content)
+        : await computeSrcDocV3(
+            await build({
+              files: toV3RuntimeFiles(content.files),
+              enableSourcemap: true,
+            }),
+          );
 
     return {
       infoSnapshot,

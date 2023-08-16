@@ -1,5 +1,5 @@
 import Worker from './worker.ts?worker';
-// import { srcdoc } from './srcdoc';
+import { computeSrcDocV3 } from './computeSrcDocV3';
 import { V3RuntimeFiles } from './types';
 
 // Nothing happening.
@@ -140,34 +140,40 @@ export const setupV3Runtime = ({
     });
 
   // TODO SSR first run
-  // let isFirstRun = true;
+
+  const enableClientSideSrcdocInit = true;
+
+  let isFirstRun = enableClientSideSrcdocInit;
   const run = ({ src, pkg, warnings }): Promise<void> =>
     new Promise((resolve) => {
-      // if (isFirstRun) {
-      //   isFirstRun = false;
-      //   // TODO reset srcdoc when dependencies change
-      //   iframe.srcdoc = srcdoc({ pkg, src });
-      //   resolve();
-      // } else {
-      window.onmessage = ({ data }) => {
-        if (data.type === 'runDone') {
-          resolve();
+      if (isFirstRun) {
+        isFirstRun = false;
+        // TODO reset srcdoc when dependencies change
+        iframe.srcdoc = computeSrcDocV3({ pkg, src });
+        resolve();
+      } else {
+        window.onmessage = ({ data }) => {
+          if (data.type === 'runDone') {
+            resolve();
+          }
+        };
+        iframe.contentWindow.postMessage(
+          { type: 'runJS', src },
+          '*',
+        );
+        if (warnings.length > 0) {
+          // TODO show warnings nicely
+          console.log(warnings);
         }
-      };
-      iframe.contentWindow.postMessage(
-        { type: 'runJS', src },
-        '*',
-      );
-      if (warnings.length > 0) {
-        // TODO show warnings nicely
-        console.log(warnings);
       }
-      // }
     });
 
   // Kick off the initial render
   // TODO work out race conditions,
   // make sure iframe and worker are both primed
+  // TODO initialization handshake to avoid race condition bugs
+  // using "ping" and "pong"
+
   // const initializeIframe = () =>
   //   new Promise((resolve) => {
   //     iframe.contentWindow.onmessage = ({ data }) => {
