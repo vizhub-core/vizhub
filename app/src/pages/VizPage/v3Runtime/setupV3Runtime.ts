@@ -141,31 +141,32 @@ export const setupV3Runtime = ({
 
   // TODO SSR first run
 
-  const enableClientSideSrcdocInit = true;
+  const enableClientSideSrcdocInit = false;
 
   let isFirstRun = enableClientSideSrcdocInit;
   const run = ({ src, pkg, warnings }): Promise<void> =>
     new Promise((resolve) => {
-      if (isFirstRun) {
-        isFirstRun = false;
-        // TODO reset srcdoc when dependencies change
-        iframe.srcdoc = computeSrcDocV3({ pkg, src });
-        resolve();
-      } else {
-        window.onmessage = ({ data }) => {
-          if (data.type === 'runDone') {
-            resolve();
-          }
-        };
-        iframe.contentWindow.postMessage(
-          { type: 'runJS', src },
-          '*',
-        );
-        if (warnings.length > 0) {
-          // TODO show warnings nicely
-          console.log(warnings);
+      // if (isFirstRun) {
+      //   isFirstRun = false;
+      //   // TODO reset srcdoc when dependencies change
+      //   // iframe.srcdoc = computeSrcDocV3({ pkg, src });
+      //   resolve();
+      // } else {
+      console.log('Sending message to iframe');
+      window.onmessage = ({ data }) => {
+        if (data.type === 'runDone') {
+          resolve();
         }
+      };
+      iframe.contentWindow.postMessage(
+        { type: 'runJS', src },
+        '*',
+      );
+      if (warnings.length > 0) {
+        // TODO show warnings nicely
+        console.log(warnings);
       }
+      // }
     });
 
   // Kick off the initial render

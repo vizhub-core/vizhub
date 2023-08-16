@@ -66,6 +66,7 @@ export const useRuntime = ({
     console.log('Attempting a V3 run!');
 
     if (v3Runtime.current && content.files) {
+      console.log('here');
       v3Runtime.current.handleCodeChange(
         toV3RuntimeFiles(content.files),
       );
