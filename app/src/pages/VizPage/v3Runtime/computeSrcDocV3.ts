@@ -25,7 +25,7 @@ export const computeSrcDocV3 = ({
   <head>
     <meta charset="utf-8">${cdn}
   </head>
-  <body>
+  <body style="margin:0">
     <script>${src}</script>
     <script>
       (() => {

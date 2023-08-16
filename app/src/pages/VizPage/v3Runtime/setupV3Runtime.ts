@@ -85,15 +85,18 @@ export const setupV3Runtime = ({
 
   // Builds and runs the latest files.
   const update = async () => {
-    await run(await build(latestFiles));
     state = PENDING_CLEAN;
+    await run(await build(latestFiles));
     updateCount++;
-    // if (state === PENDING_DIRTY) {
-    //   requestAnimationFrame(update);
-    //   state = ENQUEUED;
-    // } else {
-    //   state = IDLE;
-    // }
+    // TypeScript can't comprehend that `state`
+    // may change during the await calls above.
+    // @ts-ignore
+    if (state === PENDING_DIRTY) {
+      requestAnimationFrame(update);
+      state = ENQUEUED;
+    } else {
+      state = IDLE;
+    }
   };
 
   let buildTimes = [];
@@ -139,11 +142,9 @@ export const setupV3Runtime = ({
       worker.postMessage({ files, enableSourcemap: true });
     });
 
-  // TODO SSR first run
+  // const enableClientSideSrcdocInit = false;
 
-  const enableClientSideSrcdocInit = false;
-
-  let isFirstRun = enableClientSideSrcdocInit;
+  // let isFirstRun = enableClientSideSrcdocInit;
   const run = ({ src, pkg, warnings }): Promise<void> =>
     new Promise((resolve) => {
       // if (isFirstRun) {
@@ -152,9 +153,9 @@ export const setupV3Runtime = ({
       //   // iframe.srcdoc = computeSrcDocV3({ pkg, src });
       //   resolve();
       // } else {
-      console.log('Sending message to iframe');
       window.onmessage = ({ data }) => {
         if (data.type === 'runDone') {
+          console.log('got run done');
           resolve();
         }
       };

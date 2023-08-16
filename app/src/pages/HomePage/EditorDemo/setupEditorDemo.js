@@ -126,10 +126,12 @@ export const setupEditorDemo = ({
 
   let isFirstRun = true;
   const run = ({ src, pkg, warnings }) =>
-    new Promise((resolve, reject) => {
+    new Promise((resolve) => {
       if (isFirstRun) {
         isFirstRun = false;
         // TODO reset srcdoc when dependencies change
+        //  if(dependenciesChanged) {
+
         iframe.srcdoc = srcdoc({ pkg, src });
         resolve();
       } else {
