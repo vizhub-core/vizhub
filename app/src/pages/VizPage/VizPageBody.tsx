@@ -34,6 +34,9 @@ import { getLicense } from '../../accessors/getLicense';
 import { getHeight } from '../../accessors/getHeight';
 import { ShareDBDoc } from 'vzcode';
 import { useRuntime } from './useRuntime';
+import { getPackageJsonText } from '../../accessors/getPackageJsonText';
+import { getPackageJson } from '../../accessors/getPackageJson';
+import { PackageJson } from './v3Runtime/types';
 
 // The fixed path of the files in the ShareDB<Content> document.
 const filesPath = ['files'];
@@ -115,9 +118,17 @@ export const VizPageBody = ({
   );
 
   // The license to display for this viz.
-  const license = useMemo(
-    () => getLicense(content),
+  const packageJsonText: string | null = useMemo(
+    () => getPackageJsonText(content),
     [content],
+  );
+  const packageJson: PackageJson | null = useMemo(
+    () => getPackageJson(packageJsonText),
+    [packageJsonText],
+  );
+  const license = useMemo(
+    () => getLicense(packageJson),
+    [packageJson],
   );
 
   // The height of the viz, in pixels, falling back to default.
@@ -163,6 +174,48 @@ export const VizPageBody = ({
       />
     ),
     [initialSrcdoc, vizHeight],
+  );
+
+  // The formatted created date.
+  const createdDateFormatted = useMemo(
+    () => formatTimestamp(info.created),
+    [info.created],
+  );
+
+  // The formatted updated date.
+  const updatedDateFormatted = useMemo(
+    () => formatTimestamp(info.updated),
+    [info.updated],
+  );
+
+  // The display name of the author.
+  const authorDisplayName = useMemo(
+    () => getUserDisplayName(ownerUser),
+    [ownerUser],
+  );
+
+  // The href to the forked-from viz.
+  const forkedFromVizHref = useMemo(
+    () =>
+      forkedFromInfo
+        ? getVizPageHref(
+            forkedFromOwnerUser,
+            forkedFromInfo,
+          )
+        : null,
+    [forkedFromInfo, forkedFromOwnerUser],
+  );
+
+  // The href to the forks page.
+  const forksPageHref = useMemo(
+    () => getForksPageHref(ownerUser, info),
+    [ownerUser, info],
+  );
+
+  // The href to the owner's profile page.
+  const ownerUserHref = useMemo(
+    () => getProfilePageHref(ownerUser),
+    [ownerUser],
   );
 
   return (
@@ -220,33 +273,17 @@ export const VizPageBody = ({
             defaultVizWidth={defaultVizWidth}
             renderVizRunner={renderVizRunner}
             renderMarkdownHTML={renderMarkdownHTML}
-            authorDisplayName={getUserDisplayName(
-              ownerUser,
-            )}
+            authorDisplayName={authorDisplayName}
             authorAvatarURL={ownerUser.picture}
-            createdDateFormatted={formatTimestamp(
-              info.created,
-            )}
-            updatedDateFormatted={formatTimestamp(
-              info.updated,
-            )}
+            createdDateFormatted={createdDateFormatted}
+            updatedDateFormatted={updatedDateFormatted}
             forkedFromVizTitle={
               forkedFromInfo ? forkedFromInfo.title : null
             }
-            forkedFromVizHref={
-              forkedFromInfo
-                ? getVizPageHref(
-                    forkedFromOwnerUser,
-                    forkedFromInfo,
-                  )
-                : null
-            }
+            forkedFromVizHref={forkedFromVizHref}
             forksCount={info.forksCount}
-            forksPageHref={getForksPageHref(
-              ownerUser,
-              info,
-            )}
-            ownerUserHref={getProfilePageHref(ownerUser)}
+            forksPageHref={forksPageHref}
+            ownerUserHref={ownerUserHref}
             upvotesCount={info.upvotesCount}
             license={license}
           />

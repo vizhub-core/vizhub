@@ -6,7 +6,7 @@ import {
 } from '@rollup/browser';
 import {
   BuildResult,
-  PackageJSON,
+  PackageJson,
   V3RuntimeFiles,
 } from './types';
 
@@ -20,12 +20,12 @@ const parseJSON = (str: string, errors: any[]) => {
   }
 };
 
-const getPkg = (files: V3RuntimeFiles, errors) =>
+const getPkg = (files: V3RuntimeFiles, errors: any[]) =>
   'package.json' in files
     ? parseJSON(files['package.json'], errors)
     : null;
 
-const getGlobals = (pkg: PackageJSON, errors) => {
+const getGlobals = (pkg: PackageJson) => {
   const libraries = pkg?.vizhub?.libraries;
   if (libraries) {
     return Object.entries(libraries).reduce(
@@ -71,7 +71,7 @@ export const build = async ({
   const warnings = [];
   const errors = [];
   let src: string;
-  let pkg: PackageJSON;
+  let pkg: PackageJson;
 
   const inputOptions: RollupOptions = {
     input: './index.js',
@@ -90,7 +90,7 @@ export const build = async ({
 
   pkg = getPkg(files, errors);
   if (pkg) {
-    const globals = getGlobals(pkg, errors);
+    const globals = getGlobals(pkg);
     if (globals) {
       inputOptions.external = Object.keys(globals);
       outputOptions.globals = globals;

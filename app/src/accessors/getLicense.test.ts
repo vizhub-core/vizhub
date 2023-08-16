@@ -1,7 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import { getLicense, defaultLicense } from './getLicense';
 import { primordialViz } from 'gateways/test/fixtures';
-import { Content } from 'entities';
+import { getPackageJsonText } from './getPackageJsonText';
+import { getPackageJson } from './getPackageJson';
 
 // The two tests marked with concurrent will be run in parallel
 describe('getLicense', () => {
@@ -14,36 +15,44 @@ describe('getLicense', () => {
     expect(getLicense(null)).toBe(defaultLicense);
   });
   it('should return default license if content is missing files', () => {
-    expect(getLicense({} as Content)).toBe(defaultLicense);
+    expect(getLicense({})).toBe(defaultLicense);
   });
 
   it('should return specified license', () => {
     expect(
-      getLicense({
-        ...primordialViz.content,
-        files: {
-          ...primordialViz.content.files,
-          '9693462': {
-            name: 'package.json',
-            text: '{"license": "GPL-3.0"}',
-          },
-        },
-      }),
+      getLicense(
+        getPackageJson(
+          getPackageJsonText({
+            ...primordialViz.content,
+            files: {
+              ...primordialViz.content.files,
+              '9693462': {
+                name: 'package.json',
+                text: '{"license": "GPL-3.0"}',
+              },
+            },
+          }),
+        ),
+      ),
     ).toBe('GPL-3.0');
   });
 
   it('should return default license if package.json is invalid JSON', () => {
     expect(
-      getLicense({
-        ...primordialViz.content,
-        files: {
-          ...primordialViz.content.files,
-          '9693462': {
-            name: 'package.json',
-            text: '{"license": "GPL',
-          },
-        },
-      }),
+      getLicense(
+        getPackageJson(
+          getPackageJsonText({
+            ...primordialViz.content,
+            files: {
+              ...primordialViz.content.files,
+              '9693462': {
+                name: 'package.json',
+                text: '{"license": "GPL',
+              },
+            },
+          }),
+        ),
+      ),
     ).toBe(defaultLicense);
   });
 });

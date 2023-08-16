@@ -1,5 +1,4 @@
 import Worker from './worker.ts?worker';
-import { computeSrcDocV3 } from './computeSrcDocV3';
 import { V3RuntimeFiles } from './types';
 
 // Nothing happening.
@@ -24,7 +23,6 @@ export const setupV3Runtime = ({
   iframe: HTMLIFrameElement;
   // initialFiles: V3RuntimeFiles;
 }) => {
-  console.log('Setting up V3 runtime');
   const worker = new Worker();
 
   // Valid State Transitions:
@@ -145,7 +143,7 @@ export const setupV3Runtime = ({
   // const enableClientSideSrcdocInit = false;
 
   // let isFirstRun = enableClientSideSrcdocInit;
-  const run = ({ src, pkg, warnings }): Promise<void> =>
+  const run = ({ src, warnings }): Promise<void> =>
     new Promise((resolve) => {
       // if (isFirstRun) {
       //   isFirstRun = false;
@@ -176,14 +174,5 @@ export const setupV3Runtime = ({
   // TODO initialization handshake to avoid race condition bugs
   // using "ping" and "pong"
 
-  // const initializeIframe = () =>
-  //   new Promise((resolve) => {
-  //     iframe.contentWindow.onmessage = ({ data }) => {
-  //       if (data.type === 'initDone') {
-  //         resolve();
-  //       }
-  //     };
-  //     iframe.contentWindow.postMessage({ type: 'init' }, '*');
-  //   });
   return { handleCodeChange };
 };

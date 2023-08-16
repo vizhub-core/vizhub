@@ -1,14 +1,16 @@
+import { License } from 'entities';
+
 export type V3RuntimeFiles = {
   // Keys are file names
   // Values are file contents
   [fileName: string]: string;
 };
 
-export type PackageJSON = {
-  dependencies: {
+export type PackageJson = {
+  dependencies?: {
     [key: string]: string;
   };
-  vizhub: {
+  vizhub?: {
     libraries: {
       [key: string]: {
         path: string;
@@ -16,11 +18,12 @@ export type PackageJSON = {
       };
     };
   };
+  license?: License;
 };
 export type BuildResult = {
   errors: any[];
   warnings: any[];
   src: string;
-  pkg: PackageJSON;
+  pkg?: PackageJson;
   time: number;
 };

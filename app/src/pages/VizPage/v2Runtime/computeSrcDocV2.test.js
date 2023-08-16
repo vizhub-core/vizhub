@@ -1,16 +1,16 @@
 import { describe, it, expect } from 'vitest';
 import { primordialViz } from 'gateways/test/fixtures';
-import { computeSrcDoc } from './computeSrcDoc';
+import { computeSrcDocV2 } from './computeSrcDocV2';
 import { setJSDOM } from './getComputedIndexHtml';
 import { JSDOM } from 'jsdom';
 
 setJSDOM(JSDOM);
 
-describe('computeSrcDoc', () => {
+describe('computeSrcDocV2', () => {
   it('TODO should compute correct srcdoc', async () => {
     expect(true).toEqual(true);
-    // console.log('`' + computeSrcDoc(primordialViz.content) + '`');
-    expect(await computeSrcDoc(primordialViz.content))
+    // console.log('`' + computeSrcDocV2(primordialViz.content) + '`');
+    expect(await computeSrcDocV2(primordialViz.content))
       .toEqual(`<script>(function() {
       var XHR = window.XMLHttpRequest;
       window.XMLHttpRequest = function() {
