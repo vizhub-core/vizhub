@@ -21,8 +21,8 @@ import { VizPageBody } from './VizPageBody';
 import './styles.scss';
 import { VizPageToasts } from './VizPageToasts';
 import { useOnFork } from './useOnFork';
-import { useOnSave } from './useOnSave';
 import { useOnSettingsSave } from './useOnSettingsSave';
+import { ShareDBDoc } from 'vzcode';
 
 const vizKit = VizKit({ baseUrl: '/api' });
 
@@ -54,16 +54,14 @@ export const VizPage: Page = ({
     initialSrcdoc,
     canUserEditViz,
   } = pageData;
-  const info: Info = useShareDBDocData(
-    infoSnapshot,
-    'Info',
-  );
+
+  const infoShareDBDoc: ShareDBDoc<Info> =
+    useShareDBDoc<Info>(infoSnapshot, 'Info');
+  const info: Info = useData(infoSnapshot, infoShareDBDoc);
   const id: VizId = info.id;
 
-  const contentShareDBDoc = useShareDBDoc<Content>(
-    contentSnapshot,
-    'Content',
-  );
+  const contentShareDBDoc: ShareDBDoc<Content> =
+    useShareDBDoc<Content>(contentSnapshot, 'Content');
   const content: Content = useData(
     contentSnapshot,
     contentShareDBDoc,
@@ -160,7 +158,10 @@ export const VizPage: Page = ({
   });
 
   // When the user clicks "Save" from within the settings modal.
-  const onSettingsSave = useOnSettingsSave();
+  const onSettingsSave = useOnSettingsSave(
+    infoShareDBDoc,
+    toggleSettingsModal,
+  );
 
   // Send an analytics event to track this page view.
   useEffect(() => {
