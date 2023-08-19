@@ -4,6 +4,7 @@ import { ForkSVG } from '../Icons/ForkSVG';
 import { ShareSVG } from '../Icons/ShareSVG';
 import { ChevronSVG } from '../Icons/ChevronSVG';
 import { DownloadSVG } from '../Icons/DownloadSVG';
+import { SettingsSVG } from '../Icons/SettingsSVG';
 import './styles.scss';
 
 export const VizPageHead = ({
@@ -13,6 +14,8 @@ export const VizPageHead = ({
   onShareClick,
   onForkClick,
   showForkButton,
+  showSettingsButton,
+  onSettingsClick,
 }) => {
   const toggleShowEditor = useCallback(
     () => setShowEditor(!showEditor),
@@ -48,6 +51,16 @@ export const VizPageHead = ({
           <ShareSVG />
           Share
         </Button>
+        {showSettingsButton ? (
+          <Button
+            variant="light"
+            size="sm"
+            onClick={onSettingsClick}
+          >
+            <SettingsSVG />
+            Settings
+          </Button>
+        ) : null}
         {showForkButton ? (
           <Button size="sm" onClick={onForkClick}>
             <ForkSVG />
