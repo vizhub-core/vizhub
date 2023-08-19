@@ -1,5 +1,14 @@
-import { GetViz } from 'interactors';
-import { Info, VizId, Snapshot } from 'entities';
+import { VerifyVizAccess } from 'interactors';
+import {
+  Info,
+  VizId,
+  Snapshot,
+  Content,
+  READ,
+  WRITE,
+  User,
+  UserId,
+} from 'entities';
 import { JSDOM } from 'jsdom';
 import { parseAuth0Sub } from '../../parseAuth0User';
 import { getFileText } from '../../accessors/getFileText';
@@ -13,39 +22,33 @@ import { build } from './v3Runtime/build';
 import { toV3RuntimeFiles } from './v3Runtime/toV3RuntimeFiles';
 
 setJSDOM(JSDOM);
-
+// TODO move the data fetching part of this to a separate file - interactors/getVizPageData.ts
+// This file should mainly deal with computations like rendering the README and
+// computing the srcdoc for the iframe.
 VizPage.getPageData = async ({
   gateways,
   params,
   auth0User,
 }): Promise<VizPageData> => {
   const id: VizId = params.id;
-  const { getUser, getInfo } = gateways;
-  const getViz = GetViz(gateways);
+  const { getUser, getInfo, getContent } = gateways;
+  const verifyVizAccess = VerifyVizAccess(gateways);
 
-  // Get the Info and Content entities that comprise the Viz.
   try {
-    const vizResult = await getViz(id);
-    if (vizResult.outcome === 'failure') {
+    // Get the Info entity of the Viz.
+    const infoResult = await getInfo(id);
+    if (infoResult.outcome === 'failure') {
       // Indicates viz not found
       return null;
     }
-
-    const { infoSnapshot, contentSnapshot, info } =
-      vizResult.value;
+    const infoSnapshot: Snapshot<Info> = infoResult.value;
+    const info: Info = infoSnapshot.data;
     const { title, owner, forkedFrom } = info;
 
-    // Get the User entity for the owner of the viz.
-    const ownerUserResult = await getUser(owner);
-    if (ownerUserResult.outcome === 'failure') {
-      console.log('Error when fetching owner user:');
-      console.log(ownerUserResult.error);
-      return null;
-    }
-    const ownerUserSnapshot = ownerUserResult.value;
-
     // If the user is currently authenticated...
-    let authenticatedUserSnapshot = null;
+    let authenticatedUserSnapshot:
+      | Snapshot<User>
+      | undefined;
     if (auth0User) {
       const authenticatedUserId = parseAuth0Sub(
         auth0User.sub,
@@ -68,10 +71,75 @@ VizPage.getPageData = async ({
       authenticatedUserSnapshot =
         authenticatedUserResult.value;
     }
+    const userId: UserId | undefined =
+      authenticatedUserSnapshot
+        ? authenticatedUserSnapshot.data.id
+        : undefined;
+
+    // Access control: Verify that the user has read access to the viz.
+    const verifyVizReadAccessResult = await verifyVizAccess(
+      {
+        userId,
+        info,
+        action: READ,
+      },
+    );
+    if (verifyVizReadAccessResult.outcome === 'failure') {
+      console.log('Error when verifying viz access:');
+      console.log(verifyVizReadAccessResult.error);
+      return null;
+    }
+    if (!verifyVizReadAccessResult.value) {
+      // console.log('User does not have read access to viz');
+      return null;
+    }
+
+    // Access control: Verify that the user has write access to the viz.
+    // This is used to determine whether to show the "Settings" button.
+    // TODO refactor verifyVizAccess to check multiple actions at once.
+    const verifyVizWriteAccessResult =
+      await verifyVizAccess({
+        userId,
+        info,
+        action: WRITE,
+      });
+    if (verifyVizWriteAccessResult.outcome === 'failure') {
+      console.log('Error when verifying viz access:');
+      console.log(verifyVizWriteAccessResult.error);
+      return null;
+    }
+    const canUserEditViz: boolean =
+      verifyVizWriteAccessResult.value;
+
+    // If we're here, then the user has read access to the viz,
+    // so it's worth fetching the content.
+    const contentResult = await getContent(id);
+
+    if (contentResult.outcome === 'failure') {
+      // This shouold never happen - if the info is there
+      // then the content should be there too,
+      // unless it's frozen.
+      console.log(
+        "Error when fetching viz's content (info is defined but not content):",
+      );
+      console.log(contentResult.error);
+      return null;
+    }
+    const contentSnapshot: Snapshot<Content> =
+      contentResult.value;
+    const content: Content = contentSnapshot.data;
+
+    // Get the User entity for the owner of the viz.
+    const ownerUserResult = await getUser(owner);
+    if (ownerUserResult.outcome === 'failure') {
+      console.log('Error when fetching owner user:');
+      console.log(ownerUserResult.error);
+      return null;
+    }
+    const ownerUserSnapshot = ownerUserResult.value;
 
     // Render Markdown server-side.
     // TODO cache it per commit.
-    const content = contentSnapshot.data;
     const initialReadmeHTML = renderREADME(
       getFileText(content, 'README.md'),
     );
@@ -134,6 +202,7 @@ VizPage.getPageData = async ({
       authenticatedUserSnapshot,
       initialReadmeHTML,
       initialSrcdoc,
+      canUserEditViz,
     };
   } catch (e) {
     console.log('error fetching viz with id ', id);
