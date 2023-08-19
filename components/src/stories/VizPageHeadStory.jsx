@@ -5,6 +5,9 @@ export const args = {
   onExportClick: () => console.log('onExportClick'),
   onShareClick: () => console.log('onShareClick'),
   onForkClick: () => console.log('onForkClick'),
+  onSettingsClick: () => console.log('onSettingsClick'),
+  showForkButton: true,
+  showSettingsButton: true,
 };
 
 const Story = () => {

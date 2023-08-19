@@ -4,12 +4,13 @@ import { ShareSVG } from '../components/Icons/ShareSVG';
 import { ChevronSVG } from '../components/Icons/ChevronSVG';
 import { DownloadSVG } from '../components/Icons/DownloadSVG';
 import { StarSVG } from '../components/Icons/StarSVG';
+import { SettingsSVG } from '../components/Icons/SettingsSVG';
 
 import { ForkSVG as v2ForkSVG } from '../components/Icons/v2/ForkSVG';
 // TODO migrate all of these to new icons.
 import { CloseSVG } from '../components/Icons/v2/CloseSVG';
 import { PullSVG } from '../components/Icons/v2/PullSVG';
-import { SettingsSVG } from '../components/Icons/v2/SettingsSVG';
+// import { SettingsSVG } from '../components/Icons/v2/SettingsSVG';
 import { ShareSVG as v2ShareSVG } from '../components/Icons/v2/ShareSVG';
 import { ArrowSVG } from '../components/Icons/v2/ArrowSVG';
 import { VoteSVG } from '../components/Icons/v2/VoteSVG';
@@ -25,7 +26,7 @@ const v2icons = [
   v2ShareSVG,
   CloseSVG,
   PullSVG,
-  SettingsSVG,
+  // SettingsSVG,
   ArrowSVG,
   () => <ArrowSVG left={true} />,
   VoteSVG,
@@ -48,6 +49,7 @@ const v3icons = [
   ({ height }) => <ChevronSVG height={height} down />,
   DownloadSVG,
   StarSVG,
+  SettingsSVG,
 ];
 
 const displayIcons = (icons) => (

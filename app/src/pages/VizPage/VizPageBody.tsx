@@ -62,6 +62,7 @@ export const VizPageBody = ({
   setActiveFileId,
   tabList,
   setTabList,
+  canUserEditViz,
 }: {
   info: Info;
   content: Content;
@@ -91,6 +92,7 @@ export const VizPageBody = ({
   setActiveFileId: (activeFileId: FileId | null) => void;
   tabList: Array<FileId>;
   setTabList: (tabList: Array<FileId>) => void;
+  canUserEditViz: boolean;
 }) => {
   // The currently authenticated user, if any.
   const authenticatedUser: User | null = useContext(
@@ -228,6 +230,7 @@ export const VizPageBody = ({
         onShareClick={onShareClick}
         onForkClick={toggleForkModal}
         showForkButton={!!authenticatedUser}
+        showSettingsButton={canUserEditViz}
       />
       <div className="vh-viz-page-body">
         {showEditor && files ? (
