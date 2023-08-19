@@ -21,6 +21,7 @@ import {
 } from 'entities';
 import { VizPageHead } from 'components/src/components/VizPageHead';
 import { ForkModal } from 'components/src/components/ForkModal';
+import { SettingsModal } from 'components/src/components/SettingsModal';
 import { VizPageViewer } from 'components/src/components/VizPageViewer';
 import { AuthenticatedUserContext } from '../../contexts/AuthenticatedUserContext';
 import { SmartHeader } from '../../smartComponents/SmartHeader';
@@ -37,6 +38,7 @@ import { useRuntime } from './useRuntime';
 import { getPackageJsonText } from '../../accessors/getPackageJsonText';
 import { getPackageJson } from '../../accessors/getPackageJson';
 import { PackageJson } from './v3Runtime/types';
+import { VizSettings } from './useOnSettingsSave';
 
 // The fixed path of the files in the ShareDB<Content> document.
 const filesPath = ['files'];
@@ -63,6 +65,10 @@ export const VizPageBody = ({
   tabList,
   setTabList,
   canUserEditViz,
+
+  showSettingsModal,
+  toggleSettingsModal,
+  onSettingsSave,
 }: {
   info: Info;
   content: Content;
@@ -93,6 +99,9 @@ export const VizPageBody = ({
   tabList: Array<FileId>;
   setTabList: (tabList: Array<FileId>) => void;
   canUserEditViz: boolean;
+  showSettingsModal: boolean;
+  toggleSettingsModal: () => void;
+  onSettingsSave: (vizSettings: VizSettings) => void;
 }) => {
   // The currently authenticated user, if any.
   const authenticatedUser: User | null = useContext(
@@ -100,7 +109,11 @@ export const VizPageBody = ({
   );
 
   // The list of possible owners of a fork of this viz.
-  const possibleForkOwners = useMemo(
+  // Also serves as the list of possible owners of a settings change.
+  const possibleOwners: Array<{
+    id: UserId;
+    label: string;
+  }> = useMemo(
     () =>
       authenticatedUser
         ? [
@@ -108,6 +121,7 @@ export const VizPageBody = ({
               id: authenticatedUser.id,
               label: getUserDisplayName(authenticatedUser),
             },
+            // TODO add orgs that the user is a member of.
           ]
         : [],
     [authenticatedUser],
@@ -228,9 +242,10 @@ export const VizPageBody = ({
         setShowEditor={setShowEditor}
         onExportClick={onExportClick}
         onShareClick={onShareClick}
-        onForkClick={toggleForkModal}
         showForkButton={!!authenticatedUser}
+        onForkClick={toggleForkModal}
         showSettingsButton={canUserEditViz}
+        onSettingsClick={toggleSettingsModal}
       />
       <div className="vh-viz-page-body">
         {showEditor && files ? (
@@ -292,17 +307,32 @@ export const VizPageBody = ({
           />
         </div>
       </div>
-      <ForkModal
-        initialTitle={'Fork of ' + info.title}
-        initialVisibility={info.visibility}
-        initialOwner={authenticatedUser?.id}
-        possibleOwners={possibleForkOwners}
-        show={showForkModal}
-        onClose={toggleForkModal}
-        onFork={onFork}
-        currentPlan={authenticatedUser?.plan}
-        pricingHref={'/pricing'}
-      />
+      {showForkModal ? (
+        <ForkModal
+          initialTitle={'Fork of ' + info.title}
+          initialVisibility={info.visibility}
+          initialOwner={authenticatedUser?.id}
+          possibleOwners={possibleOwners}
+          show={showForkModal}
+          onClose={toggleForkModal}
+          onFork={onFork}
+          currentPlan={authenticatedUser?.plan}
+          pricingHref={'/pricing'}
+        />
+      ) : null}
+      {showSettingsModal ? (
+        <SettingsModal
+          initialTitle={info.title}
+          initialVisibility={info.visibility}
+          initialOwner={info.owner}
+          possibleOwners={possibleOwners}
+          show={showSettingsModal}
+          onClose={toggleSettingsModal}
+          onSave={onSettingsSave}
+          currentPlan={authenticatedUser?.plan}
+          pricingHref={'/pricing'}
+        />
+      ) : null}
     </div>
   );
 };

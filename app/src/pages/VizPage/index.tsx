@@ -21,6 +21,8 @@ import { VizPageBody } from './VizPageBody';
 import './styles.scss';
 import { VizPageToasts } from './VizPageToasts';
 import { useOnFork } from './useOnFork';
+import { useOnSave } from './useOnSave';
+import { useOnSettingsSave } from './useOnSettingsSave';
 
 const vizKit = VizKit({ baseUrl: '/api' });
 
@@ -98,8 +100,6 @@ export const VizPage: Page = ({
   // The ordered list of tabs in the code editor.
   const [tabList, setTabList] = useState<Array<FileId>>([]);
 
-  const [showForkModal, setShowForkModal] = useState(false);
-
   const onExportClick = useCallback(() => {
     console.log('TODO onExportClick');
   }, []);
@@ -108,12 +108,29 @@ export const VizPage: Page = ({
     console.log('TODO onShareClick');
   }, []);
 
+  // State of whether or not the fork modal is open.
+  const [showForkModal, setShowForkModal] = useState(false);
+
   // When the user clicks the "Fork" icon to open the fork modal.
   // When the user hits the "x" to close the modal.
   const toggleForkModal = useCallback(() => {
     setShowForkModal((showForkModal) => !showForkModal);
   }, []);
 
+  // State of whether or not the settings modal is open.
+  const [showSettingsModal, setShowSettingsModal] =
+    useState(false);
+
+  // When the user clicks the "Settings" icon to open the settings modal.
+  // When the user hits the "x" to close the modal.
+  const toggleSettingsModal = useCallback(() => {
+    setShowSettingsModal(
+      (showSettingsModal) => !showSettingsModal,
+    );
+  }, []);
+
+  // When the user clicks the link (not button) to fork the viz
+  // in the toast that appears when the user has unsaved edits.
   const handleForkLinkClick = useCallback(
     (
       event: React.MouseEvent<
@@ -141,6 +158,9 @@ export const VizPage: Page = ({
     content,
     hasUnforkedEdits,
   });
+
+  // When the user clicks "Save" from within the settings modal.
+  const onSettingsSave = useOnSettingsSave();
 
   // Send an analytics event to track this page view.
   useEffect(() => {
@@ -202,6 +222,10 @@ export const VizPage: Page = ({
           toggleForkModal,
           onFork,
           initialReadmeHTML,
+
+          showSettingsModal,
+          toggleSettingsModal,
+          onSettingsSave,
 
           initialSrcdoc,
           canUserEditViz,
