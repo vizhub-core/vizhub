@@ -5,6 +5,7 @@ import { ChevronSVG } from '../components/Icons/ChevronSVG';
 import { DownloadSVG } from '../components/Icons/DownloadSVG';
 import { StarSVG } from '../components/Icons/StarSVG';
 import { SettingsSVG } from '../components/Icons/SettingsSVG';
+import { VisibilityPrivateSVG } from '../components/Icons/VisibilityPrivateSVG';
 
 import { ForkSVG as v2ForkSVG } from '../components/Icons/v2/ForkSVG';
 // TODO migrate all of these to new icons.
@@ -50,6 +51,7 @@ const v3icons = [
   DownloadSVG,
   StarSVG,
   SettingsSVG,
+  VisibilityPrivateSVG,
 ];
 
 const displayIcons = (icons) => (

@@ -50,7 +50,7 @@
       padding: var(--vh-padding-lots) 0px;
       border-bottom: 1px solid var(--vh-rule-color);
 
-      .right {
+      &-right {
         display: flex;
         align-items: center;
         gap: 10px;
@@ -63,6 +63,9 @@
           border-radius: 15px;
           padding: 5px 10px;
           height: 30px;
+          display: flex;
+          align-items: center;
+          gap: 6px;
         }
       }
     }
