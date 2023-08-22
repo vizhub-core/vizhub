@@ -66,11 +66,17 @@
           display: flex;
           align-items: center;
           gap: 6px;
+
           &.private {
             background-color: #ff006b;
           }
           &.unlisted {
             background-color: #b1a28d;
+          }
+
+          div {
+            /* Trying to center the text vertically. */
+            padding-top: 1px;
           }
         }
       }

@@ -6,7 +6,8 @@ import { DownloadSVG } from '../components/Icons/DownloadSVG';
 import { StarSVG } from '../components/Icons/StarSVG';
 import { SettingsSVG } from '../components/Icons/SettingsSVG';
 import { VisibilityPrivateSVG } from '../components/Icons/VisibilityPrivateSVG';
-
+import { VisibilityUnlistedSVG } from '../components/Icons/VisibilityUnlistedSVG';
+import { VisibilityPublicSVG } from '../components/Icons/VisibilityPublicSVG';
 import { ForkSVG as v2ForkSVG } from '../components/Icons/v2/ForkSVG';
 // TODO migrate all of these to new icons.
 import { CloseSVG } from '../components/Icons/v2/CloseSVG';
@@ -52,6 +53,8 @@ const v3icons = [
   StarSVG,
   SettingsSVG,
   VisibilityPrivateSVG,
+  VisibilityUnlistedSVG,
+  VisibilityPublicSVG,
 ];
 
 const displayIcons = (icons) => (

@@ -6,6 +6,7 @@ import {
 } from 'react';
 import { UpvoteWidget } from 'components';
 import { VisibilityPrivateSVG } from '../Icons/VisibilityPrivateSVG';
+import { VisibilityUnlistedSVG } from '../Icons/VisibilityUnlistedSVG';
 import './styles.scss';
 
 export const VizPageViewer = ({
@@ -68,13 +69,13 @@ export const VizPageViewer = ({
             {isPrivate ? (
               <div className="visibility-label private">
                 <VisibilityPrivateSVG />
-                PRIVATE
+                <div>PRIVATE</div>
               </div>
             ) : null}
             {isUnlisted ? (
               <div className="visibility-label unlisted">
-                <VisibilityPrivateSVG />
-                UNLISTED
+                <VisibilityUnlistedSVG />
+                <div>UNLISTED</div>
               </div>
             ) : null}
           </div>

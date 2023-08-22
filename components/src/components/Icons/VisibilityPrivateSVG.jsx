@@ -1,15 +1,15 @@
-const zoomX = 11;
-const zoomY = 6;
+// const zoomX = 11;
+// const zoomY = 6;
+// const viewBox = `${zoomX} ${zoomY} ${48 - zoomX * 2}  ${
+//   48 - zoomY * 2
+// }`;
+// console.log(viewBox);
+const viewBox = '11 6 26 36';
 export const VisibilityPrivateSVG = ({
   height = 18,
   fill = 'currentcolor',
 }) => (
-  <svg
-    height={height}
-    viewBox={`${zoomX} ${zoomY} ${48 - zoomX * 2}  ${
-      48 - zoomY * 2
-    }`}
-  >
+  <svg height={height} viewBox={viewBox}>
     <path
       fill={fill}
       d="M24 33.422c.938 0 1.7-.762 1.7-1.7v-2.688a1.701 1.701 0 0 0-3.4 0v2.688c0 .938.762 1.7 1.7 1.7z"
