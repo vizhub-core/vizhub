@@ -55,17 +55,23 @@
         align-items: center;
         gap: 10px;
 
-        .private-label {
+        .visibility-label {
           font-size: 14px;
           font-weight: bold;
           color: white;
-          background-color: #ff006b;
+
           border-radius: 15px;
           padding: 5px 10px;
           height: 30px;
           display: flex;
           align-items: center;
           gap: 6px;
+          &.private {
+            background-color: #ff006b;
+          }
+          &.unlisted {
+            background-color: #b1a28d;
+          }
         }
       }
     }

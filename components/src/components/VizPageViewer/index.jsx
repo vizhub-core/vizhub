@@ -66,13 +66,13 @@ export const VizPageViewer = ({
               onClick={handleUpvoteClick}
             />
             {isPrivate ? (
-              <div className="private-label">
+              <div className="visibility-label private">
                 <VisibilityPrivateSVG />
                 PRIVATE
               </div>
             ) : null}
             {isUnlisted ? (
-              <div className="private-label">
+              <div className="visibility-label unlisted">
                 <VisibilityPrivateSVG />
                 UNLISTED
               </div>
