@@ -5,6 +5,8 @@ import {
   useState,
 } from 'react';
 import { UpvoteWidget } from 'components';
+import { VisibilityPrivateSVG } from '../Icons/VisibilityPrivateSVG';
+import { VisibilityUnlistedSVG } from '../Icons/VisibilityUnlistedSVG';
 import './styles.scss';
 
 export const VizPageViewer = ({
@@ -24,6 +26,8 @@ export const VizPageViewer = ({
   upvotesCount,
   license,
   defaultVizWidth,
+  isPrivate,
+  isUnlisted,
 }) => {
   // This SVG element is used only for its dynamic resizing behavior.
   // It's invisible, nothing is rendered into it.
@@ -57,10 +61,24 @@ export const VizPageViewer = ({
         </div>
         <div className="title-bar">
           <h4>{vizTitle}</h4>
-          <UpvoteWidget
-            upvotesCount={upvotesCount}
-            onClick={handleUpvoteClick}
-          />
+          <div className="title-bar-right">
+            <UpvoteWidget
+              upvotesCount={upvotesCount}
+              onClick={handleUpvoteClick}
+            />
+            {isPrivate ? (
+              <div className="visibility-label private">
+                <VisibilityPrivateSVG />
+                <div>PRIVATE</div>
+              </div>
+            ) : null}
+            {isUnlisted ? (
+              <div className="visibility-label unlisted">
+                <VisibilityUnlistedSVG />
+                <div>UNLISTED</div>
+              </div>
+            ) : null}
+          </div>
         </div>
 
         <div className="meta-info">
