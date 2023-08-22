@@ -304,6 +304,8 @@ export const VizPageBody = ({
             ownerUserHref={ownerUserHref}
             upvotesCount={info.upvotesCount}
             license={license}
+            isPrivate={info.visibility === 'private'}
+            isUnlisted={info.visibility === 'unlisted'}
           />
         </div>
       </div>

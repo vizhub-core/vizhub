@@ -1,7 +1,7 @@
 import { VizPageViewer } from '../components/VizPageViewer';
 import { renderMarkdownHTML } from './renderMarkdownHTML';
 
-const renderVizRunner = (iframeScale) => {
+export const renderVizRunner = (iframeScale) => {
   return (
     <iframe
       srcDoc={'Hello World'}
