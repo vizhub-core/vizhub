@@ -7,6 +7,10 @@ import {
 } from 'react';
 import { Sidebar } from 'vzcode/src/client/Sidebar';
 import { useTabsState } from 'vzcode/src/client/useTabsState';
+// TODO https://github.com/vizhub-core/vizhub3/issues/251
+// import { usePrettier } from 'vzcode/src/client/usePrettier';
+// import PrettierWorker from 'vzcode/src/client/usePrettier/worker?worker';
+
 import { TabList } from 'vzcode/src/client/TabList';
 import { CodeEditor } from 'vzcode/src/client/CodeEditor';
 import {
@@ -233,6 +237,9 @@ export const VizPageBody = ({
     () => getProfilePageHref(ownerUser),
     [ownerUser],
   );
+
+  // Auto-run Pretter after local changes.
+  // usePrettier(contentShareDBDoc, PrettierWorker);
 
   return (
     <div className="vh-page">
