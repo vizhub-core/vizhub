@@ -35,5 +35,8 @@
     "migration",
     "ot",
     "vzcode"
-  ]
+  ],
+  "dependencies": {
+    "adm-zip": "^0.5.10"
+  }
 }
