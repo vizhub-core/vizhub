@@ -69,10 +69,10 @@ export const VizPageBody = ({
   tabList,
   setTabList,
   canUserEditViz,
-
   showSettingsModal,
   toggleSettingsModal,
   onSettingsSave,
+  editorCache,
 }: {
   info: Info;
   content: Content;
@@ -106,6 +106,7 @@ export const VizPageBody = ({
   showSettingsModal: boolean;
   toggleSettingsModal: () => void;
   onSettingsSave: (vizSettings: VizSettings) => void;
+  editorCache: EditorCache;
 }) => {
   // The currently authenticated user, if any.
   const authenticatedUser: User | null = useContext(
@@ -238,9 +239,6 @@ export const VizPageBody = ({
     [ownerUser],
   );
 
-  // Auto-run Pretter after local changes.
-  // usePrettier(contentShareDBDoc, PrettierWorker);
-
   return (
     <div className="vh-page">
       <SmartHeader />
@@ -279,6 +277,7 @@ export const VizPageBody = ({
                 activeFileId={activeFileId}
                 localPresence={localPresence}
                 docPresence={docPresence}
+                editorCache={editorCache}
 
                 // TODO make dynamic themes work
                 // theme={theme}

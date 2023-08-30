@@ -22,7 +22,31 @@ import './styles.scss';
 import { VizPageToasts } from './VizPageToasts';
 import { useOnFork } from './useOnFork';
 import { useOnSettingsSave } from './useOnSettingsSave';
-import { ShareDBDoc } from 'vzcode';
+import { Files, ShareDBDoc } from 'vzcode';
+import { usePrettier } from 'vzcode/src/client/usePrettier';
+import {
+  EditorCache,
+  useEditorCache,
+} from 'vzcode/src/client/useEditorCache';
+// @ts-ignore
+import PrettierWorker from 'vzcode/src/client/usePrettier/worker.ts?worker';
+import { getRuntimeVersion } from '../../accessors/getRuntimeVersion';
+import { diff } from 'ot';
+
+// console.log('PrettierWorker', PrettierWorker);
+// console.log('usePrettier', usePrettier);
+
+// Instantiate the Prettier worker.
+// const prettierWorker = new PrettierWorker();
+// only in the browser'
+// const prettierWorker = new Worker(
+//   new URL('./usePrettier/worker.ts', import.meta.url),
+// );
+
+let prettierWorker: Worker | null = null;
+if (typeof window !== 'undefined') {
+  prettierWorker = new PrettierWorker();
+}
 
 const vizKit = VizKit({ baseUrl: '/api' });
 
@@ -87,37 +111,57 @@ export const VizPage: Page = ({
 
   // `showEditor`
   // True if the sidebar should be shown.
+  // TODO put this in URL state
   const [showEditor, setShowEditor] = useState(false);
 
   // `activeFileId`
   // The id of the currently open file tab.
+  // TODO put this in URL state
   const [activeFileId, setActiveFileId] =
     useState<FileId | null>(null);
 
   // `tabList`
   // The ordered list of tabs in the code editor.
+  // TODO put this in URL state
   const [tabList, setTabList] = useState<Array<FileId>>([]);
 
+  // State of whether or not the fork modal is open.
+  const [showForkModal, setShowForkModal] = useState(false);
+
+  // State of whether or not the settings modal is open.
+  const [showSettingsModal, setShowSettingsModal] =
+    useState(false);
+
+  // Handle when the user clicks the "Export" button.
   const onExportClick = useCallback(() => {
     console.log('TODO onExportClick');
+    // TODO get the current content of the editor
+    const currentFiles: Files = content.files;
+
+    // Figure out which version we are in.
+    const runtimeVersion: number =
+      getRuntimeVersion(content);
+
+    if (runtimeVersion === 2) {
+      generateExportZipV2(currentFiles);
+    } else if (runtimeVersion === 3) {
+      generateExportZipV3(currentFiles);
+    } else {
+      throw new Error(
+        `Unknown runtime version: ${runtimeVersion}`,
+      );
+    }
   }, []);
 
   const onShareClick = useCallback(() => {
     console.log('TODO onShareClick');
   }, []);
 
-  // State of whether or not the fork modal is open.
-  const [showForkModal, setShowForkModal] = useState(false);
-
   // When the user clicks the "Fork" icon to open the fork modal.
   // When the user hits the "x" to close the modal.
   const toggleForkModal = useCallback(() => {
     setShowForkModal((showForkModal) => !showForkModal);
   }, []);
-
-  // State of whether or not the settings modal is open.
-  const [showSettingsModal, setShowSettingsModal] =
-    useState(false);
 
   // When the user clicks the "Settings" icon to open the settings modal.
   // When the user hits the "x" to close the modal.
@@ -194,6 +238,30 @@ export const VizPage: Page = ({
     };
   }, []);
 
+  // A helper function to submit operations to the ShareDB document.
+  const submitOperation: (
+    next: (content: Content) => Content,
+  ) => void = useCallback(
+    (next) => {
+      const content: Content = contentShareDBDoc.data;
+      const op = diff(content, next(content));
+      if (op && contentShareDBDoc) {
+        contentShareDBDoc.submitOp(op);
+      }
+    },
+    [contentShareDBDoc],
+  );
+
+  // Auto-run Pretter after local changes.
+  usePrettier(
+    contentShareDBDoc,
+    submitOperation,
+    prettierWorker,
+  );
+
+  // Cache of CodeMirror editors by file id.
+  const editorCache = useEditorCache();
+
   return (
     <AuthenticatedUserProvider
       authenticatedUserSnapshot={
@@ -230,6 +298,8 @@ export const VizPage: Page = ({
 
           initialSrcdoc,
           canUserEditViz,
+
+          editorCache,
         }}
       />
       <VizPageToasts
