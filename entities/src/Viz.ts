@@ -170,10 +170,10 @@ export interface Content {
   //   * `true` when the user is interacting
   //     via interactive code widgets (e.g. Alt+drag)
   //     * Hot reloading is throttled when this is `true`.
-  //   * `false` when they are not (e.g. normal typing)
+  //   * `false` or `undefined` when they are not (e.g. normal typing)
   //     * Hot reloading is debounced when this is `false`.
   // See also https://github.com/vizhub-core/vzcode/blob/main/src/types.ts#L76
-  isInteracting: boolean;
+  isInteracting?: boolean;
 }
 
 // VizAuthorshipId

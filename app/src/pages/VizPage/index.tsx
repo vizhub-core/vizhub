@@ -24,24 +24,12 @@ import { useOnFork } from './useOnFork';
 import { useOnSettingsSave } from './useOnSettingsSave';
 import { Files, ShareDBDoc } from 'vzcode';
 import { usePrettier } from 'vzcode/src/client/usePrettier';
-import {
-  EditorCache,
-  useEditorCache,
-} from 'vzcode/src/client/useEditorCache';
+import { useEditorCache } from 'vzcode/src/client/useEditorCache';
 // @ts-ignore
 import PrettierWorker from 'vzcode/src/client/usePrettier/worker.ts?worker';
 import { getRuntimeVersion } from '../../accessors/getRuntimeVersion';
 import { diff } from 'ot';
-
-// console.log('PrettierWorker', PrettierWorker);
-// console.log('usePrettier', usePrettier);
-
-// Instantiate the Prettier worker.
-// const prettierWorker = new PrettierWorker();
-// only in the browser'
-// const prettierWorker = new Worker(
-//   new URL('./usePrettier/worker.ts', import.meta.url),
-// );
+import { useTabsState } from 'vzcode/src/client/useTabsState';
 
 let prettierWorker: Worker | null = null;
 if (typeof window !== 'undefined') {
@@ -68,6 +56,7 @@ export const VizPage: Page = ({
 }: {
   pageData: VizPageData;
 }) => {
+  // Unpack server-rendered data.
   const {
     infoSnapshot,
     contentSnapshot,
@@ -79,6 +68,9 @@ export const VizPage: Page = ({
     canUserEditViz,
   } = pageData;
 
+  // /////////////////////////////////////////
+  /////////////// ShareDB ////////////////////
+  // /////////////////////////////////////////
   const infoShareDBDoc: ShareDBDoc<Info> =
     useShareDBDoc<Info>(infoSnapshot, 'Info');
   const info: Info = useData(infoSnapshot, infoShareDBDoc);
@@ -89,6 +81,20 @@ export const VizPage: Page = ({
   const content: Content = useData(
     contentSnapshot,
     contentShareDBDoc,
+  );
+
+  // A helper function to submit operations to the ShareDB document.
+  const submitOperation: (
+    next: (content: Content) => Content,
+  ) => void = useCallback(
+    (next) => {
+      const content: Content = contentShareDBDoc.data;
+      const op = diff(content, next(content));
+      if (op && contentShareDBDoc) {
+        contentShareDBDoc.submitOp(op);
+      }
+    },
+    [contentShareDBDoc],
   );
 
   const contentShareDBDocPresence = useShareDBDocPresence(
@@ -109,6 +115,10 @@ export const VizPage: Page = ({
     'User',
   );
 
+  // /////////////////////////////////////////
+  ////////////// URL State ///////////////////
+  // /////////////////////////////////////////
+
   // `showEditor`
   // True if the sidebar should be shown.
   // TODO put this in URL state
@@ -125,43 +135,30 @@ export const VizPage: Page = ({
   // TODO put this in URL state
   const [tabList, setTabList] = useState<Array<FileId>>([]);
 
+  // Logic for opening and closing tabs.
+  const { closeTab, openTab } = useTabsState(
+    activeFileId,
+    setActiveFileId,
+    tabList,
+    setTabList,
+  );
+
+  // /////////////////////////////////////////
+  /////////////// Modals /////////////////////
+  // /////////////////////////////////////////
+
   // State of whether or not the fork modal is open.
   const [showForkModal, setShowForkModal] = useState(false);
-
-  // State of whether or not the settings modal is open.
-  const [showSettingsModal, setShowSettingsModal] =
-    useState(false);
-
-  // Handle when the user clicks the "Export" button.
-  const onExportClick = useCallback(() => {
-    console.log('TODO onExportClick');
-    // TODO get the current content of the editor
-    const currentFiles: Files = content.files;
-
-    // Figure out which version we are in.
-    const runtimeVersion: number =
-      getRuntimeVersion(content);
-
-    if (runtimeVersion === 2) {
-      generateExportZipV2(currentFiles);
-    } else if (runtimeVersion === 3) {
-      generateExportZipV3(currentFiles);
-    } else {
-      throw new Error(
-        `Unknown runtime version: ${runtimeVersion}`,
-      );
-    }
-  }, []);
-
-  const onShareClick = useCallback(() => {
-    console.log('TODO onShareClick');
-  }, []);
 
   // When the user clicks the "Fork" icon to open the fork modal.
   // When the user hits the "x" to close the modal.
   const toggleForkModal = useCallback(() => {
     setShowForkModal((showForkModal) => !showForkModal);
   }, []);
+
+  // State of whether or not the settings modal is open.
+  const [showSettingsModal, setShowSettingsModal] =
+    useState(false);
 
   // When the user clicks the "Settings" icon to open the settings modal.
   // When the user hits the "x" to close the modal.
@@ -170,6 +167,44 @@ export const VizPage: Page = ({
       (showSettingsModal) => !showSettingsModal,
     );
   }, []);
+
+  // /////////////////////////////////////////
+  /////////////// Callbacks //////////////////
+  // /////////////////////////////////////////
+
+  // Handle when the user clicks the "Export" button.
+  const onExportClick = useCallback(() => {
+    console.log('TODO onExportClick');
+    // TODO get the current content of the editor
+    const currentFiles: Files = content.files;
+    console.log(JSON.stringify(currentFiles, null, 2));
+
+    // Figure out which version we are in.
+    const runtimeVersion: number =
+      getRuntimeVersion(content);
+
+    if (runtimeVersion === 2) {
+      console.log('TODO generateExportZipV2');
+
+      // generateExportZipV2(currentFiles);
+    } else if (runtimeVersion === 3) {
+      console.log('TODO generateExportZipV3');
+      // generateExportZipV3(currentFiles);
+    } else {
+      throw new Error(
+        `Unknown runtime version: ${runtimeVersion}`,
+      );
+    }
+  }, []);
+
+  // Handle when the user clicks the "Share" button.
+  const onShareClick = useCallback(() => {
+    console.log('TODO onShareClick');
+  }, []);
+
+  // /////////////////////////////////////////
+  /////////////// Forking// //////////////////
+  // /////////////////////////////////////////
 
   // When the user clicks the link (not button) to fork the viz
   // in the toast that appears when the user has unsaved edits.
@@ -189,9 +224,6 @@ export const VizPage: Page = ({
   // Show ShareDB errors as toast
   const [hasUnforkedEdits, setHasUnforkedEdits] =
     useState<boolean>(false);
-  // const hideToast = useCallback(() => {
-  //   setToastMessage(null);
-  // }, []);
 
   // When the user clicks "Fork" from within the fork modal.
   const onFork = useOnFork({
@@ -201,20 +233,7 @@ export const VizPage: Page = ({
     hasUnforkedEdits,
   });
 
-  // When the user clicks "Save" from within the settings modal.
-  const onSettingsSave = useOnSettingsSave(
-    infoShareDBDoc,
-    toggleSettingsModal,
-  );
-
-  // Send an analytics event to track this page view.
-  useEffect(() => {
-    vizKit.rest.recordAnalyticsEvents(
-      `event.pageview.viz.owner:${ownerUser.id}.viz:${info.id}`,
-    );
-  }, []);
-
-  // Handle permissions errors
+  // Handle permissions errors re: forking
   useEffect(() => {
     const connection = getConnection();
     const handleError = (error) => {
@@ -238,25 +257,102 @@ export const VizPage: Page = ({
     };
   }, []);
 
-  // A helper function to submit operations to the ShareDB document.
-  const submitOperation: (
-    next: (content: Content) => Content,
-  ) => void = useCallback(
-    (next) => {
-      const content: Content = contentShareDBDoc.data;
-      const op = diff(content, next(content));
-      if (op && contentShareDBDoc) {
-        contentShareDBDoc.submitOp(op);
-      }
-    },
-    [contentShareDBDoc],
+  // /////////////////////////////////////////
+  /////////////// Settings ///////////////////
+  // /////////////////////////////////////////
+
+  // When the user clicks "Save" from within the settings modal.
+  const onSettingsSave = useOnSettingsSave(
+    infoShareDBDoc,
+    toggleSettingsModal,
   );
+
+  // /////////////////////////////////////////
+  /////////////// Analytics///////////////////
+  // /////////////////////////////////////////
+
+  // Send an analytics event to track this page view.
+  useEffect(() => {
+    vizKit.rest.recordAnalyticsEvents(
+      `event.pageview.viz.owner:${ownerUser.id}.viz:${info.id}`,
+    );
+  }, []);
+
+  // /////////////////////////////////////////
+  /////////////// Code Editor ////////////////
+  // /////////////////////////////////////////
 
   // Auto-run Pretter after local changes.
   usePrettier(
     contentShareDBDoc,
     submitOperation,
     prettierWorker,
+  );
+
+  // TODO de-duplicate this with VZCode
+  // TODO move this logic to a hook called `useFileCRUD`
+  // Include
+  //  - `createFile`
+  //  - `handleRenameFileClick`
+  //  - `deleteFile`
+  //  - `handleDeleteFileClick`
+  // TODO use Bootstrap modals not native prompts
+  const createFile = useCallback(() => {
+    const name = prompt('Enter new file name');
+    if (name) {
+      submitOperation((document) => ({
+        ...document,
+        files: {
+          ...document.files,
+          [randomId()]: { name, text: '' },
+        },
+      }));
+    }
+  }, [submitOperation]);
+
+  // Called when a file in the sidebar is double-clicked.
+  const handleRenameFileClick = useCallback(
+    (fileId: FileId) => {
+      // TODO better UX, maybe Bootstrap modal? Maybe edit inline?
+      const newName = prompt('Enter new name');
+
+      if (newName) {
+        submitOperation((document) => ({
+          ...document,
+          files: {
+            ...document.files,
+            [fileId]: {
+              ...document.files[fileId],
+              name: newName,
+            },
+          },
+        }));
+      }
+    },
+    [submitOperation],
+  );
+
+  const deleteFile = useCallback(
+    (fileId: FileId) => {
+      closeTab(fileId);
+      submitOperation((document) => {
+        const updatedFiles = { ...document.files };
+        delete updatedFiles[fileId];
+        return { ...document, files: updatedFiles };
+      });
+    },
+    [submitOperation, closeTab],
+  );
+
+  // TODO prompt the user "Are you sure?"
+  const handleDeleteFileClick = useCallback(
+    (fileId: FileId, event: React.MouseEvent) => {
+      // Stop propagation so that the outer listener doesn't fire,
+      // which would try to open this file in a tab.
+      event.stopPropagation();
+      deleteFile(fileId);
+    },
+    [deleteFile],
   );
 
   // Cache of CodeMirror editors by file id.
@@ -283,7 +379,6 @@ export const VizPage: Page = ({
           activeFileId,
           setActiveFileId,
           tabList,
-          setTabList,
 
           onExportClick,
           onShareClick,
@@ -298,6 +393,12 @@ export const VizPage: Page = ({
 
           initialSrcdoc,
           canUserEditViz,
+
+          closeTab,
+          openTab,
+          createFile,
+          handleRenameFileClick,
+          handleDeleteFileClick,
 
           editorCache,
         }}
