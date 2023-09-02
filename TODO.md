@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 VizHub Burn List:
 
  * [X] Auto-run Prettier in VZCode - fresh PR
@@ -13,11 +14,30 @@ VizHub Burn List:
  * [X] Verify that Prettier runs in production
  * [X] Add X to close file from VZCode
  * [X] Drop VizHub 3 DB
+=======
+Beta Launch
+>>>>>>> Stashed changes
  * [X] Re-migrate primordial viz
  * [ ] Final internal QA before beta launch
  * [ ] Set up beta invite codes
  * [ ] Send email to beta testers inviting them to join
+<<<<<<< Updated upstream
  * [ ] Expose localhost to Internet with CodeLlama available
  * [ ] Ignore changes from applying prettier when running the code
+=======
+
+Pro Launch
+ * [ ] Migrate in batches, with ability to roll back batch
+
+Tech Debt
+ * [ ] Generate embeddings locally via LocalAI
+ * [ ] Handle Rollup errors for when an import is not resolved
+ * [ ] un-adopt boxicons, use inline SVG instead
+ * [ ] De-duplicate `submitOperation` with VZCode implementation
+>>>>>>> Stashed changes
  * [ ] Adopt JSON1 op type (TypeScript import) in VZCode / VizHub3 Entities
  * [ ] Label VZCode tech debt issues
+
+New Features
+ * [ ] Ignore changes from applying prettier when running the code
+ * [ ] Map localhost to `brain.vizhub.com`
