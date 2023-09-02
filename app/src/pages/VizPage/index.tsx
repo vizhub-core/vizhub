@@ -30,6 +30,7 @@ import PrettierWorker from 'vzcode/src/client/usePrettier/worker.ts?worker';
 import { getRuntimeVersion } from '../../accessors/getRuntimeVersion';
 import { diff } from 'ot';
 import { useTabsState } from 'vzcode/src/client/useTabsState';
+import { generateExportZipV2 } from './generateExportZipV2';
 
 let prettierWorker: Worker | null = null;
 if (typeof window !== 'undefined') {
@@ -184,9 +185,9 @@ export const VizPage: Page = ({
       getRuntimeVersion(content);
 
     if (runtimeVersion === 2) {
-      console.log('TODO generateExportZipV2');
+      // console.log('TODO generateExportZipV2');
 
-      // generateExportZipV2(currentFiles);
+      generateExportZipV2(currentFiles);
     } else if (runtimeVersion === 3) {
       console.log('TODO generateExportZipV3');
       // generateExportZipV3(currentFiles);

@@ -134,6 +134,13 @@ export const build = async ({
     }
   }
 
+  if (!files['package.json']) {
+    warnings.push({
+      code: 'MISSING_PACKAGE_JSON',
+      message: 'Missing package.json',
+    });
+  }
+
   return {
     errors,
     warnings,
