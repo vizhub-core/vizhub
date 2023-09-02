@@ -1,7 +1,13 @@
 import JSZip from 'jszip';
-import { Files } from 'entities';
+import { Files } from 'vzcode';
 
-export const generateExportZipV2 = (files: Files) => {
+// Generates a zip file of the given files using jszip
+// and downloads it to the user's machine.
+// `fileName` is the name of the zip file to be generated.
+export const generateExportZip = (
+  files: Files,
+  fileName = 'export.zip',
+) => {
   const zip = new JSZip();
   for (const { name, text } of Object.values(files)) {
     zip.file(name, text);
@@ -10,7 +16,7 @@ export const generateExportZipV2 = (files: Files) => {
     const url = URL.createObjectURL(content);
     const link = document.createElement('a');
     link.href = url;
-    link.download = 'export.zip';
+    link.download = fileName;
     link.click();
     URL.revokeObjectURL(url);
   });

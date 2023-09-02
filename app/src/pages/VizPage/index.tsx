@@ -30,7 +30,8 @@ import PrettierWorker from 'vzcode/src/client/usePrettier/worker.ts?worker';
 import { getRuntimeVersion } from '../../accessors/getRuntimeVersion';
 import { diff } from 'ot';
 import { useTabsState } from 'vzcode/src/client/useTabsState';
-import { generateExportZipV2 } from './generateExportZipV2';
+import { generateExportZipV2 } from './export/generateExportZipV2';
+import { generateExportZipV3 } from './export/generateExportZipV3';
 
 let prettierWorker: Worker | null = null;
 if (typeof window !== 'undefined') {
@@ -175,22 +176,19 @@ export const VizPage: Page = ({
 
   // Handle when the user clicks the "Export" button.
   const onExportClick = useCallback(() => {
-    console.log('TODO onExportClick');
-    // TODO get the current content of the editor
     const currentFiles: Files = content.files;
-    console.log(JSON.stringify(currentFiles, null, 2));
 
     // Figure out which version we are in.
     const runtimeVersion: number =
       getRuntimeVersion(content);
 
-    if (runtimeVersion === 2) {
-      // console.log('TODO generateExportZipV2');
+    // Compute the file name based on the viz title.
+    const fileName = `${info.title}.zip`;
 
-      generateExportZipV2(currentFiles);
+    if (runtimeVersion === 2) {
+      generateExportZipV2(currentFiles, fileName);
     } else if (runtimeVersion === 3) {
-      console.log('TODO generateExportZipV3');
-      // generateExportZipV3(currentFiles);
+      generateExportZipV3(currentFiles, fileName);
     } else {
       throw new Error(
         `Unknown runtime version: ${runtimeVersion}`,
