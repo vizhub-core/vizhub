@@ -16,7 +16,7 @@ import * as Sentry from '@sentry/node';
 import { seoMetaTags } from './src/seoMetaTags.js';
 
 // TODO import this from package.json
-const version = '3.0.0-beta.18';
+const version = '3.0.0-beta.19';
 
 const env = process.env;
 
@@ -36,16 +36,24 @@ const send404 = (res) => {
 
 async function createServer(
   root = process.cwd(),
+
+  // `isProd` is true when running in production mode.
+  // Governs:
+  // - whether to use Vite's dev server or not
+  // - whether to use the production build or not
+  // - whether to use Sentry or not
+
   isProd = env.NODE_ENV === 'production',
   hmrPort,
 ) {
+  // if using the production build,
+  // load it only once and cache the result
   const indexProd = isProd
     ? fs.readFileSync(
         resolve('dist/client/index.html'),
         'utf-8',
       )
     : '';
-
   const prodServerEntry = isProd
     ? await import('./dist/server/entry-server.js')
     : null;
@@ -55,33 +63,12 @@ async function createServer(
   // Support parsing of JSON bodies in API requests.
   app.use(express.json());
 
-  // Set up Sentry.
-  // See https://vizhub.sentry.io/onboarding/setup-docs/
-  Sentry.init({
-    dsn: 'https://645705f71cac4ca08b3714784eb530f0@o4505320347271168.ingest.sentry.io/4505320348581888',
-    integrations: [
-      // enable HTTP calls tracing
-      new Sentry.Integrations.Http({ tracing: true }),
-      // enable Express.js middleware tracing
-      new Sentry.Integrations.Express({ app }),
-      // Automatically instrument Node.js libraries and frameworks
-      ...Sentry.autoDiscoverNodePerformanceMonitoringIntegrations(),
-    ],
-
-    // Set tracesSampleRate to 1.0 to capture 100%
-    // of transactions for performance monitoring.
-    // We recommend adjusting this value in production
-    tracesSampleRate: 1.0,
-  });
-
-  // RequestHandler creates a separate execution context, so that all
-  // transactions/spans/breadcrumbs are isolated across requests
-  app.use(Sentry.Handlers.requestHandler());
-  // TracingHandler creates a trace for every incoming request
-  app.use(Sentry.Handlers.tracingHandler());
-
+  // Set up Vite in dev mode.
+  // This will attach the Vite dev server to our Express app.
+  // This will also reload the server routes on file changes.
   let vite;
   if (!isProd) {
+    // Development environment
     vite = await (
       await import('vite')
     ).createServer({
@@ -104,6 +91,8 @@ async function createServer(
     // use vite's connect instance as middleware
     app.use(vite.middlewares);
   } else {
+    // Production environment
+
     // Compress requests for performance in production.
     app.use((await import('compression')).default());
 
@@ -116,6 +105,32 @@ async function createServer(
         },
       ),
     );
+
+    // Set up Sentry, prod only.
+    // See https://vizhub.sentry.io/onboarding/setup-docs/
+
+    Sentry.init({
+      dsn: 'https://645705f71cac4ca08b3714784eb530f0@o4505320347271168.ingest.sentry.io/4505320348581888',
+      integrations: [
+        // enable HTTP calls tracing
+        new Sentry.Integrations.Http({ tracing: true }),
+        // enable Express.js middleware tracing
+        new Sentry.Integrations.Express({ app }),
+        // Automatically instrument Node.js libraries and frameworks
+        ...Sentry.autoDiscoverNodePerformanceMonitoringIntegrations(),
+      ],
+
+      // Set tracesSampleRate to 1.0 to capture 100%
+      // of transactions for performance monitoring.
+      // We recommend adjusting this value in production
+      tracesSampleRate: 1.0,
+    });
+
+    // RequestHandler creates a separate execution context, so that all
+    // transactions/spans/breadcrumbs are isolated across requests
+    app.use(Sentry.Handlers.requestHandler());
+    // TracingHandler creates a trace for every incoming request
+    app.use(Sentry.Handlers.tracingHandler());
   }
 
   // Handle the API requests.
@@ -291,6 +306,7 @@ async function createServer(
           '/src/entry-server.tsx',
         );
       } else {
+        // use cached template in production
         template = indexProd;
         entry = prodServerEntry;
       }

@@ -16,6 +16,9 @@ import { storeVizEmbedding } from './embeddings';
 // Hardcoded ID of the primordial viz (actually in the V2 database)
 const primordialVizId = '86a75dc8bdbe4965ba353a79d4bd44c8';
 
+// Feature flag
+const enableEmbedding = false;
+
 // Processes a single viz.
 // Returns true if the viz is valid (worthy of migration), false if not.
 // Assumption: the same viz can be processed multiple times without issue.
@@ -97,34 +100,36 @@ export const processViz = async ({
   // If we are here, it means we are going to migrate this viz,
   // either because it has not been migrated yet,
   // or because it has been updated since the last migration.
-  let embedding;
+  let embedding = null;
 
-  // If the embedding is already stored in Redis, don't re-compute it.
-  logDetail(
-    '  Checking if embedding is already stored in Redis...',
-  );
-  const existingEmbedding = await getEmbedding({
-    redisClient,
-    id,
-  });
-  if (existingEmbedding === null) {
-    // Generate the embedding for the viz (latest version).
-    logDetail('  Embedding not found in Redis,');
-    logDetail('  Generating embedding');
-    embedding = await generateEmbeddingOpenAI(goodFiles);
-
-    // Store the embedding in Redis.
-    logDetail('    Storing embedding in Redis...');
-    await storeEmbedding({
+  if (enableEmbedding) {
+    // If the embedding is already stored in Redis, don't re-compute it.
+    logDetail(
+      '  Checking if embedding is already stored in Redis...',
+    );
+    const existingEmbedding = await getEmbedding({
       redisClient,
       id,
-      embedding,
-      timestamp: createdTimestamp,
     });
-    logDetail('    Stored embedding in Redis!');
-  } else {
-    logDetail('  Embedding found in Redis!');
-    embedding = existingEmbedding;
+    if (existingEmbedding === null) {
+      // Generate the embedding for the viz (latest version).
+      logDetail('  Embedding not found in Redis,');
+      logDetail('  Generating embedding');
+      embedding = await generateEmbeddingOpenAI(goodFiles);
+
+      // Store the embedding in Redis.
+      logDetail('    Storing embedding in Redis...');
+      await storeEmbedding({
+        redisClient,
+        id,
+        embedding,
+        timestamp: createdTimestamp,
+      });
+      logDetail('    Stored embedding in Redis!');
+    } else {
+      logDetail('  Embedding found in Redis!');
+      embedding = existingEmbedding;
+    }
   }
 
   // Store the embedding in MongoDB.
@@ -174,6 +179,9 @@ export const processViz = async ({
       console.log(
         '   This is the first migration of a non-primordial viz!',
       );
+
+      // Hold off for now.
+      process.exit(1);
       // This viz has not been migrated yet.
       // So we need to create the viz in V3 by forking, then update it.
       const creationResult = await createMigratedViz({

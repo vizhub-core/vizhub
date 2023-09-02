@@ -28,13 +28,48 @@ export const initializeMongoDB = async ({
   if (env.VIZHUB3_MONGO_LOCAL === 'true') {
     console.log('Connecting to local MongoDB...');
     mongoClient = new MongoClient(mongoLocalURI);
-  } else if (isProd) {
+  } else {
     console.log('  Connecting to production MongoDB...');
 
     const username = env.VIZHUB3_MONGO_USERNAME;
     const password = env.VIZHUB3_MONGO_PASSWORD;
     const database = env.VIZHUB3_MONGO_DATABASE;
     const domain = env.VIZHUB3_MONGO_DOMAIN;
+
+    // Validate environment variables.
+    if (!username || !password || !database || !domain) {
+      console.log(
+        'Check your VizHub environment variables.',
+      );
+      console.log(
+        'Either set VIZHUB3_MONGO_LOCAL=true for local development, or',
+      );
+      console.log(
+        'Set VIZHUB3_MONGO_USERNAME,VIZHUB3_MONGO_PASSWORD, and VIZHUB3_MONGO_DATABASE for production deployment.',
+      );
+      console.log('Current values:');
+      console.log(
+        'VIZHUB3_MONGO_LOCAL:',
+        env.VIZHUB3_MONGO_LOCAL,
+      );
+      console.log(
+        'VIZHUB3_MONGO_USERNAME:',
+        env.VIZHUB3_MONGO_USERNAME,
+      );
+      console.log(
+        'VIZHUB3_MONGO_PASSWORD:',
+        env.VIZHUB3_MONGO_PASSWORD,
+      );
+      console.log(
+        'VIZHUB3_MONGO_DATABASE:',
+        env.VIZHUB3_MONGO_DATABASE,
+      );
+      console.log(
+        'VIZHUB3_MONGO_DOMAIN:',
+        env.VIZHUB3_MONGO_DOMAIN,
+      );
+      process.exit(1);
+    }
 
     const uri = `mongodb+srv://${username}:${password}@${domain}/${database}?retryWrites=true&w=majority`;
     // console.log('uri:');
@@ -45,24 +80,6 @@ export const initializeMongoDB = async ({
       useUnifiedTopology: true,
       serverApi: ServerApiVersion.v1,
     });
-  } else {
-    console.log('Check your VizHub environment variables.');
-    console.log(
-      'Either set VIZHUB3_MONGO_LOCAL=true for local development, or',
-    );
-    console.log(
-      'Set VIZHUB3_MONGO_USERNAME,VIZHUB3_MONGO_PASSWORD, and VIZHUB3_MONGO_DATABASE for production deployment.',
-    );
-    console.log('Current values:');
-    console.log(
-      'VIZHUB3_MONGO_LOCAL:',
-      env.VIZHUB3_MONGO_LOCAL,
-    );
-    // console.log('VIZHUB3_MONGO_USERNAME:', env.VIZHUB3_MONGO_USERNAME);
-    // console.log('VIZHUB3_MONGO_PASSWORD:', env.VIZHUB3_MONGO_PASSWORD);
-    // console.log('VIZHUB3_MONGO_DATABASE:', env.VIZHUB3_MONGO_DATABASE);
-    // console.log('VIZHUB3_MONGO_DOMAIN:', env.VIZHUB3_MONGO_DOMAIN);
-    process.exit(1);
   }
 
   const mongoDBConnection = await mongoClient.connect();
