@@ -5,20 +5,28 @@ export const computeSrcDocV3 = ({
   pkg,
   src,
 }: BuildResult) => {
-  const {
-    dependencies,
-    vizhub: { libraries },
-  } = pkg;
+  let cdn = '';
+  if (
+    pkg &&
+    pkg.dependencies &&
+    pkg.vizhub &&
+    pkg.vizhub.libraries
+  ) {
+    const {
+      dependencies,
+      vizhub: { libraries },
+    } = pkg;
 
-  const cdn = Object.keys(dependencies)
-    .map((dependency, i) => {
-      const version = dependencies[dependency];
-      const path = libraries[dependency].path;
-      const src = `https://cdn.jsdelivr.net/npm/${dependency}@${version}${path}`;
-      const indent = i > 0 ? '    ' : '\n    ';
-      return `${indent}<script src="${src}"></script>`;
-    })
-    .join('\n');
+    cdn = Object.keys(dependencies)
+      .map((dependency, i) => {
+        const version = dependencies[dependency];
+        const path = libraries[dependency].path;
+        const src = `https://cdn.jsdelivr.net/npm/${dependency}@${version}${path}`;
+        const indent = i > 0 ? '    ' : '\n    ';
+        return `${indent}<script src="${src}"></script>`;
+      })
+      .join('\n');
+  }
 
   return `<!DOCTYPE html>
 <html>

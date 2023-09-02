@@ -26,7 +26,7 @@
   "homepage": "https://github.com/vizhub-core/vizhub3#readme",
   "dependencies": {
     "@rollup/browser": "^3.28.1",
-    "@sentry/node": "^7.65.0",
+    "@sentry/node": "^7.66.0",
     "@teamwork/websocket-json-stream": "^2.0.0",
     "@types/react-router-dom": "^5.3.3",
     "@types/sharedb": "^3.3.2",
@@ -38,6 +38,7 @@
     "jose": "^4.14.4",
     "jsdom": "^22.1.0",
     "jsesc": "^3.0.2",
+    "jszip": "^3.10.1",
     "marked": "^7.0.5",
     "marked-gfm-heading-id": "^3.0.6",
     "mongodb-legacy": "^6.0.0",

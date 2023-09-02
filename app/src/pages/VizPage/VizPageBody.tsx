@@ -7,10 +7,6 @@ import {
 } from 'react';
 import { Sidebar } from 'vzcode/src/client/Sidebar';
 import { useTabsState } from 'vzcode/src/client/useTabsState';
-// TODO https://github.com/vizhub-core/vizhub3/issues/251
-// import { usePrettier } from 'vzcode/src/client/usePrettier';
-// import PrettierWorker from 'vzcode/src/client/usePrettier/worker?worker';
-
 import { TabList } from 'vzcode/src/client/TabList';
 import { CodeEditor } from 'vzcode/src/client/CodeEditor';
 import {
@@ -43,6 +39,7 @@ import { getPackageJsonText } from '../../accessors/getPackageJsonText';
 import { getPackageJson } from '../../accessors/getPackageJson';
 import { PackageJson } from './v3Runtime/types';
 import { VizSettings } from './useOnSettingsSave';
+import { EditorCache } from 'vzcode/src/client/useEditorCache';
 
 // The fixed path of the files in the ShareDB<Content> document.
 const filesPath = ['files'];
@@ -67,11 +64,15 @@ export const VizPageBody = ({
   activeFileId,
   setActiveFileId,
   tabList,
-  setTabList,
   canUserEditViz,
   showSettingsModal,
   toggleSettingsModal,
   onSettingsSave,
+  closeTab,
+  openTab,
+  createFile,
+  handleRenameFileClick,
+  handleDeleteFileClick,
   editorCache,
 }: {
   info: Info;
@@ -101,11 +102,18 @@ export const VizPageBody = ({
   activeFileId: FileId | null;
   setActiveFileId: (activeFileId: FileId | null) => void;
   tabList: Array<FileId>;
-  setTabList: (tabList: Array<FileId>) => void;
   canUserEditViz: boolean;
   showSettingsModal: boolean;
   toggleSettingsModal: () => void;
   onSettingsSave: (vizSettings: VizSettings) => void;
+  closeTab: (fileId: FileId) => void;
+  openTab: (fileId: FileId) => void;
+  createFile: () => void;
+  handleRenameFileClick: (fileId: FileId) => void;
+  handleDeleteFileClick: (
+    fileId: FileId,
+    event: React.MouseEvent,
+  ) => void;
   editorCache: EditorCache;
 }) => {
   // The currently authenticated user, if any.
@@ -156,14 +164,6 @@ export const VizPageBody = ({
   const vizHeight = useMemo(
     () => getHeight(content.height),
     [content.height],
-  );
-
-  // Logic for opening and closing tabs.
-  const { closeTab, openTab } = useTabsState(
-    activeFileId,
-    setActiveFileId,
-    tabList,
-    setTabList,
   );
 
   const files: Files = content.files;
@@ -239,6 +239,11 @@ export const VizPageBody = ({
     [ownerUser],
   );
 
+  // const handleRenameFileClick = useCallback(
+  //   (fileId: FileId) => {
+  //     const newTitle = prompt('Enter a new title for the file:');
+  //     if (newTitle) {
+  //       submitOp(
   return (
     <div className="vh-page">
       <SmartHeader />
@@ -255,9 +260,26 @@ export const VizPageBody = ({
       <div className="vh-viz-page-body">
         {showEditor && files ? (
           <div className="left">
+            {/* createFile={createFile}
+          files={files}
+          handleRenameFileClick={handleRenameFileClick}
+          handleDeleteFileClick={handleDeleteFileClick}
+          handleFileClick={openTab}
+          setIsSettingsOpen={setIsSettingsOpen}
+          isDirectoryOpen={isDirectoryOpen}
+          toggleDirectory={toggleDirectory} */}
             <Sidebar
               files={files}
               handleFileClick={openTab}
+              // handleRenameFileClick={handleRenameFileClick}
+              createFile={createFile}
+              // files={files}
+              handleRenameFileClick={handleRenameFileClick}
+              handleDeleteFileClick={handleDeleteFileClick}
+              // handleFileClick={openTab}
+              // setIsSettingsOpen={setIsSettingsOpen}
+              // isDirectoryOpen={isDirectoryOpen}
+              // toggleDirectory={toggleDirectory}
             />
           </div>
         ) : null}

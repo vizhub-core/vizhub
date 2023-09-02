@@ -1,4 +1,5 @@
-import { select, transition } from 'd3-selection';
+import { select } from 'd3-selection';
+import { transition } from 'd3-transition';
 import { utcDay } from 'd3-time';
 import { utcFormat } from 'd3-time-format';
 import { scaleBand, scaleLinear } from 'd3-scale';
@@ -84,6 +85,7 @@ export const viz = (node, { analyticsEvent }) => {
       selection.select('.domain').remove();
     });
 
+  const t = transition().duration(500);
   svg
     .selectAll('rect')
     .data(data)
@@ -99,7 +101,7 @@ export const viz = (node, { analyticsEvent }) => {
       (update) =>
         update.call((selection) =>
           selection
-            .transition()
+            .transition(t)
             .attr('y', (d) => yScale(yValue(d)))
             .attr(
               'height',
