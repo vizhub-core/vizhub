@@ -2,11 +2,12 @@ import {
   RefObject,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useRef,
 } from 'react';
 import { Sidebar } from 'vzcode/src/client/Sidebar';
-import { useTabsState } from 'vzcode/src/client/useTabsState';
+import { SplitPaneResizeContext } from 'vzcode/src/client/SplitPaneResizeContext';
 import { TabList } from 'vzcode/src/client/TabList';
 import { CodeEditor } from 'vzcode/src/client/CodeEditor';
 import {
@@ -196,6 +197,17 @@ export const VizPageBody = ({
     ),
     [initialSrcdoc, vizHeight],
   );
+
+  // Disable pointer events when split pane is being dragged.
+  // Otherwise, they do interfere with dragging the split pane.
+  // Inspired by https://github.com/vizhub-core/vizhub/blob/01cadfb78a2611df32f981b1fd8136b70447de9e/vizhub-v2/packages/neoFrontend/src/pages/VizPage/VizRunnerContext/index.js#L15
+  const { isDragging } = useContext(SplitPaneResizeContext);
+  useEffect(() => {
+    if (!iframeRef.current) return;
+    iframeRef.current.style['pointer-events'] = isDragging
+      ? 'none'
+      : 'all';
+  }, [isDragging]);
 
   // The formatted created date.
   const createdDateFormatted = useMemo(

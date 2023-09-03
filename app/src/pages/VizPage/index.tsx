@@ -32,6 +32,7 @@ import { diff } from 'ot';
 import { useTabsState } from 'vzcode/src/client/useTabsState';
 import { generateExportZipV2 } from './export/generateExportZipV2';
 import { generateExportZipV3 } from './export/generateExportZipV3';
+import { SplitPaneResizeProvider } from './SplitPaneResizeProvider';
 
 let prettierWorker: Worker | null = null;
 if (typeof window !== 'undefined') {
@@ -363,45 +364,47 @@ export const VizPage: Page = ({
         pageData.authenticatedUserSnapshot
       }
     >
-      <VizPageBody
-        {...{
-          info,
-          content,
-          contentShareDBDoc,
-          contentShareDBDocPresence,
-          ownerUser,
-          forkedFromInfo,
-          forkedFromOwnerUser,
+      <SplitPaneResizeProvider>
+        <VizPageBody
+          {...{
+            info,
+            content,
+            contentShareDBDoc,
+            contentShareDBDocPresence,
+            ownerUser,
+            forkedFromInfo,
+            forkedFromOwnerUser,
 
-          showEditor,
-          setShowEditor,
-          activeFileId,
-          setActiveFileId,
-          tabList,
+            showEditor,
+            setShowEditor,
+            activeFileId,
+            setActiveFileId,
+            tabList,
 
-          onExportClick,
-          onShareClick,
-          showForkModal,
-          toggleForkModal,
-          onFork,
-          initialReadmeHTML,
+            onExportClick,
+            onShareClick,
+            showForkModal,
+            toggleForkModal,
+            onFork,
+            initialReadmeHTML,
 
-          showSettingsModal,
-          toggleSettingsModal,
-          onSettingsSave,
+            showSettingsModal,
+            toggleSettingsModal,
+            onSettingsSave,
 
-          initialSrcdoc,
-          canUserEditViz,
+            initialSrcdoc,
+            canUserEditViz,
 
-          closeTab,
-          openTab,
-          createFile,
-          handleRenameFileClick,
-          handleDeleteFileClick,
+            closeTab,
+            openTab,
+            createFile,
+            handleRenameFileClick,
+            handleDeleteFileClick,
 
-          editorCache,
-        }}
-      />
+            editorCache,
+          }}
+        />
+      </SplitPaneResizeProvider>
       <VizPageToasts
         hasUnforkedEdits={hasUnforkedEdits}
         handleForkLinkClick={handleForkLinkClick}
