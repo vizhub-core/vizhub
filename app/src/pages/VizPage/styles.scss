@@ -8,8 +8,11 @@ $mobile-breakpoint: 550px;
   flex: 1;
   display: flex;
 
+  /* To support Resizer, which is position: absolute */
+  position: relative;
+
   .left {
-    width: 200px;
+    // width: 200px;
 
     @media (max-width: $mobile-breakpoint) {
       width: 100%;

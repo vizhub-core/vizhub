@@ -32,7 +32,7 @@ import { diff } from 'ot';
 import { useTabsState } from 'vzcode/src/client/useTabsState';
 import { generateExportZipV2 } from './export/generateExportZipV2';
 import { generateExportZipV3 } from './export/generateExportZipV3';
-import { SplitPaneResizeProvider } from './SplitPaneResizeProvider';
+import { SplitPaneResizeProvider } from 'vzcode/src/client/SplitPaneResizeContext';
 
 let prettierWorker: Worker | null = null;
 if (typeof window !== 'undefined') {
