@@ -14,6 +14,8 @@ VizHub Burn List:
  * [X] Verify that Prettier runs in production
  * [X] Add X to close file from VZCode
  * [X] Drop VizHub 3 DB
+ * [ ] Make sidebar resizer work
+ * [ ] Make sidebar resizer work well - fix interaction surface
 =======
 Beta Launch
 >>>>>>> Stashed changes

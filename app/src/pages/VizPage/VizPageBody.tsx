@@ -8,6 +8,7 @@ import {
 } from 'react';
 import { Sidebar } from 'vzcode/src/client/Sidebar';
 import { SplitPaneResizeContext } from 'vzcode/src/client/SplitPaneResizeContext';
+import { Resizer } from 'vzcode/src/client/Resizer';
 import { TabList } from 'vzcode/src/client/TabList';
 import { CodeEditor } from 'vzcode/src/client/CodeEditor';
 import {
@@ -319,6 +320,7 @@ export const VizPageBody = ({
             ) : null}
           </div>
         ) : null}
+        {showEditor ? <Resizer /> : null}
 
         <div
           className={`right${
