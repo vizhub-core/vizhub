@@ -20,9 +20,11 @@ import { AuthenticatedUserProvider } from '../../contexts/AuthenticatedUserConte
 import { Page, PageData } from '../Page';
 import { VizPageBody } from './VizPageBody';
 
+// VZCode
 // @ts-ignore
-import PrettierWorker from 'vzcode/src/client/usePrettier/worker.ts?worker';
 import { Files, ShareDBDoc } from 'vzcode';
+import { randomId } from 'vzcode/src/randomId';
+import PrettierWorker from 'vzcode/src/client/usePrettier/worker.ts?worker';
 import { SplitPaneResizeProvider } from 'vzcode/src/client/SplitPaneResizeContext';
 import { usePrettier } from 'vzcode/src/client/usePrettier';
 import { useEditorCache } from 'vzcode/src/client/useEditorCache';
