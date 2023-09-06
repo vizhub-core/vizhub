@@ -87,6 +87,7 @@ export const useRuntime = ({
         // v2RuntimeWorker.current.postMessage({ content });
 
         // Set process on global scope so computeSrcDoc doesn't break.
+	// @ts-ignore
         globalThis.process = {};
 
         // Lazy load computeSrcDoc because it's a large chunk.

@@ -25,8 +25,8 @@
   },
   "homepage": "https://github.com/vizhub-core/vizhub3#readme",
   "dependencies": {
-    "@rollup/browser": "^3.28.1",
-    "@sentry/node": "^7.67.0",
+    "@rollup/browser": "^3.29.0",
+    "@sentry/node": "^7.68.0",
     "@teamwork/websocket-json-stream": "^2.0.0",
     "@types/react-router-dom": "^5.3.3",
     "@types/sharedb": "^3.3.2",
@@ -49,11 +49,11 @@
     "react-router-dom": "^6.15.0",
     "rollup-pluginutils": "^2.8.2",
     "sharedb": "^4.0.1",
-    "sharedb-mongo": "^4.0.0",
+    "sharedb-mongo": "^4.1.0",
     "vizhub-libraries": "^1.8.0",
     "vizhub-ui": "^3.3.0",
     "vzcode": "^0.19.0",
-    "ws": "^8.13.0",
+    "ws": "^8.14.0",
     "xss": "^1.0.14"
   },
   "devDependencies": {

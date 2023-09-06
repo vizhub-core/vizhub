@@ -11,7 +11,8 @@
     "precommit": "npm run prettier; npm run test; npm run tsc",
     "build": "cd app; npm run build",
     "serve": "cd app; npm run serve",
-    "dev": "cd app; npm run dev"
+    "dev": "cd app; npm run dev",
+    "finalize": "npm run upgrade; npm install; npm run prettier; npm run test; npm run tsc"
   },
   "repository": {
     "type": "git",
