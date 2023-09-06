@@ -8,6 +8,7 @@ import {
   VizId,
 } from 'entities';
 import { VizKit } from 'api/src/VizKit';
+import { diff } from 'ot';
 import {
   getConnection,
   useData,
@@ -18,21 +19,22 @@ import {
 import { AuthenticatedUserProvider } from '../../contexts/AuthenticatedUserContext';
 import { Page, PageData } from '../Page';
 import { VizPageBody } from './VizPageBody';
-import './styles.scss';
+
+// @ts-ignore
+import PrettierWorker from 'vzcode/src/client/usePrettier/worker.ts?worker';
+import { Files, ShareDBDoc } from 'vzcode';
+import { SplitPaneResizeProvider } from 'vzcode/src/client/SplitPaneResizeContext';
+import { usePrettier } from 'vzcode/src/client/usePrettier';
+import { useEditorCache } from 'vzcode/src/client/useEditorCache';
+
 import { VizPageToasts } from './VizPageToasts';
 import { useOnFork } from './useOnFork';
 import { useOnSettingsSave } from './useOnSettingsSave';
-import { Files, ShareDBDoc } from 'vzcode';
-import { usePrettier } from 'vzcode/src/client/usePrettier';
-import { useEditorCache } from 'vzcode/src/client/useEditorCache';
-// @ts-ignore
-import PrettierWorker from 'vzcode/src/client/usePrettier/worker.ts?worker';
 import { getRuntimeVersion } from '../../accessors/getRuntimeVersion';
-import { diff } from 'ot';
 import { useTabsState } from 'vzcode/src/client/useTabsState';
 import { generateExportZipV2 } from './export/generateExportZipV2';
 import { generateExportZipV3 } from './export/generateExportZipV3';
-import { SplitPaneResizeProvider } from 'vzcode/src/client/SplitPaneResizeContext';
+import './styles.scss';
 
 let prettierWorker: Worker | null = null;
 if (typeof window !== 'undefined') {
