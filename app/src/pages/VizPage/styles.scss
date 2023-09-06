@@ -8,17 +8,16 @@ $mobile-breakpoint: 550px;
   flex: 1;
   display: flex;
 
+  /* This makes the parent fill the available vertical space */
+  min-height: 0;
+
   /* To support Resizer, which is position: absolute */
   position: relative;
 
   .left {
-    // width: 200px;
-
     @media (max-width: $mobile-breakpoint) {
       width: 100%;
     }
-
-    background-color: blue;
   }
   .middle {
     display: flex;

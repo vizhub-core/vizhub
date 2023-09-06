@@ -262,19 +262,6 @@ export const VizPage: Page = ({
     };
   }, []);
 
-  // if (newName) {
-  //   submitOperation((document) => ({
-  //     ...document,
-  //     files: {
-  //       ...document.files,
-  //       [fileId]: {
-  //         ...document.files[fileId],
-  //         name: newName,
-  //       },
-  //     },
-  //   }));
-  // }
-
   // /////////////////////////////////////////
   /////////////// Settings ///////////////////
   // /////////////////////////////////////////
@@ -338,35 +325,25 @@ export const VizPage: Page = ({
     [toggleRenameModal],
   );
 
-  // if (newName) {
-  //   submitOperation((document) => ({
-  //     ...document,
-  //     files: {
-  //       ...document.files,
-  //       [fileId]: {
-  //         ...document.files[fileId],
-  //         name: newName,
-  //       },
-  //     },
-  //   }));
-  // }
-
-  const handleRename = useCallback((newName: string) => {
-    if (fileBeingRenamed !== null) {
-      submitOperation((document) => ({
-        ...document,
-        files: {
-          ...document.files,
-          [fileBeingRenamed]: {
-            ...document.files[fileBeingRenamed],
-            name: newName,
+  const handleRename = useCallback(
+    (newName: string) => {
+      if (fileBeingRenamed !== null) {
+        submitOperation((document) => ({
+          ...document,
+          files: {
+            ...document.files,
+            [fileBeingRenamed]: {
+              ...document.files[fileBeingRenamed],
+              name: newName,
+            },
           },
-        },
-      }));
-      setFileBeingRenamed(null);
-      toggleRenameModal();
-    }
-  }, []);
+        }));
+        setFileBeingRenamed(null);
+        toggleRenameModal();
+      }
+    },
+    [fileBeingRenamed],
+  );
 
   // //// Code Editor / Delete File //////////
 

@@ -1,4 +1,9 @@
-import { useState, useCallback } from 'react';
+import {
+  useState,
+  useCallback,
+  useRef,
+  useEffect,
+} from 'react';
 import { Modal, Form, Button } from '../bootstrap';
 import { VisibilityControl } from '../VisibilityControl';
 import { OwnerControl } from '../OwnerControl';
@@ -28,8 +33,37 @@ export const ForkModal = ({
     onFork({ title, visibility, owner });
   }, [title, visibility, owner, onFork]);
 
+  const inputRef = useRef(null);
+
+  // Focus on the input field when modal is shown
+  useEffect(() => {
+    if (show && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [show]);
+
+  // Support keyboard shortcuts
+  const handleKeyDown = useCallback(
+    (e) => {
+      if (
+        e.key === 'Enter' &&
+        (e.ctrlKey ||
+          e.shiftKey ||
+          (!e.altKey && !e.metaKey))
+      ) {
+        handleForkClick();
+      }
+    },
+    [handleForkClick],
+  );
+
   return show ? (
-    <Modal show={show} onHide={onClose} animation={false}>
+    <Modal
+      show={show}
+      onHide={onClose}
+      animation={false}
+      onKeyDown={handleKeyDown}
+    >
       <Modal.Header closeButton>
         <Modal.Title>Fork</Modal.Title>
       </Modal.Header>
@@ -40,6 +74,7 @@ export const ForkModal = ({
             type="text"
             value={title}
             onChange={handleTitleChange}
+            ref={inputRef}
           />
           <Form.Text className="text-muted">
             Choose a title for your viz

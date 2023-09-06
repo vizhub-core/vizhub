@@ -7,15 +7,6 @@ export const args = {
     console.log('onRename');
     console.log(newName);
   },
-  // initialVisibility: 'public',
-  // initialOwner,
-  // possibleOwners,
-  // onFork: (forkData) => {
-  //   console.log('onFork');
-  //   console.log(forkData);
-  // },
-  // currentPlan: 'pro',
-  // pricingHref: 'pricingHref',
 };
 
 const Story = () => {

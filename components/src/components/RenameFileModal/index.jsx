@@ -44,7 +44,12 @@ export const RenameFileModal = ({
   );
 
   return show ? (
-    <Modal show={show} onHide={onClose} animation={false}>
+    <Modal
+      show={show}
+      onHide={onClose}
+      animation={false}
+      onKeyDown={handleKeyDown}
+    >
       <Modal.Header closeButton>
         <Modal.Title>Rename File</Modal.Title>
       </Modal.Header>
@@ -56,7 +61,7 @@ export const RenameFileModal = ({
             value={newName}
             onChange={handleNameChange}
             ref={inputRef}
-            onKeyDown={handleKeyDown} // Add this line
+            spellCheck="false"
           />
           <Form.Text className="text-muted">
             Enter the new name for your file

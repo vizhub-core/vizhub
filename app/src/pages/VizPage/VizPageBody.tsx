@@ -283,10 +283,6 @@ export const VizPageBody = ({
               createFile={createFile}
               handleRenameFileClick={handleRenameFileClick}
               handleDeleteFileClick={handleDeleteFileClick}
-              // handleFileClick={openTab}
-              // setIsSettingsOpen={setIsSettingsOpen}
-              // isDirectoryOpen={isDirectoryOpen}
-              // toggleDirectory={toggleDirectory}
             />
           </div>
         ) : null}
@@ -314,6 +310,8 @@ export const VizPageBody = ({
             ) : null}
           </div>
         ) : null}
+
+        {/* The resizer between the sidebar and code editor */}
         {showEditor ? <Resizer /> : null}
 
         <div
