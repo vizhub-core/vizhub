@@ -24,6 +24,7 @@ import {
 import { VizPageHead } from 'components/src/components/VizPageHead';
 import { ForkModal } from 'components/src/components/ForkModal';
 import { SettingsModal } from 'components/src/components/SettingsModal';
+import { RenameFileModal } from 'components/src/components/RenameFileModal';
 import { VizPageViewer } from 'components/src/components/VizPageViewer';
 import { AuthenticatedUserContext } from '../../contexts/AuthenticatedUserContext';
 import { SmartHeader } from '../../smartComponents/SmartHeader';
@@ -76,6 +77,10 @@ export const VizPageBody = ({
   handleRenameFileClick,
   handleDeleteFileClick,
   editorCache,
+  showRenameModal,
+  toggleRenameModal,
+  handleRename,
+  fileBeingRenamed,
 }: {
   info: Info;
   content: Content;
@@ -117,6 +122,10 @@ export const VizPageBody = ({
     event: React.MouseEvent,
   ) => void;
   editorCache: EditorCache;
+  showRenameModal: boolean;
+  toggleRenameModal: () => void;
+  handleRename: (newName: string) => void;
+  fileBeingRenamed: FileId | null;
 }) => {
   // The currently authenticated user, if any.
   const authenticatedUser: User | null = useContext(
@@ -252,11 +261,6 @@ export const VizPageBody = ({
     [ownerUser],
   );
 
-  // const handleRenameFileClick = useCallback(
-  //   (fileId: FileId) => {
-  //     const newTitle = prompt('Enter a new title for the file:');
-  //     if (newTitle) {
-  //       submitOp(
   return (
     <div className="vh-page">
       <SmartHeader />
@@ -273,20 +277,10 @@ export const VizPageBody = ({
       <div className="vh-viz-page-body">
         {showEditor && files ? (
           <div className="left">
-            {/* createFile={createFile}
-          files={files}
-          handleRenameFileClick={handleRenameFileClick}
-          handleDeleteFileClick={handleDeleteFileClick}
-          handleFileClick={openTab}
-          setIsSettingsOpen={setIsSettingsOpen}
-          isDirectoryOpen={isDirectoryOpen}
-          toggleDirectory={toggleDirectory} */}
             <Sidebar
               files={files}
               handleFileClick={openTab}
-              // handleRenameFileClick={handleRenameFileClick}
               createFile={createFile}
-              // files={files}
               handleRenameFileClick={handleRenameFileClick}
               handleDeleteFileClick={handleDeleteFileClick}
               // handleFileClick={openTab}
@@ -375,6 +369,15 @@ export const VizPageBody = ({
           onSave={onSettingsSave}
           currentPlan={authenticatedUser?.plan}
           pricingHref={'/pricing'}
+        />
+      ) : null}
+
+      {showRenameModal && fileBeingRenamed !== null ? (
+        <RenameFileModal
+          show={showRenameModal}
+          onClose={toggleRenameModal}
+          onRename={handleRename}
+          initialFileName={files[fileBeingRenamed].name}
         />
       ) : null}
     </div>

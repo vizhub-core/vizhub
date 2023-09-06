@@ -154,26 +154,25 @@ export const VizPage: Page = ({
   /////////////// Modals /////////////////////
   // /////////////////////////////////////////
 
-  // State of whether or not the fork modal is open.
-  const [showForkModal, setShowForkModal] = useState(false);
+  const useToggleState = (
+    initialValue: boolean = false,
+  ): [boolean, () => void] => {
+    const [state, setState] =
+      useState<boolean>(initialValue);
 
-  // When the user clicks the "Fork" icon to open the fork modal.
-  // When the user hits the "x" to close the modal.
-  const toggleForkModal = useCallback(() => {
-    setShowForkModal((showForkModal) => !showForkModal);
-  }, []);
+    const toggleState: () => void = useCallback(() => {
+      setState((prevState) => !prevState);
+    }, []);
 
-  // State of whether or not the settings modal is open.
-  const [showSettingsModal, setShowSettingsModal] =
-    useState(false);
+    return [state, toggleState];
+  };
 
-  // When the user clicks the "Settings" icon to open the settings modal.
-  // When the user hits the "x" to close the modal.
-  const toggleSettingsModal = useCallback(() => {
-    setShowSettingsModal(
-      (showSettingsModal) => !showSettingsModal,
-    );
-  }, []);
+  // Now you can use the custom hook to manage each modal's state:
+  const [showForkModal, toggleForkModal] = useToggleState();
+  const [showSettingsModal, toggleSettingsModal] =
+    useToggleState();
+  const [showRenameModal, toggleRenameModal] =
+    useToggleState();
 
   // /////////////////////////////////////////
   /////////////// Callbacks //////////////////
@@ -219,7 +218,9 @@ export const VizPage: Page = ({
         MouseEvent
       >,
     ) => {
+      // Needed because the link is an anchor tag.
       event.preventDefault();
+
       toggleForkModal();
     },
     [toggleForkModal],
@@ -261,6 +262,19 @@ export const VizPage: Page = ({
     };
   }, []);
 
+  // if (newName) {
+  //   submitOperation((document) => ({
+  //     ...document,
+  //     files: {
+  //       ...document.files,
+  //       [fileId]: {
+  //         ...document.files[fileId],
+  //         name: newName,
+  //       },
+  //     },
+  //   }));
+  // }
+
   // /////////////////////////////////////////
   /////////////// Settings ///////////////////
   // /////////////////////////////////////////
@@ -286,12 +300,7 @@ export const VizPage: Page = ({
   /////////////// Code Editor ////////////////
   // /////////////////////////////////////////
 
-  // Auto-run Pretter after local changes.
-  usePrettier(
-    contentShareDBDoc,
-    submitOperation,
-    prettierWorker,
-  );
+  // //// Code Editor / Create File //////////
 
   // TODO de-duplicate this with VZCode
   // TODO move this logic to a hook called `useFileCRUD`
@@ -314,27 +323,52 @@ export const VizPage: Page = ({
     }
   }, [submitOperation]);
 
-  // Called when a file in the sidebar is double-clicked.
+  // //// Code Editor / Rename File //////////
+
+  // The id of the file that is currently being renamed.
+  const [fileBeingRenamed, setFileBeingRenamed] =
+    useState<FileId | null>(null);
+
+  // Called when a file in the sidebar has its "rename" icon clicked.
   const handleRenameFileClick = useCallback(
     (fileId: FileId) => {
-      // TODO better UX, maybe Bootstrap modal? Maybe edit inline?
-      const newName = prompt('Enter new name');
-
-      if (newName) {
-        submitOperation((document) => ({
-          ...document,
-          files: {
-            ...document.files,
-            [fileId]: {
-              ...document.files[fileId],
-              name: newName,
-            },
-          },
-        }));
-      }
+      setFileBeingRenamed(fileId);
+      toggleRenameModal();
     },
-    [submitOperation],
+    [toggleRenameModal],
   );
+
+  // if (newName) {
+  //   submitOperation((document) => ({
+  //     ...document,
+  //     files: {
+  //       ...document.files,
+  //       [fileId]: {
+  //         ...document.files[fileId],
+  //         name: newName,
+  //       },
+  //     },
+  //   }));
+  // }
+
+  const handleRename = useCallback((newName: string) => {
+    if (fileBeingRenamed !== null) {
+      submitOperation((document) => ({
+        ...document,
+        files: {
+          ...document.files,
+          [fileBeingRenamed]: {
+            ...document.files[fileBeingRenamed],
+            name: newName,
+          },
+        },
+      }));
+      setFileBeingRenamed(null);
+      toggleRenameModal();
+    }
+  }, []);
+
+  // //// Code Editor / Delete File //////////
 
   const deleteFile = useCallback(
     (fileId: FileId) => {
@@ -358,6 +392,17 @@ export const VizPage: Page = ({
     },
     [deleteFile],
   );
+
+  // //// Code Editor / Prettier //////////
+
+  // Auto-run Pretter after local changes.
+  usePrettier(
+    contentShareDBDoc,
+    submitOperation,
+    prettierWorker,
+  );
+
+  // //// Code Editor / CodeMirror /////////
 
   // Cache of CodeMirror editors by file id.
   const editorCache = useEditorCache();
@@ -395,6 +440,11 @@ export const VizPage: Page = ({
             showSettingsModal,
             toggleSettingsModal,
             onSettingsSave,
+
+            showRenameModal,
+            toggleRenameModal,
+            handleRename,
+            fileBeingRenamed,
 
             initialSrcdoc,
             canUserEditViz,
