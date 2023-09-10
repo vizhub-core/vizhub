@@ -4,12 +4,11 @@
 // we use Vite's SSR feature to dynamically load and run it.
 import { createServer } from 'vite';
 
-const vite = await createServer({
-  server: { middlewareMode: true },
-  appType: 'custom',
-});
+const vite = await createServer();
 
 const { migrate } =
   await vite.ssrLoadModule('./migrate.ts');
 
-console.log(migrate);
+await migrate();
+
+process.exit();
