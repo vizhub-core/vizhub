@@ -1,0 +1,26 @@
+{
+  "name": "migration",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "vitest run",
+    "migrate": "node index.js",
+    "prettier": "prettier {*.*,**/*.*} --single-quote --write",
+    "tsc": "tsc --noEmit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vizhub-core/vizhub3.git"
+  },
+  "author": "Curran Kelleher",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/vizhub-core/vizhub3/issues"
+  },
+  "homepage": "https://github.com/vizhub-core/vizhub3#readme",
+  "devDependencies": {
+    "vite": "^4.4.9",
+    "vitest": "^0.34.4"
+  }
+}

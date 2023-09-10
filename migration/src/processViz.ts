@@ -103,22 +103,29 @@ export const processViz = async ({
   let embedding = null;
 
   if (enableEmbedding) {
+    // TODO use
     // If the embedding is already stored in Redis, don't re-compute it.
-    logDetail(
-      '  Checking if embedding is already stored in Redis...',
-    );
-    const existingEmbedding = await getEmbedding({
-      redisClient,
-      id,
-    });
+    // logDetail(
+    //   '  Checking if embedding is already stored in Redis...',
+    // );
+    // const existingEmbedding = await getEmbedding({
+    //   redisClient,
+    //   id,
+    // });
+    const existingEmbedding = null;
     if (existingEmbedding === null) {
       // Generate the embedding for the viz (latest version).
-      logDetail('  Embedding not found in Redis,');
+      logDetail('  Existing embedding not found,');
       logDetail('  Generating embedding');
       embedding = await generateEmbeddingOpenAI(goodFiles);
 
       // Store the embedding in Redis.
-      logDetail('    Storing embedding in Redis...');
+      logDetail('    Storing embedding...');
+
+      // TODO store embedding in PostgreSQL
+      console.log(embedding);
+
+      process.exit();
       await storeEmbedding({
         redisClient,
         id,

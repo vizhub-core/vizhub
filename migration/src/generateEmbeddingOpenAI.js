@@ -1,4 +1,4 @@
-import { Configuration, OpenAIApi } from 'openai';
+import OpenAI from 'openai';
 import { encode, decode } from 'gpt-3-encoder';
 
 import { removeEmoji } from './removeEmoji';
@@ -22,8 +22,7 @@ const maxFileTextLength = 4000;
 const apiKey = process.env.VIZHUB_OPENAI_API_KEY;
 
 // The OpenAI API client.
-const configuration = new Configuration({ apiKey });
-const openAi = new OpenAIApi(configuration);
+const openai = new OpenAI({ apiKey });
 
 // Ensures the prompt is not too long.
 // Inspired by the way LatentScope does it.
@@ -44,7 +43,7 @@ function truncateIfNeeded(str) {
 
 // Computes an embedding for the input text.
 const embed = async (input) => {
-  const embeddingRes = await openAi.createEmbedding({
+  const embeddingRes = await openai.createEmbedding({
     model,
     input: truncateIfNeeded(input),
   });
