@@ -1,59 +1,38 @@
 import express from 'express';
 import { RecordAnalyticsEvents } from 'interactors';
-
-export const stripeWebhookEndpoint = ({
-  app,
-  gateways,
-}) => {
-  const { saveBetaProgramSignup } = gateways;
-  const recordAnalyticsEvents =
-    RecordAnalyticsEvents(gateways);
-
-  //  stripe listen --forward-to localhost:3000/api/stripe-webhooks
-
-  // Docs for Stripe Webhooks
-  // https://stripe.com/docs/webhooks/signatures
-
-  const stripe = require('stripe')('sk_test_Isw5Gw3q2WQmSuuU7q1Knll5');
+import Stripe from 'stripe';
+const stripe = Stripe('sk_test_Isw5Gw3q2WQmSuuU7q1Knll5');
 
 const session = await stripe.checkout.sessions.create({
   success_url: 'https://example.com/success',
   line_items: [
-    {price: 'price_H5ggYwtDq4fbrJ', quantity: 2},
+    { price: 'price_H5ggYwtDq4fbrJ', quantity: 2 },
   ],
   mode: 'payment',
 });
 
-  // // Match the raw body to content type application/json
-  // // If you are using Express v4 - v4.16 you need to use body-parser, not express, to retrieve the request body
+export const createCheckoutSession = ({
+  app,
+  gateways,
+}) => {
   app.post(
-    // '/webhook',
-    '/api/stripe-webhook',
+    '/api/create-checkout-session',
     express.json({ type: 'application/json' }),
     (request, response) => {
-      console.log('reveiced request to Stripe Webhook');
-      const event = request.body;
-
-      // Handle the event
-      switch (event.type) {
-        case 'customer.subscription.created':
-          const subscriptionCreated = event.data.object;
-          console.log(
-            'subscription created',
-            subscriptionCreated,
-          );
-          // TODO get user id from subscription
-          const userId = event.data.object.customer;
-          // TODO update user with subscription
-          updateUserSubscription(userId, 'pro');
-          break;
-        // ... handle other event types
-        default:
-          console.log(`Unhandled event type ${event.type}`);
-      }
-
-      // Return a response to acknowledge receipt of the event
-      response.json({ received: true });
+      console.log(
+        'reveiced request to create checkout session',
+      );
+      // TODO create checkout session that has client_reference_id
+      // const event = request.body;
+      // const session = await stripe.checkout.sessions.create({
+      //   success_url: 'https://example.com/success',
+      //   line_items: [
+      //     { price: 'price_H5ggYwtDq4fbrJ', quantity: 2 },
+      //   ],
+      //   mode: 'payment',
+      //   client_reference_id: authenticatedUser.id,
+      // });
+      // response.json({ received: true });
     },
   );
 
