@@ -1,8 +1,9 @@
 import express from 'express';
-import { ok } from 'gateways';
+import { err, ok } from 'gateways';
 import { RecordAnalyticsEvents } from 'interactors';
 import Stripe from 'stripe';
 import { parseAuth0Sub, parseAuth0User } from '..';
+import { authenticationRequiredError } from 'gateways/src/errors';
 
 let stripe;
 
@@ -33,23 +34,36 @@ export const createCheckoutSession = ({
         authenticatedUserId,
       );
 
-      const sessionId = 'fake-session-id';
+      // Having the User ID is required to create a Stripe
+      // Checkout Session. Without it, we can't associate
+      // the Stripe Customer with the VizHub User after
+      // the Checkout Session is completed.
+      if (!authenticatedUserId) {
+        res.json(err(authenticationRequiredError()));
+        return;
+      }
 
-      // const session = await stripe.checkout.sessions.create(
-      //   {
-      //     success_url: 'https://example.com/success',
-      //     line_items: [
-      //       {
-      //         price: process.env.VIZHUB_STRIPE_PRICE_ID,
-      //         quantity: 1,
-      //       },
-      //     ],
-      //     mode: 'subscription',
-      // client_reference_id: authenticatedUser.id,
-      //   },
-      // );
+      // const sessionId = 'fake-session-id';
 
-      res.json(ok({ sessionId }));
+      // https://stripe.com/docs/api/checkout/sessions/create#create_checkout_session-client_reference_id
+      const session = await stripe.checkout.sessions.create(
+        {
+          success_url: 'https://example.com/success',
+          line_items: [
+            {
+              price: process.env.VIZHUB_STRIPE_PRICE_ID,
+              quantity: 1,
+            },
+          ],
+          mode: 'subscription',
+          client_reference_id: authenticatedUserId,
+        },
+      );
+
+      // console.log('session');
+      // console.log(session);
+
+      res.json(ok({ sessionId: session.id }));
     },
   );
 
