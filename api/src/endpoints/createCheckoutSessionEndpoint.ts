@@ -2,7 +2,8 @@ import express from 'express';
 import { ok } from 'gateways';
 import { RecordAnalyticsEvents } from 'interactors';
 import Stripe from 'stripe';
-// const stripe = Stripe('sk_test_Isw5Gw3q2WQmSuuU7q1Knll5');
+
+let stripe;
 
 // console.log('Stripe', Stripe);
 
@@ -10,23 +11,35 @@ export const createCheckoutSession = ({
   app,
   gateways,
 }) => {
+  if (!stripe) {
+    stripe = Stripe(process.env.VIZHUB_STRIPE_SECRET_KEY);
+  }
   app.post(
     '/api/create-checkout-session',
     express.json({ type: 'application/json' }),
-    (request, response) => {
+    async (req, res) => {
       console.log(
         'reveiced request to create checkout session',
       );
 
+      const authenticatedUserId = parseAuth0Sub(
+        req.auth0User?.sub,
+      );
+
       const sessionId = 'fake-session-id';
 
-      // const session = await stripe.checkout.sessions.create({
-      //   success_url: 'https://example.com/success',
-      //   line_items: [
-      //     { price: 'price_H5ggYwtDq4fbrJ', quantity: 2 },
-      //   ],
-      //   mode: 'payment',
-      // });
+      const session = await stripe.checkout.sessions.create(
+        {
+          success_url: 'https://example.com/success',
+          line_items: [
+            {
+              price: process.env.VIZHUB_STRIPE_PRICE_ID,
+              quantity: 1,
+            },
+          ],
+          mode: 'subscription',
+        },
+      );
 
       // const session = await stripe.checkout.sessions.create({
       //   success_url: 'https://example.com/success',
