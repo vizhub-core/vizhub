@@ -4,7 +4,7 @@ import {
   UpdateOrCreateUser,
   RecordAnalyticsEvents,
 } from 'interactors';
-import { parseAuth0Sub } from './parseAuth0User';
+import { parseAuth0Sub } from 'api';
 
 // Deals with authentication via Auth0.
 export const authentication = ({ env, gateways, app }) => {

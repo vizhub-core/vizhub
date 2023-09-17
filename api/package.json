@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "API for VizHub3",
   "type": "module",
+  "main": "src/index.ts",
   "scripts": {
     "test": "",
     "tsc": "",

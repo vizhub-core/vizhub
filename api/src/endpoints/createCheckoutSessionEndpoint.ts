@@ -2,6 +2,7 @@ import express from 'express';
 import { ok } from 'gateways';
 import { RecordAnalyticsEvents } from 'interactors';
 import Stripe from 'stripe';
+import { parseAuth0Sub } from '..';
 
 let stripe;
 
@@ -25,41 +26,28 @@ export const createCheckoutSession = ({
       const authenticatedUserId = parseAuth0Sub(
         req.auth0User?.sub,
       );
+      console.log(
+        'authenticatedUserId',
+        authenticatedUserId,
+      );
 
       const sessionId = 'fake-session-id';
 
-      const session = await stripe.checkout.sessions.create(
-        {
-          success_url: 'https://example.com/success',
-          line_items: [
-            {
-              price: process.env.VIZHUB_STRIPE_PRICE_ID,
-              quantity: 1,
-            },
-          ],
-          mode: 'subscription',
-        },
-      );
+      // const session = await stripe.checkout.sessions.create(
+      //   {
+      //     success_url: 'https://example.com/success',
+      //     line_items: [
+      //       {
+      //         price: process.env.VIZHUB_STRIPE_PRICE_ID,
+      //         quantity: 1,
+      //       },
+      //     ],
+      //     mode: 'subscription',
+      // client_reference_id: authenticatedUser.id,
+      //   },
+      // );
 
-      // const session = await stripe.checkout.sessions.create({
-      //   success_url: 'https://example.com/success',
-      //   line_items: [
-      //     {price: 'price_H5ggYwtDq4fbrJ', quantity: 2},
-      //   ],
-      //   mode: 'payment',
-      // });
-
-      // TODO create checkout session that has client_reference_id
-      // const event = request.body;
-      // const session = await stripe.checkout.sessions.create({
-      //   success_url: 'https://example.com/success',
-      //   line_items: [
-      //     { price: 'price_H5ggYwtDq4fbrJ', quantity: 2 },
-      //   ],
-      //   mode: 'payment',
-      //   client_reference_id: authenticatedUser.id,
-      // });
-      response.json(ok({ sessionId }));
+      res.json(ok({ sessionId }));
     },
   );
 

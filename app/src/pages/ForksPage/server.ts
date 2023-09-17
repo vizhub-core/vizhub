@@ -3,7 +3,6 @@ import {
   ForksPageData,
   ForksPageQuery,
 } from './index';
-import { parseAuth0Sub } from '../../parseAuth0User';
 import {
   Info,
   SortId,
@@ -15,6 +14,7 @@ import { Gateways } from 'gateways';
 import { Auth0User } from '../Page';
 import { GetInfosAndOwners } from 'interactors';
 import xss from 'xss';
+import { getAuthenticatedUser } from '../getAuthenticatedUser';
 
 ForksPage.getPageData = async ({
   gateways,
@@ -48,22 +48,11 @@ ForksPage.getPageData = async ({
   const { infoSnapshots, ownerUserSnapshots } =
     infosAndOwnersResult.value;
 
-  // If the user is currently authenticated...
-  let authenticatedUserSnapshot = null;
-  if (auth0User) {
-    const authenticatedUserResult = await getUser(
-      parseAuth0Sub(auth0User.sub),
-    );
-    if (authenticatedUserResult.outcome === 'failure') {
-      console.log(
-        'Error when fetching authenticated user:',
-      );
-      console.log(authenticatedUserResult.error);
-      return null;
-    }
-    authenticatedUserSnapshot =
-      authenticatedUserResult.value;
-  }
+  const { authenticatedUserSnapshot } =
+    await getAuthenticatedUser({
+      gateways,
+      auth0User,
+    });
 
   // Get the Info snapshot for the forked-from viz
   const forkedFromInfoResult = await getInfo(forkedFrom);

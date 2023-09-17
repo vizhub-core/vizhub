@@ -4,7 +4,7 @@
 
 import { VerifyVizAccess } from 'interactors';
 import { CONTENT_COLLECTION } from 'database';
-import { parseAuth0Sub } from './parseAuth0User';
+import { parseAuth0Sub } from 'api';
 import { Gateways } from 'gateways';
 import { Action, Info, READ, VizId, WRITE } from 'entities';
 

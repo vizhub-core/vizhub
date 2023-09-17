@@ -3,7 +3,7 @@ import {
   ExplorePageData,
   ExplorePageQuery,
 } from './index';
-import { parseAuth0Sub } from '../../parseAuth0User';
+
 import {
   SortId,
   asSortId,

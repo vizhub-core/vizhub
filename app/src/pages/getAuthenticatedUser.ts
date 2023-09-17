@@ -1,5 +1,5 @@
 import { Snapshot, User, UserId } from 'entities';
-import { parseAuth0Sub } from '../parseAuth0User';
+import { parseAuth0Sub } from 'api';
 
 export const getAuthenticatedUser = async ({
   gateways,

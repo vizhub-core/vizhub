@@ -1,11 +1,11 @@
 import { ProfilePage, ProfilePageData } from './index';
-import { parseAuth0Sub } from '../../parseAuth0User';
 import { GetInfosAndOwners } from 'interactors';
 import {
   SortId,
   asSortId,
   defaultSortOption,
 } from 'entities';
+import { getAuthenticatedUser } from '../getAuthenticatedUser';
 
 ProfilePage.getPageData = async ({
   gateways,
@@ -39,22 +39,11 @@ ProfilePage.getPageData = async ({
     }
     const { infoSnapshots } = infosAndOwnersResult.value;
 
-    // If the user is currently authenticated...
-    let authenticatedUserSnapshot = null;
-    if (auth0User) {
-      const authenticatedUserResult = await getUser(
-        parseAuth0Sub(auth0User.sub),
-      );
-      if (authenticatedUserResult.outcome === 'failure') {
-        console.log(
-          'Error when fetching authenticated user:',
-        );
-        console.log(authenticatedUserResult.error);
-        return null;
-      }
-      authenticatedUserSnapshot =
-        authenticatedUserResult.value;
-    }
+    const { authenticatedUserSnapshot } =
+      await getAuthenticatedUser({
+        gateways,
+        auth0User,
+      });
 
     const pageData: ProfilePageData = {
       title: `${userName} on VizHub`,

@@ -1,29 +1,16 @@
 import { SearchPage, SearchPageData } from './index';
-import { parseAuth0Sub } from '../../parseAuth0User';
+import { getAuthenticatedUser } from '../getAuthenticatedUser';
 
 SearchPage.getPageData = async ({
   gateways,
   auth0User,
   query,
 }): Promise<SearchPageData> => {
-  const { getUser } = gateways;
-
-  // If the user is currently authenticated...
-  let authenticatedUserSnapshot = null;
-  if (auth0User) {
-    const authenticatedUserResult = await getUser(
-      parseAuth0Sub(auth0User.sub),
-    );
-    if (authenticatedUserResult.outcome === 'failure') {
-      console.log(
-        'Error when fetching authenticated user:',
-      );
-      console.log(authenticatedUserResult.error);
-      return null;
-    }
-    authenticatedUserSnapshot =
-      authenticatedUserResult.value;
-  }
+  const { authenticatedUserSnapshot } =
+    await getAuthenticatedUser({
+      gateways,
+      auth0User,
+    });
 
   return {
     title: `VizHub Search Results`,
