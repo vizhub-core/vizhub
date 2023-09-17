@@ -14,15 +14,9 @@ export const stripeWebhookEndpoint = ({
   // Docs for Stripe Webhooks
   // https://stripe.com/docs/webhooks/signatures
 
-  const stripe = require('stripe')('sk_test_Isw5Gw3q2WQmSuuU7q1Knll5');
-
-const session = await stripe.checkout.sessions.create({
-  success_url: 'https://example.com/success',
-  line_items: [
-    {price: 'price_H5ggYwtDq4fbrJ', quantity: 2},
-  ],
-  mode: 'payment',
-});
+  // const stripe = require('stripe')(
+  //   'sk_test_Isw5Gw3q2WQmSuuU7q1Knll5',
+  // );
 
   // // Match the raw body to content type application/json
   // // If you are using Express v4 - v4.16 you need to use body-parser, not express, to retrieve the request body
@@ -30,7 +24,7 @@ const session = await stripe.checkout.sessions.create({
     // '/webhook',
     '/api/stripe-webhook',
     express.json({ type: 'application/json' }),
-    (request, response) => {
+    async (request, response) => {
       console.log('reveiced request to Stripe Webhook');
       const event = request.body;
 
@@ -42,6 +36,7 @@ const session = await stripe.checkout.sessions.create({
             'subscription created',
             subscriptionCreated,
           );
+
           // TODO get user id from subscription
           const userId = event.data.object.customer;
           // TODO update user with subscription

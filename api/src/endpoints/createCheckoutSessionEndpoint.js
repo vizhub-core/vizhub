@@ -22,6 +22,14 @@ export const createCheckoutSession = ({
       console.log(
         'reveiced request to create checkout session',
       );
+      // const session = await stripe.checkout.sessions.create({
+      //   success_url: 'https://example.com/success',
+      //   line_items: [
+      //     {price: 'price_H5ggYwtDq4fbrJ', quantity: 2},
+      //   ],
+      //   mode: 'payment',
+      // });
+
       // TODO create checkout session that has client_reference_id
       // const event = request.body;
       // const session = await stripe.checkout.sessions.create({

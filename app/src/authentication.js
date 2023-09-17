@@ -7,7 +7,7 @@ import {
 import { parseAuth0Sub } from './parseAuth0User';
 
 // Deals with authentication via Auth0.
-export const authentication = ({ env, gateways }) => {
+export const authentication = ({ env, gateways, app }) => {
   const updateOrCreateUser = UpdateOrCreateUser(gateways);
   const recordAnalyticsEvents =
     RecordAnalyticsEvents(gateways);
@@ -70,8 +70,24 @@ export const authentication = ({ env, gateways }) => {
     routes: {
       // This is particular for the GitHub auth provider
       callback: '/login/callback',
+
+      // We override the login route so that
+      // we can set the returnTo parameter.
+      login: false,
     },
     afterCallback,
   });
+
+  app.use(authMiddleware);
+
+  app.get('/login', (req, res) => {
+    const query = req.query;
+    const options = {};
+    if (query.redirect && query.redirect === 'pricing') {
+      options.returnTo = `/${query.redirect}`;
+    }
+    return res.oidc.login(options);
+  });
+
   return authMiddleware;
 };

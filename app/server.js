@@ -173,8 +173,7 @@ async function createServer(
   // Set up authentication.
   let authMiddleware;
   if (env.VIZHUB3_AUTH0_SECRET) {
-    authMiddleware = authentication({ env, gateways });
-    app.use(authMiddleware);
+    authMiddleware = authentication({ env, gateways, app });
   } else {
     console.log(
       'Environment variable VIZHUB3_AUTH0_SECRET is not set. See README for details.',
