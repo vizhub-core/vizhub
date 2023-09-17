@@ -2,7 +2,7 @@ import express from 'express';
 import { ok } from 'gateways';
 import { RecordAnalyticsEvents } from 'interactors';
 import Stripe from 'stripe';
-import { parseAuth0Sub } from '..';
+import { parseAuth0Sub, parseAuth0User } from '..';
 
 let stripe;
 
@@ -23,9 +23,11 @@ export const createCheckoutSession = ({
         'reveiced request to create checkout session',
       );
 
-      const authenticatedUserId = parseAuth0Sub(
-        req.auth0User?.sub,
-      );
+      // Get at the currently authenticated user.
+      const auth0User = req?.oidc?.user || null;
+
+      const { authenticatedUserId } =
+        parseAuth0User(auth0User);
       console.log(
         'authenticatedUserId',
         authenticatedUserId,
