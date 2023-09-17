@@ -80,14 +80,25 @@ export const authentication = ({ env, gateways, app }) => {
 
   app.use(authMiddleware);
 
-  app.get('/login', (req, res) => {
-    const query = req.query;
-    const options = {};
-    if (query.redirect && query.redirect === 'pricing') {
-      options.returnTo = `/${query.redirect}`;
-    }
-    return res.oidc.login(options);
-  });
+  // Only allow post-login redirects to certain paths.
+  const validPaths = [
+    'pricing',
+
+    // TODO return to profile page after login
+    // if already on profile page
+    // TODO return to checkout page after login
+    // if already on pricing page
+    // TODO return to viz page after login
+    // if already on viz page
+  ];
+
+  app.get('/login', (req, res) =>
+    res.oidc.login({
+      returnTo: validPaths.includes(req.query.redirect)
+        ? `/${req.query.redirect}`
+        : undefined,
+    }),
+  );
 
   return authMiddleware;
 };
