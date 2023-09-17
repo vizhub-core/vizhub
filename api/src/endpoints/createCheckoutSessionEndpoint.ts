@@ -1,20 +1,19 @@
 import express from 'express';
 import { err, ok } from 'gateways';
-import { RecordAnalyticsEvents } from 'interactors';
 import Stripe from 'stripe';
-import { parseAuth0Sub, parseAuth0User } from '..';
+import { parseAuth0User } from '..';
 import { authenticationRequiredError } from 'gateways/src/errors';
 
 let stripe;
 
-// console.log('Stripe', Stripe);
-
-export const createCheckoutSession = ({
-  app,
-  gateways,
-}) => {
+export const createCheckoutSession = ({ app }) => {
   if (!stripe) {
-    stripe = Stripe(process.env.VIZHUB_STRIPE_SECRET_KEY);
+    stripe = new Stripe(
+      process.env.VIZHUB_STRIPE_SECRET_KEY,
+      {
+        apiVersion: '2023-08-16',
+      },
+    );
   }
   app.post(
     '/api/create-checkout-session',
@@ -43,8 +42,6 @@ export const createCheckoutSession = ({
         return;
       }
 
-      // const sessionId = 'fake-session-id';
-
       // https://stripe.com/docs/api/checkout/sessions/create#create_checkout_session-client_reference_id
       const session = await stripe.checkout.sessions.create(
         {
@@ -59,60 +56,7 @@ export const createCheckoutSession = ({
           client_reference_id: authenticatedUserId,
         },
       );
-
-      // console.log('session');
-      // console.log(session);
-
-      res.json(ok({ sessionId: session.id }));
+      res.json(ok({ sessionURL: session.url }));
     },
   );
-
-  // app.listen(8000, () => console.log('Running on port 8000'));
-
-  // app.post('/api/stripe-webhooks', async (req, res) => {
-  // console.log('reveiced request to Stripe Webhook');
-
-  // // Verify the signature
-  // const sig = req.headers['stripe-signature'];
-  // const endpointSecret =
-  //   process.env.STRIPE_WEBHOOK_SECRET;
-  // let event;
-
-  // try {
-  //   event = stripe.webhooks.constructEvent(
-  //     req.body,
-  //     sig,
-  //     endpointSecret,
-  //   );
-  // } catch (err) {
-  //   console.log(err);
-  //   return res
-  //     .status(400)
-  //     .send(`Webhook Error: ${err.message}`);
-  // }
-
-  // if (req.body && req.body.email) {
-  //   const email = req.body.email;
-  //   const result = await saveBetaProgramSignup({
-  //     id: generateId(),
-  //     email,
-  //   });
-  //   if (result.outcome !== 'success') {
-  //     throw result.error;
-  //   }
-
-  //   await recordAnalyticsEvents({
-  //     eventId: 'event.private-beta-email-submit',
-  //   });
-
-  //   res.send(ok('success'));
-  // } else {
-  //   res.send(err(missingParameterError('email')));
-  // }
-
-  // Send a 200 status code to Stripe
-  // Explicitly set the 200 status code
-  //   res.status(200);
-  //   res.send('success');
-  // });
 };

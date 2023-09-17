@@ -7,27 +7,10 @@ import {
   AuthenticatedUserProvider,
 } from '../../contexts/AuthenticatedUserContext';
 import { Page, PageData } from '../Page';
-// import { setCookie } from '../cookies';
-// import { UserId } from 'entities';
-// import Stripe from 'stripe';
 import './styles.scss';
 import { User } from 'entities';
 
 const vizKit = VizKit({ baseUrl: './api' });
-// const redirectToCheckout = async (userId: UserId) => {
-//   const sessionId =
-//     await vizKit.rest.createCheckoutSession(userId);
-//   if (sessionId) {
-//     const stripe = new Stripe('YOUR_PUBLISHABLE_KEY', {
-//       apiVersion: '2023-08-16',
-//     }); // Make sure to replace 'YOUR_PUBLISHABLE_KEY' with your Stripe publishable key
-//     stripe.redirectToCheckout({ sessionId });
-//   } else {
-//     console.error(
-//       'Failed to get a valid session ID for checkout.',
-//     );
-//   }
-// };
 
 export type PricingPageData = PageData & {
   description: string;
@@ -60,9 +43,14 @@ const Body = () => {
       window.location.href = url;
 
       return;
+    } else {
+      // https://stripe.com/docs/checkout/quickstart
+      //   <form action="/create-checkout-session" method="POST">
+      //   <button type="submit" id="checkout-button">Checkout</button>
+      // </form>
+      //
+      // res.redirect(303, session.url);
     }
-    console.log('TODO handle pro click');
-
     // Invoke vizKit.rest.createCheckoutSession to create a Stripe Checkout Session.
     const createCheckoutSessionResult =
       await vizKit.rest.createCheckoutSession(
@@ -77,14 +65,14 @@ const Body = () => {
       return;
     }
 
-    const sessionId =
-      createCheckoutSessionResult.value.sessionId;
+    const { sessionURL } =
+      createCheckoutSessionResult.value;
+    // Redirect the user to the Stripe Checkout page.
+    window.location.href = sessionURL;
 
-    console.log('sessionId', sessionId);
-
-    // vizKit.rest.recordAnalyticsEvents(
-    //   'event.click.pricing.pro',
-    // );
+    vizKit.rest.recordAnalyticsEvents(
+      'event.click.pricing.pro',
+    );
     // // Pretend that the user goes through a checkout process...
 
     // TODO bring back toast
