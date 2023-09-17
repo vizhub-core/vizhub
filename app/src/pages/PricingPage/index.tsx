@@ -62,6 +62,26 @@ const Body = () => {
       return;
     }
     console.log('TODO handle pro click');
+
+    // Invoke vizKit.rest.createCheckoutSession to create a Stripe Checkout Session.
+    const createCheckoutSessionResult =
+      await vizKit.rest.createCheckoutSession(
+        authenticatedUser.id,
+      );
+
+    if (createCheckoutSessionResult.result === 'error') {
+      console.error(
+        'TODO handle error',
+        createCheckoutSessionResult.error,
+      );
+      return;
+    }
+
+    const sessionId =
+      createCheckoutSessionResult.value.sessionId;
+
+    console.log('sessionId', sessionId);
+
     // vizKit.rest.recordAnalyticsEvents(
     //   'event.click.pricing.pro',
     // );

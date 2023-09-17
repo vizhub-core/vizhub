@@ -1,15 +1,10 @@
 import express from 'express';
+import { ok } from 'gateways';
 import { RecordAnalyticsEvents } from 'interactors';
 import Stripe from 'stripe';
-const stripe = Stripe('sk_test_Isw5Gw3q2WQmSuuU7q1Knll5');
+// const stripe = Stripe('sk_test_Isw5Gw3q2WQmSuuU7q1Knll5');
 
-const session = await stripe.checkout.sessions.create({
-  success_url: 'https://example.com/success',
-  line_items: [
-    { price: 'price_H5ggYwtDq4fbrJ', quantity: 2 },
-  ],
-  mode: 'payment',
-});
+// console.log('Stripe', Stripe);
 
 export const createCheckoutSession = ({
   app,
@@ -22,6 +17,17 @@ export const createCheckoutSession = ({
       console.log(
         'reveiced request to create checkout session',
       );
+
+      const sessionId = 'fake-session-id';
+
+      // const session = await stripe.checkout.sessions.create({
+      //   success_url: 'https://example.com/success',
+      //   line_items: [
+      //     { price: 'price_H5ggYwtDq4fbrJ', quantity: 2 },
+      //   ],
+      //   mode: 'payment',
+      // });
+
       // const session = await stripe.checkout.sessions.create({
       //   success_url: 'https://example.com/success',
       //   line_items: [
@@ -40,7 +46,7 @@ export const createCheckoutSession = ({
       //   mode: 'payment',
       //   client_reference_id: authenticatedUser.id,
       // });
-      // response.json({ received: true });
+      response.json(ok({ sessionId }));
     },
   );
 
