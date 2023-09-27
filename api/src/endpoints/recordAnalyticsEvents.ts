@@ -1,3 +1,4 @@
+import express from 'express';
 import { err, missingParameterError } from 'gateways';
 import { RecordAnalyticsEvents } from 'interactors';
 
@@ -10,6 +11,7 @@ export const recordAnalyticsEvents = ({
     RecordAnalyticsEvents(gateways);
   app.post(
     '/api/record-analytics-event',
+    express.json(),
     async (req, res) => {
       if (req.body && req.body.eventId) {
         const eventId = req.body.eventId;

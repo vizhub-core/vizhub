@@ -110,7 +110,6 @@ export const VizKit = ({ baseUrl, ssrFetch = null }) => {
             userId,
           },
         );
-        console.log('createCheckoutSession result', result);
 
         return result;
       },

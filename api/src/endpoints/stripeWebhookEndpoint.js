@@ -3,22 +3,18 @@ import express from 'express';
 import Stripe from 'stripe';
 const stripe = Stripe(process.env.VIZHUB_STRIPE_SECRET_KEY);
 
+// Critical for Stripe development - run this incantation
+// stripe listen --forward-to localhost:3000/api/stripe-webhooks
+
+// Click "Try it online" from this page to trigger Webhook
+// https://stripe.com/docs/stripe-cli
+// stripe trigger customer.subscription.created
+
+// Docs for Stripe Webhooks
+// https://stripe.com/docs/webhooks
 export const stripeWebhookEndpoint = ({ app }) => {
-  //  stripe listen --forward-to localhost:3000/api/stripe-webhooks
-
-  // Docs for Stripe Webhooks
-  // https://stripe.com/docs/webhooks/signatures
-
-  // const stripe = require('stripe')(
-  //   'sk_test_Isw5Gw3q2WQmSuuU7q1Knll5',
-  // );
-
-  // // Match the raw body to content type application/json
-  // // If you are using Express v4 - v4.16 you need to use body-parser, not express, to retrieve the request body
   app.post(
-    // '/webhook',
     '/api/stripe-webhook',
-    // express.json({ type: 'application/json' }),
     express.raw({ type: 'application/json' }),
     async (request, response) => {
       console.log('reveiced request to Stripe Webhook');
@@ -38,15 +34,11 @@ export const stripeWebhookEndpoint = ({ app }) => {
         );
       } catch (err) {
         console.log(err);
-        process.exit();
         return response
           .status(400)
           .send(`Webhook Error: ${err.message}`);
       }
 
-      console.log('signature verified');
-
-      process.exit();
       // console.log(JSON.stringify(event, null, 2));
 
       // Handle the event
@@ -60,6 +52,7 @@ export const stripeWebhookEndpoint = ({ app }) => {
 
           // TODO get user id from subscription
           const userId = event.data.object.customer;
+
           // TODO update user with subscription
           updateUserSubscription(userId, 'pro');
           break;
