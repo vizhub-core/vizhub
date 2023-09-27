@@ -1,14 +1,9 @@
 import express from 'express';
-import { RecordAnalyticsEvents } from 'interactors';
 
-export const stripeWebhookEndpoint = ({
-  app,
-  gateways,
-}) => {
-  const { saveBetaProgramSignup } = gateways;
-  const recordAnalyticsEvents =
-    RecordAnalyticsEvents(gateways);
+import Stripe from 'stripe';
+const stripe = Stripe(process.env.VIZHUB_STRIPE_SECRET_KEY);
 
+export const stripeWebhookEndpoint = ({ app }) => {
   //  stripe listen --forward-to localhost:3000/api/stripe-webhooks
 
   // Docs for Stripe Webhooks
@@ -23,12 +18,36 @@ export const stripeWebhookEndpoint = ({
   app.post(
     // '/webhook',
     '/api/stripe-webhook',
-    express.json({ type: 'application/json' }),
+    // express.json({ type: 'application/json' }),
+    express.raw({ type: 'application/json' }),
     async (request, response) => {
       console.log('reveiced request to Stripe Webhook');
-      const event = request.body;
 
-      console.log(JSON.stringify(event, null, 2));
+      // Verify signature to prevent spoofing
+      // See https://stripe.com/docs/webhooks#verify-official-libraries
+      const sig = request.headers['stripe-signature'];
+      const endpointSecret =
+        process.env.VIZHUB_STRIPE_WEBHOOK_SIGNING_SECRET;
+      let event;
+
+      try {
+        event = stripe.webhooks.constructEvent(
+          request.body,
+          sig,
+          endpointSecret,
+        );
+      } catch (err) {
+        console.log(err);
+        process.exit();
+        return response
+          .status(400)
+          .send(`Webhook Error: ${err.message}`);
+      }
+
+      console.log('signature verified');
+
+      process.exit();
+      // console.log(JSON.stringify(event, null, 2));
 
       // Handle the event
       switch (event.type) {

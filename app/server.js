@@ -61,7 +61,8 @@ async function createServer(
   const app = express();
 
   // Support parsing of JSON bodies in API requests.
-  app.use(express.json());
+  // Removed as this interferes with the Stripe webhook signing.
+  // app.use(express.json());
 
   // Set up Vite in dev mode.
   // This will attach the Vite dev server to our Express app.
