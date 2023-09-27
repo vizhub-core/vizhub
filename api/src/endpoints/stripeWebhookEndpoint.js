@@ -64,7 +64,9 @@ export const stripeWebhookEndpoint = ({ app }) => {
             'Stripe customer id from checkout session',
             checkoutSessionCompleted.customer,
           );
-          process.exit();
+
+          // TODO invoke updateUserStripeId
+
           // // TODO update user with Stripe id
           // updateUserStripeId(
           //   userId,
