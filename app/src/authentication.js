@@ -93,6 +93,9 @@ export const authentication = ({ env, gateways, app }) => {
   ];
 
   app.get('/login', (req, res) =>
+    // TODO make this work properly,
+    // and also handle pages with dynamic routes such as
+    //  '/:userName/:id';
     res.oidc.login({
       returnTo: validPaths.includes(req.query.redirect)
         ? `/${req.query.redirect}`
