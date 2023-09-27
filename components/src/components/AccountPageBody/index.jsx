@@ -33,16 +33,6 @@ export const AccountPageBody = ({
           {currentPlan === 'pro' ? (
             <div>
               <p>You are currently on the pro plan.</p>
-              <p>
-                During the current private beta testing
-                period, it looks like you're a paying
-                customer, but we're not actually collecting
-                any payments. Once the beta program ends,
-                your account will revert back to the free
-                plan, and your private vizzes will become
-                read-only until you upgrade to an actual
-                paid account.
-              </p>
               <Button onClick={onUnsubscribeClick}>
                 Unsubscribe
               </Button>

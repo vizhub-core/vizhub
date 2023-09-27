@@ -3,6 +3,7 @@
 import { describe, it, expect } from 'vitest';
 import { initGateways } from './initGateways';
 import { UpdateOrCreateUser } from '../src';
+import { User } from 'entities';
 
 // This is what we get from Auth0.
 const claims = {
@@ -38,7 +39,7 @@ const options = {
   picture: claims.picture,
 };
 
-const expectedUser = {
+export const expectedUser: User = {
   id: options.id,
   primaryEmail: options.email,
   secondaryEmails: [],

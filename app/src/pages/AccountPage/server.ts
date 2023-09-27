@@ -1,5 +1,5 @@
 import { AccountPage, AccountPageData } from './index';
-import { parseAuth0Sub } from '../../parseAuth0User';
+import { parseAuth0Sub } from 'api';
 
 AccountPage.getPageData = async ({
   gateways,

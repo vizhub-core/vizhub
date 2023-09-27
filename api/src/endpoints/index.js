@@ -5,6 +5,8 @@ import { getInfosAndOwnersEndpoint } from './getInfosAndOwnersEndpoint';
 import { forkVizEndpoint } from './forkVizEndpoint';
 import { fakeCheckoutSuccessEndpoint } from './fakeCheckoutSuccessEndpoint';
 import { fakeUnsubscribeSuccessEndpoint } from './fakeUnsubscribeSuccessEndpoint';
+import { stripeWebhookEndpoint } from './stripeWebhookEndpoint';
+import { createCheckoutSession } from './createCheckoutSessionEndpoint';
 
 export const endpoints = [
   healthCheck,
@@ -14,4 +16,6 @@ export const endpoints = [
   forkVizEndpoint,
   fakeCheckoutSuccessEndpoint,
   fakeUnsubscribeSuccessEndpoint,
+  stripeWebhookEndpoint,
+  createCheckoutSession,
 ];

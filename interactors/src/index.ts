@@ -3,6 +3,7 @@
 // Corresponds to the "use cases" concept from Clean Architecture.
 // See https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html
 export { UpdateOrCreateUser } from './updateOrCreateUser';
+export { UpdateUserStripeId } from './updateUserStripeId';
 export { GetViz } from './getViz';
 export { SaveViz } from './saveViz';
 export { GetContentAtCommit } from './getContentAtCommit';

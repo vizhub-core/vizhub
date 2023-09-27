@@ -56,6 +56,10 @@ export interface User {
   //  * What level of paying customer this user is.
   plan: Plan;
 
+  // stripeCustomerId
+  //  * The Stripe customer ID for this user.
+  stripeCustomerId?: string;
+
   // company
   //  * What company this user works for.
   company?: string;
