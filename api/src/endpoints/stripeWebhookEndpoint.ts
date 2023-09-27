@@ -1,7 +1,8 @@
 import express from 'express';
 
-import Stripe from 'stripe';
-const stripe = Stripe(process.env.VIZHUB_STRIPE_SECRET_KEY);
+import { UserId } from 'entities';
+import { getStripe } from './getStripe';
+import { UpdateUserStripeId } from 'interactors';
 
 // Critical for Stripe development - run this incantation
 // stripe listen --forward-to localhost:3000/api/stripe-webhooks
@@ -12,19 +13,24 @@ const stripe = Stripe(process.env.VIZHUB_STRIPE_SECRET_KEY);
 
 // Docs for Stripe Webhooks
 // https://stripe.com/docs/webhooks
-export const stripeWebhookEndpoint = ({ app }) => {
+export const stripeWebhookEndpoint = ({
+  app,
+  gateways,
+}) => {
+  const updateUserStripeId = UpdateUserStripeId(gateways);
+
   app.post(
     '/api/stripe-webhook',
     express.raw({ type: 'application/json' }),
     async (request, response) => {
-      console.log('reveiced request to Stripe Webhook');
-
       // Verify signature to prevent spoofing
       // See https://stripe.com/docs/webhooks#verify-official-libraries
       const sig = request.headers['stripe-signature'];
       const endpointSecret =
         process.env.VIZHUB_STRIPE_WEBHOOK_SIGNING_SECRET;
       let event;
+
+      const stripe = getStripe();
 
       try {
         event = stripe.webhooks.constructEvent(
@@ -46,32 +52,19 @@ export const stripeWebhookEndpoint = ({ app }) => {
         case 'checkout.session.completed':
           const checkoutSessionCompleted =
             event.data.object;
-          console.log(
-            'checkout session completed',
-            checkoutSessionCompleted,
-          );
 
-          // TODO get user id from checkout session
-          const userId =
+          const userId: UserId =
             checkoutSessionCompleted.client_reference_id;
 
-          console.log(
-            'userId from checkout session',
+          const stripeCustomerId =
+            checkoutSessionCompleted.customer;
+
+          const result = await updateUserStripeId({
             userId,
-          );
+            stripeCustomerId,
+          });
 
-          console.log(
-            'Stripe customer id from checkout session',
-            checkoutSessionCompleted.customer,
-          );
-
-          // TODO invoke updateUserStripeId
-
-          // // TODO update user with Stripe id
-          // updateUserStripeId(
-          //   userId,
-          //   checkoutSessionCompleted.customer,
-          // );
+          console.log('result', result);
 
           // // TODO update user with subscription
           // updateUserSubscription(userId, 'pro');

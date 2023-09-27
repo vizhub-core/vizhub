@@ -1,20 +1,10 @@
 import express from 'express';
 import { err, ok } from 'gateways';
-import Stripe from 'stripe';
 import { parseAuth0User } from '..';
 import { authenticationRequiredError } from 'gateways/src/errors';
-
-let stripe;
+import { getStripe } from './getStripe';
 
 export const createCheckoutSession = ({ app }) => {
-  if (!stripe) {
-    stripe = new Stripe(
-      process.env.VIZHUB_STRIPE_SECRET_KEY,
-      {
-        apiVersion: '2023-08-16',
-      },
-    );
-  }
   app.post(
     '/api/create-checkout-session',
     express.json({ type: 'application/json' }),
@@ -41,6 +31,8 @@ export const createCheckoutSession = ({ app }) => {
         res.json(err(authenticationRequiredError()));
         return;
       }
+
+      const stripe = getStripe();
 
       // https://stripe.com/docs/api/checkout/sessions/create#create_checkout_session-client_reference_id
       const session = await stripe.checkout.sessions.create(
