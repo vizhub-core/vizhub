@@ -3,7 +3,7 @@ import { renderToString } from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom/server';
 import { App } from './App';
 export { pages } from './pages/server';
-export { api } from 'api/src/api';
+export { api } from 'api';
 export { initializeGateways } from 'database';
 export { authentication } from './authentication';
 export * as accessControl from './accessControl';

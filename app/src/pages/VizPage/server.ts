@@ -6,11 +6,8 @@ import {
   Content,
   READ,
   WRITE,
-  User,
-  UserId,
 } from 'entities';
 import { JSDOM } from 'jsdom';
-import { parseAuth0Sub } from '../../parseAuth0User';
 import { getFileText } from '../../accessors/getFileText';
 import { VizPage, VizPageData } from './index';
 import { renderREADME } from './renderREADME';
@@ -20,6 +17,7 @@ import { computeSrcDocV3 } from './v3Runtime/computeSrcDocV3';
 import { getRuntimeVersion } from '../../accessors/getRuntimeVersion';
 import { build } from './v3Runtime/build';
 import { toV3RuntimeFiles } from './v3Runtime/toV3RuntimeFiles';
+import { getAuthenticatedUser } from '../getAuthenticatedUser';
 
 setJSDOM(JSDOM);
 // TODO move the data fetching part of this to a separate file - interactors/getVizPageData.ts
@@ -44,42 +42,18 @@ VizPage.getPageData = async ({
     const infoSnapshot: Snapshot<Info> = infoResult.value;
     const info: Info = infoSnapshot.data;
     const { title, owner, forkedFrom } = info;
-
-    // If the user is currently authenticated...
-    let authenticatedUserSnapshot:
-      | Snapshot<User>
-      | undefined;
-    if (auth0User) {
-      const authenticatedUserId = parseAuth0Sub(
-        auth0User.sub,
-      );
-
-      // Get the User entity for the currently authenticated user.
-      // TODO batch this together so we make only one query against User collection
-      // e.g. const getUsersResult = await getUsers([owner,authenticatedUserId,forkedFromOwner]);
-
-      const authenticatedUserResult = await getUser(
-        authenticatedUserId,
-      );
-      if (authenticatedUserResult.outcome === 'failure') {
-        console.log(
-          'Error when fetching authenticated user:',
-        );
-        console.log(authenticatedUserResult.error);
-        return null;
-      }
-      authenticatedUserSnapshot =
-        authenticatedUserResult.value;
-    }
-    const userId: UserId | undefined =
-      authenticatedUserSnapshot
-        ? authenticatedUserSnapshot.data.id
-        : undefined;
+    const {
+      authenticatedUserId,
+      authenticatedUserSnapshot,
+    } = await getAuthenticatedUser({
+      gateways,
+      auth0User,
+    });
 
     // Access control: Verify that the user has read access to the viz.
     const verifyVizReadAccessResult = await verifyVizAccess(
       {
-        userId,
+        authenticatedUserId,
         info,
         action: READ,
       },
@@ -99,7 +73,7 @@ VizPage.getPageData = async ({
     // TODO refactor verifyVizAccess to check multiple actions at once.
     const verifyVizWriteAccessResult =
       await verifyVizAccess({
-        userId,
+        authenticatedUserId,
         info,
         action: WRITE,
       });

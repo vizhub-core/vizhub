@@ -50,6 +50,7 @@
     "rollup-pluginutils": "^2.8.2",
     "sharedb": "^4.0.1",
     "sharedb-mongo": "^4.1.0",
+    "stripe": "^13.6.0",
     "vizhub-libraries": "^1.8.0",
     "vizhub-ui": "^3.3.0",
     "vzcode": "^0.19.0",

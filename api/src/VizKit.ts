@@ -102,6 +102,17 @@ export const VizKit = ({ baseUrl, ssrFetch = null }) => {
             userId,
           },
         ),
+
+      createCheckoutSession: async (userId: UserId) => {
+        const result = await postJSON(
+          `${baseUrl}/create-checkout-session`,
+          {
+            userId,
+          },
+        );
+
+        return result;
+      },
     },
   };
 };

@@ -1,3 +1,4 @@
+import express from 'express';
 import { err, missingParameterError } from 'gateways';
 import { GetInfosAndOwners } from 'interactors';
 
@@ -9,6 +10,7 @@ export const getInfosAndOwnersEndpoint = ({
   const getInfosAndOwners = GetInfosAndOwners(gateways);
   app.post(
     '/api/get-infos-and-owners',
+    express.json(),
     async (req, res) => {
       if (req.body) {
         const {

@@ -1,3 +1,4 @@
+import express from 'express';
 import { User } from 'entities';
 import {
   Gateways,
@@ -16,6 +17,7 @@ export const fakeUnsubscribeSuccessEndpoint = ({
   const { getUser, saveUser } = gateways;
   app.post(
     '/api/fake-unsubscribe-success',
+    express.json(),
     async (req, res) => {
       // TODO Get the authenticated user from the request
       // to verify authorization.

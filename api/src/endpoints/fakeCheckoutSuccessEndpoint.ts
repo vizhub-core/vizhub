@@ -1,3 +1,4 @@
+import express from 'express';
 import { User } from 'entities';
 import {
   Gateways,
@@ -5,6 +6,7 @@ import {
   missingParameterError,
   ok,
 } from 'gateways';
+import e from 'express';
 
 export const fakeCheckoutSuccessEndpoint = ({
   app,
@@ -16,7 +18,8 @@ export const fakeCheckoutSuccessEndpoint = ({
   const { getUser, saveUser } = gateways;
   app.post(
     '/api/fake-checkout-success',
-    async (req, res) => {
+    express.json(),
+    async (req: express.Request, res: express.Response) => {
       // TODO Get the authenticated user from the request
       // to verify authorization.
 

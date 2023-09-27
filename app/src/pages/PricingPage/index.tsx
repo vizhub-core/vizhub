@@ -7,7 +7,6 @@ import {
   AuthenticatedUserProvider,
 } from '../../contexts/AuthenticatedUserContext';
 import { Page, PageData } from '../Page';
-import { setCookie } from '../cookies';
 import './styles.scss';
 import { User } from 'entities';
 
@@ -24,29 +23,68 @@ const Body = () => {
   );
 
   const handleProClick = useCallback(async () => {
-    vizKit.rest.recordAnalyticsEvents(
-      'event.click.pricing.pro',
-    );
-    // Pretend that the user goes through a checkout process...
+    // If the user is not logged in,
 
+    // make them log in first.
     if (!authenticatedUser) {
       console.log(
         'TODO handle unauthenticated user - redirect to login?',
       );
+
+      //   <Button
+      //   as="a"
+      //   href={`/login?redirect=${currentPageURL}`}
+      //   className="vh-header-button"
+      // >
+      //   Log in
+      // </Button>;
+      const url = '/login?redirect=pricing';
+
+      window.location.href = url;
+
+      return;
+    } else {
+      // https://stripe.com/docs/checkout/quickstart
+      //   <form action="/create-checkout-session" method="POST">
+      //   <button type="submit" id="checkout-button">Checkout</button>
+      // </form>
+      //
+      // res.redirect(303, session.url);
+    }
+    // Invoke vizKit.rest.createCheckoutSession to create a Stripe Checkout Session.
+    const createCheckoutSessionResult =
+      await vizKit.rest.createCheckoutSession(
+        authenticatedUser.id,
+      );
+
+    if (createCheckoutSessionResult.result === 'error') {
+      console.error(
+        'TODO handle error',
+        createCheckoutSessionResult.error,
+      );
       return;
     }
 
-    // Set the cookie to show upgrade success toast on the account page.
-    setCookie('showUpgradeSuccessToast', 'true', 1);
+    const { sessionURL } =
+      createCheckoutSessionResult.value;
+    // Redirect the user to the Stripe Checkout page.
+    window.location.href = sessionURL;
 
-    // Invoke the fake WebHook to simulate a successful payment.
-    await vizKit.rest.fakeCheckoutSuccess(
-      authenticatedUser.id,
+    vizKit.rest.recordAnalyticsEvents(
+      'event.click.pricing.pro',
     );
+    // // Pretend that the user goes through a checkout process...
 
+    // TODO bring back toast
+    // // Set the cookie to show upgrade success toast on the account page.
+    // setCookie('showUpgradeSuccessToast', 'true', 1);
+    // // Invoke the fake WebHook to simulate a successful payment.
+    // await vizKit.rest.fakeCheckoutSuccess(
+    //   authenticatedUser.id,
+    // );
     // Navigate to the account page.
-    const url = '/account';
-    window.location.href = url;
+    // const url = '/account';
+    // window.location.href = url;
   }, [authenticatedUser]);
 
   return <PricingPageBody onProClick={handleProClick} />;
