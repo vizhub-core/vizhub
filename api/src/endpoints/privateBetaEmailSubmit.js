@@ -17,7 +17,7 @@ export const privateBetaEmailSubmit = ({
     '/api/private-beta-email-submit',
     express.json(),
     async (req, res) => {
-      console.log('reveiced request to submit email');
+      // console.log('reveiced request to submit email');
       if (req.body && req.body.email) {
         const email = req.body.email;
         const result = await saveBetaProgramSignup({

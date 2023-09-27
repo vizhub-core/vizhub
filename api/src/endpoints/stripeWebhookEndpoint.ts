@@ -48,101 +48,30 @@ export const stripeWebhookEndpoint = ({
       // console.log(JSON.stringify(event, null, 2));
 
       // Handle the event
-      switch (event.type) {
-        case 'checkout.session.completed':
-          const checkoutSessionCompleted =
-            event.data.object;
+      if (event.type === 'checkout.session.completed') {
+        const checkoutSessionCompleted = event.data.object;
 
-          const userId: UserId =
-            checkoutSessionCompleted.client_reference_id;
+        const userId: UserId =
+          checkoutSessionCompleted.client_reference_id;
 
-          const stripeCustomerId =
-            checkoutSessionCompleted.customer;
+        const stripeCustomerId =
+          checkoutSessionCompleted.customer;
 
-          const result = await updateUserStripeId({
-            userId,
-            stripeCustomerId,
-          });
+        const result = await updateUserStripeId({
+          userId,
+          stripeCustomerId,
+        });
 
-          console.log('result', result);
-
-          // // TODO update user with subscription
-          // updateUserSubscription(userId, 'pro');
-          break;
-        case 'customer.subscription.created':
-          const subscriptionCreated = event.data.object;
+        if (result.outcome === 'failure') {
           console.log(
-            'subscription created',
-            subscriptionCreated,
+            'error updating user stripe id',
+            result.error,
           );
-
-          // // TODO get user id from subscription
-          // const userId = event.data.object.customer;
-
-          // // TODO update user with subscription
-          // updateUserSubscription(userId, 'pro');
-          break;
-        // ... handle other event types
-        default:
-          console.log(`Unhandled event type ${event.type}`);
+        }
       }
-
-      // TODO get stripe ID and customer ID
-      const stripeId = event.data.object.id;
-      const customerId = event.data.object.customer;
-      // TODO update user with stripe ID
 
       // Return a response to acknowledge receipt of the event
       response.json({ received: true });
     },
   );
-
-  // app.listen(8000, () => console.log('Running on port 8000'));
-
-  // app.post('/api/stripe-webhooks', async (req, res) => {
-  // console.log('reveiced request to Stripe Webhook');
-
-  // // Verify the signature
-  // const sig = req.headers['stripe-signature'];
-  // const endpointSecret =
-  //   process.env.STRIPE_WEBHOOK_SECRET;
-  // let event;
-
-  // try {
-  //   event = stripe.webhooks.constructEvent(
-  //     req.body,
-  //     sig,
-  //     endpointSecret,
-  //   );
-  // } catch (err) {
-  //   console.log(err);
-  //   return res
-  //     .status(400)
-  //     .send(`Webhook Error: ${err.message}`);
-  // }
-
-  // if (req.body && req.body.email) {
-  //   const email = req.body.email;
-  //   const result = await saveBetaProgramSignup({
-  //     id: generateId(),
-  //     email,
-  //   });
-  //   if (result.outcome !== 'success') {
-  //     throw result.error;
-  //   }
-
-  //   await recordAnalyticsEvents({
-  //     eventId: 'event.private-beta-email-submit',
-  //   });
-
-  //   res.send(ok('success'));
-  // } else {
-  //   res.send(err(missingParameterError('email')));
-  // }
-
-  // Send a 200 status code to Stripe
-  // Explicitly set the 200 status code
-  //   res.status(200);
-  //   res.send('success');
-  // });
 };

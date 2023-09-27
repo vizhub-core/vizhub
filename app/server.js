@@ -434,6 +434,7 @@ async function createServer(
     '/joe/viz1',
     '/joe/v3-runtime-demo',
     '/explore',
+    '/account',
     '/pricing',
     '/search?query=map',
   ];
