@@ -24,12 +24,12 @@
   "dependencies": {
     "decay": "^1.0.12",
     "multiscale-timeseries": "^2.0.0",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "concurrently": "^8.2.1",
     "prettier": "^3.0.3",
     "typescript": "^5.2.2",
-    "vitest": "^0.34.3"
+    "vitest": "^0.34.5"
   }
 }
