@@ -1,7 +1,12 @@
 import { Gateways, Result } from 'gateways';
 import { setupConnections } from './setupConnections/setupConnections';
-import { MigrationStatus, Snapshot } from 'entities';
+import {
+  MigrationStatus,
+  Snapshot,
+  timestampToDate,
+} from 'entities';
 import Prompt from 'prompt-sync';
+import { getBatchTimestamps } from './getBatchTimestamps';
 export type MigrateResult = {
   isTestRun: boolean;
   migrationStatus: MigrationStatus;
@@ -73,19 +78,43 @@ export const migrate = async ({
         `Previous batch was unsuccessful. Rolling back batch number ${migrationStatus.currentBatchNumber}`,
       );
       // TODO test this path
+      // TODO implement this path - roll back batch
+      // Each entity needs to be handled differently, possibly
+      // Commits need to be rolled back carefully, including
+      //  - Reset the viz to the state it was in before the migration
+      //    regarding the last updated date and the end commit id.
     } else {
       console.log(
         `Previous batch was successful. Starting batch number ${migrationStatus.currentBatchNumber}`,
       );
+
       // Update migration status for new batch
-      migrationStatus.currentBatchCompleted = false;
       migrationStatus.currentBatchNumber += 1;
+      migrationStatus.currentBatchCompleted = false;
       await gateways.saveMigrationStatus(migrationStatus);
     }
   }
 
-  // const { batchStartTimestamp, batchEndTimestamp } =
-  //   getBatchTimestamps(batchNumber);
+  // This is the batch number of the batch we are doing now.
+  const batchNumber = migrationStatus.currentBatchNumber;
+
+  // This window of time determines which window of time
+  // we'll simulate for this migration batch.
+  // The migration batch is only scoped to changes that happened
+  // during this window of time. This means that any events outside this
+  // time frame will be ignored, including:
+  //  - Upvotes that happened outside this time frame
+  const { batchStartTimestamp, batchEndTimestamp } =
+    getBatchTimestamps(batchNumber);
+
+  console.log(
+    '  batch start date: ',
+    timestampToDate(batchStartTimestamp).toLocaleString(),
+  );
+  console.log(
+    '  batch end date: ',
+    timestampToDate(batchEndTimestamp).toLocaleString(),
+  );
 
   return {
     isTestRun: isTest,
