@@ -1,3 +1,5 @@
+import fs from 'fs';
+import Prompt from 'prompt-sync';
 import { Gateways, Result } from 'gateways';
 import { setupConnections } from './setupConnections/setupConnections';
 import {
@@ -6,7 +8,6 @@ import {
   Snapshot,
   timestampToDate,
 } from 'entities';
-import Prompt from 'prompt-sync';
 import { getBatchTimestamps } from './getBatchTimestamps';
 import { v2Vizzes } from './v2Vizzes';
 import { getVizV2 } from './getVizV2';
@@ -140,7 +141,13 @@ export const migrate = async ({
         `Processing viz #${i}: ${info.id} ${info.title} `,
       );
 
-      console.log('vizV2', vizV2);
+      // TODO write this to a file
+      // console.log(JSON.stringify(vizV2, null, 2));
+      const fileName = `./v2Fixtures/vizV2-${info.id}.json`;
+      fs.writeFileSync(
+        fileName,
+        JSON.stringify(vizV2, null, 2),
+      );
       process.exit(0);
 
       // const isVizV2Valid: boolean = await processViz({
