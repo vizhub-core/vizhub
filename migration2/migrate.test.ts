@@ -4,6 +4,16 @@ import { getBatchTimestamps } from './getBatchTimestamps';
 import { MigrationStatus } from 'entities';
 
 describe('migrate', async () => {
+  it('getBatchTimestamps', async () => {
+    const batchNumber = 0;
+
+    const { batchStartTimestamp, batchEndTimestamp } =
+      getBatchTimestamps(batchNumber);
+
+    expect(batchStartTimestamp).toEqual(1534046400);
+    expect(batchEndTimestamp).toEqual(1534651200);
+  });
+
   it('should make connections and know it it in test mode (batch 0)', async () => {
     const migrateResult: MigrateResult = await migrate({
       isTest: true,
@@ -12,6 +22,9 @@ describe('migrate', async () => {
     const { isTestRun, migrationStatus } = migrateResult;
     expect(isTestRun).toEqual(true);
     expect(migrationStatus.currentBatchNumber).toEqual(0);
+    expect(migrationStatus.currentBatchCompleted).toEqual(
+      false,
+    );
   });
 
   it('should continue from the previous batch', async () => {
@@ -38,14 +51,5 @@ describe('migrate', async () => {
     expect(saved.currentBatchNumber).toEqual(51);
     expect(saved.currentBatchCompleted).toEqual(false);
   });
-
-  it('getBatchTimestamps', async () => {
-    const batchNumber = 0;
-
-    const { batchStartTimestamp, batchEndTimestamp } =
-      getBatchTimestamps(batchNumber);
-
-    expect(batchStartTimestamp).toEqual(1534046400);
-    expect(batchEndTimestamp).toEqual(1534651200);
-  });
+  it('should migrate the first batch', async () => {});
 });

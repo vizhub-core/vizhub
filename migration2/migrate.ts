@@ -148,7 +148,9 @@ export const migrate = async ({
         fileName,
         JSON.stringify(vizV2, null, 2),
       );
-      process.exit(0);
+      if (i > 4) {
+        process.exit(0);
+      }
 
       // const isVizV2Valid: boolean = await processViz({
       //   vizV2,
