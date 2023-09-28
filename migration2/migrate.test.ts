@@ -1,6 +1,7 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, assert } from 'vitest';
 import { migrate, MigrateResult } from './migrate';
 import { getBatchTimestamps } from './getBatchTimestamps';
+import { MigrationStatus } from 'entities';
 
 describe('migrate', async () => {
   it('should make connections and know it it in test mode (batch 0)', async () => {
@@ -24,11 +25,18 @@ describe('migrate', async () => {
       },
     });
 
-    const { isTestRun, migrationStatus } = migrateResult;
+    const { isTestRun, migrationStatus, gateways } =
+      migrateResult;
     expect(isTestRun).toEqual(true);
     expect(migrationStatus.currentBatchNumber).toEqual(51);
 
-    console.log('migrationStatus', migrationStatus);
+    // Check that the migration status was saved.
+    const result = await gateways.getMigrationStatus('v2');
+    assert(result.outcome === 'success');
+    const saved: MigrationStatus = result.value.data;
+
+    expect(saved.currentBatchNumber).toEqual(51);
+    expect(saved.currentBatchCompleted).toEqual(false);
   });
 
   it('getBatchTimestamps', async () => {

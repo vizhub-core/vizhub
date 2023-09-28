@@ -5,6 +5,7 @@ import Prompt from 'prompt-sync';
 export type MigrateResult = {
   isTestRun: boolean;
   migrationStatus: MigrationStatus;
+  gateways: Gateways;
 };
 
 export const migrate = async ({
@@ -89,6 +90,9 @@ export const migrate = async ({
   return {
     isTestRun: isTest,
     migrationStatus,
+
+    // Gateways is returned only for testing purposes
+    gateways,
   };
 
   // TODO
