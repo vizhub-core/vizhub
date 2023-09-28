@@ -6,11 +6,19 @@ const plans = {
     name: 'Free',
     pricing: { price: 0, unit: 'forever' },
     bullets: [
-      'Unlimited public vizzes',
-      'Unlimited collaborators',
-      'Multiplayer code editing',
+      'Search & Browse Public Vizzes',
+      'Fork & remix open source code',
+      'Star Your Favorites',
+      // 'access the VizHub Forum',
+      <>
+        <a href="https://vizhub.com/forum/t/index-of-courses/289">
+          Free Online Courses
+        </a>
+      </>,
+      // 'Unlimited collaborators',
+      // 'Multiplayer code editing',
       // 'ES modules and JSX support',
-      'Export to vanilla JavaScript',
+      // 'Export to vanilla JavaScript',
       // 'Search open source content',
       // 'Star public vizzes',
       // 'Public folders',
@@ -47,11 +55,16 @@ const plans = {
   },
   pro: {
     name: 'Pro',
-    pricing: { price: 15, unit: 'per editor* per month' },
+    pricing: {
+      price: 200,
+      unit: 'per year, 30 day free trial',
+    },
     previousPlanBullet: 'Everything in Free',
     bullets: [
-      'Private vizzes',
-      'Collaborators on private vizzes',
+      'Private Vizzes',
+      // 'Private Folders',
+      'Unlimited Editors',
+      // 'Collaborators on private vizzes',
       // 'Private & unlisted vizzes',
       // 'Private & unlisted folders',
       // 'Private & unlisted collections',
@@ -205,11 +218,11 @@ export const PricingPageBody = ({
             onClick={onFreeClick}
           />
           <PlanCard plan={plans.pro} onClick={onProClick}>
-            <div className="mb-3">
+            {/* <div className="mb-3">
               *An <strong>editor</strong> is a user granted
               permission to edit at least one private viz
               that you own.
-            </div>
+            </div> */}
           </PlanCard>
           {/* <PlanCard plan={plans.enterprise} onClick={onEnterpriseClick} /> */}
         </div>

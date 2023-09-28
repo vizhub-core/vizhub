@@ -16,7 +16,7 @@ import * as Sentry from '@sentry/node';
 import { seoMetaTags } from './src/seoMetaTags.js';
 
 // TODO import this from package.json
-const version = '3.0.0-beta.21';
+const version = '3.0.0-beta.22';
 
 const env = process.env;
 
@@ -61,7 +61,8 @@ async function createServer(
   const app = express();
 
   // Support parsing of JSON bodies in API requests.
-  app.use(express.json());
+  // Removed as this interferes with the Stripe webhook signing.
+  // app.use(express.json());
 
   // Set up Vite in dev mode.
   // This will attach the Vite dev server to our Express app.
@@ -173,8 +174,7 @@ async function createServer(
   // Set up authentication.
   let authMiddleware;
   if (env.VIZHUB3_AUTH0_SECRET) {
-    authMiddleware = authentication({ env, gateways });
-    app.use(authMiddleware);
+    authMiddleware = authentication({ env, gateways, app });
   } else {
     console.log(
       'Environment variable VIZHUB3_AUTH0_SECRET is not set. See README for details.',
@@ -434,6 +434,7 @@ async function createServer(
     '/joe/viz1',
     '/joe/v3-runtime-demo',
     '/explore',
+    '/account',
     '/pricing',
     '/search?query=map',
   ];

@@ -3,7 +3,7 @@ import {
   ExplorePageData,
   ExplorePageQuery,
 } from './index';
-import { parseAuth0Sub } from '../../parseAuth0User';
+
 import {
   SortId,
   asSortId,
@@ -12,6 +12,7 @@ import {
 import { Gateways } from 'gateways';
 import { Auth0User } from '../Page';
 import { GetInfosAndOwners } from 'interactors';
+import { parseAuth0Sub } from 'api';
 
 ExplorePage.getPageData = async ({
   gateways,

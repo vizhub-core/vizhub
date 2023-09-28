@@ -27,14 +27,14 @@ export const VerifyVizAccess = (gateways: Gateways) => {
   const { getPermissions, getFolderAncestors } = gateways;
 
   return async (options: {
-    userId: UserId | undefined;
+    authenticatedUserId: UserId | undefined;
     info: Info;
     action: Action;
   }): Promise<Result<boolean>> => {
-    const { userId, info, action } = options;
+    const { authenticatedUserId, info, action } = options;
     // If user is undefined, then the user is not logged in,
     // and therefore can only read public or unlisted vizzes.
-    if (userId === undefined) {
+    if (authenticatedUserId === undefined) {
       // If the action is read, then the user can read public or unlisted vizzes.
       if (action === READ) {
         return ok(
@@ -58,7 +58,7 @@ export const VerifyVizAccess = (gateways: Gateways) => {
 
     // If the user is the owner of this viz,
     // then the user can perform any action.
-    if (info.owner === userId) {
+    if (info.owner === authenticatedUserId) {
       return ok(true);
     }
 
@@ -86,7 +86,7 @@ export const VerifyVizAccess = (gateways: Gateways) => {
     // Then check if the user has permission to access any of those folders,
     // in addition to permissions on this viz.
     const permissionsResult = await getPermissions(
-      userId,
+      authenticatedUserId,
       resources,
     );
     if (permissionsResult.outcome === 'failure') {

@@ -4,10 +4,10 @@ import {
   UpdateOrCreateUser,
   RecordAnalyticsEvents,
 } from 'interactors';
-import { parseAuth0Sub } from './parseAuth0User';
+import { parseAuth0Sub } from 'api';
 
 // Deals with authentication via Auth0.
-export const authentication = ({ env, gateways }) => {
+export const authentication = ({ env, gateways, app }) => {
   const updateOrCreateUser = UpdateOrCreateUser(gateways);
   const recordAnalyticsEvents =
     RecordAnalyticsEvents(gateways);
@@ -70,8 +70,38 @@ export const authentication = ({ env, gateways }) => {
     routes: {
       // This is particular for the GitHub auth provider
       callback: '/login/callback',
+
+      // We override the login route so that
+      // we can set the returnTo parameter.
+      login: false,
     },
     afterCallback,
   });
+
+  app.use(authMiddleware);
+
+  // Only allow post-login redirects to certain paths.
+  const validPaths = [
+    'pricing',
+
+    // TODO return to profile page after login
+    // if already on profile page
+    // TODO return to checkout page after login
+    // if already on pricing page
+    // TODO return to viz page after login
+    // if already on viz page
+  ];
+
+  app.get('/login', (req, res) =>
+    // TODO make this work properly,
+    // and also handle pages with dynamic routes such as
+    //  '/:userName/:id';
+    res.oidc.login({
+      returnTo: validPaths.includes(req.query.redirect)
+        ? `/${req.query.redirect}`
+        : undefined,
+    }),
+  );
+
   return authMiddleware;
 };

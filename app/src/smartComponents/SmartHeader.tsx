@@ -14,7 +14,7 @@ export const SmartHeader = () => {
 
   return (
     <Header
-      loginHref={'/login'}
+      loginHref={`/login`}
       logoutHref={'/logout'}
       pricingHref={'/pricing'}
       accountHref={'/account'}
