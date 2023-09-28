@@ -88,6 +88,7 @@ export { defaultVizWidth, defaultVizHeight } from './Viz';
 
 // V2 types - useful for migration and for V2 runtime
 export type {
+  VizV2,
   InfoV2,
   ContentV2,
   FilesV2,

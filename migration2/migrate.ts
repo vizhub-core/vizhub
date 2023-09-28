@@ -1,12 +1,15 @@
 import { Gateways, Result } from 'gateways';
 import { setupConnections } from './setupConnections/setupConnections';
 import {
+  InfoV2,
   MigrationStatus,
   Snapshot,
   timestampToDate,
 } from 'entities';
 import Prompt from 'prompt-sync';
 import { getBatchTimestamps } from './getBatchTimestamps';
+import { v2Vizzes } from './v2Vizzes';
+import { getVizV2 } from './getVizV2';
 export type MigrateResult = {
   isTestRun: boolean;
   migrationStatus: MigrationStatus;
@@ -114,6 +117,124 @@ export const migrate = async ({
   console.log(
     '  batch end date: ',
     timestampToDate(batchEndTimestamp).toLocaleString(),
+  );
+
+  // Iterate over vizzes in the V2 database that may have been created
+  // or updated during the time period defined by startTime and endTime.
+  const numVizzesProcessed = await v2Vizzes(
+    {
+      v2InfoCollection,
+      startTime: batchStartTimestamp,
+      endTime: batchEndTimestamp,
+    },
+    async (info: InfoV2, i: number) => {
+      // Get the viz from the V2 database.
+      const vizV2 = await getVizV2({
+        info,
+        v2ContentCollection,
+        v2ContentOpCollection,
+      });
+
+      // Migrate the viz! Does not includes Upvotes or Users.
+      console.log(
+        `Processing viz #${i}: ${info.id} ${info.title} `,
+      );
+
+      console.log('vizV2', vizV2);
+      process.exit(0);
+
+      // const isVizV2Valid: boolean = await processViz({
+      //   vizV2,
+      //   gateways,
+      //   i,
+      //   redisClient,
+      //   contentCollection,
+      // });
+
+      // // If the viz is invalid, skip it.
+      // if (!isVizV2Valid) {
+      //   console.log(
+      //     `  Skipping invalid V2 viz #${i}: ${info.id} ${info.title} `,
+      //   );
+      //   return;
+      // }
+
+      // // Migrate upvotes
+      // // We do this always, because when an upvote is added to a viz,
+      // // the viz itself doesn't change (last updated date is not updated),
+      // // so we need to track the changes to upvotes separately.
+      // // Note that this migration only adds upvotes, it does not remove them.
+      // // So if an upvote is removed from a viz in the V2 database,
+      // // after having been migrated, it will still be in the V3 database.
+      // logDetail(`  Migrating upvotes`);
+      // await migrateUpvotesIfNeeded({
+      //   vizV2,
+      //   gateways,
+      // });
+
+      // // Migrate the viz owner if needed.
+      // logDetail(`  Migrating owner user`);
+      // process.stdout.write('    ');
+      // await migrateUserIfNeeded({
+      //   userId: vizV2.info.owner,
+      //   gateways,
+      //   userCollection,
+      // });
+      // process.stdout.write('\n');
+
+      // // Migrate the users that upvoted this viz.
+      // if (
+      //   vizV2.info.upvotes &&
+      //   vizV2.info.upvotes.length > 0
+      // ) {
+      //   logDetail(`  Migrating upvoter users`);
+      //   process.stdout.write('    ');
+      //   await Promise.all(
+      //     vizV2.info.upvotes.map(({ userId }) =>
+      //       migrateUserIfNeeded({
+      //         userId,
+      //         gateways,
+      //         userCollection,
+      //       }),
+      //     ),
+      //   );
+      //   process.stdout.write('\n');
+      // }
+
+      // // Migrate the users that are collaborators on this viz.
+      // if (
+      //   vizV2.info.collaborators &&
+      //   vizV2.info.collaborators.length > 0
+      // ) {
+      //   logDetail(`  Migrating collaborator users`);
+      //   process.stdout.write('    ');
+      //   await Promise.all(
+      //     vizV2.info.collaborators.map(({ userId }) =>
+      //       migrateUserIfNeeded({
+      //         userId,
+      //         gateways,
+      //         userCollection,
+      //       }),
+      //     ),
+      //   );
+      //   process.stdout.write('\n');
+      // }
+
+      // // Check if the viz is valid after migration.
+      // logDetail(`Validating...`);
+      // const isVizV3Valid: boolean = await validateViz({
+      //   id: info.id,
+      //   gateways,
+      // });
+      // if (!isVizV3Valid) {
+      //   console.log(
+      //     'Migrated viz is invalid! TODO roll back... ',
+      //   );
+      //   process.exit(0);
+      // }
+      // logDetail(`Validation passed!`);
+      // // await reportProgress({ i, n });
+    },
   );
 
   return {
