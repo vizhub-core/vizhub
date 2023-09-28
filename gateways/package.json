@@ -22,9 +22,9 @@
   },
   "homepage": "https://github.com/vizhub-core/vizhub3#readme",
   "dependencies": {
-    "@types/d3-array": "^3.0.7",
+    "@types/d3-array": "^3.0.8",
     "d3-array": "^3.2.4",
-    "vitest": "^0.34.3"
+    "vitest": "^0.34.5"
   },
   "devDependencies": {
     "concurrently": "^8.2.1",

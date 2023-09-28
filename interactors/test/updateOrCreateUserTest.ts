@@ -1,6 +1,6 @@
 // See also
 // https://github.com/vizhub-core/vizhub/blob/main/vizhub-v3/vizhub-interactors/test/FindOrCreateUserTest.ts
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, assert } from 'vitest';
 import { initGateways } from './initGateways';
 import { UpdateOrCreateUser } from '../src';
 import { User } from 'entities';
@@ -59,10 +59,13 @@ export const updateOrCreateUserTest = () => {
 
       const result = await updateOrCreateUser(options);
 
-      expect(result.outcome).toEqual('success');
+      assert(result.outcome === 'success');
       expect(result.value).toEqual('success');
 
-      expect((await getUser(id)).value.data).toEqual(
+      const getUserResult = await getUser(id);
+      assert(getUserResult.outcome === 'success');
+
+      expect(getUserResult.value.data).toEqual(
         expectedUser,
       );
     });
@@ -82,18 +85,22 @@ export const updateOrCreateUserTest = () => {
       await saveUser(existingUser);
 
       // Sanity check
-      expect((await getUser(id)).value.data).toEqual(
+      const getUserResult = await getUser(id);
+      assert(getUserResult.outcome === 'success');
+      expect(getUserResult.value.data).toEqual(
         existingUser,
       );
 
       const result = await updateOrCreateUser(options);
 
-      expect(result.outcome).toEqual('success');
+      assert(result.outcome === 'success');
       expect(result.value).toEqual('success');
 
-      expect(
-        (await getUser(options.id)).value.data,
-      ).toEqual(expectedUser);
+      const getUserResult2 = await getUser(id);
+      assert(getUserResult2.outcome === 'success');
+      expect(getUserResult2.value.data).toEqual(
+        expectedUser,
+      );
     });
 
     it('should update an existing user and preserve plan', async () => {
