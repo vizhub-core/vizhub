@@ -21,6 +21,6 @@
   "homepage": "https://github.com/vizhub-core/vizhub3#readme",
   "devDependencies": {
     "vite": "^4.4.9",
-    "vitest": "^0.34.4"
+    "vitest": "^0.34.5"
   }
 }
