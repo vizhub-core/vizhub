@@ -29,17 +29,44 @@ export const createCheckoutSession = ({ app }) => {
       // https://stripe.com/docs/api/checkout/sessions/create#create_checkout_session-client_reference_id
       const session = await stripe.checkout.sessions.create(
         {
+          mode: 'subscription',
           // TODO consider making the base URL configurable
           success_url: 'https://beta.vizhub.com/account',
+          cancel_url: 'https://beta.vizhub.com/account',
+          client_reference_id: authenticatedUserId,
           line_items: [
             {
               price: process.env.VIZHUB_STRIPE_PRICE_ID,
               quantity: 1,
             },
           ],
-          mode: 'subscription',
-          client_reference_id: authenticatedUserId,
-          trial_period_days: 30, // This adds a 30-day free trial
+
+          // 30 day free trial
+          // See https://stripe.com/docs/payments/checkout/free-trials
+          subscription_data: {
+            trial_settings: {
+              end_behavior: {
+                missing_payment_method: 'cancel',
+              },
+            },
+            trial_period_days: 30,
+          },
+
+          // Yes, we do always want to collect payment method.
+          // By signing up, the user is agreeing to pay for the
+          // service, so we want to collect payment method
+          // regardless of whether they have a coupon or not.
+
+          // If they have a coupon for one free year that comes with
+          // joining the beta, then they will get a free year.
+
+          payment_method_collection: 'always',
+
+          // discounts: [
+          //   {
+          //     coupon: process.env.VIZHUB_STRIPE_COUPON_ID,
+          //   },
+          // ],
         },
       );
       res.json(ok({ sessionURL: session.url }));
