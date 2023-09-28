@@ -6,8 +6,10 @@ export type MigrationStatusId = 'v2' | 'bl.ocks';
 export interface MigrationStatus {
   id: MigrationStatusId;
   currentBatchNumber: number;
+  // Whether or not this batch was completed successfully.
+  // If false, the batch will be retried.
+  currentBatchCompleted?: boolean;
 }
-
 // MigrationBatchId
 //  * Unique identifier string for a migration batch.
 //  * The first batch is '1', the second is '2', etc.

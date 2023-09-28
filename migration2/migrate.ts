@@ -49,6 +49,7 @@ export const migrate = async ({
 
   let migrationStatus: MigrationStatus;
 
+  // Check if we're starting a new migration, first batch
   if (migrationStatusResult.outcome === 'failure') {
     console.log(
       'No existing migration status found. Starting first migration batch!',
@@ -56,8 +57,30 @@ export const migrate = async ({
     migrationStatus = {
       id: 'v2',
       currentBatchNumber: 0,
+      currentBatchCompleted: false,
     };
     gateways.saveMigrationStatus(migrationStatus);
+  } else {
+    migrationStatus = migrationStatusResult.value.data;
+    console.log(
+      `Found existing migration status. Starting from batch ${migrationStatus.currentBatchNumber}`,
+    );
+
+    // If previous batch was unsuccessful, roll back to previous batch
+    if (migrationStatus.currentBatchCompleted === false) {
+      console.log(
+        `Previous batch was unsuccessful. Rolling back batch number ${migrationStatus.currentBatchNumber}`,
+      );
+      // TODO test this path
+    } else {
+      console.log(
+        `Previous batch was successful. Starting batch number ${migrationStatus.currentBatchNumber}`,
+      );
+      // Update migration status for new batch
+      migrationStatus.currentBatchCompleted = false;
+      migrationStatus.currentBatchNumber += 1;
+      await gateways.saveMigrationStatus(migrationStatus);
+    }
   }
 
   // const { batchStartTimestamp, batchEndTimestamp } =

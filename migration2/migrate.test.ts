@@ -3,7 +3,7 @@ import { migrate, MigrateResult } from './migrate';
 import { getBatchTimestamps } from './getBatchTimestamps';
 
 describe('migrate', async () => {
-  it('should make connections and know it it in test mode', async () => {
+  it('should make connections and know it it in test mode (batch 0)', async () => {
     const migrateResult: MigrateResult = await migrate({
       isTest: true,
     });
@@ -11,9 +11,26 @@ describe('migrate', async () => {
     const { isTestRun, migrationStatus } = migrateResult;
     expect(isTestRun).toEqual(true);
     expect(migrationStatus.currentBatchNumber).toEqual(0);
+  });
+
+  it('should continue from the previous batch', async () => {
+    const migrateResult: MigrateResult = await migrate({
+      isTest: true,
+      loadTestFixtures: async (gateways) => {
+        await gateways.saveMigrationStatus({
+          id: 'v2',
+          currentBatchNumber: 50,
+        });
+      },
+    });
+
+    const { isTestRun, migrationStatus } = migrateResult;
+    expect(isTestRun).toEqual(true);
+    expect(migrationStatus.currentBatchNumber).toEqual(51);
 
     console.log('migrationStatus', migrationStatus);
   });
+
   it('getBatchTimestamps', async () => {
     const batchNumber = 0;
 
