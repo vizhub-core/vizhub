@@ -1,7 +1,7 @@
-import { Result } from 'gateways';
+import { Gateways, Result } from 'gateways';
 import { setupConnections } from './setupConnections/setupConnections';
 import { MigrationStatus, Snapshot } from 'entities';
-
+import Prompt from 'prompt-sync';
 export type MigrateResult = {
   isTestRun: boolean;
   migrationStatus: MigrationStatus;
@@ -9,26 +9,38 @@ export type MigrateResult = {
 
 export const migrate = async ({
   isTest,
+  loadTestFixtures,
 }: {
   isTest: boolean;
+  loadTestFixtures?: (gateways: Gateways) => Promise<void>;
 }): Promise<MigrateResult> => {
   if (!isTest) {
-    ('migrating for real');
+    console.log('migrating for real');
+    // Prompt user to make sure they want to do this
+    const prompt = Prompt();
+
+    const yes = prompt(
+      'Are you sure you want to migrate the database? (y/n) ',
+    );
+    if (yes !== 'y') {
+      console.log('Aborting migration.');
+      process.exit(0);
+    }
   }
 
   const {
     v2MongoDBDatabase,
     v2MongoClient,
-    infoCollection,
-    contentCollection,
-    // infoOpCollection,
-    contentOpCollection,
-    userCollection,
+    v2InfoCollection,
+    v2ContentCollection,
+    v2ContentOpCollection,
+    v2UserCollection,
     gateways,
     mongoDBDatabase,
     mongoDBConnection,
   } = await setupConnections({
     isTest,
+    loadTestFixtures,
   });
 
   const migrationStatusResult: Result<
