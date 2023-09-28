@@ -8,7 +8,10 @@ describe('migrate', async () => {
       isTest: true,
     });
 
-    expect(migrateResult.isTestRun).toEqual(true);
+    const { isTestRun, migrationStatus } = migrateResult;
+    expect(isTestRun).toEqual(true);
+
+    MigrationStatus;
   });
   it('getBatchTimestamps', async () => {
     const batchNumber = 0;

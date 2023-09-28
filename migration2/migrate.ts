@@ -1,11 +1,16 @@
+import { Result } from 'gateways';
 import { setupConnections } from './setupConnections/setupConnections';
+import { MigrationStatus, Snapshot } from 'entities';
 
 export type MigrateResult = {
   isTestRun: boolean;
+  migrationStatus: MigrationStatus;
 };
 
 export const migrate = async ({
   isTest,
+}: {
+  isTest: boolean;
 }): Promise<MigrateResult> => {
   if (!isTest) {
     ('migrating for real');
@@ -22,15 +27,33 @@ export const migrate = async ({
     gateways,
     mongoDBDatabase,
     mongoDBConnection,
-  } = await setupConnections();
+  } = await setupConnections({
+    isTest,
+  });
 
-  const  = await gateways.getMigrationStatus();
+  const migrationStatusResult: Result<
+    Snapshot<MigrationStatus>
+  > = await gateways.getMigrationStatus('v2');
 
-  const { batchStartTimestamp, batchEndTimestamp } =
-    getBatchTimestamps(batchNumber);
+  let migrationStatus: MigrationStatus;
+
+  if (migrationStatusResult.outcome === 'failure') {
+    console.log(
+      'No existing migration status found. Starting first migration batch!',
+    );
+    migrationStatus = {
+      id: 'v2',
+      currentBatchNumber: 0,
+    };
+    gateways.saveMigrationStatus(migrationStatus);
+  }
+
+  // const { batchStartTimestamp, batchEndTimestamp } =
+  //   getBatchTimestamps(batchNumber);
 
   return {
     isTestRun: isTest,
+    migrationStatus,
   };
 
   // TODO

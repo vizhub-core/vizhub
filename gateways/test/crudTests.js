@@ -116,7 +116,7 @@ export const sampleEntities = {
   Deployment: sampleDeployment,
   MergeRequest: sampleMergeRequest,
   BetaProgramSignup: sampleBetaProgramSignup,
-  Embedding: sampleEmbedding,
+  // Embedding: sampleEmbedding,
   MigrationStatus: sampleMigrationStatus,
   MigrationBatch: sampleMigrationBatch,
 };

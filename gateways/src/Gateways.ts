@@ -42,10 +42,16 @@ import {
   ResourceId,
   SortField,
   SortOrder,
-  Embedding,
-  EmbeddingId,
+  // Embedding,
+  // EmbeddingId,
+  MigrationStatus,
+  MigrationBatch,
 } from 'entities';
 import { Result, Success } from './Result';
+import {
+  MigrationBatchId,
+  MigrationStatusId,
+} from 'entities/src/Migration';
 
 // The maximum number of Info documents to return in a single page from `getInfos()`
 export const pageSize = 50;
@@ -206,15 +212,34 @@ export interface Gateways {
     id: AnalyticsEventId,
   ): Promise<Result<Success>>;
 
-  saveEmbedding(
-    embedding: Embedding,
+  saveMigrationStatus(
+    migrationStatus: MigrationStatus,
   ): Promise<Result<Success>>;
-  getEmbedding(
-    id: EmbeddingId,
-  ): Promise<Result<Snapshot<Embedding>>>;
-  deleteEmbedding(
-    id: EmbeddingId,
+  getMigrationStatus(
+    id: MigrationStatusId,
+  ): Promise<Result<Snapshot<MigrationStatus>>>;
+  deleteMigrationStatus(): Promise<Result<Success>>;
+  // TODO same as above for MigrationBatch
+  saveMigrationBatch(
+    migrationBatch: MigrationBatch,
   ): Promise<Result<Success>>;
+  getMigrationBatch(
+    id: MigrationBatchId,
+  ): Promise<Result<Snapshot<MigrationBatch>>>;
+  deleteMigrationBatch(
+    id: number,
+  ): Promise<Result<Success>>;
+
+  // TODO implement these backed by `pgvector` in Supabase
+  // saveEmbedding(
+  //   embedding: Embedding,
+  // ): Promise<Result<Success>>;
+  // getEmbedding(
+  //   id: EmbeddingId,
+  // ): Promise<Result<Snapshot<Embedding>>>;
+  // deleteEmbedding(
+  //   id: EmbeddingId,
+  // ): Promise<Result<Success>>;
 
   // ***************************************************************
   // ******************** Non-CRUD Operations **********************

@@ -357,11 +357,11 @@ export const sampleBetaProgramSignup: BetaProgramSignup = {
   email: 'test@test.com',
 };
 
-export const sampleEmbedding: Embedding = {
-  id: '74893257843',
-  type: 'Viz',
-  vector: [1, 2, 3],
-};
+// export const sampleEmbedding: Embedding = {
+//   id: '74893257843',
+//   type: 'Viz',
+//   vector: [1, 2, 3],
+// };
 
 export const sampleMigrationStatus = {
   currentBatchNumber: 0,

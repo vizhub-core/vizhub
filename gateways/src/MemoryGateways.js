@@ -50,7 +50,7 @@ export const crudEntityNames = [
   'MergeRequest',
   'BetaProgramSignup',
   'AnalyticsEvent',
-  'Embedding',
+  // 'Embedding',
   'MigrationStatus',
   'MigrationBatch',
 ];
@@ -62,7 +62,7 @@ export const noSnapshot = {
   Commit: true,
   Milestone: true,
   BetaProgramSignup: true,
-  Embedding: true,
+  // Embedding: true,
 };
 
 // An in-memory implementation for gateways,
