@@ -9,19 +9,11 @@ export const createCheckoutSession = ({ app }) => {
     '/api/create-checkout-session',
     express.json({ type: 'application/json' }),
     async (req, res) => {
-      // console.log(
-      //   'reveiced request to create checkout session',
-      // );
-
       // Get at the currently authenticated user.
       const auth0User = req?.oidc?.user || null;
 
       const { authenticatedUserId } =
         parseAuth0User(auth0User);
-      // console.log(
-      //   'authenticatedUserId',
-      //   authenticatedUserId,
-      // );
 
       // Having the User ID is required to create a Stripe
       // Checkout Session. Without it, we can't associate
@@ -47,6 +39,7 @@ export const createCheckoutSession = ({ app }) => {
           ],
           mode: 'subscription',
           client_reference_id: authenticatedUserId,
+          trial_period_days: 30, // This adds a 30-day free trial
         },
       );
       res.json(ok({ sessionURL: session.url }));
