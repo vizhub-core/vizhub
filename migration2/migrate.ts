@@ -1,11 +1,33 @@
+import { setupConnections } from './setupConnections/setupConnections';
+
 export type MigrateResult = {
   isTestRun: boolean;
 };
 
 export const migrate = async ({
-  isTest = false,
+  isTest,
 }): Promise<MigrateResult> => {
-  console.log(isTest ? 'testing' : 'migrating for real');
+  if (!isTest) {
+    ('migrating for real');
+  }
+
+  const {
+    v2MongoDBDatabase,
+    v2MongoClient,
+    infoCollection,
+    contentCollection,
+    // infoOpCollection,
+    contentOpCollection,
+    userCollection,
+    gateways,
+    mongoDBDatabase,
+    mongoDBConnection,
+  } = await setupConnections();
+
+  const batchNumber = await getBatchNumber();
+
+  const { batchStartTimestamp, batchEndTimestamp } =
+    getBatchTimestamps(batchNumber);
 
   return {
     isTestRun: isTest,

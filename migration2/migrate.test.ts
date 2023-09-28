@@ -1,43 +1,22 @@
-// See also
 import { describe, it, expect } from 'vitest';
 import { migrate, MigrateResult } from './migrate';
+import { getBatchTimestamps } from './getBatchTimestamps';
 
 describe('migrate', async () => {
-  it('should know it is in test mode', async () => {
+  it('should make connections and know it it in test mode', async () => {
     const migrateResult: MigrateResult = await migrate({
       isTest: true,
     });
 
     expect(migrateResult.isTestRun).toEqual(true);
   });
-  it('should query for vizzes in the current batch', async () => {
-    // Hardcoded earliest timestamp.
-    // This is the lowest value for `vizInfo.createdTimestamp` in the V2 database.
-    const firstVizCreationDate =
-      timestampToDate(1534246611);
+  it('getBatchTimestamps', async () => {
+    const batchNumber = 0;
 
-    // Floor the week using d3-time
-    const firstVizCreationDateFloored = timeWeek.floor(
-      firstVizCreationDate,
-    );
-    // Define a one-week batch of vizzes to migrate.
-    const startTimeDate = timeWeek.offset(
-      firstVizCreationDateFloored,
-      batchNumber,
-    );
-    const endTimeDate = timeWeek.offset(startTimeDate, 1);
+    const { batchStartTimestamp, batchEndTimestamp } =
+      getBatchTimestamps(batchNumber);
 
-    const startTime = dateToTimestamp(startTimeDate);
-    const endTime = dateToTimestamp(endTimeDate);
-
-    const migrateResult: MigrateResult = await migrate({
-      isTest: true,
-      iterateVizzes: {
-        batchStartTimestamp,
-        batchEndTimestamp,
-      },
-    });
-
-    expect(migrateResult.isTestRun).toEqual(true);
+    expect(batchStartTimestamp).toEqual(1534046400);
+    expect(batchEndTimestamp).toEqual(1534651200);
   });
 });

@@ -3,6 +3,10 @@ const { MongoClient } = MongoLegacy;
 
 const v2MongoURI = process.env.VIZHUB_V2_MONGO_URI;
 
+if (!v2MongoURI) {
+  throw new Error('VIZHUB_V2_MONGO_URI is not defined');
+}
+
 export const initializeV2MongoDBDatabase = async () => {
   console.log(`  Connecting to v2 MongoDB`);
   console.log(`    Using v2 Mongo URI "${v2MongoURI}".`);
@@ -15,10 +19,9 @@ export const initializeV2MongoDBDatabase = async () => {
 
   const timeout = setTimeout(() => {
     console.log(
-      '\n    Having trouble connecting to the V2 database...',
+      '\n    Having trouble connecting to the database...',
     );
     console.log('    Ensure that the database is running.');
-    console.log('    Did you whitelist your current IP?');
   }, 4000);
 
   const v2MongoClient = new MongoClient(v2MongoURI);

@@ -77,7 +77,6 @@ export const initializeMongoDB = async ({
 
     mongoClient = new MongoClient(uri, {
       useNewUrlParser: true,
-      useUnifiedTopology: true,
       serverApi: ServerApiVersion.v1,
     });
   }
