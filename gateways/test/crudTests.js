@@ -21,6 +21,8 @@ import {
   sampleMergeRequest,
   sampleBetaProgramSignup,
   sampleEmbedding,
+  sampleMigrationStatus,
+  sampleMigrationBatch,
 } from './fixtures';
 
 export const crudTests = (entityName, sampleEntity) => {
@@ -115,4 +117,6 @@ export const sampleEntities = {
   MergeRequest: sampleMergeRequest,
   BetaProgramSignup: sampleBetaProgramSignup,
   Embedding: sampleEmbedding,
+  MigrationStatus: sampleMigrationStatus,
+  MigrationBatch: sampleMigrationBatch,
 };

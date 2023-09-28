@@ -114,11 +114,11 @@ export type {
   AnalyticsEventId,
 } from './Analytics';
 
-export type {
-  Embedding,
-  EmbeddingId,
-  EmbeddingType,
-} from './Embedding';
+// export type {
+//   Embedding,
+//   EmbeddingId,
+//   EmbeddingType,
+// } from './Embedding';
 
 export {
   sortOptions,
@@ -128,9 +128,15 @@ export {
   defaultSortOrder,
   defaultSortField,
 } from './Sorting';
+
 export type {
   SortField,
   SortOption,
   SortOrder,
   SortId,
 } from './Sorting';
+
+export type {
+  MigrationStatus,
+  MigrationBatch,
+} from './Migration';

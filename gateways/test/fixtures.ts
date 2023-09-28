@@ -362,3 +362,12 @@ export const sampleEmbedding: Embedding = {
   type: 'Viz',
   vector: [1, 2, 3],
 };
+
+export const sampleMigrationStatus = {
+  currentBatchNumber: 0,
+};
+
+export const sampleMigrationBatch = {
+  batchNumber: 0,
+  migratedEntities: [],
+};

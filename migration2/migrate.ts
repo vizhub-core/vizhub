@@ -24,7 +24,7 @@ export const migrate = async ({
     mongoDBConnection,
   } = await setupConnections();
 
-  const batchNumber = await getBatchNumber();
+  const  = await gateways.getMigrationStatus();
 
   const { batchStartTimestamp, batchEndTimestamp } =
     getBatchTimestamps(batchNumber);
