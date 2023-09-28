@@ -25,7 +25,7 @@
   },
   "homepage": "https://github.com/vizhub-core/vizhub3#readme",
   "dependencies": {
-    "@rollup/browser": "^3.29.3",
+    "@rollup/browser": "^3.29.4",
     "@sentry/node": "^7.72.0",
     "@teamwork/websocket-json-stream": "^2.0.0",
     "@types/react-router-dom": "^5.3.3",
@@ -53,7 +53,7 @@
     "stripe": "^13.7.0",
     "vizhub-libraries": "^1.8.0",
     "vizhub-ui": "^3.3.0",
-    "vzcode": "^0.20.0",
+    "vzcode": "^0.20.1",
     "ws": "^8.14.2",
     "xss": "^1.0.14"
   },
