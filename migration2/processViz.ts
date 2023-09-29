@@ -1,6 +1,6 @@
 // import { Info, FilesV2 } from 'entities';
 // import { logDetail } from './logDetail';
-// import { generateEmbeddingOpenAI } from './generateEmbeddingOpenAI';
+import { generateEmbeddingOpenAI } from './generateEmbeddingOpenAI';
 // import { computeForkedFrom } from './computeForkedFrom';
 import { isolateGoodFiles } from './isolateGoodFiles';
 import { FilesV2, VizV2 } from 'entities';
@@ -102,7 +102,13 @@ export const processViz = async ({
     return false;
   }
 
-  console.log('  goodFiles:', goodFiles);
+  // console.log('  goodFiles:', goodFiles);
+
+  // Compute the embedding for the viz (latest version).
+  const embedding =
+    await generateEmbeddingOpenAI(goodFiles);
+
+  console.log('  embedding:', embedding);
 
   // // If we are here, it means we are going to migrate this viz,
   // // either because it has not been migrated yet,
@@ -226,9 +232,6 @@ export const processViz = async ({
   // const scoreViz = ScoreViz(gateways);
   // console.log('  Scoring viz...');
   // await scoreViz({ viz: id });
-
-  // Compute the embedding for the viz (latest version).
-  // const embedding = await generateEmbeddingOpenAI(goodFiles);
 
   return true;
 };
