@@ -2,6 +2,7 @@ import OpenAI from 'openai';
 import { encode, decode } from 'gpt-3-encoder';
 
 import { removeEmoji } from './removeEmoji';
+import { FilesV2 } from 'entities';
 
 // The dimension of the embedding, as a string.
 export const embeddingSize = 1536;
@@ -26,7 +27,7 @@ const openai = new OpenAI({ apiKey });
 
 // Ensures the prompt is not too long.
 // Inspired by the way LatentScope does it.
-function truncateIfNeeded(str) {
+function truncateIfNeeded(str: string) {
   if (!str) str = ' ';
   let tokens = encode(str);
   console.log(
@@ -42,18 +43,18 @@ function truncateIfNeeded(str) {
 }
 
 // Computes an embedding for the input text.
-const embed = async (input) => {
-  const embeddingRes = await openai.createEmbedding({
+const embed = async (input: string) => {
+  const embeddingRes = await openai.embeddings.create({
     model,
     input: truncateIfNeeded(input),
   });
-  const [{ embedding }] = embeddingRes.data.data;
+  const [{ embedding }] = embeddingRes.data;
   return embedding;
 };
 
 export const generateEmbeddingOpenAI = async (
-  goodFiles,
-) => {
+  goodFiles: FilesV2,
+): Promise<Array<number>> => {
   const input = removeEmoji(goodFiles)
     .map(({ name, text }) => {
       // Substring on name as there was one particular case

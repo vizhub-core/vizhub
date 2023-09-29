@@ -2,6 +2,11 @@
 // }
 import { diff } from 'ot';
 import {
+  sampleEmbedding,
+  sampleEmbedding2,
+} from './sampleEmbedding';
+
+import {
   Viz,
   Timestamp,
   User,
@@ -22,7 +27,9 @@ import {
   MergeRequest,
   BetaProgramSignup,
   EDITOR,
-  Embedding,
+  VizEmbedding,
+  MigrationStatus,
+  MigrationBatch,
 } from 'entities';
 import { v3RuntimeDemoFiles } from './v3RuntimeDemoFiles';
 
@@ -32,6 +39,18 @@ export const ts3: Timestamp = 1638300000;
 export const ts4: Timestamp = 1638400000;
 
 export const primordialCommitId = 'commit1';
+
+export const sampleVizEmbedding: VizEmbedding = {
+  vizId: 'viz1',
+  commitId: 'commit1',
+  embedding: sampleEmbedding,
+};
+
+export const sampleVizEmbedding2: VizEmbedding = {
+  ...sampleVizEmbedding,
+  vizId: 'viz2',
+  embedding: sampleEmbedding2,
+};
 
 export const userJoe: User = {
   id: '47895473289547832938754',
@@ -357,8 +376,18 @@ export const sampleBetaProgramSignup: BetaProgramSignup = {
   email: 'test@test.com',
 };
 
-export const sampleEmbedding: Embedding = {
-  id: '74893257843',
-  type: 'Viz',
-  vector: [1, 2, 3],
+// export const sampleEmbedding: Embedding = {
+//   id: '74893257843',
+//   type: 'Viz',
+//   vector: [1, 2, 3],
+// };
+
+export const sampleMigrationStatus: MigrationStatus = {
+  id: 'v2',
+  currentBatchNumber: 0,
+};
+
+export const sampleMigrationBatch: MigrationBatch = {
+  id: 'v2-0',
+  migratedEntities: [],
 };

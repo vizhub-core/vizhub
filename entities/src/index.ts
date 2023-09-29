@@ -88,6 +88,7 @@ export { defaultVizWidth, defaultVizHeight } from './Viz';
 
 // V2 types - useful for migration and for V2 runtime
 export type {
+  VizV2,
   InfoV2,
   ContentV2,
   FilesV2,
@@ -114,11 +115,7 @@ export type {
   AnalyticsEventId,
 } from './Analytics';
 
-export type {
-  Embedding,
-  EmbeddingId,
-  EmbeddingType,
-} from './Embedding';
+export type { VizEmbedding } from './Embedding';
 
 export {
   sortOptions,
@@ -128,9 +125,15 @@ export {
   defaultSortOrder,
   defaultSortField,
 } from './Sorting';
+
 export type {
   SortField,
   SortOption,
   SortOrder,
   SortId,
 } from './Sorting';
+
+export type {
+  MigrationStatus,
+  MigrationBatch,
+} from './Migration';

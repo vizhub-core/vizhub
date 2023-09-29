@@ -42,10 +42,17 @@ import {
   ResourceId,
   SortField,
   SortOrder,
-  Embedding,
-  EmbeddingId,
+  // Embedding,
+  // EmbeddingId,
+  MigrationStatus,
+  MigrationBatch,
+  VizEmbedding,
 } from 'entities';
 import { Result, Success } from './Result';
+import {
+  MigrationBatchId,
+  MigrationStatusId,
+} from 'entities/src/Migration';
 
 // The maximum number of Info documents to return in a single page from `getInfos()`
 export const pageSize = 50;
@@ -206,15 +213,36 @@ export interface Gateways {
     id: AnalyticsEventId,
   ): Promise<Result<Success>>;
 
-  saveEmbedding(
-    embedding: Embedding,
+  saveMigrationStatus(
+    migrationStatus: MigrationStatus,
   ): Promise<Result<Success>>;
-  getEmbedding(
-    id: EmbeddingId,
-  ): Promise<Result<Snapshot<Embedding>>>;
-  deleteEmbedding(
-    id: EmbeddingId,
+  getMigrationStatus(
+    id: MigrationStatusId,
+  ): Promise<Result<Snapshot<MigrationStatus>>>;
+  deleteMigrationStatus(
+    id: MigrationStatusId,
   ): Promise<Result<Success>>;
+
+  saveMigrationBatch(
+    migrationBatch: MigrationBatch,
+  ): Promise<Result<Success>>;
+  getMigrationBatch(
+    id: MigrationBatchId,
+  ): Promise<Result<Snapshot<MigrationBatch>>>;
+  deleteMigrationBatch(
+    id: MigrationBatchId,
+  ): Promise<Result<Success>>;
+
+  // TODO implement these backed by `pgvector` in Supabase
+  // saveEmbedding(
+  //   embedding: Embedding,
+  // ): Promise<Result<Success>>;
+  // getEmbedding(
+  //   id: EmbeddingId,
+  // ): Promise<Result<Snapshot<Embedding>>>;
+  // deleteEmbedding(
+  //   id: EmbeddingId,
+  // ): Promise<Result<Success>>;
 
   // ***************************************************************
   // ******************** Non-CRUD Operations **********************
@@ -351,4 +379,43 @@ export interface Gateways {
   getUsersByIds(
     ids: Array<UserId>,
   ): Promise<Result<Array<Snapshot<User>>>>;
+
+  // ***************************************************************
+  // ******************** Embeddings & Supabase ********************
+  // ***************************************************************
+
+  // saveVizEmbedding
+  //
+  // Saves the embedding for the given viz.
+  // This is backed by Postgres and `pgvector` in Supabase.
+  // Also implemented in MemoryGateways for testing.
+  saveVizEmbedding(
+    vizEmbedding: VizEmbedding,
+  ): Promise<Result<Success>>;
+
+  // getVizEmbedding
+  //
+  // Gets the embedding for the given viz.
+  getVizEmbedding(
+    vizId: VizId,
+  ): Promise<Result<VizEmbedding>>;
+
+  // deleteVizEmbedding
+  //
+  // Deletes the embedding for the given viz.
+  // This is backed by Postgres and `pgvector` in Supabase.
+  // Also implemented in MemoryGateways for testing.
+  deleteVizEmbedding(
+    vizId: VizId,
+  ): Promise<Result<Success>>;
+
+  // knnVizEmbeddingSearch
+  //
+  // Gets the nearest neighbors of the given embedding.
+  // This is backed by Postgres and `pgvector` in Supabase.
+  // Also implemented in MemoryGateways for testing.
+  knnVizEmbeddingSearch(
+    embedding: Array<number>,
+    k: number,
+  ): Promise<Result<Array<VizId>>>;
 }

@@ -62,6 +62,8 @@ export const createCheckoutSession = ({ app }) => {
 
           payment_method_collection: 'always',
 
+          allow_promotion_codes: true,
+
           // discounts: [
           //   {
           //     coupon: process.env.VIZHUB_STRIPE_COUPON_ID,

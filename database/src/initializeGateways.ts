@@ -2,6 +2,7 @@ import { initializeMongoDB } from './initializeMongoDB';
 import { initializeShareDB } from './initializeShareDB';
 import { DatabaseGateways } from './DatabaseGateways';
 import { Gateways } from 'gateways';
+import { initializeSupabase } from './initializeSupabase';
 
 // `attachMiddleware` allows ShareDB middleware to be attached to the ShareDB backend
 // in the proper sequence such that the middleware handles the initial server-side connection.
@@ -38,11 +39,15 @@ export const initializeGateways = async ({
       attachMiddleware,
     });
 
+  // TODO initialize postgres via Supabase
+  const supabase = initializeSupabase();
+
   // For ease of development, the DatabaseGateways are implemented in JavaScript.
   // @ts-ignore
   const gateways: Gateways = DatabaseGateways({
     shareDBConnection,
     mongoDBDatabase,
+    supabase,
   }) as Gateways;
 
   return {

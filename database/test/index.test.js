@@ -7,6 +7,7 @@ import { interactorsTests } from 'interactors/test';
 import { DatabaseGateways } from '../src';
 import { initializeMongoDB } from '../src/initializeMongoDB';
 import { initializeShareDB } from '../src/initializeShareDB';
+import { initializeSupabase } from '../src/initializeSupabase';
 
 describe('DatabaseGateways', async () => {
   // Make the MongoDB connection only once, for all tests,
@@ -34,9 +35,12 @@ describe('DatabaseGateways', async () => {
       mongoDBConnection,
     });
 
+    const supabase = initializeSupabase();
+
     const databaseGateways = DatabaseGateways({
       shareDBConnection,
       mongoDBDatabase,
+      supabase,
     });
 
     return databaseGateways;

@@ -70,7 +70,7 @@ const migrate = async () => {
 
   console.log('    Connected successfully to v3 Redis!');
 
-  // Floor the month using d3-time
+  // Floor the week using d3-time
   const firstVizCreationDateFloored = timeWeek.floor(
     firstVizCreationDate,
   );

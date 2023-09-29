@@ -22,12 +22,14 @@ import {
 import { otType, diff } from 'ot';
 import { toCollectionName } from './toCollectionName';
 import { pageSize } from 'gateways/src/Gateways';
+import { embeddingMethods } from './embeddingMethods';
 
 // An in-database implementation for gateways,
 // for use in production.
 export const DatabaseGateways = ({
   shareDBConnection,
   mongoDBDatabase,
+  supabase,
 }) => {
   // A generic "save" implementation for ShareDB.
   // TODORedLock
@@ -558,6 +560,12 @@ export const DatabaseGateways = ({
       ),
     };
   }
+
+  // console.log('supabase defined?', supabase);
+  databaseGateways = {
+    ...databaseGateways,
+    ...embeddingMethods(supabase),
+  };
 
   return databaseGateways;
 };

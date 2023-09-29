@@ -1,0 +1,68 @@
+{
+  "info": {
+    "_id": "a56e821963b849b897dd51db26067db9",
+    "id": "a56e821963b849b897dd51db26067db9",
+    "documentType": "visualization",
+    "owner": "676445",
+    "title": "Dancing Penguin!",
+    "description": "This is a description using [Markdown](https://en.wikipedia.org/wiki/Markdown).",
+    "lastUpdatedTimestamp": 1534264718,
+    "imagesUpdatedTimestamp": 1541535145,
+    "forksCount": 0,
+    "upvotesCount": 0,
+    "scoreWilson": 0,
+    "scoreRedditHotCreated": -3592.790897177778,
+    "scoreHackerHotCreated": -4.224250547207939e-9,
+    "scoreRedditHotLastUpdated": -3592.780852733333,
+    "scoreHackerHotLastUpdated": -4.224271804038604e-9,
+    "createdTimestamp": 1534264266,
+    "forkedFrom": "3fd333e335fe4ecb9ee0c819802443b7",
+    "forkFromBackfilled": true,
+    "_type": "http://sharejs.org/types/JSONv0",
+    "_v": 11012,
+    "_m": {
+      "ctime": 1534264266140,
+      "mtime": 1695939856375
+    },
+    "_o": "6515fd100b919d05031f9bb2"
+  },
+  "content": {
+    "_id": "a56e821963b849b897dd51db26067db9",
+    "id": "a56e821963b849b897dd51db26067db9",
+    "documentType": "visualization",
+    "files": [
+      {
+        "name": "bundle.js",
+        "text": "(function (d3) {\n\t'use strict';\n\n\t// This is an example of an ES6 module.\n\tconst message = \"Hello World!\";\n\n\t// You can import API functions like this from D3.js.\n\n\t// This line uses D3 to set the text of the message div.\n\td3.select('#message').text(message);\n\n}(d3));\n"
+      },
+      {
+        "name": "index.html",
+        "text": "<!DOCTYPE html>\n<html>\n\t<head>\n\t\t<meta charset=\"UTF-8\">\n\t\t<title>Dancing Penguin!</title>\n\t\t<link rel=\"stylesheet\" type=\"text/css\" href=\"https://statics.teams.microsoft.com/hashedcss/stylesheets.theme-default.min-d246adc6.css\" media=\"screen\" />\n\t</head>\n\t<style>\n\t\thtml,body {\n\t\t\topacity: 1;\n\t\t\tmin-width: 0;\n\t\t\tmin-height: 0;\n\t\t\tbackground: none;\n\t\t}\n\t</style>\n\t<body style=\"display: flex; align-items: center; justify-content: center;\">\n\t\t<span id=\"penguin\" class=\"animated-emoticon-80-penguin\" title=\"Penguin\" type=\"(penguin)\"\n\t\t\tcontenteditable=\"false\"><img alt=\"🐧\" itemid=\"penguin\" itemscope=\"\"\n\t\t\t\titemtype=\"http://schema.skype.com/Emoji\"\n\t\t\t\tsrc=\"https://statics.teams.microsoft.com/evergreen-assets/funstuff/skype-emoticons-f/penguin/default_80.png\"\n\t\t\t\tstyle=\"width:80px;height:80px;\"><span\n\t\t\t\tclass=\"zoetrope\"></span></span>\n\t</body>\n</html>"
+      },
+      {
+        "name": "styles.css",
+        "text": "body {\n  background-color: pink;\n  text-align: center;\n  font-size: 12em;\n}"
+      },
+      {
+        "name": "index.js",
+        "text": "// You can import API functions like this from D3.js.\nimport { select } from 'd3';\n\n// You can import local modules like this. See message.js!\nimport { message } from './myMessage';\n\n// This line uses D3 to set the text of the message div.\nselect('#message').text(message);"
+      },
+      {
+        "name": "myMessage.js",
+        "text": "// This is an example of an ES6 module.\nexport const message = \"Hello World!\""
+      },
+      {
+        "name": "README.md",
+        "text": "This is a description using [Markdown](https://en.wikipedia.org/wiki/Markdown)."
+      }
+    ],
+    "_type": "http://sharejs.org/types/JSONv0",
+    "_v": 31,
+    "_m": {
+      "ctime": 1534264266140,
+      "mtime": 1534264718269
+    },
+    "_o": "5b73058efdaca07e4860d925"
+  },
+  "ops": []
+}
