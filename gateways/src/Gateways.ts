@@ -395,4 +395,14 @@ export interface Gateways {
   //
   // Gets the embedding for the given viz.
   getVizEmbedding(id: VizId): Promise<Result<VizEmbedding>>;
+
+  // knnVizEmbeddingSearch
+  //
+  // Gets the nearest neighbors of the given embedding.
+  // This is backed by Postgres and `pgvector` in Supabase.
+  // Also implemented in MemoryGateways for testing.
+  knnVizEmbeddingSearch(
+    embedding: Array<number>,
+    k: number,
+  ): Promise<Result<Array<VizId>>>;
 }

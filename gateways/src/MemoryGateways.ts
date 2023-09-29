@@ -22,7 +22,7 @@ import {
   User,
   ResourceId,
 } from 'entities';
-import { ok, err } from './Result';
+import { ok, err, Result } from './Result';
 import { Gateways, pageSize } from './Gateways';
 import { ascending, descending } from 'd3-array';
 
@@ -290,13 +290,54 @@ export const MemoryGateways = (): Gateways => {
       ? ok(vizEmbeddings[vizId])
       : err(resourceNotFoundError(vizId));
 
-  // const knnVizEmbeddingSearch = (
-  //   vizEmbedding: VizEmbedding,
-  // ): Promise<Array<VizId>> => {
-  //   // TODO implement K nearest neighbor search
-  //   // using the vizEmbeddings index and the
-  //   // cosine similarity metric.
-  // };
+  // Utility function to compute cosine similarity between two vectors
+  const cosineSimilarity = (
+    vecA: Array<number>,
+    vecB: Array<number>,
+  ): number => {
+    let dotProduct = 0.0;
+    let normA = 0.0;
+    let normB = 0.0;
+
+    for (let i = 0; i < vecA.length; i++) {
+      dotProduct += vecA[i] * vecB[i];
+      normA += vecA[i] * vecA[i];
+      normB += vecB[i] * vecB[i];
+    }
+
+    // If either of the norms is zero, return 0 (indicating vectors are orthogonal)
+    if (normA === 0 || normB === 0) {
+      return 0;
+    }
+
+    return (
+      dotProduct / (Math.sqrt(normA) * Math.sqrt(normB))
+    );
+  };
+
+  const knnVizEmbeddingSearch = async (
+    embedding: Array<number>,
+    k: number,
+  ): Promise<Result<Array<VizId>>> => {
+    // Compute cosine similarities
+    const similarities: Array<[VizId, number]> = [];
+
+    for (const id in vizEmbeddings) {
+      const similarity = cosineSimilarity(
+        embedding,
+        vizEmbeddings[id].embedding,
+      );
+      similarities.push([id, similarity]);
+    }
+
+    // Sort by similarity in descending order and take top K
+    const sorted = similarities
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, k);
+
+    // Return the VizIds of the top K
+    return ok(sorted.map((item) => item[0]));
+  };
 
   // Populate non-CRUD methods.
   let memoryGateways = {
@@ -314,6 +355,7 @@ export const MemoryGateways = (): Gateways => {
     getPermissions,
     saveVizEmbedding,
     getVizEmbedding,
+    knnVizEmbeddingSearch,
   };
 
   // Packages up save, get, and delete

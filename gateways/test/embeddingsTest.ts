@@ -34,5 +34,26 @@ export const embeddingsTest = () => {
         'Resource not found with id: viz1',
       );
     });
+
+    it('knnVizEmbeddingSearch', async () => {
+      const gateways = await initGateways();
+      const { saveVizEmbedding } = gateways;
+
+      const saveResult = await saveVizEmbedding(
+        sampleVizEmbedding,
+      );
+      assert(saveResult.outcome === 'success');
+
+      const searchResult =
+        await gateways.knnVizEmbeddingSearch(
+          sampleVizEmbedding.embedding,
+          5,
+        );
+
+      assert(searchResult.outcome === 'success');
+      expect(searchResult.value).toEqual([
+        sampleVizEmbedding.vizId,
+      ]);
+    });
   });
 };
