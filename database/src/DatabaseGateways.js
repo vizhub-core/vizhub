@@ -28,6 +28,7 @@ import { pageSize } from 'gateways/src/Gateways';
 export const DatabaseGateways = ({
   shareDBConnection,
   mongoDBDatabase,
+  supabase,
 }) => {
   // A generic "save" implementation for ShareDB.
   // TODORedLock
@@ -558,6 +559,8 @@ export const DatabaseGateways = ({
       ),
     };
   }
+
+  // console.log('supabase', supabase);
 
   return databaseGateways;
 };

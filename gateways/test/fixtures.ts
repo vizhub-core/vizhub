@@ -23,6 +23,8 @@ import {
   BetaProgramSignup,
   EDITOR,
   VizEmbedding,
+  MigrationStatus,
+  MigrationBatch,
 } from 'entities';
 import { v3RuntimeDemoFiles } from './v3RuntimeDemoFiles';
 
@@ -369,11 +371,12 @@ export const sampleBetaProgramSignup: BetaProgramSignup = {
 //   vector: [1, 2, 3],
 // };
 
-export const sampleMigrationStatus = {
+export const sampleMigrationStatus: MigrationStatus = {
+  id: 'v2',
   currentBatchNumber: 0,
 };
 
-export const sampleMigrationBatch = {
-  batchNumber: 0,
+export const sampleMigrationBatch: MigrationBatch = {
+  id: 'v2-0',
   migratedEntities: [],
 };

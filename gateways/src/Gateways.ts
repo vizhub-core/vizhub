@@ -219,8 +219,10 @@ export interface Gateways {
   getMigrationStatus(
     id: MigrationStatusId,
   ): Promise<Result<Snapshot<MigrationStatus>>>;
-  deleteMigrationStatus(): Promise<Result<Success>>;
-  // TODO same as above for MigrationBatch
+  deleteMigrationStatus(
+    id: MigrationStatusId,
+  ): Promise<Result<Success>>;
+
   saveMigrationBatch(
     migrationBatch: MigrationBatch,
   ): Promise<Result<Success>>;
@@ -228,7 +230,7 @@ export interface Gateways {
     id: MigrationBatchId,
   ): Promise<Result<Snapshot<MigrationBatch>>>;
   deleteMigrationBatch(
-    id: number,
+    id: MigrationBatchId,
   ): Promise<Result<Success>>;
 
   // TODO implement these backed by `pgvector` in Supabase
