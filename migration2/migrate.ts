@@ -6,6 +6,8 @@ import {
   InfoV2,
   MigrationStatus,
   Snapshot,
+  Viz,
+  VizV2,
   timestampToDate,
 } from 'entities';
 import { getBatchTimestamps } from './getBatchTimestamps';
@@ -27,7 +29,7 @@ export const migrate = async ({
   if (!isTest) {
     console.log('migrating for real');
     // Prompt user to make sure they want to do this
-    const prompt = Prompt();
+    const prompt = Prompt({});
 
     const yes = prompt(
       'Are you sure you want to migrate the database? (y/n) ',
@@ -120,6 +122,11 @@ export const migrate = async ({
     timestampToDate(batchEndTimestamp).toLocaleString(),
   );
 
+  // Use fixtures if we're in test mode.
+  // These are pre-exported V2 vizzes that we can use to test the migration.
+  // This lets us test the migration without having to connect to the V2 database.
+  const useFixtures = isTest;
+
   // Iterate over vizzes in the V2 database that may have been created
   // or updated during the time period defined by startTime and endTime.
   const numVizzesProcessed = await v2Vizzes(
@@ -127,29 +134,41 @@ export const migrate = async ({
       v2InfoCollection,
       startTime: batchStartTimestamp,
       endTime: batchEndTimestamp,
+      useFixtures,
     },
     async (info: InfoV2, i: number) => {
-      // Get the viz from the V2 database.
-      const vizV2 = await getVizV2({
-        info,
-        v2ContentCollection,
-        v2ContentOpCollection,
-      });
+      let vizV2: VizV2;
+
+      if (useFixtures) {
+        const fileName = `./v2Fixtures/vizV2-${info.id}.json`;
+        vizV2 = JSON.parse(
+          fs.readFileSync(fileName, 'utf8'),
+        );
+      } else {
+        // Get the viz from the V2 database.
+        vizV2 = await getVizV2({
+          info,
+          v2ContentCollection,
+          v2ContentOpCollection,
+        });
+      }
 
       // Migrate the viz! Does not includes Upvotes or Users.
       console.log(
         `Processing viz #${i}: ${info.id} ${info.title} `,
       );
 
-      // TODO write this to a file
-      // console.log(JSON.stringify(vizV2, null, 2));
+      // This code generates fixtures for the first 5 vizzes.
+      const generateFixtures = false;
       const fileName = `./v2Fixtures/vizV2-${info.id}.json`;
-      fs.writeFileSync(
-        fileName,
-        JSON.stringify(vizV2, null, 2),
-      );
-      if (i > 4) {
-        process.exit(0);
+      if (generateFixtures) {
+        fs.writeFileSync(
+          fileName,
+          JSON.stringify(vizV2, null, 2),
+        );
+        if (i > 4) {
+          process.exit(0);
+        }
       }
 
       // const isVizV2Valid: boolean = await processViz({
@@ -253,29 +272,4 @@ export const migrate = async ({
     // Gateways is returned only for testing purposes
     gateways,
   };
-
-  // TODO
-  //
-  // Viz Iteration Layer
-  // - Connect to layer that iterates vizzes
-  // - Develop a mock iteration layer for testing
-  // - Use a scrape of data that we commit to the repo
-  //
-  // Embeddings
-  // - Develop an interface for computing embeddings
-  // - Mock that interface to run locally - random vectors
-  // - Add tests for it
-  // - Develop an interface for storing and querying embeddings
-  // - Mock that interface to run in-memory
-  //
-  // Entity Migration
-  // - Add tests for migrating a viz
-  // - Migrate viz op history
-  // - Migrate upvotes
-  // - Migrate collaborators
-  // - Migrate users (owner, upvoters, collaborators)
-  //
-  // Full Migration
-  // - Add tests for completely migrating partially migrated viz
-  // - Add tests for rolling back a migration batch
 };

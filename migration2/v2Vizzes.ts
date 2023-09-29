@@ -1,6 +1,8 @@
-import { InfoV2, Timestamp } from 'entities';
+import fs from 'fs';
+import path from 'path';
+import { InfoV2, Timestamp, VizV2 } from 'entities';
 
-// Iterates over V2 vizzes straight out of Mongo.
+// Iterates over V2 VizInfos straight out of Mongo.
 // Restricts the search to vizzes that may have been modified
 // between `startTime` and `endTime`.
 export const v2Vizzes = async (
@@ -8,23 +10,62 @@ export const v2Vizzes = async (
     v2InfoCollection,
     startTime,
     endTime,
+    useFixtures,
   }: {
     v2InfoCollection: any;
     startTime: Timestamp;
     endTime: Timestamp;
+    useFixtures: boolean;
   },
   callback: (info: InfoV2, i: number) => Promise<void>,
 ) => {
+  if (useFixtures) {
+    console.log('Using fixtures for v2Vizzes iteration');
+    // TODO: list files in the `v2Fixtures` directory
+    // and iterate over them.
+    // This will allow us to test the migration
+    // without connecting to the V2 database.
+    // See https://stackoverflow.com/a/27271628/358804
+    // for how to list files in a directory.
+    // See https://stackoverflow.com/a/10049720/358804
+    // for how to iterate over an array of files.
+
+    const directoryPath = path.join(
+      __dirname,
+      'v2Fixtures',
+    );
+    const files = fs.readdirSync(directoryPath);
+    const infos: Array<InfoV2> = [];
+    for (const fileName of files) {
+      const filePath = path.join(directoryPath, fileName);
+      const vizV2 = JSON.parse(
+        fs.readFileSync(filePath, 'utf8'),
+      );
+      infos.push(vizV2.info);
+    }
+
+    // Sort infos by ascending `createdTimestamp`.
+    infos.sort(
+      (a, b) => a.createdTimestamp - b.createdTimestamp,
+    );
+
+    // Iterate over infos.
+    let i = 0;
+    for (const info of infos) {
+      await callback(info, i);
+      i++;
+    }
+
+    return;
+  }
+
+  // If we are not using fixtures, iterate over the V2 database.
   const infoIterator = v2InfoCollection.find({
     $and: [
       { lastUpdatedTimestamp: { $gt: startTime } },
       { createdTimestamp: { $lt: endTime } },
     ],
   });
-  // // TODO sort by createdTimestamp
-  // .sort({ createdTimestamp: 1 })
-  // .batchSize(1000)
-  // .cursor();
 
   // Invariant: we are always moving forward in time
   // with respect to creation date.
