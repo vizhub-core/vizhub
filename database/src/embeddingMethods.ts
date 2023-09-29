@@ -1,5 +1,10 @@
 import { VizEmbedding, VizId } from 'entities';
-import { Result, ok } from 'gateways';
+import {
+  Result,
+  err,
+  ok,
+  resourceNotFoundError,
+} from 'gateways';
 export const embeddingMethods = (supabase) => ({
   saveVizEmbedding: async (vizEmbedding: VizEmbedding) => {
     const { vizId, commitId, embedding } = vizEmbedding;
@@ -35,12 +40,17 @@ export const embeddingMethods = (supabase) => ({
 
       .eq('viz_id', vizId)
       .single();
+
     if (error) {
-      return {
-        outcome: 'failure',
-        error,
-      };
+      if (
+        error.message ===
+        'JSON object requested, multiple (or no) rows returned'
+      ) {
+        return err(resourceNotFoundError(vizId));
+      }
+      return err(error);
     }
+
     const vizEmbedding: VizEmbedding = {
       vizId,
       commitId: data.commit_id,
@@ -48,6 +58,22 @@ export const embeddingMethods = (supabase) => ({
     };
 
     return ok(vizEmbedding);
+  },
+  deleteVizEmbedding: async (vizId: VizId) => {
+    const { error } = await supabase
+      .from('viz_embeddings')
+      .delete()
+      .eq('viz_id', vizId);
+    if (error) {
+      if (
+        error.message ===
+        'JSON object requested, multiple (or no) rows returned'
+      ) {
+        return err(resourceNotFoundError(vizId));
+      }
+      return err(error);
+    }
+    return ok('success');
   },
   knnVizEmbeddingSearch: async (
     embedding: Array<number>,
