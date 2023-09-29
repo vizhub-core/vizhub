@@ -560,7 +560,7 @@ export const DatabaseGateways = ({
     };
   }
 
-  // console.log('supabase', supabase);
+  console.log('supabase defined?', supabase);
 
   return databaseGateways;
 };

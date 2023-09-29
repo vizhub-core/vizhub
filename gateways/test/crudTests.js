@@ -20,7 +20,6 @@ import {
   sampleDeployment,
   sampleMergeRequest,
   sampleBetaProgramSignup,
-  sampleEmbedding,
   sampleMigrationStatus,
   sampleMigrationBatch,
 } from './fixtures';

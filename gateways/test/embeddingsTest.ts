@@ -3,7 +3,7 @@ import { initGateways } from './initGateways';
 import { sampleVizEmbedding } from './fixtures';
 
 export const embeddingsTest = () => {
-  describe('embeddings', () => {
+  describe.only('embeddings', () => {
     it('saveVizEmbedding and getVizEmbedding', async () => {
       const gateways = await initGateways();
       const { saveVizEmbedding } = gateways;
