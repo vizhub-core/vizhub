@@ -46,6 +46,7 @@ import {
   // EmbeddingId,
   MigrationStatus,
   MigrationBatch,
+  VizEmbedding,
 } from 'entities';
 import { Result, Success } from './Result';
 import {
@@ -387,7 +388,11 @@ export interface Gateways {
   // This is backed by Postgres and `pgvector` in Supabase.
   // Also implemented in MemoryGateways for testing.
   saveVizEmbedding(
-    vizId: VizId,
-    embedding: Array<number>,
+    vizEmbedding: VizEmbedding,
   ): Promise<Result<Success>>;
+
+  // getVizEmbedding
+  //
+  // Gets the embedding for the given viz.
+  getVizEmbedding(id: VizId): Promise<Result<VizEmbedding>>;
 }

@@ -35,6 +35,7 @@ export const primordialCommitId = 'commit1';
 
 export const sampleVizEmbedding: VizEmbedding = {
   vizId: 'viz1',
+  commitId: 'commit1',
   embedding: [1, 2, 3],
 };
 

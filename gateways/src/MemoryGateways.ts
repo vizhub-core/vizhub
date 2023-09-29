@@ -12,20 +12,33 @@ import {
 import {
   defaultSortOrder,
   defaultSortOption,
+  VizId,
+  VizEmbedding,
+  CommitId,
+  FolderId,
+  UserName,
+  EmailAddress,
+  UserId,
+  User,
+  ResourceId,
 } from 'entities';
 import { ok, err } from './Result';
-import { pageSize } from './Gateways';
+import { Gateways, pageSize } from './Gateways';
 import { ascending, descending } from 'd3-array';
 
+type Entity = { [key: string]: any };
+type EntityName = string;
+type EntityId = string;
+
 // A stub similar to ShareDB snapshots.
-export const fakeSnapshot = (data) => ({
+export const fakeSnapshot = (data: Entity) => ({
   data,
   v: 1,
   type: 'json1',
 });
 
 // No-operation, do nothing.
-const noop = (d) => d;
+const noop = (d: Entity) => d;
 
 // The same underlying CRUD (Create, Read, Update, Delete)
 // implementation supports all these entities.
@@ -50,7 +63,6 @@ export const crudEntityNames = [
   'MergeRequest',
   'BetaProgramSignup',
   'AnalyticsEvent',
-  // 'Embedding',
   'MigrationStatus',
   'MigrationBatch',
 ];
@@ -67,59 +79,54 @@ export const noSnapshot = {
 
 // An in-memory implementation for gateways,
 // for use in unit tests (faster than using Mongo).
-export const MemoryGateways = () => {
+export const MemoryGateways = (): Gateways => {
   // Stores all documents.
   //  * Sort of simulates an instance of MongoDB.
-  // * Keys: entity names
-  // Values: Objects having:
-  //  * Keys: ids
-  //  * Values: documents
-  const documents = {};
+  //  * Keys: entity names
+  //  * Values: Objects having:
+  //    * Keys: ids
+  //    * Values: documents
+  const documents: {
+    [key: EntityName]: { [key: EntityId]: Entity };
+  } = {};
 
   // Stores all viz embeddings.
   // Keys: ids
-  // Values: viz embeddings of the form:
-  // {
-  //   id: VizId,
-  //   embedding: Array<number>,
-  // }
-  const vizEmbeddings = {};
+  // Values: viz embeddings
+  const vizEmbeddings: {
+    [key: VizId]: VizEmbedding;
+  } = {};
 
   // Writes a document.
-  const genericSave = (entityName) => async (entity) => {
-    documents[entityName][entity.id] = entity;
-    return ok('success');
-  };
+  const genericSave =
+    (entityName: EntityName) => async (entity: Entity) => {
+      documents[entityName][entity.id] = entity;
+      return ok('success');
+    };
 
   // Reads a document
-  const genericGet = (entityName) => async (id) =>
-    id in documents[entityName]
-      ? ok(
-          (noSnapshot[entityName] ? noop : fakeSnapshot)(
-            documents[entityName][id],
-          ),
-        )
-      : err(resourceNotFoundError(id));
+  const genericGet =
+    (entityName: EntityName) => async (id: EntityId) =>
+      id in documents[entityName]
+        ? ok(
+            (noSnapshot[entityName] ? noop : fakeSnapshot)(
+              documents[entityName][id],
+            ),
+          )
+        : err(resourceNotFoundError(id));
 
   // Deletes a document
-  const genericDelete = (entityName) => async (id) => {
-    if (id in documents[entityName]) {
-      delete documents[entityName][id];
-      return ok('success');
-    } else {
-      return err(resourceNotFoundError(id));
-    }
-  };
+  const genericDelete =
+    (entityName: EntityName) => async (id: EntityId) => {
+      if (id in documents[entityName]) {
+        delete documents[entityName][id];
+        return ok('success');
+      } else {
+        return err(resourceNotFoundError(id));
+      }
+    };
 
-  // Packages up save, get, and delete
-  // for a given entity name.
-  const crud = (entityName) => ({
-    [`save${entityName}`]: genericSave(entityName),
-    [`get${entityName}`]: genericGet(entityName),
-    [`delete${entityName}`]: genericDelete(entityName),
-  });
-
-  const getForks = async (id) =>
+  const getForks = async (id: EntityId) =>
     ok(
       Object.values(documents.Info)
         .filter(({ forkedFrom }) => forkedFrom === id)
@@ -154,17 +161,17 @@ export const MemoryGateways = () => {
     );
   };
 
-  const incrementForksCount = async (id) => {
+  const incrementForksCount = async (id: VizId) => {
     documents.Info[id].forksCount++;
     return ok('success');
   };
 
-  const incrementUpvotesCount = async (id) => {
+  const incrementUpvotesCount = async (id: VizId) => {
     documents.Info[id].upvotesCount++;
     return ok('success');
   };
 
-  const decrementUpvotesCount = async (id) => {
+  const decrementUpvotesCount = async (id: VizId) => {
     if (documents.Info[id].upvotesCount === 0) {
       return err(invalidDecrementError(id, 'upvotesCount'));
     }
@@ -172,7 +179,7 @@ export const MemoryGateways = () => {
     return ok('success');
   };
 
-  const decrementForksCount = async (id) => {
+  const decrementForksCount = async (id: VizId) => {
     if (documents.Info[id].forksCount === 0) {
       return err(invalidDecrementError(id, 'forksCount'));
     }
@@ -181,9 +188,9 @@ export const MemoryGateways = () => {
   };
 
   const getCommitAncestors = async (
-    id,
-    toNearestMilestone,
-    start,
+    id: CommitId,
+    toNearestMilestone?: boolean,
+    start?: CommitId,
   ) => {
     let commit = documents.Commit[id];
     if (!commit) {
@@ -206,7 +213,7 @@ export const MemoryGateways = () => {
   // TODO consider only returning ids here?
   // For permissions, onlu ids are needed.
   // For breadcrumbs, names are needed as well
-  const getFolderAncestors = async (id) => {
+  const getFolderAncestors = async (id: FolderId) => {
     let folder = documents.Folder[id];
     if (!folder) {
       return err(resourceNotFoundError(id));
@@ -214,7 +221,7 @@ export const MemoryGateways = () => {
     const folders = [folder];
     while (folder.parent) {
       if (!(folder.parent in documents.Folder)) {
-        return err(resourceNotFoundError(commit.parent));
+        return err(resourceNotFoundError(folder.parent));
       }
       folder = documents.Folder[folder.parent];
       folders.push(folder);
@@ -222,7 +229,7 @@ export const MemoryGateways = () => {
     return ok(folders.reverse());
   };
 
-  const getUserByUserName = async (userName) => {
+  const getUserByUserName = async (userName: UserName) => {
     const user = Object.values(documents.User).find(
       (user) => user.userName === userName,
     );
@@ -231,7 +238,9 @@ export const MemoryGateways = () => {
       : err(resourceNotFoundError(userName));
   };
 
-  const getUserByEmails = async (emails) => {
+  const getUserByEmails = async (
+    emails: Array<EmailAddress>,
+  ) => {
     const user = Object.values(documents.User).find(
       (user) =>
         emails.includes(user.primaryEmail) ||
@@ -242,17 +251,20 @@ export const MemoryGateways = () => {
     );
     return user
       ? ok(fakeSnapshot(user))
-      : err(resourceNotFoundError(emails));
+      : err(resourceNotFoundError(emails.join(', ')));
   };
 
-  const getUsersByIds = async (ids) => {
+  const getUsersByIds = async (ids: Array<UserId>) => {
     const users = Object.values(documents.User).filter(
       (user) => ids.includes(user.id),
     );
     return ok(users.map(fakeSnapshot));
   };
 
-  const getPermissions = async (user, resources) => {
+  const getPermissions = async (
+    user: User,
+    resources: Array<ResourceId>,
+  ) => {
     const allPermissions = Object.values(
       documents.Permission,
     );
@@ -266,10 +278,25 @@ export const MemoryGateways = () => {
     return ok(permissions.map(fakeSnapshot));
   };
 
-  const saveVizEmbedding = async (embedding) => {
-    vizEmbeddings[embedding.id] = embedding;
+  const saveVizEmbedding = async (
+    vizEmbedding: VizEmbedding,
+  ) => {
+    vizEmbeddings[vizEmbedding.vizId] = vizEmbedding;
     return ok('success');
   };
+
+  const getVizEmbedding = async (vizId: VizId) =>
+    vizId in vizEmbeddings
+      ? ok(vizEmbeddings[vizId])
+      : err(resourceNotFoundError(vizId));
+
+  // const knnVizEmbeddingSearch = (
+  //   vizEmbedding: VizEmbedding,
+  // ): Promise<Array<VizId>> => {
+  //   // TODO implement K nearest neighbor search
+  //   // using the vizEmbeddings index and the
+  //   // cosine similarity metric.
+  // };
 
   // Populate non-CRUD methods.
   let memoryGateways = {
@@ -286,7 +313,16 @@ export const MemoryGateways = () => {
     getUsersByIds,
     getPermissions,
     saveVizEmbedding,
+    getVizEmbedding,
   };
+
+  // Packages up save, get, and delete
+  // for a given entity name.
+  const crud = (entityName: EntityName) => ({
+    [`save${entityName}`]: genericSave(entityName),
+    [`get${entityName}`]: genericGet(entityName),
+    [`delete${entityName}`]: genericDelete(entityName),
+  });
 
   // Populate CRUD methods.
   for (const entityName of crudEntityNames) {
@@ -297,5 +333,10 @@ export const MemoryGateways = () => {
     };
   }
 
-  return memoryGateways;
+  // TODO (maybe): make TypeScript happy
+  // Not sure it's worth it as we'd need to unroll
+  // the spread AND for loop above, filling in
+  // actual entity types for each entity name.
+  // @ts-expect-error
+  return memoryGateways as Gateways;
 };

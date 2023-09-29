@@ -1,19 +1,14 @@
-// // Embedding
-// // * A vector for vector similarity search.
-// export interface Embedding {
-//   id: EmbeddingId;
-//   type: EmbeddingType;
-//   vector: Array<number>;
-// }
+// Embedding
+// * A vector for vector similarity search.
+// * Computed from the source code of a Viz.
+// * Always computed from the latest commit of a Viz.
+// * Needs to be updated when latest commit changes.
 
+import { CommitId } from './RevisionHistory';
 import { VizId } from './Viz';
-
-// export type EmbeddingId = string;
-
-// // Embeddings can be computed for different types of objects.
-// export type EmbeddingType = 'Viz' | 'File' | 'User';
 
 export interface VizEmbedding {
   vizId: VizId;
+  commitId: CommitId;
   embedding: Array<number>;
 }
