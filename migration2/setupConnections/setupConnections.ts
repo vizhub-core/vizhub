@@ -21,27 +21,39 @@ export const setupConnections = async ({
   isTest: boolean;
   loadTestFixtures?: (gateways: Gateways) => Promise<void>;
 }): Promise<MigrationConnections> => {
-  // The source database
-  const { v2MongoDBDatabase, v2MongoClient } =
-    await initializeV2MongoDBDatabase();
+  // Source database - v2
+  let v2MongoDBDatabase: any;
+  let v2InfoCollection: any;
+  let v2MongoClient: any;
+  let v2ContentCollection: any;
+  let v2ContentOpCollection: any;
+  let v2UserCollection: any;
 
-  // V2 collections
-  const v2InfoCollection =
-    v2MongoDBDatabase.collection('documentInfo');
-  const v2ContentCollection = v2MongoDBDatabase.collection(
-    'documentContent',
-  );
-  // const infoOpCollection = v2MongoDBDatabase.collection('o_documentInfo');
-  const v2ContentOpCollection =
-    v2MongoDBDatabase.collection('o_documentContent');
-  const v2UserCollection =
-    v2MongoDBDatabase.collection('user');
-
+  // Target database - v3
   let gateways: Gateways;
   let mongoDBDatabase: any;
   let mongoDBConnection: any;
 
   if (!isTest) {
+    console.log('Connecting to V2 Mongo');
+    // The source database - real deal
+    // const { v2MongoDBDatabase, v2MongoClient } =
+    const v2Mongo = await initializeV2MongoDBDatabase();
+
+    v2MongoDBDatabase = v2Mongo.v2MongoDBDatabase;
+    v2MongoClient = v2Mongo.v2MongoClient;
+    // V2 collections
+    v2InfoCollection =
+      v2MongoDBDatabase.collection('documentInfo');
+    v2ContentCollection = v2MongoDBDatabase.collection(
+      'documentContent',
+    );
+    // const infoOpCollection = v2MongoDBDatabase.collection('o_documentInfo');
+    v2ContentOpCollection = v2MongoDBDatabase.collection(
+      'o_documentContent',
+    );
+    v2UserCollection = v2MongoDBDatabase.collection('user');
+
     // The target database - real deal
     const target = await initializeGateways({
       isProd: true,

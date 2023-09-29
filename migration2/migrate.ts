@@ -176,8 +176,9 @@ export const migrate = async ({
       const isVizV2Valid: boolean = await processViz({
         vizV2,
         gateways,
-        i,
         v2ContentCollection,
+        batchStartTimestamp,
+        batchEndTimestamp,
       });
 
       // // If the viz is invalid, skip it.

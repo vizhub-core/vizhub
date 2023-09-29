@@ -3,9 +3,10 @@
 import { generateEmbeddingOpenAI } from './generateEmbeddingOpenAI';
 // import { computeForkedFrom } from './computeForkedFrom';
 import { isolateGoodFiles } from './isolateGoodFiles';
-import { FilesV2, VizV2 } from 'entities';
+import { FilesV2, VizV2, Timestamp } from 'entities';
 import { Gateways } from 'gateways';
 import { Collection } from 'mongodb-legacy';
+import { migratePrimordialViz } from './migratePrimordialViz';
 // import { updateMigratedViz } from './updateMigratedViz';
 // import { migratePrimordialViz } from './migratePrimordialViz';
 // import { createMigratedViz } from './createMigratedViz';
@@ -15,10 +16,14 @@ import { Collection } from 'mongodb-legacy';
 // import { storeVizEmbedding } from './embeddings';
 
 // Hardcoded ID of the primordial viz (actually in the V2 database)
-const primordialVizId = '86a75dc8bdbe4965ba353a79d4bd44c8';
+export const primordialVizId =
+  '86a75dc8bdbe4965ba353a79d4bd44c8';
 
-// Feature flag
+// Feature flag to enable/disable embeddings.
 const enableEmbedding = false;
+
+// If the viz is private, skip it for now.
+const skipPrivateVizzes = true;
 
 // Processes a single viz.
 // Returns true if the viz is valid (worthy of migration), false if not.
@@ -29,15 +34,15 @@ const enableEmbedding = false;
 export const processViz = async ({
   vizV2,
   gateways,
-  i,
-  redisClient,
   v2ContentCollection,
+  batchStartTimestamp,
+  batchEndTimestamp,
 }: {
   vizV2: VizV2;
   gateways: Gateways;
-  i: number;
-  redisClient: any;
   v2ContentCollection: Collection;
+  batchStartTimestamp: Timestamp;
+  batchEndTimestamp: Timestamp;
 }): Promise<boolean> => {
   // Setup
 
@@ -45,8 +50,6 @@ export const processViz = async ({
 
   // console.log('checking privacy', privacy);
 
-  const skipPrivateVizzes = true;
-  // If the viz is private, skip it for now.
   // TODO test this path
   if (skipPrivateVizzes && privacy === 'private') {
     console.log('  Private viz, skipping this viz.');
@@ -102,20 +105,56 @@ export const processViz = async ({
     return false;
   }
 
-  // console.log('  goodFiles:', goodFiles);
+  if (isPrimordialViz) {
+    console.log(
+      '   This is the primordial viz first migration!',
+    );
+    await migratePrimordialViz({
+      vizV2,
+      title,
+      goodFiles,
+      gateways,
+    });
+    // After this operation, we are done with this viz.
+    return true;
+  }
 
-  // Compute the embedding for the viz (latest version).
-  const embedding: Array<number> =
-    await generateEmbeddingOpenAI(goodFiles);
+  // Next steps:
+  // - determine if this viz needs to be created or updated
+  // - if it needs to be created, create it
+  // - if it needs to be updated, update it
 
-  console.log('  embedding:', embedding);
+  // // Compute the forkedFrom and forkedFromIsBackfilled fields.
+  // const { forkedFrom, forkedFromIsBackfilled } =
+  //   await computeForkedFrom({
+  //     isPrimordialViz,
+  //     vizV2,
+  //     contentCollection,
+  //     embedding,
+  //     redisClient,
+  //   });
 
-  gateways.saveVizEmbedding({
-    vizId: id,
-    embedding,
-  });
+  // // If createdTimestamp is between batchStartTimestamp and batchEndTimestamp,
+  // const vizNeedsCreation =
+  //   createdTimestamp >= batchStartTimestamp &&
+  //   createdTimestamp < batchEndTimestamp;
 
-  process.exit();
+  //   if(vizNeedsCreation) {
+
+  // // console.log('  goodFiles:', goodFiles);
+
+  // // Compute the embedding for the viz (latest version).
+  // const embedding: Array<number> =
+  //   await generateEmbeddingOpenAI(goodFiles);
+
+  // console.log('  embedding:', embedding);
+
+  // gateways.saveVizEmbedding({
+  //   vizId: id,
+  //   embedding,
+  // });
+
+  // process.exit();
 
   // TODO connect to postgresql for embedding storage
 
@@ -175,16 +214,6 @@ export const processViz = async ({
   // //   vector: embedding,
   // // });
   // // logDetail('    Stored embedding in MongoDB!');
-
-  // // Compute the forkedFrom and forkedFromIsBackfilled fields.
-  // const { forkedFrom, forkedFromIsBackfilled } =
-  //   await computeForkedFrom({
-  //     isPrimordialViz,
-  //     vizV2,
-  //     contentCollection,
-  //     embedding,
-  //     redisClient,
-  //   });
 
   // console.log('  forkedFrom:', forkedFrom);
   // console.log(
