@@ -3,14 +3,19 @@ import { initGateways } from './initGateways';
 import { sampleVizEmbedding } from './fixtures';
 
 export const embeddingsTest = () => {
-  describe.only('embeddings', () => {
-    it('saveVizEmbedding and getVizEmbedding', async () => {
+  describe('embeddings', () => {
+    it.only('saveVizEmbedding and getVizEmbedding', async () => {
       const gateways = await initGateways();
       const { saveVizEmbedding } = gateways;
 
       const saveResult = await saveVizEmbedding(
         sampleVizEmbedding,
       );
+
+      if (saveResult.outcome === 'failure') {
+        console.log(saveResult.error);
+      }
+
       assert(saveResult.outcome === 'success');
 
       const getResult = await gateways.getVizEmbedding(
