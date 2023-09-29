@@ -31,19 +31,19 @@ export const processViz = async ({
   gateways,
   i,
   redisClient,
-  contentCollection,
+  v2ContentCollection,
 }: {
   vizV2: VizV2;
   gateways: Gateways;
   i: number;
   redisClient: any;
-  contentCollection: Collection;
+  v2ContentCollection: Collection;
 }): Promise<boolean> => {
   // Setup
 
   const { id, createdTimestamp, privacy } = vizV2.info;
 
-  console.log('checking privacy', privacy);
+  // console.log('checking privacy', privacy);
 
   const skipPrivateVizzes = true;
   // If the viz is private, skip it for now.
@@ -92,12 +92,12 @@ export const processViz = async ({
 
   // Isolate the "good files" that we want to use for embedding.
   // This excludes invalid files and `bundle.js` (since it's auto-generated).
-  const goodFiles: FilesV2 = isolateGoodFiles(
+  const goodFiles: FilesV2 | null = isolateGoodFiles(
     vizV2.content,
   );
 
   // If there are no good files, skip this viz! It's not worth migrating.
-  if (!goodFiles) {
+  if (goodFiles === null) {
     console.log('  No good files, skipping this viz.');
     return false;
   }
@@ -105,10 +105,25 @@ export const processViz = async ({
   // console.log('  goodFiles:', goodFiles);
 
   // Compute the embedding for the viz (latest version).
-  const embedding =
+  const embedding: Array<number> =
     await generateEmbeddingOpenAI(goodFiles);
 
   console.log('  embedding:', embedding);
+
+  gateways.saveVizEmbedding({
+    vizId: id,
+    embedding,
+  });
+
+  process.exit();
+
+  // TODO connect to postgresql for embedding storage
+
+  // import { createClient } from '@supabase/supabase-js'
+
+  // const supabaseUrl = 'https://fovknjmalizayekfairw.supabase.co'
+  // const supabaseKey = process.env.SUPABASE_KEY
+  // const supabase = createClient(supabaseUrl, supabaseKey)
 
   // // If we are here, it means we are going to migrate this viz,
   // // either because it has not been migrated yet,

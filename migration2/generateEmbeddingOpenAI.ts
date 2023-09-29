@@ -2,6 +2,7 @@ import OpenAI from 'openai';
 import { encode, decode } from 'gpt-3-encoder';
 
 import { removeEmoji } from './removeEmoji';
+import { FilesV2 } from 'entities';
 
 // The dimension of the embedding, as a string.
 export const embeddingSize = 1536;
@@ -47,14 +48,13 @@ const embed = async (input: string) => {
     model,
     input: truncateIfNeeded(input),
   });
-  console.log(embeddingRes.data);
   const [{ embedding }] = embeddingRes.data;
   return embedding;
 };
 
 export const generateEmbeddingOpenAI = async (
-  goodFiles,
-) => {
+  goodFiles: FilesV2,
+): Promise<Array<number>> => {
   const input = removeEmoji(goodFiles)
     .map(({ name, text }) => {
       // Substring on name as there was one particular case

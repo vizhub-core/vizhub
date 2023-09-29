@@ -115,11 +115,7 @@ export type {
   AnalyticsEventId,
 } from './Analytics';
 
-// export type {
-//   Embedding,
-//   EmbeddingId,
-//   EmbeddingType,
-// } from './Embedding';
+export type { VizEmbedding } from './Embedding';
 
 export {
   sortOptions,

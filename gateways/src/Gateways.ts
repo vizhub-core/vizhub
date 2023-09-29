@@ -376,4 +376,18 @@ export interface Gateways {
   getUsersByIds(
     ids: Array<UserId>,
   ): Promise<Result<Array<Snapshot<User>>>>;
+
+  // ***************************************************************
+  // ******************** Embeddings & Supabase ********************
+  // ***************************************************************
+
+  // saveVizEmbedding
+  //
+  // Saves the embedding for the given viz.
+  // This is backed by Postgres and `pgvector` in Supabase.
+  // Also implemented in MemoryGateways for testing.
+  saveVizEmbedding(
+    vizId: VizId,
+    embedding: Array<number>,
+  ): Promise<Result<Success>>;
 }

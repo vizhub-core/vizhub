@@ -76,6 +76,15 @@ export const MemoryGateways = () => {
   //  * Values: documents
   const documents = {};
 
+  // Stores all viz embeddings.
+  // Keys: ids
+  // Values: viz embeddings of the form:
+  // {
+  //   id: VizId,
+  //   embedding: Array<number>,
+  // }
+  const vizEmbeddings = {};
+
   // Writes a document.
   const genericSave = (entityName) => async (entity) => {
     documents[entityName][entity.id] = entity;
@@ -257,6 +266,11 @@ export const MemoryGateways = () => {
     return ok(permissions.map(fakeSnapshot));
   };
 
+  const saveVizEmbedding = async (embedding) => {
+    vizEmbeddings[embedding.id] = embedding;
+    return ok('success');
+  };
+
   // Populate non-CRUD methods.
   let memoryGateways = {
     getForks,
@@ -271,6 +285,7 @@ export const MemoryGateways = () => {
     getUserByEmails,
     getUsersByIds,
     getPermissions,
+    saveVizEmbedding,
   };
 
   // Populate CRUD methods.

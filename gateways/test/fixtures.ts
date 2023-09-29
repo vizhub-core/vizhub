@@ -22,7 +22,7 @@ import {
   MergeRequest,
   BetaProgramSignup,
   EDITOR,
-  Embedding,
+  VizEmbedding,
 } from 'entities';
 import { v3RuntimeDemoFiles } from './v3RuntimeDemoFiles';
 
@@ -32,6 +32,11 @@ export const ts3: Timestamp = 1638300000;
 export const ts4: Timestamp = 1638400000;
 
 export const primordialCommitId = 'commit1';
+
+export const sampleVizEmbedding: VizEmbedding = {
+  vizId: 'viz1',
+  embedding: [1, 2, 3],
+};
 
 export const userJoe: User = {
   id: '47895473289547832938754',
