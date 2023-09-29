@@ -7,6 +7,7 @@ import { FilesV2, VizV2, Timestamp } from 'entities';
 import { Gateways } from 'gateways';
 import { Collection } from 'mongodb-legacy';
 import { migratePrimordialViz } from './migratePrimordialViz';
+import fs from 'fs';
 // import { updateMigratedViz } from './updateMigratedViz';
 // import { migratePrimordialViz } from './migratePrimordialViz';
 // import { createMigratedViz } from './createMigratedViz';
@@ -115,6 +116,34 @@ export const processViz = async ({
       goodFiles,
       gateways,
     });
+
+    // Is this the right place to update the embedding?
+    // Imagine a world where ever 15 minutes, we update the embedding for all vizzes.
+    // Meaning, we query for the vizzes that need to have their embeddings updated,
+    // which is true when the viz has been updated since the last embedding update.
+    //
+    // This is complex because the embedding is stored in supabase, but the Info
+    // documents are stored in MongoDB.
+    //
+    // Options for implementation:
+    //  - For each viz, fetch its embedding from Supabase, check commit id.
+    //    If commit id is different, update the embedding.
+    //    This is a lot of requests to Supabase.
+    //  - For each viz, fetch its Info document from MongoDB, check commit id.
+    //    If commit id is different than ____, update the embedding.
+    //    We'd need to define a new field in the Info document to store the commit id
+    //    of the last computed embedding, which we could potentially do.
+    //    This is _not_ a lot of requests to MongoDB because we could isolate the
+    //    Info documents that need to be updated with a single MongoDB query.
+    //
+    //    If we're adding a new field to the Info document, we could also add a field
+    //    `embeddingIsUpToDate` which is a boolean. This would allow us to skip
+    //    the embedding computation for vizzes that have not been updated since
+    //    the last embedding computation.
+    //
+    //    This is the best option, but would require that the interactor for committing
+    //    a viz also updates the `embeddingIsUpToDate` field.
+    // await updateEmbeddings();
     // After this operation, we are done with this viz.
     return true;
   }
@@ -143,9 +172,16 @@ export const processViz = async ({
 
   // // console.log('  goodFiles:', goodFiles);
 
-  // // Compute the embedding for the viz (latest version).
-  // const embedding: Array<number> =
-  //   await generateEmbeddingOpenAI(goodFiles);
+  // Compute the embedding for the viz (latest version).
+  const embedding: Array<number> =
+    await generateEmbeddingOpenAI(goodFiles);
+
+  JSON.stringify(embedding);
+  // Write this to a file
+  fs.writeFileSync(
+    `./embeddings/${vizV2.info.id}.json`,
+    JSON.stringify(embedding),
+  );
 
   // console.log('  embedding:', embedding);
 
