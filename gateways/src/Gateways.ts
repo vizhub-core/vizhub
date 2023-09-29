@@ -396,7 +396,9 @@ export interface Gateways {
   // getVizEmbedding
   //
   // Gets the embedding for the given viz.
-  getVizEmbedding(id: VizId): Promise<Result<VizEmbedding>>;
+  getVizEmbedding(
+    vizId: VizId,
+  ): Promise<Result<VizEmbedding>>;
 
   // knnVizEmbeddingSearch
   //

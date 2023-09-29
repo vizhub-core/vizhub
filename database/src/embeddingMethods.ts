@@ -1,11 +1,14 @@
+import { VizEmbedding, VizId } from 'entities';
+import { Result, ok } from 'gateways';
 export const embeddingMethods = (supabase) => ({
-  saveVizEmbedding: async (vizEmbedding) => {
-    const { vizId, embedding } = vizEmbedding;
+  saveVizEmbedding: async (vizEmbedding: VizEmbedding) => {
+    const { vizId, commitId, embedding } = vizEmbedding;
     const { data, error } = await supabase
       .from('viz_embeddings')
       .insert([
         {
           viz_id: vizId,
+          commit_id: commitId,
           embedding,
         },
       ]);
@@ -19,10 +22,17 @@ export const embeddingMethods = (supabase) => ({
       outcome: 'success',
     };
   },
-  getVizEmbedding: async (vizId) => {
+  // getVizEmbedding(id: VizId): Promise<Result<VizEmbedding>>;
+  getVizEmbedding: async (
+    vizId: VizId,
+  ): Promise<Result<VizEmbedding>> => {
     const { data, error } = await supabase
       .from('viz_embeddings')
-      .select('embedding')
+      // .select('embedding')
+      .select('embedding, commit_id') // Select multiple columns here
+
+      // TODO also select commit_id
+
       .eq('viz_id', vizId)
       .single();
     if (error) {
@@ -31,13 +41,13 @@ export const embeddingMethods = (supabase) => ({
         error,
       };
     }
-    return {
-      outcome: 'success',
-      value: {
-        vizId,
-        embedding: data.embedding,
-      },
+    const vizEmbedding: VizEmbedding = {
+      vizId,
+      commitId: data.commit_id,
+      embedding: JSON.parse(data.embedding),
     };
+
+    return ok(vizEmbedding);
   },
   knnVizEmbeddingSearch: async (
     embedding: Array<number>,

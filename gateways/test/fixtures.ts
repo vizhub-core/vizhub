@@ -1,6 +1,8 @@
 // See also https://github.com/vizhub-core/vizhub/blob/main/vizhub-v3/vizhub-interactors/test/fixtures.ts
 // }
 import { diff } from 'ot';
+import { sampleEmbedding } from './sampleEmbedding';
+
 import {
   Viz,
   Timestamp,
@@ -38,7 +40,7 @@ export const primordialCommitId = 'commit1';
 export const sampleVizEmbedding: VizEmbedding = {
   vizId: 'viz1',
   commitId: 'commit1',
-  embedding: [1, 2, 3],
+  embedding: sampleEmbedding,
 };
 
 export const userJoe: User = {

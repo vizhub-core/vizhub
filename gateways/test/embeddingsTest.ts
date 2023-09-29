@@ -21,6 +21,7 @@ export const embeddingsTest = () => {
       const getResult = await gateways.getVizEmbedding(
         sampleVizEmbedding.vizId,
       );
+      // console.log(JSON.stringify(getResult, null, 2));
 
       assert(getResult.outcome === 'success');
       expect(getResult.value).toEqual(sampleVizEmbedding);
