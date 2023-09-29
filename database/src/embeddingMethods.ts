@@ -79,6 +79,33 @@ export const embeddingMethods = (supabase) => ({
     embedding: Array<number>,
     k: number,
   ) => {
+    // The following is a Postgres function that uses `pgvector` to
+    // perform a kNN search.
+    /*
+DROP FUNCTION IF EXISTS knn_viz_embedding_search(vector(1536), int);
+create or replace function knn_viz_embedding_search(
+    embedding vector(1536),
+    match_count int
+)
+returns table (
+    viz_id text,
+    similarity float
+)
+language plpgsql
+as $$
+#variable_conflict use_variable
+begin
+  return query
+  select
+    viz_embeddings.viz_id,
+    (viz_embeddings.embedding <#> embedding) * -1 as similarity
+  from viz_embeddings
+  order by viz_embeddings.embedding <#> embedding
+  limit match_count;
+end;
+$$;
+
+  */
     const { data, error } = await supabase.rpc(
       'knn_viz_embedding_search',
       {
@@ -87,16 +114,12 @@ export const embeddingMethods = (supabase) => ({
       },
     );
     if (error) {
-      // TODO user err
-      return {
-        outcome: 'failure',
-        error,
-      };
+      err(error);
     }
     // TODO use ok
     return {
       outcome: 'success',
-      value: data,
+      value: data.map((row) => row.viz_id),
     };
   },
 });

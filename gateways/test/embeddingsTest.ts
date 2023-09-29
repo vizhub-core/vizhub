@@ -4,7 +4,7 @@ import { sampleVizEmbedding } from './fixtures';
 
 export const embeddingsTest = () => {
   describe('embeddings', () => {
-    it.only('saveVizEmbedding, getVizEmbedding and deleteVizEmbedding', async () => {
+    it('saveVizEmbedding, getVizEmbedding and deleteVizEmbedding', async () => {
       const gateways = await initGateways();
       const { saveVizEmbedding } = gateways;
 
@@ -18,10 +18,10 @@ export const embeddingsTest = () => {
 
       assert(saveResult.outcome === 'success');
 
+      // Verifies getVizEmbedding, found case
       const getResult = await gateways.getVizEmbedding(
         sampleVizEmbedding.vizId,
       );
-      // console.log(JSON.stringify(getResult, null, 2));
 
       assert(getResult.outcome === 'success');
       expect(getResult.value).toEqual(sampleVizEmbedding);
@@ -32,25 +32,12 @@ export const embeddingsTest = () => {
         );
       assert(deleteResult.outcome === 'success');
 
+      // Verifies getVizEmbedding, not found case
       const getResult2 = await gateways.getVizEmbedding(
         sampleVizEmbedding.vizId,
       );
       assert(getResult2.outcome === 'failure');
       expect(getResult2.error.message).toEqual(
-        'Resource not found with id: viz1',
-      );
-    });
-
-    it('getVizEmbedding not found case', async () => {
-      const gateways = await initGateways();
-      const { saveVizEmbedding } = gateways;
-
-      const getResult = await gateways.getVizEmbedding(
-        sampleVizEmbedding.vizId,
-      );
-
-      assert(getResult.outcome === 'failure');
-      expect(getResult.error.message).toEqual(
         'Resource not found with id: viz1',
       );
     });
@@ -62,6 +49,9 @@ export const embeddingsTest = () => {
       const saveResult = await saveVizEmbedding(
         sampleVizEmbedding,
       );
+      if (saveResult.outcome === 'failure') {
+        console.log(saveResult.error);
+      }
       assert(saveResult.outcome === 'success');
 
       const searchResult =
@@ -70,10 +60,21 @@ export const embeddingsTest = () => {
           5,
         );
 
+      if (searchResult.outcome === 'failure') {
+        console.log(searchResult.error);
+      }
       assert(searchResult.outcome === 'success');
       expect(searchResult.value).toEqual([
         sampleVizEmbedding.vizId,
       ]);
+
+      // Clean up
+
+      const deleteResult =
+        await gateways.deleteVizEmbedding(
+          sampleVizEmbedding.vizId,
+        );
+      assert(deleteResult.outcome === 'success');
     });
 
     it('knnVizEmbeddingSearch - many vectors case', async () => {
