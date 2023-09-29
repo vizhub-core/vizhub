@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, assert } from 'vitest';
 import {
   VIEWER,
   ADMIN,
@@ -6,6 +6,8 @@ import {
   WRITE,
   DELETE,
   PRIVATE,
+  Permission,
+  Folder,
 } from 'entities';
 import {
   primordialViz,
@@ -27,6 +29,13 @@ const verify =
     expected,
     permissions = [],
     folders = [],
+  }: {
+    userId?: string;
+    info: any;
+    action: any;
+    expected: boolean;
+    permissions?: Permission[];
+    folders?: Folder[];
   }) =>
   async () => {
     const gateways = initGateways();
@@ -41,15 +50,15 @@ const verify =
     }
 
     const result = await verifyVizAccess({
-      userId,
+      authenticatedUserId: userId,
       info,
       action,
     });
 
-    if (result.error) {
+    if (result.outcome === 'failure') {
       console.log(result.error);
     }
-    expect(result.outcome).toEqual('success');
+    assert(result.outcome === 'success');
     expect(result.value).toEqual(expected);
   };
 
