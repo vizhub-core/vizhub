@@ -19,13 +19,14 @@ describe('migrate', async () => {
   it('should make connections and know it it in test mode (batch 0)', async () => {
     const migrateResult: MigrateResult = await migrate({
       isTest: true,
+      maxNumberOfVizzes: 0,
     });
 
     const { isTestRun, migrationStatus } = migrateResult;
     expect(isTestRun).toEqual(true);
     expect(migrationStatus.currentBatchNumber).toEqual(0);
     expect(migrationStatus.currentBatchCompleted).toEqual(
-      false,
+      true,
     );
   });
 
@@ -51,22 +52,28 @@ describe('migrate', async () => {
     const saved: MigrationStatus = result.value.data;
 
     expect(saved.currentBatchNumber).toEqual(51);
-    expect(saved.currentBatchCompleted).toEqual(false);
+    expect(saved.currentBatchCompleted).toEqual(true);
   });
 
   it('should migrate the primordial viz', async () => {
     setPredictableGenerateId();
     const migrateResult: MigrateResult = await migrate({
       isTest: true,
+      maxNumberOfVizzes: 1,
     });
 
-    const { isTestRun, migrationStatus, gateways } =
-      migrateResult;
+    const {
+      isTestRun,
+      migrationStatus,
+      migrationBatch,
+      gateways,
+    } = migrateResult;
     expect(isTestRun).toEqual(true);
     expect(migrationStatus.currentBatchNumber).toEqual(0);
     expect(migrationStatus.currentBatchCompleted).toEqual(
-      false,
+      true,
     );
+    expect(migrationBatch.numVizzesProcessed).toEqual(1);
 
     // Verify the primordial viz was migrated.
     const result = await gateways.getInfo(primordialVizId);
@@ -89,7 +96,6 @@ describe('migrate', async () => {
       committed: true,
       commitAuthors: [],
     });
-    console.log(info);
   });
 
   // it('should migrate the first batch', async () => {});

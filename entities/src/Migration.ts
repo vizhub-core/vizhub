@@ -19,10 +19,11 @@ export type MigrationBatchId = string;
 
 export interface MigrationBatch {
   id: MigrationBatchId;
-  migratedEntities: Array<{
-    entityName: string;
-    entityId: string;
-  }>;
+  numVizzesProcessed: number;
+  // migratedEntities: Array<{
+  //   entityName: string;
+  //   entityId: string;
+  // }>;
 }
 
 // We might need these at some point...

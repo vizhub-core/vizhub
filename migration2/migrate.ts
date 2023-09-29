@@ -4,6 +4,7 @@ import { Gateways, Result } from 'gateways';
 import { setupConnections } from './setupConnections/setupConnections';
 import {
   InfoV2,
+  MigrationBatch,
   MigrationStatus,
   Snapshot,
   Viz,
@@ -18,15 +19,26 @@ import { processViz } from './processViz';
 export type MigrateResult = {
   isTestRun: boolean;
   migrationStatus: MigrationStatus;
+  migrationBatch: MigrationBatch;
   gateways: Gateways;
 };
+
+// Feature Flags
+
+// This generate fixtures for the first 5 vizzes.
+const generateFixtures = false;
 
 export const migrate = async ({
   isTest,
   loadTestFixtures,
+  maxNumberOfVizzes,
 }: {
   isTest: boolean;
   loadTestFixtures?: (gateways: Gateways) => Promise<void>;
+
+  // Used to limit the number of vizzes that are migrated,
+  // only used in tests.
+  maxNumberOfVizzes?: number;
 }): Promise<MigrateResult> => {
   if (!isTest) {
     console.log('migrating for real');
@@ -73,6 +85,7 @@ export const migrate = async ({
       currentBatchNumber: 0,
       currentBatchCompleted: false,
     };
+
     gateways.saveMigrationStatus(migrationStatus);
   } else {
     migrationStatus = migrationStatusResult.value.data;
@@ -125,13 +138,14 @@ export const migrate = async ({
   );
 
   // Use fixtures if we're in test mode.
-  // These are pre-exported V2 vizzes that we can use to test the migration.
+  // These are pre-exported V2 vizzes and embeddings that we can use to test the migration.
   // This lets us test the migration without having to connect to the V2 database.
   const useFixtures = isTest;
 
   // Iterate over vizzes in the V2 database that may have been created
   // or updated during the time period defined by startTime and endTime.
-  const numVizzesProcessed = await v2Vizzes(
+  let numVizzesProcessed = 0;
+  await v2Vizzes(
     {
       v2InfoCollection,
       startTime: batchStartTimestamp,
@@ -140,6 +154,13 @@ export const migrate = async ({
     },
     async (info: InfoV2, i: number) => {
       let vizV2: VizV2;
+
+      // Respect maxNumberOfVizzes
+      if (maxNumberOfVizzes && i >= maxNumberOfVizzes) {
+        return;
+      } else {
+        numVizzesProcessed += 1;
+      }
 
       if (useFixtures) {
         const fileName = `./v2Fixtures/vizV2-${info.id}.json`;
@@ -160,10 +181,8 @@ export const migrate = async ({
         `Processing viz #${i}: ${info.id} ${info.title} `,
       );
 
-      // This code generates fixtures for the first 5 vizzes.
-      const generateFixtures = false;
-      const fileName = `./v2Fixtures/vizV2-${info.id}.json`;
       if (generateFixtures) {
+        const fileName = `./v2Fixtures/vizV2-${info.id}.json`;
         fs.writeFileSync(
           fileName,
           JSON.stringify(vizV2, null, 2),
@@ -179,6 +198,8 @@ export const migrate = async ({
         v2ContentCollection,
         batchStartTimestamp,
         batchEndTimestamp,
+        useFixtures,
+        generateFixtures,
       });
 
       // // If the viz is invalid, skip it.
@@ -267,9 +288,25 @@ export const migrate = async ({
     },
   );
 
+  const migrationBatch: MigrationBatch = {
+    id: `v2-${batchNumber}`,
+    numVizzesProcessed,
+  };
+
+  // Update migration status for new batch
+  migrationStatus.currentBatchCompleted = true;
+  const saveResult =
+    await gateways.saveMigrationStatus(migrationStatus);
+  if (saveResult.outcome === 'failure') {
+    throw new Error(
+      `Failed to save migration status: ${saveResult.error.message}`,
+    );
+  }
+
   return {
     isTestRun: isTest,
     migrationStatus,
+    migrationBatch,
 
     // Gateways is returned only for testing purposes
     gateways,

@@ -38,12 +38,16 @@ export const processViz = async ({
   v2ContentCollection,
   batchStartTimestamp,
   batchEndTimestamp,
+  useFixtures,
+  generateFixtures,
 }: {
   vizV2: VizV2;
   gateways: Gateways;
   v2ContentCollection: Collection;
   batchStartTimestamp: Timestamp;
   batchEndTimestamp: Timestamp;
+  useFixtures: boolean;
+  generateFixtures;
 }): Promise<boolean> => {
   // Setup
 
@@ -173,16 +177,21 @@ export const processViz = async ({
   // // console.log('  goodFiles:', goodFiles);
 
   // Compute the embedding for the viz (latest version).
-  const embedding: Array<number> =
-    await generateEmbeddingOpenAI(goodFiles);
+  const embedding: Array<number> = useFixtures
+    ? JSON.parse(
+        fs.readFileSync(
+          `./embeddings/${vizV2.info.id}.json`,
+          'utf8',
+        ),
+      )
+    : await generateEmbeddingOpenAI(goodFiles);
 
-  JSON.stringify(embedding);
-  // Write this to a file
-  fs.writeFileSync(
-    `./embeddings/${vizV2.info.id}.json`,
-    JSON.stringify(embedding),
-  );
-
+  if (generateFixtures) {
+    fs.writeFileSync(
+      `./embeddings/${vizV2.info.id}.json`,
+      JSON.stringify(embedding),
+    );
+  }
   // console.log('  embedding:', embedding);
 
   // gateways.saveVizEmbedding({

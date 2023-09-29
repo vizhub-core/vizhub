@@ -131,7 +131,4 @@ export const v2Vizzes = async (
     // then increments by 1 for each iteration.
     i++;
   }
-
-  // By the end, i is the number of vizzes iterated.
-  return i;
 };
