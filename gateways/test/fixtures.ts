@@ -1,7 +1,10 @@
 // See also https://github.com/vizhub-core/vizhub/blob/main/vizhub-v3/vizhub-interactors/test/fixtures.ts
 // }
 import { diff } from 'ot';
-import { sampleEmbedding } from './sampleEmbedding';
+import {
+  sampleEmbedding,
+  sampleEmbedding2,
+} from './sampleEmbedding';
 
 import {
   Viz,
@@ -41,6 +44,12 @@ export const sampleVizEmbedding: VizEmbedding = {
   vizId: 'viz1',
   commitId: 'commit1',
   embedding: sampleEmbedding,
+};
+
+export const sampleVizEmbedding2: VizEmbedding = {
+  ...sampleVizEmbedding,
+  vizId: 'viz2',
+  embedding: sampleEmbedding2,
 };
 
 export const userJoe: User = {

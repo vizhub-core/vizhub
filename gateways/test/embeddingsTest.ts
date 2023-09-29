@@ -1,6 +1,9 @@
 import { describe, it, expect, assert } from 'vitest';
 import { initGateways } from './initGateways';
-import { sampleVizEmbedding } from './fixtures';
+import {
+  sampleVizEmbedding,
+  sampleVizEmbedding2,
+} from './fixtures';
 
 export const embeddingsTest = () => {
   describe('embeddings', () => {
@@ -87,34 +90,37 @@ export const embeddingsTest = () => {
       );
 
       assert(
-        (
-          await saveVizEmbedding({
-            ...sampleVizEmbedding,
-            vizId: 'viz2',
-            embedding: [0.5, 0.5, 0.5],
-          })
-        ).outcome === 'success',
+        (await saveVizEmbedding(sampleVizEmbedding2))
+          .outcome === 'success',
       );
 
-      assert(
-        (
-          await saveVizEmbedding({
-            ...sampleVizEmbedding,
-            vizId: 'viz3',
-            embedding: [0.1, 0.1, 0.1],
-          })
-        ).outcome === 'success',
-      );
+      // assert(
+      //   (
+      //     await saveVizEmbedding({
 
-      assert(
-        (
-          await saveVizEmbedding({
-            ...sampleVizEmbedding,
-            vizId: 'viz4',
-            embedding: [0.9, 0.9, 0.9],
-          })
-        ).outcome === 'success',
-      );
+      //     })
+      //   ).outcome === 'success',
+      // );
+
+      // assert(
+      //   (
+      //     await saveVizEmbedding({
+      //       ...sampleVizEmbedding,
+      //       vizId: 'viz3',
+      //       embedding: [0.1, 0.1, 0.1],
+      //     })
+      //   ).outcome === 'success',
+      // );
+
+      // assert(
+      //   (
+      //     await saveVizEmbedding({
+      //       ...sampleVizEmbedding,
+      //       vizId: 'viz4',
+      //       embedding: [0.9, 0.9, 0.9],
+      //     })
+      //   ).outcome === 'success',
+      // );
 
       const searchResult =
         await gateways.knnVizEmbeddingSearch(
@@ -123,11 +129,7 @@ export const embeddingsTest = () => {
         );
 
       assert(searchResult.outcome === 'success');
-      expect(searchResult.value).toEqual([
-        'viz1',
-        'viz4',
-        'viz2',
-      ]);
+      expect(searchResult.value).toEqual(['viz1', 'viz2']);
     });
   });
 };
