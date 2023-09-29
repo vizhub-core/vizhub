@@ -400,6 +400,15 @@ export interface Gateways {
     vizId: VizId,
   ): Promise<Result<VizEmbedding>>;
 
+  // deleteVizEmbedding
+  //
+  // Deletes the embedding for the given viz.
+  // This is backed by Postgres and `pgvector` in Supabase.
+  // Also implemented in MemoryGateways for testing.
+  deleteVizEmbedding(
+    vizId: VizId,
+  ): Promise<Result<Success>>;
+
   // knnVizEmbeddingSearch
   //
   // Gets the nearest neighbors of the given embedding.

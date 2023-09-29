@@ -290,6 +290,15 @@ export const MemoryGateways = (): Gateways => {
       ? ok(vizEmbeddings[vizId])
       : err(resourceNotFoundError(vizId));
 
+  const deleteVizEmbedding = async (vizId: VizId) => {
+    if (vizId in vizEmbeddings) {
+      delete vizEmbeddings[vizId];
+      return ok('success');
+    } else {
+      return err(resourceNotFoundError(vizId));
+    }
+  };
+
   // Utility function to compute cosine similarity between two vectors
   const cosineSimilarity = (
     vecA: Array<number>,
@@ -355,6 +364,7 @@ export const MemoryGateways = (): Gateways => {
     getPermissions,
     saveVizEmbedding,
     getVizEmbedding,
+    deleteVizEmbedding,
     knnVizEmbeddingSearch,
   };
 

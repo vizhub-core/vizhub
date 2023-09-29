@@ -4,7 +4,7 @@ import { sampleVizEmbedding } from './fixtures';
 
 export const embeddingsTest = () => {
   describe('embeddings', () => {
-    it.only('saveVizEmbedding and getVizEmbedding', async () => {
+    it.only('saveVizEmbedding, getVizEmbedding and deleteVizEmbedding', async () => {
       const gateways = await initGateways();
       const { saveVizEmbedding } = gateways;
 
@@ -25,6 +25,20 @@ export const embeddingsTest = () => {
 
       assert(getResult.outcome === 'success');
       expect(getResult.value).toEqual(sampleVizEmbedding);
+
+      const deleteResult =
+        await gateways.deleteVizEmbedding(
+          sampleVizEmbedding.vizId,
+        );
+      assert(deleteResult.outcome === 'success');
+
+      const getResult2 = await gateways.getVizEmbedding(
+        sampleVizEmbedding.vizId,
+      );
+      assert(getResult2.outcome === 'failure');
+      expect(getResult2.error.message).toEqual(
+        'Resource not found with id: viz1',
+      );
     });
 
     it('getVizEmbedding not found case', async () => {
