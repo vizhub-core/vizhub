@@ -13,6 +13,8 @@ import {
 import { getBatchTimestamps } from './getBatchTimestamps';
 import { v2Vizzes } from './v2Vizzes';
 import { getVizV2 } from './getVizV2';
+import { processViz } from './processViz';
+
 export type MigrateResult = {
   isTestRun: boolean;
   migrationStatus: MigrationStatus;
@@ -171,13 +173,12 @@ export const migrate = async ({
         }
       }
 
-      // const isVizV2Valid: boolean = await processViz({
-      //   vizV2,
-      //   gateways,
-      //   i,
-      //   redisClient,
-      //   contentCollection,
-      // });
+      const isVizV2Valid: boolean = await processViz({
+        vizV2,
+        gateways,
+        i,
+        v2ContentCollection,
+      });
 
       // // If the viz is invalid, skip it.
       // if (!isVizV2Valid) {
