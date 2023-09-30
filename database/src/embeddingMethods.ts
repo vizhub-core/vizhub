@@ -8,7 +8,7 @@ import {
 export const embeddingMethods = (supabase) => ({
   saveVizEmbedding: async (vizEmbedding: VizEmbedding) => {
     const { vizId, commitId, embedding } = vizEmbedding;
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from('viz_embeddings')
       .insert([
         {
@@ -17,15 +17,7 @@ export const embeddingMethods = (supabase) => ({
           embedding,
         },
       ]);
-    if (error) {
-      return {
-        outcome: 'failure',
-        error,
-      };
-    }
-    return {
-      outcome: 'success',
-    };
+    return error ? err(error) : ok('success');
   },
   // getVizEmbedding(id: VizId): Promise<Result<VizEmbedding>>;
   getVizEmbedding: async (
@@ -113,37 +105,9 @@ $$;
         match_count: k,
       },
     );
-    if (error) {
-      err(error);
-    }
-    // TODO use ok
-    return {
-      outcome: 'success',
-      value: data.map((row) => row.viz_id),
-    };
+
+    return error
+      ? err(error)
+      : ok(data.map((row) => row.viz_id));
   },
 });
-
-//   // saveVizEmbedding
-//   //
-//   // Saves the embedding for the given viz.
-//   // This is backed by Postgres and `pgvector` in Supabase.
-//   // Also implemented in MemoryGateways for testing.
-//   saveVizEmbedding(
-//     vizEmbedding: VizEmbedding,
-//   ): Promise<Result<Success>>;
-
-//   // getVizEmbedding
-//   //
-//   // Gets the embedding for the given viz.
-//   getVizEmbedding(id: VizId): Promise<Result<VizEmbedding>>;
-
-//   // knnVizEmbeddingSearch
-//   //
-//   // Gets the nearest neighbors of the given embedding.
-//   // This is backed by Postgres and `pgvector` in Supabase.
-//   // Also implemented in MemoryGateways for testing.
-//   knnVizEmbeddingSearch(
-//     embedding: Array<number>,
-//     k: number,
-//   ): Promise<Result<Array<VizId>>>;

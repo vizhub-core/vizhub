@@ -70,14 +70,18 @@ export const migrate = async ({
     loadTestFixtures,
   });
 
+  // Get the current migration status.
   const migrationStatusResult: Result<
     Snapshot<MigrationStatus>
   > = await gateways.getMigrationStatus('v2');
-
   let migrationStatus: MigrationStatus;
 
-  // Check if we're starting a new migration, first batch
+  // Check for the following cases:
+  //  * A.) If we're starting a new migration, first batch
+  //  * B.) If we're continuing a migration, previous batch was successful
+  //  * C.) If we're continuing a migration, previous batch was unsuccessful
   if (migrationStatusResult.outcome === 'failure') {
+    // Case A.) If we're starting a new migration, first batch
     console.log(
       'No existing migration status found. Starting first migration batch!',
     );
@@ -94,26 +98,21 @@ export const migrate = async ({
       `Found existing migration status. Starting from batch ${migrationStatus.currentBatchNumber}`,
     );
 
-    // If previous batch was unsuccessful, roll back to previous batch
-    if (migrationStatus.currentBatchCompleted === false) {
-      console.log(
-        `Previous batch was unsuccessful. Rolling back batch number ${migrationStatus.currentBatchNumber}`,
-      );
-      // TODO test this path
-      // TODO implement this path - roll back batch
-      // Each entity needs to be handled differently, possibly
-      // Commits need to be rolled back carefully, including
-      //  - Reset the viz to the state it was in before the migration
-      //    regarding the last updated date and the end commit id.
-    } else {
-      console.log(
-        `Previous batch was successful. Starting batch number ${migrationStatus.currentBatchNumber}`,
-      );
-
-      // Update migration status for new batch
+    // Case B.) If we're continuing a migration, previous batch was successful
+    // TODO test this case
+    if (migrationStatus.currentBatchCompleted === true) {
+      console.log(`Previous batch was successful.`);
+      // Update migration status to move to next batch.
       migrationStatus.currentBatchNumber += 1;
       migrationStatus.currentBatchCompleted = false;
       await gateways.saveMigrationStatus(migrationStatus);
+    } else {
+      // Case C.) If we're continuing a migration, previous batch was unsuccessful
+      // TODO test this case
+      console.log(`Previous batch was unsuccessful.`);
+
+      // In this case, we re-run the previous batch,
+      // being careful to skip any vizzes that were already migrated.
     }
   }
 
@@ -146,6 +145,11 @@ export const migrate = async ({
   // Iterate over vizzes in the V2 database that may have been created
   // or updated during the time period defined by startTime and endTime.
   let numVizzesProcessed = 0;
+
+  // The number of vizzes that we missed due to
+  // maxNumberOfVizzes being set. This is only used in tests.
+  let numVizzesMissed = 0;
+
   await v2Vizzes(
     {
       v2InfoCollection,
@@ -160,15 +164,20 @@ export const migrate = async ({
 
       // Migrate the viz! Does not includes Upvotes or Users.
       console.log(
-        `Processing viz #${i} of batch: ${info.id} ${info.title} `,
+        `Considering viz #${i} of batch: ${info.id} ${info.title} `,
       );
       // Respect maxNumberOfVizzes
       if (
-        maxNumberOfVizzes &&
+        typeof maxNumberOfVizzes === 'number' &&
         numVizzesProcessed >= maxNumberOfVizzes
       ) {
+        console.log(
+          `  Skipping viz as we're beyond maxNumberOfVizzes`,
+        );
+        numVizzesMissed += 1;
         return;
       } else {
+        console.log(`  Processing viz`);
         numVizzesProcessed += 1;
       }
 
@@ -297,16 +306,22 @@ export const migrate = async ({
   const migrationBatch: MigrationBatch = {
     id: `v2-${batchNumber}`,
     numVizzesProcessed,
+    numVizzesMissed,
   };
 
-  // Update migration status for new batch
-  migrationStatus.currentBatchCompleted = true;
-  const saveResult =
-    await gateways.saveMigrationStatus(migrationStatus);
-  if (saveResult.outcome === 'failure') {
-    throw new Error(
-      `Failed to save migration status: ${saveResult.error.message}`,
-    );
+  // Update migration status as "complete" for new batch
+  // if we've processed all the vizzes available for this batch.
+  console.log('numVizzesMissed', numVizzesMissed);
+  if (numVizzesMissed === 0) {
+    migrationStatus.currentBatchCompleted = true;
+    const saveResult =
+      await gateways.saveMigrationStatus(migrationStatus);
+
+    if (saveResult.outcome === 'failure') {
+      throw new Error(
+        `Failed to save migration status: ${saveResult.error.message}`,
+      );
+    }
   }
 
   return {

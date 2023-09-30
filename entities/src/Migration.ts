@@ -20,6 +20,7 @@ export type MigrationBatchId = string;
 export interface MigrationBatch {
   id: MigrationBatchId;
   numVizzesProcessed: number;
+  numVizzesMissed: number;
   // migratedEntities: Array<{
   //   entityName: string;
   //   entityId: string;

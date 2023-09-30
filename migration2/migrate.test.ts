@@ -32,27 +32,41 @@ describe('migrate', async () => {
       maxNumberOfVizzes: 0,
     });
 
-    const { isTestRun, migrationStatus } = migrateResult;
+    const { isTestRun, migrationStatus, migrationBatch } =
+      migrateResult;
+
     expect(isTestRun).toEqual(true);
     expect(migrationStatus.currentBatchNumber).toEqual(0);
     expect(migrationStatus.currentBatchCompleted).toEqual(
-      true,
+      false,
     );
+    // console.log(JSON.stringify(migrationBatch, null, 2));
+    expect(migrationBatch).toEqual({
+      id: 'v2-0',
+      numVizzesProcessed: 0,
+      numVizzesMissed: 3,
+    });
   });
 
-  it('should continue from the previous batch', async () => {
+  it('should continue from the previous batch if it was successful', async () => {
     const migrateResult: MigrateResult = await migrate({
       isTest: true,
       loadTestFixtures: async (gateways) => {
         await gateways.saveMigrationStatus({
           id: 'v2',
           currentBatchNumber: 50,
+          currentBatchCompleted: true,
         });
       },
+      maxNumberOfVizzes: 0,
     });
 
-    const { isTestRun, migrationStatus, gateways } =
-      migrateResult;
+    const {
+      isTestRun,
+      migrationStatus,
+      gateways,
+      migrationBatch,
+    } = migrateResult;
     expect(isTestRun).toEqual(true);
     expect(migrationStatus.currentBatchNumber).toEqual(51);
 
@@ -62,7 +76,45 @@ describe('migrate', async () => {
     const saved: MigrationStatus = result.value.data;
 
     expect(saved.currentBatchNumber).toEqual(51);
-    expect(saved.currentBatchCompleted).toEqual(true);
+
+    expect(saved.currentBatchCompleted).toEqual(false);
+
+    expect(migrationBatch).toEqual({
+      id: 'v2-51',
+      numVizzesProcessed: 0,
+      numVizzesMissed: 3,
+    });
+  });
+
+  it('should re-run previous batch if it was unsuccessful', async () => {
+    const migrateResult: MigrateResult = await migrate({
+      isTest: true,
+      loadTestFixtures: async (gateways) => {
+        await gateways.saveMigrationStatus({
+          id: 'v2',
+          currentBatchNumber: 50,
+          currentBatchCompleted: false,
+        });
+      },
+      maxNumberOfVizzes: 0,
+    });
+
+    const { migrationStatus, gateways, migrationBatch } =
+      migrateResult;
+    expect(migrationStatus.currentBatchNumber).toEqual(50);
+
+    const result = await gateways.getMigrationStatus('v2');
+    assert(result.outcome === 'success');
+    const saved: MigrationStatus = result.value.data;
+
+    expect(saved.currentBatchNumber).toEqual(50);
+    expect(saved.currentBatchCompleted).toEqual(false);
+
+    expect(migrationBatch).toEqual({
+      id: 'v2-50',
+      numVizzesProcessed: 0,
+      numVizzesMissed: 3,
+    });
   });
 
   it('should migrate the primordial viz', async () => {
@@ -82,9 +134,15 @@ describe('migrate', async () => {
     expect(isTestRun).toEqual(true);
     expect(migrationStatus.currentBatchNumber).toEqual(0);
     expect(migrationStatus.currentBatchCompleted).toEqual(
-      true,
+      false,
     );
     expect(migrationBatch.numVizzesProcessed).toEqual(1);
+
+    expect(migrationBatch).toEqual({
+      id: 'v2-0',
+      numVizzesProcessed: 1,
+      numVizzesMissed: 2,
+    });
 
     // Verify the primordial viz was migrated.
     const result = await gateways.getInfo(primordialVizId);
@@ -148,9 +206,7 @@ describe('migrate', async () => {
       bio: 'Fascinated by visual presentation of data as a means to understand the world better and communicate that understanding to others.',
       migratedFromV2: true,
     });
-
-    // console.log(JSON.stringify(user, null, 2));
   });
 
-  // it('should migrate the first batch', async () => {});
+  // TODO it('should not re-migrate the primordial viz', async () => {});
 });
