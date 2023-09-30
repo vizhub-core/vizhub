@@ -11,6 +11,14 @@ export const setPredictableGenerateFileId = () => {
     return i.toString();
   };
 };
+
+export const setPredictableGenerateFileId = () => {
+  let i = 0;
+  generateFileId = () => {
+    i++;
+    return i.toString();
+  };
+};
 export const computeV3Files = (
   goodFiles: FilesV2,
   oldContentV3?: Content,

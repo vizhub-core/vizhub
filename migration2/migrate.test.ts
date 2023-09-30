@@ -100,8 +100,8 @@ describe('migrate', async () => {
       updated: 1637796734,
       visibility: 'public',
       upvotesCount: 0,
-      start: '100',
-      end: '100',
+      start,
+      end,
       folder: null,
       isFrozen: false,
       committed: true,
@@ -140,6 +140,7 @@ describe('migrate', async () => {
     // });
 
     // console.log(JSON.stringify(user, null, 2));
+
   });
 
   // it('should migrate the first batch', async () => {});
