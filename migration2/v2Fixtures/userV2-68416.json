@@ -1,0 +1,20 @@
+{
+  "_id": "68416",
+  "id": "68416",
+  "userName": "curran",
+  "fullName": "Curran Kelleher",
+  "email": "curran.kelleher@gmail.com",
+  "avatarUrl": "https://avatars.githubusercontent.com/u/68416?v=4",
+  "company": null,
+  "website": "https://vizhub.com/curran",
+  "location": "Remote",
+  "bio": "Fascinated by visual presentation of data as a means to understand the world better and communicate that understanding to others.",
+  "plan": "pro",
+  "_type": "http://sharejs.org/types/JSONv0",
+  "_v": 184,
+  "_m": {
+    "ctime": 1534246600234,
+    "mtime": 1695825907155
+  },
+  "_o": "65143ff31792b9466bdc8aa1"
+}

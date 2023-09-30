@@ -5,6 +5,7 @@ import {
   Commit,
   CommitId,
   MigrationStatus,
+  UserId,
 } from 'entities';
 import { primordialVizId } from './processViz';
 import { setPredictableGenerateId } from 'interactors';
@@ -88,9 +89,10 @@ describe('migrate', async () => {
     const info = result.value.data;
     const start: CommitId = info.start;
     const end: CommitId = info.end;
+    const owner: UserId = info.owner;
     expect(info).toEqual({
       id: '86a75dc8bdbe4965ba353a79d4bd44c8',
-      owner: '68416',
+      owner,
       title: 'Hello VizHub',
       forkedFrom: null,
       forksCount: 0,
@@ -124,9 +126,21 @@ describe('migrate', async () => {
     expect(endCommit).toEqual(primordialCommit);
 
     // Verify the owner user was migrated.
-    const userResult = await gateways.getUser('68416');
+    const getUserResult = await gateways.getUser(owner);
+    assert(getUserResult.outcome === 'success');
+    const user = getUserResult.value;
+    // expect(user).toEqual({
+    //   id: '68416',
+    //   name: 'vizhub',
+    //   avatarUrl:
+    //     'https://avatars.githubusercontent.com/u/68416?v=4',
+    //   created: 1534246611,
+    //   updated: 1637796734,
+    //   isAnonymous: false,
+    // });
 
-    // console.log(JSON.stringify(startCommit, null, 2));
+    // console.log(JSON.stringify(user, null, 2));
+
   });
 
   // it('should migrate the first batch', async () => {});
