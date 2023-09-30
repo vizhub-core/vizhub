@@ -2,7 +2,15 @@ import { Content, Files, FileV2, FilesV2 } from 'entities';
 import { v4 as uuid } from 'uuid';
 
 // A file ID is an 8 character uuid (random characters).
-const generateFileId = () => uuid().substring(0, 8);
+let generateFileId = () => uuid().substring(0, 8);
+
+export const setPredictableGenerateFileId = () => {
+  let i = 0;
+  generateFileId = () => {
+    i++;
+    return i.toString();
+  };
+};
 
 export const computeV3Files = (
   goodFiles: FilesV2,
