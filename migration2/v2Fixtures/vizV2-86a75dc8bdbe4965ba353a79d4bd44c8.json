@@ -151,13 +151,13 @@
         "timestamp": 1569613992
       }
     ],
-    "forksCount": 2903,
+    "forksCount": 2905,
     "upvotesCount": 35,
-    "scoreWilson": 0.9974223359262065,
-    "scoreRedditHotCreated": -3590.011065064237,
-    "scoreHackerHotCreated": 0.000006273890992812313,
-    "scoreRedditHotLastUpdated": -1288.8972206197925,
-    "scoreHackerHotLastUpdated": 0.00003953878592517024,
+    "scoreWilson": 0.9974240643458212,
+    "scoreRedditHotCreated": -3592.090776292266,
+    "scoreHackerHotCreated": 0.0000062715783654194655,
+    "scoreRedditHotLastUpdated": -1290.9769318478218,
+    "scoreHackerHotLastUpdated": 0.00003945102645649785,
     "createdTimestamp": 1534246611,
     "collaborators": [
       {
@@ -165,12 +165,12 @@
       }
     ],
     "_type": "http://sharejs.org/types/JSONv0",
-    "_v": 13829,
+    "_v": 13844,
     "_m": {
       "ctime": 1534246611924,
-      "mtime": 1695939856353
+      "mtime": 1696033456501
     },
-    "_o": "6515fd100b919d05031f9bb0"
+    "_o": "65176ab00b919d05032e75fe"
   },
   "content": {
     "_id": "86a75dc8bdbe4965ba353a79d4bd44c8",

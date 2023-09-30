@@ -12,19 +12,19 @@
     "forksCount": 6,
     "upvotesCount": 0,
     "scoreWilson": 0.4384939195509822,
-    "scoreRedditHotCreated": -3592.6320646563913,
-    "scoreHackerHotCreated": 8.447154092248862e-9,
-    "scoreRedditHotLastUpdated": -2634.8758868786135,
-    "scoreHackerHotLastUpdated": 1.4758243678436843e-8,
+    "scoreRedditHotCreated": -3594.7120678341694,
+    "scoreHackerHotCreated": 8.438359710211635e-9,
+    "scoreRedditHotLastUpdated": -2636.9558900563916,
+    "scoreHackerHotLastUpdated": 1.4737301282093987e-8,
     "forkedFrom": "86a75dc8bdbe4965ba353a79d4bd44c8",
     "createdTimestamp": 1534249943,
     "_type": "http://sharejs.org/types/JSONv0",
-    "_v": 11001,
+    "_v": 11014,
     "_m": {
       "ctime": 1534249943226,
-      "mtime": 1695939856368
+      "mtime": 1696033456511
     },
-    "_o": "6515fd100b919d05031f9bb1"
+    "_o": "65176ab00b919d05032e75ff"
   },
   "content": {
     "_id": "3fd333e335fe4ecb9ee0c819802443b7",

@@ -37,6 +37,10 @@ export const v2Vizzes = async (
     const files = fs.readdirSync(directoryPath);
     const infos: Array<InfoV2> = [];
     for (const fileName of files) {
+      // Ignore files that don't start with `vizV2-`.
+      if (fileName.startsWith('vizV2-') === false) {
+        continue;
+      }
       const filePath = path.join(directoryPath, fileName);
       const vizV2 = JSON.parse(
         fs.readFileSync(filePath, 'utf8'),

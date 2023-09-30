@@ -1,0 +1,19 @@
+{
+  "_id": "676445",
+  "id": "676445",
+  "userName": "adufilie",
+  "fullName": "Andy Dufilie",
+  "email": "andy.dufilie@gmail.com",
+  "avatarUrl": "https://avatars3.githubusercontent.com/u/676445?v=4",
+  "company": null,
+  "website": "linkedin.com/in/adufilie",
+  "location": "Greater Boston Area",
+  "bio": null,
+  "_type": "http://sharejs.org/types/JSONv0",
+  "_v": 1,
+  "_m": {
+    "ctime": 1534264141553,
+    "mtime": 1534264141553
+  },
+  "_o": "5b73034dfdaca07e4860d8e8"
+}
