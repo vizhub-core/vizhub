@@ -1,16 +1,19 @@
 import { describe, it, expect, assert } from 'vitest';
-import { migrate, MigrateResult } from './migrate';
-import { getBatchTimestamps } from './getBatchTimestamps';
 import {
   Commit,
   CommitId,
   MigrationStatus,
+  Snapshot,
+  User,
   UserId,
 } from 'entities';
-import { primordialVizId } from './processViz';
 import { setPredictableGenerateId } from 'interactors';
+import { migrate, MigrateResult } from './migrate';
+import { getBatchTimestamps } from './getBatchTimestamps';
+import { primordialVizId } from './processViz';
 import { primordialCommit } from './primordialCommit';
 import { setPredictableGenerateFileId } from './computeV3Files';
+import { Result } from 'gateways';
 
 describe('migrate', async () => {
   it('getBatchTimestamps', async () => {
@@ -126,21 +129,27 @@ describe('migrate', async () => {
     expect(endCommit).toEqual(primordialCommit);
 
     // Verify the owner user was migrated.
-    const getUserResult = await gateways.getUser(owner);
+    const getUserResult: Result<Snapshot<User>> =
+      await gateways.getUser(owner);
     assert(getUserResult.outcome === 'success');
-    const user = getUserResult.value;
-    // expect(user).toEqual({
-    //   id: '68416',
-    //   name: 'vizhub',
-    //   avatarUrl:
-    //     'https://avatars.githubusercontent.com/u/68416?v=4',
-    //   created: 1534246611,
-    //   updated: 1637796734,
-    //   isAnonymous: false,
-    // });
+    const user: User = getUserResult.value.data;
+    expect(user).toEqual({
+      id: '68416',
+      userName: 'curran',
+      displayName: 'Curran Kelleher',
+      primaryEmail: 'curran.kelleher@gmail.com',
+      secondaryEmails: [],
+      picture:
+        'https://avatars.githubusercontent.com/u/68416?v=4',
+      plan: 'free',
+      company: null,
+      website: 'https://vizhub.com/curran',
+      location: 'Remote',
+      bio: 'Fascinated by visual presentation of data as a means to understand the world better and communicate that understanding to others.',
+      migratedFromV2: true,
+    });
 
     // console.log(JSON.stringify(user, null, 2));
-
   });
 
   // it('should migrate the first batch', async () => {});
