@@ -1,18 +1,15 @@
 import { describe, it, expect, assert } from 'vitest';
 import { migrate, MigrateResult } from './migrate';
 import { getBatchTimestamps } from './getBatchTimestamps';
-<<<<<<< Updated upstream
-import { MigrationStatus } from 'entities';
-=======
 import {
   Commit,
   CommitId,
   MigrationStatus,
   UserId,
 } from 'entities';
->>>>>>> Stashed changes
 import { primordialVizId } from './processViz';
 import { setPredictableGenerateId } from 'interactors';
+import { primordialCommitFixture } from './primordialCommitFixture';
 
 describe('migrate', async () => {
   it('getBatchTimestamps', async () => {
@@ -66,6 +63,7 @@ describe('migrate', async () => {
 
   it('should migrate the primordial viz', async () => {
     setPredictableGenerateId();
+    setPredictableGenerateFileId();
     const migrateResult: MigrateResult = await migrate({
       isTest: true,
       maxNumberOfVizzes: 1,
@@ -88,12 +86,9 @@ describe('migrate', async () => {
     const result = await gateways.getInfo(primordialVizId);
     assert(result.outcome === 'success');
     const info = result.value.data;
-<<<<<<< Updated upstream
-=======
     const start: CommitId = info.start;
     const end: CommitId = info.end;
     const owner: UserId = info.owner;
->>>>>>> Stashed changes
     expect(info).toEqual({
       id: '86a75dc8bdbe4965ba353a79d4bd44c8',
       owner,
@@ -111,8 +106,6 @@ describe('migrate', async () => {
       committed: true,
       commitAuthors: [],
     });
-<<<<<<< Updated upstream
-=======
 
     assert(start !== null);
     assert(end !== null);
@@ -123,13 +116,14 @@ describe('migrate', async () => {
       await gateways.getCommit(start);
     assert(startCommitResult.outcome === 'success');
     const startCommit: Commit = startCommitResult.value;
-    expect(startCommit).toEqual(primordialCommit);
+    console.log(JSON.stringify(startCommit, null, 2));
+    expect(startCommit).toEqual(primordialCommitFixture);
 
     const getEndCommitResult =
       await gateways.getCommit(end);
     assert(getEndCommitResult.outcome === 'success');
     const endCommit: Commit = getEndCommitResult.value;
-    expect(endCommit).toEqual(primordialCommit);
+    expect(endCommit).toEqual(primordialCommitFixture);
 
     // Verify the owner user was migrated.
     const getUserResult = await gateways.getUser(owner);
@@ -145,8 +139,7 @@ describe('migrate', async () => {
     //   isAnonymous: false,
     // });
 
-    // console.log(JSON.stringify(user, null, 2));
->>>>>>> Stashed changes
+    console.log(JSON.stringify(user, null, 2));
   });
 
   // it('should migrate the first batch', async () => {});
