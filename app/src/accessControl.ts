@@ -151,7 +151,7 @@ const vizVerify = (gateways: Gateways, action: Action) => {
       }
       const info: Info = infoResult.value.data;
       const verifyResult = await verifyVizAccess({
-        userId,
+        authenticatedUserId: userId,
         info,
         action,
       });

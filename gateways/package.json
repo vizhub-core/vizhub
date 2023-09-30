@@ -24,7 +24,7 @@
   "dependencies": {
     "@types/d3-array": "^3.0.8",
     "d3-array": "^3.2.4",
-    "vitest": "^0.34.5"
+    "vitest": "^0.34.6"
   },
   "devDependencies": {
     "concurrently": "^8.2.1",
