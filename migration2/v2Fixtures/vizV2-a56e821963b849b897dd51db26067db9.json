@@ -11,20 +11,20 @@
     "forksCount": 0,
     "upvotesCount": 0,
     "scoreWilson": 0,
-    "scoreRedditHotCreated": -3592.790897177778,
-    "scoreHackerHotCreated": -4.224250547207939e-9,
-    "scoreRedditHotLastUpdated": -3592.780852733333,
-    "scoreHackerHotLastUpdated": -4.224271804038604e-9,
+    "scoreRedditHotCreated": -3594.8709003555555,
+    "scoreHackerHotCreated": -4.219852265722854e-9,
+    "scoreRedditHotLastUpdated": -3594.8608559111112,
+    "scoreHackerHotLastUpdated": -4.219873488134986e-9,
     "createdTimestamp": 1534264266,
     "forkedFrom": "3fd333e335fe4ecb9ee0c819802443b7",
     "forkFromBackfilled": true,
     "_type": "http://sharejs.org/types/JSONv0",
-    "_v": 11012,
+    "_v": 11025,
     "_m": {
       "ctime": 1534264266140,
-      "mtime": 1695939856375
+      "mtime": 1696033456518
     },
-    "_o": "6515fd100b919d05031f9bb2"
+    "_o": "65176ab00b919d05032e7600"
   },
   "content": {
     "_id": "a56e821963b849b897dd51db26067db9",

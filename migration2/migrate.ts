@@ -15,6 +15,7 @@ import { getBatchTimestamps } from './getBatchTimestamps';
 import { v2Vizzes } from './v2Vizzes';
 import { getVizV2 } from './getVizV2';
 import { processViz } from './processViz';
+import { migrateUserIfNeeded } from './migrateUserIfNeeded';
 
 export type MigrateResult = {
   isTestRun: boolean;
@@ -26,7 +27,7 @@ export type MigrateResult = {
 // Feature Flags
 
 // This generate fixtures for the first 5 vizzes.
-const generateFixtures = false;
+const generateFixtures = true;
 
 export const migrate = async ({
   isTest,
@@ -155,8 +156,17 @@ export const migrate = async ({
     async (info: InfoV2, i: number) => {
       let vizV2: VizV2;
 
+      // console.log('info: ', info);
+
+      // Migrate the viz! Does not includes Upvotes or Users.
+      console.log(
+        `Processing viz #${i} of batch: ${info.id} ${info.title} `,
+      );
       // Respect maxNumberOfVizzes
-      if (maxNumberOfVizzes && i >= maxNumberOfVizzes) {
+      if (
+        maxNumberOfVizzes &&
+        numVizzesProcessed >= maxNumberOfVizzes
+      ) {
         return;
       } else {
         numVizzesProcessed += 1;
@@ -176,20 +186,12 @@ export const migrate = async ({
         });
       }
 
-      // Migrate the viz! Does not includes Upvotes or Users.
-      console.log(
-        `Processing viz #${i}: ${info.id} ${info.title} `,
-      );
-
       if (generateFixtures) {
         const fileName = `./v2Fixtures/vizV2-${info.id}.json`;
         fs.writeFileSync(
           fileName,
           JSON.stringify(vizV2, null, 2),
         );
-        if (i > 4) {
-          process.exit(0);
-        }
       }
 
       const isVizV2Valid: boolean = await processViz({
@@ -202,13 +204,13 @@ export const migrate = async ({
         generateFixtures,
       });
 
-      // // If the viz is invalid, skip it.
-      // if (!isVizV2Valid) {
-      //   console.log(
-      //     `  Skipping invalid V2 viz #${i}: ${info.id} ${info.title} `,
-      //   );
-      //   return;
-      // }
+      // If the viz is invalid, skip it.
+      if (!isVizV2Valid) {
+        console.log(
+          `  Skipping invalid V2 viz #${i}: ${info.id} ${info.title} `,
+        );
+        return;
+      }
 
       // // Migrate upvotes
       // // We do this always, because when an upvote is added to a viz,
@@ -223,15 +225,19 @@ export const migrate = async ({
       //   gateways,
       // });
 
-      // // Migrate the viz owner if needed.
-      // logDetail(`  Migrating owner user`);
-      // process.stdout.write('    ');
-      // await migrateUserIfNeeded({
-      //   userId: vizV2.info.owner,
-      //   gateways,
-      //   userCollection,
-      // });
-      // process.stdout.write('\n');
+      // Migrate the viz owner if needed.
+      console.log(
+        `  Migrating owner user ${vizV2.info.owner}`,
+      );
+      process.stdout.write('    ');
+      await migrateUserIfNeeded({
+        userId: vizV2.info.owner,
+        gateways,
+        v2UserCollection,
+        generateFixtures,
+        useFixtures,
+      });
+      process.stdout.write('\n');
 
       // // Migrate the users that upvoted this viz.
       // if (
