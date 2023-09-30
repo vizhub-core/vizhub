@@ -3,7 +3,7 @@
 import { generateEmbeddingOpenAI } from './generateEmbeddingOpenAI';
 // import { computeForkedFrom } from './computeForkedFrom';
 import { isolateGoodFiles } from './isolateGoodFiles';
-import { FilesV2, VizV2, Timestamp } from 'entities';
+import { FilesV2, VizV2, Timestamp, Info } from 'entities';
 import { Gateways } from 'gateways';
 import { Collection } from 'mongodb-legacy';
 import { migratePrimordialViz } from './migratePrimordialViz';
@@ -66,17 +66,17 @@ export const processViz = async ({
   // Sometimes titles have leading or trailing spaces, so trim that.
   const title = vizV2.info.title.trim();
 
-  // // Figure out if the viz has already been migrated.
-  // const infoMigratedResult = await gateways.getInfo(id);
-  // const isAlreadyMigrated =
-  //   infoMigratedResult.outcome === 'success';
-  // logDetail(`  Already migrated: ${isAlreadyMigrated}`);
+  // Figure out if the viz has already been migrated.
+  const infoMigratedResult = await gateways.getInfo(id);
+  const isAlreadyMigrated =
+    infoMigratedResult.outcome === 'success';
+  console.log(`  Already migrated: ${isAlreadyMigrated}`);
   // let infoMigrated: Info | undefined;
   // if (isAlreadyMigrated) {
   //   infoMigrated = infoMigratedResult.value.data;
   // }
 
-  // // If the viz has already been migrated, figure out if it has been updated since then.
+  // If the viz has already been migrated, figure out if it has been updated since then.
   // let updatedSinceLastMigration: boolean = false;
   // if (isAlreadyMigrated) {
   //   const infoMigrated: Info =
@@ -85,18 +85,18 @@ export const processViz = async ({
   //     vizV2.info.lastUpdatedTimestamp >
   //     infoMigrated.updated;
   // }
-  // logDetail(
+  // console.log(
   //   `  Updated since last migration: ${updatedSinceLastMigration}`,
   // );
 
-  // // If the viz has already been migrated and has not been updated since,
-  // // then do nothing and report that it is valid.
+  // If the viz has already been migrated and has not been updated since,
+  // then do nothing and report that it is valid.
   // if (isAlreadyMigrated && !updatedSinceLastMigration) {
-  //   logDetail(
-  //     '  Already migrated and not updated since, skipping this viz.',
-  //   );
-  //   return true;
-  // }
+  if (isAlreadyMigrated) {
+    // TODO catch updates to the viz since it was migrated
+    console.log('  Already migrated, skipping this viz.');
+    return true;
+  }
 
   // Isolate the "good files" that we want to use for embedding.
   // This excludes invalid files and `bundle.js` (since it's auto-generated).

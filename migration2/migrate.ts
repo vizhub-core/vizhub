@@ -26,8 +26,8 @@ export type MigrateResult = {
 
 // Feature Flags
 
-// This generate fixtures for the first 5 vizzes.
-const generateFixtures = true;
+// This generate fixtures for the first batch (3 vizzes).
+const generateFixtures = false;
 
 export const migrate = async ({
   isTest,
