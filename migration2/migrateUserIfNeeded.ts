@@ -1,8 +1,7 @@
 import { writeFileSync, readFileSync } from 'fs';
-import { User, UserId } from 'entities';
+import { User, UserId, UserV2 } from 'entities';
 import { Gateways, Result, Success, ok } from 'gateways';
 import { Collection, Document } from 'mongodb-legacy';
-import { assert } from 'vitest';
 
 export const migrateUserIfNeeded = async ({
   userId,
@@ -29,27 +28,6 @@ export const migrateUserIfNeeded = async ({
   } else {
     // console.log(`    User ${userId} not yet migrated, migrating now`);
     process.stdout.write('+');
-  }
-
-  interface UserV2 {
-    _id: string;
-    id: string;
-    userName: string;
-    fullName: string;
-    email: string;
-    avatarUrl: string;
-    company: string;
-    website: string;
-    location: string;
-    bio: string;
-    plan: string;
-    _type: string;
-    _v: number;
-    _m: {
-      ctime: number;
-      mtime: number;
-    };
-    _o: string;
   }
 
   const userV2: UserV2 = useFixtures

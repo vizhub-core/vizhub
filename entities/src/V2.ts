@@ -25,6 +25,7 @@ export type InfoV2 = {
   scoreHackerHotCreated: number;
   scoreRedditHotLastUpdated: number;
   scoreHackerHotLastUpdated: number;
+  height?: number;
 };
 
 export type PrivacyV2 = 'public' | 'private';
@@ -42,6 +43,27 @@ export type VizV2 = {
   content: ContentV2;
   // ShareDB ops from the op log
   ops: Array<any>;
+};
+
+export type UserV2 = {
+  _id: string;
+  id: string;
+  userName: string;
+  fullName: string;
+  email: string;
+  avatarUrl: string;
+  company: string;
+  website: string;
+  location: string;
+  bio: string;
+  plan: string;
+  _type: string;
+  _v: number;
+  _m: {
+    ctime: number;
+    mtime: number;
+  };
+  _o: string;
 };
 
 // An example of a VizV2:

@@ -89,7 +89,7 @@ export interface Commit {
   //
   //  * TODO consider making this field optional for small Mongo documents,
   //    otherwise _most_ commits will have "milestone: null" wasting disk space.
-  milestone: MilestoneId | null;
+  milestone?: MilestoneId;
 }
 
 // MilestoneId

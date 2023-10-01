@@ -39,9 +39,6 @@ export interface Info {
   // The user or organization that owns this viz.
   owner: UserId | OrgId;
 
-  // A Viz may or may not exist within a Folder.
-  folder: FolderId | null;
-
   // The title of the viz.
   title: string;
 
@@ -53,33 +50,19 @@ export interface Info {
   //    when the forked from viz is deleted.
   forkedFrom: VizId | null;
 
-  // True if forkedFrom was backfilled (guessed)
-  // by the V2 --> V3 migration script,
-  // or by an earlier backfilling initiative.
-  //
-  // Undefined if not (no entry in Mongo document).
-  //
-  // (Aside: Deletion in V2 did not account for
-  //         breakages of forkedFrom, so in the V2
-  //         database there are lots of forkedFrom
-  //         field values that are invalid because
-  //         they point to deleted vizzes. )
-  forkedFromIsBackfilled?: boolean;
-
   // When this viz was created.
   created: Timestamp;
 
   // When this viz was last updated.
   updated: Timestamp;
 
-  // The visibility of this viz (public, private, unlisted).
-  visibility: Visibility;
-
   // The commit corresponding to the initial version
-  // of this viz, at the time it was forked.
+  // of this viz, at the time it was created (forked).
+  // Invariant: `startCommit.timestamp === info.created`
   start: CommitId;
 
   // The most recent commit of this viz.
+  // Invariant: `endCommit.timestamp === info.updated`
   end: CommitId;
 
   // committed
@@ -98,16 +81,18 @@ export interface Info {
   //    records and cleared out here when the viz is committed
   commitAuthors: Array<UserId>;
 
-  // Whether or not this viz is "frozen."
-  // If true, content is null.
-  // If false, content is defined.
-  isFrozen: boolean;
-
   // How many forks this viz has.
   forksCount: number;
 
   // How many upvotes this viz has.
   upvotesCount: number;
+
+  // The visibility of this viz (public, private, unlisted).
+  // `undefined` means the viz is public.
+  visibility?: Visibility;
+
+  // A Viz may or may not exist within a Folder.
+  folder?: FolderId;
 
   // If this viz is currently in the "trash",
   // this field represents when it was put there.
@@ -116,6 +101,24 @@ export interface Info {
   // A popularity score for this viz.
   // Populated by the scoreHackerHot algorithm.
   popularity?: number;
+
+  // True if forkedFrom was backfilled (guessed)
+  // by the V2 --> V3 migration script,
+  // or by an earlier backfilling initiative.
+  //
+  // Undefined if not (no entry in Mongo document).
+  //
+  // (Aside: Deletion in V2 did not account for
+  //         breakages of forkedFrom, so in the V2
+  //         database there are lots of forkedFrom
+  //         field values that are invalid because
+  //         they point to deleted vizzes. )
+  forkedFromIsBackfilled?: boolean;
+
+  // Whether or not this viz is "frozen."
+  // If true, content is null.
+  // If false or `undefined`, content is defined.
+  frozen?: boolean;
 }
 
 // Configuration
