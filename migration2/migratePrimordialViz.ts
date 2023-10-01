@@ -18,7 +18,6 @@ import {
 import { computeV3Files } from './computeV3Files';
 import { diff } from 'ot';
 import { Gateways } from 'gateways';
-import { assert } from 'vitest';
 
 // Migrates the primordial viz for the first time only.
 export const migratePrimordialViz = async ({
@@ -86,7 +85,7 @@ export const migratePrimordialViz = async ({
     throw new Error('Failed to save start commit!');
   }
 
-  assert((await saveViz(vizV3)).outcome === 'success');
+  await saveViz(vizV3);
 
   // At this point the viz should be valid,
   // even though it has no files and only one commit.
@@ -108,11 +107,9 @@ export const migratePrimordialViz = async ({
     },
   };
 
-  assert(
-    (await saveViz(uncommitted)).outcome === 'success',
-  );
+  await saveViz(uncommitted);
 
-  assert((await commitViz(id)).outcome === 'success');
+  await commitViz(id);
 
   // Save the primordial viz.
 
