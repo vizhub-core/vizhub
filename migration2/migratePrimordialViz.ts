@@ -13,6 +13,7 @@ import {
 import {
   CommitViz,
   SaveViz,
+  ValidateViz,
   generateId,
 } from 'interactors';
 import { computeV3Files } from './computeV3Files';
@@ -34,6 +35,7 @@ export const migratePrimordialViz = async ({
   const { saveCommit } = gateways;
   const saveViz = SaveViz(gateways);
   const commitViz = CommitViz(gateways);
+  const validateViz = ValidateViz(gateways);
 
   console.log('    Migrating the Primordial Viz...');
 
@@ -90,6 +92,16 @@ export const migratePrimordialViz = async ({
   // At this point the viz should be valid,
   // even though it has no files and only one commit.
   // TODO invoke ValidateViz here.
+  const validateResult = await validateViz(id);
+  if (validateResult.outcome === 'failure') {
+    throw new Error('Failed to validate viz!');
+  }
+  console.log(
+    '    Validated the Primordial Viz, first commit!',
+  );
+
+  // TODO clean up, report all possible errors
+  // throwIfError(await validateViz(id));
 
   const newFiles = computeV3Files(goodFiles) as Files;
 
