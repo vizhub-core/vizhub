@@ -126,7 +126,6 @@ export const primordialViz: Viz = {
     end: primordialCommitId,
     committed: true,
     commitAuthors: [],
-    isFrozen: false,
     forksCount: 0,
 
     // This is important for testing that
