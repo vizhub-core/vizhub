@@ -9,8 +9,13 @@ import { invariantViolationError } from 'gateways/src/errors';
 export const ValidateViz =
   (gateways: Gateways) =>
   async (id: VizId): Promise<Result<'success'>> => {
-    const { getInfo, getContent, getCommit, getUser } =
-      gateways;
+    const {
+      getInfo,
+      getContent,
+      getCommit,
+      getUser,
+      getFolder,
+    } = gateways;
     const getContentAtCommit = GetContentAtCommit(gateways);
 
     // Get the viz info and content.
@@ -42,12 +47,24 @@ export const ValidateViz =
     if (ownerResult.outcome === 'failure') {
       return ownerResult;
     }
-    const owner: User = ownerResult.value;
+    const ownerUser: User = ownerResult.value.data;
 
     // The start commit time should match the viz created time.
     if (startCommit.timestamp !== info.created) {
       throw new Error(
         'Invariant: `startCommit.timestamp === info.created`',
+      );
+    }
+
+    // The start commit should have the owner as the author.
+    if (startCommit.authors.length !== 1) {
+      throw new Error(
+        'Invariant: `startCommit.authors.length === 1`',
+      );
+    }
+    if (startCommit.authors[0] !== ownerUser.id) {
+      throw new Error(
+        'Invariant: `startCommit.author === owner.id`',
       );
     }
 
@@ -76,7 +93,19 @@ export const ValidateViz =
       }
     }
 
-    //
+    // If the viz is in a folder...
+    if (info.folder) {
+      // The folder should exist.
+      const folderResult = await getFolder(info.folder);
+      if (folderResult.outcome === 'failure') {
+        return folderResult;
+      }
+      const folder = folderResult.value.data;
+
+      // TODO consider: when moving a viz into a folder
+      // owned by a different user, should we change the owner
+      // of the viz to match the owner of the folder?
+    }
 
     // In all cases:
     //  * startCommit.timestamp <= endCommit.timestamp

@@ -3,6 +3,7 @@ import { describe, it, expect, assert } from 'vitest';
 import {
   primordialCommit,
   primordialViz,
+  sampleFolder,
   userJoe,
 } from 'gateways/test';
 import { initGateways } from './initGateways';
@@ -58,8 +59,6 @@ export const validateVizTest = () => {
       const validateViz = ValidateViz(gateways);
       await saveInfo(primordialViz.info);
       await saveContent(primordialViz.content);
-
-      // TODO save owner user
       await saveCommit(primordialCommit);
 
       const result = await validateViz(
@@ -71,34 +70,7 @@ export const validateVizTest = () => {
       );
     });
 
-    // it('validateViz, failure case - missing folder', async () => {
-    //   const gateways = initGateways();
-    //   const {
-    //     saveInfo,
-    //     saveContent,
-    //     saveCommit,
-    //     saveUser,
-    //   } = gateways;
-    //   const validateViz = ValidateViz(gateways);
-    //   await saveInfo(primordialViz.info);
-    //   await saveContent(primordialViz.content);
-    //   await saveCommit(primordialCommit);
-    //   await saveUser(userJoe);
-
-    //   const result = await validateViz(
-    //     primordialViz.info.id,
-    //   );
-    //   assert(result.outcome === 'failure');
-    //   expect(result.error.message).toEqual(
-    //     `Resource not found with id: ${primordialViz.info.owner}`,
-    //   );
-    //   // if (result.outcome === 'failure') {
-    //   //   console.log(result);
-    //   // }
-    //   // expect(result.outcome).toEqual('success');
-    // });
-
-    it('validateViz, success case', async () => {
+    it('validateViz, failure case - missing folder', async () => {
       const gateways = initGateways();
       const {
         saveInfo,
@@ -111,6 +83,31 @@ export const validateVizTest = () => {
       await saveContent(primordialViz.content);
       await saveCommit(primordialCommit);
       await saveUser(userJoe);
+
+      const result = await validateViz(
+        primordialViz.info.id,
+      );
+      assert(result.outcome === 'failure');
+      expect(result.error.message).toEqual(
+        `Resource not found with id: ${primordialViz.info.folder}`,
+      );
+    });
+
+    it('validateViz, success case', async () => {
+      const gateways = initGateways();
+      const {
+        saveInfo,
+        saveContent,
+        saveCommit,
+        saveUser,
+        saveFolder,
+      } = gateways;
+      const validateViz = ValidateViz(gateways);
+      await saveInfo(primordialViz.info);
+      await saveContent(primordialViz.content);
+      await saveCommit(primordialCommit);
+      await saveUser(userJoe);
+      await saveFolder(sampleFolder);
 
       const result = await validateViz(
         primordialViz.info.id,
