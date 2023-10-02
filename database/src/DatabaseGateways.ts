@@ -486,6 +486,14 @@ export const DatabaseGateways = ({
         (error, results) => {
           query.destroy();
           if (error) return resolve(err(error));
+
+          // Guard against the case that some of the ids were not found.
+          if (results.length !== ids.length) {
+            resolve(
+              err(resourceNotFoundError(ids.join(', '))),
+            );
+          }
+
           resolve(
             ok(results.map((doc) => doc.toSnapshot())),
           );

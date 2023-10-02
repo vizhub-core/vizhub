@@ -9,7 +9,7 @@ import { initGateways } from './initGateways';
 import { ValidateViz } from '../src';
 
 export const validateVizTest = () => {
-  describe.only('validateVizTest', async () => {
+  describe('validateVizTest', async () => {
     it('validateViz, failure case - viz info not found', async () => {
       const gateways = initGateways();
       const validateViz = ValidateViz(gateways);
