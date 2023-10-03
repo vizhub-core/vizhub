@@ -15,6 +15,7 @@ export const ValidateViz =
       getCommit,
       getUser,
       getFolder,
+      getVizEmbedding,
     } = gateways;
     const getContentAtCommit = GetContentAtCommit(gateways);
 
@@ -66,6 +67,27 @@ export const ValidateViz =
       throw new Error(
         'Invariant: `startCommit.author === owner.id`',
       );
+    }
+
+    // If this viz is not the primordial viz,
+    // the start commit's parent should belong to
+    // the forkedFrom viz.
+    if (startCommit.parent !== undefined) {
+      const startParentCommitResult = await getCommit(
+        startCommit.parent,
+      );
+      if (startParentCommitResult.outcome === 'failure') {
+        return startParentCommitResult;
+      }
+      const startParentCommit: Commit =
+        startParentCommitResult.value;
+      if (startParentCommit.viz !== info.forkedFrom) {
+        return err(
+          invariantViolationError(
+            'startCommit.parent === info.forkedFrom',
+          ),
+        );
+      }
     }
 
     // If the viz is committed...
@@ -122,6 +144,12 @@ export const ValidateViz =
     // If these are different, there are certain invariants we need to check.
     //  *
     // }
+
+    // TODO check there is an associated embedding using getVizEmbedding
+    const embeddingResult = await getVizEmbedding(id);
+    if (embeddingResult.outcome === 'failure') {
+      return embeddingResult;
+    }
 
     return ok('success');
   };

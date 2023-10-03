@@ -4,6 +4,7 @@ import {
   primordialCommit,
   primordialViz,
   sampleFolder,
+  sampleVizEmbedding,
   userJoe,
 } from 'gateways/test';
 import { initGateways } from './initGateways';
@@ -93,7 +94,7 @@ export const validateVizTest = () => {
       );
     });
 
-    it('validateViz, success case', async () => {
+    it('validateViz, failure case - missing embedding', async () => {
       const gateways = initGateways();
       const {
         saveInfo,
@@ -108,6 +109,33 @@ export const validateVizTest = () => {
       await saveCommit(primordialCommit);
       await saveUser(userJoe);
       await saveFolder(sampleFolder);
+
+      const result = await validateViz(
+        primordialViz.info.id,
+      );
+      assert(result.outcome === 'failure');
+      expect(result.error.message).toEqual(
+        `Resource not found with id: ${primordialViz.info.id}`,
+      );
+    });
+
+    it('validateViz, success case', async () => {
+      const gateways = initGateways();
+      const {
+        saveInfo,
+        saveContent,
+        saveCommit,
+        saveUser,
+        saveFolder,
+        saveVizEmbedding,
+      } = gateways;
+      const validateViz = ValidateViz(gateways);
+      await saveInfo(primordialViz.info);
+      await saveContent(primordialViz.content);
+      await saveCommit(primordialCommit);
+      await saveUser(userJoe);
+      await saveFolder(sampleFolder);
+      await saveVizEmbedding(sampleVizEmbedding);
 
       const result = await validateViz(
         primordialViz.info.id,
