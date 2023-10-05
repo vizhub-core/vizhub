@@ -18,7 +18,7 @@
     "react-bootstrap": "^2.9.0",
     "react-dom": "^18.2.0",
     "react-stately": "^3.27.0",
-    "vizhub-ui": "^3.3.0"
+    "vizhub-ui": "^3.4.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.25",

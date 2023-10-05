@@ -16,6 +16,7 @@ import Col from 'react-bootstrap/cjs/Col.js';
 import Toast from 'react-bootstrap/cjs/Toast.js';
 import ToastContainer from 'react-bootstrap/cjs/ToastContainer.js';
 import Alert from 'react-bootstrap/cjs/Alert.js';
+import Card from 'react-bootstrap/cjs/Card.js';
 
 export {
   Alert,
@@ -33,4 +34,5 @@ export {
   Col,
   Toast,
   ToastContainer,
+  Card,
 };
