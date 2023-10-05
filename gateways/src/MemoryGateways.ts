@@ -258,6 +258,9 @@ export const MemoryGateways = (): Gateways => {
     const users = Object.values(documents.User).filter(
       (user) => ids.includes(user.id),
     );
+    if (users.length !== ids.length) {
+      return err(resourceNotFoundError(ids.join(', ')));
+    }
     return ok(users.map(fakeSnapshot));
   };
 

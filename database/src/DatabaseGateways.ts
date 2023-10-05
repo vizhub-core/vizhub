@@ -285,6 +285,7 @@ export const DatabaseGateways = ({
     // do not have a milestone.
     // Note that the results DO NOT include the commit with the milestone.
     if (toNearestMilestone) {
+      // @ts-ignore
       $graphLookup.restrictSearchWithMatch.milestone = {
         $eq: null,
       };
@@ -292,6 +293,7 @@ export const DatabaseGateways = ({
 
     // TODO thoroughly test this. It may be buggy.
     if (start) {
+      // @ts-ignore
       $graphLookup.restrictSearchWithMatch._id = start;
     }
 
@@ -484,6 +486,14 @@ export const DatabaseGateways = ({
         (error, results) => {
           query.destroy();
           if (error) return resolve(err(error));
+
+          // Guard against the case that some of the ids were not found.
+          if (results.length !== ids.length) {
+            resolve(
+              err(resourceNotFoundError(ids.join(', '))),
+            );
+          }
+
           resolve(
             ok(results.map((doc) => doc.toSnapshot())),
           );

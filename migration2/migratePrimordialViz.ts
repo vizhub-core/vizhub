@@ -7,8 +7,15 @@ import {
   VizId,
   FilesV2,
   defaultVizHeight,
+  CommitId,
+  VizV2,
 } from 'entities';
-import { SaveViz, generateId } from 'interactors';
+import {
+  CommitViz,
+  SaveViz,
+  ValidateViz,
+  generateId,
+} from 'interactors';
 import { computeV3Files } from './computeV3Files';
 import { diff } from 'ot';
 import { Gateways } from 'gateways';
@@ -20,94 +27,110 @@ export const migratePrimordialViz = async ({
   goodFiles,
   gateways,
 }: {
-  vizV2: any;
+  vizV2: VizV2;
   title: string;
   goodFiles: FilesV2;
   gateways: Gateways;
 }) => {
-  console.log('    Generating the Primordial Commit');
+  const { saveCommit } = gateways;
+  const saveViz = SaveViz(gateways);
+  const commitViz = CommitViz(gateways);
+  const validateViz = ValidateViz(gateways);
 
-  // Scaffold the V3 viz.
-  const info: Info = {
-    id: vizV2.info.id,
-    owner: vizV2.info.owner,
+  console.log('    Migrating the Primordial Viz...');
 
-    // For now, folder is undefined,
-    // which should put it automatically in the users's
-    // "home view" above all folders.
-    //folder: 'TODO figure out folder here!',
-    title,
+  const start: CommitId = generateId();
+  const end: CommitId = generateId();
 
-    // The primoirdial viz is the only viz that is not a fork.
-    forkedFrom: null,
-    // This will be incremented later
-    forksCount: 0,
-    created: vizV2.info.createdTimestamp,
-    updated: vizV2.info.lastUpdatedTimestamp,
-    visibility: vizV2.info.privacy || 'public',
-    // This will be incremented later
-    upvotesCount: 0,
-    // Start and end will be filled in later
-    start: 'invalid',
-    end: 'invalid',
-    folder: null,
-    isFrozen: false,
-    committed: false,
-    commitAuthors: [],
+  const id = vizV2.info.id;
+  const owner = vizV2.info.owner;
+
+  // Scaffold the V3 viz,
+  // at the first commit (before any files are added)
+  const vizV3: Viz = {
+    info: {
+      id,
+      owner,
+      title,
+      forkedFrom: null,
+      forksCount: 0,
+      created: vizV2.info.createdTimestamp,
+      // updated: vizV2.info.lastUpdatedTimestamp,
+      updated: vizV2.info.createdTimestamp,
+      visibility: vizV2.info.privacy || 'public',
+      upvotesCount: 0,
+
+      // At the first save of the viz, the start commit and
+      // end commit are the same.
+      start,
+      end: start,
+      committed: true,
+      commitAuthors: [owner],
+    },
+    content: {
+      id: vizV2.info.id,
+      height: vizV2.info.height || defaultVizHeight,
+      title: vizV2.info.title,
+      files: {},
+    },
   };
 
-  const content: Content = {
-    id: vizV2.info.id,
-    height: vizV2.info.height | defaultVizHeight,
-    title: vizV2.info.title,
-    files: {}, // This is filled in later
-  };
-  const vizV3: Viz = { info, content };
-
-  // The first ever commit.
-  // Special because it's the only with no parentCommitId.
-  const primordialCommitId = generateId();
-
-  vizV3.info.start = primordialCommitId;
-  vizV3.info.end = primordialCommitId;
-  vizV3.info.committed = true;
-  vizV3.info.commitAuthors = [];
-  vizV3.info.isFrozen = false;
-
-  // Compute migrated V3 files from V2 files
-  vizV3.content.files = computeV3Files(goodFiles) as Files;
-
-  // The first ever commit.
-  // Special because it's the only with no parentCommitId.
-  const primordialCommit: Commit = {
-    id: primordialCommitId,
-    viz: vizV2.info.id,
-    authors: [vizV2.info.owner],
+  const saveStartResult = await saveCommit({
+    id: start,
+    viz: id,
+    authors: [owner],
     timestamp: vizV2.info.createdTimestamp,
+    // Note that `vizV3.content` has no files at this point.
     ops: diff({}, vizV3.content),
-    milestone: null,
+  });
+  if (saveStartResult.outcome === 'failure') {
+    throw new Error('Failed to save start commit!');
+  }
+
+  await saveViz(vizV3);
+
+  // At this point the viz should be valid,
+  // even though it has no files and only one commit.
+  const validateResult = await validateViz(id);
+  if (validateResult.outcome === 'failure') {
+    throw new Error('Failed to validate viz!');
+  }
+  console.log(
+    '    Validated the Primordial Viz, first commit!',
+  );
+
+  // TODO clean up, report all possible errors
+  // throwIfError(await validateViz(id));
+
+  const newFiles = computeV3Files(goodFiles) as Files;
+
+  // Simulates the user doing all the work to create the files.
+  const uncommitted: Viz = {
+    info: {
+      ...vizV3.info,
+      updated: vizV2.info.lastUpdatedTimestamp,
+      committed: false,
+      commitAuthors: [owner],
+    },
+    content: {
+      ...vizV3.content,
+      files: newFiles,
+    },
   };
 
-  // Save the primordial commit.
-  const saveCommitResult = await gateways.saveCommit(
-    primordialCommit,
-  );
-  if (saveCommitResult.outcome === 'failure') {
-    throw new Error(
-      'Failed to save primordial commit! ' +
-        saveCommitResult.error,
-    );
-  }
+  await saveViz(uncommitted);
+
+  await commitViz(id);
 
   // Save the primordial viz.
-  const saveViz = SaveViz(gateways);
-  const saveVizResult = await saveViz(vizV3);
-  if (saveVizResult.outcome === 'failure') {
-    throw new Error(
-      'Failed to save primordial viz! ' +
-        saveVizResult.error,
-    );
+
+  const validateResult2 = await validateViz(id);
+  if (validateResult2.outcome === 'failure') {
+    throw new Error('Failed to validate viz!');
   }
+  console.log(
+    '    Validated the Primordial Viz, second commit!',
+  );
 
   console.log(
     '    Saved primordial commit and viz for the first time!',

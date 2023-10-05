@@ -7,6 +7,13 @@ import {
 
 export const embeddingsTest = () => {
   describe('embeddings', () => {
+    it('clean up just in case', async () => {
+      const gateways = await initGateways();
+      const { deleteVizEmbedding } = gateways;
+      await deleteVizEmbedding(sampleVizEmbedding.vizId);
+      await deleteVizEmbedding(sampleVizEmbedding2.vizId);
+    });
+
     it('saveVizEmbedding, getVizEmbedding and deleteVizEmbedding', async () => {
       const gateways = await initGateways();
       const { saveVizEmbedding } = gateways;

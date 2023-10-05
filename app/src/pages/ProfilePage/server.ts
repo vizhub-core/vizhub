@@ -14,7 +14,7 @@ ProfilePage.getPageData = async ({
   auth0User,
 }) => {
   const { userName } = params;
-  const { getUserByUserName, getUser } = gateways;
+  const { getUserByUserName } = gateways;
   const getInfosAndOwners = GetInfosAndOwners(gateways);
 
   const userResult = await getUserByUserName(userName);

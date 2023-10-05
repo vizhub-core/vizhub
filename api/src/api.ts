@@ -14,7 +14,7 @@ import { endpoints } from './endpoints';
 //   message,
 // });
 
-export const api = async ({ app, isProd, gateways }) => {
+export const api = async ({ app, gateways }) => {
   // Set up endpoints
   for (const endpoint of endpoints) {
     endpoint({ app, gateways });
@@ -22,7 +22,7 @@ export const api = async ({ app, isProd, gateways }) => {
 
   // TODO test the auto-scaling using this
   // simulates image generation
-  app.get('/api/test', (req, res) => {
+  app.get('/api/test', (_, res) => {
     setTimeout(() => {
       res.send('testing');
     }, 10000);

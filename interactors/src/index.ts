@@ -22,3 +22,4 @@ export { generateUpvoteId } from './generateUpvoteId';
 export { GetCommitAtTimestamp } from './getCommitAtTimestamp';
 export { GetInfosAndOwners } from './getInfosAndOwners';
 export { ScoreViz } from './scoreViz';
+export { ValidateViz } from './validateViz';

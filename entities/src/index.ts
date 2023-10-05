@@ -93,6 +93,7 @@ export type {
   ContentV2,
   FilesV2,
   FileV2,
+  UserV2,
 } from './V2';
 
 export type {

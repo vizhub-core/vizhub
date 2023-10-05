@@ -9,7 +9,6 @@ const vite = await createServer();
 const { migrate } =
   await vite.ssrLoadModule('./migrate.ts');
 
-
 await migrate({ isTest: false, maxNumberOfVizzes: 5 });
 
 process.exit();
