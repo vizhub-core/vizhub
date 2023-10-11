@@ -31,6 +31,6 @@
     "vite": "^4.4.11"
   },
   "devDependencies": {
-    "@types/express": "^4.17.18"
+    "@types/express": "^4.17.19"
   }
 }
