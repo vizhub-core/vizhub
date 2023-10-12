@@ -1,4 +1,4 @@
-import fs from 'fs';
+import { readFileSync, writeFileSync } from 'fs';
 import Prompt from 'prompt-sync';
 import { Gateways, Result } from 'gateways';
 import { setupConnections } from './setupConnections/setupConnections';
@@ -7,7 +7,6 @@ import {
   MigrationBatch,
   MigrationStatus,
   Snapshot,
-  Viz,
   VizV2,
   timestampToDate,
 } from 'entities';
@@ -16,6 +15,7 @@ import { v2Vizzes } from './v2Vizzes';
 import { getVizV2 } from './getVizV2';
 import { processViz } from './processViz';
 import { migrateUserIfNeeded } from './migrateUserIfNeeded';
+import { ValidateViz } from 'interactors';
 
 export type MigrateResult = {
   isTestRun: boolean;
@@ -69,6 +69,8 @@ export const migrate = async ({
     isTest,
     loadTestFixtures,
   });
+
+  const validateViz = ValidateViz(gateways);
 
   // Get the current migration status.
   const migrationStatusResult: Result<
@@ -183,9 +185,7 @@ export const migrate = async ({
 
       if (useFixtures) {
         const fileName = `./v2Fixtures/vizV2-${info.id}.json`;
-        vizV2 = JSON.parse(
-          fs.readFileSync(fileName, 'utf8'),
-        );
+        vizV2 = JSON.parse(readFileSync(fileName, 'utf8'));
       } else {
         // Get the viz from the V2 database.
         vizV2 = await getVizV2({
@@ -197,7 +197,7 @@ export const migrate = async ({
 
       if (generateFixtures) {
         const fileName = `./v2Fixtures/vizV2-${info.id}.json`;
-        fs.writeFileSync(
+        writeFileSync(
           fileName,
           JSON.stringify(vizV2, null, 2),
         );
@@ -247,6 +247,12 @@ export const migrate = async ({
         useFixtures,
       });
       process.stdout.write('\n');
+
+      // TODO
+      // const validateResult2 = await validateViz(info.id);
+      // if (validateResult2.outcome === 'failure') {
+      //   throw validateResult2.error;
+      // }
 
       // // Migrate the users that upvoted this viz.
       // if (

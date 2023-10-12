@@ -48,7 +48,7 @@ export const embeddingsTest = () => {
       );
       assert(getResult2.outcome === 'failure');
       expect(getResult2.error.message).toEqual(
-        'Resource not found with id: viz1',
+        'Resource (VizEmbedding) not found with id: viz1',
       );
     });
 

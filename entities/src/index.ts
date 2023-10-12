@@ -138,3 +138,28 @@ export type {
   MigrationStatus,
   MigrationBatch,
 } from './Migration';
+
+export type EntityName =
+  | 'Info'
+  | 'Content'
+  | 'User'
+  | 'Upvote'
+  | 'VizAuthorship'
+  | 'Comment'
+  | 'Mention'
+  | 'Folder'
+  | 'Permission'
+  | 'Org'
+  | 'OrgMembership'
+  | 'Tagging'
+  | 'Collection'
+  | 'CollectionMembership'
+  | 'Commit'
+  | 'Milestone'
+  | 'Deployment'
+  | 'MergeRequest'
+  | 'BetaProgramSignup'
+  | 'AnalyticsEvent'
+  | 'MigrationStatus'
+  | 'MigrationBatch'
+  | 'VizEmbedding';

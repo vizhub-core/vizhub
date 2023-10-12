@@ -20,7 +20,7 @@ export const validateVizTest = () => {
       );
       assert(result.outcome === 'failure');
       expect(result.error.message).toEqual(
-        'Resource not found with id: viz1',
+        'Resource (Info) not found with id: viz1',
       );
     });
 
@@ -34,7 +34,7 @@ export const validateVizTest = () => {
       );
       assert(result.outcome === 'failure');
       expect(result.error.message).toEqual(
-        'Resource not found with id: viz1',
+        'Resource (Content) not found with id: viz1',
       );
     });
 
@@ -49,7 +49,7 @@ export const validateVizTest = () => {
       );
       assert(result.outcome === 'failure');
       expect(result.error.message).toEqual(
-        'Resource not found with id: commit1',
+        'Resource (Commit) not found with id: commit1',
       );
     });
 
@@ -67,7 +67,7 @@ export const validateVizTest = () => {
       );
       assert(result.outcome === 'failure');
       expect(result.error.message).toEqual(
-        `Resource not found with id: ${primordialViz.info.owner}`,
+        `Resource (User) not found with id: ${primordialViz.info.owner}`,
       );
     });
 
@@ -90,7 +90,7 @@ export const validateVizTest = () => {
       );
       assert(result.outcome === 'failure');
       expect(result.error.message).toEqual(
-        `Resource not found with id: ${primordialViz.info.folder}`,
+        `Resource (Folder) not found with id: ${primordialViz.info.folder}`,
       );
     });
 
@@ -115,7 +115,7 @@ export const validateVizTest = () => {
       );
       assert(result.outcome === 'failure');
       expect(result.error.message).toEqual(
-        `Resource not found with id: ${primordialViz.info.id}`,
+        `Resource (VizEmbedding) not found with id: ${primordialViz.info.id}`,
       );
     });
 

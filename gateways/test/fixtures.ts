@@ -388,5 +388,6 @@ export const sampleMigrationStatus: MigrationStatus = {
 
 export const sampleMigrationBatch: MigrationBatch = {
   id: 'v2-0',
-  migratedEntities: [],
+  numVizzesProcessed: 2,
+  numVizzesMissed: 0,
 };

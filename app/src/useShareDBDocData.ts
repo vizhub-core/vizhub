@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import ShareDBClient from 'sharedb-client-browser/dist/sharedb-client-umd.cjs';
 import { otType } from 'ot';
 import { toCollectionName } from 'database/src/toCollectionName';
-import { Snapshot } from 'entities';
+import { EntityName, Snapshot } from 'entities';
 import { ShareDBDoc } from 'vzcode';
 import { randomId } from 'vzcode/src/randomId';
 
@@ -42,7 +42,7 @@ const logShareDBError = (error) => {
 // something doesn't exist, e.g. the `forkedFromInfo` of the primordial viz.
 export const useShareDBDoc = <T>(
   snapshot: Snapshot<T> | null,
-  entityName: string,
+  entityName: EntityName,
 ): ShareDBDoc<T> | null => {
   // Get access to the ShareDB document.
   // `null` if we're server-side or if `snapshot` is `null`.
@@ -113,7 +113,7 @@ export const useShareDBDocData = <T>(
 // See https://github.com/share/sharedb/blob/master/examples/rich-text-presence/client.js#L53
 export const useShareDBDocPresence = (
   id: string,
-  entityName: string,
+  entityName: EntityName,
 ) => {
   const shareDBDocPresence = useMemo(() => {
     // Bail if we're server-side

@@ -109,7 +109,7 @@ export const updateOrCreateUserTest = () => {
       const updateOrCreateUser =
         UpdateOrCreateUser(gateways);
 
-      const existingUser = {
+      const existingUser: User = {
         ...expectedUser,
         displayName: 'Schmurran Schmellemer',
         picture:
@@ -119,18 +119,20 @@ export const updateOrCreateUserTest = () => {
       await saveUser(existingUser);
 
       // Sanity check
-      expect((await getUser(id)).value.data).toEqual(
+      const getUserResult = await getUser(id);
+      assert(getUserResult.outcome === 'success');
+      expect(getUserResult.value.data).toEqual(
         existingUser,
       );
 
       const result = await updateOrCreateUser(options);
 
-      expect(result.outcome).toEqual('success');
+      assert(result.outcome === 'success');
       expect(result.value).toEqual('success');
 
-      expect(
-        (await getUser(options.id)).value.data,
-      ).toEqual({
+      const getUserResult2 = await getUser(id);
+      assert(getUserResult2.outcome === 'success');
+      expect(getUserResult2.value.data).toEqual({
         ...expectedUser,
         plan: 'pro',
       });

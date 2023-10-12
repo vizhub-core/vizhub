@@ -35,7 +35,7 @@ export const getVizTest = () => {
       const result = await getViz('bogus-id');
       expect(result.outcome).toEqual('failure');
       expect(result.error.message).toEqual(
-        'Resource not found with id: bogus-id',
+        'Resource (Info) not found with id: bogus-id',
       );
     });
   });

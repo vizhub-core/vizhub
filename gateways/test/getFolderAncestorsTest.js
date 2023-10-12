@@ -20,7 +20,7 @@ export const getFolderAncestorsTest = () => {
       expect(result.outcome).toEqual('failure');
       expect(result.error.code).toEqual('resourceNotFound');
       expect(result.error.message).toEqual(
-        'Resource not found with id: bogus-id',
+        'Resource (Folder) not found with id: bogus-id',
       );
     });
 

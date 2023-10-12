@@ -21,13 +21,13 @@ import {
   UserId,
   User,
   ResourceId,
+  EntityName,
 } from 'entities';
 import { ok, err, Result } from './Result';
 import { Gateways, pageSize } from './Gateways';
 import { ascending, descending } from 'd3-array';
 
 type Entity = { [key: string]: any };
-type EntityName = string;
 type EntityId = string;
 
 // A stub similar to ShareDB snapshots.
@@ -42,7 +42,7 @@ const noop = (d: Entity) => d;
 
 // The same underlying CRUD (Create, Read, Update, Delete)
 // implementation supports all these entities.
-export const crudEntityNames = [
+export const crudEntityNames: Array<EntityName> = [
   'Info',
   'Content',
   'User',
@@ -87,7 +87,7 @@ export const MemoryGateways = (): Gateways => {
   //    * Keys: ids
   //    * Values: documents
   const documents: {
-    [key: EntityName]: { [key: EntityId]: Entity };
+    [key: string]: { [key: EntityId]: Entity };
   } = {};
 
   // Stores all viz embeddings.
@@ -113,7 +113,7 @@ export const MemoryGateways = (): Gateways => {
               documents[entityName][id],
             ),
           )
-        : err(resourceNotFoundError(id));
+        : err(resourceNotFoundError(id, entityName));
 
   // Deletes a document
   const genericDelete =
@@ -122,7 +122,7 @@ export const MemoryGateways = (): Gateways => {
         delete documents[entityName][id];
         return ok('success');
       } else {
-        return err(resourceNotFoundError(id));
+        return err(resourceNotFoundError(id, entityName));
       }
     };
 
@@ -194,7 +194,7 @@ export const MemoryGateways = (): Gateways => {
   ) => {
     let commit = documents.Commit[id];
     if (!commit) {
-      return err(resourceNotFoundError(id));
+      return err(resourceNotFoundError(id, 'Commit'));
     }
     const commits = [commit];
     while (
@@ -203,7 +203,9 @@ export const MemoryGateways = (): Gateways => {
       !(start && commit.id === start)
     ) {
       if (!(commit.parent in documents.Commit)) {
-        return err(resourceNotFoundError(commit.parent));
+        return err(
+          resourceNotFoundError(commit.parent, 'Commit'),
+        );
       }
       commit = documents.Commit[commit.parent];
       commits.push(commit);
@@ -216,12 +218,14 @@ export const MemoryGateways = (): Gateways => {
   const getFolderAncestors = async (id: FolderId) => {
     let folder = documents.Folder[id];
     if (!folder) {
-      return err(resourceNotFoundError(id));
+      return err(resourceNotFoundError(id, 'Folder'));
     }
     const folders = [folder];
     while (folder.parent) {
       if (!(folder.parent in documents.Folder)) {
-        return err(resourceNotFoundError(folder.parent));
+        return err(
+          resourceNotFoundError(folder.parent, 'Folder'),
+        );
       }
       folder = documents.Folder[folder.parent];
       folders.push(folder);
@@ -235,7 +239,7 @@ export const MemoryGateways = (): Gateways => {
     );
     return user
       ? ok(fakeSnapshot(user))
-      : err(resourceNotFoundError(userName));
+      : err(resourceNotFoundError(userName, 'User'));
   };
 
   const getUserByEmails = async (
@@ -251,7 +255,9 @@ export const MemoryGateways = (): Gateways => {
     );
     return user
       ? ok(fakeSnapshot(user))
-      : err(resourceNotFoundError(emails.join(', ')));
+      : err(
+          resourceNotFoundError(emails.join(', '), 'User'),
+        );
   };
 
   const getUsersByIds = async (ids: Array<UserId>) => {
@@ -259,7 +265,9 @@ export const MemoryGateways = (): Gateways => {
       (user) => ids.includes(user.id),
     );
     if (users.length !== ids.length) {
-      return err(resourceNotFoundError(ids.join(', ')));
+      return err(
+        resourceNotFoundError(ids.join(', '), 'User'),
+      );
     }
     return ok(users.map(fakeSnapshot));
   };
@@ -291,14 +299,16 @@ export const MemoryGateways = (): Gateways => {
   const getVizEmbedding = async (vizId: VizId) =>
     vizId in vizEmbeddings
       ? ok(vizEmbeddings[vizId])
-      : err(resourceNotFoundError(vizId));
+      : err(resourceNotFoundError(vizId, 'VizEmbedding'));
 
   const deleteVizEmbedding = async (vizId: VizId) => {
     if (vizId in vizEmbeddings) {
       delete vizEmbeddings[vizId];
       return ok('success');
     } else {
-      return err(resourceNotFoundError(vizId));
+      return err(
+        resourceNotFoundError(vizId, 'VizEmbedding'),
+      );
     }
   };
 

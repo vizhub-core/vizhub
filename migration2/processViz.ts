@@ -7,7 +7,7 @@ import { FilesV2, VizV2, Timestamp, Info } from 'entities';
 import { Gateways } from 'gateways';
 import { Collection } from 'mongodb-legacy';
 import { migratePrimordialViz } from './migratePrimordialViz';
-import fs from 'fs';
+import { readFileSync, writeFileSync } from 'fs';
 // import { updateMigratedViz } from './updateMigratedViz';
 // import { migratePrimordialViz } from './migratePrimordialViz';
 // import { createMigratedViz } from './createMigratedViz';
@@ -179,7 +179,7 @@ export const processViz = async ({
   // Compute the embedding for the viz (latest version).
   const embedding: Array<number> = useFixtures
     ? JSON.parse(
-        fs.readFileSync(
+        readFileSync(
           `./embeddings/${vizV2.info.id}.json`,
           'utf8',
         ),
@@ -187,7 +187,7 @@ export const processViz = async ({
     : await generateEmbeddingOpenAI(goodFiles);
 
   if (generateFixtures) {
-    fs.writeFileSync(
+    writeFileSync(
       `./embeddings/${vizV2.info.id}.json`,
       JSON.stringify(embedding),
     );

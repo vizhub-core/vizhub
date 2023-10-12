@@ -105,7 +105,7 @@ commit.ops:
         VizHubErrorCode.resourceNotFound,
       );
       expect(result.error.message).toEqual(
-        'Resource not found with id: bogus-id',
+        'Resource (Commit) not found with id: bogus-id',
       );
     });
 
@@ -124,7 +124,7 @@ commit.ops:
         VizHubErrorCode.resourceNotFound,
       );
       expect(result.error.message).toEqual(
-        'Resource not found with id: commit1',
+        'Resource (Commit) not found with id: commit1',
       );
     });
 
@@ -144,7 +144,7 @@ commit.ops:
         VizHubErrorCode.resourceNotFound,
       );
       expect(result.error.message).toEqual(
-        'Resource not found with id: 4327589043278',
+        'Resource (Milestone) not found with id: 4327589043278',
       );
     });
 
@@ -296,7 +296,7 @@ commit.ops:
         VizHubErrorCode.resourceNotFound,
       );
       expect(result.error.message).toEqual(
-        `Resource not found with id: ${milestoneToDelete}`,
+        `Resource (Milestone) not found with id: ${milestoneToDelete}`,
       );
     });
   });
