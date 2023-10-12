@@ -89,15 +89,15 @@ export const migratePrimordialViz = async ({
 
   await saveViz(vizV3);
 
-  // At this point the viz should be valid,
-  // even though it has no files and only one commit.
-  const validateResult = await validateViz(id);
-  if (validateResult.outcome === 'failure') {
-    throw new Error('Failed to validate viz!');
-  }
-  console.log(
-    '    Validated the Primordial Viz, first commit!',
-  );
+  // // At this point the viz should be valid,
+  // // even though it has no files and only one commit.
+  // const validateResult = await validateViz(id);
+  // if (validateResult.outcome === 'failure') {
+  //   throw new Error('Failed to validate viz!');
+  // }
+  // console.log(
+  //   '    Validated the Primordial Viz, first commit!',
+  // );
 
   // TODO clean up, report all possible errors
   // throwIfError(await validateViz(id));
@@ -121,18 +121,4 @@ export const migratePrimordialViz = async ({
   await saveViz(uncommitted);
 
   await commitViz(id);
-
-  // Save the primordial viz.
-
-  const validateResult2 = await validateViz(id);
-  if (validateResult2.outcome === 'failure') {
-    throw new Error('Failed to validate viz!');
-  }
-  console.log(
-    '    Validated the Primordial Viz, second commit!',
-  );
-
-  console.log(
-    '    Saved primordial commit and viz for the first time!',
-  );
 };

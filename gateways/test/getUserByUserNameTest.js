@@ -22,7 +22,7 @@ export const getUserByUserNameTest = () => {
       expect(result.outcome).toEqual('failure');
       expect(result.error.code).toEqual('resourceNotFound');
       expect(result.error.message).toEqual(
-        'Resource not found with id: unknown-user',
+        'Resource (User) not found with id: unknown-user',
       );
     });
   });

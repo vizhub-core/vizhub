@@ -32,7 +32,7 @@ export const updateUserStripeIdTest = () => {
         stripeCustomerId,
       });
 
-      expect(result.outcome).toEqual('success');
+      assert(result.outcome === 'success');
       expect(result.value).toEqual('success');
 
       const updatedUserResult = await getUser(userId);

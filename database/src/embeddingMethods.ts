@@ -38,7 +38,9 @@ export const embeddingMethods = (supabase) => ({
         error.message ===
         'JSON object requested, multiple (or no) rows returned'
       ) {
-        return err(resourceNotFoundError(vizId));
+        return err(
+          resourceNotFoundError(vizId, 'VizEmbedding'),
+        );
       }
       return err(error);
     }
@@ -61,7 +63,9 @@ export const embeddingMethods = (supabase) => ({
         error.message ===
         'JSON object requested, multiple (or no) rows returned'
       ) {
-        return err(resourceNotFoundError(vizId));
+        return err(
+          resourceNotFoundError(vizId, 'VizEmbedding'),
+        );
       }
       return err(error);
     }

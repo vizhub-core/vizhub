@@ -1,4 +1,4 @@
-import { CommitId, VizId } from 'entities';
+import { CommitId, EntityName, VizId } from 'entities';
 
 // A VizHub-specific error code.
 export enum VizHubErrorCode {
@@ -24,9 +24,10 @@ export class VizHubError extends Error {
 
 export const resourceNotFoundError = (
   id: string,
+  entityName: EntityName,
 ): VizHubError =>
   new VizHubError(
-    'Resource not found with id: ' + id,
+    `Resource (${entityName}) not found with id: ${id}`,
     VizHubErrorCode.resourceNotFound,
   );
 

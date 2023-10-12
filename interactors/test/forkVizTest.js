@@ -128,7 +128,7 @@ export const forkVizTest = () => {
         VizHubErrorCode.resourceNotFound,
       );
       expect(result.error.message).toEqual(
-        `Resource not found with id: bogus-id`,
+        `Resource (Info) not found with id: bogus-id`,
       );
     });
 

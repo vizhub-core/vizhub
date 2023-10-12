@@ -25,7 +25,7 @@ export const getUsersByIdsTest = () => {
         await getUsersByIds([userJoe.id]);
       assert(result.outcome === 'failure');
       expect(result.error.message).toEqual(
-        `Resource not found with id: ${userJoe.id}`,
+        `Resource (User) not found with id: ${userJoe.id}`,
       );
     });
   });

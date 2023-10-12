@@ -8,6 +8,10 @@
 // https://gitlab.com/curran/vizhub-ee/-/blob/main/prototypes/commitDataModelV1/src/gateways/DatabaseGateways.js
 import { descending } from 'd3-array';
 import {
+  CommitId,
+  EntityName,
+  FolderId,
+  UserName,
   defaultSortField,
   defaultSortOrder,
 } from 'entities';
@@ -61,41 +65,49 @@ export const DatabaseGateways = ({
     });
 
   // A generic "get" implementation for ShareDB.
-  const shareDBGet = (collectionName) => (id) =>
-    new Promise((resolve) => {
-      const shareDBDoc = shareDBConnection.get(
-        collectionName,
-        id,
-      );
-      shareDBDoc.fetch((error) => {
-        if (error) {
-          return resolve(err(error));
-        }
-        if (!shareDBDoc.type) {
-          return resolve(err(resourceNotFoundError(id)));
-        }
-        resolve(ok(shareDBDoc.toSnapshot()));
+  const shareDBGet =
+    (entityName: EntityName, collectionName: string) =>
+    (id) =>
+      new Promise((resolve) => {
+        const shareDBDoc = shareDBConnection.get(
+          collectionName,
+          id,
+        );
+        shareDBDoc.fetch((error) => {
+          if (error) {
+            return resolve(err(error));
+          }
+          if (!shareDBDoc.type) {
+            return resolve(
+              err(resourceNotFoundError(id, entityName)),
+            );
+          }
+          resolve(ok(shareDBDoc.toSnapshot()));
+        });
       });
-    });
 
   // A generic "delete" implementation for ShareDB.
-  const shareDBDelete = (collectionName) => (id) =>
-    new Promise((resolve) => {
-      const shareDBDoc = shareDBConnection.get(
-        collectionName,
-        id,
-      );
-      shareDBDoc.del((error) => {
-        if (
-          error &&
-          error.code === 'ERR_DOC_DOES_NOT_EXIST'
-        ) {
-          return resolve(err(resourceNotFoundError(id)));
-        }
-        if (error) return resolve(err(error));
-        resolve(ok('success'));
+  const shareDBDelete =
+    (entityName: EntityName, collectionName: string) =>
+    (id) =>
+      new Promise((resolve) => {
+        const shareDBDoc = shareDBConnection.get(
+          collectionName,
+          id,
+        );
+        shareDBDoc.del((error) => {
+          if (
+            error &&
+            error.code === 'ERR_DOC_DOES_NOT_EXIST'
+          ) {
+            return resolve(
+              err(resourceNotFoundError(id, entityName)),
+            );
+          }
+          if (error) return resolve(err(error));
+          resolve(ok('success'));
+        });
       });
-    });
 
   // A generic "add" implementation for ShareDB,
   // for incrementing and decrementing numeric fields.
@@ -103,7 +115,13 @@ export const DatabaseGateways = ({
   //  * `field` - the field to add to
   //  * `number` - the number to add to the field value
   const shareDBAdd =
-    (collectionName, field, number) => (id) =>
+    (
+      entityName: EntityName,
+      collectionName: string,
+      field: string,
+      number: number,
+    ) =>
+    (id) =>
       new Promise((resolve) => {
         const shareDBDoc = shareDBConnection.get(
           collectionName,
@@ -118,7 +136,9 @@ export const DatabaseGateways = ({
           };
 
           if (!shareDBDoc.type) {
-            return resolve(err(resourceNotFoundError(id)));
+            return resolve(
+              err(resourceNotFoundError(id, entityName)),
+            );
           } else {
             if (
               number < 0 &&
@@ -160,13 +180,16 @@ export const DatabaseGateways = ({
   };
 
   // A generic "get" implementation for MongoDB.
-  const mongoDBGet = (collectionName) => {
+  const mongoDBGet = (
+    entityName: EntityName,
+    collectionName: string,
+  ) => {
     const collection =
       mongoDBDatabase.collection(collectionName);
     return async (id) => {
       const entity = await collection.findOne({ _id: id });
       if (entity === null) {
-        return err(resourceNotFoundError(id));
+        return err(resourceNotFoundError(id, entityName));
       }
       delete entity._id;
       return ok(entity);
@@ -174,7 +197,10 @@ export const DatabaseGateways = ({
   };
 
   // A generic "delete" implementation for MongoDB.
-  const mongoDBDelete = (collectionName) => {
+  const mongoDBDelete = (
+    entityName: EntityName,
+    collectionName: string,
+  ) => {
     const collection =
       mongoDBDatabase.collection(collectionName);
     return async (id) => {
@@ -182,25 +208,29 @@ export const DatabaseGateways = ({
         _id: id,
       });
       if (results.deletedCount === 0) {
-        return err(resourceNotFoundError(id));
+        return err(resourceNotFoundError(id, entityName));
       }
       return ok('success');
     };
   };
 
-  const crud = (entityName, collectionName, layer) => ({
+  const crud = (
+    entityName: EntityName,
+    collectionName: string,
+    layer: 'sharedb' | 'mongodb',
+  ) => ({
     [`save${entityName}`]:
       layer === 'sharedb'
         ? shareDBSave(collectionName)
         : mongoDBSave(collectionName),
     [`get${entityName}`]:
       layer === 'sharedb'
-        ? shareDBGet(collectionName)
-        : mongoDBGet(collectionName),
+        ? shareDBGet(entityName, collectionName)
+        : mongoDBGet(entityName, collectionName),
     [`delete${entityName}`]:
       layer === 'sharedb'
-        ? shareDBDelete(collectionName)
-        : mongoDBDelete(collectionName),
+        ? shareDBDelete(entityName, collectionName)
+        : mongoDBDelete(entityName, collectionName),
   });
 
   const getForks = (id) =>
@@ -262,11 +292,11 @@ export const DatabaseGateways = ({
     });
 
   const getCommitAncestors = async (
-    id,
-    toNearestMilestone,
-    start,
+    id: string,
+    toNearestMilestone: boolean,
+    start: CommitId,
   ) => {
-    const entityName = 'Commit';
+    const entityName: EntityName = 'Commit';
     const from = toCollectionName(entityName);
     const collection = mongoDBDatabase.collection(from);
 
@@ -305,7 +335,7 @@ export const DatabaseGateways = ({
     ).toArray();
 
     if (results.length === 0) {
-      return err(resourceNotFoundError(id));
+      return err(resourceNotFoundError(id, entityName));
     }
 
     // Sanity check.
@@ -372,8 +402,8 @@ export const DatabaseGateways = ({
   // TODO consider making this a ShareDB query.
   // Use case: breadcrumbs that change in real time
   //   when a viz/folder is moved.
-  const getFolderAncestors = async (id) => {
-    const entityName = 'Folder';
+  const getFolderAncestors = async (id: FolderId) => {
+    const entityName: EntityName = 'Folder';
     const from = toCollectionName(entityName);
     const collection = mongoDBDatabase.collection(from);
 
@@ -394,7 +424,7 @@ export const DatabaseGateways = ({
     ).toArray();
 
     if (results.length === 0) {
-      return err(resourceNotFoundError(id));
+      return err(resourceNotFoundError(id, entityName));
     }
 
     // Sanity check.
@@ -427,7 +457,7 @@ export const DatabaseGateways = ({
     return ok(folders);
   };
 
-  const getUserByUserName = (userName) =>
+  const getUserByUserName = (userName: UserName) =>
     new Promise((resolve) => {
       const entityName = 'User';
       const query = shareDBConnection.createFetchQuery(
@@ -439,7 +469,7 @@ export const DatabaseGateways = ({
           if (error) return resolve(err(error));
           if (results.length === 0) {
             return resolve(
-              err(resourceNotFoundError(userName)),
+              err(resourceNotFoundError(userName, 'User')),
             );
           }
           resolve(ok(results[0].toSnapshot()));
@@ -468,7 +498,7 @@ export const DatabaseGateways = ({
           if (error) return resolve(err(error));
           if (results.length === 0) {
             return resolve(
-              err(resourceNotFoundError(emails)),
+              err(resourceNotFoundError(emails, 'User')),
             );
           }
           resolve(ok(results[0].toSnapshot()));
@@ -490,7 +520,12 @@ export const DatabaseGateways = ({
           // Guard against the case that some of the ids were not found.
           if (results.length !== ids.length) {
             resolve(
-              err(resourceNotFoundError(ids.join(', '))),
+              err(
+                resourceNotFoundError(
+                  ids.join(', '),
+                  'User',
+                ),
+              ),
             );
           }
 
@@ -525,21 +560,25 @@ export const DatabaseGateways = ({
 
   const from = toCollectionName('Info');
   const incrementForksCount = shareDBAdd(
+    'Info',
     from,
     'forksCount',
     1,
   );
   const decrementForksCount = shareDBAdd(
+    'Info',
     from,
     'forksCount',
     -1,
   );
   const incrementUpvotesCount = shareDBAdd(
+    'Info',
     from,
     'upvotesCount',
     1,
   );
   const decrementUpvotesCount = shareDBAdd(
+    'Info',
     from,
     'upvotesCount',
     -1,

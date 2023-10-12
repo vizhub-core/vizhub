@@ -23,8 +23,12 @@ import {
   sampleMigrationStatus,
   sampleMigrationBatch,
 } from './fixtures';
+import { EntityName } from 'entities';
 
-export const crudTests = (entityName, sampleEntity) => {
+export const crudTests = (
+  entityName: EntityName,
+  sampleEntity,
+) => {
   const saveMethod = `save${entityName}`;
   const getMethod = `get${entityName}`;
   const deleteMethod = `delete${entityName}`;
@@ -59,7 +63,7 @@ export const crudTests = (entityName, sampleEntity) => {
         'resourceNotFound',
       );
       expect(getResult.error.message).toEqual(
-        'Resource not found with id: bogus-id',
+        `Resource (${entityName}) not found with id: bogus-id`,
       );
     });
 

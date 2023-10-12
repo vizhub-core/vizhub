@@ -1,6 +1,6 @@
-import fs from 'fs';
-import path from 'path';
-import { InfoV2, Timestamp, VizV2 } from 'entities';
+import { readdirSync, readFileSync } from 'fs';
+import { join } from 'path';
+import { InfoV2, Timestamp } from 'entities';
 
 // Iterates over V2 VizInfos straight out of Mongo.
 // Restricts the search to vizzes that may have been modified
@@ -30,20 +30,17 @@ export const v2Vizzes = async (
     // See https://stackoverflow.com/a/10049720/358804
     // for how to iterate over an array of files.
 
-    const directoryPath = path.join(
-      __dirname,
-      'v2Fixtures',
-    );
-    const files = fs.readdirSync(directoryPath);
+    const directoryPath = join(__dirname, 'v2Fixtures');
+    const files = readdirSync(directoryPath);
     const infos: Array<InfoV2> = [];
     for (const fileName of files) {
       // Ignore files that don't start with `vizV2-`.
       if (fileName.startsWith('vizV2-') === false) {
         continue;
       }
-      const filePath = path.join(directoryPath, fileName);
+      const filePath = join(directoryPath, fileName);
       const vizV2 = JSON.parse(
-        fs.readFileSync(filePath, 'utf8'),
+        readFileSync(filePath, 'utf8'),
       );
       infos.push(vizV2.info);
     }
