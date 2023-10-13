@@ -154,6 +154,7 @@ const vizVerify = (gateways: Gateways, action: Action) => {
         authenticatedUserId: userId,
         info,
         action,
+        debug,
       });
       if (verifyResult.outcome === 'failure') {
         throw verifyResult.error;

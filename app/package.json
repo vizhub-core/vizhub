@@ -47,6 +47,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.16.0",
+    "rollup": "^4.0.2",
     "rollup-pluginutils": "^2.8.2",
     "sharedb": "^4.1.0",
     "sharedb-mongo": "^4.1.0",

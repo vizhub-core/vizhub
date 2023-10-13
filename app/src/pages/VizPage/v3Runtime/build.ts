@@ -3,7 +3,7 @@ import {
   OutputOptions,
   RollupOptions,
   RollupCache,
-} from '@rollup/browser';
+} from 'rollup';
 import {
   BuildResult,
   PackageJson,
