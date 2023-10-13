@@ -1,5 +1,4 @@
 import {
-  rollup,
   OutputOptions,
   RollupOptions,
   RollupCache,
@@ -104,6 +103,10 @@ export const build = async ({
     }
 
     try {
+      const { rollup } = await (import.meta.env.SSR
+        ? import('rollup')
+        : import('@rollup/browser'));
+
       const bundle = await rollup(inputOptions);
       cache = bundle.cache;
       const { code, map } = (
