@@ -21,7 +21,7 @@
   "homepage": "https://github.com/vizhub-core/vizhub3#readme",
   "devDependencies": {
     "@types/d3-time": "^3.0.2",
-    "@types/uuid": "^9.0.5",
+    "@types/uuid": "^9.0.6",
     "vite": "^4.5.0",
     "vitest": "^0.34.6"
   },
