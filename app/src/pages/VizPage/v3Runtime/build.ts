@@ -62,9 +62,11 @@ let cache: RollupCache | null = null;
 export const build = async ({
   files,
   enableSourcemap = false,
+  rollup,
 }: {
   files: V3RuntimeFiles;
   enableSourcemap?: boolean;
+  rollup: any;
 }): Promise<BuildResult> => {
   const startTime = Date.now();
   const warnings = [];
@@ -103,10 +105,6 @@ export const build = async ({
     }
 
     try {
-      const { rollup } = await (import.meta.env.SSR
-        ? import('rollup')
-        : import('@rollup/browser'));
-
       const bundle = await rollup(inputOptions);
       cache = bundle.cache;
       const { code, map } = (

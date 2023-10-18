@@ -8,9 +8,16 @@ export default defineConfig({
     react(),
     // visualizer({ open: true })
   ],
-  // build: {
-  //   // minify: false,
-  // },
+  build: {
+    // minify: false,
+    // rollupOptions: {
+    //
+    // },
+    // rollupOptions: {
+    //   // https://rollupjs.org/configuration-options/
+    //   external: ['rollup'],
+    // },
+  },
   // Support Rollup v4
   // See https://github.com/curran/rollup-v4-browser-vite-demo/
   optimizeDeps: {

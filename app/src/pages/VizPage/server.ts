@@ -1,4 +1,5 @@
-import { VerifyVizAccess } from 'interactors';
+import { rollup } from 'rollup';
+import { JSDOM } from 'jsdom';
 import {
   Info,
   VizId,
@@ -7,7 +8,7 @@ import {
   READ,
   WRITE,
 } from 'entities';
-import { JSDOM } from 'jsdom';
+import { VerifyVizAccess } from 'interactors';
 import { getFileText } from '../../accessors/getFileText';
 import { VizPage, VizPageData } from './index';
 import { renderREADME } from './renderREADME';
@@ -163,6 +164,7 @@ VizPage.getPageData = async ({
             await build({
               files: toV3RuntimeFiles(content.files),
               enableSourcemap: true,
+              rollup,
             }),
           );
 
