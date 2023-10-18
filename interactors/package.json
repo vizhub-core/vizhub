@@ -28,7 +28,7 @@
     "uuid": "^9.0.1"
   },
   "devDependencies": {
-    "@types/deep-equal": "^1.0.2",
+    "@types/deep-equal": "^1.0.3",
     "concurrently": "^8.2.1",
     "prettier": "^3.0.3",
     "typescript": "^5.2.2",

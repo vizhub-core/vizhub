@@ -30,8 +30,17 @@ export const VerifyVizAccess = (gateways: Gateways) => {
     authenticatedUserId: UserId | undefined;
     info: Info;
     action: Action;
+    debug?: boolean;
   }): Promise<Result<boolean>> => {
-    const { authenticatedUserId, info, action } = options;
+    const { authenticatedUserId, info, action, debug } =
+      options;
+
+    if (debug) {
+      console.log(
+        'VerifyVizAccess',
+        JSON.stringify(options),
+      );
+    }
     // If user is undefined, then the user is not logged in,
     // and therefore can only read public or unlisted vizzes.
     if (authenticatedUserId === undefined) {

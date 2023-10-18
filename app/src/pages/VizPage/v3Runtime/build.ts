@@ -1,9 +1,8 @@
 import {
-  rollup,
   OutputOptions,
   RollupOptions,
   RollupCache,
-} from '@rollup/browser';
+} from 'rollup';
 import {
   BuildResult,
   PackageJson,
@@ -63,9 +62,11 @@ let cache: RollupCache | null = null;
 export const build = async ({
   files,
   enableSourcemap = false,
+  rollup,
 }: {
   files: V3RuntimeFiles;
   enableSourcemap?: boolean;
+  rollup: any;
 }): Promise<BuildResult> => {
   const startTime = Date.now();
   const warnings = [];

@@ -1,10 +1,11 @@
 import { describe, it, expect } from 'vitest';
+import { rollup } from 'rollup';
 import { build } from './build';
 
 describe('V3 build', () => {
   it('Should not crash when missing files', async () => {
     const files = {};
-    const buildResult = await build({ files });
+    const buildResult = await build({ files, rollup });
 
     expect(buildResult).toBeDefined();
 
