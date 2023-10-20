@@ -41,7 +41,7 @@
     "jszip": "^3.10.1",
     "marked": "^9.1.2",
     "marked-gfm-heading-id": "^3.1.0",
-    "mongodb-legacy": "^6.0.0",
+    "mongodb-legacy": "^6.0.1",
     "path": "^0.12.7",
     "path-posix": "^1.0.0",
     "react": "^18.2.0",
@@ -54,7 +54,7 @@
     "stripe": "^14.1.0",
     "vizhub-libraries": "^1.8.0",
     "vizhub-ui": "^3.4.0",
-    "vzcode": "^0.24.0",
+    "vzcode": "^0.25.0",
     "ws": "^8.14.2",
     "xss": "^1.0.14"
   },
