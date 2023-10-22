@@ -33,7 +33,6 @@ import { VizPageToasts } from './VizPageToasts';
 import { useOnFork } from './useOnFork';
 import { useOnSettingsSave } from './useOnSettingsSave';
 import { getRuntimeVersion } from '../../accessors/getRuntimeVersion';
-import { useTabsState } from 'vzcode/src/client/useTabsState';
 import { generateExportZipV2 } from './export/generateExportZipV2';
 import { generateExportZipV3 } from './export/generateExportZipV3';
 import './styles.scss';
@@ -90,19 +89,19 @@ export const VizPage: Page = ({
     contentShareDBDoc,
   );
 
-  // A helper function to submit operations to the ShareDB document.
-  const submitOperation: (
-    next: (content: Content) => Content,
-  ) => void = useCallback(
-    (next) => {
-      const content: Content = contentShareDBDoc.data;
-      const op = diff(content, next(content));
-      if (op && contentShareDBDoc) {
-        contentShareDBDoc.submitOp(op);
-      }
-    },
-    [contentShareDBDoc],
-  );
+  // // A helper function to submit operations to the ShareDB document.
+  // const submitOperation: (
+  //   next: (content: Content) => Content,
+  // ) => void = useCallback(
+  //   (next) => {
+  //     const content: Content = contentShareDBDoc.data;
+  //     const op = diff(content, next(content));
+  //     if (op && contentShareDBDoc) {
+  //       contentShareDBDoc.submitOp(op);
+  //     }
+  //   },
+  //   [contentShareDBDoc],
+  // );
 
   const contentShareDBDocPresence = useShareDBDocPresence(
     id,
@@ -129,26 +128,69 @@ export const VizPage: Page = ({
   // `showEditor`
   // True if the sidebar should be shown.
   // TODO put this in URL state
+  // False: https://vizhub.com/curran/86a75dc8bdbe4965ba353a79d4bd44c8
+  // True: https://vizhub.com/curran/86a75dc8bdbe4965ba353a79d4bd44c8?edit=files
   const [showEditor, setShowEditor] = useState(false);
 
   // `activeFileId`
   // The id of the currently open file tab.
-  // TODO put this in URL state
-  const [activeFileId, setActiveFileId] =
-    useState<FileId | null>(null);
+  // TODO put this in URL state'
+  // https://vizhub.com/curran/86a75dc8bdbe4965ba353a79d4bd44c8?file=index.html
+  // const [activeFileId, setActiveFileId] =
+  //   useState<FileId | null>(null);
+
+  // TODO try incorporating this:
+  // import { useState, useEffect } from 'react';
+  // import {
+  //   useLocation,
+  //   useHistory
+  // } from 'react-router-dom';
+
+  // function YourComponent() {
+  //   const location = useLocation();
+  //   const history = useHistory();
+  //   const queryParams = new URLSearchParams(location.search);
+
+  //   // Initialize `showEditor` from URL
+  //   const showEditorFromUrl = queryParams.get('edit') === 'files';
+  //   const [showEditor, setShowEditor] = useState(showEditorFromUrl);
+
+  //   // Initialize `activeFileId` from URL
+  //   const activeFileIdFromUrl = queryParams.get('file');
+  //   const [activeFileId, setActiveFileId] = useState(activeFileIdFromUrl || null);
+
+  //   // Update URL when `showEditor` or `activeFileId` changes
+  //   useEffect(() => {
+  //     let newQueryParams = new URLSearchParams();
+
+  //     if (showEditor) {
+  //       newQueryParams.set('edit', 'files');
+  //     }
+
+  //     if (activeFileId) {
+  //       newQueryParams.set('file', activeFileId);
+  //     }
+
+  //     history.replace({
+  //       pathname: location.pathname,
+  //       search: newQueryParams.toString(),
+  //     });
+  //   }, [showEditor, activeFileId]);
+
+  //   // ... rest of your component logic ...
+
+  //   return (
+  //     // ... your component's JSX ...
+  //   );
+  // }
+
+  // export default YourComponent;
 
   // `tabList`
   // The ordered list of tabs in the code editor.
   // TODO put this in URL state
-  const [tabList, setTabList] = useState<Array<FileId>>([]);
-
-  // Logic for opening and closing tabs.
-  const { closeTab, openTab } = useTabsState(
-    activeFileId,
-    setActiveFileId,
-    tabList,
-    setTabList,
-  );
+  // https://vizhub.com/curran/86a75dc8bdbe4965ba353a79d4bd44c8?tabs=index.html,README.md
+  // const [tabList, setTabList] = useState<Array<FileId>>([]);
 
   // /////////////////////////////////////////
   /////////////// Modals /////////////////////
@@ -171,8 +213,8 @@ export const VizPage: Page = ({
   const [showForkModal, toggleForkModal] = useToggleState();
   const [showSettingsModal, toggleSettingsModal] =
     useToggleState();
-  const [showRenameModal, toggleRenameModal] =
-    useToggleState();
+  // const [showRenameModal, toggleRenameModal] =
+  //   useToggleState();
 
   // /////////////////////////////////////////
   /////////////// Callbacks //////////////////
@@ -205,9 +247,9 @@ export const VizPage: Page = ({
     console.log('TODO onShareClick');
   }, []);
 
-  // /////////////////////////////////////////
-  /////////////// Forking// //////////////////
-  // /////////////////////////////////////////
+  ///////////////////////////////////////////
+  /////////////// Forking ///////////////////
+  ///////////////////////////////////////////
 
   // When the user clicks the link (not button) to fork the viz
   // in the toast that appears when the user has unsaved edits.
@@ -262,9 +304,9 @@ export const VizPage: Page = ({
     };
   }, []);
 
-  // /////////////////////////////////////////
+  ////////////////////////////////////////////
   /////////////// Settings ///////////////////
-  // /////////////////////////////////////////
+  ////////////////////////////////////////////
 
   // When the user clicks "Save" from within the settings modal.
   const onSettingsSave = useOnSettingsSave(
@@ -283,106 +325,11 @@ export const VizPage: Page = ({
     );
   }, []);
 
-  // /////////////////////////////////////////
-  /////////////// Code Editor ////////////////
-  // /////////////////////////////////////////
+  ////////////////////////////////////////////
+  ///////////////// VZCode ///////////////////
+  ////////////////////////////////////////////
 
-  // //// Code Editor / Create File //////////
-
-  // TODO de-duplicate this with VZCode
-  // TODO move this logic to a hook called `useFileCRUD`
-  // Include
-  //  - `createFile`
-  //  - `handleRenameFileClick`
-  //  - `deleteFile`
-  //  - `handleDeleteFileClick`
-  // TODO use Bootstrap modals not native prompts
-  const createFile = useCallback(() => {
-    const name = prompt('Enter new file name');
-    if (name) {
-      submitOperation((document) => ({
-        ...document,
-        files: {
-          ...document.files,
-          [randomId()]: { name, text: '' },
-        },
-      }));
-    }
-  }, [submitOperation]);
-
-  // //// Code Editor / Rename File //////////
-
-  // The id of the file that is currently being renamed.
-  const [fileBeingRenamed, setFileBeingRenamed] =
-    useState<FileId | null>(null);
-
-  // Called when a file in the sidebar has its "rename" icon clicked.
-  const handleRenameFileClick = useCallback(
-    (fileId: FileId) => {
-      setFileBeingRenamed(fileId);
-      toggleRenameModal();
-    },
-    [toggleRenameModal],
-  );
-
-  const handleRename = useCallback(
-    (newName: string) => {
-      if (fileBeingRenamed !== null) {
-        submitOperation((document) => ({
-          ...document,
-          files: {
-            ...document.files,
-            [fileBeingRenamed]: {
-              ...document.files[fileBeingRenamed],
-              name: newName,
-            },
-          },
-        }));
-        setFileBeingRenamed(null);
-        toggleRenameModal();
-      }
-    },
-    [fileBeingRenamed],
-  );
-
-  // //// Code Editor / Delete File //////////
-
-  const deleteFile = useCallback(
-    (fileId: FileId) => {
-      closeTab(fileId);
-      submitOperation((document) => {
-        const updatedFiles = { ...document.files };
-        delete updatedFiles[fileId];
-        return { ...document, files: updatedFiles };
-      });
-    },
-    [submitOperation, closeTab],
-  );
-
-  // TODO prompt the user "Are you sure?"
-  const handleDeleteFileClick = useCallback(
-    (fileId: FileId, event: React.MouseEvent) => {
-      // Stop propagation so that the outer listener doesn't fire,
-      // which would try to open this file in a tab.
-      event.stopPropagation();
-      deleteFile(fileId);
-    },
-    [deleteFile],
-  );
-
-  // //// Code Editor / Prettier //////////
-
-  // Auto-run Pretter after local changes.
-  usePrettier(
-    contentShareDBDoc,
-    submitOperation,
-    prettierWorker,
-  );
-
-  // //// Code Editor / CodeMirror /////////
-
-  // Cache of CodeMirror editors by file id.
-  const editorCache = useEditorCache();
+  // TODO try to deduplicate with stuff in vzcode App.tsx
 
   return (
     <AuthenticatedUserProvider
@@ -400,39 +347,19 @@ export const VizPage: Page = ({
             ownerUser,
             forkedFromInfo,
             forkedFromOwnerUser,
-
             showEditor,
             setShowEditor,
-            activeFileId,
-            setActiveFileId,
-            tabList,
-
             onExportClick,
             onShareClick,
             showForkModal,
             toggleForkModal,
             onFork,
             initialReadmeHTML,
-
             showSettingsModal,
             toggleSettingsModal,
             onSettingsSave,
-
-            showRenameModal,
-            toggleRenameModal,
-            handleRename,
-            fileBeingRenamed,
-
             initialSrcdoc,
             canUserEditViz,
-
-            closeTab,
-            openTab,
-            createFile,
-            handleRenameFileClick,
-            handleDeleteFileClick,
-
-            editorCache,
           }}
         />
       </SplitPaneResizeProvider>

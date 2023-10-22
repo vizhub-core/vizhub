@@ -6,43 +6,45 @@ import {
   useMemo,
   useRef,
 } from 'react';
-import { Sidebar } from 'vzcode/src/client/Sidebar';
-import { SplitPaneResizeContext } from 'vzcode/src/client/SplitPaneResizeContext';
-import { Resizer } from 'vzcode/src/client/Resizer';
-import { TabList } from 'vzcode/src/client/TabList';
-import { CodeEditor } from 'vzcode/src/client/CodeEditor';
+
+import type { ShareDBDoc } from 'vzcode';
+import { SplitPaneResizeContext } from 'vzcode';
+
 import {
   defaultVizWidth,
   Content,
   Info,
   User,
-  FileId,
-  Files,
   UserId,
   Visibility,
 } from 'entities';
+
+// TODO consolidate imports, from 'components'
 import { VizPageHead } from 'components/src/components/VizPageHead';
 import { ForkModal } from 'components/src/components/ForkModal';
 import { SettingsModal } from 'components/src/components/SettingsModal';
 import { RenameFileModal } from 'components/src/components/RenameFileModal';
 import { VizPageViewer } from 'components/src/components/VizPageViewer';
-import { AuthenticatedUserContext } from '../../contexts/AuthenticatedUserContext';
-import { SmartHeader } from '../../smartComponents/SmartHeader';
-import { getUserDisplayName } from '../../accessors/getUserDisplayName';
-import { useRenderMarkdownHTML } from './useRenderMarkdownHTML';
-import { formatTimestamp } from '../../accessors/formatTimestamp';
-import { getForksPageHref } from '../../accessors/getForksPageHref';
-import { getProfilePageHref } from '../../accessors/getProfilePageHref';
-import { getVizPageHref } from '../../accessors/getVizPageHref';
-import { getLicense } from '../../accessors/getLicense';
-import { getHeight } from '../../accessors/getHeight';
-import { ShareDBDoc } from 'vzcode';
-import { useRuntime } from './useRuntime';
-import { getPackageJsonText } from '../../accessors/getPackageJsonText';
-import { getPackageJson } from '../../accessors/getPackageJson';
-import { PackageJson } from './v3Runtime/types';
+
+import { AuthenticatedUserContext } from '../../../contexts/AuthenticatedUserContext';
+import { SmartHeader } from '../../../smartComponents/SmartHeader';
+
+// TODO consolidate imports, from 'accessors'
+import { getUserDisplayName } from '../../../accessors/getUserDisplayName';
+import { formatTimestamp } from '../../../accessors/formatTimestamp';
+import { getForksPageHref } from '../../../accessors/getForksPageHref';
+import { getProfilePageHref } from '../../../accessors/getProfilePageHref';
+import { getVizPageHref } from '../../../accessors/getVizPageHref';
+import { getLicense } from '../../../accessors/getLicense';
+import { getHeight } from '../../../accessors/getHeight';
+import { getPackageJsonText } from '../../../accessors/getPackageJsonText';
+import { getPackageJson } from '../../../accessors/getPackageJson';
+
+import { useRuntime } from '../useRuntime';
+import type { PackageJson } from '../v3Runtime/types';
 import { VizSettings } from './useOnSettingsSave';
-import { EditorCache } from 'vzcode/src/client/useEditorCache';
+import { useRenderMarkdownHTML } from './useRenderMarkdownHTML';
+import { VizPageEditor } from './VizPageEditor';
 
 // The fixed path of the files in the ShareDB<Content> document.
 const filesPath = ['files'];
@@ -53,6 +55,8 @@ export const VizPageBody = ({
   contentShareDBDoc,
   contentShareDBDocPresence,
   ownerUser,
+  forkedFromInfo,
+  forkedFromOwnerUser,
   showEditor,
   setShowEditor,
   onExportClick,
@@ -61,32 +65,19 @@ export const VizPageBody = ({
   toggleForkModal,
   onFork,
   initialReadmeHTML,
-  forkedFromInfo,
-  forkedFromOwnerUser,
-  initialSrcdoc,
-  activeFileId,
-  setActiveFileId,
-  tabList,
-  canUserEditViz,
   showSettingsModal,
   toggleSettingsModal,
   onSettingsSave,
-  closeTab,
-  openTab,
-  createFile,
-  handleRenameFileClick,
-  handleDeleteFileClick,
-  editorCache,
-  showRenameModal,
-  toggleRenameModal,
-  handleRename,
-  fileBeingRenamed,
+  initialSrcdoc,
+  canUserEditViz,
 }: {
   info: Info;
   content: Content;
   contentShareDBDoc: ShareDBDoc<Content>;
   contentShareDBDocPresence: any;
   ownerUser: User;
+  forkedFromInfo: Info | null;
+  forkedFromOwnerUser: User | null;
   showEditor: boolean;
   setShowEditor: (showEditor: boolean) => void;
   onExportClick: () => void;
@@ -103,29 +94,11 @@ export const VizPageBody = ({
     visibility: Visibility;
   }) => void;
   initialReadmeHTML: string;
-  forkedFromInfo: Info | null;
-  forkedFromOwnerUser: User | null;
-  initialSrcdoc: string;
-  activeFileId: FileId | null;
-  setActiveFileId: (activeFileId: FileId | null) => void;
-  tabList: Array<FileId>;
-  canUserEditViz: boolean;
   showSettingsModal: boolean;
   toggleSettingsModal: () => void;
   onSettingsSave: (vizSettings: VizSettings) => void;
-  closeTab: (fileId: FileId) => void;
-  openTab: (fileId: FileId) => void;
-  createFile: () => void;
-  handleRenameFileClick: (fileId: FileId) => void;
-  handleDeleteFileClick: (
-    fileId: FileId,
-    event: React.MouseEvent,
-  ) => void;
-  editorCache: EditorCache;
-  showRenameModal: boolean;
-  toggleRenameModal: () => void;
-  handleRename: (newName: string) => void;
-  fileBeingRenamed: FileId | null;
+  initialSrcdoc: string;
+  canUserEditViz: boolean;
 }) => {
   // The currently authenticated user, if any.
   const authenticatedUser: User | null = useContext(
@@ -176,8 +149,6 @@ export const VizPageBody = ({
     () => getHeight(content.height),
     [content.height],
   );
-
-  const files: Files = content.files;
 
   // These are undefined during SSR, defined in the browser.
   const localPresence =
@@ -275,44 +246,19 @@ export const VizPageBody = ({
         onSettingsClick={toggleSettingsModal}
       />
       <div className="vh-viz-page-body">
-        {showEditor && files ? (
-          <div className="left">
-            <Sidebar
-              files={files}
-              handleFileClick={openTab}
-              createFile={createFile}
-              handleRenameFileClick={handleRenameFileClick}
-              handleDeleteFileClick={handleDeleteFileClick}
-            />
-          </div>
-        ) : null}
-        {showEditor && activeFileId ? (
-          <div className="middle">
-            <TabList
-              files={files}
-              tabList={tabList}
-              activeFileId={activeFileId}
-              setActiveFileId={setActiveFileId}
-              closeTab={closeTab}
-            />
-            {files && activeFileId ? (
-              <CodeEditor
-                shareDBDoc={contentShareDBDoc}
-                filesPath={filesPath}
-                activeFileId={activeFileId}
-                localPresence={localPresence}
-                docPresence={docPresence}
-                editorCache={editorCache}
-
-                // TODO make dynamic themes work
-                // theme={theme}
-              />
-            ) : null}
-          </div>
-        ) : null}
-
-        {/* The resizer between the sidebar and code editor */}
-        {showEditor ? <Resizer /> : null}
+        <VizPageEditor
+          showEditor={showEditor}
+          content={content}
+          contentShareDBDoc={contentShareDBDoc}
+          // contentShareDBDocPresence={contentShareDBDocPresence}
+          // showForkModal={showForkModal}
+          // toggleForkModal={toggleForkModal}
+          // initialReadmeHTML={initialReadmeHTML}
+          // showSettingsModal={showSettingsModal}
+          // toggleSettingsModal={toggleSettingsModal}
+          // initialSrcdoc={initialSrcdoc}
+          // canUserEditViz={canUserEditViz}
+        />
 
         <div
           className={`right${
@@ -367,15 +313,6 @@ export const VizPageBody = ({
           onSave={onSettingsSave}
           currentPlan={authenticatedUser?.plan}
           pricingHref={'/pricing'}
-        />
-      ) : null}
-
-      {showRenameModal && fileBeingRenamed !== null ? (
-        <RenameFileModal
-          show={showRenameModal}
-          onClose={toggleRenameModal}
-          onRename={handleRename}
-          initialFileName={files[fileBeingRenamed].name}
         />
       ) : null}
     </div>
