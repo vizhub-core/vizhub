@@ -23,6 +23,14 @@ $mobile-breakpoint: 550px;
     display: flex;
     flex: 1;
     flex-direction: column;
+
+    /* To suport PrettierErrorOverlay, which is position: absolute */
+    position: relative;
+
+    /* Cool effect */
+    .vz-tab-list {
+      border-top-right-radius: 24px;
+    }
   }
   .right {
     flex: 1;
