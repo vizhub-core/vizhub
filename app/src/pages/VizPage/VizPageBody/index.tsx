@@ -150,12 +150,6 @@ export const VizPageBody = ({
     [content.height],
   );
 
-  // These are undefined during SSR, defined in the browser.
-  const localPresence =
-    contentShareDBDocPresence?.localPresence;
-  const docPresence =
-    contentShareDBDocPresence?.docPresence;
-
   // The ref to the viz runner iframe.
   const iframeRef: RefObject<HTMLIFrameElement> =
     useRef<HTMLIFrameElement>(null);
@@ -250,7 +244,9 @@ export const VizPageBody = ({
           showEditor={showEditor}
           content={content}
           contentShareDBDoc={contentShareDBDoc}
-          // contentShareDBDocPresence={contentShareDBDocPresence}
+          contentShareDBDocPresence={
+            contentShareDBDocPresence
+          }
           // showForkModal={showForkModal}
           // toggleForkModal={toggleForkModal}
           // initialReadmeHTML={initialReadmeHTML}

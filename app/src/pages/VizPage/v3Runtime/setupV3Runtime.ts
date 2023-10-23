@@ -1,6 +1,8 @@
 import Worker from './worker.ts?worker';
-
 import { V3RuntimeFiles } from './types';
+
+// Flag for debugging.
+const debug = false;
 
 // Nothing happening.
 const IDLE = 'IDLE';
@@ -70,7 +72,7 @@ export const setupV3Runtime = ({
   let updateCount = 0;
   if (profileHotReloadFPS) {
     setInterval(() => {
-      if (updateCount > 0) {
+      if (debug && updateCount > 0) {
         console.log(
           updateCount +
             ' hot reload' +
@@ -154,7 +156,9 @@ export const setupV3Runtime = ({
       // } else {
       window.onmessage = ({ data }) => {
         if (data.type === 'runDone') {
-          console.log('got run done');
+          if (debug) {
+            console.log('got run done');
+          }
           resolve();
         }
       };

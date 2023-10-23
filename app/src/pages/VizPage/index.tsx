@@ -1,14 +1,12 @@
 import { useCallback, useEffect, useState } from 'react';
 import {
   Content,
-  FileId,
   Info,
   Snapshot,
   User,
   VizId,
 } from 'entities';
 import { VizKit } from 'api/src/VizKit';
-import { diff } from 'ot';
 import {
   getConnection,
   useData,
@@ -23,11 +21,8 @@ import { VizPageBody } from './VizPageBody';
 // VZCode
 // @ts-ignore
 import { Files, ShareDBDoc } from 'vzcode';
-import { randomId } from 'vzcode/src/randomId';
-import PrettierWorker from 'vzcode/src/client/usePrettier/worker.ts?worker';
+
 import { SplitPaneResizeProvider } from 'vzcode/src/client/SplitPaneResizeContext';
-import { usePrettier } from 'vzcode/src/client/usePrettier';
-import { useEditorCache } from 'vzcode/src/client/useEditorCache';
 
 import { VizPageToasts } from './VizPageToasts';
 import { useOnFork } from './useOnFork';
@@ -36,11 +31,6 @@ import { getRuntimeVersion } from '../../accessors/getRuntimeVersion';
 import { generateExportZipV2 } from './export/generateExportZipV2';
 import { generateExportZipV3 } from './export/generateExportZipV3';
 import './styles.scss';
-
-let prettierWorker: Worker | null = null;
-if (typeof window !== 'undefined') {
-  prettierWorker = new PrettierWorker();
-}
 
 const vizKit = VizKit({ baseUrl: '/api' });
 
