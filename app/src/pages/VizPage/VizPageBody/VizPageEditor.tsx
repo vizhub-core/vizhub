@@ -32,11 +32,13 @@ export const VizPageEditor = ({
   content,
   contentShareDBDoc,
   contentShareDBDocPresence,
+  initialSrcdocError,
 }: {
   showEditor: boolean;
   content: Content | null;
   contentShareDBDoc: ShareDBDoc<Content>;
   contentShareDBDocPresence: any;
+  initialSrcdocError: string | null;
 }) => {
   const submitOperation = useSubmitOperation(
     contentShareDBDoc,
@@ -142,7 +144,12 @@ export const VizPageEditor = ({
             />
           ) : null}
           <PrettierErrorOverlay
-            prettierError={prettierError}
+            prettierError={
+              // TODO clear this out on local build
+              initialSrcdocError
+                ? initialSrcdocError
+                : prettierError
+            }
           />
           <PresenceNotifications
             docPresence={docPresence}

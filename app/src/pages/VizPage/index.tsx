@@ -43,6 +43,7 @@ export type VizPageData = PageData & {
   authenticatedUserSnapshot: Snapshot<User> | null;
   initialReadmeHTML: string;
   initialSrcdoc: string;
+  initialSrcdocError: string | null;
   canUserEditViz: boolean;
 };
 
@@ -61,8 +62,16 @@ export const VizPage: Page = ({
     forkedFromInfoSnapshot,
     forkedFromOwnerUserSnapshot,
     initialSrcdoc,
+    initialSrcdocError,
     canUserEditViz,
   } = pageData;
+
+  // Present the initial srcdoc error in the console.
+  // TODO make this better UX - perhaps leverage
+  // vzcode error overlay?
+  if (initialSrcdocError !== null) {
+    console.error(initialSrcdocError);
+  }
 
   // /////////////////////////////////////////
   /////////////// ShareDB ////////////////////
@@ -349,6 +358,7 @@ export const VizPage: Page = ({
             toggleSettingsModal,
             onSettingsSave,
             initialSrcdoc,
+            initialSrcdocError,
             canUserEditViz,
           }}
         />

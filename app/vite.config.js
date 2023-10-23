@@ -22,5 +22,11 @@ export default defineConfig({
   // See https://github.com/curran/rollup-v4-browser-vite-demo/
   optimizeDeps: {
     exclude: ['@rollup/browser'],
+
+    // Fixes "React is undefined" error with VZCode imports
+    // See https://github.com/vitejs/vite-plugin-react/issues/192#issuecomment-1627384670
+    esbuildOptions: {
+      jsx: 'automatic',
+    },
   },
 });

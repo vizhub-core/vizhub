@@ -157,16 +157,23 @@ VizPage.getPageData = async ({
     const runtimeVersion: number =
       getRuntimeVersion(content);
 
-    const initialSrcdoc =
-      runtimeVersion === 2
-        ? await computeSrcDocV2(content)
-        : await computeSrcDocV3(
-            await build({
-              files: toV3RuntimeFiles(content.files),
-              enableSourcemap: true,
-              rollup,
-            }),
-          );
+    let initialSrcdoc = '';
+    let initialSrcdocError = null;
+
+    try {
+      initialSrcdoc =
+        runtimeVersion === 2
+          ? await computeSrcDocV2(content)
+          : await computeSrcDocV3(
+              await build({
+                files: toV3RuntimeFiles(content.files),
+                enableSourcemap: true,
+                rollup,
+              }),
+            );
+    } catch (e) {
+      initialSrcdocError = e.toString();
+    }
 
     return {
       infoSnapshot,
@@ -178,6 +185,7 @@ VizPage.getPageData = async ({
       authenticatedUserSnapshot,
       initialReadmeHTML,
       initialSrcdoc,
+      initialSrcdocError,
       canUserEditViz,
     };
   } catch (e) {

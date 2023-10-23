@@ -69,6 +69,7 @@ export const VizPageBody = ({
   toggleSettingsModal,
   onSettingsSave,
   initialSrcdoc,
+  initialSrcdocError,
   canUserEditViz,
 }: {
   info: Info;
@@ -98,6 +99,7 @@ export const VizPageBody = ({
   toggleSettingsModal: () => void;
   onSettingsSave: (vizSettings: VizSettings) => void;
   initialSrcdoc: string;
+  initialSrcdocError: string | null;
   canUserEditViz: boolean;
 }) => {
   // The currently authenticated user, if any.
@@ -247,6 +249,7 @@ export const VizPageBody = ({
           contentShareDBDocPresence={
             contentShareDBDocPresence
           }
+          initialSrcdocError={initialSrcdocError}
           // showForkModal={showForkModal}
           // toggleForkModal={toggleForkModal}
           // initialReadmeHTML={initialReadmeHTML}
