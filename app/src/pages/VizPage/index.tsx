@@ -1,5 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
 import {
+  Files,
+  ShareDBDoc,
+  SplitPaneResizeProvider,
+} from 'vzcode';
+import {
   Content,
   Info,
   Snapshot,
@@ -17,13 +22,6 @@ import {
 import { AuthenticatedUserProvider } from '../../contexts/AuthenticatedUserContext';
 import { Page, PageData } from '../Page';
 import { VizPageBody } from './VizPageBody';
-
-// VZCode
-// @ts-ignore
-import { Files, ShareDBDoc } from 'vzcode';
-
-import { SplitPaneResizeProvider } from 'vzcode/src/client/SplitPaneResizeContext';
-
 import { VizPageToasts } from './VizPageToasts';
 import { useOnFork } from './useOnFork';
 import { useOnSettingsSave } from './useOnSettingsSave';

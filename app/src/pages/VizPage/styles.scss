@@ -67,3 +67,40 @@ $mobile-breakpoint: 550px;
   width: 100%;
   height: 100%;
 }
+
+//////////////// Begin pasted block ////////////////
+// TODO reduce duplication with `vzcode/src/client/style.scss`
+:root {
+  --vzcode-font-family: ui-monospace, SFMono-Regular,
+    'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace !important;
+
+  --vzcode-font-size: 16px;
+
+  /* Variable for the background color */
+  --vz-bg-color: rgb(
+    41,
+    44,
+    52
+  ); /* Variable for the background color */
+}
+
+/* Scrollbar Styles */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--app-bg-color);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+//////////////// End pasted block ////////////////

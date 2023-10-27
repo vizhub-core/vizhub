@@ -23,7 +23,6 @@ import {
   useEditorCache,
   useDynamicTheme,
   createInitialState,
-  SplitPaneResizeProvider,
 } from 'vzcode';
 
 import PrettierWorker from 'vzcode/src/client/usePrettier/worker.ts?worker';
@@ -143,66 +142,63 @@ export const VizPageEditor = ({
     ? content.files
     : null;
 
-  return (
-    <SplitPaneResizeProvider>
-      <div className="app">
-        <div className="left">
-          <VZSidebar
-            files={files}
-            createFile={createFile}
-            renameFile={renameFile}
-            deleteFile={deleteFile}
-            deleteDirectory={deleteDirectory}
-            openTab={openTab}
-            setIsSettingsOpen={setIsSettingsOpen}
-            isDirectoryOpen={isDirectoryOpen}
-            toggleDirectory={toggleDirectory}
-            activeFileId={activeFileId}
-          />
-          <VZSettings
-            show={isSettingsOpen}
-            onClose={closeSettings}
-            theme={theme}
-            setTheme={setTheme}
-            username={username}
-            setUsername={setUsername}
-          />
-        </div>
-        <div className="right">
-          <TabList
-            files={files}
-            tabList={tabList}
-            activeFileId={activeFileId}
-            setActiveFileId={setActiveFileId}
-            openTab={openTab}
-            closeTabs={closeTabs}
-            createFile={createFile}
-          />
-          {content && activeFileId ? (
-            <CodeEditor
-              shareDBDoc={shareDBDoc}
-              submitOperation={submitOperation}
-              localPresence={localPresence}
-              docPresence={docPresence}
-              activeFileId={activeFileId}
-              theme={theme}
-              editorCache={editorCache}
-              editorWantsFocus={editorWantsFocus}
-              editorNoLongerWantsFocus={
-                editorNoLongerWantsFocus
-              }
-              username={username}
-            />
-          ) : null}
-          <CodeErrorOverlay errorMessage={errorMessage} />
-          <PresenceNotifications
-            docPresence={docPresence}
-            localPresence={localPresence}
-          />
-        </div>
-        <Resizer />
+  return showEditor && files ? (
+    <>
+      <div className="left">
+        <VZSidebar
+          files={files}
+          createFile={createFile}
+          renameFile={renameFile}
+          deleteFile={deleteFile}
+          deleteDirectory={deleteDirectory}
+          openTab={openTab}
+          setIsSettingsOpen={setIsSettingsOpen}
+          isDirectoryOpen={isDirectoryOpen}
+          toggleDirectory={toggleDirectory}
+          activeFileId={activeFileId}
+        />
+        <VZSettings
+          show={isSettingsOpen}
+          onClose={closeSettings}
+          theme={theme}
+          setTheme={setTheme}
+          username={username}
+          setUsername={setUsername}
+        />
       </div>
-    </SplitPaneResizeProvider>
-  );
-  return null;
+      <div className="middle">
+        <TabList
+          files={files}
+          tabList={tabList}
+          activeFileId={activeFileId}
+          setActiveFileId={setActiveFileId}
+          openTab={openTab}
+          closeTabs={closeTabs}
+          createFile={createFile}
+        />
+        {content && activeFileId ? (
+          <CodeEditor
+            shareDBDoc={shareDBDoc}
+            submitOperation={submitOperation}
+            localPresence={localPresence}
+            docPresence={docPresence}
+            activeFileId={activeFileId}
+            theme={theme}
+            editorCache={editorCache}
+            editorWantsFocus={editorWantsFocus}
+            editorNoLongerWantsFocus={
+              editorNoLongerWantsFocus
+            }
+            username={username}
+          />
+        ) : null}
+        <CodeErrorOverlay errorMessage={errorMessage} />
+        <PresenceNotifications
+          docPresence={docPresence}
+          localPresence={localPresence}
+        />
+      </div>
+      <Resizer />
+    </>
+  ) : null;
 };

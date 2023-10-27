@@ -5,12 +5,9 @@ import {
   useEffect,
   useMemo,
   useRef,
-  useState,
 } from 'react';
-
 import type { ShareDBDoc } from 'vzcode';
 import { SplitPaneResizeContext } from 'vzcode';
-
 import {
   defaultVizWidth,
   Content,
@@ -24,7 +21,6 @@ import {
 import { VizPageHead } from 'components/src/components/VizPageHead';
 import { ForkModal } from 'components/src/components/ForkModal';
 import { SettingsModal } from 'components/src/components/SettingsModal';
-import { RenameFileModal } from 'components/src/components/RenameFileModal';
 import { VizPageViewer } from 'components/src/components/VizPageViewer';
 
 import { AuthenticatedUserContext } from '../../../contexts/AuthenticatedUserContext';
@@ -43,12 +39,9 @@ import { getPackageJson } from '../../../accessors/getPackageJson';
 
 import { useRuntime } from '../useRuntime';
 import type { PackageJson } from '../v3Runtime/types';
-import { VizSettings } from './useOnSettingsSave';
 import { useRenderMarkdownHTML } from './useRenderMarkdownHTML';
 import { VizPageEditor } from './VizPageEditor';
-
-// The fixed path of the files in the ShareDB<Content> document.
-const filesPath = ['files'];
+import { VizSettings } from '../useOnSettingsSave';
 
 export const VizPageBody = ({
   info,
