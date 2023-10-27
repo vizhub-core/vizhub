@@ -1,5 +1,5 @@
 import Worker from './worker.ts?worker';
-import { V3RuntimeFiles } from './types';
+import { BuildResult, V3RuntimeFiles } from './types';
 
 // Flag for debugging.
 const debug = false;
@@ -22,9 +22,11 @@ const PENDING_DIRTY = 'PENDING_DIRTY';
 
 export const setupV3Runtime = ({
   iframe, // initialFiles,
+  setSrcdocError,
 }: {
   iframe: HTMLIFrameElement;
   // initialFiles: V3RuntimeFiles;
+  setSrcdocError: (error: string | null) => void;
 }) => {
   const worker = new Worker();
 
@@ -46,6 +48,14 @@ export const setupV3Runtime = ({
   //  * PENDING_DIRTY --> ENQUEUED
   //    When the pending update finishes running
   //    and files were changed in the mean time.
+  //
+  // When a build error happens, the state is set to IDLE.
+  // This is to prevent a build error from causing
+  // the whole system to stop working.
+  //
+  // Valid State Transitions (with build errors):
+  // TODO complete this section
+
   let state:
     | typeof IDLE
     | typeof ENQUEUED
@@ -108,12 +118,7 @@ export const setupV3Runtime = ({
 
   const build = (
     files: V3RuntimeFiles,
-  ): Promise<{
-    // TODO iterate these types - first pass only here
-    src: string;
-    pkg: string;
-    warnings: string[];
-  }> =>
+  ): Promise<BuildResult> =>
     new Promise((resolve) => {
       worker.onmessage = ({ data }) => {
         const { errors, warnings, src, pkg, time } = data;
@@ -131,29 +136,48 @@ export const setupV3Runtime = ({
           }
         }
 
-        if (errors.length > 0) {
-          return console.log(errors);
-        }
-        if (warnings.length > 0) {
-          return console.log(warnings);
-        }
+        // if (errors.length > 0) {
+        //   return console.log(errors);
+        // }
+        // if (warnings.length > 0) {
+        //   return console.log(warnings);
+        // }
 
-        resolve({ src, pkg, warnings });
+        resolve({ src, pkg, errors, warnings });
       };
       worker.postMessage({ files, enableSourcemap: true });
     });
 
-  // const enableClientSideSrcdocInit = false;
-
-  // let isFirstRun = enableClientSideSrcdocInit;
-  const run = ({ src, warnings }): Promise<void> =>
+  // Runs the latest code.
+  // TODO reset srcdoc when dependencies change
+  const run = ({
+    src,
+    warnings,
+    errors,
+  }: BuildResult): Promise<void> =>
     new Promise((resolve) => {
-      // if (isFirstRun) {
-      //   isFirstRun = false;
-      //   // TODO reset srcdoc when dependencies change
-      //   // iframe.srcdoc = computeSrcDocV3({ pkg, src });
-      //   resolve();
-      // } else {
+      // If there were build errors,
+      // display them and don't run.
+      if (errors.length > 0) {
+        setSrcdocError(errors.join('\n\n'));
+        resolve();
+        return;
+      }
+
+      // If we're here, then there were no build errors.
+
+      // If there were build warnings,
+      // display them.
+      if (warnings.length > 0) {
+        // TODO distinguish between warnings and errors in UI
+        setSrcdocError(warnings.join('\n\n'));
+      } else {
+        // If there were no warnings,
+        // clear the error message.
+        setSrcdocError(null);
+      }
+
+      // Run the code.
       window.onmessage = ({ data }) => {
         if (data.type === 'runDone') {
           if (debug) {
@@ -166,11 +190,6 @@ export const setupV3Runtime = ({
         { type: 'runJS', src },
         '*',
       );
-      if (warnings.length > 0) {
-        // TODO show warnings nicely
-        console.log(warnings);
-      }
-      // }
     });
 
   // Kick off the initial render

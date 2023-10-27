@@ -5,6 +5,7 @@ import {
   useEffect,
   useMemo,
   useRef,
+  useState,
 } from 'react';
 
 import type { ShareDBDoc } from 'vzcode';
@@ -156,8 +157,19 @@ export const VizPageBody = ({
   const iframeRef: RefObject<HTMLIFrameElement> =
     useRef<HTMLIFrameElement>(null);
 
+  // TODO clear this out on local build
+  // TODO update this from client-side Rollup errors
+  // const [srcdocError, setSrcdocError] = useState<
+  //   string | null
+  // >(initialSrcdocError);
+  const srcdocError = initialSrcdocError;
+
+  const setSrcdocError = (srcdocError: string | null) => {
+    console.log('setSrcdocError', srcdocError);
+  };
+
   // Set up the runtime environment.
-  useRuntime({ content, iframeRef });
+  useRuntime({ content, iframeRef, setSrcdocError });
 
   // Render the viz runner iframe.
   const renderVizRunner = useCallback(
@@ -249,7 +261,7 @@ export const VizPageBody = ({
           contentShareDBDocPresence={
             contentShareDBDocPresence
           }
-          initialSrcdocError={initialSrcdocError}
+          srcdocError={srcdocError}
           // showForkModal={showForkModal}
           // toggleForkModal={toggleForkModal}
           // initialReadmeHTML={initialReadmeHTML}

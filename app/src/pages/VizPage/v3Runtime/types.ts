@@ -20,10 +20,18 @@ export type PackageJson = {
   };
   license?: License;
 };
+// export type BuildResult = {
+//   errors: any[];
+//   warnings: any[];
+//   src: string;
+//   pkg?: PackageJson;
+//   time: number;
+// };
+
 export type BuildResult = {
-  errors: any[];
-  warnings: any[];
+  // TODO iterate types for `src` and `pkg`
   src: string;
-  pkg?: PackageJson;
-  time: number;
+  pkg: string;
+  errors: Array<string>;
+  warnings: Array<string>;
 };

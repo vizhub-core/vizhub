@@ -66,13 +66,6 @@ export const VizPage: Page = ({
     canUserEditViz,
   } = pageData;
 
-  // Present the initial srcdoc error in the console.
-  // TODO make this better UX - perhaps leverage
-  // vzcode error overlay?
-  if (initialSrcdocError !== null) {
-    console.error(initialSrcdocError);
-  }
-
   // /////////////////////////////////////////
   /////////////// ShareDB ////////////////////
   // /////////////////////////////////////////
@@ -87,20 +80,6 @@ export const VizPage: Page = ({
     contentSnapshot,
     contentShareDBDoc,
   );
-
-  // // A helper function to submit operations to the ShareDB document.
-  // const submitOperation: (
-  //   next: (content: Content) => Content,
-  // ) => void = useCallback(
-  //   (next) => {
-  //     const content: Content = contentShareDBDoc.data;
-  //     const op = diff(content, next(content));
-  //     if (op && contentShareDBDoc) {
-  //       contentShareDBDoc.submitOp(op);
-  //     }
-  //   },
-  //   [contentShareDBDoc],
-  // );
 
   const contentShareDBDocPresence = useShareDBDocPresence(
     id,
@@ -323,12 +302,6 @@ export const VizPage: Page = ({
       `event.pageview.viz.owner:${ownerUser.id}.viz:${info.id}`,
     );
   }, []);
-
-  ////////////////////////////////////////////
-  ///////////////// VZCode ///////////////////
-  ////////////////////////////////////////////
-
-  // TODO try to deduplicate with stuff in vzcode App.tsx
 
   return (
     <AuthenticatedUserProvider

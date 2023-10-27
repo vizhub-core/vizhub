@@ -158,7 +158,7 @@ VizPage.getPageData = async ({
       getRuntimeVersion(content);
 
     let initialSrcdoc = '';
-    let initialSrcdocError = null;
+    let initialSrcdocError: string | null = null;
 
     try {
       initialSrcdoc =

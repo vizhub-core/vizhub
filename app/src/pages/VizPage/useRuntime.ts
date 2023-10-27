@@ -14,9 +14,11 @@ import { V3RuntimeFiles } from './v3Runtime/types';
 export const useRuntime = ({
   iframeRef,
   content,
+  setSrcdocError,
 }: {
   iframeRef: RefObject<HTMLIFrameElement>;
   content: Content;
+  setSrcdocError: (error: string | null) => void;
 }) => {
   // This ref is used to skip the first mount.
   const initialMount = useRef(true);
@@ -45,6 +47,7 @@ export const useRuntime = ({
           v3Runtime.current = setupV3Runtime({
             iframe,
             // initialFiles,
+            setSrcdocError,
           });
 
           // TODO expose handleCodeChange so we can
@@ -96,9 +99,17 @@ export const useRuntime = ({
         );
 
         // console.log(computeSrcDoc);
-        const srcdoc = await computeSrcDocV2(content);
-        if (iframeRef.current) {
-          iframeRef.current.srcdoc = srcdoc;
+        try {
+          const srcdoc = await computeSrcDocV2(content);
+          if (iframeRef.current) {
+            iframeRef.current.srcdoc = srcdoc;
+          }
+        } catch (e) {
+          // TODO QA this code path, ideally add tests
+          console.log(
+            'TODO QA this code path, ideally add tests',
+          );
+          setSrcdocError(e.message);
         }
       }, 800);
 
