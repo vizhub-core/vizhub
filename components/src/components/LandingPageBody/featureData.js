@@ -64,7 +64,7 @@ export const featureData = [
   },
   {
     sectionHeader: 'Never Lose Work',
-    title: 'Revision Histories',
+    title: 'Revision History',
     description:
       'Every change archived. Navigate back in time, compare versions, and always pick up right where you left off.',
     cta: 'See How',
