@@ -1,13 +1,13 @@
 export const featureData = [
-  {
-    sectionHeader: 'Captivating Introduction',
-    title: 'Unleash Visualization Magic',
-    description:
-      'Discover VizHub, the ultimate platform for creating, sharing, and exploring dynamic data visualizations.',
-    cta: 'Explore Now',
-    imageDescription:
-      'A mesmerizing animated visualization, perhaps a swirling interactive globe or particle flow.',
-  },
+  // {
+  //   sectionHeader: 'Captivating Introduction',
+  //   title: 'Unleash Visualization Magic',
+  //   description:
+  //     'Discover VizHub, the ultimate platform for creating, sharing, and exploring dynamic data visualizations.',
+  //   cta: 'Explore Now',
+  //   imageDescription:
+  //     'A mesmerizing animated visualization, perhaps a swirling interactive globe or particle flow.',
+  // },
   {
     sectionHeader: 'Collaboration Made Easy',
     title: 'Collaborate in Real-Time',

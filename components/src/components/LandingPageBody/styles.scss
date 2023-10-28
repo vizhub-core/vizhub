@@ -7,14 +7,11 @@
 
   .vh-landing-page-hero {
     width: 100%;
-    // min-height: 600px;
-    // background-color: #393939;
-    // Dark gradient
-    background: linear-gradient(
-      180deg,
-      rgba(57, 57, 57, 1) 0%,
-      rgba(0, 0, 0, 1) 100%
-    );
+
+    background-image: url('https://github.com/vizhub-core/vizhub-legacy/assets/68416/4e18e38b-0449-4ff5-bf0c-2d84385d32e7');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
 
     display: flex;
     justify-content: space-between;
@@ -24,21 +21,22 @@
       flex-direction: column;
       align-items: flex-start;
       justify-content: space-between;
-      padding: 60px;
-      flex: 1;
+      padding: 60px 60px 120px 120px;
+      max-width: 900px;
 
       .vh-landing-page-hero__title {
-        font-size: 90px;
+        font-size: 60px;
         font-weight: 600;
         margin-bottom: 1rem;
         color: rgba(255, 255, 255, 0.9);
       }
 
       .vh-landing-page-hero__description {
-        font-size: 32px;
+        font-size: 24px;
         font-weight: 400;
         margin-bottom: 2rem;
         color: rgba(255, 255, 255, 0.9);
+        max-width: 450px;
       }
 
       .vh-landing-page-hero__button {
@@ -52,60 +50,68 @@
         cursor: pointer;
       }
     }
-
-    .vh-landing-page-hero__image {
-      flex: 1.2;
-      background-color: #9e9e9e;
-      // width: 600px;
-      height: 100%;
-      font-size: 12px;
-      padding: 30px;
-    }
+    // .vh-landing-page-hero__image {
+    //   flex: 1;
+    // }
   }
 
-  .feature {
-    max-width: 960px;
-    margin: 30px;
-    // Add a background color to the feature
-    background-color: white;
-    padding: 35px;
-    gap: 35px;
-    border-radius: 20px;
+  .vh-landing-page-features {
     display: flex;
-    justify-content: space-between;
+    // flex-wrap: wrap;
+    flex-direction: column;
 
-    .feature__group {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      // justify-content: space-between;
-      align-items: flex-start;
-    }
-
-    .feature__header {
-      font-size: 32px;
-    }
-    .feature__title {
-      font-size: 20px;
+    .vh-landing-page-features__title {
+      font-size: 42px;
       font-weight: 600;
-      margin-bottom: 1rem;
-      color: #9e9e9e;
-    }
-
-    .feature__description {
-      font-size: 16px;
-      font-weight: 400;
-      margin-bottom: 1rem;
+      margin: 60px 0 30px 0;
       color: rgba(0, 0, 0, 0.9);
     }
+    .feature {
+      max-width: 960px;
+      margin: 30px 0;
+      // Add a background color to the feature
+      background-color: white;
+      padding: 35px;
+      gap: 35px;
+      border-radius: 40px;
+      display: flex;
+      justify-content: space-between;
 
-    .feature__image {
-      background-color: #9e9e9e;
-      width: 400px;
-      height: 300px;
-      border-radius: 10px;
-      font-size: 12px;
-      padding: 30px;
+      box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.1);
+
+      .feature__group {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        // justify-content: space-between;
+        align-items: flex-start;
+      }
+
+      .feature__header {
+        font-size: 32px;
+      }
+      .feature__title {
+        font-size: 20px;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: #9e9e9e;
+      }
+
+      .feature__description {
+        font-size: 16px;
+        font-weight: 400;
+        margin-bottom: 1rem;
+        color: rgba(0, 0, 0, 0.9);
+      }
+
+      .feature__image {
+        background-color: #9e9e9e;
+        width: 400px;
+        height: 300px;
+        border-radius: 10px;
+        font-size: 12px;
+        padding: 30px;
+      }
     }
   }
 }
