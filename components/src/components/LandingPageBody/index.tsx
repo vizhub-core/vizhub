@@ -174,9 +174,33 @@ const ImageSection = ({ feature }) => {
     </div>
   );
 };
+
+// Put the image
+// Who can use it
+// Title on features section
+
+const HeroSection = () => {
+  return (
+    <div className="vh-landing-page-hero">
+      <div className="vh-landing-page-hero__content">
+        <div className="vh-landing-page-hero__title">
+          Unleash Visualization Magic
+        </div>
+        <div className="vh-landing-page-hero__description">
+          Discover VizHub, the ultimate platform for
+          creating, sharing, and exploring dynamic data
+          visualizations.
+        </div>
+        <Button>Explore Now</Button>
+      </div>
+      <div className="vh-landing-page-hero__image"></div>
+    </div>
+  );
+};
 export const LandingPageBody = () => {
   return (
     <div className="vh-page vh-landing-page-body">
+      <HeroSection />
       {featureData.map((feature, index) => (
         <div className="feature">
           {index % 2 === 0 ? (
