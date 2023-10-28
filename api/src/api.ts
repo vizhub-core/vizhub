@@ -14,10 +14,14 @@ import { endpoints } from './endpoints';
 //   message,
 // });
 
-export const api = async ({ app, gateways }) => {
+export const api = async ({
+  app,
+  gateways,
+  shareDBConnection,
+}) => {
   // Set up endpoints
   for (const endpoint of endpoints) {
-    endpoint({ app, gateways });
+    endpoint({ app, gateways, shareDBConnection });
   }
 
   // TODO test the auto-scaling using this

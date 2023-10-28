@@ -32,6 +32,8 @@ if (typeof window !== 'undefined') {
   prettierWorker = new PrettierWorker();
 }
 
+const aiAssistEndpoint = '/api/ai-assist';
+
 export const VizPageEditor = ({
   showEditor,
   content,
@@ -142,6 +144,11 @@ export const VizPageEditor = ({
     ? content.files
     : null;
 
+  // AI assist needs to know which viz we're in.
+  const aiAssistOptions = {
+    vizId: content?.id,
+  };
+
   return showEditor && files ? (
     <>
       <div className="left">
@@ -190,6 +197,8 @@ export const VizPageEditor = ({
               editorNoLongerWantsFocus
             }
             username={username}
+            aiAssistEndpoint={aiAssistEndpoint}
+            aiAssistOptions={aiAssistOptions}
           />
         ) : null}
         <CodeErrorOverlay errorMessage={errorMessage} />

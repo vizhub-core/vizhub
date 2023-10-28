@@ -53,6 +53,7 @@ export const initializeGateways = async ({
   return {
     gateways,
     shareDBBackend,
+    shareDBConnection,
     mongoDBDatabase,
     mongoDBConnection,
   };
