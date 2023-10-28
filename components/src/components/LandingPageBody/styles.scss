@@ -1,5 +1,54 @@
-.vh-home-page-body {
+.vh-landing-page-body {
   flex: 1;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  overflow: auto;
+
+  .feature {
+    max-width: 960px;
+    margin: 30px;
+    // Add a background color to the feature
+    background-color: white;
+    padding: 35px;
+    gap: 35px;
+    border-radius: 20px;
+    display: flex;
+    justify-content: space-between;
+
+    .feature__group {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      // justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .feature__header {
+      font-size: 32px;
+    }
+    .feature__title {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: #9e9e9e;
+    }
+
+    .feature__description {
+      font-size: 16px;
+      font-weight: 400;
+      margin-bottom: 1rem;
+      color: rgba(0, 0, 0, 0.9);
+    }
+
+    .feature__image {
+      // Gray background
+      background-color: #9e9e9e;
+      width: 400px;
+      height: 300px;
+      border-radius: 10px;
+      font-size: 12px;
+      padding: 30px;
+    }
+  }
 }
