@@ -11,6 +11,8 @@ import './styles.scss';
 
 export const VizPageViewer = ({
   vizTitle,
+  setVizTitle,
+  enableEditingTitle,
   vizHeight,
   renderVizRunner,
   renderMarkdownHTML,
@@ -40,6 +42,48 @@ export const VizPageViewer = ({
     alert('TODO handle upvoting');
   }, []);
 
+  // Editable title functionality
+  const [isEditingTitle, setIsEditingTitle] =
+    useState(false);
+  const [editableTitle, setEditableTitle] =
+    useState(vizTitle);
+
+  // const handleRenameIconClick = () => {
+  //   setIsEditingTitle(true);
+  // };
+
+  // const handleTitleChange = (e) => {
+  //   setEditableTitle(e.target.value);
+  // };
+
+  // const handleTitleSubmit = () => {
+  //   setVizTitle(editableTitle);
+  //   setIsEditingTitle(false);
+  // };
+
+  const handleRenameIconClick = useCallback(() => {
+    setIsEditingTitle(true);
+  }, []);
+
+  const handleTitleChange = useCallback((e) => {
+    setEditableTitle(e.target.value);
+  }, []);
+
+  const handleTitleSubmit = useCallback(() => {
+    setVizTitle(editableTitle);
+    setIsEditingTitle(false);
+  }, [editableTitle, setVizTitle]);
+
+  const handleTitleKeyDown = useCallback(
+    (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault(); // to prevent a newline or any default behavior
+        handleTitleSubmit();
+      }
+    },
+    [handleTitleSubmit],
+  );
+
   useEffect(() => {
     const resizeObserver = new ResizeObserver(() => {
       const { clientWidth } = svgRef.current;
@@ -60,8 +104,29 @@ export const VizPageViewer = ({
           {renderVizRunner(iframeScale)}
         </div>
         <div className="title-bar">
-          <h4>{vizTitle}</h4>
+          {isEditingTitle ? (
+            <input
+              value={editableTitle}
+              onChange={handleTitleChange}
+              onBlur={handleTitleSubmit}
+              onKeyDown={handleTitleKeyDown}
+              autoFocus
+            />
+          ) : (
+            <h4>{vizTitle}</h4>
+          )}
           <div className="title-bar-right">
+            {enableEditingTitle ? (
+              <i
+                className="bx bxs-edit utilities"
+                style={{
+                  color: 'rgba(0,0,0,0.5)',
+                  cursor: 'pointer',
+                }}
+                onClick={handleRenameIconClick}
+                title="Edit viz title"
+              ></i>
+            ) : null}
             <UpvoteWidget
               upvotesCount={upvotesCount}
               onClick={handleUpvoteClick}

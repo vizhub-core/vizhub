@@ -29,6 +29,7 @@ import { getRuntimeVersion } from '../../accessors/getRuntimeVersion';
 import { generateExportZipV2 } from './export/generateExportZipV2';
 import { generateExportZipV3 } from './export/generateExportZipV3';
 import './styles.scss';
+import { useSetVizTitle } from './useSetVizTitle';
 
 const vizKit = VizKit({ baseUrl: '/api' });
 
@@ -290,6 +291,9 @@ export const VizPage: Page = ({
     toggleSettingsModal,
   );
 
+  // Saves the title when the user edits it.
+  const setVizTitle = useSetVizTitle(infoShareDBDoc);
+
   // /////////////////////////////////////////
   /////////////// Analytics///////////////////
   // /////////////////////////////////////////
@@ -331,6 +335,7 @@ export const VizPage: Page = ({
             initialSrcdoc,
             initialSrcdocError,
             canUserEditViz,
+            setVizTitle,
           }}
         />
       </SplitPaneResizeProvider>
