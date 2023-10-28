@@ -1,5 +1,104 @@
-.vh-home-page-body {
+.vh-landing-page-body {
   flex: 1;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  overflow: auto;
+
+  .hero {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    background-image: url('https://github.com/vizhub-core/vizhub-legacy/assets/68416/4e18e38b-0449-4ff5-bf0c-2d84385d32e7');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+
+    &__title {
+      font-size: 64px;
+      font-weight: 600;
+      margin-bottom: 24px;
+      color: white;
+    }
+
+    &__desc {
+      font-size: 32px;
+      font-weight: 400;
+      margin-bottom: 32px;
+      color: white;
+      max-width: 450px;
+    }
+
+    &__content {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding: 64px 64px 128px 128px;
+      max-width: 900px;
+    }
+  }
+
+  .features {
+    display: flex;
+    flex-direction: column;
+
+    &__title {
+      font-size: 42px;
+      font-weight: 600;
+      margin: 60px 0 30px 0;
+      color: rgba(0, 0, 0, 0.9);
+    }
+
+    .item {
+      max-width: 1200px;
+      margin: 32px 0;
+      background-color: white;
+      padding: 64px;
+      gap: 48px;
+      border-radius: 64px;
+      display: flex;
+      justify-content: space-between;
+      box-shadow: var(--vh-box-shadow);
+
+      &__group {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      &__header {
+        font-size: 14px;
+        text-transform: uppercase;
+        font-weight: 600;
+        margin-bottom: 32px;
+      }
+
+      &__title {
+        font-size: 64px;
+        margin-bottom: 1rem;
+        margin-bottom: 24px;
+      }
+
+      &__desc {
+        font-size: 18px;
+        margin-bottom: 1rem;
+        color: rgba(0, 0, 0, 0.9);
+        margin-bottom: 48px;
+      }
+
+      &__img {
+        background-color: #00000067;
+        width: 500px;
+        height: 100%;
+        border-radius: 6px;
+        font-size: 16px;
+        padding: 64px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+  }
 }

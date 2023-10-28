@@ -1,126 +1,66 @@
 import React from 'react';
-import {
-  Container,
-  Row,
-  Col,
-  Button,
-  Card,
-} from '../bootstrap';
+import { Button } from '../bootstrap';
+import { featureData } from './featureData';
+import './styles.scss';
 
-export const LandingPageBody = () => {
-  return (
-    <Container fluid className="p-5 bg-light">
-      <Container className="my-5">
-        <Row className="align-items-center">
-          <Col md={8}>
-            <h1>
-              Welcome to Our Data Visualization Platform!
-            </h1>
-            <p>
-              Revolutionizing the way you collaborate and
-              design data visualizations.
-            </p>
-            <Button variant="primary" href="#features">
-              Learn More
-            </Button>
-          </Col>
-        </Row>
-      </Container>
+const Hero = () => (
+  <div className="hero">
+    <div className="hero__content">
+      <div className="hero__title">
+        See Data Come to Life
+      </div>
+      <div className="hero__desc">
+        Discover VizHub, the ultimate platform for creating,
+        sharing, and exploring dynamic data visualizations.
+      </div>
+      <Button size="lg">Get Started </Button>
+    </div>
+  </div>
+);
 
-      <section id="features">
-        <Container>
-          <h2 className="mb-4">Key Features</h2>
-          <Row className="mb-3">
-            <Col>
-              <Card className="mb-3">
-                <Card.Body>
-                  <Card.Title>
-                    Browser-based Designing
-                  </Card.Title>
-                  <Card.Text>
-                    Enable designers to contribute to data
-                    visualization projects using just a
-                    browser, no local setup required.
-                  </Card.Text>
-                </Card.Body>
-              </Card>
-            </Col>
-            <Col>
-              <Card className="mb-3">
-                <Card.Body>
-                  <Card.Title>
-                    Real-time Mob Programming
-                  </Card.Title>
-                  <Card.Text>
-                    Collaborate seamlessly in real-time and
-                    enhance team synergy.
-                  </Card.Text>
-                </Card.Body>
-              </Card>
-            </Col>
-          </Row>
+const Content = ({ feature }) => (
+  <div className="item__group">
+    <div className="item__top">
+      <div className="item__header">
+        {feature.sectionHeader}
+      </div>
+      <div className="item__title">{feature.title}</div>
+    </div>
+    <div className="item__desc">{feature.description}</div>
+    <Button>{feature.cta}</Button>
+  </div>
+);
 
-          <Row className="mb-3">
-            <Col>
-              <Card className="mb-3">
-                <Card.Body>
-                  <Card.Title>
-                    AI-Assisted Coding
-                  </Card.Title>
-                  <Card.Text>
-                    Bring in an AI collaborator directly
-                    into your editor during mob programming
-                    sessions.
-                  </Card.Text>
-                </Card.Body>
-              </Card>
-            </Col>
-            <Col>
-              <Card className="mb-3">
-                <Card.Body>
-                  <Card.Title>
-                    Freedom with Vanilla JavaScript
-                  </Card.Title>
-                  <Card.Text>
-                    Author in Vanilla JavaScript and easily
-                    export your work without any platform
-                    lock-in.
-                  </Card.Text>
-                </Card.Body>
-              </Card>
-            </Col>
-          </Row>
+const Image = ({ feature }) => (
+  <div className="item__img">
+    {feature.imageDescription}
+  </div>
+);
 
-          <Row className="mb-3">
-            <Col>
-              <Card className="mb-3">
-                <Card.Body>
-                  <Card.Title>
-                    Streamlined Development
-                  </Card.Title>
-                  <Card.Text>
-                    Boost your team's efficiency in data
-                    visualization development.
-                  </Card.Text>
-                </Card.Body>
-              </Card>
-            </Col>
-            <Col>
-              <Card className="mb-3">
-                <Card.Body>
-                  <Card.Title>
-                    Immediate Client Feedback
-                  </Card.Title>
-                  <Card.Text>
-                    Action feedback instantly with real-time
-                    collaboration and hot reloading.
-                  </Card.Text>
-                </Card.Body>
-              </Card>
-            </Col>
-          </Row>
-        </Container>
-      </section>
-    </Container>
-  );
-};
+const Features = () => (
+  <div className="features">
+    <div className="features__title">FEATURES</div>
+    {featureData.map((feature, index) => (
+      <div key={feature.id || index} className="item">
+        {index % 2 === 0 ? (
+          <>
+            <Content feature={feature} />
+            <Image feature={feature} />
+          </>
+        ) : (
+          <>
+            <Image feature={feature} />
+            <Content feature={feature} />
+          </>
+        )}
+      </div>
+    ))}
+  </div>
+);
+
+export const LandingPageBody = () => (
+  <div className="vh-page vh-landing-page-body">
+    <Hero />
+    <Features />
+  </div>
+);

@@ -1,5 +1,6 @@
 import { AboutPage } from './AboutPage';
 import { HomePage } from './HomePage';
+import { LandingPage } from './LandingPage';
 import { ProfilePage } from './ProfilePage';
 import { VizPage } from './VizPage';
 import { BetaConfirmPage } from './BetaConfirmPage';
@@ -14,6 +15,7 @@ import { AccountPage } from './AccountPage';
 // Need to update `server.js` as well
 export const pages = [
   HomePage,
+  LandingPage,
   AboutPage,
   VizPage,
   ForksPage,
