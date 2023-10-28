@@ -15,17 +15,17 @@
     background-position: center center;
 
     &__title {
-      font-size: 60px;
+      font-size: 64px;
       font-weight: 600;
-      margin-bottom: 1rem;
-      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 24px;
+      color: white;
     }
 
     &__desc {
-      font-size: 24px;
+      font-size: 32px;
       font-weight: 400;
-      margin-bottom: 2rem;
-      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 32px;
+      color: white;
       max-width: 450px;
     }
 
@@ -34,7 +34,7 @@
       flex-direction: column;
       align-items: flex-start;
       justify-content: space-between;
-      padding: 60px 60px 120px 120px;
+      padding: 64px 64px 128px 128px;
       max-width: 900px;
     }
   }
@@ -55,7 +55,7 @@
       margin: 32px 0;
       background-color: white;
       padding: 64px;
-      gap: 64px;
+      gap: 48px;
       border-radius: 64px;
       display: flex;
       justify-content: space-between;
@@ -90,7 +90,7 @@
 
       &__img {
         background-color: #00000067;
-        width: 600px;
+        width: 500px;
         height: 100%;
         border-radius: 6px;
         font-size: 16px;

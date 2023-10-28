@@ -1,5 +1,6 @@
 export { Spinner } from './components/Spinner';
 export { HomePageBody } from './components/HomePageBody';
+export { LandingPageBody } from './components/LandingPageBody';
 export { Header } from './components/Header';
 export { VizPageHead } from './components/VizPageHead';
 export { ForkModal } from './components/ForkModal';

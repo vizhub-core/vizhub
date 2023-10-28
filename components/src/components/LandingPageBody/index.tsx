@@ -13,7 +13,7 @@ const Hero = () => (
         Discover VizHub, the ultimate platform for creating,
         sharing, and exploring dynamic data visualizations.
       </div>
-      <Button>Explore Now</Button>
+      <Button size="lg">Get Started </Button>
     </div>
   </div>
 );
