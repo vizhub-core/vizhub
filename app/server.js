@@ -158,7 +158,7 @@ async function createServer(
   const server = http.createServer(app);
 
   // Initialize gateways and database connections.
-  const { gateways, shareDBBackend } =
+  const { gateways, shareDBBackend, shareDBConnection } =
     await initializeGateways({
       isProd,
       env,
@@ -275,7 +275,7 @@ async function createServer(
   });
 
   // Set up the API endpoints.
-  await api({ app, isProd, gateways });
+  await api({ app, gateways, shareDBConnection });
 
   // Debug for testing sentry
   app.get('/debug-sentry', function mainHandler(req, res) {
