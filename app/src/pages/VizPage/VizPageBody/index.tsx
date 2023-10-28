@@ -65,6 +65,7 @@ export const VizPageBody = ({
   initialSrcdoc,
   initialSrcdocError,
   canUserEditViz,
+  setVizTitle,
 }: {
   info: Info;
   content: Content;
@@ -95,6 +96,7 @@ export const VizPageBody = ({
   initialSrcdoc: string;
   initialSrcdocError: string | null;
   canUserEditViz: boolean;
+  setVizTitle: (title: string) => void;
 }) => {
   // The currently authenticated user, if any.
   const authenticatedUser: User | null = useContext(
@@ -255,13 +257,6 @@ export const VizPageBody = ({
             contentShareDBDocPresence
           }
           srcdocError={srcdocError}
-          // showForkModal={showForkModal}
-          // toggleForkModal={toggleForkModal}
-          // initialReadmeHTML={initialReadmeHTML}
-          // showSettingsModal={showSettingsModal}
-          // toggleSettingsModal={toggleSettingsModal}
-          // initialSrcdoc={initialSrcdoc}
-          // canUserEditViz={canUserEditViz}
         />
 
         <div
@@ -271,6 +266,8 @@ export const VizPageBody = ({
         >
           <VizPageViewer
             vizTitle={info.title}
+            enableEditingTitle={canUserEditViz}
+            setVizTitle={setVizTitle}
             vizHeight={vizHeight}
             defaultVizWidth={defaultVizWidth}
             renderVizRunner={renderVizRunner}
