@@ -1,8 +1,74 @@
-.vh-pricing-page {
-  overflow: auto;
-  .card {
-    box-shadow: var(--vh-box-shadow);
-    background-color: white;
-    font-size: 18px;
+// theme.scss
+$defaultCodingFontFamily: 'SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace';
+$defaultCodingFontSize: 16px;
+$buttonHeight: 40px;
+$buttonHeightSmall: 30px;
+$background: #f6eee3;
+$dark: #161514;
+$lightText: #797979;
+$lightBorder: #e6e6e6;
+$attentionGrabber: #f0353d;
+$shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.15);
+$borderRadiusMedium: 4px;
+$mobileBreakpoint: 576px;
+
+.table {
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  box-shadow: $shadow;
+  border-radius: $borderRadiusMedium;
+  padding: 84px;
+  font-size: 16px;
+
+  @media (max-width: $mobileBreakpoint) {
+    padding: 10px;
+  }
+}
+
+.row {
+  margin: 24px 0;
+  display: flex;
+  align-items: center;
+}
+
+.left,
+.right {
+  flex: 1;
+}
+
+.right {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  max-width: 300px;
+}
+
+.feature-title {
+  font-size: map-get($text, 'large');
+}
+
+.plan-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.plan-label {
+  font-size: map-get($text, 'large');
+}
+
+.plan-subtext {
+  font-size: map-get($text, 'small');
+  margin-bottom: 10px;
+}
+
+.feature-description {
+  color: $lightText;
+  display: block;
+
+  @media (max-width: $mobileBreakpoint) {
+    display: none;
   }
 }
