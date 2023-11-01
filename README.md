@@ -6,7 +6,7 @@ VizHub Platform V3
 
 To develop locally, all you need is:
 
- * A local instance of MongoDB
+ * A local instance of MongoDB - see [Install MongoDB Community Edition on Ubuntu](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-ubuntu/#std-label-install-mdb-community-ubuntu)
  * NodeJS
 
 In the root (`vizhub3`) or in the `app` package (`vizhub3/app`), run the following to start the VizHub dev server:
