@@ -37,6 +37,15 @@
       padding: 64px 64px 128px 128px;
       max-width: 900px;
     }
+    .hero_section_button {
+      padding: 10px 20px; /* Some initial styling for the button */
+      transition: transform 0.3s ease; /* Smooth transformation */
+    }
+
+    .hero_section_button:hover {
+      transform: scale(1.1);
+      /* Enlarges the button by 10% */
+    }
   }
 
   .features {
