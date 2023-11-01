@@ -2,6 +2,21 @@
 
 VizHub Platform V3
 
+## Getting Started as a VizHub Developer
+
+To develop locally, all you need is:
+
+ * A local instance of MongoDB
+ * NodeJS
+
+In the root (`vizhub3`), run the following to start the VizHub dev server:
+
+```
+npm run dev
+```
+
+Note: you only ever need to run `npm run build` for a production build.
+
 ## Environment Variables
 
 To enable use of MongoDB in development:
