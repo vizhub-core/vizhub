@@ -4,6 +4,19 @@ VizHub Platform V3
 
 ## Getting Started as a VizHub Developer
 
+### UI Development Only
+
+If all you need to do is change UI, that is located in the `components` package:
+
+```
+cd vizhub3
+npm install
+cd components
+npm run dev
+```
+
+### Full Stack App Development
+
 To develop locally, all you need is:
 
  * A local instance of MongoDB - see [Install MongoDB Community Edition on Ubuntu](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-ubuntu/#std-label-install-mdb-community-ubuntu)
@@ -18,6 +31,13 @@ npm run dev
 To see what this script does, look at `package.json` in the `scripts` property.
 
 Note: you only need to run `npm run build` for a production build, not for local development.
+
+### Contribution Guidelines
+
+Please run Prettier on the code for each Pull Request.
+
+ * Suggested workflow: enable VSCode Prettier extension to format the document on save
+ * Alternative: run `npm run prettier` to format the code
 
 ## Environment Variables
 
