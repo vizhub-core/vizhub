@@ -15,18 +15,28 @@
     background-position: center center;
 
     &__title {
-      font-size: 64px;
-      font-weight: 600;
-      margin-bottom: 24px;
+      font-size: 80px;
+      //font-weight: 600;
+      margin-bottom: 14px;
       color: white;
+      font-family:"Cormorant Garamond", serif;
+    }
+    &__subtitle {
+      font-size: 30px;
+      font-weight: 00;
+      margin-bottom: 14px;
+      color: white;
+      max-width: 450px;
     }
 
     &__desc {
-      font-size: 32px;
-      font-weight: 400;
-      margin-bottom: 32px;
+      font-size: 20px;
+      font-weight: 0;
+      margin-bottom: 14px;
       color: white;
       max-width: 450px;
+      letter-spacing: 1px;
+
     }
 
     &__content {
@@ -38,14 +48,32 @@
       max-width: 900px;
     }
     .hero_section_button {
-      padding: 10px 20px;        /* Some initial styling for the button */
-      transition: transform 0.3s ease;  /* Smooth transformation */
-  }
-  
-  .hero_section_button:hover {
+      font-size: 16px;
+      letter-spacing: 1px;
+      padding: 8px 16px;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: 'Open Sans', sans-serif;
+      font-weight: 400;
+      display: inline-block;
+      line-height: 20px;
+      transition: all ease-in-out 0.3s;
+      margin-bottom: 14px;
+      /* Some initial styling for the button */
+      //transition: transform 0.3s ease;  /* Smooth transformation */
+    }
+
+    .hero_section_button:hover {
       transform: scale(1.1);
-                  /* Enlarges the button by 10% */
-  }
+      /* Enlarges the button by 10% */
+    }
+    &__bottomSection{
+      font-weight: 00;
+      color: #fff; 
+      fill-opacity: 0.95;  
+    }
   }
 
   .features {
@@ -108,7 +136,6 @@
         align-items: center;
         justify-content: center;
       }
-      
     }
   }
 }

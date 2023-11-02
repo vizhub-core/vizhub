@@ -6,15 +6,26 @@ import './styles.scss';
 const Hero = () => (
   <div className="hero">
     <div className="hero__content">
-      <div className="hero__title">
-        See Data Come to Life
+      <div className="hero__title">Joy of Visualizing</div>
+      <div className="hero__subtitle">
+        <p>
+          Embark on Your Visualization Journey with VizHub!
+        </p>
       </div>
       <div className="hero__desc">
-        Discover VizHub, the ultimate platform for creating,
-        sharing, and exploring dynamic data visualizations.
+        <p>
+          The ultimate platform for creating, sharing, and
+          exploring visualizations.
+        </p>
       </div>
-      <Button className='hero_section_button'size="lg">Get Started </Button>
+      <Button className="hero_section_button" size="lg">
+        TRY FOR FREE
+      </Button>
+      <div className="hero__bottomSection">
+      <p>Already a member? Log in</p>
     </div>
+    </div>
+   
   </div>
 );
 
