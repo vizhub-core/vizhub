@@ -100,6 +100,15 @@ const Footer = () => (
             Discord
           </a>
         </li>
+        <li>
+          <a href="https://vizhub.com/">Contact</a>
+        </li>
+        <li>
+          <a href="https://vizhub.com/">Terms and Conditions</a>
+        </li>
+        <li>
+          <a href="https://vizhub.com/">Privacy Policy</a>
+        </li>
       </ul>
       <div></div>
     </div>
