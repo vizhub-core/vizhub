@@ -4,7 +4,37 @@
   flex-direction: column;
   align-items: center;
   overflow: auto;
+  .SectionJoinVizHubUsers {
+    background-color: rgb(171, 168, 168);
+    min-height: 300px;
+    width: 100%;
+    justify-content: space-between;
+    justify-content: center;
+    display: flex;
 
+    &__content {
+      margin-top: 60px;
+
+      color: #fff;
+      fill-opacity: 0.95;
+    }
+    &__button {
+      justify-content: space-between;
+      justify-content: center;
+      margin-left: 400px;
+    }
+  }
+  .Footer {
+    width: 100%;
+    background-color: rgb(137, 137, 137);
+    justify-content: space-between;
+    justify-content: center;
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    
+
+  }
   .hero {
     width: 100%;
     display: flex;
@@ -19,7 +49,7 @@
       //font-weight: 600;
       margin-bottom: 14px;
       color: white;
-      font-family:"Cormorant Garamond", serif;
+      font-family: 'Cormorant Garamond', serif;
     }
     &__subtitle {
       font-size: 30px;
@@ -36,7 +66,6 @@
       color: white;
       max-width: 450px;
       letter-spacing: 1px;
-
     }
 
     &__content {
@@ -48,7 +77,6 @@
       max-width: 900px;
     }
     .hero_section_button {
-<<<<<<< HEAD
       font-size: 16px;
       letter-spacing: 1px;
       padding: 8px 16px;
@@ -64,24 +92,17 @@
       margin-bottom: 14px;
       /* Some initial styling for the button */
       //transition: transform 0.3s ease;  /* Smooth transformation */
-=======
-      padding: 10px 20px; /* Some initial styling for the button */
-      transition: transform 0.3s ease; /* Smooth transformation */
->>>>>>> refs/remotes/origin/landing-page-design-modify
     }
 
     .hero_section_button:hover {
       transform: scale(1.1);
       /* Enlarges the button by 10% */
     }
-<<<<<<< HEAD
-    &__bottomSection{
+    &__bottomSection {
       font-weight: 00;
-      color: #fff; 
-      fill-opacity: 0.95;  
+      color: #fff;
+      fill-opacity: 0.95;
     }
-=======
->>>>>>> refs/remotes/origin/landing-page-design-modify
   }
 
   .features {

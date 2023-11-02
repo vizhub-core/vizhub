@@ -2,6 +2,7 @@ import React from 'react';
 import { Button } from '../bootstrap';
 import { featureData } from './featureData';
 import './styles.scss';
+import { LogoSVG } from '../Icons/LogoSVG';
 
 const Hero = () => (
   <div className="hero">
@@ -19,18 +20,12 @@ const Hero = () => (
         </p>
       </div>
       <Button className="hero_section_button" size="lg">
-<<<<<<< HEAD
         TRY FOR FREE
       </Button>
       <div className="hero__bottomSection">
-      <p>Already a member? Log in</p>
-=======
-        Get Started
-      </Button>
->>>>>>> refs/remotes/origin/landing-page-design-modify
+        <p>Already a member? Log in</p>
+      </div>
     </div>
-    </div>
-   
   </div>
 );
 
@@ -73,10 +68,49 @@ const Features = () => (
     ))}
   </div>
 );
+// Adding section for 'Join 10000 VizHub Users'
+const SectionJoinVizHubUsers = () => (
+  <div className="SectionJoinVizHubUsers">
+    <div className="SectionJoinVizHubUsers__content">
+      <h2>
+        Join THOUSANDS of people around the world who are
+        creating visualizations{' '}
+      </h2>
+      <Button color="gray">10,000</Button>
+      <p>and COUNTING ......</p>
+      <div className="SectionJoinVizHubUsers__button">
+        <Button> JOIN 10,000 + PEOPLE </Button>
+        <div className="hero__bottomSection">
+          <p>Already a member? Log in</p>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+const Footer = () => (
+  <div className="Footer">
+    <div className="Footer__content">
+      <LogoSVG height={32} />
+      <ul id="menu-footer">
+        <li>
+          <a href="https://vizhub.com/forum/">Forum</a>
+        </li>
+        <li>
+          <a href="https://discord.com/channels/1149071828258660402/1149071828824895553">
+            Discord
+          </a>
+        </li>
+      </ul>
+      <div></div>
+    </div>
+  </div>
+);
 
 export const LandingPageBody = () => (
   <div className="vh-page vh-landing-page-body">
     <Hero />
     <Features />
+    <SectionJoinVizHubUsers />
+    <Footer />
   </div>
 );
