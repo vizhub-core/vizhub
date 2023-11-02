@@ -19,10 +19,15 @@ const Hero = () => (
         </p>
       </div>
       <Button className="hero_section_button" size="lg">
+<<<<<<< HEAD
         TRY FOR FREE
       </Button>
       <div className="hero__bottomSection">
       <p>Already a member? Log in</p>
+=======
+        Get Started
+      </Button>
+>>>>>>> refs/remotes/origin/landing-page-design-modify
     </div>
     </div>
    

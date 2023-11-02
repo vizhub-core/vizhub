@@ -48,6 +48,7 @@
       max-width: 900px;
     }
     .hero_section_button {
+<<<<<<< HEAD
       font-size: 16px;
       letter-spacing: 1px;
       padding: 8px 16px;
@@ -63,17 +64,24 @@
       margin-bottom: 14px;
       /* Some initial styling for the button */
       //transition: transform 0.3s ease;  /* Smooth transformation */
+=======
+      padding: 10px 20px; /* Some initial styling for the button */
+      transition: transform 0.3s ease; /* Smooth transformation */
+>>>>>>> refs/remotes/origin/landing-page-design-modify
     }
 
     .hero_section_button:hover {
       transform: scale(1.1);
       /* Enlarges the button by 10% */
     }
+<<<<<<< HEAD
     &__bottomSection{
       font-weight: 00;
       color: #fff; 
       fill-opacity: 0.95;  
     }
+=======
+>>>>>>> refs/remotes/origin/landing-page-design-modify
   }
 
   .features {
