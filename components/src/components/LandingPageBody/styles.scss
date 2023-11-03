@@ -5,7 +5,10 @@
   align-items: center;
   overflow: auto;
   .SectionJoinVizHubUsers {
-    background-color: rgb(171, 168, 168);
+    background-image: url('https://user-images.githubusercontent.com/13540669/280184065-a413f433-8528-493e-b77c-ed114cdbb72f.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position:center;
     min-height: 300px;
     width: 100%;
     justify-content: space-between;
@@ -32,7 +35,40 @@
     min-height: 300px;
     display: flex;
     flex-direction: column;
-    
+    &__logo {
+      margin-left: 60px;
+    }
+    &__content {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      justify-content: center;
+      margin-left: 200px;
+    }
+  }
+  .SocialMedia {
+    width: 100%;
+    background-color: rgb(163, 135, 135);
+    justify-content: space-between;
+    justify-content: center;
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    &__content {
+      justify-content: space-between;
+      justify-content: center;
+      margin-left: 400px;
+    }
+  }
+  .Copyright {
+    min-height: 60px;
+    margin-top: 30px;
+  }
+  .VideoVizhub{
+    margin:60px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 
   }
   .hero {

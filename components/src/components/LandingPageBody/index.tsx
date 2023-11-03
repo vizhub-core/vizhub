@@ -3,7 +3,7 @@ import { Button } from '../bootstrap';
 import { featureData } from './featureData';
 import './styles.scss';
 import { LogoSVG } from '../Icons/LogoSVG';
-
+import { FacebookSVG } from '../Icons/FacebookSVG';
 const Hero = () => (
   <div className="hero">
     <div className="hero__content">
@@ -69,6 +69,28 @@ const Features = () => (
   </div>
 );
 // Adding section for 'Join 10000 VizHub Users'
+const VideoVizhub = () => (
+  <div className="VideoVizhub">
+    <div className="VideoVizhub __content">
+      <div>
+        <div>
+        <h2>Introduction to VizHub </h2>
+        </div>
+        <div>
+          <iframe
+            width="560"
+            height="315"
+            src="https://www.youtube.com/embed/jeKO0tsB7XI?si=UCGlA1J350C-OUJW"
+            title="YouTube video player"
+            //frameborder="0"
+            //allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            //allowfullscreen
+          ></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+);
 const SectionJoinVizHubUsers = () => (
   <div className="SectionJoinVizHubUsers">
     <div className="SectionJoinVizHubUsers__content">
@@ -89,37 +111,67 @@ const SectionJoinVizHubUsers = () => (
 );
 const Footer = () => (
   <div className="Footer">
-    <div className="Footer__content">
+    <div className="Footer__logo">
       <LogoSVG height={32} />
-      <ul id="menu-footer">
-        <li>
-          <a href="https://vizhub.com/forum/">Forum</a>
-        </li>
-        <li>
-          <a href="https://discord.com/channels/1149071828258660402/1149071828824895553">
-            Discord
-          </a>
-        </li>
-        <li>
-          <a href="https://vizhub.com/">Contact</a>
-        </li>
-        <li>
-          <a href="https://vizhub.com/">Terms and Conditions</a>
-        </li>
-        <li>
-          <a href="https://vizhub.com/">Privacy Policy</a>
-        </li>
-      </ul>
-      <div></div>
+    </div>
+    <div className="Footer__content">
+      <div>
+        <ul id="menu-footer">
+          <li>
+            <a href="https://vizhub.com/forum/">Forum</a>
+          </li>
+          <li>
+            <a href="https://discord.gg/wbtJ7SCtYr">
+              Discord
+            </a>
+          </li>
+          <li>
+            <a href="https://vizhub.com/">Contact</a>
+          </li>
+        </ul>
+      </div>
+      <div>
+        <ul id="menu-footer">
+          <li>
+            <a href="https://vizhub.com/">
+              Terms and Conditions
+            </a>
+          </li>
+          <li>
+            <a href="https://vizhub.com/">Privacy Policy</a>
+          </li>
+          <li>
+            <a href="https://vizhub.com/forum/c/site-feedback/2">
+              Feedback
+            </a>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 );
-
+const SocialMedia = () => (
+  <div className="SocialMedia ">
+    <div className="SocialMedia__content">
+      <FacebookSVG />
+    </div>
+  </div>
+);
+const Copyright = () => (
+  <div className="Copyright ">
+    <div className="Copyright__content">
+      ©2023 Datavis Tech INC
+    </div>
+  </div>
+);
 export const LandingPageBody = () => (
   <div className="vh-page vh-landing-page-body">
     <Hero />
     <Features />
+    <VideoVizhub />
     <SectionJoinVizHubUsers />
     <Footer />
+    <SocialMedia />
+    <Copyright />
   </div>
 );
