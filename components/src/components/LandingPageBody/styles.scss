@@ -4,7 +4,73 @@
   flex-direction: column;
   align-items: center;
   overflow: auto;
+  .SectionJoinVizHubUsers {
+    background-image: url('https://user-images.githubusercontent.com/13540669/280184065-a413f433-8528-493e-b77c-ed114cdbb72f.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position:center;
+    min-height: 300px;
+    width: 100%;
+    justify-content: space-between;
+    justify-content: center;
+    display: flex;
 
+    &__content {
+      margin-top: 60px;
+
+      color: #fff;
+      fill-opacity: 0.95;
+    }
+    &__button {
+      justify-content: space-between;
+      justify-content: center;
+      margin-left: 400px;
+    }
+  }
+  .Footer {
+    width: 100%;
+    background-color: rgb(137, 137, 137);
+    justify-content: space-between;
+    justify-content: center;
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    &__logo {
+      margin-left: 60px;
+    }
+    &__content {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      justify-content: center;
+      margin-left: 200px;
+    }
+  }
+  .SocialMedia {
+    width: 100%;
+    background-color: rgb(163, 135, 135);
+    justify-content: space-between;
+    justify-content: center;
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    &__content {
+      justify-content: space-between;
+      justify-content: center;
+      margin-left: 400px;
+    }
+  }
+  .Copyright {
+    min-height: 60px;
+    margin-top: 30px;
+  }
+  .VideoVizhub{
+    margin:60px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+  }
   .hero {
     width: 100%;
     display: flex;
@@ -15,18 +81,27 @@
     background-position: center center;
 
     &__title {
-      font-size: 64px;
-      font-weight: 600;
-      margin-bottom: 24px;
+      font-size: 80px;
+      //font-weight: 600;
+      margin-bottom: 14px;
       color: white;
+      font-family: 'Cormorant Garamond', serif;
+    }
+    &__subtitle {
+      font-size: 30px;
+      font-weight: 00;
+      margin-bottom: 14px;
+      color: white;
+      max-width: 450px;
     }
 
     &__desc {
-      font-size: 32px;
-      font-weight: 400;
-      margin-bottom: 32px;
+      font-size: 20px;
+      font-weight: 0;
+      margin-bottom: 14px;
       color: white;
       max-width: 450px;
+      letter-spacing: 1px;
     }
 
     &__content {
@@ -38,13 +113,31 @@
       max-width: 900px;
     }
     .hero_section_button {
-      padding: 10px 20px; /* Some initial styling for the button */
-      transition: transform 0.3s ease; /* Smooth transformation */
+      font-size: 16px;
+      letter-spacing: 1px;
+      padding: 8px 16px;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: 'Open Sans', sans-serif;
+      font-weight: 400;
+      display: inline-block;
+      line-height: 20px;
+      transition: all ease-in-out 0.3s;
+      margin-bottom: 14px;
+      /* Some initial styling for the button */
+      //transition: transform 0.3s ease;  /* Smooth transformation */
     }
 
     .hero_section_button:hover {
       transform: scale(1.1);
       /* Enlarges the button by 10% */
+    }
+    &__bottomSection {
+      font-weight: 00;
+      color: #fff;
+      fill-opacity: 0.95;
     }
   }
 
