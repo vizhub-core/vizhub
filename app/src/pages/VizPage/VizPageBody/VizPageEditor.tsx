@@ -99,6 +99,8 @@ export const VizPageEditor = ({
     theme,
     isSettingsOpen,
     editorWantsFocus,
+
+    // TODO remove this
     username,
   } = state;
 
@@ -111,6 +113,8 @@ export const VizPageEditor = ({
     setIsSettingsOpen,
     closeSettings,
     editorNoLongerWantsFocus,
+
+    // TODO remove this
     setUsername,
   } = useActions(dispatch);
 
@@ -171,6 +175,7 @@ export const VizPageEditor = ({
           setTheme={setTheme}
           username={username}
           setUsername={setUsername}
+          enableUsernameField={false}
         />
       </div>
       <div className="middle">
