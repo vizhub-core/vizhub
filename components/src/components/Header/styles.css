@@ -6,8 +6,10 @@
 .vh-brand-logo {
   padding-top: 0;
   padding-bottom: 0;
+  padding-left: 30px;
 }
 .navbar__avatar-toggle {
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
 }
+

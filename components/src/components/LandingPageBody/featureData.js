@@ -9,15 +9,6 @@ export const featureData = [
   //     'A mesmerizing animated visualization, perhaps a swirling interactive globe or particle flow.',
   // },
   {
-    sectionHeader: 'Collaboration Made Easy',
-    title: 'Collaborate in Real-Time',
-    description:
-      'Bid farewell to disjointed workflows. Dive into synchronized coding, designing, and reviewing, all under one roof.',
-    cta: 'Collaborate',
-    imageDescription:
-      'A split screen showing two or more avatars live coding and a visualization updating in real-time.',
-  },
-  {
     sectionHeader: 'Immersive Learning',
     title: 'Learn by Doing',
     description:
@@ -27,22 +18,42 @@ export const featureData = [
       'A montage of video thumbnails showcasing various tutorials and educators teaching on VizHub.',
   },
   {
-    sectionHeader: 'Full Control, No Compromises',
-    title: 'Unparalleled Access Control',
+    sectionHeader: 'Collaboration Made Easy',
+    title: 'Collaborate in Real-Time',
     description:
-      "Manage, organize, and govern your visualizations with intuitive folders and waterfall permissions. You're always in charge.",
-    cta: 'Discover More',
+      'Bid farewell to disjointed workflows. Dive into synchronized coding, designing, and reviewing, all under one roof.',
+    cta: 'Collaborate',
     imageDescription:
-      'A sleek dashboard interface displaying nested folders, user permissions, and visualizations.',
+      'A split screen showing two or more avatars live coding and a visualization updating in real-time.',
   },
+
   {
-    sectionHeader: 'Hot Reloading & Interactive Widgets',
-    title: 'Instant Feedback Loop',
+    sectionHeader: 'Engage & Connect',
+    title: 'Join the Community',
     description:
-      'Experience coding like never before with hot reloading and interactive widgets. Adjust, visualize, perfect!',
-    cta: 'Try Now',
+      'Engage with passionate creators, educators, and enthusiasts. Exchange ideas, seek feedback, and grow together.',
+    cta: 'Join Now',
     imageDescription:
-      'A coding editor with widgets like sliders, color pickers, and toggles, with the visualization instantly reflecting changes.',
+      'A virtual meetup or forum snapshot with avatars, comments, and thumbs-up icons.',
+  },
+  /*
+  {
+    sectionHeader: 'Trusted by the Best',
+    title: 'VizHub Elite',
+    description:
+      'Pioneering firms and institutions trust and use VizHub daily. Join the ranks of the best in visualization.',
+    cta: 'See Reviews',
+    imageDescription:
+      'Logos of prominent companies or institutions that use VizHub, perhaps with a few glowing short testimonials.',
+  },
+    {
+    sectionHeader: 'A Library of Inspiration',
+    title: 'Explore the Gallery',
+    description:
+      'Dive into a vast ocean of shared visualizations, find inspiration, and build upon the brilliance of others.',
+    cta: 'Browse Gallery',
+    imageDescription:
+      'A mosaic of various data visualizations, showcasing diversity and creativity.',
   },
   {
     sectionHeader: 'Framework Flexibility',
@@ -54,15 +65,24 @@ export const featureData = [
       'Logos of popular frameworks (React, Vue) surrounded by visualizations.',
   },
   {
-    sectionHeader: 'A Library of Inspiration',
-    title: 'Explore the Gallery',
+    sectionHeader: 'Hot Reloading & Interactive Widgets',
+    title: 'Instant Feedback Loop',
     description:
-      'Dive into a vast ocean of shared visualizations, find inspiration, and build upon the brilliance of others.',
-    cta: 'Browse Gallery',
+      'Experience coding like never before with hot reloading and interactive widgets. Adjust, visualize, perfect!',
+    cta: 'Try Now',
     imageDescription:
-      'A mosaic of various data visualizations, showcasing diversity and creativity.',
+      'A coding editor with widgets like sliders, color pickers, and toggles, with the visualization instantly reflecting changes.',
   },
   {
+    sectionHeader: 'Full Control, No Compromises',
+    title: 'Unparalleled Access Control',
+    description:
+      "Manage, organize, and govern your visualizations with intuitive folders and waterfall permissions. You're always in charge.",
+    cta: 'Discover More',
+    imageDescription:
+      'A sleek dashboard interface displaying nested folders, user permissions, and visualizations.',
+  },
+   {
     sectionHeader: 'Never Lose Work',
     title: 'Revision History',
     description:
@@ -71,22 +91,5 @@ export const featureData = [
     imageDescription:
       'A timeline graphic showing various versions and milestones of a visualization project.',
   },
-  {
-    sectionHeader: 'Engage & Connect',
-    title: 'Join the Community',
-    description:
-      'Engage with passionate creators, educators, and enthusiasts. Exchange ideas, seek feedback, and grow together.',
-    cta: 'Join Now',
-    imageDescription:
-      'A virtual meetup or forum snapshot with avatars, comments, and thumbs-up icons.',
-  },
-  {
-    sectionHeader: 'Trusted by the Best',
-    title: 'VizHub Elite',
-    description:
-      'Pioneering firms and institutions trust and use VizHub daily. Join the ranks of the best in visualization.',
-    cta: 'See Reviews',
-    imageDescription:
-      'Logos of prominent companies or institutions that use VizHub, perhaps with a few glowing short testimonials.',
-  },
+  */
 ];
