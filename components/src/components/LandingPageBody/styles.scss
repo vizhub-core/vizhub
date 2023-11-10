@@ -8,7 +8,7 @@
     background-image: url('https://user-images.githubusercontent.com/13540669/280184065-a413f433-8528-493e-b77c-ed114cdbb72f.png');
     background-size: cover;
     background-repeat: no-repeat;
-    background-position:center;
+    background-position: center;
     min-height: 300px;
     width: 100%;
     justify-content: space-between;
@@ -64,18 +64,17 @@
     min-height: 60px;
     margin-top: 30px;
   }
-  .VideoVizhub{
-    margin:60px;
+  .VideoVizhub {
+    margin: 60px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-
   }
   .hero {
     width: 100%;
     display: flex;
     justify-content: space-between;
-    background-image: url('https://github.com/vizhub-core/vizhub-legacy/assets/68416/4e18e38b-0449-4ff5-bf0c-2d84385d32e7');
+    background-image: url('https://user-images.githubusercontent.com/13540669/282199538-b1da313f-5aa1-468d-9ef3-ed6be2e611fc.png');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
@@ -143,17 +142,19 @@
 
   .features {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    margin-top: 60px;
+    gap: 30px;
 
-    &__title {
+    justify-content: center &__title {
       font-size: 42px;
-      font-weight: 600;
+      font-weight: 300;
       margin: 60px 0 30px 0;
       color: rgba(0, 0, 0, 0.9);
     }
 
     .item {
-      max-width: 1200px;
+      max-width: 500px;
       margin: 32px 0;
       background-color: white;
       padding: 64px;

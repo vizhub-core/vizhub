@@ -42,7 +42,12 @@ export const Header = ({
           >
             Forum
           </Nav.Link>
-
+          <Nav.Link
+            href="https://vizhub.com/forum/c/uncategorized/1"
+            target="_blank"
+          >
+            Resources
+          </Nav.Link>
           <Nav.Link
             href="https://vizhub.com/forum/c/help/6"
             target="_blank"
@@ -87,6 +92,7 @@ export const Header = ({
               as="a"
               href={loginHref}
               className="vh-header-button"
+             // style={{margin:'30px',padding:'10px'}}
             >
               Log in
             </Button>

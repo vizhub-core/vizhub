@@ -49,18 +49,19 @@ const Image = ({ feature }) => (
 );
 
 const Features = () => (
+  
   <div className="features">
-    <div className="features__title">FEATURES</div>
+    
     {featureData.map((feature, index) => (
       <div key={feature.id || index} className="item">
         {index % 2 === 0 ? (
           <>
             <Content feature={feature} />
-            <Image feature={feature} />
+            {/*<Image feature={feature} />*/}
           </>
         ) : (
           <>
-            <Image feature={feature} />
+            {/*<Image feature={feature} />*/}
             <Content feature={feature} />
           </>
         )}

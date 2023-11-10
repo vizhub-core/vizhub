@@ -1,7 +1,8 @@
 @media (max-width: 768px) {
   .vh-header-button {
-    margin-bottom: 10px;
+    margin: 30px;
   }
+  
 }
 .vh-brand-logo {
   padding-top: 0;
@@ -12,4 +13,11 @@
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
 }
-
+  
+.basic-navbar-nav{
+  padding: 10px;
+}
+.vh-header-button {
+  margin: 30px;
+ 
+}
