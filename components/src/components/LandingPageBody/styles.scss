@@ -29,12 +29,15 @@
   }
   .Footer {
     width: 100%;
-    background-color: rgb(137, 137, 137);
+
     justify-content: space-between;
     justify-content: center;
     min-height: 300px;
     display: flex;
     flex-direction: column;
+    ul {
+      list-style: none;
+    }
     &__logo {
       margin-left: 60px;
     }
@@ -43,12 +46,14 @@
       flex-direction: row;
       justify-content: space-between;
       justify-content: center;
-      margin-left: 200px;
+      margin-left: 100px;
+      color: #fff;
+      opacity: 0.95;
     }
   }
   .SocialMedia {
     width: 100%;
-    background-color: rgb(163, 135, 135);
+    background-color: rgb(213, 213, 213);
     justify-content: space-between;
     justify-content: center;
     min-height: 100px;
@@ -147,9 +152,9 @@
     gap: 30px;
 
     justify-content: center &__title {
-      font-size: 42px;
+      font-size: 32px;
       font-weight: 300;
-      margin: 60px 0 30px 0;
+      margin: 60px 0 0px 0;
       color: rgba(0, 0, 0, 0.9);
     }
 
@@ -175,20 +180,20 @@
         font-size: 14px;
         text-transform: uppercase;
         font-weight: 600;
-        margin-bottom: 32px;
+        margin-bottom: 14px;
       }
 
       &__title {
-        font-size: 64px;
+        font-size: 42px;
         margin-bottom: 1rem;
-        margin-bottom: 24px;
+        margin-bottom: 14px;
       }
 
       &__desc {
         font-size: 18px;
         margin-bottom: 1rem;
         color: rgba(0, 0, 0, 0.9);
-        margin-bottom: 48px;
+        margin-bottom: 14px;
       }
 
       &__img {

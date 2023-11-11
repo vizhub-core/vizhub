@@ -19,7 +19,7 @@ export const featureData = [
   },
   {
     sectionHeader: 'Collaboration Made Easy',
-    title: 'Collaborate in Real-Time',
+    title: 'Collaborate in  Real-Time',
     description:
       'Bid farewell to disjointed workflows. Dive into synchronized coding, designing, and reviewing, all under one roof.',
     cta: 'Collaborate',

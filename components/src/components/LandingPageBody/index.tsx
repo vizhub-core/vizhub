@@ -49,9 +49,7 @@ const Image = ({ feature }) => (
 );
 
 const Features = () => (
-  
   <div className="features">
-    
     {featureData.map((feature, index) => (
       <div key={feature.id || index} className="item">
         {index % 2 === 0 ? (
@@ -75,7 +73,7 @@ const VideoVizhub = () => (
     <div className="VideoVizhub __content">
       <div>
         <div>
-        <h2>Introduction to VizHub </h2>
+          <h2>Introduction to VizHub </h2>
         </div>
         <div>
           <iframe
@@ -115,7 +113,10 @@ const Footer = () => (
     <div className="Footer__logo">
       <LogoSVG height={32} />
     </div>
-    <div className="Footer__content">
+    <div
+      className="Footer__content"
+      style={{ color: 'white' }}
+    >
       <div>
         <ul id="menu-footer">
           <li>
@@ -153,9 +154,14 @@ const Footer = () => (
 );
 const SocialMedia = () => (
   <div className="SocialMedia ">
-    <div className="SocialMedia__content">
+    <a
+      className="SocialMedia__content"
+      href="https://www.facebook.com/profile.php?id=100071381815409"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
       <FacebookSVG />
-    </div>
+    </a>
   </div>
 );
 const Copyright = () => (
