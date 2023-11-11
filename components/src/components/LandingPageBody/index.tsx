@@ -4,6 +4,7 @@ import { featureData } from './featureData';
 import './styles.scss';
 import { LogoSVG } from '../Icons/LogoSVG';
 import { FacebookSVG } from '../Icons/FacebookSVG';
+import { TwitterSVG } from '../Icons/TwitterSVG';
 const Hero = () => (
   <div className="hero">
     <div className="hero__content">
@@ -90,10 +91,10 @@ const VideoVizhub = () => (
   <div className="VideoVizhub">
     <div className="VideoVizhub __content">
       <div>
+        
         <div>
-          <h2>Introduction to VizHub </h2>
-        </div>
-        <div>
+        <h2>Introduction to VizHub </h2>
+
           <iframe
             width="560"
             height="315"
@@ -172,22 +173,24 @@ const Footer = () => (
 );
 const SocialMedia = () => (
   <div className="SocialMedia ">
-    <a
-      className="SocialMedia__content"
-      href="https://www.facebook.com/profile.php?id=100071381815409"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      <FacebookSVG />
-    </a>
-    <a
-      className="SocialMedia__content"
-      href="https://www.facebook.com/profile.php?id=100071381815409"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      Twitter
-    </a>
+    <div className="SocialMedia__content ">
+      <a
+        className="SocialMedia__facebook"
+        href="https://www.facebook.com/profile.php?id=100071381815409"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <FacebookSVG />
+      </a>
+      <a
+        className="SocialMedia__twitter"
+        href="https://twitter.com/viz_hub"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <TwitterSVG />
+      </a>
+    </div>
   </div>
 );
 
