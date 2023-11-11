@@ -7,7 +7,8 @@ export const args = {
   pricingHref: 'pricingHref',
   accountHref: 'accountHref',
   aboutHref: 'aboutHref',
-  
+  resourcesHref: 'resourcesHref',
+
   onForumClick: () => {
     console.log('onForumClick');
   },

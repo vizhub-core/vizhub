@@ -10,16 +10,13 @@ const About = () => (
         </p>
       </div>
       <div className="about__desc">
-        <p>
-     
-          
-        </p>
+        <p></p>
       </div>
     </div>
   </div>
 );
 
-export const AboutPageBody = () => (
+export const ResourcesPageBody = () => (
   <div className="vh-page vh-landing-page-body">
     <About />
   </div>

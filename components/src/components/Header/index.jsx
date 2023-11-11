@@ -35,7 +35,7 @@ export const Header = ({
         <Nav className="me-auto" />
         <Nav className="align-items-md-center">
           <Nav.Link href={aboutHref}>About</Nav.Link>
-        
+
           <Nav.Link
             onClick={onForumClick}
             href="https://vizhub.com/forum/"
@@ -44,10 +44,7 @@ export const Header = ({
           >
             Forum
           </Nav.Link>
-          <Nav.Link
-            href="https://vizhub.com/forum/c/uncategorized/1"
-            target="_blank"
-          >
+          <Nav.Link href={resoucesHref} target="_blank">
             Resources
           </Nav.Link>
           <Nav.Link href={pricingHref}>Pricing</Nav.Link>
