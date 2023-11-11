@@ -27,6 +27,15 @@
       margin-left: 400px;
     }
   }
+  .mostRecent{
+    max-height: 300px;
+    min-height: 300px;
+    width: 100%;
+    background-color: rgb(231, 229, 229);
+    margin-top: 60px;
+    padding:60px;
+    text-align: center;
+  }
   .Footer {
     width: 100%;
 
@@ -54,11 +63,12 @@
   .SocialMedia {
     width: 100%;
     background-color: rgb(213, 213, 213);
-    justify-content: space-between;
     justify-content: center;
     min-height: 100px;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    gap:30px;
+    padding:30px;
     &__content {
       justify-content: space-between;
       justify-content: center;

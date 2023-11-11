@@ -28,6 +28,24 @@ const Hero = () => (
     </div>
   </div>
 );
+const MostPopular = () => (
+  <div className="mostRecent">
+    <div className="mostRecent__content">
+      <div className="mostRecent__title">
+        <h2>Most Popular Visualizations</h2>
+      </div>
+    </div>
+  </div>
+);
+const MostRecent = () => (
+  <div className="mostRecent">
+    <div className="mostRecent__content">
+      <div className="mostRecent__title">
+        <h2>Most Recent Visualizations</h2>
+      </div>
+    </div>
+  </div>
+);
 
 const Content = ({ feature }) => (
   <div className="item__group">
@@ -162,8 +180,17 @@ const SocialMedia = () => (
     >
       <FacebookSVG />
     </a>
+    <a
+      className="SocialMedia__content"
+      href="https://www.facebook.com/profile.php?id=100071381815409"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      Twitter
+    </a>
   </div>
 );
+
 const Copyright = () => (
   <div className="Copyright ">
     <div className="Copyright__content">
@@ -174,6 +201,8 @@ const Copyright = () => (
 export const LandingPageBody = () => (
   <div className="vh-page vh-landing-page-body">
     <Hero />
+    <MostPopular />
+    <MostRecent />
     <Features />
     <VideoVizhub />
     <SectionJoinVizHubUsers />
