@@ -15,7 +15,7 @@ const Hero = () => (
           exploring visualizations.
         </p>
       </div>
-    
+
       <div className="hero__bottomSection">
         <p>Already a member? Log in</p>
       </div>
@@ -23,7 +23,7 @@ const Hero = () => (
   </div>
 );
 
-export const AboutPage = () => (
+export const AboutPageBody = () => (
   <div className="vh-page vh-landing-page-body">
     <Hero />
   </div>

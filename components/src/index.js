@@ -9,6 +9,7 @@ export { ExplorePageBody } from './components/ExplorePageBody';
 export { ForksPageBody } from './components/ForksPageBody';
 export { VizPageViewer } from './components/VizPageViewer';
 export { UpvoteWidget } from './components/UpvoteWidget';
-//export {AboutPageBody} from './components/AboutPageBody';
+export {AboutPageBody} from './components/AboutPageBody';
+
 
 import './components/index.scss';
