@@ -41,7 +41,8 @@
 
     justify-content: space-between;
     justify-content: center;
-    min-height: 300px;
+    min-height: 200px;
+    padding: 30px;
     display: flex;
     flex-direction: column;
     ul {
@@ -122,6 +123,7 @@
       color: white;
       max-width: 450px;
       letter-spacing: 1px;
+      font-family:  Helvetica
     }
 
     &__content {

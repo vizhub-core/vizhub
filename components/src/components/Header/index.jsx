@@ -22,6 +22,7 @@ export const Header = ({
   aboutHref,
 }) => (
   <Navbar bg="dark" variant="dark" expand="md">
+   
     <Container fluid>
       <Navbar.Brand
         className="vh-brand-logo"
@@ -31,10 +32,11 @@ export const Header = ({
         <LogoSVG height={32} />
       </Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
+
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="me-auto" />
         <Nav className="align-items-md-center">
-          <Nav.Link href={aboutHref}>About</Nav.Link>
+          <Nav.Link>About</Nav.Link>
 
           <Nav.Link
             onClick={onForumClick}
@@ -44,9 +46,7 @@ export const Header = ({
           >
             Forum
           </Nav.Link>
-          <Nav.Link href={resoucesHref} target="_blank">
-            Resources
-          </Nav.Link>
+          <Nav.Link target="_blank">Resources</Nav.Link>
           <Nav.Link href={pricingHref}>Pricing</Nav.Link>
           <Nav.Link
             href="https://vizhub.com/forum/c/help/6"
@@ -93,7 +93,12 @@ export const Header = ({
               as="a"
               href={loginHref}
               className="vh-header-button"
-              // style={{margin:'30px',padding:'10px'}}
+              style={{
+                margin: '30px',
+                padding: '30px',
+                paddingTop: '5px',
+                paddingBottom: '5px',
+              }}
             >
               Log in
             </Button>

@@ -15,16 +15,25 @@
 
 .basic-navbar-nav {
   padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px;
+
+  
 }
 .vh-header-button {
   margin: 30px;
 }
-#headerTop {
+.align-items-md-left {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
-  background-color: #fff;
-  border-bottom: 1px solid #e5e5e5;
-}
+  gap: 10px;
+  margin: 10px;
+  padding-right: 10px;
+  justify-content: left;
+  flex : 1;
+  margin-bottom: 0px;
+
+}   
+
 
