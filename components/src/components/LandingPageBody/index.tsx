@@ -17,7 +17,7 @@ const Hero = () => (
       <div className="hero__desc">
         <p>
           The ultimate platform for creating, sharing, and
-          exploring visualizations.
+          exploring data visualizations.
         </p>
       </div>
       <Button className="hero_section_button" size="lg">
@@ -69,31 +69,37 @@ const Image = ({ feature }) => (
 
 const Features = () => (
   <div className="features">
-    {featureData.map((feature, index) => (
-      <div key={feature.id || index} className="item">
-        {index % 2 === 0 ? (
-          <>
-            <Content feature={feature} />
-            {/*<Image feature={feature} />*/}
-          </>
-        ) : (
-          <>
-            {/*<Image feature={feature} />*/}
-            <Content feature={feature} />
-          </>
-        )}
-      </div>
-    ))}
+    
+    <div>
+    <div>
+      <h2 className="features__title_main">FEATURES</h2>
+    </div>
+      {featureData.map((feature, index) => (
+        <div key={feature.id || index} className="item">
+          {index % 2 === 0 ? (
+            <>
+              <Content feature={feature} />
+              {/*<Image feature={feature} />*/}
+            </>
+          ) : (
+            <>
+              {/*<Image feature={feature} />*/}
+              <Content feature={feature} />
+            </>
+          )}
+        </div>
+      ))}
+    </div>
   </div>
 );
 // Adding section for 'Join 10000 VizHub Users'
+/*
 const VideoVizhub = () => (
   <div className="VideoVizhub">
     <div className="VideoVizhub __content">
       <div>
-        
         <div>
-        <h2>Introduction to VizHub </h2>
+          <h2>Introduction to VizHub </h2>
 
           <iframe
             width="560"
@@ -109,20 +115,28 @@ const VideoVizhub = () => (
     </div>
   </div>
 );
+*/
 const SectionJoinVizHubUsers = () => (
   <div className="SectionJoinVizHubUsers">
     <div className="SectionJoinVizHubUsers__content">
-      <h2>
-        Join THOUSANDS of people around the world who are
-        creating visualizations{' '}
-      </h2>
-      <Button color="gray">10,000</Button>
-      <p>and COUNTING ......</p>
-      <div className="SectionJoinVizHubUsers__button">
+      <div className="SectionJoinVizHubUsers__text">
+        <h2>
+          Join THOUSANDS of people around the world who are
+          creating visualizations{' '}
+        </h2>
+        <Button color="gray">10,000</Button>
+        <p>and COUNTING ......</p>
+
         <Button> JOIN 10,000 + PEOPLE </Button>
-        <div className="hero__bottomSection">
-          <p>Already a member? Log in</p>
-        </div>
+        <p>Already a member? Log in</p>
+      </div>
+      <div className="SectionJoinVizHubUsers__image">
+        <img
+          width={500}
+          height={400}
+          src="https://user-images.githubusercontent.com/13540669/282220781-13ed12eb-3810-41be-adcf-13d298edc868.png"
+          alt="people"
+        />
       </div>
     </div>
   </div>
@@ -207,7 +221,7 @@ export const LandingPageBody = () => (
     <MostPopular />
     <MostRecent />
     <Features />
-    <VideoVizhub />
+    {/*<VideoVizhub />*/}
     <SectionJoinVizHubUsers />
     <Footer />
     <SocialMedia />
