@@ -19,10 +19,10 @@ export const Header = ({
   onForumClick,
   onVizHubClick,
   pricingHref,
+  resourcesHref,
   aboutHref,
 }) => (
   <Navbar bg="dark" variant="dark" expand="md">
-   
     <Container fluid>
       <Navbar.Brand
         className="vh-brand-logo"
@@ -46,11 +46,18 @@ export const Header = ({
           >
             Forum
           </Nav.Link>
-          <Nav.Link target="_blank">Resources</Nav.Link>
+          <Nav.Link
+            href={resourcesHref}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Resources
+          </Nav.Link>
           <Nav.Link href={pricingHref}>Pricing</Nav.Link>
           <Nav.Link
             href="https://vizhub.com/forum/c/help/6"
             target="_blank"
+            rel="noopener noreferrer"
             title="Help"
           >
             <HelpSVG />

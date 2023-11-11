@@ -10,6 +10,7 @@ import { ForksPage } from './ForksPage/server';
 import { SearchPage } from './SearchPage/server';
 import { PricingPage } from './PricingPage/server';
 import { AccountPage } from './AccountPage/server';
+import { ResourcesPage } from './ResourcesPage/server';
 
 // Note: order matters (profile page should come last)
 // Need to update `client.js` as well
@@ -25,5 +26,6 @@ export const pages = [
   PricingPage,
   AccountPage,
   SearchPage,
+  ResourcesPage,
   ProfilePage,
 ];
