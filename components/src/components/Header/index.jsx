@@ -5,6 +5,7 @@ import {
   Dropdown,
   Button,
 } from '../bootstrap';
+import { HelpSVG } from '../Icons/HelpSVG';
 import { LogoSVG } from '../Icons/LogoSVG';
 import './styles.css';
 
@@ -18,6 +19,8 @@ export const Header = ({
   onForumClick,
   onVizHubClick,
   pricingHref,
+  resourcesHref,
+  aboutHref,
 }) => (
   <Navbar bg="dark" variant="dark" expand="md">
     <Container fluid>
@@ -29,10 +32,12 @@ export const Header = ({
         <LogoSVG height={32} />
       </Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
+
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="me-auto" />
         <Nav className="align-items-md-center">
-          <Nav.Link href={pricingHref}>Pricing</Nav.Link>
+          <Nav.Link>About</Nav.Link>
+
           <Nav.Link
             onClick={onForumClick}
             href="https://vizhub.com/forum/"
@@ -40,6 +45,22 @@ export const Header = ({
             rel="noopener noreferrer"
           >
             Forum
+          </Nav.Link>
+          <Nav.Link
+            href={resourcesHref}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Resources
+          </Nav.Link>
+          <Nav.Link href={pricingHref}>Pricing</Nav.Link>
+          <Nav.Link
+            href="https://vizhub.com/forum/c/help/6"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Help"
+          >
+            <HelpSVG />
           </Nav.Link>
 
           {authenticatedUserAvatarURL ? (
@@ -79,6 +100,12 @@ export const Header = ({
               as="a"
               href={loginHref}
               className="vh-header-button"
+              style={{
+                margin: '30px',
+                padding: '30px',
+                paddingTop: '5px',
+                paddingBottom: '5px',
+              }}
             >
               Log in
             </Button>

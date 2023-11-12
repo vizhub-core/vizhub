@@ -1,6 +1,6 @@
 import { Header } from '../components/Header';
 import { HeaderTop } from '../components/HeaderTop';
-import { LandingPageBody } from '../components/LandingPageBody';
+import { ResourcesPageBody } from '../components/ResourcesPageBody';
 
 const Story = () => {
   return (
@@ -8,7 +8,7 @@ const Story = () => {
       <div className="vh-page">
         <HeaderTop />
         <Header />
-        <LandingPageBody />
+        <ResourcesPageBody />
       </div>
     </div>
   );
