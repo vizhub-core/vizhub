@@ -10,13 +10,18 @@ export const AuthenticatedUserContext =
 export const AuthenticatedUserProvider = ({
   authenticatedUserSnapshot,
   children,
-}) => (
-  <AuthenticatedUserContext.Provider
-    value={useShareDBDocData<User | null>(
+}) => {
+  const authenticatedUser: User | null =
+    useShareDBDocData<User | null>(
       authenticatedUserSnapshot,
       'User',
-    )}
-  >
-    {children}
-  </AuthenticatedUserContext.Provider>
-);
+    );
+
+  return (
+    <AuthenticatedUserContext.Provider
+      value={authenticatedUser}
+    >
+      {children}
+    </AuthenticatedUserContext.Provider>
+  );
+};

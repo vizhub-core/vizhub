@@ -9,7 +9,7 @@ import {
   VZCodeProvider,
   VZSidebar,
   VZSettings,
-  Resizer,
+  VZResizer,
   TabList,
   CodeEditor,
   CodeErrorOverlay,
@@ -54,7 +54,7 @@ export const VizPageEditor = ({
   contentShareDBDoc: ShareDBDoc<Content>;
   contentShareDBDocPresence: any;
   srcdocError: string | null;
-  authenticatedUser: User;
+  authenticatedUser: User | null;
 }) => {
   /////////////////////////////////////////////////////////
   /////////////////////////////////////////////////////////
@@ -66,9 +66,17 @@ export const VizPageEditor = ({
     contentShareDBDocPresence?.docPresence;
 
   // AI assist needs to know which viz we're in.
-  const aiAssistOptions = {
-    vizId: content?.id,
-  };
+  // TODO bring this back
+  // const aiAssistOptions = {
+  //   vizId: content?.id,
+  // };
+
+  // Propagate the initial username from VizHub's platform auth
+  // into VZCode for use in presence features.
+  const initialUsername =
+    authenticatedUser !== null
+      ? authenticatedUser.userName
+      : 'Anonymous';
 
   return (
     <VZCodeProvider
@@ -78,14 +86,13 @@ export const VizPageEditor = ({
       docPresence={docPresence}
       prettierWorker={prettierWorker}
       typeScriptWorker={typeScriptWorker}
-      initialUsername={authenticatedUser.userName}
+      initialUsername={initialUsername}
       codeError={srcdocError}
     >
       {showEditor ? <VZLeft /> : null}
-
       <VZMiddle />
-      <Resizer side="left" />
-      <Resizer side="right" />
+      <VZResizer side="left" />
+      <VZResizer side="right" />
     </VZCodeProvider>
   );
 };
