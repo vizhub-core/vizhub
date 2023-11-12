@@ -436,6 +436,7 @@ async function createServer(
     '/explore',
     '/account',
     '/pricing',
+    '/resources',
     '/search?query=map',
   ];
 
