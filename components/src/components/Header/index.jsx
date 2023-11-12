@@ -5,6 +5,7 @@ import {
   Dropdown,
   Button,
 } from '../bootstrap';
+import { HelpSVG } from '../Icons/HelpSVG';
 import { LogoSVG } from '../Icons/LogoSVG';
 import './styles.css';
 
@@ -40,6 +41,18 @@ export const Header = ({
             rel="noopener noreferrer"
           >
             Forum
+          </Nav.Link>
+          <Nav.Link
+            href="https://vizhub.com/forum/c/uncategorized/1"
+            target="_blank"
+          >
+            Resources
+          </Nav.Link>
+          <Nav.Link
+            href="https://vizhub.com/forum/c/help/6"
+            target="_blank"
+          >
+            <HelpSVG />
           </Nav.Link>
 
           {authenticatedUserAvatarURL ? (
@@ -79,6 +92,7 @@ export const Header = ({
               as="a"
               href={loginHref}
               className="vh-header-button"
+             // style={{margin:'30px',padding:'10px'}}
             >
               Log in
             </Button>
