@@ -74,7 +74,7 @@ const VideoVizhub = () => (
     <div className="VideoVizhub __content">
       <div>
         <div>
-        <h2>Introduction to VizHub </h2>
+          <h2>Introduction to VizHub </h2>
         </div>
         <div>
           <iframe

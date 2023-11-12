@@ -14,16 +14,16 @@
   },
   "dependencies": {
     "react": "^18.2.0",
-    "react-aria": "^3.29.1",
+    "react-aria": "^3.30.0",
     "react-bootstrap": "^2.9.1",
     "react-dom": "^18.2.0",
-    "react-stately": "^3.27.1",
+    "react-stately": "^3.28.0",
     "vizhub-ui": "^3.5.0"
   },
   "devDependencies": {
-    "@types/react": "^18.2.33",
-    "@types/react-dom": "^18.2.14",
-    "@vitejs/plugin-react": "^4.1.0",
+    "@types/react": "^18.2.37",
+    "@types/react-dom": "^18.2.15",
+    "@vitejs/plugin-react": "^4.1.1",
     "prettier": "^3.0.3",
     "sass": "^1.69.5",
     "vite": "^4.5.0"
