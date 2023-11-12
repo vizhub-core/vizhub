@@ -6,17 +6,31 @@ import { Button } from '../bootstrap';
 const Hero = () => (
   <div className="hero">
     <div className="hero__content">
-      <div style={{backgroundColor:'black',opacity:'0.8',padding:'30px'}}>
+      <div
+        style={{
+          backgroundColor: 'black',
+          opacity: '0.8',
+          padding: '30px',
+          borderRadius: '30px',
+          position: 'absolute',
+          top: '42%',
+          left: '40%',
+          transform: 'translate(-50%, -50%)',
+          color: 'white',
+          width: '50%',
+          textAlign: 'left',
+
+        }}
+      >
         <div className="hero__title">
           Expand Your Circle
         </div>
 
-        <div className="hero__desc">
+        <div className="hero__desc" >
           <p>
-            By connecting with
-            like-minded people and organizations. Find
-            resources to help you grow your knowledge and
-            skills.
+            Connect with like-minded people and
+            organizations. Find resources to help you grow
+            your knowledge and skills.
           </p>
         </div>
         <Button className="hero_section_button" size="lg">
@@ -33,12 +47,11 @@ const Hero = () => (
 const Features = () => (
   <div className="features">
     <div>
-   
       <div>
         <h3 className="item">Related Books</h3>
       </div>
       <div>
-        <h3 className="item">Related  Groups</h3>
+        <h3 className="item">Related Groups</h3>
       </div>
       <div>
         <h3 className="item">Related Conferences</h3>
@@ -55,8 +68,8 @@ const Features = () => (
       <div>
         <h3 className="item">About VizHub</h3>
         <div>
-        <h3 className="item">Blogs.org</h3>
-      </div>
+          <h3 className="item">Blogs.org</h3>
+        </div>
       </div>
     </div>
   </div>

@@ -40,15 +40,14 @@
       opacity: 0.95;
       max-width: 350px;
       letter-spacing: 1px;
-
-      font-family: poppins;
+      font-family: Arial, Helvetica, sans-serif;
       font-style: normal;
     }
 
     &__content {
       display: flex;
       flex-direction: column;
-      align-items: flex-start;
+      align-items: flex-end;
       justify-content: space-between;
       padding: 64px 64px 0px 0px;
       max-width: 900px;
@@ -68,7 +67,6 @@
       transition: all ease-in-out 0.3s;
       margin-bottom: 14px;
       /* Some initial styling for the button */
-      //transition: transform 0.3s ease;  /* Smooth transformation */
     }
 
     .hero_section_button:hover {
