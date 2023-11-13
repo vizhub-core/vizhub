@@ -269,10 +269,12 @@ export const VizPage: Page = ({
 
       setHasUnforkedEdits(true);
 
+      // TODO consider if this is even feasible.
+      // Just closing the connection ends up breaking things.
       // Also allow the user to make edits without forking.
       // Their edits are not synched to the server, but are kept in memory.
       // The edited version will be saved if the user does fork.
-      connection.close();
+      // connection.close();
     };
 
     connection.on('error', handleError);

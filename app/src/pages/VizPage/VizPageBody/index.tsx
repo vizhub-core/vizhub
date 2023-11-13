@@ -160,6 +160,7 @@ export const VizPageBody = ({
   const srcdocError = initialSrcdocError;
 
   const setSrcdocError = (srcdocError: string | null) => {
+    console.log('TODO surface this error in VZCode');
     console.log('setSrcdocError', srcdocError);
   };
 
@@ -185,13 +186,16 @@ export const VizPageBody = ({
   // Disable pointer events when split pane is being dragged.
   // Otherwise, they do interfere with dragging the split pane.
   // Inspired by https://github.com/vizhub-core/vizhub/blob/01cadfb78a2611df32f981b1fd8136b70447de9e/vizhub-v2/packages/neoFrontend/src/pages/VizPage/VizRunnerContext/index.js#L15
-  const { isDragging } = useContext(SplitPaneResizeContext);
+  const { isDraggingLeft, isDraggingRight } = useContext(
+    SplitPaneResizeContext,
+  );
   useEffect(() => {
     if (!iframeRef.current) return;
+    const isDragging = isDraggingLeft || isDraggingRight;
     iframeRef.current.style['pointer-events'] = isDragging
       ? 'none'
       : 'all';
-  }, [isDragging]);
+  }, [isDraggingLeft, isDraggingRight]);
 
   // The formatted created date.
   const createdDateFormatted = useMemo(
@@ -257,6 +261,7 @@ export const VizPageBody = ({
             contentShareDBDocPresence
           }
           srcdocError={srcdocError}
+          authenticatedUser={authenticatedUser}
         />
 
         <div

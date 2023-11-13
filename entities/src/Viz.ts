@@ -3,7 +3,7 @@ import { OrgId } from './Orgs';
 import { CommitId } from './RevisionHistory';
 import { FolderId } from './Folders';
 import { Timestamp, Visibility } from './common';
-import { FileId, File, Files } from 'vzcode';
+import { FileId, File, Files, VZCodeContent } from 'vzcode';
 
 export type { FileId, File, Files };
 
@@ -135,14 +135,10 @@ export const defaultVizWidth = 960;
 // Content
 //  * Heavyweight content of a viz.
 //  * Contains the full content of all files in the viz.
-export interface Content {
+export type Content = VZCodeContent & {
   // id
   // * The viz that this content is associated with
   id: VizId;
-
-  // files
-  // * The full text content of all files in this viz
-  files: Files;
 
   // title
   //  * The title of the viz, same as Info.title
@@ -168,16 +164,7 @@ export interface Content {
   // * This can be manipulated by viz code at runtime
   // * This can be manipulated by the visual editor as well
   configuration?: Configuration;
-
-  // `isInteracting`
-  //   * `true` when the user is interacting
-  //     via interactive code widgets (e.g. Alt+drag)
-  //     * Hot reloading is throttled when this is `true`.
-  //   * `false` or `undefined` when they are not (e.g. normal typing)
-  //     * Hot reloading is debounced when this is `false`.
-  // See also https://github.com/vizhub-core/vzcode/blob/main/src/types.ts#L76
-  isInteracting?: boolean;
-}
+};
 
 // VizAuthorshipId
 //  * Unique identifier string for a VizAuthorship.

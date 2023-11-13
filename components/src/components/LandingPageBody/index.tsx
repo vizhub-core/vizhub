@@ -99,7 +99,8 @@ const VideoVizhub = () => (
       <div>
         <div>
           <h2>Introduction to VizHub </h2>
-
+        </div>
+        <div>
           <iframe
             width="560"
             height="315"
