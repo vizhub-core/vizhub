@@ -69,11 +69,10 @@ const Image = ({ feature }) => (
 
 const Features = () => (
   <div className="features">
-    
     <div>
-    <div>
-      <h2 className="features__title_main">FEATURES</h2>
-    </div>
+      <div>
+        <h2 className="features__title_main">FEATURES</h2>
+      </div>
       {featureData.map((feature, index) => (
         <div key={feature.id || index} className="item">
           {index % 2 === 0 ? (
@@ -100,7 +99,8 @@ const VideoVizhub = () => (
       <div>
         <div>
           <h2>Introduction to VizHub </h2>
-
+        </div>
+        <div>
           <iframe
             width="560"
             height="315"

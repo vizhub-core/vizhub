@@ -73,8 +73,8 @@ function Option({ item, state }) {
         color: isDisabled
           ? '#aaa'
           : isSelected
-          ? 'white'
-          : null,
+            ? 'white'
+            : null,
         padding: '2px 5px',
         outline: isFocusVisible
           ? '2px solid orange'

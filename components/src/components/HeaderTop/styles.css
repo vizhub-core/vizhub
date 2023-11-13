@@ -19,8 +19,6 @@
   justify-content: space-between;
   align-items: center;
   margin: 10px;
-
-  
 }
 .vh-header-button {
   margin: 30px;
@@ -31,9 +29,6 @@
   margin: 10px;
   padding-right: 10px;
   justify-content: left;
-  flex : 1;
+  flex: 1;
   margin-bottom: 0px;
-
-}   
-
-
+}

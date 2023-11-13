@@ -7,10 +7,7 @@
 
   .SectionJoinVizHubUsers {
     margin: 60px;
-    //background-color: rgb(193, 191, 191);
-
     width: 100%;
-    
 
     justify-content: center;
     min-height: 200px;
@@ -136,7 +133,7 @@
       max-width: 350px;
       letter-spacing: 1px;
 
-      font-family:poppins;
+      font-family: poppins;
       font-style: normal;
     }
 
@@ -183,8 +180,7 @@
     margin-top: 60px;
     gap: 30px;
 
-   
-    &__title_main{
+    &__title_main {
       font-size: 32px;
       font-weight: 300;
       margin: 60px 0 0px 0;

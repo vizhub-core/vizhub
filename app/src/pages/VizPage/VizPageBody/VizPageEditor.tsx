@@ -1,4 +1,4 @@
-import { Content } from 'entities';
+import { Content, User } from 'entities';
 import { useReducer } from 'react';
 import type {
   EditorCache,
@@ -6,15 +6,15 @@ import type {
   ShareDBDoc,
 } from 'vzcode';
 import {
+  VZCodeProvider,
   VZSidebar,
   VZSettings,
-  Resizer,
+  VZResizer,
   TabList,
   CodeEditor,
   CodeErrorOverlay,
   PresenceNotifications,
   useFileCRUD,
-  useSubmitOperation,
   vzReducer,
   defaultTheme,
   useActions,
@@ -23,16 +23,23 @@ import {
   useEditorCache,
   useDynamicTheme,
   createInitialState,
+  VZLeft,
+  VZMiddle,
 } from 'vzcode';
 
 import PrettierWorker from 'vzcode/src/client/usePrettier/worker.ts?worker';
+import TypeScriptWorker from 'vzcode/src/client/useTypeScript/worker?worker';
 
+// Instantiate the Prettier and TypeScript workers
+// in the client, but not in SSR.
 let prettierWorker: Worker | null = null;
+let typeScriptWorker: Worker | null = null;
 if (typeof window !== 'undefined') {
   prettierWorker = new PrettierWorker();
+  typeScriptWorker = new TypeScriptWorker();
 }
 
-const aiAssistEndpoint = '/api/ai-assist';
+// const aiAssistEndpoint = '/api/ai-assist';
 
 export const VizPageEditor = ({
   showEditor,
@@ -40,16 +47,17 @@ export const VizPageEditor = ({
   contentShareDBDoc,
   contentShareDBDocPresence,
   srcdocError,
+  authenticatedUser,
 }: {
   showEditor: boolean;
   content: Content | null;
   contentShareDBDoc: ShareDBDoc<Content>;
   contentShareDBDocPresence: any;
   srcdocError: string | null;
+  authenticatedUser: User | null;
 }) => {
-  const submitOperation = useSubmitOperation(
-    contentShareDBDoc,
-  );
+  /////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////
 
   // These are undefined during SSR, defined in the browser.
   const localPresence =
@@ -57,162 +65,34 @@ export const VizPageEditor = ({
   const docPresence =
     contentShareDBDocPresence?.docPresence;
 
-  // Mappings to variable names used in VZCode.
-  const shareDBDoc = contentShareDBDoc;
-
-  // Auto-run Pretter after local changes.
-  const {
-    prettierError,
-  }: {
-    prettierError: string | null;
-  } = usePrettier(
-    shareDBDoc,
-    submitOperation,
-    prettierWorker,
-  );
-
-  // The error message shows either:
-  // * `prettierError` - errors from Prettier, client-side only
-  // * `srcdocError` - errors from Rollup, either from SSR or client-side
-  // Since `prettierError` surfaces syntax errors, it's more likely to be
-  // useful to the user, so we prioritize it.
-  const errorMessage: string | null = prettierError
-    ? prettierError
-    : srcdocError;
-
-  ////////////////////////////////////////////////////////////////////////
-  //////////// Begin paste from vzcode/src/client/App.tsx ////////////////
-  ////////////////////////////////////////////////////////////////////////
-
-  // https://react.dev/reference/react/useReducer
-  const [state, dispatch] = useReducer(
-    vzReducer,
-    // TODO wire up username from auth'd user
-    { defaultTheme, initialUsername: 'Anonymous' },
-    createInitialState,
-  );
-
-  // Unpack state.
-  const {
-    tabList,
-    activeFileId,
-    theme,
-    isSettingsOpen,
-    editorWantsFocus,
-
-    // TODO remove this
-    username,
-  } = state;
-
-  // Functions for dispatching actions to the reducer.
-  const {
-    setActiveFileId,
-    openTab,
-    closeTabs,
-    setTheme,
-    setIsSettingsOpen,
-    closeSettings,
-    editorNoLongerWantsFocus,
-
-    // TODO remove this
-    setUsername,
-  } = useActions(dispatch);
-
-  // The set of open directories.
-  // TODO move this into reducer/useActions
-  const { isDirectoryOpen, toggleDirectory } =
-    useOpenDirectories();
-
-  // usePersistUsername(username);
-
-  // Cache of CodeMirror editors by file id.
-  const editorCache: EditorCache = useEditorCache();
-
-  // Handle dynamic theme changes.
-  useDynamicTheme(editorCache, theme);
-
-  // Handle file CRUD operations.
-  const {
-    createFile,
-    renameFile,
-    deleteFile,
-    deleteDirectory,
-  } = useFileCRUD({
-    submitOperation,
-    closeTabs,
-    openTab,
-  });
-
-  // Isolate the files object from the document.
-  const files: Files | null = content
-    ? content.files
-    : null;
-
   // AI assist needs to know which viz we're in.
-  const aiAssistOptions = {
-    vizId: content?.id,
-  };
+  // TODO bring this back
+  // const aiAssistOptions = {
+  //   vizId: content?.id,
+  // };
 
-  return showEditor && files ? (
-    <>
-      <div className="left">
-        <VZSidebar
-          files={files}
-          createFile={createFile}
-          renameFile={renameFile}
-          deleteFile={deleteFile}
-          deleteDirectory={deleteDirectory}
-          openTab={openTab}
-          setIsSettingsOpen={setIsSettingsOpen}
-          isDirectoryOpen={isDirectoryOpen}
-          toggleDirectory={toggleDirectory}
-          activeFileId={activeFileId}
-        />
-        <VZSettings
-          show={isSettingsOpen}
-          onClose={closeSettings}
-          theme={theme}
-          setTheme={setTheme}
-          username={username}
-          setUsername={setUsername}
-          enableUsernameField={false}
-        />
-      </div>
-      <div className="middle">
-        <TabList
-          files={files}
-          tabList={tabList}
-          activeFileId={activeFileId}
-          setActiveFileId={setActiveFileId}
-          openTab={openTab}
-          closeTabs={closeTabs}
-          createFile={createFile}
-        />
-        {content && activeFileId ? (
-          <CodeEditor
-            shareDBDoc={shareDBDoc}
-            submitOperation={submitOperation}
-            localPresence={localPresence}
-            docPresence={docPresence}
-            activeFileId={activeFileId}
-            theme={theme}
-            editorCache={editorCache}
-            editorWantsFocus={editorWantsFocus}
-            editorNoLongerWantsFocus={
-              editorNoLongerWantsFocus
-            }
-            username={username}
-            aiAssistEndpoint={aiAssistEndpoint}
-            aiAssistOptions={aiAssistOptions}
-          />
-        ) : null}
-        <CodeErrorOverlay errorMessage={errorMessage} />
-        <PresenceNotifications
-          docPresence={docPresence}
-          localPresence={localPresence}
-        />
-      </div>
-      <Resizer />
-    </>
-  ) : null;
+  // Propagate the initial username from VizHub's platform auth
+  // into VZCode for use in presence features.
+  const initialUsername =
+    authenticatedUser !== null
+      ? authenticatedUser.userName
+      : 'Anonymous';
+
+  return (
+    <VZCodeProvider
+      content={content}
+      shareDBDoc={contentShareDBDoc}
+      localPresence={localPresence}
+      docPresence={docPresence}
+      prettierWorker={prettierWorker}
+      typeScriptWorker={typeScriptWorker}
+      initialUsername={initialUsername}
+      codeError={srcdocError}
+    >
+      {showEditor ? <VZLeft /> : null}
+      <VZMiddle />
+      <VZResizer side="left" />
+      <VZResizer side="right" />
+    </VZCodeProvider>
+  );
 };

@@ -23,14 +23,14 @@
   "homepage": "https://github.com/vizhub-core/vizhub3#readme",
   "dependencies": {
     "decay": "^1.0.12",
-    "deep-equal": "^2.2.2",
+    "deep-equal": "^2.2.3",
     "multiscale-timeseries": "^2.0.0",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
-    "@types/deep-equal": "^1.0.3",
+    "@types/deep-equal": "^1.0.4",
     "concurrently": "^8.2.2",
-    "prettier": "^3.0.3",
+    "prettier": "^3.1.0",
     "typescript": "^5.2.2",
     "vitest": "^0.34.6"
   }

@@ -46,6 +46,3 @@ export const AccountPageBody = ({
 //WHAT IS pricingHref
 //WHAT IS loginHref
 //WHAT IS onUnsubscribeClick
-
-
-

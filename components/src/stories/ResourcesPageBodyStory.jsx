@@ -6,7 +6,6 @@ const Story = () => {
   return (
     <div className="layout-fullscreen">
       <div className="vh-page">
-        <HeaderTop />
         <Header />
         <ResourcesPageBody />
       </div>
