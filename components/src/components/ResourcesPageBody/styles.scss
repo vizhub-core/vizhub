@@ -1,108 +1,16 @@
-.vh-landing-page-body {
+.vh-resources-page-body {
   flex: 1;
   display: flex;
   flex-direction: row;
   align-items: center;
   overflow: auto;
-
-  .SectionJoinVizHubUsers {
-    margin: 60px;
-    width: 100%;
-
-    justify-content: center;
-    min-height: 200px;
-    display: flex;
-    flex-direction: row;
-    padding: 60px;
-    &__content {
-      height: 200px;
-      margin-bottom: 160px;
-
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      justify-content: center;
-      margin-left: 30px;
-      margin-right: 30px;
-      margin-bottom: 30px;
-      gap: 60px;
-    }
-    &__text {
-      width: 40%;
-    }
-  }
-
-  .mostRecent {
-    max-height: 300px;
-    min-height: 300px;
-    width: 100%;
-    background-color: rgb(231, 229, 229);
-    margin-top: 60px;
-    padding: 60px;
-    text-align: center;
-  }
-  .Footer {
-    margin-top: 120px;
-    width: 100%;
-    background-color: #dedcdc;
-    justify-content: space-between;
-    justify-content: center;
-    min-height: 200px;
-    padding: 30px;
-    display: flex;
-    flex-direction: column;
-    ul {
-      list-style: none;
-    }
-    &__logo {
-      margin-left: 60px;
-    }
-    &__content {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      justify-content: center;
-      margin-left: 100px;
-      color: #fff;
-      opacity: 0.95;
-    }
-  }
-  .SocialMedia {
-    width: 100%;
-    background-color: rgb(238, 231, 231);
-    justify-content: center;
-    min-height: 100px;
-    display: flex;
-    flex-direction: row;
-    padding: 10px;
-    &__content {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      justify-content: center;
-      margin-left: 30px;
-      padding: 30px;
-      margin-right: 30px;
-      gap: 60px;
-    }
-  }
-  .Copyright {
-    min-height: 60px;
-    margin-top: 30px;
-  }
-  .VideoVizhub {
-    width: 100%;
-    justify-content: center;
-    margin: 120px;
-    display: flex;
-    justify-content: space-between;
-    background-color: #a0999967;
-  }
+  margin-top: 0px;
   .hero {
     width: 100%;
     display: flex;
+    min-height: 500px;
     justify-content: space-between;
-    background-image: url('https://user-images.githubusercontent.com/13540669/282199538-b1da313f-5aa1-468d-9ef3-ed6be2e611fc.png');
+    background-image: url('https://user-images.githubusercontent.com/13540669/282278289-950674ba-3874-4133-8d05-93c12882c846.png');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
@@ -132,17 +40,16 @@
       opacity: 0.95;
       max-width: 350px;
       letter-spacing: 1px;
-
-      font-family: poppins;
+      font-family: Arial, Helvetica, sans-serif;
       font-style: normal;
     }
 
     &__content {
       display: flex;
       flex-direction: column;
-      align-items: flex-start;
+      align-items: flex-end;
       justify-content: space-between;
-      padding: 64px 64px 128px 128px;
+      padding: 64px 64px 0px 0px;
       max-width: 900px;
     }
     .hero_section_button {
@@ -160,7 +67,6 @@
       transition: all ease-in-out 0.3s;
       margin-bottom: 14px;
       /* Some initial styling for the button */
-      //transition: transform 0.3s ease;  /* Smooth transformation */
     }
 
     .hero_section_button:hover {
@@ -177,7 +83,7 @@
   .features {
     display: flex;
     flex-direction: row;
-    margin-top: 60px;
+    margin-top: 0px;
     gap: 30px;
 
     &__title_main {
@@ -194,7 +100,8 @@
     }
 
     .item {
-      max-width: 500px;
+      min-width: 100%;
+      min-height: 100px;
       margin: 32px 0;
       background-color: white;
       padding: 64px;
