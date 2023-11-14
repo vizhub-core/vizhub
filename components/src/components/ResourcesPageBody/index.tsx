@@ -19,14 +19,13 @@ const Hero = () => (
           color: 'white',
           width: '50%',
           textAlign: 'left',
-
         }}
       >
         <div className="hero__title">
           Expand Your Circle
         </div>
 
-        <div className="hero__desc" >
+        <div className="hero__desc">
           <p>
             Connect with like-minded people and
             organizations. Find resources to help you grow

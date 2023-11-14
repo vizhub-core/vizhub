@@ -21,7 +21,7 @@ $mobile-breakpoint: 550px;
   }
   .middle {
     display: flex;
-    flex: 1;
+    // flex: 1;
     flex-direction: column;
 
     /* To suport PrettierErrorOverlay, which is position: absolute */
