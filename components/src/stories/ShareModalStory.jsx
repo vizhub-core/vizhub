@@ -23,14 +23,22 @@ export const args = {
 
 const Story = () => {
   const [show, setShow] = useState(true);
+
+  // State to manage checkbox value, renamed to anyoneCanEdit
+  const [anyoneCanEdit, setAnyoneCanEdit] = useState(false);
+
+  console.log('anyoneCanEdit', anyoneCanEdit);
+
   return (
     <div className="layout-centered">
       <ShareModal
         show={show}
-        {...args}
         onClose={() => {
           setShow(false);
         }}
+        anyoneCanEdit={anyoneCanEdit}
+        setAnyoneCanEdit={setAnyoneCanEdit}
+        {...args}
       />
     </div>
   );

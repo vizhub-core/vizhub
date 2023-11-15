@@ -91,6 +91,9 @@ export interface Info {
   // `undefined` means the viz is public.
   visibility?: Visibility;
 
+  // True if anyone can edit this viz.
+  anyoneCanEdit?: boolean;
+
   // A Viz may or may not exist within a Folder.
   folder?: FolderId;
 
