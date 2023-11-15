@@ -85,8 +85,11 @@ export const VizPage: Page = ({
     contentSnapshot,
     contentShareDBDoc,
   );
-  const submitContentOperation =
-    useSubmitOperation<Content>(contentShareDBDoc);
+  const submitContentOperation: (
+    next: (content: Content) => Content,
+  ) => void = useSubmitOperation<Content>(
+    contentShareDBDoc,
+  );
 
   const contentShareDBDocPresence = useShareDBDocPresence(
     id,
@@ -349,6 +352,7 @@ export const VizPage: Page = ({
             canUserEditViz,
             setVizTitle,
             setAnyoneCanEdit,
+            submitContentOperation,
           }}
         />
       </SplitPaneResizeProvider>

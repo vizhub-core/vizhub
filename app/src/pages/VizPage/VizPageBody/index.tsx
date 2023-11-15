@@ -69,6 +69,7 @@ export const VizPageBody = ({
   canUserEditViz,
   setVizTitle,
   setAnyoneCanEdit,
+  submitContentOperation,
 }: {
   info: Info;
   content: Content;
@@ -102,6 +103,9 @@ export const VizPageBody = ({
   canUserEditViz: boolean;
   setVizTitle: (title: string) => void;
   setAnyoneCanEdit: (anyoneCanEdit: boolean) => void;
+  submitContentOperation: (
+    next: (content: Content) => Content,
+  ) => void;
 }) => {
   // The currently authenticated user, if any.
   const authenticatedUser: User | null = useContext(
@@ -296,6 +300,7 @@ export const VizPageBody = ({
           }
           srcdocError={srcdocError}
           authenticatedUser={authenticatedUser}
+          submitContentOperation={submitContentOperation}
         />
 
         <div
