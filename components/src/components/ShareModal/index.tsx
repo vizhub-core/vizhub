@@ -17,36 +17,57 @@ export const ShareModal = ({
   linkToCopy,
   onClose,
   onLinkCopy,
+  anyoneCanEdit,
+  setAnyoneCanEdit,
   onLinkSectionNavigate,
   onEmbedSectionNavigate,
   onSnippetSectionNavigate,
-  anyoneCanEdit,
-  setAnyoneCanEdit,
+  onCollaboratorsSectionNavigate,
 }: {
   show: boolean;
   linkToCopy: string;
   onClose: () => void;
   onLinkCopy: () => void;
-  onLinkSectionNavigate: () => void;
-  onEmbedSectionNavigate: () => void;
-  onSnippetSectionNavigate: () => void;
   anyoneCanEdit: boolean;
   setAnyoneCanEdit: (anyoneCanEdit: boolean) => void;
+  onLinkSectionNavigate?: () => void;
+  onEmbedSectionNavigate?: () => void;
+  onSnippetSectionNavigate?: () => void;
+  onCollaboratorsSectionNavigate?: () => void;
 }) => {
   const [section, setSection] = useState('link');
 
-  const handleSectionSelect = useCallback((newSection) => {
-    // Emit these for analytics only
-    if (newSection === 'link') {
-      onLinkSectionNavigate();
-    } else if (newSection === 'embed') {
-      onEmbedSectionNavigate();
-    } else if (newSection === 'snippet') {
-      onSnippetSectionNavigate();
-    }
+  const handleSectionSelect = useCallback(
+    (newSection: string) => {
+      // Emit these for analytics only
+      if (newSection === 'link' && onLinkSectionNavigate) {
+        onLinkSectionNavigate();
+      } else if (
+        newSection === 'embed' &&
+        onEmbedSectionNavigate
+      ) {
+        onEmbedSectionNavigate();
+      } else if (
+        newSection === 'snippet' &&
+        onSnippetSectionNavigate
+      ) {
+        onSnippetSectionNavigate();
+      } else if (
+        newSection === 'collaborators' &&
+        onCollaboratorsSectionNavigate
+      ) {
+        onCollaboratorsSectionNavigate();
+      }
 
-    setSection(newSection);
-  }, []);
+      setSection(newSection);
+    },
+    [
+      onLinkSectionNavigate,
+      onEmbedSectionNavigate,
+      onSnippetSectionNavigate,
+      onCollaboratorsSectionNavigate,
+    ],
+  );
 
   return show ? (
     <Modal show={show} onHide={onClose} animation={false}>
