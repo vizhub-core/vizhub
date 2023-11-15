@@ -31,8 +31,8 @@ const Hero = () => (
       </div>
     </div>
     <iframe
-      width="800%"
-      height="800"
+      width="59.1%"
+      height="500"
       src="https://vizhub.com/nitanagdeote/120fb7b17edc479fac1522a3c5cdd553?mode=embed"
       title="Hero Section-Rotating Globe-Interactive Viz"
       frameBorder="0"
