@@ -185,6 +185,45 @@ export const verifyVizAccessTest = () => {
           expected: false,
         }),
       );
+
+      it(
+        'read public viz with `anyoneCanEdit`, anyone',
+        verify({
+          userId: undefined,
+          info: {
+            ...primordialViz.info,
+            anyoneCanEdit: true,
+          },
+          action: READ,
+          expected: true,
+        }),
+      );
+
+      it(
+        'write public viz with `anyoneCanEdit`, anyone',
+        verify({
+          userId: undefined,
+          info: {
+            ...primordialViz.info,
+            anyoneCanEdit: true,
+          },
+          action: WRITE,
+          expected: true,
+        }),
+      );
+
+      it(
+        'delete public viz with `anyoneCanEdit`, anyone',
+        verify({
+          userId: undefined,
+          info: {
+            ...primordialViz.info,
+            anyoneCanEdit: true,
+          },
+          action: DELETE,
+          expected: false,
+        }),
+      );
     });
     describe('cases requiring Permissions queries', () => {
       it(

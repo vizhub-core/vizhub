@@ -41,6 +41,12 @@ export const VerifyVizAccess = (gateways: Gateways) => {
         JSON.stringify(options),
       );
     }
+
+    // Allow anyone to edit a viz wherein `anyoneCanEdit` is true.
+    if (action === WRITE && info.anyoneCanEdit) {
+      return ok(true);
+    }
+
     // If user is undefined, then the user is not logged in,
     // and therefore can only read public or unlisted vizzes.
     if (authenticatedUserId === undefined) {

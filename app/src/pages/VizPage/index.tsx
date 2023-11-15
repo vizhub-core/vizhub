@@ -3,6 +3,7 @@ import {
   Files,
   ShareDBDoc,
   SplitPaneResizeProvider,
+  useSubmitOperation,
 } from 'vzcode';
 import {
   Content,
@@ -24,12 +25,15 @@ import { Page, PageData } from '../Page';
 import { VizPageBody } from './VizPageBody';
 import { VizPageToasts } from './VizPageToasts';
 import { useOnFork } from './useOnFork';
-import { useOnSettingsSave } from './useOnSettingsSave';
 import { getRuntimeVersion } from '../../accessors/getRuntimeVersion';
 import { generateExportZipV2 } from './export/generateExportZipV2';
 import { generateExportZipV3 } from './export/generateExportZipV3';
 import './styles.scss';
-import { useSetVizTitle } from './useSetVizTitle';
+import {
+  useOnSettingsSave,
+  useSetAnyoneCanEdit,
+  useSetVizTitle,
+} from './useVizMutations';
 
 const vizKit = VizKit({ baseUrl: '/api' });
 
@@ -72,11 +76,18 @@ export const VizPage: Page = ({
     useShareDBDoc<Info>(infoSnapshot, 'Info');
   const info: Info = useData(infoSnapshot, infoShareDBDoc);
   const id: VizId = info.id;
+  const submitInfoOperation =
+    useSubmitOperation<Info>(infoShareDBDoc);
 
   const contentShareDBDoc: ShareDBDoc<Content> =
     useShareDBDoc<Content>(contentSnapshot, 'Content');
   const content: Content = useData(
     contentSnapshot,
+    contentShareDBDoc,
+  );
+  const submitContentOperation: (
+    next: (content: Content) => Content,
+  ) => void = useSubmitOperation<Content>(
     contentShareDBDoc,
   );
 
@@ -186,9 +197,10 @@ export const VizPage: Page = ({
     return [state, toggleState];
   };
 
-  // Now you can use the custom hook to manage each modal's state:
   const [showForkModal, toggleForkModal] = useToggleState();
   const [showSettingsModal, toggleSettingsModal] =
+    useToggleState();
+  const [showShareModal, toggleShareModal] =
     useToggleState();
   // const [showRenameModal, toggleRenameModal] =
   //   useToggleState();
@@ -217,11 +229,6 @@ export const VizPage: Page = ({
         `Unknown runtime version: ${runtimeVersion}`,
       );
     }
-  }, []);
-
-  // Handle when the user clicks the "Share" button.
-  const onShareClick = useCallback(() => {
-    console.log('TODO onShareClick');
   }, []);
 
   ///////////////////////////////////////////
@@ -289,12 +296,17 @@ export const VizPage: Page = ({
 
   // When the user clicks "Save" from within the settings modal.
   const onSettingsSave = useOnSettingsSave(
-    infoShareDBDoc,
+    submitInfoOperation,
     toggleSettingsModal,
   );
 
   // Saves the title when the user edits it.
-  const setVizTitle = useSetVizTitle(infoShareDBDoc);
+  const setVizTitle = useSetVizTitle(submitInfoOperation);
+
+  // useSetAnyoneCanEdit
+  const setAnyoneCanEdit = useSetAnyoneCanEdit(
+    submitInfoOperation,
+  );
 
   // /////////////////////////////////////////
   /////////////// Analytics///////////////////
@@ -326,18 +338,21 @@ export const VizPage: Page = ({
             showEditor,
             setShowEditor,
             onExportClick,
-            onShareClick,
             showForkModal,
             toggleForkModal,
             onFork,
             initialReadmeHTML,
             showSettingsModal,
             toggleSettingsModal,
+            showShareModal,
+            toggleShareModal,
             onSettingsSave,
             initialSrcdoc,
             initialSrcdocError,
             canUserEditViz,
             setVizTitle,
+            setAnyoneCanEdit,
+            submitContentOperation,
           }}
         />
       </SplitPaneResizeProvider>
