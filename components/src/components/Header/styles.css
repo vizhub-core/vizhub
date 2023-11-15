@@ -6,24 +6,12 @@
 .vh-brand-logo {
   padding-top: 0;
   padding-bottom: 0;
-  padding-left: 30px;
 }
 .navbar__avatar-toggle {
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
 }
 
-.basic-navbar-nav {
-  padding: 10px;
-}
 .vh-header-button {
-  margin: 30px;
-}
-#headerTop {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
-  background-color: #fff;
-  border-bottom: 1px solid #e5e5e5;
+  margin-bottom: 10px;
 }

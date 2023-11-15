@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, Nav, Button } from '../bootstrap';
 import { LinkSection } from './LinkSection';
+import { CollaboratorsSection } from './CollaboratorsSection';
 
 const sections = {
   link: LinkSection,
@@ -11,6 +12,8 @@ const sections = {
 
   // TODO
   snippet: () => null,
+
+  collaborators: CollaboratorsSection,
 };
 
 export const ShareModal = ({
@@ -60,6 +63,11 @@ export const ShareModal = ({
           </Nav.Item>
           <Nav.Item>
             <Nav.Link eventKey="snippet">Snippet</Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link eventKey="collaborators">
+              Collaborators
+            </Nav.Link>
           </Nav.Item>
         </Nav>
         <Section

@@ -9,6 +9,15 @@ import { HelpSVG } from '../Icons/HelpSVG';
 import { LogoSVG } from '../Icons/LogoSVG';
 import './styles.css';
 
+// Feature flag to enable/disable help icon
+const enableHelpSVG = false;
+
+// Feature flag to enable/disable resources link
+const enableResourcesLink = false;
+
+// Feature flag to enable/disable pricing page link
+const enablePricingLink = false;
+
 export const Header = ({
   authenticatedUserAvatarURL,
   loginHref,
@@ -46,22 +55,34 @@ export const Header = ({
           >
             Forum
           </Nav.Link>
-          <Nav.Link
-            href={resourcesHref}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Resources
-          </Nav.Link>
-          <Nav.Link href={pricingHref}>Pricing</Nav.Link>
-          <Nav.Link
-            href="https://vizhub.com/forum/c/help/6"
-            target="_blank"
-            rel="noopener noreferrer"
-            title="Help"
-          >
-            <HelpSVG />
-          </Nav.Link>
+          {enableResourcesLink && (
+            <Nav.Link
+              href={resourcesHref}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Resources
+            </Nav.Link>
+          )}
+          {enablePricingLink && (
+            <Nav.Link
+              href={pricingHref}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Pricing
+            </Nav.Link>
+          )}
+          {enableHelpSVG && (
+            <Nav.Link
+              href="https://vizhub.com/forum/c/help/6"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Help"
+            >
+              <HelpSVG />
+            </Nav.Link>
+          )}
 
           {authenticatedUserAvatarURL ? (
             <Dropdown align="end">
