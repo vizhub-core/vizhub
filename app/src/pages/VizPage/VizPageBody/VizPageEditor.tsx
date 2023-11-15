@@ -1,28 +1,8 @@
 import { Content, User } from 'entities';
-import { useReducer } from 'react';
-import type {
-  EditorCache,
-  Files,
-  ShareDBDoc,
-} from 'vzcode';
+import type { ShareDBDoc } from 'vzcode';
 import {
   VZCodeProvider,
-  VZSidebar,
-  VZSettings,
   VZResizer,
-  TabList,
-  CodeEditor,
-  CodeErrorOverlay,
-  PresenceNotifications,
-  useFileCRUD,
-  vzReducer,
-  defaultTheme,
-  useActions,
-  useOpenDirectories,
-  usePrettier,
-  useEditorCache,
-  useDynamicTheme,
-  createInitialState,
   VZLeft,
   VZMiddle,
 } from 'vzcode';
@@ -48,6 +28,7 @@ export const VizPageEditor = ({
   contentShareDBDocPresence,
   srcdocError,
   authenticatedUser,
+  submitContentOperation,
 }: {
   showEditor: boolean;
   content: Content | null;
@@ -55,6 +36,9 @@ export const VizPageEditor = ({
   contentShareDBDocPresence: any;
   srcdocError: string | null;
   authenticatedUser: User | null;
+  submitContentOperation: (
+    next: (content: Content) => Content,
+  ) => void;
 }) => {
   /////////////////////////////////////////////////////////
   /////////////////////////////////////////////////////////
@@ -88,6 +72,7 @@ export const VizPageEditor = ({
       typeScriptWorker={typeScriptWorker}
       initialUsername={initialUsername}
       codeError={srcdocError}
+      submitOperation={submitContentOperation}
     >
       {showEditor ? <VZLeft /> : null}
       <VZMiddle />
