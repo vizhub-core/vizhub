@@ -121,12 +121,6 @@ export const Header = ({
               as="a"
               href={loginHref}
               className="vh-header-button"
-              style={{
-                margin: '30px',
-                padding: '30px',
-                paddingTop: '5px',
-                paddingBottom: '5px',
-              }}
             >
               Log in
             </Button>
