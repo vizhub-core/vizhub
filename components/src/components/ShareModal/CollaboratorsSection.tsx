@@ -1,14 +1,17 @@
-import React, { useState, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { Form, InputGroup } from '../bootstrap';
 
-export const CollaboratorsSection = ({}) => {
-  // State to manage checkbox value
-  const [canEdit, setCanEdit] = useState(false);
-
+export const CollaboratorsSection = ({
+  anyoneCanEdit,
+  setAnyoneCanEdit,
+}: {
+  anyoneCanEdit: boolean;
+  setAnyoneCanEdit: (anyoneCanEdit: boolean) => void;
+}) => {
   // Handler to change the state when checkbox is clicked, memoized with useCallback
   const handleCheckboxChange = useCallback(() => {
-    setCanEdit(!canEdit);
-  }, [canEdit, setCanEdit]);
+    setAnyoneCanEdit(!anyoneCanEdit);
+  }, [anyoneCanEdit, setAnyoneCanEdit]);
 
   return (
     <Form.Group
@@ -19,7 +22,7 @@ export const CollaboratorsSection = ({}) => {
         <Form.Check
           type="checkbox"
           label="Anyone can edit"
-          checked={canEdit}
+          checked={anyoneCanEdit}
           onChange={handleCheckboxChange}
         />
       </InputGroup>
