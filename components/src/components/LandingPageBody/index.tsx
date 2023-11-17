@@ -6,7 +6,10 @@ import { LogoSVG } from '../Icons/LogoSVG';
 import { FacebookSVG } from '../Icons/FacebookSVG';
 import { TwitterSVG } from '../Icons/TwitterSVG';
 const Hero = () => (
-  <div className="hero">
+  <div
+    className="hero"
+    style={{ backgroundColor: 'black' }}
+  >
     <div className="hero__content">
       <div className="hero__title">Joy of Visualizing</div>
       <div className="hero__subtitle">
@@ -27,6 +30,13 @@ const Hero = () => (
         <p>Already a member? Log in</p>
       </div>
     </div>
+    <iframe
+      width="59.1%"
+      height="500"
+      src="https://vizhub.com/nitanagdeote/120fb7b17edc479fac1522a3c5cdd553?mode=embed"
+      title="Hero Section-Rotating Globe-Interactive Viz"
+      frameBorder="0"
+    ></iframe>
   </div>
 );
 const MostPopular = () => (

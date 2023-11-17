@@ -5,6 +5,7 @@ import {
   useEffect,
   useMemo,
   useRef,
+  useState,
 } from 'react';
 import type { ShareDBDoc } from 'vzcode';
 import { SplitPaneResizeContext } from 'vzcode';
@@ -161,18 +162,17 @@ export const VizPageBody = ({
   const iframeRef: RefObject<HTMLIFrameElement> =
     useRef<HTMLIFrameElement>(null);
 
-  // TODO clear this out on local build
-  // TODO update this from client-side Rollup errors
-  // const [srcdocError, setSrcdocError] = useState<
-  //   string | null
-  // >(initialSrcdocError);
-  const srcdocError = initialSrcdocError;
+  // TODO
+  // * [ ] clear this out on local build & qa that it works
+  // * [ ] update this from client-side Rollup errors & QA that it works
+  const [srcdocErrorMessage, setSrcdocErrorMessage] =
+    useState<string | null>(initialSrcdocError);
 
-  const setSrcdocError = (srcdocError: string | null) => {
-    console.log('TODO surface this error in VZCode');
-    console.log('setSrcdocError', srcdocError);
-  };
-
+  const setSrcdocError = useCallback((error) => {
+    console.log('setSrcdocError');
+    console.log(error);
+    // setSrcdocErrorMessage(errorMessage);
+  }, []);
   // Set up the runtime environment.
   useRuntime({ content, iframeRef, setSrcdocError });
 
@@ -298,7 +298,7 @@ export const VizPageBody = ({
           contentShareDBDocPresence={
             contentShareDBDocPresence
           }
-          srcdocError={srcdocError}
+          srcdocErrorMessage={srcdocErrorMessage}
           authenticatedUser={authenticatedUser}
           submitContentOperation={submitContentOperation}
         />
