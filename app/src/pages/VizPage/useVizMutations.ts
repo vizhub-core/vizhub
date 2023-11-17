@@ -38,6 +38,19 @@ export const useSetAnyoneCanEdit = (
     [submitInfoOperation],
   );
 
+// Marks a viz as uncommitted.
+export const useSetUncommitted = (
+  submitInfoOperation: (next: (info: Info) => Info) => void,
+) =>
+  useCallback(() => {
+    submitInfoOperation(
+      (info: Info): Info => ({
+        ...info,
+        committed: false,
+      }),
+    );
+  }, [submitInfoOperation]);
+
 export const useOnSettingsSave = (
   submitInfoOperation: (
     next: (content: Info) => Info,
