@@ -32,8 +32,10 @@ import './styles.scss';
 import {
   useOnSettingsSave,
   useSetAnyoneCanEdit,
+  useSetUncommitted,
   useSetVizTitle,
 } from './useVizMutations';
+import { useMarkUncommitted } from './useMarkUncommitted';
 
 const vizKit = VizKit({ baseUrl: '/api' });
 
@@ -303,10 +305,19 @@ export const VizPage: Page = ({
   // Saves the title when the user edits it.
   const setVizTitle = useSetVizTitle(submitInfoOperation);
 
-  // useSetAnyoneCanEdit
   const setAnyoneCanEdit = useSetAnyoneCanEdit(
     submitInfoOperation,
   );
+
+  const setUncommitted = useSetUncommitted(
+    submitInfoOperation,
+  );
+
+  useMarkUncommitted({
+    contentShareDBDoc,
+    infoShareDBDoc,
+    setUncommitted,
+  });
 
   // /////////////////////////////////////////
   /////////////// Analytics///////////////////
