@@ -26,7 +26,7 @@ export const VizPageEditor = ({
   content,
   contentShareDBDoc,
   contentShareDBDocPresence,
-  srcdocError,
+  srcdocErrorMessage,
   authenticatedUser,
   submitContentOperation,
 }: {
@@ -34,7 +34,7 @@ export const VizPageEditor = ({
   content: Content | null;
   contentShareDBDoc: ShareDBDoc<Content>;
   contentShareDBDocPresence: any;
-  srcdocError: string | null;
+  srcdocErrorMessage: string | null;
   authenticatedUser: User | null;
   submitContentOperation: (
     next: (content: Content) => Content,
@@ -71,7 +71,7 @@ export const VizPageEditor = ({
       prettierWorker={prettierWorker}
       typeScriptWorker={typeScriptWorker}
       initialUsername={initialUsername}
-      codeError={srcdocError}
+      codeError={srcdocErrorMessage}
       submitOperation={submitContentOperation}
     >
       {showEditor ? <VZLeft /> : null}
