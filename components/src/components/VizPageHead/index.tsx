@@ -6,6 +6,7 @@ import { ChevronSVG } from '../Icons/ChevronSVG';
 import { DownloadSVG } from '../Icons/DownloadSVG';
 import { SettingsSVG } from '../Icons/SettingsSVG';
 import './styles.scss';
+import { TrashSVG } from '../Icons/TrashSVG';
 
 export const VizPageHead = ({
   showEditor,
@@ -14,8 +15,10 @@ export const VizPageHead = ({
   onShareClick,
   onForkClick,
   showForkButton,
+  showTrashButton,
   showSettingsButton,
   onSettingsClick,
+  onTrashClick,
 }) => {
   const toggleShowEditor = useCallback(
     () => setShowEditor(!showEditor),
@@ -59,6 +62,16 @@ export const VizPageHead = ({
           >
             <SettingsSVG />
             Settings
+          </Button>
+        ) : null}
+        {showTrashButton ? (
+          <Button
+            variant="light"
+            size="sm"
+            onClick={onTrashClick}
+          >
+            <TrashSVG fill="#FF006B" />
+            Delete
           </Button>
         ) : null}
         {showForkButton ? (
