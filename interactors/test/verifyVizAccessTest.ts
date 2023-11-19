@@ -20,6 +20,8 @@ import {
 } from 'gateways/test';
 import { initGateways } from './initGateways';
 import { VerifyVizAccess } from '../src';
+import { VizAccess } from '../src/verifyVizAccess';
+import { Result } from 'gateways';
 
 const verify =
   ({
@@ -49,17 +51,20 @@ const verify =
       await savePermission(permission);
     }
 
-    const result = await verifyVizAccess({
-      authenticatedUserId: userId,
-      info,
-      action,
-    });
+    const result: Result<VizAccess> = await verifyVizAccess(
+      {
+        authenticatedUserId: userId,
+        info,
+        actions: [action],
+      },
+    );
 
     if (result.outcome === 'failure') {
       console.log(result.error);
     }
     assert(result.outcome === 'success');
-    expect(result.value).toEqual(expected);
+    const vizAccess: VizAccess = result.value;
+    expect(vizAccess[action]).toEqual(expected);
   };
 
 export const verifyVizAccessTest = () => {
