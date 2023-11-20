@@ -5,8 +5,9 @@
 import { VerifyVizAccess } from 'interactors';
 import { CONTENT_COLLECTION } from 'database';
 import { parseAuth0Sub } from 'api';
-import { Gateways } from 'gateways';
+import { Gateways, Result } from 'gateways';
 import { Action, Info, READ, VizId, WRITE } from 'entities';
+import { VizAccess } from 'interactors/src/verifyVizAccess';
 
 // Useful for debugging agent identification.
 const debug = false;
@@ -150,17 +151,18 @@ const vizVerify = (gateways: Gateways, action: Action) => {
         throw infoResult.error;
       }
       const info: Info = infoResult.value.data;
-      const verifyResult = await verifyVizAccess({
-        authenticatedUserId: userId,
-        info,
-        action,
-        debug,
-      });
+      const verifyResult: Result<VizAccess> =
+        await verifyVizAccess({
+          authenticatedUserId: userId,
+          info,
+          actions: [action],
+          debug,
+        });
       if (verifyResult.outcome === 'failure') {
         throw verifyResult.error;
       }
-      const canWrite = verifyResult.value;
-      if (!canWrite) {
+      const hasPermission = verifyResult.value[action];
+      if (!hasPermission) {
         return next(
           'You do not have permissions to edit this viz.\nThis viz is now disconnected from remote updates so that you can make edits locally, but they will not be saved unless you fork this viz.',
         );

@@ -32,22 +32,23 @@ export const VizPageToasts = ({
     <>
       {hasUnforkedEdits ? (
         <VizToast
-          title="Limited Editing Permissions"
+          title="Permission Denied"
           isWarning={true}
         >
           <ul className="mb-0">
             <li>
               You do not have permissions to edit this viz
             </li>
-            <li>
+            {/* <li>
               Local edits are possible but won't be saved
             </li>
-            <li>Disconnected from remote updates</li>
+            <li>Disconnected from remote updates</li> */}
             <li>
+              You can{' '}
               <a href="" onClick={handleForkLinkClick}>
-                Fork the viz
+                Fork this viz
               </a>{' '}
-              to save your local changes
+              to modify it.
             </li>
           </ul>
         </VizToast>

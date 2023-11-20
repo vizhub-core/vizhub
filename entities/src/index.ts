@@ -139,6 +139,8 @@ export type {
   MigrationBatch,
 } from './Migration';
 
+export type { Image } from './Images';
+
 export type EntityName =
   | 'Info'
   | 'Content'
