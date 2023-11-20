@@ -1,9 +1,9 @@
+import { useContext } from 'react';
 import { Info, Snapshot, sortOptions } from 'entities';
 import { ExplorePageBody } from 'components';
 import { SmartHeader } from '../../smartComponents/SmartHeader';
 import { SortContext } from '../../contexts/SortContext';
-import { VizPreviewPresenter } from '../VizPreviewPresenter';
-import { useContext } from 'react';
+import { VizPreviewPresenter } from '../../smartComponents/VizPreviewPresenter';
 import { InfosAndOwnersContext } from '../../contexts/InfosAndOwnersContext';
 
 export const Body = () => {
