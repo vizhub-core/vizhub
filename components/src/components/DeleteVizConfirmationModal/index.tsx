@@ -1,16 +1,34 @@
 import { Button, Modal } from '../bootstrap';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 
-// Confirmation modal for deleting a file or directory.
+// Confirmation modal for deleting a viz.
 // Inspired by https://react-bootstrap.netlify.app/docs/components/modal/#live-demo
-
-// TODO reduce duplication between this and
-// vzcode/src/client/VZSidebar/DeleteConfirmationModal.tsx
 export const DeleteVizConfirmationModal = ({
   show,
   onClose,
   onConfirm,
 }) => {
+  const handleEnterKey = useCallback(
+    (event: KeyboardEvent) => {
+      if (event.key === 'Enter') {
+        onConfirm();
+      }
+    },
+    [onConfirm],
+  );
+
+  useEffect(() => {
+    if (show) {
+      window.addEventListener('keydown', handleEnterKey);
+    } else {
+      window.removeEventListener('keydown', handleEnterKey);
+    }
+
+    return () => {
+      window.removeEventListener('keydown', handleEnterKey);
+    };
+  }, [show, handleEnterKey]);
+
   return (
     <Modal show={show} onHide={onClose} centered>
       <Modal.Header closeButton onClick={onClose}>
