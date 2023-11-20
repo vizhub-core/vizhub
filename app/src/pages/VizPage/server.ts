@@ -19,6 +19,8 @@ import { getRuntimeVersion } from '../../accessors/getRuntimeVersion';
 import { build } from './v3Runtime/build';
 import { toV3RuntimeFiles } from './v3Runtime/toV3RuntimeFiles';
 import { getAuthenticatedUser } from '../getAuthenticatedUser';
+import { VizAccess } from 'interactors/src/verifyVizAccess';
+import { Result } from 'gateways';
 
 setJSDOM(JSDOM);
 // TODO move the data fetching part of this to a separate file - interactors/getVizPageData.ts
@@ -52,39 +54,28 @@ VizPage.getPageData = async ({
     });
 
     // Access control: Verify that the user has read access to the viz.
-    const verifyVizReadAccessResult = await verifyVizAccess(
-      {
+    const verifyVizReadAccessResult: Result<VizAccess> =
+      await verifyVizAccess({
         authenticatedUserId,
         info,
-        action: READ,
-      },
-    );
+        actions: [READ, WRITE],
+      });
     if (verifyVizReadAccessResult.outcome === 'failure') {
       console.log('Error when verifying viz access:');
       console.log(verifyVizReadAccessResult.error);
       return null;
     }
-    if (!verifyVizReadAccessResult.value) {
+    const vizAccess: VizAccess =
+      verifyVizReadAccessResult.value;
+
+    if (!vizAccess[READ]) {
       // console.log('User does not have read access to viz');
       return null;
     }
 
     // Access control: Verify that the user has write access to the viz.
     // This is used to determine whether to show the "Settings" button.
-    // TODO refactor verifyVizAccess to check multiple actions at once.
-    const verifyVizWriteAccessResult =
-      await verifyVizAccess({
-        authenticatedUserId,
-        info,
-        action: WRITE,
-      });
-    if (verifyVizWriteAccessResult.outcome === 'failure') {
-      console.log('Error when verifying viz access:');
-      console.log(verifyVizWriteAccessResult.error);
-      return null;
-    }
-    const canUserEditViz: boolean =
-      verifyVizWriteAccessResult.value;
+    const canUserEditViz: boolean = vizAccess[WRITE];
 
     // If we're here, then the user has read access to the viz,
     // so it's worth fetching the content.

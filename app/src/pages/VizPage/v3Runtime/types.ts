@@ -29,9 +29,9 @@ export type PackageJson = {
 // };
 
 export type BuildResult = {
-  // TODO iterate types for `src` and `pkg`
   src: string;
-  pkg: string;
+  pkg: PackageJson;
   errors: Array<string>;
   warnings: Array<string>;
+  time: number;
 };

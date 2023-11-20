@@ -43,6 +43,8 @@ export const ForkViz = (gateways: Gateways) => {
     forkedFromCommitId?: CommitId; // The ID of the commit being forked from (optional).
     newVizId?: VizId; // The ID of the new viz (optional).
   }): Promise<Result<Info>> => {
+    // TODO access control - check if the authenticated user
+    // is allowed to read the forkedFrom viz.
     const {
       forkedFrom,
       timestamp,

@@ -71,8 +71,8 @@ export const build = async ({
   const startTime = Date.now();
   const warnings = [];
   const errors = [];
-  let src: string;
-  let pkg: PackageJson;
+  let src: string | undefined;
+  let pkg: PackageJson | undefined;
 
   if (!files['index.js']) {
     errors.push({
@@ -124,8 +124,6 @@ export const build = async ({
           btoa(map.toString());
       }
     } catch (error) {
-      console.log('TODO handle this error');
-      console.log(error);
       const serializableError = JSON.parse(
         JSON.stringify(error),
       );

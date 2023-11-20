@@ -6,8 +6,10 @@ export const args = {
   onShareClick: () => console.log('onShareClick'),
   onForkClick: () => console.log('onForkClick'),
   onSettingsClick: () => console.log('onSettingsClick'),
+  onTrashClick: () => console.log('onTrashClick'),
   showForkButton: true,
   showSettingsButton: true,
+  showTrashButton: true,
 };
 
 const Story = () => {

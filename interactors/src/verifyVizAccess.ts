@@ -11,16 +11,31 @@ import {
   WRITE,
   DELETE,
   UNLISTED,
+  Permission,
 } from 'entities';
 
+// Represents the access that a user has to a viz.
+// Keys are actions, values are booleans representing
+// whether or not the user is allowed to perform that action.
+// Only actions that are explicitly specified are included.
+export type VizAccess = {
+  [action: string]: boolean;
+};
+
 // Delete is allowed only for admins.
-const canDelete = (permission) => permission.role === ADMIN;
+const canDelete = (permission: Permission) =>
+  permission.role === ADMIN;
 
 // Write is allowed only for editor and admin roles.
-const canWrite = (permission) =>
+const canWrite = (permission: Permission) =>
   permission.role === EDITOR || permission.role === ADMIN;
 
-// VerifyAccess
+// Read is allowed for public or unlisted vizzes.
+const canRead = (info: Info) =>
+  info.visibility === PUBLIC ||
+  info.visibility === UNLISTED;
+
+// VerifyVizAccess
 // * Determines whether or not a given user is allowed to perform
 //   a given action on a given viz.
 export const VerifyVizAccess = (gateways: Gateways) => {
@@ -29,10 +44,10 @@ export const VerifyVizAccess = (gateways: Gateways) => {
   return async (options: {
     authenticatedUserId: UserId | undefined;
     info: Info;
-    action: Action;
+    actions: Array<Action>;
     debug?: boolean;
-  }): Promise<Result<boolean>> => {
-    const { authenticatedUserId, info, action, debug } =
+  }): Promise<Result<VizAccess>> => {
+    const { authenticatedUserId, info, actions, debug } =
       options;
 
     if (debug) {
@@ -42,92 +57,96 @@ export const VerifyVizAccess = (gateways: Gateways) => {
       );
     }
 
-    // Allow anyone to edit a viz wherein `anyoneCanEdit` is true.
-    if (action === WRITE && info.anyoneCanEdit) {
-      return ok(true);
+    // If the user is the owner of the viz, then they can perform any action.
+    if (info.owner === authenticatedUserId) {
+      const ownerAccess: VizAccess = {};
+      for (const action of actions) {
+        ownerAccess[action] = true;
+      }
+      return ok(ownerAccess);
     }
 
-    // If user is undefined, then the user is not logged in,
-    // and therefore can only read public or unlisted vizzes.
-    if (authenticatedUserId === undefined) {
-      // If the action is read, then the user can read public or unlisted vizzes.
-      if (action === READ) {
-        return ok(
-          info.visibility === PUBLIC ||
-            info.visibility === UNLISTED,
+    let resources: Array<ResourceId> | undefined;
+    let permissions: Array<Permission> = [];
+    let dataFetched = false;
+
+    const fetchDataIfNeeded = async () => {
+      if (dataFetched) return;
+      dataFetched = true;
+
+      if (info.folder) {
+        // At this point we need to look at the permissions (collaborators).
+        // To implement "waterfall permissions" (like Box),
+        // we look up all the folder ancestors of this viz.
+        const ancestorsResult = await getFolderAncestors(
+          info.folder,
+        );
+        if (ancestorsResult.outcome === 'failure') {
+          return err(ancestorsResult.error);
+        }
+        const ancestors = ancestorsResult.value;
+        resources = [
+          info.id,
+          ...ancestors.map((folder) => folder.id),
+        ];
+      } else {
+        resources = [info.id];
+      }
+
+      if (authenticatedUserId && resources.length) {
+        // Then check if the user has permission to access any of those folders,
+        // in addition to permissions on this viz.
+        const permissionsResult = await getPermissions(
+          authenticatedUserId,
+          resources,
+        );
+        if (permissionsResult.outcome === 'failure') {
+          return err(permissionsResult.error);
+        }
+        permissions = permissionsResult.value.map(
+          (d) => d.data,
         );
       }
-      // If the action is write or delete, then the user cannot perform that action.
-      if (action === WRITE || action === DELETE) {
-        return ok(false);
+    };
+
+    let vizAccess: VizAccess = {};
+
+    // Process each action
+    for (const action of actions) {
+      if (
+        action === READ &&
+        (canRead(info) || info.anyoneCanEdit)
+      ) {
+        vizAccess[action] = true;
+        continue;
       }
 
-      // Defensive programming to make sure we don't forget to handle a case.
-      throw new Error(`Unknown action: ${action}`);
-    }
-
-    // If visibility is public, then anyone can read.
-    if (action === READ && info.visibility === PUBLIC) {
-      return ok(true);
-    }
-
-    // If the user is the owner of this viz,
-    // then the user can perform any action.
-    if (info.owner === authenticatedUserId) {
-      return ok(true);
-    }
-
-    // At this point we need to look at the permissions (collaborators).
-    // To implement "waterfall permissions" (like Box),
-    // we look up all the folder ancestors of this viz.
-    let resources: Array<ResourceId>;
-    if (info.folder) {
-      const ancestorsResult = await getFolderAncestors(
-        info.folder,
-      );
-      if (ancestorsResult.outcome === 'failure') {
-        return err(ancestorsResult.error);
-      }
-      const ancestors = ancestorsResult.value;
-
-      resources = [
-        info.id,
-        ...ancestors.map((folder) => folder.id),
-      ];
-    } else {
-      resources = [info.id];
-    }
-
-    // Then check if the user has permission to access any of those folders,
-    // in addition to permissions on this viz.
-    const permissionsResult = await getPermissions(
-      authenticatedUserId,
-      resources,
-    );
-    if (permissionsResult.outcome === 'failure') {
-      return err(permissionsResult.error);
-    }
-    const permissions = permissionsResult.value.map(
-      (d) => d.data,
-    );
-
-    if (permissions.length > 0) {
-      // If the user is a collaborator on any of these resources,
-      // regardless of role (because all roles grant read access)
-      // then the user can read this viz.
-      if (action === READ) {
-        return ok(true);
+      if (action === WRITE && info.anyoneCanEdit) {
+        vizAccess[action] = true;
+        continue;
       }
 
-      if (action === WRITE) {
-        return ok(permissions.some(canWrite));
-      }
+      await fetchDataIfNeeded();
 
-      if (action === DELETE) {
-        return ok(permissions.some(canDelete));
+      switch (action) {
+        case READ:
+          // If the user is a collaborator on any of these resources,
+          // regardless of role (because all roles grant read access)
+          // then the user can read this viz.
+          vizAccess[action] = permissions.length > 0;
+          break;
+        case WRITE:
+          vizAccess[action] = permissions.some(canWrite);
+          break;
+        case DELETE:
+          vizAccess[action] = permissions.some(canDelete);
+          break;
+        default:
+          // Defensive programming to make sure we don't forget to handle a case.
+          throw new Error(`Unknown action: ${action}`);
       }
     }
 
-    return ok(false);
+    return ok(vizAccess);
   };
 };

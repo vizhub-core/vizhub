@@ -22,6 +22,7 @@ import { FullExitSVG } from '../components/Icons/v2/FullExitSVG';
 import { MiniSVG } from '../components/Icons/v2/MiniSVG';
 import { SplitSVG } from '../components/Icons/v2/SplitSVG';
 import { VimSVG } from '../components/Icons/v2/VimSVG';
+import { TrashSVG } from '../components/Icons/TrashSVG';
 
 const v2icons = [
   v2ForkSVG,
@@ -55,6 +56,7 @@ const v3icons = [
   VisibilityPrivateSVG,
   VisibilityUnlistedSVG,
   VisibilityPublicSVG,
+  TrashSVG,
 ];
 
 const displayIcons = (icons) => (
