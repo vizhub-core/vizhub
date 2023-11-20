@@ -1,8 +1,8 @@
+import { useContext } from 'react';
 import { User, sortOptions } from 'entities';
 import { ProfilePageBody } from 'components';
 import { SmartHeader } from '../../smartComponents/SmartHeader';
-import { VizPreviewPresenter } from '../VizPreviewPresenter';
-import { useContext } from 'react';
+import { VizPreviewPresenter } from '../../smartComponents/VizPreviewPresenter';
 import { SortContext } from '../../contexts/SortContext';
 import { getUserDisplayName } from '../../accessors/getUserDisplayName';
 import { InfosAndOwnersContext } from '../../contexts/InfosAndOwnersContext';

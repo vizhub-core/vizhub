@@ -2,6 +2,7 @@ import { Info, Snapshot, User } from 'entities';
 import { VizPreview } from 'components/src/components/VizPreview';
 import { useShareDBDocData } from '../useShareDBDocData';
 import { getUserDisplayName } from '../accessors/getUserDisplayName';
+import { useMemo } from 'react';
 
 export const VizPreviewPresenter = ({
   infoSnapshot,
@@ -15,18 +16,29 @@ export const VizPreviewPresenter = ({
     'Info',
   );
 
+  const { id, title } = info;
+  const { userName, picture } = ownerUser;
+
+  const ownerName = useMemo(
+    () => getUserDisplayName(ownerUser),
+    [ownerUser],
+  );
+
   // TODO make this work for real
   // See https://github.com/vizhub-core/vizhub3/issues/65
-  // const thumbnailImageURL = `/api/thumbnail/${id}.png`;
-  const thumbnailImageURL = `https://vizhub.com/api/visualization/thumbnail/${info.id}.png`;
+  const thumbnailImageURL = useMemo(
+    () => `/api/viz-thumbnail/${id}.png`,
+    [id],
+  );
+  // const thumbnailImageURL = `https://vizhub.com/api/visualization/thumbnail/${info.id}.png`;
 
   return (
     <VizPreview
-      title={info.title}
+      title={title}
       thumbnailImageURL={thumbnailImageURL}
-      ownerName={getUserDisplayName(ownerUser)}
-      ownerAvatarURL={ownerUser.picture}
-      href={`/${ownerUser.userName}/${info.id}`}
+      ownerName={ownerName}
+      ownerAvatarURL={picture}
+      href={`/${userName}/${id}`}
     />
   );
 };
