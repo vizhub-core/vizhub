@@ -7,6 +7,7 @@ import {
   Commit,
   Info,
   Snapshot,
+  ImageMetadata,
 } from 'entities';
 import { sampleImage } from './sampleImageDataURI';
 import {
@@ -24,7 +25,7 @@ export const GetImage = (gateways: Gateways) => {
   const {
     getCommit,
     getInfo,
-    // getImageStatus,
+    getImageMetadata,
     // generateImage,
     // fetchImage,
     // storeImage,
@@ -68,15 +69,46 @@ export const GetImage = (gateways: Gateways) => {
       return err(vizAccessResult.error);
     }
     const vizAccess: VizAccess = vizAccessResult.value;
-
     if (!vizAccess.read) {
       return err(accessDeniedError('Read access denied'));
     }
 
+    // Fetch the image metadata
+    let imageMetadata: ImageMetadata | undefined;
+    const imageMetadataResult =
+      await getImageMetadata(commitId);
+    if (imageMetadataResult.outcome === 'failure') {
+      if (
+        imageMetadataResult.error.code ===
+        'resourceNotFound'
+      ) {
+        // This case is fine, it just means the image
+        // hasn't been generated yet.
+      } else {
+        // This is an unexpected error
+        return err(imageMetadataResult.error);
+      }
+    } else {
+      imageMetadata = imageMetadataResult.value.data;
+    }
+
+    if (!imageMetadata) {
+      // TODO generate image
+      console.log('TODO generate image');
+      return ok(sampleImage);
+    } else {
+      if (imageMetadata.status === 'generating') {
+        // TODO poll until image is generated
+        return ok(sampleImage);
+      }
+      if (imageMetadata.status === 'generated') {
+        // TODO fetch image
+        return ok(sampleImage);
+      }
+    }
+
     console.log('commit', commit);
     console.log('vizId', vizId);
-
-    // TODO access control based on viz info
 
     return ok(sampleImage);
   };
