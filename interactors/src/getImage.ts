@@ -8,6 +8,8 @@ import {
   Info,
   Snapshot,
   ImageMetadata,
+  dateToTimestamp,
+  Timestamp,
 } from 'entities';
 import { sampleImage } from './sampleImageDataURI';
 import {
@@ -26,6 +28,7 @@ export const GetImage = (gateways: Gateways) => {
     getCommit,
     getInfo,
     getImageMetadata,
+    saveImageMetadata,
     // generateImage,
     // fetchImage,
     // storeImage,
@@ -50,7 +53,8 @@ export const GetImage = (gateways: Gateways) => {
     const commit: Commit = commitResult.value;
     const vizId: VizId = commit.viz;
 
-    // Get the Info for this viz
+    // Get the Info for this viz,
+    // so we can verify access.
     const infoResult = await getInfo(vizId);
     if (infoResult.outcome === 'failure') {
       return err(infoResult.error);
@@ -85,16 +89,31 @@ export const GetImage = (gateways: Gateways) => {
         // This case is fine, it just means the image
         // hasn't been generated yet.
       } else {
-        // This is an unexpected error
+        // This is an unexpected error, like a database
+        // connection error.
         return err(imageMetadataResult.error);
       }
     } else {
       imageMetadata = imageMetadataResult.value.data;
     }
 
+    // If the image metadata is not found, assume
+    // the image status is 'not started'.
     if (!imageMetadata) {
+      // Store the metadata that indicates the image
+      // is being generated.
+      const now: Timestamp = dateToTimestamp(new Date());
+      const imageMetadata: ImageMetadata = {
+        status: 'generating',
+        commitId,
+        generatedAt: now,
+        lastAccessedAt: now,
+      };
+      await saveImageMetadata(imageMetadata);
+
       // TODO generate image
       console.log('TODO generate image');
+
       return ok(sampleImage);
     } else {
       if (imageMetadata.status === 'generating') {
