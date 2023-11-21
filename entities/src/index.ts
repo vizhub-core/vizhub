@@ -139,7 +139,7 @@ export type {
   MigrationBatch,
 } from './Migration';
 
-export type { Image } from './Images';
+export type { Image, ImageMetadata } from './Images';
 
 export type EntityName =
   | 'Info'
@@ -164,4 +164,5 @@ export type EntityName =
   | 'AnalyticsEvent'
   | 'MigrationStatus'
   | 'MigrationBatch'
-  | 'VizEmbedding';
+  | 'VizEmbedding'
+  | 'ImageMetadata';

@@ -30,6 +30,7 @@ import {
   VizEmbedding,
   MigrationStatus,
   MigrationBatch,
+  ImageMetadata,
 } from 'entities';
 import { v3RuntimeDemoFiles } from './v3RuntimeDemoFiles';
 
@@ -390,4 +391,11 @@ export const sampleMigrationBatch: MigrationBatch = {
   id: 'v2-0',
   numVizzesProcessed: 2,
   numVizzesMissed: 0,
+};
+
+export const sampleImageMetadata: ImageMetadata = {
+  commitId: 'commit1',
+  status: 'generated',
+  generatedAt: 12345,
+  lastAccessedAt: 12345,
 };

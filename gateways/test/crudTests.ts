@@ -22,6 +22,7 @@ import {
   sampleBetaProgramSignup,
   sampleMigrationStatus,
   sampleMigrationBatch,
+  sampleImageMetadata,
 } from './fixtures';
 import { EntityName } from 'entities';
 
@@ -122,4 +123,5 @@ export const sampleEntities = {
   // Embedding: sampleEmbedding,
   MigrationStatus: sampleMigrationStatus,
   MigrationBatch: sampleMigrationBatch,
+  ImageMetadata: sampleImageMetadata,
 };

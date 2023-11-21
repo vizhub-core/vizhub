@@ -65,6 +65,7 @@ export const crudEntityNames: Array<EntityName> = [
   'AnalyticsEvent',
   'MigrationStatus',
   'MigrationBatch',
+  'ImageMetadata',
 ];
 
 // These entities are stored directly in Mongo,
