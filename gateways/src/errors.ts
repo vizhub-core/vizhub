@@ -85,7 +85,4 @@ export const invariantViolationError = (
 export const accessDeniedError = (
   message: string,
 ): VizHubError =>
-  new VizHubError(
-    'Access denied: ' + message,
-    VizHubErrorCode.accessDenied,
-  );
+  new VizHubError(message, VizHubErrorCode.accessDenied);

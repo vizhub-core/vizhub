@@ -1,5 +1,5 @@
 import { describe, it, expect, assert } from 'vitest';
-import { GetImage } from '../src';
+import { GetImage, VerifyVizAccess } from '../src';
 import { initGateways } from './initGateways';
 import { sampleImage } from '../src/sampleImageDataURI';
 import {
@@ -8,7 +8,7 @@ import {
 } from 'gateways/test';
 
 export const getImageTest = () => {
-  describe.only('GetImage', () => {
+  describe('GetImage', () => {
     it('GetImage, success case', async () => {
       const gateways = initGateways();
       const { saveCommit, saveInfo } = gateways;
@@ -27,52 +27,64 @@ export const getImageTest = () => {
       expect(result.value).toEqual(sampleImage);
     });
 
-    // it('GetImage, commit retrieval failure', async () => {
-    //   const getImage = GetImage(gateways);
+    it('GetImage, commit retrieval failure', async () => {
+      const gateways = initGateways();
+      const getImage = GetImage(gateways);
 
-    //   // No setup for commit, it should fail to find it
-    //   const result = await getImage({
-    //     commitId: 'invalid-commit-id',
-    //     authenticatedUserId: 'valid-user-id',
-    //   });
-    //   expect(result.outcome).toEqual('failure');
-    //   // Expect specific error message or type
-    // });
+      const result = await getImage({
+        commitId: 'invalid-commit-id',
+        authenticatedUserId: 'valid-user-id',
+      });
+      expect(result.outcome).toEqual('failure');
+      assert(result.outcome === 'failure');
+      expect(result.error.code).toEqual('resourceNotFound');
+      expect(result.error.message).toEqual(
+        'Resource (Commit) not found with id: invalid-commit-id',
+      );
+    });
 
-    // it('GetImage, info retrieval failure', async () => {
-    //   const { saveCommit } = gateways;
-    //   const getImage = GetImage(gateways);
+    it('GetImage, info retrieval failure', async () => {
+      const gateways = initGateways();
+      const { saveCommit } = gateways;
+      const getImage = GetImage(gateways);
 
-    //   // Set up commit but no info
-    //   await saveCommit(primordialCommit);
+      // Set up commit but no info
+      await saveCommit(primordialCommit);
 
-    //   const result = await getImage({
-    //     commitId: primordialCommit.id,
-    //     authenticatedUserId: 'valid-user-id',
-    //   });
-    //   expect(result.outcome).toEqual('failure');
-    //   // Expect specific error message or type
-    // });
+      const result = await getImage({
+        commitId: primordialCommit.id,
+        authenticatedUserId: 'valid-user-id',
+      });
+      expect(result.outcome).toEqual('failure');
+      assert(result.outcome === 'failure');
+      expect(result.error.code).toEqual('resourceNotFound');
+      expect(result.error.message).toEqual(
+        'Resource (Info) not found with id: viz1',
+      );
+    });
 
-    // it('GetImage, access control failure', async () => {
-    //   const { saveCommit, saveInfo, verifyVizAccess } =
-    //     gateways;
-    //   const getImage = GetImage(gateways);
+    it('GetImage, access control failure', async () => {
+      const gateways = initGateways();
+      const { saveCommit, saveInfo } = gateways;
+      const getImage = GetImage(gateways);
 
-    //   // Set up initial state
-    //   await saveCommit(primordialCommit);
-    //   await saveInfo(/* mock info data */);
-    //   // Mock verifyVizAccess failure or simulate its behavior
+      await saveCommit(primordialCommit);
+      await saveInfo({
+        ...primordialViz.info,
+        visibility: 'private',
+      });
 
-    //   const result = await getImage({
-    //     commitId: primordialCommit.id,
-    //     authenticatedUserId: 'valid-user-id',
-    //   });
-    //   expect(result.outcome).toEqual('failure');
-    //   expect(result.error).toEqual(
-    //     accessDeniedError('Read access denied'),
-    //   );
-    // });
+      const result = await getImage({
+        commitId: primordialCommit.id,
+        authenticatedUserId: 'valid-user-id',
+      });
+      expect(result.outcome).toEqual('failure');
+      assert(result.outcome === 'failure');
+      expect(result.error.code).toEqual('accessDenied');
+      expect(result.error.message).toEqual(
+        'Read access denied',
+      );
+    });
   });
 };
 
