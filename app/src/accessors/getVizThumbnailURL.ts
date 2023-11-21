@@ -1,5 +1,5 @@
-import { VizId } from 'entities';
+import { CommitId } from 'entities';
 
 // Gets the URL for a viz thumbnail.
-export const getVizThumbnailURL = (id: VizId) =>
-  `/api/viz-thumbnail/${id}.png`;
+export const getVizThumbnailURL = (commitId: CommitId) =>
+  `/api/viz-thumbnail/${commitId}.png`;

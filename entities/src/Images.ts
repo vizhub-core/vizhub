@@ -1,21 +1,15 @@
+import { CommitId } from './RevisionHistory';
+import { Timestamp } from './common';
+
 // Image
 // * Represents the image generated from a Puppeteer screenshot.
 // * Can be stored as either a Buffer or a base64 encoded string.
 // * The 'buffer' property holds the image as a Buffer object, commonly used for binary data in Node.js.
 //     - Used when the image is generated as a file or a binary stream.
-//     - Is null if the image is stored in the base64 format.
-// * The 'base64' property contains a base64 encoded string of the image.
-//     - Useful for inline images in web contexts or for transmission over APIs.
-//     - Is null if the image is stored as a Buffer.
 // * The 'mimeType' property indicates the image format, typically 'image/png' or 'image/jpeg'.
 //     - Essential for correct interpretation and display of the image data.
-
-import { CommitId } from './RevisionHistory';
-import { Timestamp } from './common';
-
 export type Image = {
-  buffer: Buffer | null;
-  base64: string | null;
+  buffer: Buffer;
   mimeType: 'image/png' | 'image/jpeg';
 };
 

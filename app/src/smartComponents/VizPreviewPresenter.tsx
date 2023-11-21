@@ -17,7 +17,7 @@ export const VizPreviewPresenter = ({
     'Info',
   );
 
-  const { id, title } = info;
+  const { id, title, end } = info;
   const { userName, picture } = ownerUser;
 
   const ownerName = useMemo(
@@ -25,13 +25,10 @@ export const VizPreviewPresenter = ({
     [ownerUser],
   );
 
-  // TODO make this work for real
-  // See https://github.com/vizhub-core/vizhub3/issues/65
   const thumbnailImageURL = useMemo(
-    () => getVizThumbnailURL(id),
-    [id],
+    () => getVizThumbnailURL(end),
+    [end],
   );
-  // const thumbnailImageURL = `https://vizhub.com/api/visualization/thumbnail/${info.id}.png`;
 
   return (
     <VizPreview
