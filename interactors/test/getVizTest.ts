@@ -1,5 +1,4 @@
-// See also
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, assert } from 'vitest';
 import { primordialViz } from 'gateways/test';
 import { initGateways } from './initGateways';
 import { GetViz } from '../src';
@@ -16,6 +15,7 @@ export const getVizTest = () => {
 
       const result = await getViz(primordialViz.info.id);
       expect(result.outcome).toEqual('success');
+      assert(result.outcome === 'success');
       expect(result.value).toEqual({
         ...primordialViz,
         infoSnapshot: fakeSnapshot(primordialViz.info),
@@ -34,6 +34,7 @@ export const getVizTest = () => {
 
       const result = await getViz('bogus-id');
       expect(result.outcome).toEqual('failure');
+      assert(result.outcome === 'failure');
       expect(result.error.message).toEqual(
         'Resource (Info) not found with id: bogus-id',
       );
