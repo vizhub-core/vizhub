@@ -2,14 +2,14 @@
 // import { transform } from 'buble-jsx-only';
 
 import { transform } from 'buble';
-import { createFilter } from 'rollup-pluginutils';
+// import { createFilter } from 'rollup-pluginutils';
 
 export default function buble(options) {
   if (!options) options = {};
-  var filter = createFilter(
-    options.include,
-    options.exclude,
-  );
+  // var filter = createFilter(
+  //   options.include,
+  //   options.exclude,
+  // );
 
   if (!options.transforms) options.transforms = {};
   options.transforms.modules = false;
@@ -18,7 +18,7 @@ export default function buble(options) {
     name: 'buble',
 
     transform: function (code, id) {
-      if (!filter(id)) return null;
+      // if (!filter(id)) return null;
 
       try {
         return transform(code, options);
