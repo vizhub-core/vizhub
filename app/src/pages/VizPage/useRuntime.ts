@@ -4,10 +4,8 @@ import {
   useMemo,
   useRef,
 } from 'react';
-import { Content } from 'entities';
-import { getRuntimeVersion } from 'entities/src/accessors/getRuntimeVersion';
-import { toV3RuntimeFiles } from '../../runtime/v3Runtime/toV3RuntimeFiles';
-import { V3RuntimeFiles } from '../../runtime/v3Runtime/types';
+import { Content, getRuntimeVersion } from 'entities';
+import { V3RuntimeFiles, toV3RuntimeFiles } from 'runtime';
 
 // Sets up either the v2 or v3 runtime environment.
 // Meant to support dynamic switching between the two.

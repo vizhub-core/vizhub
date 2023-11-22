@@ -1,6 +1,6 @@
 import { initGateways } from './initGateways';
 import { primordialViz } from 'entities/test/fixtures';
-import { it, expect } from 'vitest';
+import { it, expect, assert } from 'vitest';
 
 export const getForksTest = () => {
   it('getForks', async () => {
@@ -32,6 +32,7 @@ export const getForksTest = () => {
       primordialViz.info.id,
     );
     expect(getForksResult.outcome).toEqual('success');
+    assert(getForksResult.outcome === 'success');
     const forks = getForksResult.value;
     expect(forks.length).toEqual(2);
     expect(
@@ -46,11 +47,13 @@ export const getForksTest = () => {
     });
 
     // Now there should be 3 forks: 'viz2', 'viz3', and 'viz4'
+    const getForksResult2 = await getForks(
+      primordialViz.info.id,
+    );
+    assert(getForksResult2.outcome === 'success');
     expect(
       new Set(
-        (await getForks(primordialViz.info.id)).value.map(
-          ({ data }) => data.id,
-        ),
+        getForksResult2.value.map(({ data }) => data.id),
       ),
     ).toEqual(new Set(['viz2', 'viz3', 'viz4']));
   });

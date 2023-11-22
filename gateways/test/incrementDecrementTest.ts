@@ -1,6 +1,7 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, assert } from 'vitest';
 import { primordialViz } from 'entities/test/fixtures';
 import { initGateways } from './initGateways';
+import { Result, Success } from '../src';
 
 export const incrementDecrementTest = () => {
   describe('increment and decrement forksCount and upvotesCount', () => {
@@ -13,9 +14,12 @@ export const incrementDecrementTest = () => {
         decrementForksCount,
       } = gateways;
       await saveInfo(primordialViz.info);
+      const infoResult = await getInfo(
+        primordialViz.info.id,
+      );
+      assert(infoResult.outcome === 'success');
       const getForksCount = async () =>
-        (await getInfo(primordialViz.info.id)).value.data
-          .forksCount;
+        infoResult.value.data.forksCount;
       expect(await getForksCount()).toEqual(0);
 
       // Increment
@@ -56,6 +60,7 @@ export const incrementDecrementTest = () => {
         primordialViz.info.id,
       );
       expect(result.outcome).toEqual('failure');
+      assert(result.outcome === 'failure');
       expect(result.error.message).toEqual(
         'Cannot decrement zero-value field `forksCount` on viz `viz1`',
       );
@@ -74,19 +79,21 @@ export const incrementDecrementTest = () => {
 
       const originalUpvotesCount =
         primordialViz.info.upvotesCount;
+      const infoResult = await getInfo(
+        primordialViz.info.id,
+      );
+      assert(infoResult.outcome === 'success');
       const getUpvotesCount = async () =>
-        (await getInfo(primordialViz.info.id)).value.data
-          .upvotesCount;
+        infoResult.value.data.upvotesCount;
       expect(await getUpvotesCount()).toEqual(
         originalUpvotesCount,
       );
 
       // Increment
-      let result;
-      result = await incrementUpvotesCount(
-        primordialViz.info.id,
-      );
+      let result: Result<Success> =
+        await incrementUpvotesCount(primordialViz.info.id);
       expect(result.outcome).toEqual('success');
+      assert(result.outcome === 'success');
       expect(result.value).toEqual('success');
 
       expect(await getUpvotesCount()).toEqual(
@@ -103,6 +110,7 @@ export const incrementDecrementTest = () => {
         primordialViz.info.id,
       );
       expect(result.outcome).toEqual('success');
+      assert(result.outcome === 'success');
       expect(result.value).toEqual('success');
       expect(await getUpvotesCount()).toEqual(
         originalUpvotesCount + 2,
@@ -127,6 +135,7 @@ export const incrementDecrementTest = () => {
         primordialViz.info.id,
       );
       expect(result.outcome).toEqual('failure');
+      assert(result.outcome === 'failure');
       expect(result.error.message).toEqual(
         'Cannot decrement zero-value field `upvotesCount` on viz `viz1`',
       );

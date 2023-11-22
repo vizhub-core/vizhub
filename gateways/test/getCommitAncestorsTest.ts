@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, assert } from 'vitest';
 import { initGateways } from './initGateways';
 import {
   primordialCommit,
@@ -14,10 +14,11 @@ export const getCommitAncestorsTest = () => {
       const gateways = await initGateways();
       const { saveCommit, getCommitAncestors } = gateways;
       await saveCommit(primordialCommit);
-      expect(
-        (await getCommitAncestors(primordialCommit.id))
-          .value,
-      ).toEqual([primordialCommit]);
+      const result = await getCommitAncestors(
+        primordialCommit.id,
+      );
+      assert(result.outcome === 'success');
+      expect(result.value).toEqual([primordialCommit]);
     });
 
     it('getCommitAncestors error case COMMIT_NOT_FOUND', async () => {
@@ -26,6 +27,7 @@ export const getCommitAncestorsTest = () => {
       const result =
         await gateways.getCommitAncestors('bogus-id');
       expect(result.outcome).toEqual('failure');
+      assert(result.outcome === 'failure');
       expect(result.error.code).toEqual('resourceNotFound');
       expect(result.error.message).toEqual(
         'Resource (Commit) not found with id: bogus-id',
@@ -40,6 +42,7 @@ export const getCommitAncestorsTest = () => {
       await saveCommit(commit2);
 
       const result = await getCommitAncestors(commit2.id);
+      assert(result.outcome === 'success');
       expect(result.value.length).toEqual(2);
       expect(result.value).toEqual([
         primordialCommit,
@@ -56,6 +59,7 @@ export const getCommitAncestorsTest = () => {
       await saveCommit(commit3);
 
       const result = await getCommitAncestors(commit3.id);
+      assert(result.outcome === 'success');
       expect(result.value.length).toEqual(3);
       expect(result.value).toEqual([
         primordialCommit,
@@ -75,6 +79,7 @@ export const getCommitAncestorsTest = () => {
         commit2.id,
         true,
       );
+      assert(result.outcome === 'success');
       expect(result.value.length).toEqual(1);
       expect(result.value).toEqual([commit2WithMilestone]);
     });
@@ -91,6 +96,7 @@ export const getCommitAncestorsTest = () => {
         commit3.id,
         true,
       );
+      assert(result.outcome === 'success');
       expect(result.value.length).toEqual(2);
       expect(result.value).toEqual([
         commit2WithMilestone,
@@ -110,6 +116,7 @@ export const getCommitAncestorsTest = () => {
         commit3.id,
         true,
       );
+      assert(result.outcome === 'success');
       expect(result.value.length).toEqual(3);
       expect(result.value).toEqual([
         primordialCommitWithMilestone,
@@ -130,6 +137,7 @@ export const getCommitAncestorsTest = () => {
         commit3.id,
         true,
       );
+      assert(result.outcome === 'success');
       expect(result.value.length).toEqual(3);
       expect(result.value).toEqual([
         primordialCommit,
@@ -151,6 +159,7 @@ export const getCommitAncestorsTest = () => {
         false,
         commit2.id,
       );
+      assert(result.outcome === 'success');
       expect(result.value.length).toEqual(2);
       expect(result.value).toEqual([commit2, commit3]);
     });

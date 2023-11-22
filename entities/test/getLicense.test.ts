@@ -5,7 +5,7 @@ import {
   getPackageJsonText,
   getPackageJson,
 } from '../';
-import { primordialViz } from './fixtures';
+import { primordialViz } from 'entities/test/fixtures';
 
 // The two tests marked with concurrent will be run in parallel
 describe('getLicense', () => {

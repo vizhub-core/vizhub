@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, assert } from 'vitest';
 import { initGateways } from './initGateways';
 import {
   primordialViz,
@@ -40,6 +40,7 @@ export const getPermissionsTest = () => {
         [primordialViz.info.id],
       );
       expect(permissionsResult.outcome).toEqual('success');
+      assert(permissionsResult.outcome === 'success');
       expect(permissionsResult.value).toEqual([]);
     });
 
@@ -53,6 +54,7 @@ export const getPermissionsTest = () => {
         [sampleFolder.id],
       );
       expect(permissionsResult.outcome).toEqual('success');
+      assert(permissionsResult.outcome === 'success');
       expect(permissionsResult.value).toEqual([]);
     });
 

@@ -6,6 +6,7 @@ import {
   useSubmitOperation,
 } from 'vzcode';
 import {
+  getRuntimeVersion,
   Content,
   Info,
   Snapshot,
@@ -25,7 +26,6 @@ import { Page, PageData } from '../Page';
 import { VizPageBody } from './VizPageBody';
 import { VizPageToasts } from './VizPageToasts';
 import { useOnFork } from './useOnFork';
-import { getRuntimeVersion } from 'entities/src/accessors/getRuntimeVersion';
 import { generateExportZipV2 } from './export/generateExportZipV2';
 import { generateExportZipV3 } from './export/generateExportZipV3';
 import './styles.scss';

@@ -1,6 +1,6 @@
 import { initGateways } from './initGateways';
 import { userJoe } from 'entities/test/fixtures';
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, assert } from 'vitest';
 
 export const getUserByEmailsTest = () => {
   describe('getUserByEmails', () => {
@@ -11,6 +11,7 @@ export const getUserByEmailsTest = () => {
       const result = await getUserByEmails([
         'joe@shmoe.com',
       ]);
+      assert(result.outcome === 'success');
       expect(result.value.data).toEqual(userJoe);
     });
 
@@ -18,14 +19,16 @@ export const getUserByEmailsTest = () => {
       const gateways = await initGateways();
       const { saveUser, getUserByEmails } = gateways;
       await saveUser(userJoe);
-      expect(
-        (await getUserByEmails(['joe@hugecorp.com'])).value
-          .data,
-      ).toEqual(userJoe);
-      expect(
-        (await getUserByEmails(['joe@joes-diner.com']))
-          .value.data,
-      ).toEqual(userJoe);
+      const result1 = await getUserByEmails([
+        'joe@hugecorp.com',
+      ]);
+      assert(result1.outcome === 'success');
+      expect(result1.value.data).toEqual(userJoe);
+      const result2 = await getUserByEmails([
+        'joe@joes-diner.com',
+      ]);
+      assert(result2.outcome === 'success');
+      expect(result2.value.data).toEqual(userJoe);
     });
   });
 };
