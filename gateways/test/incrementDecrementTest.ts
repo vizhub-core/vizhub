@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
+import { primordialViz } from 'entities/test/fixtures';
 import { initGateways } from './initGateways';
-import { primordialViz } from './fixtures';
 
 export const incrementDecrementTest = () => {
   describe('increment and decrement forksCount and upvotesCount', () => {

@@ -1,6 +1,10 @@
 import { describe, it, expect } from 'vitest';
 import { initGateways } from './initGateways';
-import { sampleFolder, folder2, folder3 } from './fixtures';
+import {
+  sampleFolder,
+  folder2,
+  folder3,
+} from 'entities/test/fixtures';
 
 export const getFolderAncestorsTest = () => {
   describe('getFolderAncestors', () => {

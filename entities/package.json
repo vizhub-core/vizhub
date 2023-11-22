@@ -4,7 +4,7 @@
   "type": "module",
   "main": "src/index.ts",
   "scripts": {
-    "test": "",
+    "test": "vitest run",
     "tsc": "tsc --noEmit",
     "prettier": "prettier {*.*,**/*.*} --single-quote --write"
   },
@@ -23,6 +23,7 @@
   },
   "devDependencies": {
     "prettier": "^3.1.0",
-    "typescript": "^5.3.2"
+    "typescript": "^5.3.2",
+    "vitest": "^0.34.6"
   }
 }

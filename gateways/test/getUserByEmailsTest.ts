@@ -1,5 +1,5 @@
 import { initGateways } from './initGateways';
-import { userJoe } from './fixtures';
+import { userJoe } from 'entities/test/fixtures';
 import { describe, it, expect } from 'vitest';
 
 export const getUserByEmailsTest = () => {

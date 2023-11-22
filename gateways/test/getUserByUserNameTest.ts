@@ -1,6 +1,6 @@
 import { initGateways } from './initGateways';
-import { userJoe } from './fixtures';
-import { describe, it, expect } from 'vitest';
+import { userJoe } from 'entities/test/fixtures';
+import { describe, it, expect, assert } from 'vitest';
 
 export const getUserByUserNameTest = () => {
   describe('getUserByUserName', () => {
@@ -10,6 +10,7 @@ export const getUserByUserNameTest = () => {
       await saveUser(userJoe);
       const result = await getUserByUserName('joe');
       expect(result.outcome).toEqual('success');
+      assert(result.outcome === 'success');
       expect(result.value.data).toEqual(userJoe);
     });
 
@@ -20,6 +21,7 @@ export const getUserByUserNameTest = () => {
       const result =
         await getUserByUserName('unknown-user');
       expect(result.outcome).toEqual('failure');
+      assert(result.outcome === 'failure');
       expect(result.error.code).toEqual('resourceNotFound');
       expect(result.error.message).toEqual(
         'Resource (User) not found with id: unknown-user',

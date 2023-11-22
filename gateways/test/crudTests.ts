@@ -23,7 +23,7 @@ import {
   sampleMigrationStatus,
   sampleMigrationBatch,
   sampleImageMetadata,
-} from './fixtures';
+} from 'entities/test/fixtures';
 import { EntityName } from 'entities';
 
 export const crudTests = (

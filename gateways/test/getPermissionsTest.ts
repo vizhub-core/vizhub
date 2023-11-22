@@ -6,7 +6,7 @@ import {
   sampleFolder,
   userJoe,
   userJane,
-} from './fixtures';
+} from 'entities/test/fixtures';
 
 // Unpacks snapshots.
 const unpack = (result) =>

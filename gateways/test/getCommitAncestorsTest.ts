@@ -6,7 +6,7 @@ import {
   commit2WithMilestone,
   commit3,
   primordialCommitWithMilestone,
-} from './fixtures';
+} from 'entities/test/fixtures';
 
 export const getCommitAncestorsTest = () => {
   describe('getCommitAncestors', () => {

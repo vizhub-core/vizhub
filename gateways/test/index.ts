@@ -1,5 +1,3 @@
-export * from '../test/fixtures';
-export * from '../test/initGateways';
 export { sampleEntities } from '../test/crudTests';
 
 // Exported like this so that these tests can be run

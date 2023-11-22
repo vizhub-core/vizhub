@@ -1,5 +1,5 @@
 import { initGateways } from './initGateways';
-import { primordialViz } from './fixtures';
+import { primordialViz } from 'entities/test/fixtures';
 import { it, expect } from 'vitest';
 
 export const getForksTest = () => {

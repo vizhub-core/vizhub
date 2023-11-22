@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { getRuntimeVersion } from './getRuntimeVersion';
-import { primordialViz } from 'gateways/test/fixtures';
-import { Content } from 'entities';
+import { getRuntimeVersion } from '../';
+import { primordialViz } from './fixtures';
+
 describe('getRuntimeVersion', () => {
   it('should return 2 if index.html is present', () => {
     expect(getRuntimeVersion(primordialViz.content)).toBe(
