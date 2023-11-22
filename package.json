@@ -36,7 +36,7 @@
     "migration",
     "migration2",
     "ot",
-    "vzcode"
+    "runtime"
   ],
   "dependencies": {
     "adm-zip": "^0.5.10"

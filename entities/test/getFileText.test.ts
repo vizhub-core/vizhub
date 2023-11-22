@@ -1,7 +1,8 @@
+import { Content } from '../';
 import { describe, it, expect } from 'vitest';
-import { getFileText } from './getFileText';
-import { primordialViz } from 'gateways/test/fixtures';
-import { Content } from 'entities';
+import { getFileText } from '../';
+import { primordialViz } from './fixtures';
+
 describe('getFileText', () => {
   it('should return null if file is missing', () => {
     expect(

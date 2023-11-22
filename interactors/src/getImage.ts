@@ -10,13 +10,16 @@ import {
   ImageMetadata,
   dateToTimestamp,
   Timestamp,
+  Content,
 } from 'entities';
+import { computeSrcDoc } from 'runtime';
 import { sampleImage } from './sampleImageDataURI';
 import {
   VerifyVizAccess,
   VizAccess,
 } from './verifyVizAccess';
 import { accessDeniedError } from 'gateways/src/errors';
+import { GetContentAtCommit } from './getContentAtCommit';
 
 // getImage
 //  * Gets an image for a commit
@@ -35,6 +38,7 @@ export const GetImage = (gateways: Gateways) => {
   } = gateways;
 
   const verifyVizAccess = VerifyVizAccess(gateways);
+  const getContentAtCommit = GetContentAtCommit(gateways);
 
   return async ({
     commitId,
@@ -111,6 +115,23 @@ export const GetImage = (gateways: Gateways) => {
       };
       await saveImageMetadata(imageMetadata);
 
+      // Fetch the Content, so we can generate the srcDoc,
+      // and then generate the image.
+      const contentResult: Result<Content> =
+        await getContentAtCommit(commitId);
+      if (contentResult.outcome === 'failure') {
+        return err(contentResult.error);
+      }
+      const content: Content = contentResult.value;
+
+      // Generate the srcDoc.
+      // TODO refactor computeSrcDoc to a new package `runtime`
+      const { initialSrcdoc, initialSrcdocError } =
+        await computeSrcDoc(content);
+
+      console.log('initialSrcdoc', initialSrcdoc);
+
+      // Fetch the
       // TODO generate image
       console.log('TODO generate image');
 

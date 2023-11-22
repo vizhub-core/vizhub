@@ -4,7 +4,7 @@ import { ProfilePageBody } from 'components';
 import { SmartHeader } from '../../smartComponents/SmartHeader';
 import { VizPreviewPresenter } from '../../smartComponents/VizPreviewPresenter';
 import { SortContext } from '../../contexts/SortContext';
-import { getUserDisplayName } from '../../accessors/getUserDisplayName';
+import { getUserDisplayName } from 'entities/src/accessors/getUserDisplayName';
 import { InfosAndOwnersContext } from '../../contexts/InfosAndOwnersContext';
 
 export const Body = ({

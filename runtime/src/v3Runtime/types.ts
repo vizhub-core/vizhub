@@ -6,7 +6,7 @@ export type V3RuntimeFiles = {
   [fileName: string]: string;
 };
 
-export type PackageJson = {
+export type V3PackageJson = {
   dependencies?: {
     [key: string]: string;
   };
@@ -28,9 +28,9 @@ export type PackageJson = {
 //   time: number;
 // };
 
-export type BuildResult = {
+export type V3BuildResult = {
   src: string;
-  pkg: PackageJson;
+  pkg: V3PackageJson;
   errors: Array<string>;
   warnings: Array<string>;
   time: number;

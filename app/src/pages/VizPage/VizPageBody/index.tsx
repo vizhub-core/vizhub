@@ -29,18 +29,18 @@ import { AuthenticatedUserContext } from '../../../contexts/AuthenticatedUserCon
 import { SmartHeader } from '../../../smartComponents/SmartHeader';
 
 // TODO consolidate imports, from 'accessors'
-import { getUserDisplayName } from '../../../accessors/getUserDisplayName';
-import { formatTimestamp } from '../../../accessors/formatTimestamp';
-import { getForksPageHref } from '../../../accessors/getForksPageHref';
-import { getProfilePageHref } from '../../../accessors/getProfilePageHref';
-import { getVizPageHref } from '../../../accessors/getVizPageHref';
-import { getLicense } from '../../../accessors/getLicense';
-import { getHeight } from '../../../accessors/getHeight';
-import { getPackageJsonText } from '../../../accessors/getPackageJsonText';
-import { getPackageJson } from '../../../accessors/getPackageJson';
+import { getUserDisplayName } from 'entities/src/accessors/getUserDisplayName';
+import { formatTimestamp } from 'entities/src/accessors/formatTimestamp';
+import { getForksPageHref } from 'entities/src/accessors/getForksPageHref';
+import { getProfilePageHref } from 'entities/src/accessors/getProfilePageHref';
+import { getVizPageHref } from 'entities/src/accessors/getVizPageHref';
+import { getLicense } from 'entities/src/accessors/getLicense';
+import { getHeight } from 'entities/src/accessors/getHeight';
+import { getPackageJsonText } from 'entities/src/accessors/getPackageJsonText';
+import { getPackageJson } from 'entities/src/accessors/getPackageJson';
 
 import { useRuntime } from '../useRuntime';
-import type { PackageJson } from '../v3Runtime/types';
+import type { PackageJson } from '../../../runtime/v3Runtime/types';
 import { useRenderMarkdownHTML } from './useRenderMarkdownHTML';
 import { VizPageEditor } from './VizPageEditor';
 import { VizSettings } from '../useVizMutations';

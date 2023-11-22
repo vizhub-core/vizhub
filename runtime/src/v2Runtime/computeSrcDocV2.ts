@@ -1,5 +1,5 @@
 import { Content, FilesV2 } from 'entities';
-import { getFileText } from '../../../accessors/getFileText';
+import { getFileText } from '../../accessors/getFileText';
 import magicSandbox from './magicSandbox';
 import { getComputedIndexHtml } from './getComputedIndexHtml';
 import { transformFiles } from './transformFiles';

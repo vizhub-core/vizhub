@@ -225,7 +225,6 @@ export const primordialCommit: Commit = {
   authors: [userJoe.id],
   timestamp: ts1,
   ops: diff({}, primordialViz.content),
-  milestone: null,
 };
 
 // The first ever commit with a (fake) milestone.
@@ -246,7 +245,6 @@ export const commit2: Commit = {
   authors: [userJoe.id],
   timestamp: ts2,
   ops: diff(primordialViz.content, primordialVizV2.content),
-  milestone: null,
 };
 
 export const commit2InvalidOp: Commit = {
@@ -264,7 +262,6 @@ export const commit3: Commit = {
     primordialVizV2.content,
     primordialVizV3.content,
   ),
-  milestone: null,
 };
 
 export const sampleMilestone: Milestone = {

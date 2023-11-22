@@ -1,6 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { getHeight } from './getHeight';
-import { defaultVizHeight } from 'entities';
+import { getHeight, defaultVizHeight } from '../';
 
 // The two tests marked with concurrent will be run in parallel
 describe('getHeight', () => {

@@ -1,8 +1,11 @@
 import { describe, it, expect } from 'vitest';
-import { getLicense, defaultLicense } from './getLicense';
-import { primordialViz } from 'gateways/test/fixtures';
-import { getPackageJsonText } from './getPackageJsonText';
-import { getPackageJson } from './getPackageJson';
+import {
+  getLicense,
+  defaultLicense,
+  getPackageJsonText,
+  getPackageJson,
+} from '../';
+import { primordialViz } from './fixtures';
 
 // The two tests marked with concurrent will be run in parallel
 describe('getLicense', () => {

@@ -1,4 +1,4 @@
-import { PackageJson } from '../pages/VizPage/v3Runtime/types';
+import { PackageJson } from 'runtime';
 
 export const defaultLicense = 'MIT';
 

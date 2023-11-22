@@ -1,4 +1,4 @@
-import { Content } from 'entities';
+import { Content } from '../';
 
 // Gets the text content of a file with the given name.
 // Returns null if not found.

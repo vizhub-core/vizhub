@@ -5,9 +5,9 @@ import {
   useRef,
 } from 'react';
 import { Content } from 'entities';
-import { getRuntimeVersion } from '../../accessors/getRuntimeVersion';
-import { toV3RuntimeFiles } from './v3Runtime/toV3RuntimeFiles';
-import { V3RuntimeFiles } from './v3Runtime/types';
+import { getRuntimeVersion } from 'entities/src/accessors/getRuntimeVersion';
+import { toV3RuntimeFiles } from '../../runtime/v3Runtime/toV3RuntimeFiles';
+import { V3RuntimeFiles } from '../../runtime/v3Runtime/types';
 
 // Sets up either the v2 or v3 runtime environment.
 // Meant to support dynamic switching between the two.
@@ -38,7 +38,7 @@ export const useRuntime = ({
   useEffect(() => {
     if (runtimeVersion === 3) {
       // Load the v3 runtime.
-      import('./v3Runtime/setupV3Runtime').then(
+      import('../../runtime/v3Runtime/setupV3Runtime').then(
         ({ setupV3Runtime }) => {
           const iframe = iframeRef.current;
           // const initialFiles = toV3RuntimeFiles(
@@ -95,7 +95,7 @@ export const useRuntime = ({
 
         // Lazy load computeSrcDoc because it's a large chunk.
         const { computeSrcDocV2 } = await import(
-          './v2Runtime/computeSrcDocV2'
+          '../../runtime/v2Runtime/computeSrcDocV2'
         );
 
         // console.log(computeSrcDoc);
