@@ -1,4 +1,4 @@
-import rollup from 'rollup';
+import { rollup } from 'rollup';
 import { Gateways, Result, ok, err } from 'gateways';
 import {
   VizId,

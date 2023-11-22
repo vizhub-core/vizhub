@@ -23,7 +23,7 @@ export const computeSrcDoc = async ({
     initialSrcdoc =
       runtimeVersion === 2
         ? await computeSrcDocV2(content)
-        : await computeSrcDocV3(
+        : computeSrcDocV3(
             await build({
               files: toV3RuntimeFiles(content.files),
               enableSourcemap: true,

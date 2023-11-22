@@ -1,11 +1,13 @@
-import { BuildResult } from './types';
+import { V3BuildResult } from './types';
 
 // Generates iframe srcdoc for first run.
 export const computeSrcDocV3 = ({
   pkg,
   src,
-}: BuildResult) => {
+  errors,
+}: V3BuildResult) => {
   let cdn = '';
+
   if (
     pkg &&
     pkg.dependencies &&

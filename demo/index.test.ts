@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { initializeGateways } from 'database';
+import { sampleEntities } from 'gateways/test';
 import {
   primordialViz,
-  sampleEntities,
   userJoe,
   v3RuntimeDemoViz,
-} from 'gateways/test';
+} from 'entities/test/fixtures';
 import { ForkViz } from '../interactors/src';
 import { dateToTimestamp } from 'entities';
 import { Gateways } from 'gateways';

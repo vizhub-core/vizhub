@@ -6,7 +6,7 @@ import {
   READ,
   WRITE,
 } from 'entities';
-import rollup from 'rollup';
+import { rollup } from 'rollup';
 import { JSDOM } from 'jsdom';
 import { VerifyVizAccess } from 'interactors';
 import { getFileText } from 'entities/src/accessors/getFileText';
@@ -138,6 +138,7 @@ VizPage.getPageData = async ({
 
     // Compute srcdoc for iframe.
     // TODO cache it per commit.
+
     const { initialSrcdoc, initialSrcdocError } =
       await computeSrcDoc({ rollup, content });
 
