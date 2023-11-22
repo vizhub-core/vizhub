@@ -12,6 +12,8 @@ import {
   dateToTimestamp,
   Timestamp,
   Content,
+  defaultVizWidth,
+  getHeight,
 } from 'entities';
 import { computeSrcDoc } from 'runtime';
 import { sampleImage } from './sampleImageDataURI';
@@ -21,6 +23,7 @@ import {
 } from './verifyVizAccess';
 import { accessDeniedError } from 'gateways/src/errors';
 import { GetContentAtCommit } from './getContentAtCommit';
+import { takeScreenshot } from './takeScreenshot';
 
 // getImage
 //  * Gets an image for a commit
@@ -130,13 +133,16 @@ export const GetImage = (gateways: Gateways) => {
       const { initialSrcdoc, initialSrcdocError } =
         await computeSrcDoc({ rollup, content });
 
-      console.log('initialSrcdoc', initialSrcdoc);
+      // TODO don't screenshot if there's an error in initialSrcdocError
 
-      // Fetch the
-      // TODO generate image
-      console.log('TODO generate image');
+      const image = await takeScreenshot({
+        srcDoc: initialSrcdoc,
+        width: defaultVizWidth,
+        height: getHeight(content.height),
+      });
 
-      return ok(sampleImage);
+      // return ok(sampleImage);
+      return ok(image);
     } else {
       if (imageMetadata.status === 'generating') {
         // TODO poll until image is generated
