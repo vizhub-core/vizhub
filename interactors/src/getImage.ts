@@ -117,7 +117,7 @@ export const GetImage = (gateways: Gateways) => {
         generatedAt: now,
         lastAccessedAt: now,
       };
-      await saveImageMetadata(imageMetadata);
+      // await saveImageMetadata(imageMetadata);
 
       // Fetch the Content, so we can generate the srcDoc,
       // and then generate the image.
