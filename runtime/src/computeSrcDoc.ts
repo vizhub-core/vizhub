@@ -1,11 +1,17 @@
-import { rollup } from 'rollup';
+// import { rollup } from 'rollup';
 import { Content, getRuntimeVersion } from 'entities';
 import { computeSrcDocV2 } from './v2Runtime/computeSrcDocV2';
 import { computeSrcDocV3 } from './v3Runtime/computeSrcDocV3';
 import { build } from './v3Runtime/build';
 import { toV3RuntimeFiles } from './v3Runtime/toV3RuntimeFiles';
 
-export const computeSrcDoc = async (content: Content) => {
+export const computeSrcDoc = async ({
+  rollup,
+  content,
+}: {
+  rollup: any;
+  content: Content;
+}) => {
   // `runtimeVersion` is used to determine which runtime
   // to use. It's either 2 or 3.
   const runtimeVersion: number = getRuntimeVersion(content);

@@ -10,7 +10,7 @@ import { SmartHeader } from '../../smartComponents/SmartHeader';
 import { SortContext } from '../../contexts/SortContext';
 import { VizPreviewPresenter } from '../../smartComponents/VizPreviewPresenter';
 import { InfosAndOwnersContext } from '../../contexts/InfosAndOwnersContext';
-import { getVizPageHref } from 'entities/src/accessors/getVizPageHref';
+import { getVizPageHref } from '../../accessors';
 
 export const Body = ({
   forkedFromInfo,

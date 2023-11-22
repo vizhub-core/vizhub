@@ -1,3 +1,4 @@
+import rollup from 'rollup';
 import { Gateways, Result, ok, err } from 'gateways';
 import {
   VizId,
@@ -127,7 +128,7 @@ export const GetImage = (gateways: Gateways) => {
       // Generate the srcDoc.
       // TODO refactor computeSrcDoc to a new package `runtime`
       const { initialSrcdoc, initialSrcdocError } =
-        await computeSrcDoc(content);
+        await computeSrcDoc({ rollup, content });
 
       console.log('initialSrcdoc', initialSrcdoc);
 

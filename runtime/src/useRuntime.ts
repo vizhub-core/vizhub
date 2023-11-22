@@ -36,7 +36,7 @@ export const useRuntime = ({
   useEffect(() => {
     if (runtimeVersion === 3) {
       // Load the v3 runtime.
-      import('../../runtime/v3Runtime/setupV3Runtime').then(
+      import('./v3Runtime/setupV3Runtime').then(
         ({ setupV3Runtime }) => {
           const iframe = iframeRef.current;
           // const initialFiles = toV3RuntimeFiles(
@@ -47,7 +47,6 @@ export const useRuntime = ({
             // initialFiles,
             setSrcdocError,
           });
-
           // TODO expose handleCodeChange so we can
           // update the runtime when the code changes.
         },
@@ -93,7 +92,7 @@ export const useRuntime = ({
 
         // Lazy load computeSrcDoc because it's a large chunk.
         const { computeSrcDocV2 } = await import(
-          '../../runtime/v2Runtime/computeSrcDocV2'
+          './v2Runtime/computeSrcDocV2'
         );
 
         // console.log(computeSrcDoc);

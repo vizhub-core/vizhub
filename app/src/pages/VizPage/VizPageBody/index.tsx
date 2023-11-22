@@ -16,7 +16,15 @@ import {
   User,
   UserId,
   Visibility,
+  getPackageJsonText,
+  V3PackageJson,
+  getPackageJson,
+  getLicense,
+  getHeight,
+  getUserDisplayName,
+  formatTimestamp,
 } from 'entities';
+import { useRuntime } from 'runtime';
 
 // TODO consolidate imports, from 'components'
 import { VizPageHead } from 'components/src/components/VizPageHead';
@@ -28,22 +36,14 @@ import { ShareModal } from 'components/src/components/ShareModal';
 import { AuthenticatedUserContext } from '../../../contexts/AuthenticatedUserContext';
 import { SmartHeader } from '../../../smartComponents/SmartHeader';
 
-// TODO consolidate imports, from 'accessors'
-import { getUserDisplayName } from 'entities/src/accessors/getUserDisplayName';
-import { formatTimestamp } from 'entities/src/accessors/formatTimestamp';
-import { getForksPageHref } from 'entities/src/accessors/getForksPageHref';
-import { getProfilePageHref } from 'entities/src/accessors/getProfilePageHref';
-import { getVizPageHref } from 'entities/src/accessors/getVizPageHref';
-import { getLicense } from 'entities/src/accessors/getLicense';
-import { getHeight } from 'entities/src/accessors/getHeight';
-import { getPackageJsonText } from 'entities/src/accessors/getPackageJsonText';
-import { getPackageJson } from 'entities/src/accessors/getPackageJson';
-
-import { useRuntime } from '../useRuntime';
-import type { PackageJson } from '../../../runtime/v3Runtime/types';
 import { useRenderMarkdownHTML } from './useRenderMarkdownHTML';
 import { VizPageEditor } from './VizPageEditor';
 import { VizSettings } from '../useVizMutations';
+import {
+  getForksPageHref,
+  getProfilePageHref,
+  getVizPageHref,
+} from '../../../accessors';
 
 export const VizPageBody = ({
   info,
@@ -143,7 +143,7 @@ export const VizPageBody = ({
     () => getPackageJsonText(content),
     [content],
   );
-  const packageJson: PackageJson | null = useMemo(
+  const packageJson: V3PackageJson | null = useMemo(
     () => getPackageJson(packageJsonText),
     [packageJsonText],
   );
@@ -277,6 +277,10 @@ export const VizPageBody = ({
     }
   }, [linkToCopy]);
 
+  const handleTrashClick = useCallback(() => {
+    console.log('TODO: handleTrashClick');
+  }, []);
+
   return (
     <div className="vh-page">
       <SmartHeader />
@@ -289,6 +293,8 @@ export const VizPageBody = ({
         onForkClick={toggleForkModal}
         showSettingsButton={canUserEditViz}
         onSettingsClick={toggleSettingsModal}
+        showTrashButton={true}
+        onTrashClick={handleTrashClick}
       />
       <div className="vh-viz-page-body">
         <VizPageEditor

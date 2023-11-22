@@ -1,4 +1,4 @@
-import { getFileText } from '../../../accessors/getFileText';
+import { getFileText } from 'entities';
 
 const EMPTY_PKG_JSON = {
   dependencies: {},

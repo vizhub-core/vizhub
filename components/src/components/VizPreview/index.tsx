@@ -24,7 +24,6 @@ export const VizPreview = ({
         style={{
           backgroundImage: `url("${thumbnailImageURL}")`,
         }}
-        alt={title}
       ></div>
       <div className="content-container">
         <div className="last-updated-date">

@@ -75,7 +75,7 @@ export const VizPageViewer = ({
   }, [editableTitle, setVizTitle]);
 
   const handleTitleKeyDown = useCallback(
-    (e) => {
+    (e: React.KeyboardEvent<HTMLInputElement>) => {
       if (e.key === 'Enter') {
         e.preventDefault(); // to prevent a newline or any default behavior
         handleTitleSubmit();
@@ -86,8 +86,10 @@ export const VizPageViewer = ({
 
   useEffect(() => {
     const resizeObserver = new ResizeObserver(() => {
-      const { clientWidth } = svgRef.current;
-      setIframeScale(clientWidth / defaultVizWidth);
+      if (svgRef.current) {
+        const { clientWidth } = svgRef.current;
+        setIframeScale(clientWidth / defaultVizWidth);
+      }
     });
     resizeObserver.observe(svgRef.current);
     return () => resizeObserver.disconnect();

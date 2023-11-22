@@ -1,9 +1,13 @@
-import { Info, Snapshot, User } from 'entities';
+import { useMemo } from 'react';
+import {
+  Info,
+  Snapshot,
+  User,
+  getUserDisplayName,
+} from 'entities';
 import { VizPreview } from 'components/src/components/VizPreview';
 import { useShareDBDocData } from '../useShareDBDocData';
-import { getUserDisplayName } from 'entities/src/accessors/getUserDisplayName';
-import { useMemo } from 'react';
-import { getVizThumbnailURL } from 'entities/src/accessors/getVizThumbnailURL';
+import { getVizThumbnailURL } from '../accessors';
 
 export const VizPreviewPresenter = ({
   infoSnapshot,
