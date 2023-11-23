@@ -49,13 +49,21 @@ export const vizThumbnailEndpoint = ({
         if (imageResult.outcome === 'failure') {
           return res.send(imageResult.error);
         }
-        const image: Image = imageResult.value;
+        const imageOrNull: Image | null = imageResult.value;
 
-        // Set the proper header for the image response
-        res.setHeader('content-type', image.mimeType);
+        if (imageOrNull !== null) {
+          const image: Image = imageOrNull;
+          // Set the proper header for the image response
+          res.setHeader('content-type', image.mimeType);
 
-        // Send the image buffer as the response
-        res.send(image.buffer);
+          // Send the image buffer as the response
+          res.send(image.buffer);
+        } else {
+          // In this case, the image generation timed out, which
+          // could happen if the queue is backed up.
+          // We want to just never respond in this case, so that
+          // the client will retry the request.
+        }
       } catch (error) {
         console.error('Error generating image:', error);
         res.status(500).send('Internal Server Error');

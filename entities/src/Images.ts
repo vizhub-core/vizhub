@@ -17,12 +17,12 @@ export type Image = {
   // base64 = buffer.toString('base64'),
   buffer: Buffer;
   // base64: string;
-  // mimeType: 'image/png' | 'image/jpeg';
+  mimeType: 'image/png' | 'image/jpeg';
 };
 
 export const imageFromBase64 = (base64: string): Image => {
   const buffer = Buffer.from(base64, 'base64');
-  return { buffer };
+  return { buffer, mimeType: 'image/png' };
 };
 
 // ImageMetadata

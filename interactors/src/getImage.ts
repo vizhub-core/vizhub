@@ -10,12 +10,10 @@ import {
   Snapshot,
   ImageMetadata,
   dateToTimestamp,
-  Timestamp,
   Content,
   defaultVizWidth,
   getHeight,
 } from 'entities';
-import { sampleStoredImage } from 'entities/test/fixtures';
 import { computeSrcDoc } from 'runtime';
 import {
   VerifyVizAccess,
@@ -25,6 +23,8 @@ import { accessDeniedError } from 'gateways/src/errors';
 import { GetContentAtCommit } from './getContentAtCommit';
 import { takeScreenshot } from './takeScreenshot';
 import { imageFromBase64 } from 'entities/src/Images';
+
+const debug = false;
 
 // getImage
 //  * Gets an image for a commit
@@ -39,9 +39,6 @@ export const GetImage = (gateways: Gateways) => {
     saveImageMetadata,
     saveStoredImage,
     getStoredImage,
-    // generateImage,
-    // fetchImage,
-    // storeImage,
   } = gateways;
 
   const verifyVizAccess = VerifyVizAccess(gateways);
@@ -53,7 +50,10 @@ export const GetImage = (gateways: Gateways) => {
   }: {
     commitId: CommitId;
     authenticatedUserId: UserId | undefined;
-  }): Promise<Result<Image>> => {
+  }): Promise<Result<Image | null>> => {
+    if (debug) {
+      console.log('getImage for commit ' + commitId);
+    }
     // Get the vizId for this commit, so that we
     // can enforce access control on thumbnails.
     const commitResult: Result<Commit> =
@@ -111,16 +111,25 @@ export const GetImage = (gateways: Gateways) => {
     // If the image metadata is not found, assume
     // the image status is 'not started'.
     if (!imageMetadata) {
+      if (debug) {
+        console.log(
+          '  image metadata not found, generating',
+        );
+      }
       // Store the metadata that indicates the image
       // is being generated.
-      const now: Timestamp = dateToTimestamp(new Date());
-      const imageMetadata: ImageMetadata = {
+      await saveImageMetadata({
         id: commitId,
         commitId,
         status: 'generating',
-        lastAccessed: now,
-      };
-      await saveImageMetadata(imageMetadata);
+        lastAccessed: dateToTimestamp(new Date()),
+      });
+
+      if (debug) {
+        console.log(
+          '  saved image metadata with status "generating"',
+        );
+      }
 
       // Fetch the Content, so we can generate the srcDoc,
       // and then generate the image.
@@ -138,26 +147,129 @@ export const GetImage = (gateways: Gateways) => {
 
       // TODO don't screenshot if there's an error in initialSrcdocError
 
+      if (debug) {
+        console.log(
+          '  generated srcdoc, taking screenshot',
+        );
+      }
+      // Take the screenshot
       const image = await takeScreenshot({
         srcDoc: initialSrcdoc,
         width: defaultVizWidth,
         height: getHeight(content.height),
       });
 
+      if (debug) {
+        console.log(
+          '  took screenshot, saving stored image',
+        );
+      }
+
+      // Save the image
+      const saveResult = await saveStoredImage({
+        id: commitId,
+        base64: image.buffer.toString('base64'),
+      });
+      if (saveResult.outcome === 'failure') {
+        return err(saveResult.error);
+      }
+
+      if (debug) {
+        console.log(
+          '  saving image metadata with status "generated"',
+        );
+      }
+
+      // Store the metadata that indicates the image
+      // has been generated.
+      await saveImageMetadata({
+        id: commitId,
+        commitId,
+        status: 'generated',
+        lastAccessed: dateToTimestamp(new Date()),
+      });
+
+      // Return the image
       return ok(image);
     } else {
       if (imageMetadata.status === 'generating') {
-        // TODO poll until image is generated
-        return ok(
-          imageFromBase64(sampleStoredImage.base64),
+        if (debug) {
+          console.log(
+            '  image metadata found with status "generating", polling',
+          );
+        }
+        const retries = 20;
+        const interval = 1000;
+        for (
+          let attempt = 1;
+          attempt <= retries;
+          attempt++
+        ) {
+          if (debug) {
+            console.log(
+              '    attempt ' +
+                attempt +
+                ' of ' +
+                retries +
+                ' to poll image status',
+            );
+          }
+          // Poll until the image is generated
+          await new Promise((resolve) =>
+            setTimeout(resolve, interval),
+          );
+          const imageMetadataResult =
+            await getImageMetadata(commitId);
+          if (imageMetadataResult.outcome === 'failure') {
+            // This should never happen, as it should
+            // at least be stored with status as 'generating'.
+            return err(imageMetadataResult.error);
+          }
+          imageMetadata = imageMetadataResult.value.data;
+          if (imageMetadata.status === 'generated') {
+            if (debug) {
+              console.log(
+                '    image status is "generated"!',
+              );
+            }
+            break;
+          } else {
+            if (debug) {
+              console.log(
+                '    image status is "' +
+                  imageMetadata.status +
+                  '", continuing to poll',
+              );
+            }
+          }
+        }
+        // If we've reached the max number of retries,
+        // return null, and let the client request
+        // time out.
+        if (debug) {
+          console.log(
+            '  max retries reached, returning null',
+          );
+        }
+        if (imageMetadata.status !== 'generated') {
+          return ok(null);
+        }
+      }
+
+      if (debug) {
+        console.log(
+          '  Fetching and returning the stored image',
         );
       }
-      if (imageMetadata.status === 'generated') {
-        // TODO fetch image
-        return ok(
-          imageFromBase64(sampleStoredImage.base64),
-        );
+      // if (imageMetadata.status === 'generated') {
+      // Fetch and return the stored image
+      const result = await getStoredImage(commitId);
+      if (result.outcome === 'failure') {
+        return err(result.error);
       }
+      const storedImage = result.value;
+      return ok(imageFromBase64(storedImage.base64));
+      // }
     }
   };
 };
