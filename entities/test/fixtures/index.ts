@@ -5,6 +5,7 @@ import {
   sampleEmbedding,
   sampleEmbedding2,
 } from './sampleEmbedding';
+import { sampleImageBase64 } from './sampleImageBase64';
 
 import {
   Viz,
@@ -33,6 +34,7 @@ import {
   ImageMetadata,
 } from 'entities';
 import { v3RuntimeDemoFiles } from './v3RuntimeDemoFiles';
+import { StoredImage } from '../../src/Images';
 
 export const ts1: Timestamp = 1638100000;
 export const ts2: Timestamp = 1638200000;
@@ -391,8 +393,13 @@ export const sampleMigrationBatch: MigrationBatch = {
 };
 
 export const sampleImageMetadata: ImageMetadata = {
+  id: 'commit1',
   commitId: 'commit1',
   status: 'generated',
-  generatedAt: 12345,
-  lastAccessedAt: 12345,
+  lastAccessed: ts1,
+};
+
+export const sampleStoredImage: StoredImage = {
+  id: 'commit1',
+  base64: sampleImageBase64,
 };

@@ -66,16 +66,17 @@ export const crudEntityNames: Array<EntityName> = [
   'MigrationStatus',
   'MigrationBatch',
   'ImageMetadata',
+  'StoredImage',
 ];
 
 // These entities are stored directly in Mongo,
 // not going through ShareDB, so they don't need to
-// be wrapped in a fake Snapshot.
+// be wrapped in a Snapshot.
 export const noSnapshot = {
   Commit: true,
   Milestone: true,
   BetaProgramSignup: true,
-  // Embedding: true,
+  StoredImage: true,
 };
 
 // An in-memory implementation for gateways,

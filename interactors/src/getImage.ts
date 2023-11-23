@@ -15,8 +15,8 @@ import {
   defaultVizWidth,
   getHeight,
 } from 'entities';
+import { sampleStoredImage } from 'entities/test/fixtures';
 import { computeSrcDoc } from 'runtime';
-import { sampleImage } from './sampleImageDataURI';
 import {
   VerifyVizAccess,
   VizAccess,
@@ -24,6 +24,7 @@ import {
 import { accessDeniedError } from 'gateways/src/errors';
 import { GetContentAtCommit } from './getContentAtCommit';
 import { takeScreenshot } from './takeScreenshot';
+import { imageFromBase64 } from 'entities/src/Images';
 
 // getImage
 //  * Gets an image for a commit
@@ -36,6 +37,8 @@ export const GetImage = (gateways: Gateways) => {
     getInfo,
     getImageMetadata,
     saveImageMetadata,
+    saveStoredImage,
+    getStoredImage,
     // generateImage,
     // fetchImage,
     // storeImage,
@@ -112,12 +115,12 @@ export const GetImage = (gateways: Gateways) => {
       // is being generated.
       const now: Timestamp = dateToTimestamp(new Date());
       const imageMetadata: ImageMetadata = {
-        status: 'generating',
+        id: commitId,
         commitId,
-        generatedAt: now,
-        lastAccessedAt: now,
+        status: 'generating',
+        lastAccessed: now,
       };
-      // await saveImageMetadata(imageMetadata);
+      await saveImageMetadata(imageMetadata);
 
       // Fetch the Content, so we can generate the srcDoc,
       // and then generate the image.
@@ -141,25 +144,59 @@ export const GetImage = (gateways: Gateways) => {
         height: getHeight(content.height),
       });
 
-      // return ok(sampleImage);
       return ok(image);
     } else {
       if (imageMetadata.status === 'generating') {
         // TODO poll until image is generated
-        return ok(sampleImage);
+        return ok(
+          imageFromBase64(sampleStoredImage.base64),
+        );
       }
       if (imageMetadata.status === 'generated') {
         // TODO fetch image
-        return ok(sampleImage);
+        return ok(
+          imageFromBase64(sampleStoredImage.base64),
+        );
       }
     }
-
-    console.log('commit', commit);
-    console.log('vizId', vizId);
-
-    return ok(sampleImage);
   };
 };
+
+// const pollImageStatus = async ({
+//   commitId,
+//   retries = 5,
+//   interval = 1000,
+// }) => {
+//   for (let attempt = 1; attempt <= retries; attempt++) {
+//     const metadataResult = await getImageMetadata({
+//       commitId,
+//     });
+
+//     // Assuming 'not found' error is equivalent to 'not started'
+//     if (
+//       metadataResult.outcome === 'failure' &&
+//       metadataResult.error.message === 'Not found'
+//     ) {
+//       return 'not started';
+//     }
+
+//     if (metadataResult.outcome === 'failure') {
+//       throw new Error('Failed to get image metadata');
+//     }
+
+//     if (metadataResult.value.status === 'generated') {
+//       return metadataResult.value.status;
+//     }
+
+//     if (attempt < retries) {
+//       await new Promise((resolve) =>
+//         setTimeout(resolve, interval),
+//       );
+//     } else {
+//       throw new Error('Image generation timed out');
+//     }
+//   }
+// };
 
 // TODO make this work
 // try {

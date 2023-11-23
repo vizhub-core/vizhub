@@ -170,7 +170,8 @@ export type EntityName =
   | 'MigrationStatus'
   | 'MigrationBatch'
   | 'VizEmbedding'
-  | 'ImageMetadata';
+  | 'ImageMetadata'
+  | 'StoredImage';
 
 export {
   formatTimestamp,
