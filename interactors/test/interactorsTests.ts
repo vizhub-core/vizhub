@@ -18,6 +18,7 @@ import { verifyVizAccessTest } from './verifyVizAccessTest';
 import { getInfosAndOwnersTest } from './getInfosAndOwnersTest';
 import { updateUserStripeIdTest } from './updateUserStripeIdTest';
 import { validateVizTest } from './validateVizTest';
+import { getImageTest } from './getImageTest';
 
 export const interactorsTests = () => {
   describe('Interactors', () => {
@@ -35,6 +36,7 @@ export const interactorsTests = () => {
     getInfosAndOwnersTest();
     updateUserStripeIdTest();
     validateVizTest();
+    getImageTest();
 
     // TODO allow to specify a timestamp
     // Why? Useful for migration

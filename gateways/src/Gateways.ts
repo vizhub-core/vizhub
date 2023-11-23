@@ -47,6 +47,8 @@ import {
   MigrationStatus,
   MigrationBatch,
   VizEmbedding,
+  ImageMetadata,
+  StoredImage,
 } from 'entities';
 import { Result, Success } from './Result';
 import {
@@ -232,6 +234,24 @@ export interface Gateways {
   deleteMigrationBatch(
     id: MigrationBatchId,
   ): Promise<Result<Success>>;
+
+  saveImageMetadata(
+    imageMetadata: ImageMetadata,
+  ): Promise<Result<Success>>;
+  getImageMetadata(
+    id: CommitId,
+  ): Promise<Result<Snapshot<ImageMetadata>>>;
+  deleteImageMetadata(
+    id: CommitId,
+  ): Promise<Result<Success>>;
+
+  saveStoredImage(
+    storedImage: StoredImage,
+  ): Promise<Result<Success>>;
+  getStoredImage(
+    id: CommitId,
+  ): Promise<Result<StoredImage>>;
+  deleteStoredImage(id: CommitId): Promise<Result<Success>>;
 
   // TODO implement these backed by `pgvector` in Supabase
   // saveEmbedding(

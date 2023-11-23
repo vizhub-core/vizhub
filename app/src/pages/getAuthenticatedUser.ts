@@ -28,7 +28,10 @@ export const getAuthenticatedUser = async ({
         'Error when fetching authenticated user:',
       );
       console.log(authenticatedUserResult.error);
-      return null;
+      return {
+        authenticatedUserId: undefined,
+        authenticatedUserSnapshot: undefined,
+      };
     }
     authenticatedUserSnapshot =
       authenticatedUserResult.value;

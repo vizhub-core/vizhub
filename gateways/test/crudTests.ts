@@ -22,7 +22,8 @@ import {
   sampleBetaProgramSignup,
   sampleMigrationStatus,
   sampleMigrationBatch,
-} from './fixtures';
+  sampleImageMetadata,
+} from 'entities/test/fixtures';
 import { EntityName } from 'entities';
 
 export const crudTests = (
@@ -122,4 +123,5 @@ export const sampleEntities = {
   // Embedding: sampleEmbedding,
   MigrationStatus: sampleMigrationStatus,
   MigrationBatch: sampleMigrationBatch,
+  ImageMetadata: sampleImageMetadata,
 };

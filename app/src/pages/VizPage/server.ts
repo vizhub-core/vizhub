@@ -1,5 +1,3 @@
-import { rollup } from 'rollup';
-import { JSDOM } from 'jsdom';
 import {
   Info,
   VizId,
@@ -8,21 +6,19 @@ import {
   READ,
   WRITE,
 } from 'entities';
+import { rollup } from 'rollup';
+import { JSDOM } from 'jsdom';
 import { VerifyVizAccess } from 'interactors';
-import { getFileText } from '../../accessors/getFileText';
+import { getFileText } from 'entities/src/accessors/getFileText';
 import { VizPage, VizPageData } from './index';
 import { renderREADME } from './renderREADME';
-import { setJSDOM } from './v2Runtime/getComputedIndexHtml';
-import { computeSrcDocV2 } from './v2Runtime/computeSrcDocV2';
-import { computeSrcDocV3 } from './v3Runtime/computeSrcDocV3';
-import { getRuntimeVersion } from '../../accessors/getRuntimeVersion';
-import { build } from './v3Runtime/build';
-import { toV3RuntimeFiles } from './v3Runtime/toV3RuntimeFiles';
 import { getAuthenticatedUser } from '../getAuthenticatedUser';
 import { VizAccess } from 'interactors/src/verifyVizAccess';
 import { Result } from 'gateways';
+import { computeSrcDoc, setJSDOM } from 'runtime';
 
 setJSDOM(JSDOM);
+
 // TODO move the data fetching part of this to a separate file - interactors/getVizPageData.ts
 // This file should mainly deal with computations like rendering the README and
 // computing the srcdoc for the iframe.
@@ -143,28 +139,8 @@ VizPage.getPageData = async ({
     // Compute srcdoc for iframe.
     // TODO cache it per commit.
 
-    // `runtimeVersion` is used to determine which runtime
-    // to use. It's either 2 or 3.
-    const runtimeVersion: number =
-      getRuntimeVersion(content);
-
-    let initialSrcdoc = '';
-    let initialSrcdocError: string | null = null;
-
-    try {
-      initialSrcdoc =
-        runtimeVersion === 2
-          ? await computeSrcDocV2(content)
-          : await computeSrcDocV3(
-              await build({
-                files: toV3RuntimeFiles(content.files),
-                enableSourcemap: true,
-                rollup,
-              }),
-            );
-    } catch (e) {
-      initialSrcdocError = e.toString();
-    }
+    const { initialSrcdoc, initialSrcdocError } =
+      await computeSrcDoc({ rollup, content });
 
     return {
       infoSnapshot,

@@ -1,22 +1,28 @@
+import { CommitId } from './RevisionHistory';
+import { Timestamp } from './common';
+
 // Image
+// * Not an entity, just used internally.
 // * Represents the image generated from a Puppeteer screenshot.
 // * Can be stored as either a Buffer or a base64 encoded string.
 // * The 'buffer' property holds the image as a Buffer object, commonly used for binary data in Node.js.
 //     - Used when the image is generated as a file or a binary stream.
-//     - Is null if the image is stored in the base64 format.
-// * The 'base64' property contains a base64 encoded string of the image.
-//     - Useful for inline images in web contexts or for transmission over APIs.
-//     - Is null if the image is stored as a Buffer.
+// * The 'base64' property holds the image as a base64 encoded string, commonly used for data transfer.
+//     - Used when the image is generated as a data URI.
+// * The 'buffer' and 'base64' properties are mutually exclusive.
 // * The 'mimeType' property indicates the image format, typically 'image/png' or 'image/jpeg'.
 //     - Essential for correct interpretation and display of the image data.
-
-import { CommitId } from './RevisionHistory';
-import { Timestamp } from './common';
-
 export type Image = {
-  buffer: Buffer | null;
-  base64: string | null;
+  // buffer = Buffer.from(base64, 'base64'),
+  // base64 = buffer.toString('base64'),
+  buffer: Buffer;
+  // base64: string;
   mimeType: 'image/png' | 'image/jpeg';
+};
+
+export const imageFromBase64 = (base64: string): Image => {
+  const buffer = Buffer.from(base64, 'base64');
+  return { buffer, mimeType: 'image/png' };
 };
 
 // ImageMetadata
@@ -24,19 +30,33 @@ export type Image = {
 //  * This type provides a structured way to track the lifecycle of an image,
 //    from generation to its last access, facilitating efficient data handling and queries.
 export interface ImageMetadata {
-  // Unique identifier for the commit associated with the image
+  // A unique identifier for the image
+  // Format: `${commitId}-${width}`
+  id: string;
+
+  // The commit associated with the image
   commitId: CommitId;
 
-  // Status of the image regarding its generation process
-  status: ImageStatus;
+  // The image's width in pixels.
+  //  * `undefined` if the image is full-size
+  //  * `number` if the image is a resized thumbnail
+  width?: number;
 
-  // Timestamp indicating when the image was originally generated
-  // Helps in identifying the age of the image and managing updates or cache invalidations
-  generatedAt: Timestamp;
+  // True while the image is being generated
+  status: 'generating' | 'generated';
 
   // Timestamp of the last time the image was accessed
-  // Useful for tracking image relevance and optimizing storage (e.g., cleaning up old, unused images)
-  lastAccessedAt: Timestamp;
+  lastAccessed: Timestamp;
 }
 
-type ImageStatus = 'generating' | 'generated';
+// StoredImage
+//  * Represents an image stored in the database.
+//  * This type is used for database queries and updates.
+export interface StoredImage {
+  // A unique identifier for the image
+  // Format: `${commitId}-${width}`
+  id: string;
+
+  // The image data as a base64 encoded string
+  base64: string;
+}

@@ -83,8 +83,13 @@ export type {
   VizAuthorshipId,
   Upvote,
   UpvoteId,
+  V3PackageJson,
 } from './Viz';
-export { defaultVizWidth, defaultVizHeight } from './Viz';
+export {
+  defaultVizWidth,
+  defaultVizHeight,
+  defaultLicense,
+} from './Viz';
 
 // V2 types - useful for migration and for V2 runtime
 export type {
@@ -139,7 +144,7 @@ export type {
   MigrationBatch,
 } from './Migration';
 
-export type { Image } from './Images';
+export type { Image, ImageMetadata } from './Images';
 
 export type EntityName =
   | 'Info'
@@ -164,4 +169,17 @@ export type EntityName =
   | 'AnalyticsEvent'
   | 'MigrationStatus'
   | 'MigrationBatch'
-  | 'VizEmbedding';
+  | 'VizEmbedding'
+  | 'ImageMetadata'
+  | 'StoredImage';
+
+export {
+  formatTimestamp,
+  getFileText,
+  getHeight,
+  getLicense,
+  getPackageJsonText,
+  getPackageJson,
+  getRuntimeVersion,
+  getUserDisplayName,
+} from './accessors';

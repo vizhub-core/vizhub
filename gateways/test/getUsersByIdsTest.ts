@@ -1,7 +1,7 @@
-import { initGateways } from './initGateways';
-import { userJoe } from './fixtures';
 import { describe, it, expect, assert } from 'vitest';
 import { Snapshot, User } from 'entities';
+import { userJoe } from 'entities/test/fixtures';
+import { initGateways } from './initGateways';
 import { Result } from '../src';
 
 export const getUsersByIdsTest = () => {

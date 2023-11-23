@@ -4,7 +4,7 @@
   "type": "module",
   "main": "src/index.ts",
   "scripts": {
-    "test": "",
+    "test": "vitest run",
     "tsc": "tsc --noEmit",
     "prettier": "prettier {*.*,**/*.*} --single-quote --write"
   },
@@ -19,10 +19,11 @@
   },
   "homepage": "https://github.com/vizhub-core/vizhub3#readme",
   "dependencies": {
-    "vzcode": "^0.32.0"
+    "vzcode": "^0.34.0"
   },
   "devDependencies": {
     "prettier": "^3.1.0",
-    "typescript": "^5.3.2"
+    "typescript": "^5.3.2",
+    "vitest": "^0.34.6"
   }
 }

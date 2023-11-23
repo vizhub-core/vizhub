@@ -3,7 +3,7 @@ import { initGateways } from './initGateways';
 import {
   sampleVizEmbedding,
   sampleVizEmbedding2,
-} from './fixtures';
+} from 'entities/test/fixtures';
 
 export const embeddingsTest = () => {
   describe('embeddings', () => {

@@ -25,6 +25,7 @@
     "decay": "^1.0.12",
     "deep-equal": "^2.2.3",
     "multiscale-timeseries": "^2.0.0",
+    "puppeteer": "^21.5.2",
     "uuid": "^9.0.1"
   },
   "devDependencies": {

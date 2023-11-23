@@ -8,6 +8,7 @@ import { fakeUnsubscribeSuccessEndpoint } from './fakeUnsubscribeSuccessEndpoint
 import { stripeWebhookEndpoint } from './stripeWebhookEndpoint';
 import { createCheckoutSession } from './createCheckoutSessionEndpoint';
 import { aiAssistEndpoint } from './aiAssistEndpoint';
+import { vizThumbnailEndpoint } from './vizThumbnailEndpoint';
 
 export const endpoints = [
   healthCheck,
@@ -20,4 +21,5 @@ export const endpoints = [
   stripeWebhookEndpoint,
   createCheckoutSession,
   aiAssistEndpoint,
+  vizThumbnailEndpoint,
 ];

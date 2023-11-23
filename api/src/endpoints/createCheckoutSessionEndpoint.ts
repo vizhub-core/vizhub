@@ -1,19 +1,20 @@
 import express from 'express';
 import { err, ok } from 'gateways';
-import { parseAuth0User } from '..';
 import { authenticationRequiredError } from 'gateways/src/errors';
+import { getAuthenticatedUserId } from '../parseAuth0User';
 import { getStripe } from './getStripe';
+import {
+  RequestWithAuth,
+  ResponseWithJSON,
+} from '../types';
 
 export const createCheckoutSession = ({ app }) => {
   app.post(
     '/api/create-checkout-session',
     express.json({ type: 'application/json' }),
-    async (req, res) => {
-      // Get at the currently authenticated user.
-      const auth0User = req?.oidc?.user || null;
-
-      const { authenticatedUserId } =
-        parseAuth0User(auth0User);
+    async (req: RequestWithAuth, res: ResponseWithJSON) => {
+      const authenticatedUserId =
+        getAuthenticatedUserId(req);
 
       // Having the User ID is required to create a Stripe
       // Checkout Session. Without it, we can't associate

@@ -15,7 +15,7 @@ import {
 } from 'entities';
 import { pageSize } from 'gateways';
 import { initGateways } from './initGateways';
-import { primordialViz } from './fixtures';
+import { primordialViz } from 'entities/test/fixtures';
 import { Gateways, Result } from '../src';
 
 // TODO consider query aspects:

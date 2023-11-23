@@ -128,13 +128,6 @@ export interface Info {
 // * An object that can be serialized as JSON
 export type Configuration = any;
 
-// The default height of a viz in pixels.
-// Homage to bl.ocks.org.
-export const defaultVizHeight = 500;
-
-// This is fixed.
-export const defaultVizWidth = 960;
-
 // Content
 //  * Heavyweight content of a viz.
 //  * Contains the full content of all files in the viz.
@@ -219,3 +212,28 @@ export interface Upvote {
   // When they upvoted
   timestamp: Timestamp;
 }
+
+export type V3PackageJson = {
+  dependencies?: {
+    [key: string]: string;
+  };
+  vizhub?: {
+    libraries: {
+      [key: string]: {
+        path: string;
+        global: string;
+      };
+    };
+  };
+  license?: License;
+};
+
+// The default height of a viz in pixels.
+// Homage to bl.ocks.org.
+export const defaultVizHeight = 500;
+
+// This is fixed.
+export const defaultVizWidth = 960;
+
+// The default license for a viz.
+export const defaultLicense = 'MIT';

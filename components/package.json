@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "main": "src/index.js",
+  "main": "src/index",
   "scripts": {
     "test": "",
     "tsc": "",
@@ -21,11 +21,11 @@
     "vizhub-ui": "^3.5.0"
   },
   "devDependencies": {
-    "@types/react": "^18.2.37",
-    "@types/react-dom": "^18.2.15",
+    "@types/react": "^18.2.38",
+    "@types/react-dom": "^18.2.17",
     "@vitejs/plugin-react": "^4.2.0",
     "prettier": "^3.1.0",
     "sass": "^1.69.5",
-    "vite": "^5.0.0"
+    "vite": "^5.0.2"
   }
 }
