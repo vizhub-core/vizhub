@@ -1,7 +1,70 @@
 import { Image } from 'entities';
 import puppeteer from 'puppeteer';
+import type { Browser } from 'puppeteer';
 
-const debug = true;
+const debug = false;
+
+// The maximum number of concurrent screenshots
+const maxSimultaneousScreenshots = 3;
+
+// The maximum time to wait for a page to load (in ms)
+const maxPageLoadTimeMS = 8000;
+
+let browser: Browser; // Reusable browser instance
+
+const launchBrowser = async () => {
+  if (!browser) {
+    browser = await puppeteer.launch({
+      executablePath: 'google-chrome-stable',
+      headless: 'new',
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    });
+  }
+  return browser;
+};
+
+// A semaphore to limit the number of concurrent screenshots
+class Semaphore {
+  max: number;
+  counter: number;
+  queue: Array<() => void>;
+  constructor(max: number) {
+    this.max = max;
+    this.counter = max;
+    this.queue = [];
+  }
+
+  async acquire() {
+    if (this.counter > 0) {
+      this.counter--;
+      return Promise.resolve();
+    }
+
+    // If counter is 0, wait until a resource is free
+    return new Promise<void>((resolve: () => void) => {
+      this.queue.push(resolve);
+    });
+  }
+
+  release() {
+    if (this.queue.length > 0) {
+      // Release the next task in the queue
+      const nextResolve = this.queue.shift();
+      nextResolve();
+    } else {
+      // Increment the counter if no tasks are waiting
+      this.counter++;
+    }
+  }
+}
+
+// Create a semaphore to govern concurrent tasks.
+// We limit concurrent tasks so that we don't
+// overload the server (run out of memory)
+
+const screenshotSemaphore = new Semaphore(
+  maxSimultaneousScreenshots,
+);
 
 export const takeScreenshot = async ({
   srcDoc,
@@ -14,87 +77,79 @@ export const takeScreenshot = async ({
     console.log('width', width);
     console.log('height', height);
   }
-  const browser = await puppeteer.launch({
-    executablePath: 'google-chrome-stable',
-    headless: 'new',
-    defaultViewport: { width, height },
-    args: ['--no-sandbox', '--disable-setuid-sandbox'],
-  });
-
-  const page = await browser.newPage();
-
-  await page.setContent(srcDoc);
 
   if (debug) {
-    console.log('Waiting for 5 seconds');
+    console.log('Acquiring screenshot semaphore');
   }
+  await screenshotSemaphore.acquire();
 
-  // Wait for 5 seconds
-  await new Promise((resolve) => setTimeout(resolve, 5000));
+  try {
+    const browser = await launchBrowser();
 
-  const screenshotBuffer = await page.screenshot({
-    fullPage: true,
-  });
+    const page = await browser.newPage();
+    await page.setViewport({ width, height });
 
-  const image: Image = {
-    buffer: screenshotBuffer,
-    mimeType: 'image/png',
-  };
-  if (debug) {
-    console.log('Closing browser');
+    await page.setContent(srcDoc);
+
+    if (debug) {
+      console.log(
+        `Waiting for ${maxPageLoadTimeMS / 1000} seconds`,
+      );
+    }
+
+    // Wait for document.readyState to be "complete",
+    // or a maximum of 5 seconds
+    // await Promise.race([
+    //   page.waitForFunction(
+    //     'document.readyState === "complete"',
+    //   ),
+    //   new Promise((resolve) =>
+    //     setTimeout(resolve, maxPageLoadTimeMS),
+    //   ),
+    // ]);
+    await new Promise((resolve) =>
+      setTimeout(resolve, maxPageLoadTimeMS),
+    );
+
+    if (debug) {
+      console.log(`Done waiting`);
+    }
+
+    // // Wait for all network requests to finish
+    // await page.waitForFunction(
+    //   'document.readyState === "complete"',
+    // );
+
+    // // Wait for an additional second, just in case
+    // // for various graphics to finish rendering.
+    // await new Promise((resolve) =>
+    //   setTimeout(resolve, 1000),
+    // );
+
+    // Take a screenshot of the page
+    const screenshotBuffer = await page.screenshot({
+      fullPage: true,
+    });
+
+    const image: Image = {
+      buffer: screenshotBuffer,
+      mimeType: 'image/png',
+    };
+    if (debug) {
+      console.log('Closing page');
+    }
+    await page.close();
+
+    return image;
+  } catch (error) {
+    if (debug) {
+      console.error('Error taking screenshot:', error);
+    }
+    throw error;
+  } finally {
+    if (debug) {
+      console.log('Releasing screenshot semaphore');
+    }
+    screenshotSemaphore.release();
   }
-  await browser.close();
-
-  return image;
 };
-
-// TODO clean up, like this:
-// import { Image } from 'entities';
-// import puppeteer from 'puppeteer';
-
-// let browser; // Reusable browser instance
-
-// const launchBrowser = async () => {
-//   if (!browser) {
-//     browser = await puppeteer.launch({
-//       executablePath: 'google-chrome-stable',
-//       headless: true, // Corrected headless option
-//       // Additional launch options if needed
-//     });
-//   }
-//   return browser;
-// };
-
-// export const takeScreenshot = async ({ srcDoc, width, height }) => {
-//   try {
-//     const browser = await launchBrowser();
-//     const page = await browser.newPage();
-
-//     await page.setViewport({ width, height });
-//     await page.setContent(srcDoc);
-
-//     // Dynamic waiting mechanism instead of fixed timeout
-//     await page.waitForFunction('document.readyState === "complete"');
-
-//     const screenshotBuffer = await page.screenshot({ fullPage: true });
-
-//     const image: Image = {
-//       buffer: screenshotBuffer,
-//       mimeType: 'image/png',
-//     };
-
-//     await page.close();
-//     return image;
-//   } catch (error) {
-//     console.error('Error taking screenshot:', error);
-//     throw error;
-//   }
-// };
-
-// // Optionally, expose a function to close the browser when the application is terminating
-// export const closeBrowser = async () => {
-//   if (browser) {
-//     await browser.close();
-//     browser = null;
-//   }
-// };

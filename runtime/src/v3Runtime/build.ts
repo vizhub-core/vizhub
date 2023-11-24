@@ -56,7 +56,7 @@ const virtual = (files: V3RuntimeFiles) => ({
 // With cache: avg = 5.2 ms
 let cache: RollupCache | null = null;
 
-const debug = true;
+const debug = false;
 
 export const build = async ({
   files,

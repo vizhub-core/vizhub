@@ -5,7 +5,7 @@ import { computeSrcDocV3 } from './v3Runtime/computeSrcDocV3';
 import { build } from './v3Runtime/build';
 import { toV3RuntimeFiles } from './v3Runtime/toV3RuntimeFiles';
 
-const debug = true;
+const debug = false;
 export const computeSrcDoc = async ({
   rollup,
   content,
