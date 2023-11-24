@@ -18,6 +18,7 @@ export const takeScreenshot = async ({
     executablePath: 'google-chrome-stable',
     headless: 'new',
     defaultViewport: { width, height },
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
   });
 
   const page = await browser.newPage();
