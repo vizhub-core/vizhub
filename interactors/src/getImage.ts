@@ -105,7 +105,22 @@ export const GetImage = (gateways: Gateways) => {
         return err(imageMetadataResult.error);
       }
     } else {
-      imageMetadata = imageMetadataResult.value.data;
+      const generatedTimestamp = imageMetadata.lastAccessed;
+      const nowTimestamp = dateToTimestamp(new Date());
+
+      // If the generation started more than 1 minute ago,
+      // assume it failed, and try again.
+      if (nowTimestamp - generatedTimestamp > 60 * 1000) {
+        if (debug) {
+          console.log(
+            '  generation started more than 1 minute ago, assuming it failed, and trying again',
+          );
+        }
+      } else {
+        // If less than 1 minute ago, assume the image
+        // is still being generated.
+        imageMetadata = imageMetadataResult.value.data;
+      }
     }
 
     // If the image metadata is not found, assume
@@ -205,6 +220,7 @@ export const GetImage = (gateways: Gateways) => {
             '  image metadata found with status "generating", polling',
           );
         }
+
         const retries = 20;
         const interval = 1000;
         for (
