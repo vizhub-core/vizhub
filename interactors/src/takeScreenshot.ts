@@ -7,6 +7,7 @@ export const takeScreenshot = async ({
   height,
 }) => {
   const browser = await puppeteer.launch({
+    executablePath: 'google-chrome-stable',
     headless: 'new',
     defaultViewport: { width, height },
   });
