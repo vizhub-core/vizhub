@@ -1,7 +1,7 @@
 import { Image } from 'entities';
 import puppeteer from 'puppeteer';
 
-const debug = false;
+const debug = true;
 
 export const takeScreenshot = async ({
   srcDoc,

@@ -1,6 +1,6 @@
 import { V3BuildResult } from './types';
 
-const debug = false;
+const debug = true;
 
 // Generates iframe srcdoc for first run.
 export const computeSrcDocV3 = ({
