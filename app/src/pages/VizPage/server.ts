@@ -8,7 +8,7 @@ import {
 } from 'entities';
 import { rollup } from 'rollup';
 import { JSDOM } from 'jsdom';
-import { VerifyVizAccess } from 'interactors';
+import { CommitViz, VerifyVizAccess } from 'interactors';
 import { getFileText } from 'entities/src/accessors/getFileText';
 import { VizPage, VizPageData } from './index';
 import { renderREADME } from './renderREADME';
@@ -18,6 +18,8 @@ import { Result } from 'gateways';
 import { computeSrcDoc, setJSDOM } from 'runtime';
 
 setJSDOM(JSDOM);
+
+const debug = false;
 
 // TODO move the data fetching part of this to a separate file - interactors/getVizPageData.ts
 // This file should mainly deal with computations like rendering the README and
@@ -30,17 +32,18 @@ VizPage.getPageData = async ({
   const id: VizId = params.id;
   const { getUser, getInfo, getContent } = gateways;
   const verifyVizAccess = VerifyVizAccess(gateways);
+  const commitViz = CommitViz(gateways);
 
   try {
     // Get the Info entity of the Viz.
-    const infoResult = await getInfo(id);
+    let infoResult = await getInfo(id);
     if (infoResult.outcome === 'failure') {
       // Indicates viz not found
       return null;
     }
-    const infoSnapshot: Snapshot<Info> = infoResult.value;
-    const info: Info = infoSnapshot.data;
-    const { title, owner, forkedFrom } = info;
+    let infoSnapshot: Snapshot<Info> = infoResult.value;
+    let info: Info = infoSnapshot.data;
+
     const {
       authenticatedUserId,
       authenticatedUserSnapshot,
@@ -68,6 +71,33 @@ VizPage.getPageData = async ({
       // console.log('User does not have read access to viz');
       return null;
     }
+
+    // If the viz is not committed, then commit it.
+    if (!info.committed) {
+      if (debug) {
+        console.log(
+          'Viz is not committed, committing it now',
+        );
+      }
+      const commitVizResult = await commitViz(id);
+      if (commitVizResult.outcome === 'failure') {
+        // TODO handle this error better
+        // Needs a refactor of the returned type
+        // return err(commitVizResult.error);
+        console.log('Error when committing viz:');
+        console.log(commitVizResult.error);
+      }
+
+      // Get the latest version with updated end commit.
+      infoResult = await getInfo(id);
+      if (infoResult.outcome === 'failure') {
+        // Indicates viz not found
+        return null;
+      }
+      infoSnapshot = infoResult.value;
+      info = infoSnapshot.data;
+    }
+    const { title, owner, forkedFrom } = info;
 
     // Access control: Verify that the user has write access to the viz.
     // This is used to determine whether to show the "Settings" button.
