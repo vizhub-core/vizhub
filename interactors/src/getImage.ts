@@ -105,7 +105,10 @@ export const GetImage = (gateways: Gateways) => {
         return err(imageMetadataResult.error);
       }
     } else {
-      const generatedTimestamp = imageMetadata.lastAccessed;
+      const potentiallyBogusImageMetadata =
+        imageMetadataResult.value.data;
+      const generatedTimestamp =
+        potentiallyBogusImageMetadata.lastAccessed;
       const nowTimestamp = dateToTimestamp(new Date());
 
       // If the generation started more than 1 minute ago,
