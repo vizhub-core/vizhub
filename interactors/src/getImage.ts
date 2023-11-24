@@ -145,6 +145,13 @@ export const GetImage = (gateways: Gateways) => {
       const { initialSrcdoc, initialSrcdocError } =
         await computeSrcDoc({ rollup, content });
 
+      if (initialSrcdocError) {
+        console.log(
+          'initialSrcdocError',
+          initialSrcdocError,
+        );
+      }
+
       // TODO don't screenshot if there's an error in initialSrcdocError
 
       if (debug) {

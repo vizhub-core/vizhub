@@ -11,6 +11,8 @@ export const takeScreenshot = async ({
   if (debug) {
     console.log('Launching puppeteer');
     console.log('srcDoc', srcDoc);
+    console.log('width', width);
+    console.log('height', height);
   }
   const browser = await puppeteer.launch({
     executablePath: 'google-chrome-stable',
