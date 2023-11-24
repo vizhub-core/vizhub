@@ -1,11 +1,19 @@
 import { Image } from 'entities';
 import puppeteer from 'puppeteer';
 
+const debug = false;
+
 export const takeScreenshot = async ({
   srcDoc,
   width,
   height,
 }) => {
+  if (debug) {
+    console.log('Launching puppeteer');
+    console.log('srcDoc', srcDoc);
+    console.log('width', width);
+    console.log('height', height);
+  }
   const browser = await puppeteer.launch({
     executablePath: 'google-chrome-stable',
     headless: 'new',
@@ -15,6 +23,10 @@ export const takeScreenshot = async ({
   const page = await browser.newPage();
 
   await page.setContent(srcDoc);
+
+  if (debug) {
+    console.log('Waiting for 5 seconds');
+  }
 
   // Wait for 5 seconds
   await new Promise((resolve) => setTimeout(resolve, 5000));
@@ -27,7 +39,9 @@ export const takeScreenshot = async ({
     buffer: screenshotBuffer,
     mimeType: 'image/png',
   };
-
+  if (debug) {
+    console.log('Closing browser');
+  }
   await browser.close();
 
   return image;
