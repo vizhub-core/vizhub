@@ -24,7 +24,7 @@ import { GetContentAtCommit } from './getContentAtCommit';
 import { takeScreenshot } from './takeScreenshot';
 import { imageFromBase64 } from 'entities/src/Images';
 
-const debug = false;
+const debug = true;
 
 // getImage
 //  * Gets an image for a commit
