@@ -1,5 +1,7 @@
 import { V3BuildResult } from './types';
 
+const debug = false;
+
 // Generates iframe srcdoc for first run.
 export const computeSrcDocV3 = ({
   pkg,
@@ -7,6 +9,12 @@ export const computeSrcDocV3 = ({
   errors,
 }: V3BuildResult) => {
   let cdn = '';
+
+  if (debug) {
+    console.log('computeSrcDocV3:');
+    console.log('  src:');
+    console.log(src?.slice(0, 200));
+  }
 
   if (
     pkg &&
