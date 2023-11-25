@@ -5,6 +5,7 @@ import {
   Content,
   READ,
   WRITE,
+  DELETE,
 } from 'entities';
 import { rollup } from 'rollup';
 import { JSDOM } from 'jsdom';
@@ -57,7 +58,7 @@ VizPage.getPageData = async ({
       await verifyVizAccess({
         authenticatedUserId,
         info,
-        actions: [READ, WRITE],
+        actions: [READ, WRITE, DELETE],
       });
     if (verifyVizReadAccessResult.outcome === 'failure') {
       console.log('Error when verifying viz access:');
@@ -102,6 +103,10 @@ VizPage.getPageData = async ({
     // Access control: Verify that the user has write access to the viz.
     // This is used to determine whether to show the "Settings" button.
     const canUserEditViz: boolean = vizAccess[WRITE];
+
+    // Access control: Verify that the user has delete access to the viz.
+    // This is used to determine whether to show the "Delete" button.
+    const canUserDeleteViz: boolean = vizAccess[DELETE];
 
     // If we're here, then the user has read access to the viz,
     // so it's worth fetching the content.
@@ -184,6 +189,7 @@ VizPage.getPageData = async ({
       initialSrcdoc,
       initialSrcdocError,
       canUserEditViz,
+      canUserDeleteViz,
     };
   } catch (e) {
     console.log('error fetching viz with id ', id);

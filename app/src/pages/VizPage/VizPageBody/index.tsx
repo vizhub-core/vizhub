@@ -51,6 +51,7 @@ export const VizPageBody = ({
   initialSrcdoc,
   initialSrcdocError,
   canUserEditViz,
+  canUserDeleteViz,
   setVizTitle,
   submitContentOperation,
   toggleDeleteVizConfirmationModal,
@@ -72,6 +73,7 @@ export const VizPageBody = ({
   initialSrcdoc: string;
   initialSrcdocError: string | null;
   canUserEditViz: boolean;
+  canUserDeleteViz: boolean;
   setVizTitle: (title: string) => void;
   submitContentOperation: (
     next: (content: Content) => Content,
@@ -213,7 +215,7 @@ export const VizPageBody = ({
         onForkClick={toggleForkModal}
         showSettingsButton={canUserEditViz}
         onSettingsClick={toggleSettingsModal}
-        showTrashButton={true}
+        showTrashButton={canUserDeleteViz}
         onTrashClick={toggleDeleteVizConfirmationModal}
       />
       <div className="vh-viz-page-body">

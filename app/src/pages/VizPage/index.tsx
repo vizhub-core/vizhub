@@ -52,6 +52,7 @@ export type VizPageData = PageData & {
   initialSrcdoc: string;
   initialSrcdocError: string | null;
   canUserEditViz: boolean;
+  canUserDeleteViz: boolean;
 };
 
 // Inspired by https://github.com/vitejs/vite-plugin-react/blob/main/playground/ssr-react/src/pages/Home.jsx
@@ -71,6 +72,7 @@ export const VizPage: Page = ({
     initialSrcdoc,
     initialSrcdocError,
     canUserEditViz,
+    canUserDeleteViz,
   } = pageData;
 
   // /////////////////////////////////////////
@@ -299,6 +301,7 @@ export const VizPage: Page = ({
             initialSrcdoc,
             initialSrcdocError,
             canUserEditViz,
+            canUserDeleteViz,
             setVizTitle,
             setAnyoneCanEdit,
             submitContentOperation,
