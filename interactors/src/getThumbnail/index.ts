@@ -21,6 +21,7 @@ import { resizeImage } from './resizeImage';
 import { generateImageId } from 'entities/src/Images';
 import { GetImage } from './getImage';
 import { FetchImageMetadata } from './fetchImageMetadata';
+import { PollImageGenerationStatus } from './PollImageGenerationStatus';
 
 const debug = false;
 
@@ -32,7 +33,6 @@ export const GetThumbnail = (gateways: Gateways) => {
   const {
     getCommit,
     getInfo,
-    getImageMetadata,
     saveImageMetadata,
     saveStoredImage,
     getStoredImage,
@@ -41,6 +41,8 @@ export const GetThumbnail = (gateways: Gateways) => {
   const verifyVizAccess = VerifyVizAccess(gateways);
   const getImage = GetImage(gateways);
   const fetchImageMetadata = FetchImageMetadata(gateways);
+  const pollImageGenerationStatus =
+    PollImageGenerationStatus(gateways);
 
   return async ({
     commitId,
@@ -100,7 +102,7 @@ export const GetThumbnail = (gateways: Gateways) => {
     if (imageMetadataResult.outcome === 'failure') {
       return err(imageMetadataResult.error);
     }
-    let imageMetadata = imageMetadataResult.value;
+    const imageMetadata = imageMetadataResult.value;
 
     // If the image metadata is not found, assume
     // the image status is 'not started'.
@@ -177,61 +179,16 @@ export const GetThumbnail = (gateways: Gateways) => {
             '  image metadata found with status "generating", polling',
           );
         }
-
-        const retries = 20;
-        const interval = 1000;
-        for (
-          let attempt = 1;
-          attempt <= retries;
-          attempt++
+        const polledImageMetadataResult: Result<ImageMetadata> =
+          await pollImageGenerationStatus(imageId);
+        if (
+          polledImageMetadataResult.outcome === 'failure'
         ) {
-          if (debug) {
-            console.log(
-              '    attempt ' +
-                attempt +
-                ' of ' +
-                retries +
-                ' to poll image status',
-            );
-          }
-          // Poll until the image is generated
-          await new Promise((resolve) =>
-            setTimeout(resolve, interval),
-          );
-          const imageMetadataResult =
-            await getImageMetadata(commitId);
-          if (imageMetadataResult.outcome === 'failure') {
-            // This should never happen, as it should
-            // at least be stored with status as 'generating'.
-            return err(imageMetadataResult.error);
-          }
-          imageMetadata = imageMetadataResult.value.data;
-          if (imageMetadata.status === 'generated') {
-            if (debug) {
-              console.log(
-                '    image status is "generated"!',
-              );
-            }
-            break;
-          } else {
-            if (debug) {
-              console.log(
-                '    image status is "' +
-                  imageMetadata.status +
-                  '", continuing to poll',
-              );
-            }
-          }
+          return err(polledImageMetadataResult.error);
         }
-        // If we've reached the max number of retries,
-        // return null, and let the client request
-        // time out.
-        if (debug) {
-          console.log(
-            '  max retries reached, returning null',
-          );
-        }
-        if (imageMetadata.status !== 'generated') {
+        const polledImageMetadata =
+          polledImageMetadataResult.value;
+        if (polledImageMetadata.status !== 'generated') {
           return ok(null);
         }
       }
