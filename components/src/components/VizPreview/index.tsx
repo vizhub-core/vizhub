@@ -1,5 +1,16 @@
+import { useEffect, useState } from 'react';
 import { UpvoteWidget } from '../UpvoteWidget';
 import './styles.scss';
+import { Spinner } from '../..';
+
+// If we're in thr browser
+let canvas: HTMLCanvasElement;
+let ctx: CanvasRenderingContext2D;
+if (typeof window !== 'undefined') {
+  // Reusable canvas for drawing images.
+  canvas = document.createElement('canvas');
+  ctx = canvas.getContext('2d');
+}
 
 // Shows a preview of a viz.
 // See also
@@ -13,6 +24,26 @@ export const VizPreview = ({
   href,
   upvotesCount,
 }) => {
+  // Data URL for the thumbnail image, or null if not yet loaded.
+  const [backgroundImage, setBackgroundImage] = useState<
+    string | null
+  >(null);
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
+
+  useEffect(() => {
+    setIsImageLoaded(false);
+    const image = new Image();
+    image.src = thumbnailImageURL;
+    image.onload = () => {
+      canvas.width = image.width;
+      canvas.height = image.height;
+      ctx.drawImage(image, 0, 0);
+      const dataURL = canvas.toDataURL();
+      setBackgroundImage(`url("${dataURL}")`);
+      setIsImageLoaded(true);
+    };
+  }, [thumbnailImageURL]);
+
   return (
     <a
       className="vh-viz-preview"
@@ -21,10 +52,15 @@ export const VizPreview = ({
     >
       <div
         className="thumbnail"
-        style={{
-          backgroundImage: `url("${thumbnailImageURL}")`,
-        }}
-      ></div>
+        style={{ backgroundImage }}
+      >
+        {isImageLoaded ? null : (
+          <div className="thumbnail-spinner">
+            <Spinner />
+          </div>
+        )}
+      </div>
+
       <div className="content-container">
         <div className="last-updated-date">
           {lastUpdatedDateFormatted}
@@ -38,6 +74,7 @@ export const VizPreview = ({
             src={ownerAvatarURL}
             alt={ownerName}
           />
+
           <div className="owner-name">{ownerName}</div>
         </div>
         <UpvoteWidget upvotesCount={upvotesCount} />
