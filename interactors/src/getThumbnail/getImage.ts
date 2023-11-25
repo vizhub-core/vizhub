@@ -15,6 +15,7 @@ import { computeSrcDoc } from 'runtime';
 import { GetContentAtCommit } from '../getContentAtCommit';
 import { takeScreenshot } from './takeScreenshot';
 import { generateImageId } from 'entities/src/Images';
+import { FetchImageMetadata } from './fetchImageMetadata';
 
 const debug = false;
 
@@ -34,6 +35,7 @@ export const GetImage = (gateways: Gateways) => {
   } = gateways;
 
   const getContentAtCommit = GetContentAtCommit(gateways);
+  const fetchImageMetadata = FetchImageMetadata(gateways);
 
   return async ({
     commitId,
@@ -49,49 +51,12 @@ export const GetImage = (gateways: Gateways) => {
       commitId,
       defaultVizWidth,
     );
-    let imageMetadata: ImageMetadata | undefined;
-    const imageMetadataResult =
-      await getImageMetadata(imageId);
+    const imageMetadataResult: Result<ImageMetadata | null> =
+      await fetchImageMetadata(imageId);
     if (imageMetadataResult.outcome === 'failure') {
-      if (
-        imageMetadataResult.error.code ===
-        'resourceNotFound'
-      ) {
-        // This case is fine, it just means the image
-        // hasn't been generated yet.
-      } else {
-        // This is an unexpected error, like a database
-        // connection error.
-        return err(imageMetadataResult.error);
-      }
-    } else {
-      const potentiallyBogusImageMetadata =
-        imageMetadataResult.value.data;
-      const generatedTimestamp =
-        potentiallyBogusImageMetadata.lastAccessed;
-      const nowTimestamp = dateToTimestamp(new Date());
-      const elapsedSeconds =
-        nowTimestamp - generatedTimestamp;
-
-      // If the generation started more than 1 minute ago,
-      // AND hasn't finished yet, then we should
-      // assume it failed, and try again.
-      if (
-        potentiallyBogusImageMetadata.status ===
-          'generating' &&
-        elapsedSeconds > 60
-      ) {
-        if (debug) {
-          console.log(
-            '  generation started more than 1 minute ago, assuming it failed, and trying again',
-          );
-        }
-      } else {
-        // If less than 1 minute ago, assume the image
-        // is still being generated.
-        imageMetadata = imageMetadataResult.value.data;
-      }
+      return err(imageMetadataResult.error);
     }
+    let imageMetadata = imageMetadataResult.value;
 
     // If the image metadata is not found, assume
     // the image status is 'not started'.
