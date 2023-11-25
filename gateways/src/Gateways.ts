@@ -49,6 +49,7 @@ import {
   VizEmbedding,
   ImageMetadata,
   StoredImage,
+  ImageId,
 } from 'entities';
 import { Result, Success } from './Result';
 import {
@@ -239,19 +240,17 @@ export interface Gateways {
     imageMetadata: ImageMetadata,
   ): Promise<Result<Success>>;
   getImageMetadata(
-    id: CommitId,
+    id: ImageId,
   ): Promise<Result<Snapshot<ImageMetadata>>>;
   deleteImageMetadata(
-    id: CommitId,
+    id: ImageId,
   ): Promise<Result<Success>>;
 
   saveStoredImage(
     storedImage: StoredImage,
   ): Promise<Result<Success>>;
-  getStoredImage(
-    id: CommitId,
-  ): Promise<Result<StoredImage>>;
-  deleteStoredImage(id: CommitId): Promise<Result<Success>>;
+  getStoredImage(id: ImageId): Promise<Result<StoredImage>>;
+  deleteStoredImage(id: ImageId): Promise<Result<Success>>;
 
   // TODO implement these backed by `pgvector` in Supabase
   // saveEmbedding(

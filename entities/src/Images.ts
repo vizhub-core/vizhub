@@ -25,14 +25,27 @@ export const imageFromBase64 = (base64: string): Image => {
   return { buffer, mimeType: 'image/png' };
 };
 
+// ImageId
+//  * Unique identifier string for image metadata.
+//  * Format: `${commitId}-${width}`
+export type ImageId = string;
+
+// generateImageId
+//  * Generates an ImageId.
+export const generateImageId = (
+  commitId: CommitId,
+  width: number,
+): ImageId => `${commitId}-${width}`;
+
 // ImageMetadata
 //  * Represents the status and access details of an image associated with a Viz commit.
 //  * This type provides a structured way to track the lifecycle of an image,
 //    from generation to its last access, facilitating efficient data handling and queries.
+//  * Applies to both full-size images and thumbnails.
 export interface ImageMetadata {
-  // A unique identifier for the image
-  // Format: `${commitId}-${width}`
-  id: string;
+  // A unique identifier for the image metadata,
+  // including width.
+  id: ImageId;
 
   // The commit associated with the image
   commitId: CommitId;
@@ -55,7 +68,7 @@ export interface ImageMetadata {
 export interface StoredImage {
   // A unique identifier for the image
   // Format: `${commitId}-${width}`
-  id: string;
+  id: ImageId;
 
   // The image data as a base64 encoded string
   base64: string;

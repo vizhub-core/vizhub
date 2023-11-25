@@ -1,5 +1,5 @@
 import { CommitId, Image } from 'entities';
-import { GetImage } from 'interactors';
+import { GetThumbnail } from 'interactors';
 import { RequestWithAuth } from '../types';
 import { getAuthenticatedUserId } from '../parseAuth0User';
 import { Gateways, Result } from 'gateways';
@@ -22,7 +22,7 @@ export const vizThumbnailEndpoint = ({
   };
   gateways: Gateways;
 }) => {
-  const getImage = GetImage(gateways);
+  const getThumbnail = GetThumbnail(gateways);
   // const getInfosAndOwners = GetInfosAndOwners(gateways);
   app.get(
     '/api/viz-thumbnail/:commitId-:width.png',
@@ -42,18 +42,27 @@ export const vizThumbnailEndpoint = ({
         return res.status(400).send('Invalid commitId');
       }
 
-      console.log('Desired width:', width);
-
       // Get the currently authenticated user.
       const authenticatedUserId =
         getAuthenticatedUserId(req);
 
       try {
+        // Desired behavior for thumbnails:
+        //  * If the thumbnail exists, return it.
+        //  * If the thumbnail doesn't exist, generate it.
+        //    * If the full scale screenshot exists,
+        //      generate the thumbnail from it.
+        //    * If the full scale screenshot doesn't exist,
+        //      generate and store both the full scale screenshot
+        //      and the thumbnail.
+
         // Generate the image using the provided commitId
-        const imageResult: Result<Image> = await getImage({
-          commitId,
-          authenticatedUserId,
-        });
+        const imageResult: Result<Image> =
+          await getThumbnail({
+            commitId,
+            authenticatedUserId,
+            width,
+          });
 
         if (imageResult.outcome === 'failure') {
           return res.send(imageResult.error);

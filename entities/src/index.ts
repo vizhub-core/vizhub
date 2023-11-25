@@ -144,7 +144,12 @@ export type {
   MigrationBatch,
 } from './Migration';
 
-export type { Image, ImageMetadata } from './Images';
+export type {
+  Image,
+  ImageId,
+  ImageMetadata,
+  StoredImage,
+} from './Images';
 export { imageFromBase64 } from './Images';
 
 export type EntityName =

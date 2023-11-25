@@ -1,53 +1,97 @@
-import { rollup } from 'rollup';
 import { Gateways, Result, ok, err } from 'gateways';
 import {
+  VizId,
+  UserId,
   CommitId,
   Image,
+  Commit,
+  Info,
+  Snapshot,
   ImageMetadata,
   dateToTimestamp,
-  Content,
-  defaultVizWidth,
-  getHeight,
   imageFromBase64,
   ImageId,
 } from 'entities';
-import { computeSrcDoc } from 'runtime';
-import { GetContentAtCommit } from '../getContentAtCommit';
-import { takeScreenshot } from './takeScreenshot';
+import {
+  VerifyVizAccess,
+  VizAccess,
+} from '../verifyVizAccess';
+import { accessDeniedError } from 'gateways/src/errors';
+import { resizeImage } from './resizeImage';
 import { generateImageId } from 'entities/src/Images';
+import { GetImage } from '../getImage';
 
 const debug = false;
 
-// getImage
-//  * Gets an image for a commit
-//  * If the image has already been generated, returns it.
-//  * Otherwise, generates the image and returns it.
-//  * Handles concurrency issues.
-//  * Does not handle access control, that is handled
-//    in getThumbnail.
-export const GetImage = (gateways: Gateways) => {
+// getThumbnail
+//  * Gets a resized image for a commit
+//  * Invokes getImage if the image has not been generated yet.
+//  * Handles access control.
+export const GetThumbnail = (gateways: Gateways) => {
   const {
+    getCommit,
+    getInfo,
     getImageMetadata,
     saveImageMetadata,
     saveStoredImage,
     getStoredImage,
   } = gateways;
 
-  const getContentAtCommit = GetContentAtCommit(gateways);
+  const verifyVizAccess = VerifyVizAccess(gateways);
+  const getImage = GetImage(gateways);
 
   return async ({
     commitId,
+    authenticatedUserId,
+    width,
   }: {
     commitId: CommitId;
+    authenticatedUserId: UserId | undefined;
+    width: number;
   }): Promise<Result<Image | null>> => {
     if (debug) {
-      console.log('getImage for commit ' + commitId);
+      console.log('getThumbnail for commit ' + commitId);
+    }
+    // Get the vizId for this commit, so that we
+    // can enforce access control on thumbnails.
+    const commitResult: Result<Commit> =
+      await getCommit(commitId);
+    if (commitResult.outcome === 'failure') {
+      return err(commitResult.error);
+    }
+    const commit: Commit = commitResult.value;
+    const vizId: VizId = commit.viz;
+
+    // Get the Info for this viz,
+    // so we can verify access.
+    const infoResult = await getInfo(vizId);
+    if (infoResult.outcome === 'failure') {
+      return err(infoResult.error);
+    }
+    const infoSnapshot: Snapshot<Info> = infoResult.value;
+    const info = infoSnapshot.data;
+
+    // Verify access
+    const vizAccessResult: Result<VizAccess> =
+      await verifyVizAccess({
+        authenticatedUserId,
+        info,
+        actions: ['read'],
+      });
+    if (vizAccessResult.outcome === 'failure') {
+      return err(vizAccessResult.error);
+    }
+    const vizAccess: VizAccess = vizAccessResult.value;
+    if (!vizAccess.read) {
+      return err(accessDeniedError('Read access denied'));
     }
 
-    // Fetch the image metadata
+    // Fetch the image metadata for this thumbnail.
+    // TODO refactor this to eliminate duplication
+    // between here and getImage
     const imageId: ImageId = generateImageId(
       commitId,
-      defaultVizWidth,
+      width,
     );
     let imageMetadata: ImageMetadata | undefined;
     const imageMetadataResult =
@@ -83,7 +127,7 @@ export const GetImage = (gateways: Gateways) => {
       ) {
         if (debug) {
           console.log(
-            '  generation started more than 1 minute ago, assuming it failed, and trying again',
+            '  [GetThumbnail] generation started more than 1 minute ago, assuming it failed, and trying again',
           );
         }
       } else {
@@ -98,7 +142,7 @@ export const GetImage = (gateways: Gateways) => {
     if (!imageMetadata) {
       if (debug) {
         console.log(
-          '  image metadata not found, generating',
+          '  [GetThumbnail] image metadata not found, invoking getImage',
         );
       }
       // Store the metadata that indicates the image
@@ -106,61 +150,38 @@ export const GetImage = (gateways: Gateways) => {
       await saveImageMetadata({
         id: imageId,
         commitId,
+        width,
         status: 'generating',
         lastAccessed: dateToTimestamp(new Date()),
       });
 
       if (debug) {
         console.log(
-          '  saved image metadata with status "generating"',
+          '  [GetThumbnail] saved image metadata with status "generating"',
         );
       }
 
-      // Fetch the Content, so we can generate the srcDoc,
-      // and then generate the image.
-      const contentResult: Result<Content> =
-        await getContentAtCommit(commitId);
-      if (contentResult.outcome === 'failure') {
-        return err(contentResult.error);
+      const fullSizeImageResult = await getImage({
+        commitId,
+      });
+      if (fullSizeImageResult.outcome === 'failure') {
+        return err(fullSizeImageResult.error);
       }
-      const content: Content = contentResult.value;
-
-      // Generate the srcDoc.
-      // TODO refactor computeSrcDoc to a new package `runtime`
-      const { initialSrcdoc, initialSrcdocError } =
-        await computeSrcDoc({ rollup, content });
-
-      if (initialSrcdocError) {
-        console.log(
-          'initialSrcdocError',
-          initialSrcdocError,
-        );
-      }
-
-      // TODO don't screenshot if there's an error in initialSrcdocError
+      const fullSizeImage = fullSizeImageResult.value;
 
       if (debug) {
-        console.log(
-          '  generated srcdoc, taking screenshot',
-        );
+        console.log('  [GetThumbnail] resizing image');
       }
-      // Take the screenshot
-      const image = await takeScreenshot({
-        srcDoc: initialSrcdoc,
-        width: defaultVizWidth,
-        height: getHeight(content.height),
+      // Resize the image
+      const resizedImage: Image = await resizeImage({
+        image: fullSizeImage,
+        width,
       });
 
-      if (debug) {
-        console.log(
-          '  took screenshot, saving stored image',
-        );
-      }
-
-      // Save the image
+      // Save the resized image
       const saveResult = await saveStoredImage({
-        id: commitId,
-        base64: image.buffer.toString('base64'),
+        id: imageId,
+        base64: resizedImage.buffer.toString('base64'),
       });
       if (saveResult.outcome === 'failure') {
         return err(saveResult.error);
@@ -174,16 +195,16 @@ export const GetImage = (gateways: Gateways) => {
 
       // Store the metadata that indicates the image
       // has been generated.
-
       await saveImageMetadata({
         id: imageId,
         commitId,
+        width,
         status: 'generated',
         lastAccessed: dateToTimestamp(new Date()),
       });
 
       // Return the image
-      return ok(image);
+      return ok(resizedImage);
     } else {
       if (imageMetadata.status === 'generating') {
         if (debug) {
@@ -213,7 +234,7 @@ export const GetImage = (gateways: Gateways) => {
             setTimeout(resolve, interval),
           );
           const imageMetadataResult =
-            await getImageMetadata(imageId);
+            await getImageMetadata(commitId);
           if (imageMetadataResult.outcome === 'failure') {
             // This should never happen, as it should
             // at least be stored with status as 'generating'.
@@ -256,7 +277,7 @@ export const GetImage = (gateways: Gateways) => {
         );
       }
       // Fetch and return the stored image
-      const result = await getStoredImage(commitId);
+      const result = await getStoredImage(imageId);
       if (result.outcome === 'failure') {
         return err(result.error);
       }
