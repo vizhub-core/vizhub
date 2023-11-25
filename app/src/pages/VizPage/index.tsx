@@ -36,6 +36,8 @@ import {
   useSetVizTitle,
 } from './useVizMutations';
 import { useMarkUncommitted } from './useMarkUncommitted';
+import { useToggleState } from './useToggleState';
+import { VizPageModals } from './VizPageModals';
 
 const vizKit = VizKit({ baseUrl: '/api' });
 
@@ -122,90 +124,19 @@ export const VizPage: Page = ({
   // True: https://vizhub.com/curran/86a75dc8bdbe4965ba353a79d4bd44c8?edit=files
   const [showEditor, setShowEditor] = useState(false);
 
-  // `activeFileId`
-  // The id of the currently open file tab.
-  // TODO put this in URL state'
-  // https://vizhub.com/curran/86a75dc8bdbe4965ba353a79d4bd44c8?file=index.html
-  // const [activeFileId, setActiveFileId] =
-  //   useState<FileId | null>(null);
-
-  // TODO try incorporating this:
-  // import { useState, useEffect } from 'react';
-  // import {
-  //   useLocation,
-  //   useHistory
-  // } from 'react-router-dom';
-
-  // function YourComponent() {
-  //   const location = useLocation();
-  //   const history = useHistory();
-  //   const queryParams = new URLSearchParams(location.search);
-
-  //   // Initialize `showEditor` from URL
-  //   const showEditorFromUrl = queryParams.get('edit') === 'files';
-  //   const [showEditor, setShowEditor] = useState(showEditorFromUrl);
-
-  //   // Initialize `activeFileId` from URL
-  //   const activeFileIdFromUrl = queryParams.get('file');
-  //   const [activeFileId, setActiveFileId] = useState(activeFileIdFromUrl || null);
-
-  //   // Update URL when `showEditor` or `activeFileId` changes
-  //   useEffect(() => {
-  //     let newQueryParams = new URLSearchParams();
-
-  //     if (showEditor) {
-  //       newQueryParams.set('edit', 'files');
-  //     }
-
-  //     if (activeFileId) {
-  //       newQueryParams.set('file', activeFileId);
-  //     }
-
-  //     history.replace({
-  //       pathname: location.pathname,
-  //       search: newQueryParams.toString(),
-  //     });
-  //   }, [showEditor, activeFileId]);
-
-  //   // ... rest of your component logic ...
-
-  //   return (
-  //     // ... your component's JSX ...
-  //   );
-  // }
-
-  // export default YourComponent;
-
-  // `tabList`
-  // The ordered list of tabs in the code editor.
-  // TODO put this in URL state
-  // https://vizhub.com/curran/86a75dc8bdbe4965ba353a79d4bd44c8?tabs=index.html,README.md
-  // const [tabList, setTabList] = useState<Array<FileId>>([]);
-
   // /////////////////////////////////////////
   /////////////// Modals /////////////////////
   // /////////////////////////////////////////
-
-  const useToggleState = (
-    initialValue: boolean = false,
-  ): [boolean, () => void] => {
-    const [state, setState] =
-      useState<boolean>(initialValue);
-
-    const toggleState: () => void = useCallback(() => {
-      setState((prevState) => !prevState);
-    }, []);
-
-    return [state, toggleState];
-  };
 
   const [showForkModal, toggleForkModal] = useToggleState();
   const [showSettingsModal, toggleSettingsModal] =
     useToggleState();
   const [showShareModal, toggleShareModal] =
     useToggleState();
-  // const [showRenameModal, toggleRenameModal] =
-  //   useToggleState();
+  const [
+    showDeleteVizConfirmationModal,
+    toggleDeleteVizConfirmationModal,
+  ] = useToggleState();
 
   // /////////////////////////////////////////
   /////////////// Callbacks //////////////////
@@ -265,6 +196,13 @@ export const VizPage: Page = ({
     content,
     hasUnforkedEdits,
   });
+
+  const onDeleteViz = useCallback(() => {
+    console.log('onDeleteViz');
+    // vizKit.rest.deleteViz(id).then(() => {
+    //   window.location.href = '/';
+    // });
+  }, [id]);
 
   // Handle permissions errors re: forking
   useEffect(() => {
@@ -364,12 +302,32 @@ export const VizPage: Page = ({
             setVizTitle,
             setAnyoneCanEdit,
             submitContentOperation,
+            showDeleteVizConfirmationModal,
+            toggleDeleteVizConfirmationModal,
           }}
         />
       </SplitPaneResizeProvider>
       <VizPageToasts
         hasUnforkedEdits={hasUnforkedEdits}
         handleForkLinkClick={handleForkLinkClick}
+      />
+      <VizPageModals
+        {...{
+          info,
+          ownerUser,
+          showForkModal,
+          toggleForkModal,
+          onFork,
+          showSettingsModal,
+          toggleSettingsModal,
+          showShareModal,
+          toggleShareModal,
+          onSettingsSave,
+          setAnyoneCanEdit,
+          showDeleteVizConfirmationModal,
+          toggleDeleteVizConfirmationModal,
+          onDeleteViz,
+        }}
       />
     </AuthenticatedUserProvider>
   );

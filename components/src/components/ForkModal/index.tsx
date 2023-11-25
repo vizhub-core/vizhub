@@ -7,6 +7,7 @@ import {
 import { Modal, Form, Button } from '../bootstrap';
 import { VisibilityControl } from '../VisibilityControl';
 import { OwnerControl } from '../OwnerControl';
+import { Plan, UserId, Visibility } from 'entities';
 
 export const ForkModal = ({
   show,
@@ -18,16 +19,40 @@ export const ForkModal = ({
   possibleOwners,
   currentPlan,
   pricingHref,
+}: {
+  show: boolean;
+  onClose: () => void;
+  onFork: ({
+    title,
+    visibility,
+    owner,
+  }: {
+    title: string;
+    visibility: string;
+    owner: string;
+  }) => void;
+  initialTitle: string;
+  initialVisibility: Visibility;
+  initialOwner: UserId;
+  possibleOwners: Array<{
+    id: UserId;
+    label: string;
+  }>;
+  currentPlan: Plan;
+  pricingHref: string;
 }) => {
-  const [title, setTitle] = useState(initialTitle);
-  const [visibility, setVisibility] = useState(
+  const [title, setTitle] = useState<string>(initialTitle);
+  const [visibility, setVisibility] = useState<Visibility>(
     initialVisibility,
   );
-  const [owner, setOwner] = useState(initialOwner);
+  const [owner, setOwner] = useState<UserId>(initialOwner);
 
-  const handleTitleChange = useCallback((event) => {
-    setTitle(event.target.value);
-  }, []);
+  const handleTitleChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setTitle(event.target.value);
+    },
+    [],
+  );
 
   const handleForkClick = useCallback(() => {
     onFork({ title, visibility, owner });
@@ -44,7 +69,7 @@ export const ForkModal = ({
 
   // Support keyboard shortcuts
   const handleKeyDown = useCallback(
-    (e) => {
+    (e: KeyboardEvent) => {
       if (
         e.key === 'Enter' &&
         (e.ctrlKey ||

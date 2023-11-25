@@ -10,5 +10,8 @@ export { ForksPageBody } from './components/ForksPageBody';
 export { VizPageViewer } from './components/VizPageViewer';
 export { UpvoteWidget } from './components/UpvoteWidget';
 export { ResourcesPageBody } from './components/ResourcesPageBody';
+export { SettingsModal } from './components/SettingsModal';
+export { ShareModal } from './components/ShareModal';
+export { DeleteVizConfirmationModal } from './components/DeleteVizConfirmationModal';
 
 import './components/index.scss';

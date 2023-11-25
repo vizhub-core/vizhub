@@ -7,15 +7,12 @@ import {
   useRef,
   useState,
 } from 'react';
-import type { ShareDBDoc } from 'vzcode';
-import { SplitPaneResizeContext } from 'vzcode';
+import { ShareDBDoc, SplitPaneResizeContext } from 'vzcode';
 import {
   defaultVizWidth,
   Content,
   Info,
   User,
-  UserId,
-  Visibility,
   getPackageJsonText,
   V3PackageJson,
   getPackageJson,
@@ -25,25 +22,16 @@ import {
   formatTimestamp,
 } from 'entities';
 import { useRuntime } from 'runtime';
-
-// TODO consolidate imports, from 'components'
-import { VizPageHead } from 'components/src/components/VizPageHead';
-import { ForkModal } from 'components/src/components/ForkModal';
-import { SettingsModal } from 'components/src/components/SettingsModal';
-import { VizPageViewer } from 'components/src/components/VizPageViewer';
-import { ShareModal } from 'components/src/components/ShareModal';
-
+import { VizPageHead, VizPageViewer } from 'components';
 import { AuthenticatedUserContext } from '../../../contexts/AuthenticatedUserContext';
 import { SmartHeader } from '../../../smartComponents/SmartHeader';
-
-import { useRenderMarkdownHTML } from './useRenderMarkdownHTML';
-import { VizPageEditor } from './VizPageEditor';
-import { VizSettings } from '../useVizMutations';
 import {
   getForksPageHref,
   getProfilePageHref,
   getVizPageHref,
 } from '../../../accessors';
+import { useRenderMarkdownHTML } from './useRenderMarkdownHTML';
+import { VizPageEditor } from './VizPageEditor';
 
 export const VizPageBody = ({
   info,
@@ -56,21 +44,16 @@ export const VizPageBody = ({
   showEditor,
   setShowEditor,
   onExportClick,
-  showForkModal,
   toggleForkModal,
-  onFork,
   initialReadmeHTML,
-  showSettingsModal,
   toggleSettingsModal,
-  showShareModal,
   toggleShareModal,
-  onSettingsSave,
   initialSrcdoc,
   initialSrcdocError,
   canUserEditViz,
   setVizTitle,
-  setAnyoneCanEdit,
   submitContentOperation,
+  toggleDeleteVizConfirmationModal,
 }: {
   info: Info;
   content: Content;
@@ -82,54 +65,22 @@ export const VizPageBody = ({
   showEditor: boolean;
   setShowEditor: (showEditor: boolean) => void;
   onExportClick: () => void;
-  showForkModal: boolean;
   toggleForkModal: () => void;
-  onFork: ({
-    owner,
-    title,
-    visibility,
-  }: {
-    owner: UserId;
-    title: string;
-    visibility: Visibility;
-  }) => void;
   initialReadmeHTML: string;
-  showSettingsModal: boolean;
   toggleSettingsModal: () => void;
-  showShareModal: boolean;
   toggleShareModal: () => void;
-  onSettingsSave: (vizSettings: VizSettings) => void;
   initialSrcdoc: string;
   initialSrcdocError: string | null;
   canUserEditViz: boolean;
   setVizTitle: (title: string) => void;
-  setAnyoneCanEdit: (anyoneCanEdit: boolean) => void;
   submitContentOperation: (
     next: (content: Content) => Content,
   ) => void;
+  toggleDeleteVizConfirmationModal: () => void;
 }) => {
   // The currently authenticated user, if any.
   const authenticatedUser: User | null = useContext(
     AuthenticatedUserContext,
-  );
-
-  // The list of possible owners of a fork of this viz.
-  // Also serves as the list of possible owners of a settings change.
-  const possibleOwners: Array<{
-    id: UserId;
-    label: string;
-  }> = useMemo(
-    () =>
-      authenticatedUser
-        ? [
-            {
-              id: authenticatedUser.id,
-              label: getUserDisplayName(authenticatedUser),
-            },
-            // TODO add orgs that the user is a member of.
-          ]
-        : [],
-    [authenticatedUser],
   );
 
   // A function that renders markdown to HTML.
@@ -250,39 +201,6 @@ export const VizPageBody = ({
     [ownerUser],
   );
 
-  const anyoneCanEdit = info.anyoneCanEdit;
-
-  const linkToCopy = useMemo(
-    () => getVizPageHref(ownerUser, info),
-    [ownerUser, info],
-  );
-
-  const handleLinkCopy = useCallback(() => {
-    // Check if the Clipboard API is available
-    if (navigator.clipboard && linkToCopy) {
-      // Copy the link to the clipboard
-      navigator.clipboard
-        .writeText(linkToCopy)
-        .then(() => {
-          // TODO: show a toast or tooltip
-          console.log(
-            'Link copied to clipboard successfully!',
-          );
-        })
-        .catch((err) => {
-          console.error('Failed to copy link: ', err);
-        });
-    } else {
-      console.error(
-        'Clipboard API not available or link is empty.',
-      );
-    }
-  }, [linkToCopy]);
-
-  const handleTrashClick = useCallback(() => {
-    console.log('TODO: handleTrashClick');
-  }, []);
-
   return (
     <div className="vh-page">
       <SmartHeader />
@@ -296,7 +214,7 @@ export const VizPageBody = ({
         showSettingsButton={canUserEditViz}
         onSettingsClick={toggleSettingsModal}
         showTrashButton={true}
-        onTrashClick={handleTrashClick}
+        onTrashClick={toggleDeleteVizConfirmationModal}
       />
       <div className="vh-viz-page-body">
         <VizPageEditor
@@ -342,42 +260,6 @@ export const VizPageBody = ({
           />
         </div>
       </div>
-      {showForkModal && (
-        <ForkModal
-          initialTitle={'Fork of ' + info.title}
-          initialVisibility={info.visibility}
-          initialOwner={authenticatedUser?.id}
-          possibleOwners={possibleOwners}
-          show={showForkModal}
-          onClose={toggleForkModal}
-          onFork={onFork}
-          currentPlan={authenticatedUser?.plan}
-          pricingHref={'/pricing'}
-        />
-      )}
-      {showSettingsModal && (
-        <SettingsModal
-          initialTitle={info.title}
-          initialVisibility={info.visibility}
-          initialOwner={info.owner}
-          possibleOwners={possibleOwners}
-          show={showSettingsModal}
-          onClose={toggleSettingsModal}
-          onSave={onSettingsSave}
-          currentPlan={authenticatedUser?.plan}
-          pricingHref={'/pricing'}
-        />
-      )}
-      {showShareModal && (
-        <ShareModal
-          show={showShareModal}
-          onClose={toggleShareModal}
-          linkToCopy={linkToCopy}
-          onLinkCopy={handleLinkCopy}
-          anyoneCanEdit={anyoneCanEdit}
-          setAnyoneCanEdit={setAnyoneCanEdit}
-        />
-      )}
     </div>
   );
 };

@@ -7,6 +7,10 @@ export const DeleteVizConfirmationModal = ({
   show,
   onClose,
   onConfirm,
+}: {
+  show: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
 }) => {
   const handleEnterKey = useCallback(
     (event: KeyboardEvent) => {
@@ -31,7 +35,7 @@ export const DeleteVizConfirmationModal = ({
 
   return (
     <Modal show={show} onHide={onClose} centered>
-      <Modal.Header closeButton onClick={onClose}>
+      <Modal.Header closeButton>
         <Modal.Title>Delete Viz</Modal.Title>
       </Modal.Header>
 

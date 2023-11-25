@@ -1,8 +1,11 @@
 import { useCallback } from 'react';
+import { Plan, Visibility } from 'entities';
 import { Form, Alert, Button } from '../bootstrap';
 import './styles.css';
 
-const visibilities = {
+const visibilities: {
+  [K in Visibility]: string;
+} = {
   public: 'Anyone can see this viz.',
   unlisted: 'Anyone with the link can see this viz.',
   private: 'Only collaborators can see this viz.',
@@ -13,10 +16,18 @@ export const VisibilityControl = ({
   setVisibility,
   currentPlan,
   pricingHref,
+}: {
+  visibility: Visibility;
+  setVisibility: (visibility: Visibility) => void;
+  currentPlan: Plan;
+  pricingHref: string;
 }) => {
-  const handleChange = useCallback((event) => {
-    setVisibility(event.target.value);
-  }, []);
+  const handleChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setVisibility(event.target.value as Visibility);
+    },
+    [],
+  );
   return (
     <Form.Group className="mb-3" controlId="visibility">
       <Form.Label>Visibility</Form.Label>
@@ -42,11 +53,7 @@ export const VisibilityControl = ({
       <Form.Text className="text-muted">
         {visibilities[visibility]}
       </Form.Text>
-      {/* {currentPlan === 'free' ? (
-        <Form.Text className="text-muted">
-          <a href={pricingHref}>Upgrade to Pro</a> to make your viz private
-        </Form.Text>
-      ) : null} */}
+
       {currentPlan === 'free' ? (
         <Alert
           variant="info"
