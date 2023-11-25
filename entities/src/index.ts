@@ -145,6 +145,7 @@ export type {
 } from './Migration';
 
 export type { Image, ImageMetadata } from './Images';
+export { imageFromBase64 } from './Images';
 
 export type EntityName =
   | 'Info'

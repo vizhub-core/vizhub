@@ -13,16 +13,17 @@ import {
   Content,
   defaultVizWidth,
   getHeight,
+  imageFromBase64,
 } from 'entities';
 import { computeSrcDoc } from 'runtime';
 import {
   VerifyVizAccess,
   VizAccess,
-} from './verifyVizAccess';
+} from '../verifyVizAccess';
 import { accessDeniedError } from 'gateways/src/errors';
-import { GetContentAtCommit } from './getContentAtCommit';
+import { GetContentAtCommit } from '../getContentAtCommit';
 import { takeScreenshot } from './takeScreenshot';
-import { imageFromBase64 } from 'entities/src/Images';
+import { resizeImage } from './resizeImage';
 
 const debug = false;
 
