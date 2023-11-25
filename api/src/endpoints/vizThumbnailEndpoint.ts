@@ -25,19 +25,28 @@ export const vizThumbnailEndpoint = ({
   const getImage = GetImage(gateways);
   // const getInfosAndOwners = GetInfosAndOwners(gateways);
   app.get(
-    '/api/viz-thumbnail/:commitId.png',
+    '/api/viz-thumbnail/:commitId-:width.png',
     async (
       req: RequestWithAuth & {
-        params: { commitId: CommitId };
+        params: { commitId: CommitId; width: string };
       },
       res: Response,
     ) => {
+      // Validate params
+      const width = parseInt(req.params.width);
+      if (isNaN(width)) {
+        return res.status(400).send('Invalid width');
+      }
+      const commitId = req.params.commitId;
+      if (commitId === undefined) {
+        return res.status(400).send('Invalid commitId');
+      }
+
+      console.log('Desired width:', width);
+
       // Get the currently authenticated user.
       const authenticatedUserId =
         getAuthenticatedUserId(req);
-
-      // Get the commit ID from the request parameters.
-      const { commitId } = req.params;
 
       try {
         // Generate the image using the provided commitId

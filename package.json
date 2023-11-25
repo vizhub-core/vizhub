@@ -37,8 +37,5 @@
     "migration2",
     "ot",
     "runtime"
-  ],
-  "dependencies": {
-    "adm-zip": "^0.5.10"
-  }
+  ]
 }

@@ -295,7 +295,6 @@ export const GetImage = (gateways: Gateways) => {
           '  Fetching and returning the stored image',
         );
       }
-      // if (imageMetadata.status === 'generated') {
       // Fetch and return the stored image
       const result = await getStoredImage(commitId);
       if (result.outcome === 'failure') {
@@ -303,7 +302,6 @@ export const GetImage = (gateways: Gateways) => {
       }
       const storedImage = result.value;
       return ok(imageFromBase64(storedImage.base64));
-      // }
     }
   };
 };
