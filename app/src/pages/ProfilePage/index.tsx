@@ -8,6 +8,7 @@ import {
   InfosAndOwnersPageData,
   InfosAndOwnersProvider,
 } from '../../contexts/InfosAndOwnersContext';
+import { ProfilePageToasts } from './ProfilePageToasts';
 
 export type ProfilePageData = PageData &
   InfosAndOwnersPageData & {
@@ -41,6 +42,7 @@ export const ProfilePage: Page = ({
           owner={profileUser.id}
         >
           <Body profileUser={profileUser} />
+          <ProfilePageToasts />
         </InfosAndOwnersProvider>
       </SortProvider>
     </AuthenticatedUserProvider>

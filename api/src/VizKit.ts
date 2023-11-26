@@ -6,16 +6,17 @@ import {
   Visibility,
   Info,
 } from 'entities';
+import { Result, Success } from 'gateways';
 
 export interface VizKitAPI {
   rest: {
     privateBetaEmailSubmit: (
       email: string,
-    ) => Promise<{ success: true }>;
+    ) => Promise<Result<Success>>;
 
     recordAnalyticsEvents: (
       eventId: string,
-    ) => Promise<{ success: true }>;
+    ) => Promise<Result<Success>>;
 
     getInfosAndOwners: (options: {
       forkedFrom: VizId;
@@ -60,15 +61,15 @@ export interface VizKitAPI {
 
     trashViz: (options: {
       id: VizId;
-    }) => Promise<{ success: true }>;
+    }) => Promise<Result<Success>>;
 
     fakeCheckoutSuccess: (
       userId: UserId,
-    ) => Promise<{ success: true }>;
+    ) => Promise<Result<Success>>;
 
     fakeUnsubscribeSuccess: (
       userId: UserId,
-    ) => Promise<{ success: true }>;
+    ) => Promise<Result<Success>>;
 
     createCheckoutSession: (userId: UserId) => Promise<{
       sessionId: string;

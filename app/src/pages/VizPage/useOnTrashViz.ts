@@ -5,7 +5,7 @@ import { setCookie } from '../cookies';
 import { VizKitAPI } from 'api/src/VizKit';
 import { getProfilePageHref } from '../../accessors';
 
-const debug = true;
+const debug = false;
 
 export const useOnTrashViz = ({
   vizKit,
@@ -34,6 +34,8 @@ export const useOnTrashViz = ({
           console.log(result.error);
           return;
         }
+        console.log('result.value');
+        console.log(result.value);
 
         // Populate cookie to show toast on the other side, after redirect.
         // See Toasts.tsx
