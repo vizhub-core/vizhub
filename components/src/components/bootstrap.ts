@@ -17,6 +17,8 @@ import Toast from 'react-bootstrap/cjs/Toast.js';
 import ToastContainer from 'react-bootstrap/cjs/ToastContainer.js';
 import Alert from 'react-bootstrap/cjs/Alert.js';
 import Card from 'react-bootstrap/cjs/Card.js';
+import Tooltip from 'react-bootstrap/cjs/Tooltip.js';
+import Overlay from 'react-bootstrap/cjs/Overlay.js';
 
 export {
   Alert,
@@ -35,4 +37,6 @@ export {
   Toast,
   ToastContainer,
   Card,
+  Tooltip,
+  Overlay,
 };
