@@ -102,12 +102,12 @@ export const VizPageModals = ({
       // Copy the link to the clipboard
       navigator.clipboard
         .writeText(linkToCopy)
-        .then(() => {
-          // TODO: show a toast or tooltip
-          console.log(
-            'Link copied to clipboard successfully!',
-          );
-        })
+        // .then(() => {
+        //   // TODO: show a toast or tooltip
+        //   console.log(
+        //     'Link copied to clipboard successfully!',
+        //   );
+        // })
         .catch((err) => {
           console.error('Failed to copy link: ', err);
         });

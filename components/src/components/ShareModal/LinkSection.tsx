@@ -1,12 +1,17 @@
-import { useCallback } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import {
   Form,
   FormControl,
   InputGroup,
   Button,
+  Tooltip,
+  Overlay,
 } from '../bootstrap';
 
 export const LinkSection = ({ linkToCopy, onLinkCopy }) => {
+  // Tracks when to show the "Copied" tooltip.
+  const [showTooltip, setShowTooltip] = useState(false);
+
   // Function to handle the onFocus event
   const handleFocus = useCallback(
     (event: React.FocusEvent<HTMLInputElement>) => {
@@ -14,6 +19,14 @@ export const LinkSection = ({ linkToCopy, onLinkCopy }) => {
     },
     [],
   );
+
+  const tooltipTarget = useRef(null);
+
+  const handleClick = useCallback(() => {
+    onLinkCopy();
+    setShowTooltip(true);
+    setTimeout(() => setShowTooltip(false), 4000);
+  }, [onLinkCopy]);
 
   return (
     <Form.Group
@@ -28,13 +41,26 @@ export const LinkSection = ({ linkToCopy, onLinkCopy }) => {
           readOnly
           onFocus={handleFocus}
         />
+
         <Button
+          ref={tooltipTarget}
           variant="outline-primary"
           id="button-copy"
-          onClick={onLinkCopy}
+          onClick={handleClick}
         >
           Copy
         </Button>
+        <Overlay
+          target={tooltipTarget.current}
+          show={showTooltip}
+          placement="top"
+        >
+          {(props) => (
+            <Tooltip id="overlay-example" {...props}>
+              Copied!
+            </Tooltip>
+          )}
+        </Overlay>
       </InputGroup>
       <Form.Text className="text-muted">
         Sharing this link on social media will automatically
