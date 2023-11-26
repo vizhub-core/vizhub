@@ -84,7 +84,7 @@ export const VizPageModals = ({
   const anyoneCanEdit = info.anyoneCanEdit;
 
   const linkToCopy = useMemo(
-    () => getVizPageHref(ownerUser, info),
+    () => getVizPageHref(ownerUser, info, true),
     [ownerUser, info],
   );
 
