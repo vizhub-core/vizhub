@@ -341,6 +341,7 @@ export interface Gateways {
     sortField,
     pageNumber,
     sortOrder,
+    includeTrashed,
   }: {
     // owner
     //
@@ -390,6 +391,10 @@ export interface Gateways {
 
     // The order to sort the results by (ascending or descending).
     sortOrder?: SortOrder;
+
+    // True if we want to only include trashed vizzes
+    // in the results (for trash page).
+    includeTrashed?: boolean;
   }): Promise<Result<Array<Snapshot<Info>>>>;
 
   // getUsersByIds

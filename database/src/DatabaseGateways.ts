@@ -259,6 +259,7 @@ export const DatabaseGateways = ({
     sortField = defaultSortField,
     pageNumber = 0,
     sortOrder = defaultSortOrder,
+    includeTrashed = false,
   }) =>
     new Promise((resolve) => {
       const entityName = 'Info';
@@ -267,12 +268,26 @@ export const DatabaseGateways = ({
       const mongoQuery = {
         ...(owner && { owner }),
         ...(forkedFrom && { forkedFrom }),
+        trashed: { $exists: includeTrashed },
         $limit: pageSize,
         $skip: pageNumber * pageSize,
         $sort: {
           [sortField]: sortOrder === 'ascending' ? 1 : -1,
         },
       };
+
+      // // If this viz is currently in the "trash",
+      // // this field represents when it was put there.
+      // // If this viz is not in the "trash",
+      // // this field is undefined.
+      // trashed?: Timestamp;
+      // if (includeTrashed) {
+      //   // Match all documents where trashed is defined.
+      //   mongoQuery.trashed = { $exists: true };
+      // } else {
+      //   // Match all documents where trashed is undefined.
+      //   mongoQuery.trashed = { $exists: false };
+      // }
 
       // TODO add test for basic access control - exclude non-public infos
       mongoQuery['visibility'] = 'public';

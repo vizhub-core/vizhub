@@ -199,13 +199,6 @@ export const VizPage: Page = ({
     hasUnforkedEdits,
   });
 
-  const onDeleteViz = useCallback(() => {
-    console.log('onDeleteViz');
-    // vizKit.rest.deleteViz(id).then(() => {
-    //   window.location.href = '/';
-    // });
-  }, [id]);
-
   // Handle permissions errors re: forking
   useEffect(() => {
     const connection = getConnection();
@@ -297,7 +290,6 @@ export const VizPage: Page = ({
             toggleSettingsModal,
             showShareModal,
             toggleShareModal,
-            onSettingsSave,
             initialSrcdoc,
             initialSrcdocError,
             canUserEditViz,
@@ -329,7 +321,7 @@ export const VizPage: Page = ({
           setAnyoneCanEdit,
           showDeleteVizConfirmationModal,
           toggleDeleteVizConfirmationModal,
-          onDeleteViz,
+          vizKit,
         }}
       />
     </AuthenticatedUserProvider>

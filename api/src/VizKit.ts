@@ -4,12 +4,84 @@ import {
   VizId,
   Content,
   Visibility,
+  Info,
 } from 'entities';
 
+export interface VizKitAPI {
+  rest: {
+    privateBetaEmailSubmit: (
+      email: string,
+    ) => Promise<{ success: true }>;
+
+    recordAnalyticsEvents: (
+      eventId: string,
+    ) => Promise<{ success: true }>;
+
+    getInfosAndOwners: (options: {
+      forkedFrom: VizId;
+      owner: UserId;
+
+      // An array of user ids that we already have in the client
+      noNeedToFetchUsers: Array<UserId>;
+
+      // The sort id that we want to use for sorting results
+      sortId: SortId;
+
+      // The page number that we want to use for pagination
+      pageNumber: number;
+    }) => Promise<{
+      infos: Array<Info>;
+      owners: Array<UserId>;
+      hasMore: boolean;
+    }>;
+
+    forkViz: (options: {
+      // The viz that we want to fork
+      forkedFrom: VizId;
+
+      // The new owner of the forked viz
+      owner: UserId;
+
+      // The title of the forked viz
+      title?: string;
+
+      // The new content of the forked viz
+      // If undefined, the forked viz will have the same content as the original viz
+      // This is only populated when the user has made changes to the viz
+      // but doesn't have the access permissions to actually change the original viz.
+      // In this case, forking is a way for the user to save their changes.
+      content?: Content;
+
+      // The visibility of the forked viz
+      visibility?: Visibility;
+    }) => Promise<{
+      forkedVizId: VizId;
+    }>;
+
+    trashViz: (options: {
+      id: VizId;
+    }) => Promise<{ success: true }>;
+
+    fakeCheckoutSuccess: (
+      userId: UserId,
+    ) => Promise<{ success: true }>;
+
+    fakeUnsubscribeSuccess: (
+      userId: UserId,
+    ) => Promise<{ success: true }>;
+
+    createCheckoutSession: (userId: UserId) => Promise<{
+      sessionId: string;
+    }>;
+  };
+}
 // Modeled after https://github.com/octokit/octokit.js/#constructor-options
 // See also https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#uploading_json_data
 
-export const VizKit = ({ baseUrl, ssrFetch = null }) => {
+export const VizKit = ({
+  baseUrl,
+  ssrFetch = null,
+}): VizKitAPI => {
   let fetch: typeof window.fetch | typeof ssrFetch;
 
   if (import.meta.env.SSR) {
@@ -89,6 +161,9 @@ export const VizKit = ({ baseUrl, ssrFetch = null }) => {
         // The visibility of the forked viz
         visibility?: Visibility;
       }) => await postJSON(`${baseUrl}/fork-viz`, options),
+
+      trashViz: async (options: { id: VizId }) =>
+        await postJSON(`${baseUrl}/trash-viz`, options),
 
       fakeCheckoutSuccess: async (userId: UserId) =>
         await postJSON(`${baseUrl}/fake-checkout-success`, {

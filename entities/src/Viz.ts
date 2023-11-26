@@ -99,6 +99,8 @@ export interface Info {
 
   // If this viz is currently in the "trash",
   // this field represents when it was put there.
+  // If this viz is not in the "trash",
+  // this field is undefined.
   trashed?: Timestamp;
 
   // A popularity score for this viz.

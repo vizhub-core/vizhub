@@ -15,6 +15,8 @@ import { VizSettings } from './useVizMutations';
 import { useCallback, useContext, useMemo } from 'react';
 import { AuthenticatedUserContext } from '../../contexts/AuthenticatedUserContext';
 import { getVizPageHref } from '../../accessors';
+import { VizKitAPI } from 'api/src/VizKit';
+import { useOnTrashViz } from './useOnTrashViz';
 
 export const VizPageModals = ({
   info,
@@ -30,7 +32,7 @@ export const VizPageModals = ({
   setAnyoneCanEdit,
   showDeleteVizConfirmationModal,
   toggleDeleteVizConfirmationModal,
-  onDeleteViz,
+  vizKit,
 }: {
   info: Info;
   ownerUser: User;
@@ -53,7 +55,7 @@ export const VizPageModals = ({
   setAnyoneCanEdit: (anyoneCanEdit: boolean) => void;
   showDeleteVizConfirmationModal: boolean;
   toggleDeleteVizConfirmationModal: () => void;
-  onDeleteViz: () => void;
+  vizKit: VizKitAPI;
 }) => {
   // The currently authenticated user, if any.
   const authenticatedUser: User | null = useContext(
@@ -85,6 +87,14 @@ export const VizPageModals = ({
     () => getVizPageHref(ownerUser, info),
     [ownerUser, info],
   );
+
+  // Handle when the user confirms that they
+  // want to delete the viz (put it in the trash).
+  const onTrashViz = useOnTrashViz({
+    vizKit,
+    id: info.id,
+    authenticatedUser,
+  });
 
   const handleLinkCopy = useCallback(() => {
     // Check if the Clipboard API is available
@@ -150,7 +160,7 @@ export const VizPageModals = ({
         <DeleteVizConfirmationModal
           show={showDeleteVizConfirmationModal}
           onClose={toggleDeleteVizConfirmationModal}
-          onConfirm={onDeleteViz}
+          onConfirm={onTrashViz}
         />
       )}
     </>
