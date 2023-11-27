@@ -28,7 +28,6 @@ import { VizPageToasts } from './VizPageToasts';
 import { useOnFork } from './useOnFork';
 import { generateExportZipV2 } from './export/generateExportZipV2';
 import { generateExportZipV3 } from './export/generateExportZipV3';
-import './styles.scss';
 import {
   useOnSettingsSave,
   useSetAnyoneCanEdit,
@@ -38,6 +37,7 @@ import {
 import { useMarkUncommitted } from './useMarkUncommitted';
 import { useToggleState } from './useToggleState';
 import { VizPageModals } from './VizPageModals';
+import './styles.scss';
 
 const vizKit = VizKit({ baseUrl: '/api' });
 

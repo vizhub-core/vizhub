@@ -2,17 +2,24 @@ import {
   OutputOptions,
   RollupOptions,
   RollupCache,
+  RollupLog,
 } from 'rollup';
-import { V3BuildResult, V3RuntimeFiles } from './types';
+import {
+  V3BuildError,
+  V3BuildResult,
+  V3RuntimeFiles,
+} from './types';
 import { V3PackageJson } from 'entities';
 
 const parseJSON = (str: string, errors: any[]) => {
   try {
     return JSON.parse(str);
   } catch (error) {
-    errors.push(error);
-    error.code = 'INVALID_PACKAGE_JSON';
-    throw error;
+    errors.push({
+      code: 'INVALID_PACKAGE_JSON',
+      message: error.message,
+    });
+    return undefined;
   }
 };
 
@@ -54,7 +61,7 @@ const virtual = (files: V3RuntimeFiles) => ({
 // Manual benchmarks for scatter plot example:
 // Without cache: avg = 5.9 ms
 // With cache: avg = 5.2 ms
-let cache: RollupCache | null = null;
+let cache: RollupCache | undefined;
 
 const debug = false;
 
@@ -67,11 +74,11 @@ export const build = async ({
   files: V3RuntimeFiles;
   enableSourcemap?: boolean;
   enableCache?: boolean;
-  rollup: any;
+  rollup;
 }): Promise<V3BuildResult> => {
   const startTime = Date.now();
-  const warnings = [];
-  const errors = [];
+  const warnings: Array<V3BuildError> = [];
+  const errors: Array<V3BuildError> = [];
   let src: string | undefined;
   let pkg: V3PackageJson | undefined;
 
@@ -94,11 +101,14 @@ export const build = async ({
     const inputOptions: RollupOptions = {
       input: './index.js',
       plugins: virtual(files),
-      onwarn: (warning: any) => {
+      onwarn: (warning: RollupLog) => {
         warnings.push(JSON.parse(JSON.stringify(warning)));
       },
     };
-    if (enableCache) {
+
+    // If cache is enabled AND there is a cache
+    // from the previous build, use it.
+    if (enableCache && cache) {
       inputOptions.cache = cache;
     }
 
@@ -174,6 +184,11 @@ export const build = async ({
     console.log('  returning src in build.ts:');
     console.log('  src:');
     console.log(src?.slice(0, 200));
+  }
+
+  // Should never happen, pacify TypeScript.
+  if (src === undefined) {
+    throw new Error('src is undefined');
   }
 
   return {
