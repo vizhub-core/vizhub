@@ -1,5 +1,6 @@
+// @ts-ignore
 import Worker from './worker.ts?worker';
-import { BuildResult, V3RuntimeFiles } from './types';
+import { V3BuildResult, V3RuntimeFiles } from './types';
 
 // Flag for debugging.
 const debug = false;
@@ -62,6 +63,12 @@ export const setupV3Runtime = ({
     | typeof PENDING_CLEAN
     | typeof PENDING_DIRTY = IDLE;
 
+  if (debug) {
+    setInterval(() => {
+      console.log('state', state);
+    }, 1000);
+  }
+
   let latestFiles: V3RuntimeFiles | null = null;
 
   // This runs when any file is changed.
@@ -97,7 +104,13 @@ export const setupV3Runtime = ({
   // Builds and runs the latest files.
   const update = async () => {
     state = PENDING_CLEAN;
+    if (debug) {
+      console.log('update: before run');
+    }
     await run(await build(latestFiles));
+    if (debug) {
+      console.log('update: after run');
+    }
     updateCount++;
     // TypeScript can't comprehend that `state`
     // may change during the await calls above.
@@ -110,17 +123,21 @@ export const setupV3Runtime = ({
     }
   };
 
-  let buildTimes = [];
+  let buildTimes: Array<number> = [];
   const profileBuildTimes = true;
-  const avg = (arr: number[]) =>
+  const avg = (arr: Array<number>) =>
     arr.reduce((a, b) => a + b, 0) / arr.length;
   const n = 100;
 
   const build = (
     files: V3RuntimeFiles,
-  ): Promise<BuildResult> =>
+  ): Promise<V3BuildResult> =>
     new Promise((resolve) => {
-      worker.onmessage = ({ data }) => {
+      worker.onmessage = ({
+        data,
+      }: {
+        data: V3BuildResult;
+      }) => {
         const { errors, warnings, src, pkg, time } = data;
 
         if (profileBuildTimes) {
@@ -143,7 +160,7 @@ export const setupV3Runtime = ({
         //   return console.log(warnings);
         // }
 
-        resolve({ src, pkg, errors, warnings });
+        resolve({ src, pkg, errors, warnings, time });
       };
       worker.postMessage({ files, enableSourcemap: true });
     });
@@ -154,7 +171,7 @@ export const setupV3Runtime = ({
     src,
     warnings,
     errors,
-  }: BuildResult): Promise<void> =>
+  }: V3BuildResult): Promise<void> =>
     new Promise((resolve) => {
       // If there were build errors,
       // display them and don't run.
@@ -181,15 +198,29 @@ export const setupV3Runtime = ({
       window.onmessage = ({ data }) => {
         if (data.type === 'runDone') {
           if (debug) {
-            console.log('got run done');
+            console.log('got runDone');
           }
           resolve();
         }
+        if (data.type === 'runError') {
+          if (debug) {
+            console.log('got runError');
+            console.log(data.error);
+          }
+          // TODO pass error out for display
+          resolve();
+        }
       };
-      iframe.contentWindow.postMessage(
-        { type: 'runJS', src },
-        '*',
-      );
+
+      if (iframe.contentWindow === null) {
+        // Should never happen.
+        console.log('iframe.contentWindow is null');
+      } else {
+        iframe.contentWindow.postMessage(
+          { type: 'runJS', src },
+          '*',
+        );
+      }
     });
 
   // Kick off the initial render
