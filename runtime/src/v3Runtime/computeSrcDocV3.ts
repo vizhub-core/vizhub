@@ -69,12 +69,16 @@ export const computeSrcDocV3 = ({
           script.id = 'injected-script';
           document.body.appendChild(script);
           run();
-          parent.postMessage({ type: 'runDone' }, "*");
         };
 
         onmessage = (message) => {
           if(message.data.type === 'runJS') {
-            runJS(message.data.src);
+            try {
+              runJS(message.data.src);
+              parent.postMessage({ type: 'runDone' }, "*");
+            } catch (error) {
+              parent.postMessage({ type: 'runError', error }, "*");
+            }
           }
           if(message.data.type === 'ping') {
             parent.postMessage({ type: 'pong' }, "*");
