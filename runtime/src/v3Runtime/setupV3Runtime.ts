@@ -77,7 +77,6 @@ export const setupV3Runtime = ({
   ): void => {
     latestFiles = files;
     if (state === IDLE) {
-      //      requestAnimationFrame(update);
       state = ENQUEUED;
       update();
     } else if (state === PENDING_CLEAN) {
@@ -106,6 +105,10 @@ export const setupV3Runtime = ({
     state = PENDING_CLEAN;
     if (debug) {
       console.log('update: before run');
+    }
+    if (latestFiles === null) {
+      // Should never happen.
+      throw new Error('latestFiles is null');
     }
     await run(await build(latestFiles));
     if (debug) {
