@@ -3,8 +3,13 @@ import {
   useEffect,
   useMemo,
   useRef,
+  useCallback,
 } from 'react';
-import { Content, getRuntimeVersion } from 'entities';
+import {
+  Content,
+  Files,
+  getRuntimeVersion,
+} from 'entities';
 import { V3RuntimeFiles, toV3RuntimeFiles } from 'runtime';
 
 // Sets up either the v2 or v3 runtime environment.
@@ -54,19 +59,40 @@ export const useRuntime = ({
     }
   }, [runtimeVersion]);
 
+  // Used to debounce updates to the v3 runtime.
+  const v3Timeout = useRef<number | undefined>(undefined);
+
+  // Executes a "run" on the v3 runtime.
+  const v3Run = useCallback(
+    (files: Files) => {
+      if (v3Runtime.current && files) {
+        v3Runtime.current.handleCodeChange(
+          toV3RuntimeFiles(files),
+        );
+      }
+    },
+    [v3Runtime],
+  );
+
   // Send file updates to the V3 runtime
   useEffect(() => {
     // We don't need to execute a "run" on first render,
     // because SSR handles the initial run by injecting
     // the srcdoc into the page server-side.
-    if (initialMount.current) {
+    if (initialMount.current === true) {
       return;
     }
 
-    if (v3Runtime.current && content.files) {
-      v3Runtime.current.handleCodeChange(
-        toV3RuntimeFiles(content.files),
-      );
+    // If we're 'interacting' using code widgets,
+    // we want to hot reload as frequently as possible.
+    if (content.isInteracting) {
+      v3Run(content.files);
+    } else {
+      // Otherwise, debounce the updates.
+      clearTimeout(v3Timeout.current);
+      v3Timeout.current = setTimeout(() => {
+        v3Run(content.files);
+      }, 800);
     }
   }, [content.files, runtimeVersion, v3Runtime]);
 
