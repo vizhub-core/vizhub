@@ -1,12 +1,12 @@
-import { Container, Button } from '../bootstrap';
 import { VizPreviewCollection } from '../VizPreviewCollection';
 import { SortControl } from '../SortControl';
-import { Spinner } from '../Spinner';
+import { More } from '../More';
 import './styles.scss';
 
 export const ProfilePageBody = ({
   // Viz preview list props.
   renderVizPreviews,
+  hasMore,
   onMoreClick,
   isLoadingNextPage,
 
@@ -49,13 +49,11 @@ export const ProfilePageBody = ({
         <VizPreviewCollection>
           {renderVizPreviews()}
         </VizPreviewCollection>
-        <div className="mt-3 mb-3 d-flex justify-content-center">
-          {isLoadingNextPage ? (
-            <Spinner fadeIn={false} />
-          ) : (
-            <Button onClick={onMoreClick}>More</Button>
-          )}
-        </div>
+        <More
+          hasMore={hasMore}
+          onMoreClick={onMoreClick}
+          isLoadingNextPage={isLoadingNextPage}
+        />
       </div>
     </div>
   );

@@ -23,6 +23,7 @@ export const InfosAndOwnersContext = createContext<{
     [userId: UserId]: Snapshot<User>;
   };
   isLoadingNextPage: boolean;
+  hasMore: boolean;
 }>(null);
 
 const vizKit = VizKit({ baseUrl: '/api' });
@@ -52,6 +53,9 @@ type PaginationState = {
   // If there was an error fetching the next page, it will be reported here
   // TODO: Handle errors better - check types match
   error?: Error;
+
+  // True if the "more" button should be shown
+  hasMore: boolean;
 };
 
 type PaginationAction =
@@ -61,6 +65,7 @@ type PaginationAction =
       sortId: SortId;
       infoSnapshots: Array<Snapshot<Info>>;
       ownerUserSnapshots: Array<Snapshot<User>>;
+      hasMore: boolean;
     }
   | { type: 'ReportError'; error: Error };
 
@@ -100,6 +105,7 @@ const reducer = (
             {},
           ),
         },
+        hasMore: action.hasMore,
       };
 
     // When the request comes back with an error
@@ -130,12 +136,14 @@ export const InfosAndOwnersProvider = ({
   forkedFrom,
   owner,
   children,
+  hasMoreInitially,
 }: {
   infoSnapshots: Array<Snapshot<Info>>;
   ownerUserSnapshots: Array<Snapshot<User>>;
   forkedFrom?: VizId;
   owner?: UserId;
   children: React.ReactNode;
+  hasMoreInitially: boolean;
 }) => {
   const { sortId } = useContext(SortContext);
 
@@ -151,8 +159,14 @@ export const InfosAndOwnersProvider = ({
         }),
         {},
       ),
+      hasMore: hasMoreInitially,
     }),
-    [sortId, infoSnapshots, ownerUserSnapshots],
+    [
+      sortId,
+      infoSnapshots,
+      ownerUserSnapshots,
+      hasMoreInitially,
+    ],
   );
 
   const [paginationState, paginationDispatch] = useReducer(
@@ -174,13 +188,17 @@ export const InfosAndOwnersProvider = ({
         pageNumber: paginationState.pages[sortId].length,
       });
       if (result.outcome === 'success') {
-        const { infoSnapshots, ownerUserSnapshots } =
-          result.value;
+        const {
+          infoSnapshots,
+          ownerUserSnapshots,
+          hasMore,
+        } = result.value;
         paginationDispatch({
           type: 'ResolveNextPage',
           sortId,
           infoSnapshots,
           ownerUserSnapshots,
+          hasMore,
         });
       } else {
         paginationDispatch({
@@ -206,6 +224,7 @@ export const InfosAndOwnersProvider = ({
       isLoadingNextPage:
         paginationState.nextPageStatus ===
         NEXT_PAGE_REQUESTED,
+      hasMore: paginationState.hasMore,
     }),
     [allInfoSnapshots, fetchNextPage, paginationState],
   );
