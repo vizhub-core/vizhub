@@ -25,14 +25,13 @@ export const ProfilePageToasts = () => {
     <>
       {showTrashedVizToast ? (
         <VizToast
-          title="Trashed Successfully"
+          title="Deleted Successfully"
           delay={6000}
           autohide
           onClose={handleTrashedVizToastClose}
           closeButton={true}
-        >
-          You have successfully deleted the viz!
-        </VizToast>
+          headerOnly={true}
+        ></VizToast>
       ) : null}
     </>
   );
