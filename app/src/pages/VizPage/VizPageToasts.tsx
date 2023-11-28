@@ -1,6 +1,13 @@
 import { VizToast } from 'components/src/components/VizToast';
-import { useCallback, useEffect, useState } from 'react';
+import {
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import { deleteCookie, getCookie } from '../cookies';
+import { AuthenticatedUserContext } from '../../contexts/AuthenticatedUserContext';
+import { User } from 'entities';
 
 export const VizPageToasts = ({
   hasUnforkedEdits,
@@ -13,6 +20,10 @@ export const VizPageToasts = ({
 }) => {
   // State for showing a toast after successful fork
   const [showForkToast, setShowForkToast] = useState(false);
+
+  const authenticatedUser: User | null = useContext(
+    AuthenticatedUserContext,
+  );
 
   const handleForkToastClose = useCallback(() => {
     setShowForkToast(false);
@@ -45,9 +56,15 @@ export const VizPageToasts = ({
             <li>Disconnected from remote updates</li> */}
             <li>
               You can{' '}
-              <a href="" onClick={handleForkLinkClick}>
-                Fork this viz
-              </a>{' '}
+              {authenticatedUser ? (
+                <a href="" onClick={handleForkLinkClick}>
+                  fork this viz
+                </a>
+              ) : (
+                <a href="/login">
+                  log in and fork this viz
+                </a>
+              )}{' '}
               to modify it.
             </li>
           </ul>
