@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Toast, ToastContainer } from '../bootstrap';
+import './styles.scss';
 
 export const VizToast = ({
   title,
@@ -9,6 +10,7 @@ export const VizToast = ({
   closeButton = false,
   isWarning = false,
   children,
+  headerOnly = false,
 }) => {
   const [count, setCount] = useState(
     delay ? delay / 1000 : null,
@@ -38,11 +40,16 @@ export const VizToast = ({
         autohide={autohide}
         onClose={onClose}
       >
-        <Toast.Header closeButton={closeButton}>
+        <Toast.Header
+          closeButton={closeButton}
+          className={headerOnly ? 'header-only' : ''}
+        >
           <strong className="me-auto">{title}</strong>
           {delay ? <small>hiding in {count}</small> : null}
         </Toast.Header>
-        <Toast.Body>{children}</Toast.Body>
+        {headerOnly ? null : (
+          <Toast.Body>{children}</Toast.Body>
+        )}
       </Toast>
     </ToastContainer>
   );

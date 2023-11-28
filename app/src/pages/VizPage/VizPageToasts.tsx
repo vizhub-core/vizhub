@@ -77,9 +77,8 @@ export const VizPageToasts = ({
           autohide
           onClose={handleForkToastClose}
           closeButton={true}
-        >
-          You have successfully forked this viz!
-        </VizToast>
+          headerOnly={true}
+        ></VizToast>
       ) : null}
     </>
   );

@@ -1,0 +1,7 @@
+.toast-header.header-only {
+  border-radius: calc(
+    var(--bs-toast-border-radius) - var(
+        --bs-toast-border-width
+      )
+  );
+}
