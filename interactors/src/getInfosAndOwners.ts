@@ -1,4 +1,4 @@
-import { Gateways, Result, ok } from 'gateways';
+import { Gateways, Result, ok, pageSize } from 'gateways';
 import {
   Info,
   UserId,
@@ -9,6 +9,12 @@ import {
   Snapshot,
   VizId,
 } from 'entities';
+
+export type InfosAndOwners = {
+  infoSnapshots: Array<Snapshot<Info>>;
+  ownerUserSnapshots: Array<Snapshot<User>>;
+  hasMore: boolean;
+};
 
 export const GetInfosAndOwners = (gateways: Gateways) => {
   const { getInfos } = gateways;
@@ -27,12 +33,7 @@ export const GetInfosAndOwners = (gateways: Gateways) => {
     owner?: UserId;
     forkedFrom?: VizId;
     vizIds?: Array<VizId>;
-  }): Promise<
-    Result<{
-      infoSnapshots: Array<Snapshot<Info>>;
-      ownerUserSnapshots: Array<Snapshot<User>>;
-    }>
-  > => {
+  }): Promise<Result<InfosAndOwners>> => {
     // Get the sort field from the sort query parameter.
     const sortField: SortField | undefined = sortId
       ? getSortField(sortId)
@@ -74,6 +75,10 @@ export const GetInfosAndOwners = (gateways: Gateways) => {
     const ownerUserSnapshots =
       ownerUserSnapshotsResult.value;
 
-    return ok({ infoSnapshots, ownerUserSnapshots });
+    return ok({
+      infoSnapshots,
+      ownerUserSnapshots,
+      hasMore: infoSnapshots.length === pageSize,
+    });
   };
 };

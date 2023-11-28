@@ -58,6 +58,7 @@ import {
 } from 'entities/src/Migration';
 
 // The maximum number of Info documents to return in a single page from `getInfos()`
+// export const pageSize = 5;
 export const pageSize = 50;
 
 export interface Gateways {

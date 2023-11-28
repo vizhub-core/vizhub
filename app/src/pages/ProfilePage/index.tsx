@@ -14,6 +14,7 @@ export type ProfilePageData = PageData &
   InfosAndOwnersPageData & {
     profileUserSnapshot: Snapshot<User>;
     infoSnapshots: Array<Snapshot<Info>>;
+    hasMore: boolean;
   };
 
 // Inspired by https://github.com/vitejs/vite-plugin-react/blob/main/playground/ssr-react/src/pages/Home.jsx
@@ -22,8 +23,11 @@ export const ProfilePage: Page = ({
 }: {
   pageData: ProfilePageData;
 }) => {
-  const { profileUserSnapshot, authenticatedUserSnapshot } =
-    pageData;
+  const {
+    profileUserSnapshot,
+    authenticatedUserSnapshot,
+    hasMore,
+  } = pageData;
 
   // Subscribe to real-time updates in case something changes like display name.
   const profileUser: User = useShareDBDocData<User>(
@@ -39,6 +43,7 @@ export const ProfilePage: Page = ({
         <InfosAndOwnersProvider
           infoSnapshots={pageData.infoSnapshots}
           ownerUserSnapshots={pageData.ownerUserSnapshots}
+          hasMoreInitially={hasMore}
           owner={profileUser.id}
         >
           <Body profileUser={profileUser} />

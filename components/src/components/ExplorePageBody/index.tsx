@@ -1,7 +1,6 @@
-import { Button } from '../bootstrap';
 import { SortControl } from '../SortControl';
 import { VizPreviewCollection } from '../VizPreviewCollection';
-import { Spinner } from '../Spinner';
+import { More } from '../More';
 import './styles.scss';
 
 export const ExplorePageBody = ({
@@ -32,13 +31,10 @@ export const ExplorePageBody = ({
         <VizPreviewCollection>
           {renderVizPreviews()}
         </VizPreviewCollection>
-        <div className="mt-3 mb-3 d-flex justify-content-center">
-          {isLoadingNextPage ? (
-            <Spinner fadeIn={false} />
-          ) : (
-            <Button onClick={onMoreClick}>More</Button>
-          )}
-        </div>
+        <More
+          onMoreClick={onMoreClick}
+          isLoadingNextPage={isLoadingNextPage}
+        />
       </div>
     </div>
   );
