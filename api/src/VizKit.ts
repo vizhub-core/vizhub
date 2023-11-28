@@ -4,9 +4,9 @@ import {
   VizId,
   Content,
   Visibility,
-  Info,
 } from 'entities';
 import { Result, Success } from 'gateways';
+import { InfosAndOwners } from 'interactors/src/getInfosAndOwners';
 
 export interface VizKitAPI {
   rest: {
@@ -30,11 +30,7 @@ export interface VizKitAPI {
 
       // The page number that we want to use for pagination
       pageNumber: number;
-    }) => Promise<{
-      infos: Array<Info>;
-      owners: Array<UserId>;
-      hasMore: boolean;
-    }>;
+    }) => Promise<Result<InfosAndOwners>>;
 
     forkViz: (options: {
       // The viz that we want to fork

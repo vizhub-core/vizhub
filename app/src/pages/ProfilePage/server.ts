@@ -37,7 +37,8 @@ ProfilePage.getPageData = async ({
       console.log(infosAndOwnersResult.error);
       return null;
     }
-    const { infoSnapshots } = infosAndOwnersResult.value;
+    const { infoSnapshots, hasMore } =
+      infosAndOwnersResult.value;
 
     const { authenticatedUserSnapshot } =
       await getAuthenticatedUser({
@@ -51,6 +52,7 @@ ProfilePage.getPageData = async ({
       profileUserSnapshot,
       ownerUserSnapshots: [profileUserSnapshot],
       infoSnapshots,
+      hasMore,
     };
 
     return pageData;
