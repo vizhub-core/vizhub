@@ -10,6 +10,7 @@ import {
   V3RuntimeFiles,
 } from './types';
 import { V3PackageJson } from 'entities';
+import { virtual } from './virtual';
 
 const parseJSON = (str: string, errors: any[]) => {
   try {
@@ -42,20 +43,6 @@ const getGlobals = (pkg: V3PackageJson) => {
   return null;
 };
 
-// A Rollup plugin for a virtual file system.
-// Inspired by https://github.com/Permutatrix/rollup-plugin-hypothetical/blob/master/index.js
-
-const js = (name: string) =>
-  name.endsWith('.js') ? name : name + '.js';
-
-const virtual = (files: V3RuntimeFiles) => ({
-  name: 'virtual',
-  resolveId: (id: string) =>
-    id.startsWith('./') ? id : null,
-  load: (id: string) =>
-    id.startsWith('./') ? files[js(id.substring(2))] : null,
-});
-
 // Rollup cache for incremental builds!
 // See https://rollupjs.org/guide/en/#cache
 // Manual benchmarks for scatter plot example:
@@ -63,7 +50,7 @@ const virtual = (files: V3RuntimeFiles) => ({
 // With cache: avg = 5.2 ms
 let cache: RollupCache | undefined;
 
-const debug = false;
+const debug = true;
 
 export const build = async ({
   files,
