@@ -12,19 +12,10 @@ export const virtual = (
   files: V3RuntimeFiles,
 ): InputPluginOption => ({
   name: 'virtual',
-  resolveId: async (id: string) => {
-    await new Promise((resolve) => setTimeout(resolve, 20));
+  // If the id starts with './', then it's a relative path,
+  // and is the responsibility of the virtual file system.
+  resolveId: (id: string) =>
+    id.startsWith('./') ? id : null,
 
-    console.log(`resolving id: ${id}`);
-
-    // If the id starts with './', then it's a relative path
-    return id.startsWith('./') ? id : null;
-
-    // If we are import from another viz, like this:
-    // import { message } from "@curran/21f72bf74ef04ea0b9c9b82aaaec859a";
-    // import { message } from "@curran/scatter-plot";
-    //
-  },
-  load: (id: string) =>
-    id.startsWith('./') ? files[js(id.substring(2))] : null,
+  load: (id: string) => files[js(id.substring(2))],
 });

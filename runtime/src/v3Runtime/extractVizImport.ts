@@ -1,6 +1,6 @@
 import { UserName, VizId } from 'entities';
 
-type VizImport = {
+export type VizImport = {
   username: UserName;
   vizId: VizId;
 };

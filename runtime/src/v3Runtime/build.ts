@@ -11,6 +11,9 @@ import {
 } from './types';
 import { V3PackageJson } from 'entities';
 import { virtual } from './virtual';
+import { importFromViz } from './importFromViz';
+
+const debug = false;
 
 const parseJSON = (str: string, errors: any[]) => {
   try {
@@ -50,8 +53,6 @@ const getGlobals = (pkg: V3PackageJson) => {
 // With cache: avg = 5.2 ms
 let cache: RollupCache | undefined;
 
-const debug = true;
-
 export const build = async ({
   files,
   enableSourcemap = false,
@@ -87,7 +88,7 @@ export const build = async ({
   } else {
     const inputOptions: RollupOptions = {
       input: './index.js',
-      plugins: virtual(files),
+      plugins: [virtual(files), importFromViz()],
       onwarn: (warning: RollupLog) => {
         warnings.push(JSON.parse(JSON.stringify(warning)));
       },
