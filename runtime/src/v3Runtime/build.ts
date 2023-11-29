@@ -173,11 +173,6 @@ export const build = async ({
     console.log(src?.slice(0, 200));
   }
 
-  // Should never happen, pacify TypeScript.
-  if (src === undefined) {
-    throw new Error('src is undefined');
-  }
-
   return {
     errors,
     warnings,

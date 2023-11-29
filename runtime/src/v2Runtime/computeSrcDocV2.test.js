@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { primordialViz } from 'gateways/test/fixtures';
+import { primordialViz } from 'entities/test/fixtures';
 import { computeSrcDocV2 } from './computeSrcDocV2';
 import { setJSDOM } from './getComputedIndexHtml';
 import { JSDOM } from 'jsdom';

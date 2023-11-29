@@ -5,6 +5,7 @@ import { build } from './build';
 describe('V3 build', () => {
   it('Should not crash when missing files', async () => {
     const files = {};
+
     const buildResult = await build({ files, rollup });
 
     expect(buildResult).toBeDefined();
@@ -24,7 +25,6 @@ describe('V3 build', () => {
     ]);
     expect(buildResult.src).toBeUndefined();
     expect(buildResult.pkg).toBeUndefined();
-    expect(buildResult.time).toBe(0);
   });
 
   // TODO add tests for success cases

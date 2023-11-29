@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import {
   primordialViz,
   sampleReadmeText,
-} from 'gateways/test/fixtures';
+} from 'entities/test/fixtures';
 import { transformFiles } from './transformFiles';
 
 describe('transformFiles', () => {
