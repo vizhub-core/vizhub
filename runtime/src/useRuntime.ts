@@ -39,7 +39,7 @@ export const useRuntime = ({
   );
 
   const v3Runtime = useRef<{
-    handleCodeChange: (files: Files) => void;
+    handleCodeChange: (content: Content) => void;
   } | null>(null);
 
   // Set up the v3 runtime.
@@ -64,9 +64,9 @@ export const useRuntime = ({
 
   // Executes a "run" on the v3 runtime.
   const v3Run = useCallback(
-    (files: Files) => {
-      if (v3Runtime.current && files) {
-        v3Runtime.current.handleCodeChange(files);
+    (content: Content) => {
+      if (v3Runtime.current && content) {
+        v3Runtime.current.handleCodeChange(content);
       }
     },
     [v3Runtime],
@@ -84,7 +84,7 @@ export const useRuntime = ({
     // If we're 'interacting' using code widgets,
     // we want to hot reload as frequently as possible.
     if (content.isInteracting) {
-      v3Run(content.files);
+      v3Run(content);
     } else {
       // Otherwise, debounce the updates.
       clearTimeout(v3Timeout.current);

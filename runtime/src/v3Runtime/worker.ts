@@ -1,23 +1,28 @@
 import { rollup } from '@rollup/browser';
 import { build } from './build';
 import { createVizCache } from './vizCache';
-
-const vizCache = createVizCache([]);
+import { Content } from 'entities';
 
 onmessage = async ({ data }) => {
-  const {
-    vizId,
-    enableSourcemap,
-  }: {
-    vizId: string;
-    enableSourcemap: boolean;
-  } = data;
-  postMessage(
-    await build({
-      vizId,
+  if (data.type === 'build') {
+    const {
+      content,
       enableSourcemap,
-      rollup,
-      vizCache,
-    }),
-  );
+    }: {
+      content: Content;
+      enableSourcemap: boolean;
+    } = data;
+
+    // TODO don't create a new vizCache every time.
+    const vizCache = createVizCache([content]);
+
+    postMessage(
+      await build({
+        vizId: content.id,
+        enableSourcemap,
+        rollup,
+        vizCache,
+      }),
+    );
+  }
 };
