@@ -9,9 +9,11 @@ const debug = false;
 export const computeSrcDoc = async ({
   rollup,
   content,
+  vizCache,
 }: {
   rollup: any;
   content: Content;
+  vizCache: VizCache;
 }) => {
   // `runtimeVersion` is used to determine which runtime
   // to use. It's either 2 or 3.
@@ -34,6 +36,7 @@ export const computeSrcDoc = async ({
               files: toV3RuntimeFiles(content.files),
               enableSourcemap: true,
               rollup,
+              vizCache,
             }),
           );
   } catch (e) {

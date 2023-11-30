@@ -17,6 +17,10 @@ import { getAuthenticatedUser } from '../getAuthenticatedUser';
 import { VizAccess } from 'interactors/src/verifyVizAccess';
 import { Result } from 'gateways';
 import { computeSrcDoc, setJSDOM } from 'runtime';
+import {
+  VizCache,
+  createVizCache,
+} from 'runtime/src/v3Runtime/vizCache';
 
 setJSDOM(JSDOM);
 
@@ -171,11 +175,12 @@ VizPage.getPageData = async ({
         forkedFromOwnerUserResult.value;
     }
 
+    const vizCache: VizCache = createVizCache({});
+
     // Compute srcdoc for iframe.
     // TODO cache it per commit.
-
     const { initialSrcdoc, initialSrcdocError } =
-      await computeSrcDoc({ rollup, content });
+      await computeSrcDoc({ rollup, content, vizCache });
 
     return {
       infoSnapshot,

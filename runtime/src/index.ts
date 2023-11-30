@@ -1,6 +1,5 @@
 export type {
   V3RuntimeFiles,
-  V3PackageJson,
   V3BuildResult,
 } from './v3Runtime';
 export { computeSrcDoc } from './computeSrcDoc';

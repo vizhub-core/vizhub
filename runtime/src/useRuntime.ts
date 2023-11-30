@@ -11,6 +11,10 @@ import {
   getRuntimeVersion,
 } from 'entities';
 import { V3RuntimeFiles, toV3RuntimeFiles } from 'runtime';
+import {
+  VizCache,
+  createVizCache,
+} from './v3Runtime/vizCache';
 
 // Sets up either the v2 or v3 runtime environment.
 // Meant to support dynamic switching between the two.
@@ -44,16 +48,11 @@ export const useRuntime = ({
       import('./v3Runtime/setupV3Runtime').then(
         ({ setupV3Runtime }) => {
           const iframe = iframeRef.current;
-          // const initialFiles = toV3RuntimeFiles(
-          //   content.files,
-          // );
+
           v3Runtime.current = setupV3Runtime({
             iframe,
-            // initialFiles,
             setSrcdocError,
           });
-          // TODO expose handleCodeChange so we can
-          // update the runtime when the code changes.
         },
       );
     }
