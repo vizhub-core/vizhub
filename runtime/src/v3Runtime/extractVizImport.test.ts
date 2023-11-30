@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { extractVizImport } from './extractVizImport';
 
-describe('extractVizImport', () => {
+describe('v3 extractVizImport', () => {
   it('should correctly extract username and hexadecimal id', () => {
     const result = extractVizImport(
       '@curran/21f72bf74ef04ea0b9c9b82aaaec859a',

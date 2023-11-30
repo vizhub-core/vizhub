@@ -11,7 +11,7 @@ const removeSourceMap = (files) => {
   return files;
 };
 
-describe('bundle', () => {
+describe('v2 bundle', () => {
   it('should bundle files using Rollup', async () => {
     const files = [
       {

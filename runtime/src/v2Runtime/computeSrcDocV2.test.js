@@ -6,7 +6,7 @@ import { JSDOM } from 'jsdom';
 
 setJSDOM(JSDOM);
 
-describe('computeSrcDocV2', () => {
+describe('v2 computeSrcDocV2', () => {
   it('TODO should compute correct srcdoc', async () => {
     expect(true).toEqual(true);
     // console.log('`' + computeSrcDocV2(primordialViz.content) + '`');
