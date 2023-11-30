@@ -22,9 +22,9 @@ marked
     gfmHeadingId({
       prefix: 'heading-',
     }),
-  )
-  // Opt out of the default behavior of mangling emails (gets rid of warning).
-  .use({ mangle: false, renderer });
+  );
+// Opt out of the default behavior of mangling emails (gets rid of warning).
+// .use({ mangle: false, renderer });
 
 // Wraps YouTube embeds in a styled wrapper,
 // so that the embed resizes nicely,

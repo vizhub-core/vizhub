@@ -12,7 +12,7 @@ export const jsDelivrCombine = (libs) =>
 // TODO consider sourcing these from package.json
 // We use Marked to render Markdown.
 // https://www.npmjs.com/package/marked
-const markedVersion = '5.1.0';
+const markedVersion = '11.0.0';
 
 // We use xss to sanitize rendered Markdown.
 // https://www.npmjs.com/package/xss
