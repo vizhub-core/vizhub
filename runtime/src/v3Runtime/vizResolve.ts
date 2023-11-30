@@ -7,25 +7,50 @@ import { InputPluginOption } from 'rollup';
 import { extractVizImport } from './extractVizImport';
 import { Content, VizId, getFileText } from 'entities';
 import { VizCache } from './vizCache';
-import { V3RuntimeFiles } from '.';
+
+// A resolved viz file id is of the form
+// `{vizId}/{fileName}`
+type ResolvedVizFileId = string;
 
 const js = (name: string) =>
   name.endsWith('.js') ? name : name + '.js';
+
+const parseId = (
+  id: ResolvedVizFileId,
+): {
+  vizId: VizId;
+  fileName: string;
+} => {
+  const [vizId, fileName]: [VizId, string] = id.split(
+    '/',
+  ) as [VizId, string];
+  return { vizId, fileName };
+};
 
 export const vizResolve = (
   vizId: VizId,
   vizCache: VizCache,
 ): InputPluginOption => ({
   name: 'vizResolve',
-  resolveId: async (id: string) => {
+  resolveId: async (
+    id: string,
+    importer: string,
+  ): Promise<ResolvedVizFileId> => {
     console.log('vizResolve: resolveId() ' + id);
-    // console.log('  importer: ' + importer);
+    console.log('  importer: ' + importer);
 
     // Handle virtual file system resolution
     // .e.g. `import { foo } from './foo.js'`
     // .e.g. `import { foo } from './foo'`
     if (id.startsWith('./')) {
       const fileName = js(id.substring(2));
+      // If there is an importer, then the file not part of
+      // the entry point, so it should be resolved relative
+      // to the importer viz.
+      if (importer) {
+        const { vizId: importerVizId } = parseId(importer);
+        return importerVizId + '/' + fileName;
+      }
       return vizId + '/' + fileName;
     }
 
