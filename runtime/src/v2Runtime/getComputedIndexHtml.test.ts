@@ -7,7 +7,7 @@ import { JSDOM } from 'jsdom';
 
 setJSDOM(JSDOM);
 
-describe('getComputedIndexHtml', () => {
+describe('v2 getComputedIndexHtml', () => {
   it('should return empty string if missing index.html', async () => {
     const files = [];
     expect(getComputedIndexHtml(files)).toEqual(``);

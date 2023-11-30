@@ -3,7 +3,7 @@ import { toV3RuntimeFiles } from './toV3RuntimeFiles';
 import { primordialViz } from 'entities/test/fixtures';
 import { V3RuntimeFiles } from './types';
 
-describe('toV3RuntimeFiles', () => {
+describe('v3 toV3RuntimeFiles', () => {
   it('should return a single file', () => {
     const v3RuntimeFiles: V3RuntimeFiles = toV3RuntimeFiles(
       primordialViz.content.files,

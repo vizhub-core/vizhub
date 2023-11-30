@@ -4,7 +4,7 @@
 
 import { InputPluginOption } from 'rollup';
 import { extractVizImport } from './extractVizImport';
-import { Content, VizId } from 'entities';
+import { Content, VizId, getFileText } from 'entities';
 import { VizCache } from './vizCache';
 
 export const importFromViz = (
@@ -16,9 +16,9 @@ export const importFromViz = (
   // import { message } from "@curran/scatter-plot";
   // then this import is the responsibility of this plugin.
   resolveId: async (id: string) => {
+    console.log('importFromViz: resolveId() ' + id);
     const vizImport = extractVizImport(id);
     if (vizImport) {
-      console.log('importFromViz: resolveId() ' + id);
       return vizImport.vizId;
     } else {
       return null;
@@ -27,9 +27,10 @@ export const importFromViz = (
   load: (id: string) => {
     const vizId: VizId = id as VizId;
     const content: Content = vizCache.get(vizId);
-    console.log('importFromViz: load() ' + id);
-    console.log('  content:');
-    console.log(content);
-    return "export const message = 'Hello, fake viz!';";
+    const code = getFileText(content, 'index.js');
+    // console.log('importFromViz: load() ' + id);
+    // console.log('  content:');
+    // console.log(content);
+    return code;
   },
 });

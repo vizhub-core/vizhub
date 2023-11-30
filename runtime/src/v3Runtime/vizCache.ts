@@ -9,7 +9,16 @@ const sampleContent: Content = {
   files: {
     '7548392': {
       name: 'index.js',
-      text: 'export const message = "Sample Message";',
+      text: `
+        import { innerMessage } from './message';
+        export const message = "Outer " + innerMessage;
+      `,
+    },
+    '6714854': {
+      name: 'message.js',
+      text: `
+        export const innerMessage = "Inner";
+      `,
     },
   },
   title: 'Sample Content for Exporting',

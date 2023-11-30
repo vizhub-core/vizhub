@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { rollup } from 'rollup';
 import { build } from './build';
 
-describe('V3 build', () => {
+describe('v3 build', () => {
   it('Should not crash when missing files', async () => {
     const files = {};
 

@@ -14,8 +14,13 @@ export const virtual = (
   name: 'virtual',
   // If the id starts with './', then it's a relative path,
   // and is the responsibility of the virtual file system.
-  resolveId: (id: string) =>
-    id.startsWith('./') ? id : null,
-
+  resolveId: (id: string) => {
+    console.log('virtual: resolveId() ' + id);
+    // id.startsWith('./') ? id : null,
+    if (id.startsWith('./')) {
+      return id;
+    }
+    return null;
+  },
   load: (id: string) => files[js(id.substring(2))],
 });

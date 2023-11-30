@@ -3,6 +3,7 @@ import {
   RollupOptions,
   RollupCache,
   RollupLog,
+  RollupBuild,
 } from 'rollup';
 import {
   V3BuildError,
@@ -65,8 +66,8 @@ export const build = async ({
   files: V3RuntimeFiles;
   enableSourcemap?: boolean;
   enableCache?: boolean;
-  rollup;
-  vizCache: VizCache;
+  rollup: (options: RollupOptions) => Promise<RollupBuild>;
+  vizCache?: VizCache;
 }): Promise<V3BuildResult> => {
   const startTime = Date.now();
   const warnings: Array<V3BuildError> = [];
@@ -90,9 +91,16 @@ export const build = async ({
       message: 'Missing index.js',
     });
   } else {
+    const plugins = [virtual(files)];
+
+    // Make vizCache optional, mainly to support simpler tests.
+    if (vizCache) {
+      plugins.push(importFromViz(vizCache));
+    }
+
     const inputOptions: RollupOptions = {
       input: './index.js',
-      plugins: [virtual(files), importFromViz(vizCache)],
+      plugins,
       onwarn: (warning: RollupLog) => {
         warnings.push(JSON.parse(JSON.stringify(warning)));
       },

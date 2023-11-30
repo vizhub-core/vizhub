@@ -1,5 +1,5 @@
-import { describe, it, expect } from 'vitest';
-import { primordialViz, ts3 } from 'gateways/test';
+import { describe, it, expect, assert } from 'vitest';
+import { primordialViz, ts3 } from 'entities/test/fixtures';
 import { initGateways } from './initGateways';
 import { TrashViz, SaveViz } from '../src';
 
@@ -23,11 +23,14 @@ export const trashTest = () => {
         timestamp: ts3,
       });
       expect(trashVizResult.outcome).toEqual('success');
+      assert(trashVizResult.outcome === 'success');
       expect(trashVizResult.value).toEqual('success');
 
-      expect(
-        (await getInfo(primordialViz.info.id)).value.data,
-      ).toEqual({
+      const getInfoResult = await getInfo(
+        primordialViz.info.id,
+      );
+      assert(getInfoResult.outcome === 'success');
+      expect(getInfoResult.value.data).toEqual({
         ...primordialViz.info,
         trashed: ts3,
       });
