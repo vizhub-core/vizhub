@@ -17,6 +17,10 @@ import { getAuthenticatedUser } from '../getAuthenticatedUser';
 import { VizAccess } from 'interactors/src/verifyVizAccess';
 import { Result } from 'gateways';
 import { computeSrcDoc, setJSDOM } from 'runtime';
+import {
+  VizCache,
+  createVizCache,
+} from 'runtime/src/v3Runtime/vizCache';
 
 setJSDOM(JSDOM);
 
@@ -171,11 +175,40 @@ VizPage.getPageData = async ({
         forkedFromOwnerUserResult.value;
     }
 
+    const vizCache: VizCache = createVizCache({
+      initialContents: [content],
+      handleCacheMiss: async (vizId: VizId) => {
+        if (debug) {
+          console.log(
+            'Handling cache miss for vizId',
+            vizId,
+          );
+        }
+        const contentResult = await getContent(vizId);
+        if (contentResult.outcome === 'failure') {
+          console.log(
+            'Error when fetching content for viz cache:',
+          );
+          console.log(contentResult.error);
+          return null;
+        }
+
+        if (debug) {
+          console.log('Fetched content for viz cache');
+          console.log(contentResult.value.data);
+        }
+        return contentResult.value.data;
+      },
+    });
     // Compute srcdoc for iframe.
     // TODO cache it per commit.
-
     const { initialSrcdoc, initialSrcdocError } =
-      await computeSrcDoc({ rollup, content });
+      await computeSrcDoc({ rollup, content, vizCache });
+
+    if (debug) {
+      console.log('initialSrcdoc');
+      console.log(initialSrcdoc.substring(0, 200));
+    }
 
     return {
       infoSnapshot,

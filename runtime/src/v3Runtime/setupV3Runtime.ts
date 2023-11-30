@@ -1,6 +1,8 @@
 // @ts-ignore
 import Worker from './worker.ts?worker';
-import { V3BuildResult, V3RuntimeFiles } from './types';
+import { V3BuildResult } from './types';
+import { Files } from 'vzcode';
+import { Content } from 'entities';
 
 // Flag for debugging.
 const debug = false;
@@ -69,13 +71,11 @@ export const setupV3Runtime = ({
     }, 1000);
   }
 
-  let latestFiles: V3RuntimeFiles | null = null;
+  let latestContent: Content | null = null;
 
   // This runs when any file is changed.
-  const handleCodeChange = (
-    files: V3RuntimeFiles,
-  ): void => {
-    latestFiles = files;
+  const handleCodeChange = (content: Content): void => {
+    latestContent = content;
     if (state === IDLE) {
       state = ENQUEUED;
       update();
@@ -106,11 +106,11 @@ export const setupV3Runtime = ({
     if (debug) {
       console.log('update: before run');
     }
-    if (latestFiles === null) {
+    if (latestContent === null) {
       // Should never happen.
-      throw new Error('latestFiles is null');
+      throw new Error('latestContent is null');
     }
-    await run(await build(latestFiles));
+    await run(await build(latestContent));
     if (debug) {
       console.log('update: after run');
     }
@@ -133,7 +133,7 @@ export const setupV3Runtime = ({
   const n = 100;
 
   const build = (
-    files: V3RuntimeFiles,
+    content: Content,
   ): Promise<V3BuildResult> =>
     new Promise((resolve) => {
       worker.onmessage = ({
@@ -165,7 +165,11 @@ export const setupV3Runtime = ({
 
         resolve({ src, pkg, errors, warnings, time });
       };
-      worker.postMessage({ files, enableSourcemap: true });
+      worker.postMessage({
+        type: 'build',
+        content,
+        enableSourcemap: true,
+      });
     });
 
   // Runs the latest code.

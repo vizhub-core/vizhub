@@ -3,30 +3,19 @@ import {
   RollupOptions,
   RollupCache,
   RollupLog,
+  RollupBuild,
 } from 'rollup';
+import { V3BuildError, V3BuildResult } from './types';
 import {
-  V3BuildError,
-  V3BuildResult,
-  V3RuntimeFiles,
-} from './types';
-import { V3PackageJson } from 'entities';
+  Content,
+  V3PackageJson,
+  VizId,
+  getFileText,
+} from 'entities';
+import { vizResolve } from './vizResolve';
+import { VizCache } from './vizCache';
 
-const parseJSON = (str: string, errors: any[]) => {
-  try {
-    return JSON.parse(str);
-  } catch (error) {
-    errors.push({
-      code: 'INVALID_PACKAGE_JSON',
-      message: error.message,
-    });
-    return undefined;
-  }
-};
-
-const getPkg = (files: V3RuntimeFiles, errors: any[]) =>
-  'package.json' in files
-    ? parseJSON(files['package.json'], errors)
-    : null;
+const debug = false;
 
 const getGlobals = (pkg: V3PackageJson) => {
   const libraries = pkg?.vizhub?.libraries;
@@ -42,20 +31,6 @@ const getGlobals = (pkg: V3PackageJson) => {
   return null;
 };
 
-// A Rollup plugin for a virtual file system.
-// Inspired by https://github.com/Permutatrix/rollup-plugin-hypothetical/blob/master/index.js
-
-const js = (name: string) =>
-  name.endsWith('.js') ? name : name + '.js';
-
-const virtual = (files: V3RuntimeFiles) => ({
-  name: 'virtual',
-  resolveId: (id: string) =>
-    id.startsWith('./') ? id : null,
-  load: (id: string) =>
-    id.startsWith('./') ? files[js(id.substring(2))] : null,
-});
-
 // Rollup cache for incremental builds!
 // See https://rollupjs.org/guide/en/#cache
 // Manual benchmarks for scatter plot example:
@@ -63,18 +38,21 @@ const virtual = (files: V3RuntimeFiles) => ({
 // With cache: avg = 5.2 ms
 let cache: RollupCache | undefined;
 
-const debug = false;
-
 export const build = async ({
-  files,
+  vizId,
   enableSourcemap = false,
   enableCache = false,
   rollup,
+  vizCache,
 }: {
-  files: V3RuntimeFiles;
+  // The ID of the viz being built.
+  vizId: VizId;
   enableSourcemap?: boolean;
   enableCache?: boolean;
-  rollup;
+  rollup: (options: RollupOptions) => Promise<RollupBuild>;
+
+  // The viz cache, prepopulated with at least the viz being built.
+  vizCache: VizCache;
 }): Promise<V3BuildResult> => {
   const startTime = Date.now();
   const warnings: Array<V3BuildError> = [];
@@ -82,17 +60,11 @@ export const build = async ({
   let src: string | undefined;
   let pkg: V3PackageJson | undefined;
 
-  if (debug) {
-    console.log('build.ts: build()');
-    console.log('  files:');
-    console.log(files);
-    console.log('  rollup:');
-    console.log(rollup);
-    console.log('  enableSourcemap:');
-    console.log(enableSourcemap);
-  }
+  const content: Content = await vizCache.get(vizId);
 
-  if (!files['index.js']) {
+  const indexJSContent = getFileText(content, 'index.js');
+
+  if (!indexJSContent) {
     errors.push({
       code: 'MISSING_INDEX_JS',
       message: 'Missing index.js',
@@ -100,7 +72,7 @@ export const build = async ({
   } else {
     const inputOptions: RollupOptions = {
       input: './index.js',
-      plugins: virtual(files),
+      plugins: [vizResolve(vizId, vizCache)],
       onwarn: (warning: RollupLog) => {
         warnings.push(JSON.parse(JSON.stringify(warning)));
       },
@@ -118,7 +90,22 @@ export const build = async ({
       sourcemap: enableSourcemap ? true : false,
     };
 
-    pkg = getPkg(files, errors);
+    const packageJSONContent = getFileText(
+      content,
+      'package.json',
+    );
+
+    if (packageJSONContent) {
+      try {
+        pkg = JSON.parse(packageJSONContent);
+      } catch (error) {
+        errors.push({
+          code: 'INVALID_PACKAGE_JSON',
+          message: error.message,
+        });
+      }
+    }
+
     if (pkg) {
       const globals = getGlobals(pkg);
       if (globals) {
@@ -126,6 +113,53 @@ export const build = async ({
         outputOptions.globals = globals;
       }
     }
+
+    // Invoke Rollup before the actual build to
+    // detect which vizzes are imported from.
+    // const vizImports: Array<VizImport> = [];
+
+    // Option A: Use <script> tags to import vizzes.
+    //
+    // After we have the viz imports, we can
+    // append the script tags to the HTML,
+    // much the same way that libraries are
+    // appended in the HTML.
+    //
+    // Pros:
+    //  * No need to bundle dependent vizzes with Rollup.
+    //  * When a dependent viz is large, e.g. containing
+    //    data files, that dependent viz is effectively
+    //    "cached" in the browser, and does not need to
+    //    be reloaded when the parent viz is reloaded.
+    //    This makes hot reloading fast when dependent
+    //    vizzes are large.
+
+    // Cons:
+    //  * Need to load vizzes from a VizHub CDN (net new).
+    //  * When a dependent viz is updated, the update is
+    //    _not_ immediately reflected, not amenable to
+    //    hot reloading.
+
+    // Option B: Bundle dependent vizzes with Rollup.
+    //
+    // After we have the viz imports, we can fetch them
+    // into the browser, and then bundle them with Rollup.
+    //
+    // Pros:
+    //  * No need to load vizzes from a VizHub CDN (net new).
+    //  * When a dependent viz is updated, the update can be
+    //    immediately reflected, amenable to hot reloading.
+    //  * The transitive dependencies can reside in memory,
+    //    leveraging ShareDB subscriptions to keep them up
+    //    to date.
+    //
+    // Cons:
+    //  * Need to bundle dependent vizzes with Rollup.
+    //  * When a dependent viz is large, e.g. containing
+    //    data files, that dependent viz is bundled with
+    //    the parent viz, and must be reloaded when the
+    //    parent viz is reloaded. This makes hot reloading
+    //    slow when dependent vizzes are large.
 
     try {
       if (debug) {
@@ -148,7 +182,7 @@ export const build = async ({
       src = code;
 
       // If sourcemaps are enabled, tack them onto the end inline.
-      if (enableSourcemap && !debug) {
+      if (enableSourcemap && map !== null && !debug) {
         // Note that map.toUrl breaks in Web Worker as window.btoa is not defined.
         // Inspired by https://github.com/Rich-Harris/magic-string/blob/abf373f2ed53d00e184ab236828853dd35a62763/src/SourceMap.js#L31
         src +=
@@ -173,22 +207,10 @@ export const build = async ({
     }
   }
 
-  if (!files['package.json']) {
-    warnings.push({
-      code: 'MISSING_PACKAGE_JSON',
-      message: 'Missing package.json',
-    });
-  }
-
   if (debug) {
     console.log('  returning src in build.ts:');
     console.log('  src:');
     console.log(src?.slice(0, 200));
-  }
-
-  // Should never happen, pacify TypeScript.
-  if (src === undefined) {
-    throw new Error('src is undefined');
   }
 
   return {

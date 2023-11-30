@@ -2,10 +2,10 @@ import { describe, it, expect } from 'vitest';
 import {
   primordialViz,
   sampleReadmeText,
-} from 'gateways/test/fixtures';
+} from 'entities/test/fixtures';
 import { transformFiles } from './transformFiles';
 
-describe('transformFiles', () => {
+describe('v2 transformFiles', () => {
   it('should transform files and exclude `index.html`', () => {
     expect(
       transformFiles(primordialViz.content.files),

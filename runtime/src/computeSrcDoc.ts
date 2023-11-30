@@ -3,15 +3,17 @@ import { Content, getRuntimeVersion } from 'entities';
 import { computeSrcDocV2 } from './v2Runtime/computeSrcDocV2';
 import { computeSrcDocV3 } from './v3Runtime/computeSrcDocV3';
 import { build } from './v3Runtime/build';
-import { toV3RuntimeFiles } from './v3Runtime/toV3RuntimeFiles';
+import { VizCache } from './v3Runtime/vizCache';
 
 const debug = false;
 export const computeSrcDoc = async ({
   rollup,
   content,
+  vizCache,
 }: {
   rollup: any;
   content: Content;
+  vizCache: VizCache;
 }) => {
   // `runtimeVersion` is used to determine which runtime
   // to use. It's either 2 or 3.
@@ -31,9 +33,10 @@ export const computeSrcDoc = async ({
         ? await computeSrcDocV2(content)
         : computeSrcDocV3(
             await build({
-              files: toV3RuntimeFiles(content.files),
+              vizId: content.id,
               enableSourcemap: true,
               rollup,
+              vizCache,
             }),
           );
   } catch (e) {

@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { renderREADME } from './renderREADME';
-import { sampleReadmeText } from 'gateways/test/fixtures';
+import { sampleReadmeText } from 'entities/test/fixtures';
 
 describe('renderMarkdown', () => {
   it('should render README', () => {
