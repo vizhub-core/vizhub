@@ -24,7 +24,7 @@ import {
 
 setJSDOM(JSDOM);
 
-const debug = true;
+const debug = false;
 
 // TODO move the data fetching part of this to a separate file - interactors/getVizPageData.ts
 // This file should mainly deal with computations like rendering the README and

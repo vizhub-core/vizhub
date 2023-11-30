@@ -8,7 +8,7 @@ import { extractVizImport } from './extractVizImport';
 import { Content, VizId, getFileText } from 'entities';
 import { VizCache } from './vizCache';
 
-const debug = true;
+const debug = false;
 
 // A resolved viz file id is of the form
 // `{vizId}/{fileName}`
