@@ -15,7 +15,7 @@ import {
 import { vizResolve } from './vizResolve';
 import { VizCache } from './vizCache';
 
-const debug = false;
+const debug = true;
 
 const getGlobals = (pkg: V3PackageJson) => {
   const libraries = pkg?.vizhub?.libraries;

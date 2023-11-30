@@ -8,6 +8,8 @@ import { extractVizImport } from './extractVizImport';
 import { Content, VizId, getFileText } from 'entities';
 import { VizCache } from './vizCache';
 
+const debug = true;
+
 // A resolved viz file id is of the form
 // `{vizId}/{fileName}`
 type ResolvedVizFileId = string;
@@ -36,8 +38,10 @@ export const vizResolve = (
     id: string,
     importer: string,
   ): Promise<ResolvedVizFileId> => {
-    console.log('vizResolve: resolveId() ' + id);
-    console.log('  importer: ' + importer);
+    if (debug) {
+      console.log('vizResolve: resolveId() ' + id);
+      console.log('  importer: ' + importer);
+    }
 
     // Handle virtual file system resolution
     // .e.g. `import { foo } from './foo.js'`
@@ -67,15 +71,17 @@ export const vizResolve = (
   },
   // `id` here is of the form
   // `{vizId}/{fileName}`
-  load: (id: string) => {
-    console.log('vizResolve: load() ' + id);
-
+  load: async (id: string) => {
+    if (debug) {
+      console.log('vizResolve: load() ' + id);
+    }
     // Parse vizId and fileName
     const [vizId, fileName]: [VizId, string] = id.split(
       '/',
     ) as [VizId, string];
 
-    const content: Content = vizCache.get(vizId);
+    const content: Content = await vizCache.get(vizId);
+
     return getFileText(content, fileName);
   },
 });
