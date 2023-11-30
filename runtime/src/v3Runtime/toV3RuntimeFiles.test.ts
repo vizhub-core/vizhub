@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { toV3RuntimeFiles } from './toV3RuntimeFiles';
-import { primordialViz } from 'gateways/test/fixtures';
+import { primordialViz } from 'entities/test/fixtures';
 import { V3RuntimeFiles } from './types';
 
 describe('toV3RuntimeFiles', () => {

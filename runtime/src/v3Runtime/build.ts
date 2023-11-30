@@ -10,6 +10,10 @@ import {
   V3RuntimeFiles,
 } from './types';
 import { V3PackageJson } from 'entities';
+import { virtual } from './virtual';
+import { importFromViz } from './importFromViz';
+
+const debug = false;
 
 const parseJSON = (str: string, errors: any[]) => {
   try {
@@ -42,28 +46,12 @@ const getGlobals = (pkg: V3PackageJson) => {
   return null;
 };
 
-// A Rollup plugin for a virtual file system.
-// Inspired by https://github.com/Permutatrix/rollup-plugin-hypothetical/blob/master/index.js
-
-const js = (name: string) =>
-  name.endsWith('.js') ? name : name + '.js';
-
-const virtual = (files: V3RuntimeFiles) => ({
-  name: 'virtual',
-  resolveId: (id: string) =>
-    id.startsWith('./') ? id : null,
-  load: (id: string) =>
-    id.startsWith('./') ? files[js(id.substring(2))] : null,
-});
-
 // Rollup cache for incremental builds!
 // See https://rollupjs.org/guide/en/#cache
 // Manual benchmarks for scatter plot example:
 // Without cache: avg = 5.9 ms
 // With cache: avg = 5.2 ms
 let cache: RollupCache | undefined;
-
-const debug = false;
 
 export const build = async ({
   files,
@@ -100,7 +88,7 @@ export const build = async ({
   } else {
     const inputOptions: RollupOptions = {
       input: './index.js',
-      plugins: virtual(files),
+      plugins: [virtual(files), importFromViz()],
       onwarn: (warning: RollupLog) => {
         warnings.push(JSON.parse(JSON.stringify(warning)));
       },
@@ -184,11 +172,6 @@ export const build = async ({
     console.log('  returning src in build.ts:');
     console.log('  src:');
     console.log(src?.slice(0, 200));
-  }
-
-  // Should never happen, pacify TypeScript.
-  if (src === undefined) {
-    throw new Error('src is undefined');
   }
 
   return {

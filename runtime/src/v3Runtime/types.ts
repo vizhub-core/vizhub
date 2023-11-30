@@ -9,7 +9,9 @@ export type V3RuntimeFiles = {
 
 // The result of a build.
 export type V3BuildResult = {
-  src: string;
+  // Could be undefined if there's no index.js.
+  src: string | undefined;
+
   pkg: V3PackageJson | undefined;
   errors: Array<V3BuildError>;
   warnings: Array<V3BuildError>;
