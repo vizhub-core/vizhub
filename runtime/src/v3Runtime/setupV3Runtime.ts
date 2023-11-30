@@ -1,6 +1,7 @@
 // @ts-ignore
 import Worker from './worker.ts?worker';
 import { V3BuildResult, V3RuntimeFiles } from './types';
+import { Files } from 'vzcode';
 
 // Flag for debugging.
 const debug = false;
@@ -69,12 +70,10 @@ export const setupV3Runtime = ({
     }, 1000);
   }
 
-  let latestFiles: V3RuntimeFiles | null = null;
+  let latestFiles: Files | null = null;
 
   // This runs when any file is changed.
-  const handleCodeChange = (
-    files: V3RuntimeFiles,
-  ): void => {
+  const handleCodeChange = (files: Files): void => {
     latestFiles = files;
     if (state === IDLE) {
       state = ENQUEUED;
@@ -132,9 +131,7 @@ export const setupV3Runtime = ({
     arr.reduce((a, b) => a + b, 0) / arr.length;
   const n = 100;
 
-  const build = (
-    files: V3RuntimeFiles,
-  ): Promise<V3BuildResult> =>
+  const build = (files: Files): Promise<V3BuildResult> =>
     new Promise((resolve) => {
       worker.onmessage = ({
         data,

@@ -5,35 +5,17 @@ import {
   RollupLog,
   RollupBuild,
 } from 'rollup';
+import { V3BuildError, V3BuildResult } from './types';
 import {
-  V3BuildError,
-  V3BuildResult,
-  V3RuntimeFiles,
-} from './types';
-import { V3PackageJson } from 'entities';
-import { virtual } from './virtual';
-import { importFromViz } from './importFromViz';
-import { VizImport } from './extractVizImport';
+  Content,
+  V3PackageJson,
+  VizId,
+  getFileText,
+} from 'entities';
+import { vizResolve } from './vizResolve';
 import { VizCache } from './vizCache';
 
 const debug = false;
-
-const parseJSON = (str: string, errors: any[]) => {
-  try {
-    return JSON.parse(str);
-  } catch (error) {
-    errors.push({
-      code: 'INVALID_PACKAGE_JSON',
-      message: error.message,
-    });
-    return undefined;
-  }
-};
-
-const getPkg = (files: V3RuntimeFiles, errors: any[]) =>
-  'package.json' in files
-    ? parseJSON(files['package.json'], errors)
-    : null;
 
 const getGlobals = (pkg: V3PackageJson) => {
   const libraries = pkg?.vizhub?.libraries;
@@ -57,17 +39,20 @@ const getGlobals = (pkg: V3PackageJson) => {
 let cache: RollupCache | undefined;
 
 export const build = async ({
-  files,
+  vizId,
   enableSourcemap = false,
   enableCache = false,
   rollup,
   vizCache,
 }: {
-  files: V3RuntimeFiles;
+  // The ID of the viz being built.
+  vizId: VizId;
   enableSourcemap?: boolean;
   enableCache?: boolean;
   rollup: (options: RollupOptions) => Promise<RollupBuild>;
-  vizCache?: VizCache;
+
+  // The viz cache, prepopulated with at least the viz being built.
+  vizCache: VizCache;
 }): Promise<V3BuildResult> => {
   const startTime = Date.now();
   const warnings: Array<V3BuildError> = [];
@@ -75,32 +60,19 @@ export const build = async ({
   let src: string | undefined;
   let pkg: V3PackageJson | undefined;
 
-  if (debug) {
-    console.log('build.ts: build()');
-    console.log('  files:');
-    console.log(files);
-    console.log('  rollup:');
-    console.log(rollup);
-    console.log('  enableSourcemap:');
-    console.log(enableSourcemap);
-  }
+  const content: Content = await vizCache.get(vizId);
 
-  if (!files['index.js']) {
+  const indexJSContent = getFileText(content, 'index.js');
+
+  if (!indexJSContent) {
     errors.push({
       code: 'MISSING_INDEX_JS',
       message: 'Missing index.js',
     });
   } else {
-    const plugins = [virtual(files)];
-
-    // Make vizCache optional, mainly to support simpler tests.
-    if (vizCache) {
-      plugins.push(importFromViz(vizCache));
-    }
-
     const inputOptions: RollupOptions = {
       input: './index.js',
-      plugins,
+      plugins: [vizResolve(vizId, vizCache)],
       onwarn: (warning: RollupLog) => {
         warnings.push(JSON.parse(JSON.stringify(warning)));
       },
@@ -118,7 +90,22 @@ export const build = async ({
       sourcemap: enableSourcemap ? true : false,
     };
 
-    pkg = getPkg(files, errors);
+    const packageJSONContent = getFileText(
+      content,
+      'package.json',
+    );
+
+    if (packageJSONContent) {
+      try {
+        pkg = JSON.parse(packageJSONContent);
+      } catch (error) {
+        errors.push({
+          code: 'INVALID_PACKAGE_JSON',
+          message: error.message,
+        });
+      }
+    }
+
     if (pkg) {
       const globals = getGlobals(pkg);
       if (globals) {
@@ -195,7 +182,7 @@ export const build = async ({
       src = code;
 
       // If sourcemaps are enabled, tack them onto the end inline.
-      if (enableSourcemap && !debug) {
+      if (enableSourcemap && map !== null && !debug) {
         // Note that map.toUrl breaks in Web Worker as window.btoa is not defined.
         // Inspired by https://github.com/Rich-Harris/magic-string/blob/abf373f2ed53d00e184ab236828853dd35a62763/src/SourceMap.js#L31
         src +=
@@ -218,13 +205,6 @@ export const build = async ({
       serializableError.message = error.message;
       errors.push(serializableError);
     }
-  }
-
-  if (!files['package.json']) {
-    warnings.push({
-      code: 'MISSING_PACKAGE_JSON',
-      message: 'Missing package.json',
-    });
   }
 
   if (debug) {

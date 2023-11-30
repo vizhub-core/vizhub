@@ -8,6 +8,7 @@ import {
 import {
   Content,
   Files,
+  FilesV2,
   getRuntimeVersion,
 } from 'entities';
 import { V3RuntimeFiles, toV3RuntimeFiles } from 'runtime';
@@ -38,7 +39,7 @@ export const useRuntime = ({
   );
 
   const v3Runtime = useRef<{
-    handleCodeChange: (files: V3RuntimeFiles) => void;
+    handleCodeChange: (files: Files) => void;
   } | null>(null);
 
   // Set up the v3 runtime.
@@ -65,9 +66,7 @@ export const useRuntime = ({
   const v3Run = useCallback(
     (files: Files) => {
       if (v3Runtime.current && files) {
-        v3Runtime.current.handleCodeChange(
-          toV3RuntimeFiles(files),
-        );
+        v3Runtime.current.handleCodeChange(files);
       }
     },
     [v3Runtime],

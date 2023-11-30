@@ -1,11 +1,11 @@
 import { V3PackageJson } from 'entities';
 
-// The files passed to the build function.
-export type V3RuntimeFiles = {
-  // Keys are file names
-  // Values are file contents
-  [fileName: string]: string;
-};
+// // The files passed to the build function.
+// export type V3RuntimeFiles = {
+//   // Keys are file names
+//   // Values are file contents
+//   [fileName: string]: string;
+// };
 
 // The result of a build.
 export type V3BuildResult = {

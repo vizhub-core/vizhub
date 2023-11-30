@@ -1,14 +1,20 @@
 import { rollup } from '@rollup/browser';
 import { build } from './build';
-import { VizCache, createVizCache } from './vizCache';
+import { createVizCache } from './vizCache';
 
-const vizCache: VizCache = createVizCache();
+const vizCache = createVizCache([]);
 
 onmessage = async ({ data }) => {
-  const { files, enableSourcemap } = data;
+  const {
+    vizId,
+    enableSourcemap,
+  }: {
+    vizId: string;
+    enableSourcemap: boolean;
+  } = data;
   postMessage(
     await build({
-      files,
+      vizId,
       enableSourcemap,
       rollup,
       vizCache,

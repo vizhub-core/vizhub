@@ -24,7 +24,7 @@ import {
 
 setJSDOM(JSDOM);
 
-const debug = false;
+const debug = true;
 
 // TODO move the data fetching part of this to a separate file - interactors/getVizPageData.ts
 // This file should mainly deal with computations like rendering the README and
@@ -175,7 +175,7 @@ VizPage.getPageData = async ({
         forkedFromOwnerUserResult.value;
     }
 
-    const vizCache: VizCache = createVizCache({});
+    const vizCache: VizCache = createVizCache([content]);
 
     // Compute srcdoc for iframe.
     // TODO cache it per commit.

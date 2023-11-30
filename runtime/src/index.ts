@@ -4,5 +4,4 @@ export type {
 } from './v3Runtime';
 export { computeSrcDoc } from './computeSrcDoc';
 export { setJSDOM } from './v2Runtime/getComputedIndexHtml';
-export { toV3RuntimeFiles } from './v3Runtime/toV3RuntimeFiles';
 export { useRuntime } from './useRuntime';
