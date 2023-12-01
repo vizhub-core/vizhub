@@ -26,6 +26,11 @@ const PENDING_CLEAN = 'PENDING_CLEAN';
 // while this run is taking place.
 const PENDING_DIRTY = 'PENDING_DIRTY';
 
+export type V3Runtime = {
+  handleCodeChange: (content: Content) => void;
+  handleImportChange: (content: Content) => void;
+};
+
 export const setupV3Runtime = ({
   iframe, // initialFiles,
   setSrcdocError,
@@ -35,7 +40,7 @@ export const setupV3Runtime = ({
   // initialFiles: V3RuntimeFiles;
   setSrcdocError: (error: string | null) => void;
   handleCacheMiss: (vizId: VizId) => Promise<Content>;
-}) => {
+}): V3Runtime => {
   // The "build worker", a Web Worker that does the building.
   const worker = new Worker();
 
