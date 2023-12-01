@@ -1,8 +1,8 @@
 // @ts-ignore
 import Worker from './worker.ts?worker';
-import { V3BuildResult } from './types';
-import { Files } from 'vzcode';
-import { Content } from 'entities';
+import { V3BuildResult, V3WorkerMessage } from './types';
+import { Content, Snapshot } from 'entities';
+import { V } from 'vitest/dist/reporters-5f784f42';
 
 // Flag for debugging.
 const debug = false;
@@ -71,11 +71,14 @@ export const setupV3Runtime = ({
     }, 1000);
   }
 
-  let latestContent: Content | null = null;
+  let latestContentSnapshot: Snapshot<Content> | null =
+    null;
 
   // This runs when any file is changed.
-  const handleCodeChange = (content: Content): void => {
-    latestContent = content;
+  const handleCodeChange = (
+    contentSnapshot: Snapshot<Content>,
+  ): void => {
+    latestContentSnapshot = contentSnapshot;
     if (state === IDLE) {
       state = ENQUEUED;
       update();
@@ -110,7 +113,7 @@ export const setupV3Runtime = ({
       // Should never happen.
       throw new Error('latestContent is null');
     }
-    await run(await build(latestContent));
+    await run(await build(latestContentSnapshot));
     if (debug) {
       console.log('update: after run');
     }
@@ -133,7 +136,7 @@ export const setupV3Runtime = ({
   const n = 100;
 
   const build = (
-    content: Content,
+    contentSnapshot: Snapshot<Content>,
   ): Promise<V3BuildResult> =>
     new Promise((resolve) => {
       worker.onmessage = ({
@@ -165,11 +168,12 @@ export const setupV3Runtime = ({
 
         resolve({ src, pkg, errors, warnings, time });
       };
-      worker.postMessage({
+      const message: V3WorkerMessage = {
         type: 'build',
-        content,
+        contentSnapshot,
         enableSourcemap: true,
-      });
+      };
+      worker.postMessage(message);
     });
 
   // Runs the latest code.
@@ -183,7 +187,9 @@ export const setupV3Runtime = ({
       // If there were build errors,
       // display them and don't run.
       if (errors.length > 0) {
-        setSrcdocError(errors.join('\n\n'));
+        setSrcdocError(
+          errors.map((error) => error.message).join('\n\n'),
+        );
         resolve();
         return;
       }

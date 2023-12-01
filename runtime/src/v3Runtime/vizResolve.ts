@@ -34,10 +34,10 @@ export const vizResolve = (
   vizCache: VizCache,
 ): InputPluginOption => ({
   name: 'vizResolve',
-  resolveId: async (
+  resolveId: (
     id: string,
-    importer: string,
-  ): Promise<ResolvedVizFileId> => {
+    importer: string | undefined,
+  ): ResolvedVizFileId | undefined => {
     if (debug) {
       console.log('vizResolve: resolveId() ' + id);
       console.log('  importer: ' + importer);

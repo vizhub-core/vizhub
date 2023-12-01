@@ -53,6 +53,10 @@ export type VizPageData = PageData & {
   initialSrcdocError: string | null;
   canUserEditViz: boolean;
   canUserDeleteViz: boolean;
+  vizCacheContentSnapshots: Record<
+    VizId,
+    Snapshot<Content>
+  >;
 };
 
 // Inspired by https://github.com/vitejs/vite-plugin-react/blob/main/playground/ssr-react/src/pages/Home.jsx

@@ -175,6 +175,13 @@ VizPage.getPageData = async ({
         forkedFromOwnerUserResult.value;
     }
 
+    // Content snapshots for client-side hydration
+    // using ShareDB's ingestSnapshot API.
+    const vizCacheContentSnapshots: Record<
+      VizId,
+      Snapshot<Content>
+    > = {};
+
     const vizCache: VizCache = createVizCache({
       initialContents: [content],
       handleCacheMiss: async (vizId: VizId) => {
@@ -192,6 +199,11 @@ VizPage.getPageData = async ({
           console.log(contentResult.error);
           return null;
         }
+
+        // Store the content snapshot to support
+        // client-side hydration using ShareDB's ingestSnapshot API.
+        vizCacheContentSnapshots[vizId] =
+          contentResult.value;
 
         if (debug) {
           console.log('Fetched content for viz cache');
@@ -223,6 +235,7 @@ VizPage.getPageData = async ({
       initialSrcdocError,
       canUserEditViz,
       canUserDeleteViz,
+      vizCacheContentSnapshots,
     };
   } catch (e) {
     console.log('error fetching viz with id ', id);

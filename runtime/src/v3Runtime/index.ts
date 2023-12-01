@@ -1,4 +1,1 @@
-export type {
-  V3RuntimeFiles,
-  V3BuildResult,
-} from './types';
+export type { V3BuildResult } from './types';

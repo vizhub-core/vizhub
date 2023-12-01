@@ -1,11 +1,4 @@
-import { V3PackageJson } from 'entities';
-
-// // The files passed to the build function.
-// export type V3RuntimeFiles = {
-//   // Keys are file names
-//   // Values are file contents
-//   [fileName: string]: string;
-// };
+import { Content, V3PackageJson, VizId } from 'entities';
 
 // The result of a build.
 export type V3BuildResult = {
@@ -23,3 +16,27 @@ export type V3BuildError = {
   code: string;
   message: string;
 };
+
+// Messages sent to and from the worker.
+export type V3WorkerMessage =
+  // `getContentRequest`
+  //  * When the worker requests the content of an imported viz.
+  //  * The main thread should respond with a `getContentResponse` message.
+  //  * This supports the worker's VizCache when it has a cache miss.
+  | { type: 'getContentRequest'; vizId: VizId }
+
+  // `getContentResponse`
+  //  * When the main thread responds to a `getContentRequest` message.
+  | {
+      type: 'getContentResponse';
+      vizId: VizId;
+      content: Content;
+    }
+
+  // `build`
+  //  * When the main thread requests a build.
+  | {
+      type: 'build';
+      content: Content;
+      enableSourcemap: boolean;
+    };

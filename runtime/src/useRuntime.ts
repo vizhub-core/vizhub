@@ -7,15 +7,9 @@ import {
 } from 'react';
 import {
   Content,
-  Files,
-  FilesV2,
+  Snapshot,
   getRuntimeVersion,
 } from 'entities';
-import { V3RuntimeFiles, toV3RuntimeFiles } from 'runtime';
-import {
-  VizCache,
-  createVizCache,
-} from './v3Runtime/vizCache';
 
 // Sets up either the v2 or v3 runtime environment.
 // Meant to support dynamic switching between the two.
@@ -39,7 +33,9 @@ export const useRuntime = ({
   );
 
   const v3Runtime = useRef<{
-    handleCodeChange: (content: Content) => void;
+    handleCodeChange: (
+      contentSnapshot: Snapshot<Content>,
+    ) => void;
   } | null>(null);
 
   // Set up the v3 runtime.
@@ -49,6 +45,11 @@ export const useRuntime = ({
       import('./v3Runtime/setupV3Runtime').then(
         ({ setupV3Runtime }) => {
           const iframe = iframeRef.current;
+
+          // Should never happen. Added to pacify TypeScript.
+          if (iframe === null) {
+            throw new Error('iframe is null');
+          }
 
           v3Runtime.current = setupV3Runtime({
             iframe,
