@@ -32,14 +32,16 @@ export type V3Runtime = {
 };
 
 export const setupV3Runtime = ({
-  iframe, // initialFiles,
+  iframe,
   setSrcdocError,
   handleCacheMiss,
+  initialContent,
 }: {
   iframe: HTMLIFrameElement;
   // initialFiles: V3RuntimeFiles;
   setSrcdocError: (error: string | null) => void;
   handleCacheMiss: (vizId: VizId) => Promise<Content>;
+  initialContent: Content;
 }): V3Runtime => {
   // The "build worker", a Web Worker that does the building.
   const worker = new Worker();
@@ -83,7 +85,10 @@ export const setupV3Runtime = ({
   }
 
   // Tracks the latest content.
-  let latestContent: Content | null = null;
+  // Note: This must be defined before the first call
+  // to `runLatestContent`, such as if an imported viz changes
+  // before the entry viz is changed.
+  let latestContent: Content = initialContent;
 
   // Pending promise resolvers.
   let pendingBuildPromise:

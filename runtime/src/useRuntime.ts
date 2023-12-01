@@ -43,6 +43,8 @@ export const useRuntime = ({
 
   const v3Runtime = useRef<V3Runtime | null>(null);
 
+  const initialContentRef = useRef<Content | null>(content);
+
   // Set up the v3 runtime.
   useEffect(() => {
     if (runtimeVersion === 3) {
@@ -60,6 +62,7 @@ export const useRuntime = ({
             iframe,
             setSrcdocError,
             handleCacheMiss,
+            initialContent: initialContentRef.current,
           });
         },
       );
