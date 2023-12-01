@@ -5,11 +5,7 @@ import {
   useRef,
   useCallback,
 } from 'react';
-import {
-  Content,
-  Snapshot,
-  getRuntimeVersion,
-} from 'entities';
+import { Content, getRuntimeVersion } from 'entities';
 
 // Sets up either the v2 or v3 runtime environment.
 // Meant to support dynamic switching between the two.
@@ -17,10 +13,12 @@ export const useRuntime = ({
   iframeRef,
   content,
   setSrcdocError,
+  handleCacheMiss,
 }: {
   iframeRef: RefObject<HTMLIFrameElement>;
   content: Content;
   setSrcdocError: (error: string | null) => void;
+  handleCacheMiss: (vizId: string) => Promise<Content>;
 }) => {
   // This ref is used to skip the first mount.
   const initialMount = useRef(true);
@@ -52,11 +50,12 @@ export const useRuntime = ({
           v3Runtime.current = setupV3Runtime({
             iframe,
             setSrcdocError,
+            handleCacheMiss,
           });
         },
       );
     }
-  }, [runtimeVersion]);
+  }, [runtimeVersion, handleCacheMiss]);
 
   // Used to debounce updates to the v3 runtime.
   const v3Timeout = useRef<number | undefined>(undefined);

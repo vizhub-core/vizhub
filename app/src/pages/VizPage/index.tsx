@@ -77,6 +77,7 @@ export const VizPage: Page = ({
     initialSrcdocError,
     canUserEditViz,
     canUserDeleteViz,
+    vizCacheContentSnapshots,
   } = pageData;
 
   // /////////////////////////////////////////
@@ -117,6 +118,21 @@ export const VizPage: Page = ({
   const forkedFromOwnerUser: User = useShareDBDocData<User>(
     forkedFromOwnerUserSnapshot,
     'User',
+  );
+
+  // Handles cache misses for viz content,
+  // when a viz imports from another viz.
+  const handleCacheMiss = useCallback(
+    async (vizId: string): Promise<Content> => {
+      // If the viz content was part of the server-rendered
+      // page data, return that.
+      return vizCacheContentSnapshots[vizId].data;
+
+      // TODO client-side fetching of newly imported vizzes.
+
+      // TODO instantiate ShareDB docs for vizCacheContentSnapshots.
+    },
+    [vizCacheContentSnapshots],
   );
 
   // /////////////////////////////////////////
@@ -297,6 +313,7 @@ export const VizPage: Page = ({
             setVizTitle,
             submitContentOperation,
             toggleDeleteVizConfirmationModal,
+            handleCacheMiss,
           }}
         />
       </SplitPaneResizeProvider>

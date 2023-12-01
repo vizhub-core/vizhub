@@ -5,7 +5,7 @@ import {
   V3WindowMessage,
   V3WorkerMessage,
 } from './types';
-import { Content } from 'entities';
+import { Content, VizId } from 'entities';
 
 // Flag for debugging.
 const debug = false;
@@ -29,10 +29,12 @@ const PENDING_DIRTY = 'PENDING_DIRTY';
 export const setupV3Runtime = ({
   iframe, // initialFiles,
   setSrcdocError,
+  handleCacheMiss,
 }: {
   iframe: HTMLIFrameElement;
   // initialFiles: V3RuntimeFiles;
   setSrcdocError: (error: string | null) => void;
+  handleCacheMiss: (vizId: VizId) => Promise<Content>;
 }) => {
   // The "build worker", a Web Worker that does the building.
   const worker = new Worker();
@@ -92,10 +94,13 @@ export const setupV3Runtime = ({
   const n = 100;
 
   // This runs when the build worker sends a message.
-  worker.addEventListener('message', ({ data }) => {
+  worker.addEventListener('message', async ({ data }) => {
     const message: V3WorkerMessage =
       data as V3WorkerMessage;
 
+    // Handle 'buildResponse' messages.
+    // These are sent by the build worker in response
+    // to a 'buildRequest' message.
     if (message.type === 'buildResponse') {
       const buildResult: V3BuildResult =
         message.buildResult;
@@ -124,10 +129,31 @@ export const setupV3Runtime = ({
         );
       }
     }
+
+    // Handle 'contentRequest' messages.
+    // These are sent by the worker when it needs
+    // to get the content of a file, in order to
+    // populate its VizCache.
+    if (message.type === 'contentRequest') {
+      const { vizId } = message;
+
+      const content = await handleCacheMiss(vizId);
+
+      const contentResponseMessage: V3WorkerMessage = {
+        type: 'contentResponse',
+        vizId: message.vizId,
+        content,
+      };
+
+      // Send the content back to the worker.
+      worker.postMessage(contentResponseMessage);
+    }
   });
 
   // This runs when the IFrame sends a message.
   window.addEventListener('message', ({ data }) => {
+    // Handle 'runDone' and 'runError' messages.
+    // These happen in response to sending a 'runJS' message.
     if (
       data.type === 'runDone' ||
       data.type === 'runError'
@@ -200,40 +226,6 @@ export const setupV3Runtime = ({
     }
   };
 
-  // const build = (
-  //   content: Content,
-  // ): Promise<V3BuildResult> =>
-  //   new Promise((resolve) => {
-  //     worker.onmessage = ({ data }) => {
-  //       const responseMessage = data as V3WorkerMessage;
-  //       if (responseMessage.type === 'buildResponse') {
-  //         const { errors, warnings, src, pkg, time } =
-  //           responseMessage.buildResult;
-
-  //         if (profileBuildTimes) {
-  //           buildTimes.push(time);
-  //           // Every n times, log the rolling average.
-  //           if (buildTimes.length % n === 0) {
-  //             console.log(
-  //               'Average build time: ' +
-  //                 avg(buildTimes) +
-  //                 ' ms',
-  //             );
-  //             buildTimes = [];
-  //           }
-  //         }
-
-  //         resolve({ src, pkg, errors, warnings, time });
-  //       }
-  //     };
-  //     const requestMessage: V3WorkerMessage = {
-  //       type: 'buildRequest',
-  //       content,
-  //       enableSourcemap: true,
-  //     };
-  //     worker.postMessage(requestMessage);
-  //   });
-
   const build = (content: Content) => {
     return new Promise<V3BuildResult>((resolve) => {
       pendingBuildPromise = resolve;
@@ -246,79 +238,6 @@ export const setupV3Runtime = ({
     });
   };
 
-  // // Runs the latest code.
-  // // TODO reset srcdoc when dependencies change
-  // const run = ({
-  //   src,
-  //   warnings,
-  //   errors,
-  // }: V3BuildResult): Promise<void> =>
-  //   new Promise((resolve) => {
-  //     // If there were build errors,
-  //     // display them and don't run.
-  //     if (errors.length > 0) {
-  //       setSrcdocError(
-  //         errors.map((error) => error.message).join('\n\n'),
-  //       );
-  //       resolve();
-  //       return;
-  //     }
-
-  //     // If we're here, then there were no build errors.
-
-  //     // If there were build warnings,
-  //     // display them.
-  //     if (warnings.length > 0) {
-  //       // TODO distinguish between warnings and errors in UI
-  //       setSrcdocError(warnings.join('\n\n'));
-  //     } else {
-  //       // If there were no warnings,
-  //       // clear the error message.
-  //       setSrcdocError(null);
-  //     }
-
-  //     // Run the code.
-  //     window.onmessage = ({ data }) => {
-  //       const message: V3WindowMessage =
-  //         data as V3WindowMessage;
-  //       if (message.type === 'runDone') {
-  //         if (debug) {
-  //           console.log('got runDone');
-  //         }
-  //         resolve();
-  //       }
-  //       if (message.type === 'runError') {
-  //         if (debug) {
-  //           console.log('got runError');
-  //           console.log(message.error);
-  //         }
-  //         // TODO pass error out for display
-  //         resolve();
-  //       }
-  //     };
-
-  //     if (iframe.contentWindow === null) {
-  //       // Should never happen.
-  //       console.log('iframe.contentWindow is null');
-  //     } else {
-  //       if (src === undefined) {
-  //         // TODO make sure the error is displayed
-  //         if (debug) {
-  //           console.log('src is undefined');
-  //         }
-  //       } else {
-  //         const message: V3WindowMessage = {
-  //           type: 'runJS',
-  //           src,
-  //         };
-  //         iframe.contentWindow.postMessage(
-  //           message,
-  //           // '*',
-  //           window.location.origin,
-  //         );
-  //       }
-  //     }
-  //   });
   const run = (buildResult: V3BuildResult) => {
     return new Promise<void>((resolve) => {
       const { src, warnings, errors } = buildResult;
