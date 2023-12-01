@@ -403,3 +403,10 @@ export const sampleStoredImage: StoredImage = {
   id: 'commit1',
   base64: sampleImageBase64,
 };
+
+// A stub similar to ShareDB snapshots.
+export const fakeSnapshot = <T>(data: T) => ({
+  data,
+  v: 1,
+  type: 'json1',
+});

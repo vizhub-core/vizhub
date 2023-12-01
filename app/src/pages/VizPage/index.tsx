@@ -1,4 +1,9 @@
-import { useCallback, useEffect, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import {
   Files,
   ShareDBDoc,
@@ -20,6 +25,8 @@ import {
   useShareDBDoc,
   useShareDBDocData,
   useShareDBDocPresence,
+  useShareDBDocs,
+  useShareDBDocsData,
 } from '../../useShareDBDocData';
 import { AuthenticatedUserProvider } from '../../contexts/AuthenticatedUserContext';
 import { Page, PageData } from '../Page';
@@ -53,6 +60,10 @@ export type VizPageData = PageData & {
   initialSrcdocError: string | null;
   canUserEditViz: boolean;
   canUserDeleteViz: boolean;
+  vizCacheContentSnapshots: Record<
+    VizId,
+    Snapshot<Content>
+  >;
 };
 
 // Inspired by https://github.com/vitejs/vite-plugin-react/blob/main/playground/ssr-react/src/pages/Home.jsx
@@ -73,6 +84,7 @@ export const VizPage: Page = ({
     initialSrcdocError,
     canUserEditViz,
     canUserDeleteViz,
+    vizCacheContentSnapshots,
   } = pageData;
 
   // /////////////////////////////////////////
@@ -114,6 +126,22 @@ export const VizPage: Page = ({
     forkedFromOwnerUserSnapshot,
     'User',
   );
+
+  // const vizCacheShareDBDocs: Record<
+  //   string,
+  //   ShareDBDoc<Content>
+  // > = useShareDBDocs<Content>(
+  //   vizCacheContentSnapshots,
+  //   'Content',
+  // );
+  // const vizCacheContents: Content = useData(
+  //   contentSnapshot,
+  //   contentShareDBDoc,
+  // );
+
+  // This updates dynamically whenever imported vizzes are updated.
+  const vizCacheContents: Record<string, Content> =
+    useShareDBDocsData(vizCacheContentSnapshots, 'Content');
 
   // /////////////////////////////////////////
   ////////////// URL State ///////////////////
@@ -293,6 +321,7 @@ export const VizPage: Page = ({
             setVizTitle,
             submitContentOperation,
             toggleDeleteVizConfirmationModal,
+            vizCacheContents,
           }}
         />
       </SplitPaneResizeProvider>

@@ -2,27 +2,10 @@ import { Content, VizId } from 'entities';
 
 export type VizCache = {
   get: (vizId: string) => Promise<Content>;
+  set: (content: Content) => void;
+  invalidate: (vizId: string) => void;
 };
 
-const sampleContent: Content = {
-  id: 'sampleContent',
-  files: {
-    '7548392': {
-      name: 'index.js',
-      text: `
-        import { innerMessage } from './message';
-        export const message = "Outer " + innerMessage;
-      `,
-    },
-    '6714854': {
-      name: 'message.js',
-      text: `
-        export const innerMessage = "Inner";
-      `,
-    },
-  },
-  title: 'Sample Content for Exporting',
-};
 // A cache of viz content.
 // For use in resolving imports from other vizzes.
 // Runs both on the server and in the browser.
@@ -33,22 +16,24 @@ export const createVizCache = ({
   initialContents: Array<Content>;
   handleCacheMiss: (vizId: VizId) => Promise<Content>;
 }): VizCache => {
-  const contentMap = new Map<VizId, Content>();
+  // Track the content of cached vizzes.
+  const contentMap = new Map<VizId, Content>(
+    initialContents.map((content) => [content.id, content]),
+  );
 
-  // Track the content of the entry point viz.
-  // contentMap.set(content.id, content);
-  for (const content of initialContents) {
-    contentMap.set(content.id, content);
-  }
-
+  // Gets the content of a viz.
+  // Returns the cached content if it exists.
+  // Otherwise, calls handleCacheMiss to fetch the content.
   const get = async (vizId: string): Promise<Content> => {
-    const cachedContent = contentMap.get(vizId);
-    if (cachedContent) {
+    const cachedContent: Content | undefined =
+      contentMap.get(vizId);
+
+    // Cache hit
+    if (cachedContent !== undefined) {
       return cachedContent;
     }
-    // TODO fetch the viz in this case.
-    console.log(`Viz cache miss: ${vizId}`);
 
+    // Cache miss
     const freshContent = await handleCacheMiss(vizId);
 
     if (freshContent) {
@@ -56,9 +41,20 @@ export const createVizCache = ({
       return freshContent;
     }
 
-    // TODO move this to tests
-    return sampleContent;
+    // TODO surface this error to the user
+    throw new Error(
+      `Unresolved import from vizId ${vizId}`,
+    );
   };
 
-  return { get };
+  // Updates the content of a viz in the cache.
+  const set = (content: Content) => {
+    contentMap.set(content.id, content);
+  };
+
+  const invalidate = (vizId: string) => {
+    contentMap.delete(vizId);
+  };
+
+  return { get, set, invalidate };
 };
