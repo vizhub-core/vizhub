@@ -84,11 +84,11 @@ export const useRuntime = ({
   const v3RunImports = useCallback(
     (changedVizIds: Array<VizId>) => {
       if (v3Runtime.current && content) {
-        console.log(
-          'TODO invalidateVizCache with ids: ' +
-            changedVizIds,
-        );
-        // v3Runtime.current.invalidateVizCache(changedVizIds);
+        // console.log(
+        //   'TODO invalidateVizCache with ids: ' +
+        //     changedVizIds,
+        // );
+        v3Runtime.current.invalidateVizCache(changedVizIds);
       }
     },
     [v3Runtime],

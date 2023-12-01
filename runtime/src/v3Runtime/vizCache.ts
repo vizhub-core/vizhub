@@ -3,6 +3,7 @@ import { Content, VizId } from 'entities';
 export type VizCache = {
   get: (vizId: string) => Promise<Content>;
   set: (content: Content) => void;
+  invalidate: (vizId: string) => void;
 };
 
 // A cache of viz content.
@@ -51,5 +52,9 @@ export const createVizCache = ({
     contentMap.set(content.id, content);
   };
 
-  return { get, set };
+  const invalidate = (vizId: string) => {
+    contentMap.delete(vizId);
+  };
+
+  return { get, set, invalidate };
 };
