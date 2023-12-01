@@ -16,7 +16,7 @@ export type V3BuildError = {
   message: string;
 };
 
-// Messages sent to and from the worker.
+// Messages sent to and from the build worker.
 export type V3WorkerMessage =
   // `contentRequest`
   //  * Sent from the worker to the main thread.
@@ -51,4 +51,31 @@ export type V3WorkerMessage =
   | {
       type: 'buildResponse';
       buildResult: V3BuildResult;
+    };
+
+// Messages sent to and from the IFrame window.
+export type V3WindowMessage =
+  // `runJS`
+  //  * Sent from the main thread to the IFrame.
+  //  * Triggers hot reloading within the V3 runtime.
+  | {
+      type: 'runJS';
+      src: string;
+    }
+
+  // `runDone`
+  //  * Sent from the IFrame to the main thread.
+  //  * Indicates that the V3 runtime has finished running the JS.
+  //  * If this was sent, there were no immediate runtime errors.
+  | {
+      type: 'runDone';
+    }
+
+  // `runError`
+  //  * Sent from the IFrame to the main thread.
+  //  * Indicates that the V3 runtime has finished running the JS.
+  //  * If this was sent, there was an immediate runtime error.
+  | {
+      type: 'runError';
+      error: Error;
     };

@@ -1,7 +1,11 @@
 // @ts-ignore
 import Worker from './worker.ts?worker';
-import { V3BuildResult, V3WorkerMessage } from './types';
-import { Content, Snapshot } from 'entities';
+import {
+  V3BuildResult,
+  V3WindowMessage,
+  V3WorkerMessage,
+} from './types';
+import { Content } from 'entities';
 
 // Flag for debugging.
 const debug = false;
@@ -155,13 +159,6 @@ export const setupV3Runtime = ({
             }
           }
 
-          // if (errors.length > 0) {
-          //   return console.log(errors);
-          // }
-          // if (warnings.length > 0) {
-          //   return console.log(warnings);
-          // }
-
           resolve({ src, pkg, errors, warnings, time });
         }
       };
@@ -206,16 +203,18 @@ export const setupV3Runtime = ({
 
       // Run the code.
       window.onmessage = ({ data }) => {
-        if (data.type === 'runDone') {
+        const message: V3WindowMessage =
+          data as V3WindowMessage;
+        if (message.type === 'runDone') {
           if (debug) {
             console.log('got runDone');
           }
           resolve();
         }
-        if (data.type === 'runError') {
+        if (message.type === 'runError') {
           if (debug) {
             console.log('got runError');
-            console.log(data.error);
+            console.log(message.error);
           }
           // TODO pass error out for display
           resolve();
@@ -226,10 +225,22 @@ export const setupV3Runtime = ({
         // Should never happen.
         console.log('iframe.contentWindow is null');
       } else {
-        iframe.contentWindow.postMessage(
-          { type: 'runJS', src },
-          '*',
-        );
+        if (src === undefined) {
+          // TODO make sure the error is displayed
+          if (debug) {
+            console.log('src is undefined');
+          }
+        } else {
+          const message: V3WindowMessage = {
+            type: 'runJS',
+            src,
+          };
+          iframe.contentWindow.postMessage(
+            message,
+            // '*',
+            window.location.origin,
+          );
+        }
       }
     });
 
