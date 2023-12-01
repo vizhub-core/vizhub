@@ -5,17 +5,7 @@ import {
   useRef,
   useCallback,
 } from 'react';
-import {
-  Content,
-  Files,
-  FilesV2,
-  getRuntimeVersion,
-} from 'entities';
-import { V3RuntimeFiles, toV3RuntimeFiles } from 'runtime';
-import {
-  VizCache,
-  createVizCache,
-} from './v3Runtime/vizCache';
+import { Content, getRuntimeVersion } from 'entities';
 
 // Sets up either the v2 or v3 runtime environment.
 // Meant to support dynamic switching between the two.
@@ -23,10 +13,12 @@ export const useRuntime = ({
   iframeRef,
   content,
   setSrcdocError,
+  handleCacheMiss,
 }: {
   iframeRef: RefObject<HTMLIFrameElement>;
   content: Content;
   setSrcdocError: (error: string | null) => void;
+  handleCacheMiss: (vizId: string) => Promise<Content>;
 }) => {
   // This ref is used to skip the first mount.
   const initialMount = useRef(true);
@@ -50,14 +42,20 @@ export const useRuntime = ({
         ({ setupV3Runtime }) => {
           const iframe = iframeRef.current;
 
+          // Should never happen. Added to pacify TypeScript.
+          if (iframe === null) {
+            throw new Error('iframe is null');
+          }
+
           v3Runtime.current = setupV3Runtime({
             iframe,
             setSrcdocError,
+            handleCacheMiss,
           });
         },
       );
     }
-  }, [runtimeVersion]);
+  }, [runtimeVersion, handleCacheMiss]);
 
   // Used to debounce updates to the v3 runtime.
   const v3Timeout = useRef<number | undefined>(undefined);
@@ -88,9 +86,9 @@ export const useRuntime = ({
     } else {
       // Otherwise, debounce the updates.
       clearTimeout(v3Timeout.current);
-      v3Timeout.current = setTimeout(() => {
-        v3Run(content.files);
-      }, 800);
+      v3Timeout.current = window.setTimeout(() => {
+        v3Run(content);
+      }, 1000);
     }
   }, [content.files, runtimeVersion, v3Runtime]);
 

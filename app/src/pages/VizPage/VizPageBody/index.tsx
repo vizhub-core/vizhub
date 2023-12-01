@@ -55,6 +55,7 @@ export const VizPageBody = ({
   setVizTitle,
   submitContentOperation,
   toggleDeleteVizConfirmationModal,
+  handleCacheMiss,
 }: {
   info: Info;
   content: Content;
@@ -79,6 +80,7 @@ export const VizPageBody = ({
     next: (content: Content) => Content,
   ) => void;
   toggleDeleteVizConfirmationModal: () => void;
+  handleCacheMiss: (vizId: string) => Promise<Content>;
 }) => {
   // The currently authenticated user, if any.
   const authenticatedUser: User | null = useContext(
@@ -128,8 +130,14 @@ export const VizPageBody = ({
     }
     // setSrcdocErrorMessage(errorMessage);
   }, []);
+
   // Set up the runtime environment.
-  useRuntime({ content, iframeRef, setSrcdocError });
+  useRuntime({
+    content,
+    iframeRef,
+    setSrcdocError,
+    handleCacheMiss,
+  });
 
   // Render the viz runner iframe.
   const renderVizRunner = useCallback(

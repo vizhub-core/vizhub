@@ -23,19 +23,13 @@ import {
   ResourceId,
   EntityName,
 } from 'entities';
+import { fakeSnapshot } from 'entities/test/fixtures';
 import { ok, err, Result } from './Result';
 import { Gateways, pageSize } from './Gateways';
 import { ascending, descending } from 'd3-array';
 
 type Entity = { [key: string]: any };
 type EntityId = string;
-
-// A stub similar to ShareDB snapshots.
-export const fakeSnapshot = (data: Entity) => ({
-  data,
-  v: 1,
-  type: 'json1',
-});
 
 // No-operation, do nothing.
 const noop = (d: Entity) => d;
