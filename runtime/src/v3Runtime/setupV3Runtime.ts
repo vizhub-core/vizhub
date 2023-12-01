@@ -2,7 +2,6 @@
 import Worker from './worker.ts?worker';
 import { V3BuildResult, V3WorkerMessage } from './types';
 import { Content, Snapshot } from 'entities';
-import { V } from 'vitest/dist/reporters-5f784f42';
 
 // Flag for debugging.
 const debug = false;
@@ -71,14 +70,12 @@ export const setupV3Runtime = ({
     }, 1000);
   }
 
-  let latestContentSnapshot: Snapshot<Content> | null =
-    null;
+  // Tracks the latest content.
+  let latestContent: Content | null = null;
 
   // This runs when any file is changed.
-  const handleCodeChange = (
-    contentSnapshot: Snapshot<Content>,
-  ): void => {
-    latestContentSnapshot = contentSnapshot;
+  const handleCodeChange = (content: Content): void => {
+    latestContent = content;
     if (state === IDLE) {
       state = ENQUEUED;
       update();
@@ -113,7 +110,7 @@ export const setupV3Runtime = ({
       // Should never happen.
       throw new Error('latestContent is null');
     }
-    await run(await build(latestContentSnapshot));
+    await run(await build(latestContent));
     if (debug) {
       console.log('update: after run');
     }
@@ -136,44 +133,44 @@ export const setupV3Runtime = ({
   const n = 100;
 
   const build = (
-    contentSnapshot: Snapshot<Content>,
+    content: Content,
   ): Promise<V3BuildResult> =>
     new Promise((resolve) => {
-      worker.onmessage = ({
-        data,
-      }: {
-        data: V3BuildResult;
-      }) => {
-        const { errors, warnings, src, pkg, time } = data;
+      worker.onmessage = ({ data }) => {
+        const responseMessage = data as V3WorkerMessage;
+        if (responseMessage.type === 'buildResponse') {
+          const { errors, warnings, src, pkg, time } =
+            responseMessage.buildResult;
 
-        if (profileBuildTimes) {
-          buildTimes.push(time);
-          // Every n times, log the rolling average.
-          if (buildTimes.length % n === 0) {
-            console.log(
-              'Average build time: ' +
-                avg(buildTimes) +
-                ' ms',
-            );
-            buildTimes = [];
+          if (profileBuildTimes) {
+            buildTimes.push(time);
+            // Every n times, log the rolling average.
+            if (buildTimes.length % n === 0) {
+              console.log(
+                'Average build time: ' +
+                  avg(buildTimes) +
+                  ' ms',
+              );
+              buildTimes = [];
+            }
           }
+
+          // if (errors.length > 0) {
+          //   return console.log(errors);
+          // }
+          // if (warnings.length > 0) {
+          //   return console.log(warnings);
+          // }
+
+          resolve({ src, pkg, errors, warnings, time });
         }
-
-        // if (errors.length > 0) {
-        //   return console.log(errors);
-        // }
-        // if (warnings.length > 0) {
-        //   return console.log(warnings);
-        // }
-
-        resolve({ src, pkg, errors, warnings, time });
       };
-      const message: V3WorkerMessage = {
-        type: 'build',
-        contentSnapshot,
+      const requestMessage: V3WorkerMessage = {
+        type: 'buildRequest',
+        content,
         enableSourcemap: true,
       };
-      worker.postMessage(message);
+      worker.postMessage(requestMessage);
     });
 
   // Runs the latest code.

@@ -33,9 +33,7 @@ export const useRuntime = ({
   );
 
   const v3Runtime = useRef<{
-    handleCodeChange: (
-      contentSnapshot: Snapshot<Content>,
-    ) => void;
+    handleCodeChange: (content: Content) => void;
   } | null>(null);
 
   // Set up the v3 runtime.
@@ -89,9 +87,9 @@ export const useRuntime = ({
     } else {
       // Otherwise, debounce the updates.
       clearTimeout(v3Timeout.current);
-      v3Timeout.current = setTimeout(() => {
-        v3Run(content.files);
-      }, 800);
+      v3Timeout.current = window.setTimeout(() => {
+        v3Run(content);
+      }, 1000);
     }
   }, [content.files, runtimeVersion, v3Runtime]);
 

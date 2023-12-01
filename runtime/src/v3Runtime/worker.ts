@@ -1,11 +1,13 @@
 import { rollup } from '@rollup/browser';
 import { build } from './build';
 import { createVizCache } from './vizCache';
-import { Content, Snapshot, VizId } from 'entities';
+import { Content, VizId } from 'entities';
 import { V3WorkerMessage } from './types';
 
-// Track pending promises for 'getContentSnapshotResponse' messages
-const pendingPromises = new Map();
+const debug = true;
+
+// Tracks pending promises for 'contentResponse' messages
+const pendingContentResponsePromises = new Map();
 
 // Create a viz cache that's backed by the main thread
 const vizCache = createVizCache({
@@ -14,13 +16,20 @@ const vizCache = createVizCache({
     vizId: VizId,
   ): Promise<Content> => {
     const message: V3WorkerMessage = {
-      type: 'getContentRequest',
+      type: 'contentRequest',
       vizId,
     };
+
+    if (debug) {
+      console.log(
+        '[build worker] sending content request message to main thread',
+        message,
+      );
+    }
     postMessage(message);
 
     return new Promise((resolve) => {
-      pendingPromises.set(vizId, resolve);
+      pendingContentResponsePromises.set(vizId, resolve);
     });
   },
 });
@@ -30,30 +39,43 @@ addEventListener('message', async ({ data }) => {
   const message: V3WorkerMessage = data as V3WorkerMessage;
 
   switch (message.type) {
-    case 'build': {
+    case 'buildRequest': {
       const { content, enableSourcemap } = message;
+
+      if (debug) {
+        console.log(
+          '[build worker] received build request message from main thread',
+          message,
+        );
+      }
 
       // Update viz cache with the latest version
       vizCache.set(content);
 
       // Post the result of the build process
-      postMessage(
-        await build({
+      const responseMessage: V3WorkerMessage = {
+        type: 'buildResponse',
+        buildResult: await build({
           vizId: content.id,
           enableSourcemap,
           rollup,
           vizCache,
         }),
-      );
+      };
+      postMessage(responseMessage);
       break;
     }
 
-    case 'getContentResponse': {
+    case 'contentResponse': {
       // Resolve pending promises for content snapshots
-      const resolver = pendingPromises.get(message.vizId);
+      const resolver = pendingContentResponsePromises.get(
+        message.vizId,
+      );
       if (resolver) {
         resolver(message.content);
-        pendingPromises.delete(message.vizId);
+        pendingContentResponsePromises.delete(
+          message.vizId,
+        );
       }
       break;
     }
