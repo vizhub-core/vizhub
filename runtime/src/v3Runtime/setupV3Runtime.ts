@@ -26,16 +26,23 @@ const PENDING_CLEAN = 'PENDING_CLEAN';
 // while this run is taking place.
 const PENDING_DIRTY = 'PENDING_DIRTY';
 
+export type V3Runtime = {
+  handleCodeChange: (content: Content) => void;
+  invalidateVizCache: (changedVizIds: Array<VizId>) => void;
+};
+
 export const setupV3Runtime = ({
-  iframe, // initialFiles,
+  iframe,
   setSrcdocError,
   handleCacheMiss,
+  initialContent,
 }: {
   iframe: HTMLIFrameElement;
   // initialFiles: V3RuntimeFiles;
   setSrcdocError: (error: string | null) => void;
   handleCacheMiss: (vizId: VizId) => Promise<Content>;
-}) => {
+  initialContent: Content;
+}): V3Runtime => {
   // The "build worker", a Web Worker that does the building.
   const worker = new Worker();
 
@@ -78,7 +85,10 @@ export const setupV3Runtime = ({
   }
 
   // Tracks the latest content.
-  let latestContent: Content | null = null;
+  // Note: This must be defined before the first call
+  // to `runLatestContent`, such as if an imported viz changes
+  // before the entry viz is changed.
+  let latestContent: Content = initialContent;
 
   // Pending promise resolvers.
   let pendingBuildPromise:
@@ -148,6 +158,18 @@ export const setupV3Runtime = ({
       // Send the content back to the worker.
       worker.postMessage(contentResponseMessage);
     }
+
+    // Handle 'invalidateVizCacheResponse' messages.
+    // These are sent by the worker in response to
+    // an 'invalidateVizCacheRequest' message.
+    if (message.type === 'invalidateVizCacheResponse') {
+      console.log(
+        '[v3 runtime] received invalidateVizCacheResponse',
+        message,
+      );
+      // Leverage existing infra for executing the hot reloading.
+      runLatestContent();
+    }
   });
 
   // This runs when the IFrame sends a message.
@@ -173,15 +195,31 @@ export const setupV3Runtime = ({
     }
   });
 
-  // This runs when any file is changed.
-  const handleCodeChange = (content: Content): void => {
-    latestContent = content;
+  const runLatestContent = () => {
     if (state === IDLE) {
       state = ENQUEUED;
       update();
     } else if (state === PENDING_CLEAN) {
       state = PENDING_DIRTY;
     }
+  };
+
+  // This runs when any file is changed.
+  const handleCodeChange = (content: Content): void => {
+    latestContent = content;
+    runLatestContent();
+  };
+
+  // This runs when one or more imported vizzes are changed.
+  const invalidateVizCache = (
+    changedVizIds: Array<VizId>,
+  ): void => {
+    // Send a message to the worker to invalidate the cache.
+    const message: V3WorkerMessage = {
+      type: 'invalidateVizCacheRequest',
+      changedVizIds,
+    };
+    worker.postMessage(message);
   };
 
   const profileHotReloadFPS = true;
@@ -302,5 +340,5 @@ export const setupV3Runtime = ({
   // TODO initialization handshake to avoid race condition bugs
   // using "ping" and "pong"
 
-  return { handleCodeChange };
+  return { handleCodeChange, invalidateVizCache };
 };

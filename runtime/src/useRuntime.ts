@@ -5,7 +5,16 @@ import {
   useRef,
   useCallback,
 } from 'react';
-import { Content, getRuntimeVersion } from 'entities';
+import {
+  Content,
+  VizId,
+  getRuntimeVersion,
+} from 'entities';
+import { V3Runtime } from './v3Runtime/setupV3Runtime';
+
+// Debounce the v3 runtime updates when not interacting
+// by this many milliseconds.
+const v3RunDebounceMs = 1000;
 
 // Sets up either the v2 or v3 runtime environment.
 // Meant to support dynamic switching between the two.
@@ -14,11 +23,13 @@ export const useRuntime = ({
   content,
   setSrcdocError,
   handleCacheMiss,
+  vizCacheContents,
 }: {
   iframeRef: RefObject<HTMLIFrameElement>;
   content: Content;
   setSrcdocError: (error: string | null) => void;
   handleCacheMiss: (vizId: string) => Promise<Content>;
+  vizCacheContents: Record<string, Content>;
 }) => {
   // This ref is used to skip the first mount.
   const initialMount = useRef(true);
@@ -30,9 +41,9 @@ export const useRuntime = ({
     [content],
   );
 
-  const v3Runtime = useRef<{
-    handleCodeChange: (content: Content) => void;
-  } | null>(null);
+  const v3Runtime = useRef<V3Runtime | null>(null);
+
+  const initialContentRef = useRef<Content | null>(content);
 
   // Set up the v3 runtime.
   useEffect(() => {
@@ -51,20 +62,36 @@ export const useRuntime = ({
             iframe,
             setSrcdocError,
             handleCacheMiss,
+            initialContent: initialContentRef.current,
           });
         },
       );
     }
-  }, [runtimeVersion, handleCacheMiss]);
+  }, [runtimeVersion]);
 
   // Used to debounce updates to the v3 runtime.
   const v3Timeout = useRef<number | undefined>(undefined);
 
-  // Executes a "run" on the v3 runtime.
+  // Executes a "run" on the v3 runtime when the entry viz changes.
   const v3Run = useCallback(
     (content: Content) => {
       if (v3Runtime.current && content) {
         v3Runtime.current.handleCodeChange(content);
+      }
+    },
+    [v3Runtime],
+  );
+
+  // Executes a "run" on the v3 runtime when any imported viz changes.
+  // Happens whenever vizCacheContents changes.
+  const v3RunImports = useCallback(
+    (changedVizIds: Array<VizId>) => {
+      if (v3Runtime.current && content) {
+        // console.log(
+        //   'TODO invalidateVizCache with ids: ' +
+        //     changedVizIds,
+        // );
+        v3Runtime.current.invalidateVizCache(changedVizIds);
       }
     },
     [v3Runtime],
@@ -88,9 +115,57 @@ export const useRuntime = ({
       clearTimeout(v3Timeout.current);
       v3Timeout.current = window.setTimeout(() => {
         v3Run(content);
-      }, 1000);
+      }, v3RunDebounceMs);
     }
   }, [content.files, runtimeVersion, v3Runtime]);
+
+  // Send updates of imported vizzes to the V3 runtime.
+  const previousVizCacheContents = useRef(vizCacheContents);
+  useEffect(() => {
+    if (initialMount.current === true) {
+      return;
+    }
+
+    // console.log(
+    //   'TODO update the v3 runtime when imported vizzes change',
+    // );
+
+    // Find the imported vizzes that have changed.
+    const changedVizIds = Object.keys(
+      vizCacheContents,
+    ).filter((vizId) => {
+      return (
+        previousVizCacheContents.current[vizId] !==
+        vizCacheContents[vizId]
+      );
+    });
+    previousVizCacheContents.current = vizCacheContents;
+
+    console.log('changedVizIds', changedVizIds);
+
+    if (changedVizIds.length === 0) {
+      return;
+    }
+
+    // // See if any of the vizzes we import from are interacting.
+    let isInteracting = false;
+    for (const vizId of changedVizIds) {
+      if (vizCacheContents[vizId].isInteracting) {
+        isInteracting = true;
+        break;
+      }
+    }
+    console.log('isInteracting', isInteracting);
+    if (isInteracting) {
+      v3RunImports(changedVizIds);
+    } else {
+      // Otherwise, debounce the updates.
+      clearTimeout(v3Timeout.current);
+      v3Timeout.current = window.setTimeout(() => {
+        v3RunImports(changedVizIds);
+      }, v3RunDebounceMs);
+    }
+  }, [vizCacheContents]);
 
   // Compute V2 updates on the main thread.
   useEffect(() => {

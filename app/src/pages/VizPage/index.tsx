@@ -1,4 +1,9 @@
-import { useCallback, useEffect, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import {
   Files,
   ShareDBDoc,
@@ -20,6 +25,8 @@ import {
   useShareDBDoc,
   useShareDBDocData,
   useShareDBDocPresence,
+  useShareDBDocs,
+  useShareDBDocsData,
 } from '../../useShareDBDocData';
 import { AuthenticatedUserProvider } from '../../contexts/AuthenticatedUserContext';
 import { Page, PageData } from '../Page';
@@ -120,20 +127,21 @@ export const VizPage: Page = ({
     'User',
   );
 
-  // Handles cache misses for viz content,
-  // when a viz imports from another viz.
-  const handleCacheMiss = useCallback(
-    async (vizId: string): Promise<Content> => {
-      // If the viz content was part of the server-rendered
-      // page data, return that.
-      return vizCacheContentSnapshots[vizId].data;
+  // const vizCacheShareDBDocs: Record<
+  //   string,
+  //   ShareDBDoc<Content>
+  // > = useShareDBDocs<Content>(
+  //   vizCacheContentSnapshots,
+  //   'Content',
+  // );
+  // const vizCacheContents: Content = useData(
+  //   contentSnapshot,
+  //   contentShareDBDoc,
+  // );
 
-      // TODO client-side fetching of newly imported vizzes.
-
-      // TODO instantiate ShareDB docs for vizCacheContentSnapshots.
-    },
-    [vizCacheContentSnapshots],
-  );
+  // This updates dynamically whenever imported vizzes are updated.
+  const vizCacheContents: Record<string, Content> =
+    useShareDBDocsData(vizCacheContentSnapshots, 'Content');
 
   // /////////////////////////////////////////
   ////////////// URL State ///////////////////
@@ -313,7 +321,7 @@ export const VizPage: Page = ({
             setVizTitle,
             submitContentOperation,
             toggleDeleteVizConfirmationModal,
-            handleCacheMiss,
+            vizCacheContents,
           }}
         />
       </SplitPaneResizeProvider>

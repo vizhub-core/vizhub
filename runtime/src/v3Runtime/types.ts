@@ -51,6 +51,23 @@ export type V3WorkerMessage =
   | {
       type: 'buildResponse';
       buildResult: V3BuildResult;
+    }
+
+  // `invalidateVizCache`
+  //  * Sent from the main thread to the worker.
+  //  * When the main thread wants to invalidate the VizCache.
+  //  * This happens when an imported viz changes.
+  | {
+      type: 'invalidateVizCacheRequest';
+      changedVizIds: Array<VizId>;
+    }
+
+  // `invalidateVizCacheResponse`
+  //  * Sent from the worker to the main thread.
+  //  * When the worker responds to a `invalidateVizCacheRequest` message.
+  //  * This message is sent to the main thread.
+  | {
+      type: 'invalidateVizCacheResponse';
     };
 
 // Messages sent to and from the IFrame window.

@@ -105,7 +105,7 @@ export const useData = <T>(
 // something doesn't exist, e.g. the `forkedFromInfo` of the primordial viz.
 export const useShareDBDocData = <T>(
   snapshot: Snapshot<T> | null,
-  entityName,
+  entityName: EntityName,
 ): T | null =>
   useData(snapshot, useShareDBDoc(snapshot, entityName));
 
@@ -140,4 +140,88 @@ export const useShareDBDocPresence = (
   }, [id, entityName]);
 
   return shareDBDocPresence;
+};
+
+/////////////////////////////////////////////////////////////
+///// Variations to handle multiple documents at a time /////
+/////////////////////////////////////////////////////////////
+
+export const useShareDBDocs = <T>(
+  snapshots: Record<string, Snapshot<T>>,
+  entityName: EntityName,
+): Record<string, ShareDBDoc<T> | null> => {
+  // Create ShareDB documents for each snapshot, keyed by document ID
+  const shareDBDocs = useMemo(() => {
+    const docs: Record<string, ShareDBDoc<T> | null> = {};
+    Object.entries(snapshots).forEach(
+      ([docID, snapshot]) => {
+        if (typeof window === 'undefined') return;
+
+        const connection = getConnection();
+        const shareDBDoc = connection.get(
+          toCollectionName(entityName),
+          docID,
+        );
+        shareDBDoc.ingestSnapshot(
+          snapshot,
+          logShareDBError,
+        );
+        shareDBDoc.subscribe(logShareDBError);
+        docs[docID] = shareDBDoc;
+      },
+    );
+    return docs;
+  }, [snapshots]);
+
+  return shareDBDocs;
+};
+
+export const useDataRecord = <T>(
+  snapshots: Record<string, Snapshot<T>>,
+  shareDBDocs: Record<string, ShareDBDoc<T> | null>,
+): Record<string, T | null> => {
+  const [data, setData] = useState<
+    Record<string, T | null>
+  >(() => {
+    const initialData: Record<string, T | null> = {};
+    Object.entries(snapshots).forEach(
+      ([docID, snapshot]) => {
+        initialData[docID] = snapshot.data;
+      },
+    );
+    return initialData;
+  });
+
+  useEffect(() => {
+    const updateState = (docID: string) => {
+      setData((prevData) => ({
+        ...prevData,
+        [docID]: shareDBDocs[docID]?.data,
+      }));
+    };
+
+    Object.entries(shareDBDocs).forEach(([docID, doc]) => {
+      if (!doc) return;
+      doc.on('op batch', () => updateState(docID));
+    });
+
+    return () => {
+      Object.entries(shareDBDocs).forEach(
+        ([docID, doc]) => {
+          if (!doc) return;
+          doc.off('op batch', () => updateState(docID));
+        },
+      );
+    };
+  }, [shareDBDocs]);
+
+  return data;
+};
+
+export const useShareDBDocsData = <T>(
+  snapshots: Record<string, Snapshot<T>>,
+  entityName: EntityName,
+): Record<string, T | null> => {
+  const shareDBDocs = useShareDBDocs(snapshots, entityName);
+  return useDataRecord(snapshots, shareDBDocs);
 };

@@ -79,5 +79,28 @@ addEventListener('message', async ({ data }) => {
       }
       break;
     }
+
+    case 'invalidateVizCacheRequest': {
+      if (debug) {
+        console.log(
+          '[build worker] received invalidateVizCacheRequest',
+          message,
+        );
+      }
+      const { changedVizIds } = message;
+
+      // Invalidate the viz cache for the changed vizzes.
+      // This will cause the worker to re-fetch the content
+      // of those vizzes the next time it needs them.
+      for (const vizId of changedVizIds) {
+        vizCache.invalidate(vizId);
+      }
+
+      const responseMessage: V3WorkerMessage = {
+        type: 'invalidateVizCacheResponse',
+      };
+      postMessage(responseMessage);
+      break;
+    }
   }
 });
