@@ -55,7 +55,7 @@ export const VizPageBody = ({
   setVizTitle,
   submitContentOperation,
   toggleDeleteVizConfirmationModal,
-  handleCacheMiss,
+  vizCacheContents,
 }: {
   info: Info;
   content: Content;
@@ -80,7 +80,7 @@ export const VizPageBody = ({
     next: (content: Content) => Content,
   ) => void;
   toggleDeleteVizConfirmationModal: () => void;
-  handleCacheMiss: (vizId: string) => Promise<Content>;
+  vizCacheContents: Record<string, Content>;
 }) => {
   // The currently authenticated user, if any.
   const authenticatedUser: User | null = useContext(
@@ -131,12 +131,49 @@ export const VizPageBody = ({
     // setSrcdocErrorMessage(errorMessage);
   }, []);
 
+  const vizCacheContentsRef = useRef(vizCacheContents);
+
+  useEffect(() => {
+    vizCacheContentsRef.current = vizCacheContents;
+  }, [vizCacheContents]);
+
+  // Handles cache misses for viz content,
+  // when a viz imports from another viz.
+  const handleCacheMiss = useCallback(
+    async (vizId: string): Promise<Content> => {
+      // Sanity check, should never happen.
+      if (!vizCacheContentsRef.current) {
+        throw new Error(
+          'vizCacheContentsRef.current is null',
+        );
+      }
+
+      const content = vizCacheContentsRef.current[vizId];
+
+      // If the viz content for this import is already tracked,
+      // then return it.
+      if (content) {
+        return content;
+      } else {
+        // TODO make this happen by:
+        // * Fetching the viz content from the server
+        // * Using a new API endpoint that returns the viz content
+        // * Ingesting the snapshot and incorporating it into the vizCacheContents
+        throw new Error(
+          `TODO client-side fetching of newly imported vizzes. Current workaround: refresh the page`,
+        );
+      }
+    },
+    [],
+  );
+
   // Set up the runtime environment.
   useRuntime({
     content,
     iframeRef,
     setSrcdocError,
     handleCacheMiss,
+    vizCacheContents,
   });
 
   // Render the viz runner iframe.

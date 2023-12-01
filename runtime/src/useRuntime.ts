@@ -14,11 +14,13 @@ export const useRuntime = ({
   content,
   setSrcdocError,
   handleCacheMiss,
+  vizCacheContents,
 }: {
   iframeRef: RefObject<HTMLIFrameElement>;
   content: Content;
   setSrcdocError: (error: string | null) => void;
   handleCacheMiss: (vizId: string) => Promise<Content>;
+  vizCacheContents: Record<string, Content>;
 }) => {
   // This ref is used to skip the first mount.
   const initialMount = useRef(true);
@@ -55,7 +57,7 @@ export const useRuntime = ({
         },
       );
     }
-  }, [runtimeVersion, handleCacheMiss]);
+  }, [runtimeVersion]);
 
   // Used to debounce updates to the v3 runtime.
   const v3Timeout = useRef<number | undefined>(undefined);
@@ -91,6 +93,36 @@ export const useRuntime = ({
       }, 1000);
     }
   }, [content.files, runtimeVersion, v3Runtime]);
+
+  // Send updates of imported vizzes to the V3 runtime.
+  useEffect(() => {
+    if (initialMount.current === true) {
+      return;
+    }
+
+    console.log(
+      'TODO update the v3 runtime when imported vizzes change',
+    );
+
+    // // See if any of the vizzes we import from are interacting.
+    let isInteracting = false;
+    for (const vizId of Object.keys(vizCacheContents)) {
+      if (vizCacheContents[vizId].isInteracting) {
+        isInteracting = true;
+        break;
+      }
+    }
+    console.log('isInteracting', isInteracting);
+    // if (isInteracting.isInteracting) {
+    //   v3Run(content);
+    // } else {
+    //   // Otherwise, debounce the updates.
+    //   clearTimeout(v3Timeout.current);
+    //   v3Timeout.current = window.setTimeout(() => {
+    //     v3Run(content);
+    //   }, 1000);
+    // }
+  }, [vizCacheContents]);
 
   // Compute V2 updates on the main thread.
   useEffect(() => {
