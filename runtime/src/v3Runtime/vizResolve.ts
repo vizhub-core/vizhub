@@ -7,12 +7,9 @@ import { InputPluginOption } from 'rollup';
 import { extractVizImport } from './extractVizImport';
 import { Content, VizId, getFileText } from 'entities';
 import { VizCache } from './vizCache';
+import { ResolvedVizFileId } from './types';
 
-const debug = false;
-
-// A resolved viz file id is of the form
-// `{vizId}/{fileName}`
-type ResolvedVizFileId = string;
+const debug = true;
 
 export const parseId = (
   id: ResolvedVizFileId,
@@ -96,17 +93,31 @@ export const vizResolve = ({
     if (debug) {
       console.log('vizResolve: load() ' + id);
     }
-    // Parse vizId and fileName
-    const [vizId, fileName]: [VizId, string] = id.split(
-      '/',
-    ) as [VizId, string];
+
+    const { vizId, fileName } = parseId(id);
+
+    if (debug) {
+      console.log('  [vizResolve] vizId: ' + vizId);
+      console.log('  [vizResolve] fileName: ' + fileName);
+    }
 
     // For CSS imports, all we need to do here is
     // keep track of them so they can be injected
     // into the IFrame later.
     if (fileName.endsWith('.css')) {
+      if (debug) {
+        console.log(
+          '    [vizResolve] tracking CSS import for ' + id,
+        );
+      }
       trackCSSImport(id);
       return '';
+    }
+
+    if (debug) {
+      console.log(
+        '    [vizResolve] tracking JS import for ' + id,
+      );
     }
 
     // For JS imports, we need to recursively resolve

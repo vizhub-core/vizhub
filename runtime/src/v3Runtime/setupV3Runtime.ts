@@ -5,10 +5,11 @@ import {
   V3WindowMessage,
   V3WorkerMessage,
 } from './types';
-import { Content, VizId } from 'entities';
+import { Content, VizId, getFileText } from 'entities';
+import { parseId } from './vizResolve';
 
 // Flag for debugging.
-const debug = false;
+const debug = true;
 
 // Nothing happening.
 const IDLE = 'IDLE';
@@ -34,13 +35,12 @@ export type V3Runtime = {
 export const setupV3Runtime = ({
   iframe,
   setSrcdocError,
-  handleCacheMiss,
+  getLatestContent,
   initialContent,
 }: {
   iframe: HTMLIFrameElement;
-  // initialFiles: V3RuntimeFiles;
   setSrcdocError: (error: string | null) => void;
-  handleCacheMiss: (vizId: VizId) => Promise<Content>;
+  getLatestContent: (vizId: VizId) => Promise<Content>;
   initialContent: Content;
 }): V3Runtime => {
   // The "build worker", a Web Worker that does the building.
@@ -147,7 +147,7 @@ export const setupV3Runtime = ({
     if (message.type === 'contentRequest') {
       const { vizId } = message;
 
-      const content = await handleCacheMiss(vizId);
+      const content = await getLatestContent(vizId);
 
       const contentResponseMessage: V3WorkerMessage = {
         type: 'contentResponse',
@@ -278,7 +278,8 @@ export const setupV3Runtime = ({
 
   const run = (buildResult: V3BuildResult) => {
     return new Promise<void>((resolve) => {
-      const { src, warnings, errors } = buildResult;
+      const { src, warnings, errors, cssFiles } =
+        buildResult;
 
       // Handle build errors
       if (errors.length > 0) {
@@ -322,12 +323,46 @@ export const setupV3Runtime = ({
       }
 
       if (iframe.contentWindow) {
-        const message: V3WindowMessage = {
+        // For each cssFiles
+        for (const cssFile of cssFiles) {
+          const { vizId, fileName } = parseId(cssFile);
+
+          getLatestContent(vizId).then((content) => {
+            const src = getFileText(content, fileName);
+
+            if (src === null) {
+              // The file doesn't exist.
+              // TODO surface this error to the user
+              // in a nicer way than this.
+              console.warn(
+                `Imported CSS file ${fileName} doesn't exist.`,
+              );
+              return;
+            }
+
+            const runCSSMessage: V3WindowMessage = {
+              type: 'runCSS',
+              id: cssFile,
+              src,
+            };
+
+            if (debug) {
+              console.log('runCSSMessage', runCSSMessage);
+            }
+
+            iframe.contentWindow?.postMessage(
+              runCSSMessage,
+              window.location.origin,
+            );
+          });
+        }
+
+        const runJSMessage: V3WindowMessage = {
           type: 'runJS',
           src,
         };
         iframe.contentWindow.postMessage(
-          message,
+          runJSMessage,
           window.location.origin,
         );
       }

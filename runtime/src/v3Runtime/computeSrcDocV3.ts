@@ -50,18 +50,14 @@ export const computeSrcDocV3 = ({
         const render = () => {
           Viz.main(document.body, { state: window.state, setState });
         };
-        
         const setState = (next) => {
           window.state = next(window.state);
           render();
         };
-        
         const run = () => {
           setState((state) => state || {});
         }
-
         run();
-
         const runJS = (src) => {
           document.getElementById('injected-script')?.remove();
           const script = document.createElement('script');
@@ -70,18 +66,35 @@ export const computeSrcDocV3 = ({
           document.body.appendChild(script);
           run();
         };
-
-        onmessage = (message) => {
-          if(message.data.type === 'runJS') {
-            try {
-              runJS(message.data.src);
-              parent.postMessage({ type: 'runDone' }, "*");
-            } catch (error) {
-              parent.postMessage({ type: 'runError', error }, "*");
-            }
+        const runCSS = (src, id) => {
+          const styleElementId = 'injected-style' + id;
+          let style = document.getElementById(styleElementId);
+          if (!style) {
+            style = document.createElement('style');
+            style.type = 'text/css';
+            style.id = styleElementId;
+            document.head.appendChild(style);
           }
-          if(message.data.type === 'ping') {
-            parent.postMessage({ type: 'pong' }, "*");
+          style.textContent = src;
+        };
+        onmessage = (message) => {
+          switch (message.data.type) {
+            case 'runJS':
+              try {
+                runJS(message.data.src);
+                parent.postMessage({ type: 'runDone' }, "*");
+              } catch (error) {
+                parent.postMessage({ type: 'runError', error }, "*");
+              }
+              break;
+            case 'runCSS':
+              runCSS(message.data.src, message.data.id);
+              break;
+            case 'ping':
+              parent.postMessage({ type: 'pong' }, "*");
+              break;
+            default:
+              break;
           }
         }
       })();

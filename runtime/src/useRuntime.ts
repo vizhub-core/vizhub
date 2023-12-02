@@ -22,13 +22,11 @@ export const useRuntime = ({
   iframeRef,
   content,
   setSrcdocError,
-  handleCacheMiss,
   vizCacheContents,
 }: {
   iframeRef: RefObject<HTMLIFrameElement>;
   content: Content;
   setSrcdocError: (error: string | null) => void;
-  handleCacheMiss: (vizId: string) => Promise<Content>;
   vizCacheContents: Record<string, Content>;
 }) => {
   // This ref is used to skip the first mount.
@@ -45,6 +43,42 @@ export const useRuntime = ({
 
   const initialContentRef = useRef<Content | null>(content);
 
+  const vizCacheContentsRef = useRef(vizCacheContents);
+
+  useEffect(() => {
+    vizCacheContentsRef.current = vizCacheContents;
+  }, [vizCacheContents]);
+
+  // Handles cache misses for viz content,
+  // when a viz imports from another viz.
+  const getLatestContent = useCallback(
+    async (vizId: VizId): Promise<Content> => {
+      // Sanity check, should never happen.
+      if (!vizCacheContentsRef.current) {
+        throw new Error(
+          'vizCacheContentsRef.current is null',
+        );
+      }
+
+      const content = vizCacheContentsRef.current[vizId];
+
+      // If the viz content for this import is already tracked,
+      // then return it.
+      if (content) {
+        return content;
+      } else {
+        // TODO make this happen by:
+        // * Fetching the viz content from the server
+        // * Using a new API endpoint that returns the viz content
+        // * Ingesting the snapshot and incorporating it into the vizCacheContents
+        throw new Error(
+          `TODO client-side fetching of newly imported vizzes. Current workaround: refresh the page`,
+        );
+      }
+    },
+    [],
+  );
+
   // Set up the v3 runtime.
   useEffect(() => {
     if (runtimeVersion === 3) {
@@ -58,10 +92,17 @@ export const useRuntime = ({
             throw new Error('iframe is null');
           }
 
+          // Should never happen. Added to pacify TypeScript.
+          if (initialContentRef.current === null) {
+            throw new Error(
+              'initialContentRef.current is null',
+            );
+          }
+
           v3Runtime.current = setupV3Runtime({
             iframe,
             setSrcdocError,
-            handleCacheMiss,
+            getLatestContent,
             initialContent: initialContentRef.current,
           });
         },
