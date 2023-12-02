@@ -10,6 +10,7 @@ import {
   getHeight,
   imageFromBase64,
   ImageId,
+  VizId,
 } from 'entities';
 import { computeSrcDoc } from 'runtime';
 import { GetContentAtCommit } from '../getContentAtCommit';
@@ -17,6 +18,10 @@ import { takeScreenshot } from './takeScreenshot';
 import { generateImageId } from 'entities/src/Images';
 import { FetchImageMetadata } from './fetchImageMetadata';
 import { PollImageGenerationStatus } from './PollImageGenerationStatus';
+import {
+  VizCache,
+  createVizCache,
+} from 'runtime/src/v3Runtime/vizCache';
 
 const debug = false;
 
@@ -32,6 +37,7 @@ export const GetImage = (gateways: Gateways) => {
     saveImageMetadata,
     saveStoredImage,
     getStoredImage,
+    getContent,
   } = gateways;
 
   const getContentAtCommit = GetContentAtCommit(gateways);
@@ -92,10 +98,34 @@ export const GetImage = (gateways: Gateways) => {
       }
       const content: Content = contentResult.value;
 
+      const vizCache: VizCache = createVizCache({
+        initialContents: [content],
+        handleCacheMiss: async (vizId: VizId) => {
+          if (debug) {
+            console.log(
+              'Handling cache miss for vizId',
+              vizId,
+            );
+          }
+          const contentResult = await getContent(vizId);
+          if (contentResult.outcome === 'failure') {
+            console.log(
+              'Error when fetching content for viz cache:',
+            );
+            console.log(contentResult.error);
+            return null;
+          }
+
+          if (debug) {
+            console.log('Fetched content for viz cache');
+            console.log(contentResult.value.data);
+          }
+          return contentResult.value.data;
+        },
+      });
       // Generate the srcDoc.
-      // TODO refactor computeSrcDoc to a new package `runtime`
       const { initialSrcdoc, initialSrcdocError } =
-        await computeSrcDoc({ rollup, content });
+        await computeSrcDoc({ rollup, content, vizCache });
 
       if (initialSrcdocError) {
         console.log(
