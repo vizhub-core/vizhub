@@ -1,7 +1,9 @@
+import { KitchenSinkApp } from 'components';
+
 import './styles.css';
 
 export const KitchenSinkPage = () => {
-  return 'TODO kitchen sink';
+  return <KitchenSinkApp />;
 };
 
 KitchenSinkPage.path = '/vizhub-ui-kitchen-sink';
