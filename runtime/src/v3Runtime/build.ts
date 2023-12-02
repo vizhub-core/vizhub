@@ -63,16 +63,21 @@ export const build = async ({
   const content: Content = await vizCache.get(vizId);
 
   const indexJSContent = getFileText(content, 'index.js');
-
+  const cssFilesSet = new Set<string>();
   if (!indexJSContent) {
     errors.push({
       code: 'MISSING_INDEX_JS',
       message: 'Missing index.js',
     });
   } else {
+    const trackCSSImport = (cssFile: string) => {
+      cssFilesSet.add(cssFile);
+    };
     const inputOptions: RollupOptions = {
       input: './index.js',
-      plugins: [vizResolve(vizId, vizCache)],
+      plugins: [
+        vizResolve({ vizId, vizCache, trackCSSImport }),
+      ],
       onwarn: (warning: RollupLog) => {
         warnings.push(JSON.parse(JSON.stringify(warning)));
       },
@@ -113,53 +118,6 @@ export const build = async ({
         outputOptions.globals = globals;
       }
     }
-
-    // Invoke Rollup before the actual build to
-    // detect which vizzes are imported from.
-    // const vizImports: Array<VizImport> = [];
-
-    // Option A: Use <script> tags to import vizzes.
-    //
-    // After we have the viz imports, we can
-    // append the script tags to the HTML,
-    // much the same way that libraries are
-    // appended in the HTML.
-    //
-    // Pros:
-    //  * No need to bundle dependent vizzes with Rollup.
-    //  * When a dependent viz is large, e.g. containing
-    //    data files, that dependent viz is effectively
-    //    "cached" in the browser, and does not need to
-    //    be reloaded when the parent viz is reloaded.
-    //    This makes hot reloading fast when dependent
-    //    vizzes are large.
-
-    // Cons:
-    //  * Need to load vizzes from a VizHub CDN (net new).
-    //  * When a dependent viz is updated, the update is
-    //    _not_ immediately reflected, not amenable to
-    //    hot reloading.
-
-    // Option B: Bundle dependent vizzes with Rollup.
-    //
-    // After we have the viz imports, we can fetch them
-    // into the browser, and then bundle them with Rollup.
-    //
-    // Pros:
-    //  * No need to load vizzes from a VizHub CDN (net new).
-    //  * When a dependent viz is updated, the update can be
-    //    immediately reflected, amenable to hot reloading.
-    //  * The transitive dependencies can reside in memory,
-    //    leveraging ShareDB subscriptions to keep them up
-    //    to date.
-    //
-    // Cons:
-    //  * Need to bundle dependent vizzes with Rollup.
-    //  * When a dependent viz is large, e.g. containing
-    //    data files, that dependent viz is bundled with
-    //    the parent viz, and must be reloaded when the
-    //    parent viz is reloaded. This makes hot reloading
-    //    slow when dependent vizzes are large.
 
     try {
       if (debug) {
@@ -218,6 +176,7 @@ export const build = async ({
     warnings,
     src,
     pkg,
+    cssFiles: Array.from(cssFilesSet),
     time: Date.now() - startTime,
   };
 };

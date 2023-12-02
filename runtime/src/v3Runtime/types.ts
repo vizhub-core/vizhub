@@ -8,6 +8,11 @@ export type V3BuildResult = {
   errors: Array<V3BuildError>;
   warnings: Array<V3BuildError>;
   time: number;
+
+  // A list of CSS files to be injected into the IFrame.
+  // e.g. `['./styles.css']`
+  // TODO e.g. `['@curran/scatter-plot/styles.css']`
+  cssFiles: Array<string>;
 };
 
 // The shape of a build error.
