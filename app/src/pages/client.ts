@@ -11,6 +11,7 @@ import { SearchPage } from './SearchPage';
 import { PricingPage } from './PricingPage';
 import { AccountPage } from './AccountPage';
 import { ResourcesPage } from './ResourcesPage';
+import { KitchenSinkPage } from './KitchenSinkPage';
 
 // Note: order matters (profile page should come last)
 // Need to update `server.js` as well
@@ -27,5 +28,6 @@ export const pages = [
   AccountPage,
   SearchPage,
   ResourcesPage,
+  KitchenSinkPage,
   ProfilePage,
 ];
