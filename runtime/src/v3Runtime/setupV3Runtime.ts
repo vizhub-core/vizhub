@@ -1,6 +1,7 @@
 // @ts-ignore
 import Worker from './worker.ts?worker';
 import {
+  ResolvedVizFileId,
   V3BuildResult,
   V3WindowMessage,
   V3WorkerMessage,
@@ -276,6 +277,7 @@ export const setupV3Runtime = ({
     });
   };
 
+  let previousCSSFiles: Array<ResolvedVizFileId> = [];
   const run = (buildResult: V3BuildResult) => {
     return new Promise<void>((resolve) => {
       const { src, warnings, errors, cssFiles } =
@@ -340,6 +342,7 @@ export const setupV3Runtime = ({
               return;
             }
 
+            // TODO only inject CSS if it has changed.
             const runCSSMessage: V3WindowMessage = {
               type: 'runCSS',
               id: cssFile,
@@ -355,6 +358,27 @@ export const setupV3Runtime = ({
               window.location.origin,
             );
           });
+        }
+
+        // Detect which CSS files have been removed
+        // and remove them from the iframe.
+        const removedCSSFiles = previousCSSFiles.filter(
+          (id) => !cssFiles.includes(id),
+        );
+        previousCSSFiles = cssFiles;
+        if (debug) {
+          console.log('removedCSSFiles', removedCSSFiles);
+        }
+        for (const id of removedCSSFiles) {
+          const removeCSSMessage: V3WindowMessage = {
+            type: 'runCSS',
+            id,
+            src: '',
+          };
+          iframe.contentWindow?.postMessage(
+            removeCSSMessage,
+            window.location.origin,
+          );
         }
 
         const runJSMessage: V3WindowMessage = {

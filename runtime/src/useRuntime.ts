@@ -158,7 +158,7 @@ export const useRuntime = ({
         v3Run(content);
       }, v3RunDebounceMs);
     }
-  }, [content.files, runtimeVersion, v3Runtime]);
+  }, [content, runtimeVersion, v3Runtime]);
 
   // Send updates of imported vizzes to the V3 runtime.
   const previousVizCacheContents = useRef(vizCacheContents);
