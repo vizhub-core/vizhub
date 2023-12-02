@@ -15,13 +15,14 @@ const entries = Object.keys(stories)
       .substring(10)
       .split('.')[0]
       .replace('Story', '');
+    // @ts-ignore
     const component = stories[key].default;
     return { key, name, component };
   })
   .filter(({ key }) => key.includes('Story'));
 const entriesMap = new Map(entries.map((d) => [d.key, d]));
 
-function App() {
+export const KitchenSinkApp = () => {
   const [storyKey, setStoryKey] = useState(null);
   const [showSidebar, setShowSidebar] = useState(true);
   const Component = storyKey
@@ -42,6 +43,4 @@ function App() {
       </div>
     </div>
   );
-}
-
-export default App;
+};

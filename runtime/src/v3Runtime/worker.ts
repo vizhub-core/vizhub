@@ -4,7 +4,7 @@ import { createVizCache } from './vizCache';
 import { Content, VizId } from 'entities';
 import { V3WorkerMessage } from './types';
 
-const debug = true;
+const debug = false;
 
 // Tracks pending promises for 'contentResponse' messages
 const pendingContentResponsePromises = new Map();
