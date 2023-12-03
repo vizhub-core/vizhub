@@ -4,8 +4,9 @@ import { build } from './build';
 import { createVizCache } from './vizCache';
 import {
   sampleContent,
-  sampleContentForCSS,
+  sampleContentWithCSS,
   sampleContentVizImport,
+  sampleContentVizImportWithCSS,
 } from 'entities/test/fixtures';
 
 describe('v3 build', () => {
@@ -74,17 +75,17 @@ describe('v3 build', () => {
 
   it('Should build successfully with css imports', async () => {
     const vizCache = createVizCache({
-      initialContents: [sampleContentForCSS],
+      initialContents: [sampleContentWithCSS],
       handleCacheMiss: vi.fn(),
     });
     const buildResult = await build({
-      vizId: sampleContentForCSS.id,
+      vizId: sampleContentWithCSS.id,
       rollup,
       vizCache,
     });
     expect(vi.fn()).toHaveBeenCalledTimes(0);
 
-    // console.log(JSON.stringify(buildResult, null, 2));
+    console.log(JSON.stringify(buildResult, null, 2));
 
     expect(buildResult).toBeDefined();
     expect(buildResult.errors).toHaveLength(0);
@@ -98,7 +99,7 @@ describe('v3 build', () => {
       'EMPTY_BUNDLE',
     );
     expect(buildResult.cssFiles[0]).toBe(
-      'sample-content-for-css/styles.css',
+      'sample-content-with-css/styles.css',
     );
   });
 
@@ -139,33 +140,36 @@ describe('v3 build', () => {
     );
   });
 
-  // it('Import from viz: should build successfully with css imports', async () => {
-  //   const vizCache = createVizCache({
-  //     initialContents: [sampleContentForCSS],
-  //     handleCacheMiss: vi.fn(),
-  //   });
-  //   const buildResult = await build({
-  //     vizId: sampleContentForCSS.id,
-  //     rollup,
-  //     vizCache,
-  //   });
-  //   expect(vi.fn()).toHaveBeenCalledTimes(0);
+  it('Import from viz: should build successfully with css imports', async () => {
+    const vizCache = createVizCache({
+      initialContents: [
+        sampleContentWithCSS,
+        sampleContentVizImportWithCSS,
+      ],
+      handleCacheMiss: vi.fn(),
+    });
+    const buildResult = await build({
+      vizId: sampleContentVizImportWithCSS.id,
+      rollup,
+      vizCache,
+    });
+    expect(vi.fn()).toHaveBeenCalledTimes(0);
 
-  //   // console.log(JSON.stringify(buildResult, null, 2));
+    console.log(JSON.stringify(buildResult, null, 2));
 
-  //   expect(buildResult).toBeDefined();
-  //   expect(buildResult.errors).toHaveLength(0);
-  //   expect(buildResult.warnings).toHaveLength(1);
-  //   expect(buildResult.cssFiles).toHaveLength(1);
-  //   expect(buildResult.src).toBeDefined();
-  //   expect(buildResult.time).toBeDefined();
-  //   expect(buildResult.pkg).toBeUndefined();
+    expect(buildResult).toBeDefined();
+    expect(buildResult.errors).toHaveLength(0);
+    expect(buildResult.warnings).toHaveLength(1);
+    expect(buildResult.cssFiles).toHaveLength(1);
+    expect(buildResult.src).toBeDefined();
+    expect(buildResult.time).toBeDefined();
+    expect(buildResult.pkg).toBeUndefined();
 
-  //   expect(buildResult.warnings[0].code).toBe(
-  //     'EMPTY_BUNDLE',
-  //   );
-  //   expect(buildResult.cssFiles[0]).toBe(
-  //     'sampleContent/styles.css',
-  //   );
-  // });
+    expect(buildResult.warnings[0].code).toBe(
+      'EMPTY_BUNDLE',
+    );
+    expect(buildResult.cssFiles[0]).toBe(
+      'sample-content-with-css/styles.css',
+    );
+  });
 });

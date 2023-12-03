@@ -434,8 +434,8 @@ export const sampleContent: Content = {
 };
 
 // Sample content for testing CSS imports
-export const sampleContentForCSS: Content = {
-  id: 'sample-content-for-css',
+export const sampleContentWithCSS: Content = {
+  id: 'sample-content-with-css',
   files: {
     '5473849': {
       name: 'index.js',
@@ -467,4 +467,20 @@ export const sampleContentVizImport: Content = {
     },
   },
   title: 'Sample Content for Viz Importing',
+};
+
+// Sample content for testing CSS imports
+// across vizzes
+export const sampleContentVizImportWithCSS: Content = {
+  id: 'sample-content-viz-import-with-css',
+  files: {
+    '7548392': {
+      name: 'index.js',
+      text: `
+        // Import for the CSS side effect
+        import '@joe/sample-content-with-css';
+      `,
+    },
+  },
+  title: 'Sample Content for Viz Importing with CSS',
 };
