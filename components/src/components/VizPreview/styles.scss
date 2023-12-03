@@ -4,7 +4,7 @@
   justify-content: space-between;
   background-color: white;
   box-shadow: var(--vh-box-shadow);
-  border-radius: 25px;
+  border-radius: 8px;
   cursor: pointer;
 
   /* Aspect ratio, original thumbnail size: 230 X 120*/
@@ -55,12 +55,11 @@
     justify-content: flex-start;
 
     .last-updated-date {
-      color: var(--vh-foreground-color-light);
-      font-size: var(--vh-small-font-size);
-      padding-bottom: 4px;
+      padding-top: 16px;
     }
     .title {
       font-weight: bold;
+      font-size: 20px;
 
       /* Truncate text at 2 lines. */
       /* Inspired by https://developer.mozilla.org/en-US/docs/Web/CSS/-webkit-line-clamp */
@@ -90,6 +89,12 @@
         margin-left: 12px;
       }
     }
+  }
+  .last-updated-date,
+  .owner-name {
+    color: var(--vh-foreground-color-light);
+    font-weight: 500;
+    line-height: 16px;
   }
 }
 

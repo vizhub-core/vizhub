@@ -1,9 +1,11 @@
 .vh-upvote-widget {
   display: flex;
   align-items: center;
-  font-size: 12px;
+  // font-size: 12px;
   gap: 4px;
   svg {
     cursor: pointer;
   }
+  color: var(--vh-foreground-color-light);
+  font-weight: 500;
 }

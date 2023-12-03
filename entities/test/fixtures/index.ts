@@ -32,6 +32,7 @@ import {
   MigrationStatus,
   MigrationBatch,
   ImageMetadata,
+  Content,
 } from 'entities';
 import { v3RuntimeDemoFiles } from './v3RuntimeDemoFiles';
 import { StoredImage } from '../../src/Images';
@@ -410,3 +411,44 @@ export const fakeSnapshot = <T>(data: T) => ({
   v: 1,
   type: 'json1',
 });
+
+// Sample content for testing JS imports
+export const sampleContent: Content = {
+  id: 'sampleContent',
+  files: {
+    '7548392': {
+      name: 'index.js',
+      text: `
+        import { innerMessage } from './message';
+        export const message = "Outer " + innerMessage;
+      `,
+    },
+    '6714854': {
+      name: 'message.js',
+      text: `
+        export const innerMessage = "Inner";
+      `,
+    },
+  },
+  title: 'Sample Content for Exporting',
+};
+
+// Sample content for testing CSS imports
+export const sampleContentForCSS: Content = {
+  id: 'sampleContent',
+  files: {
+    '5473849': {
+      name: 'index.js',
+      text: `
+        import './styles.css';
+      `,
+    },
+    '0175432': {
+      name: 'styles.css',
+      text: `
+        body { color: red; }
+      `,
+    },
+  },
+  title: 'Sample Content for CSS Importing',
+};

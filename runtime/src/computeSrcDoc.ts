@@ -31,14 +31,15 @@ export const computeSrcDoc = async ({
     initialSrcdoc =
       runtimeVersion === 2
         ? await computeSrcDocV2(content)
-        : computeSrcDocV3(
-            await build({
+        : await computeSrcDocV3({
+            vizCache,
+            buildResult: await build({
               vizId: content.id,
               enableSourcemap: true,
               rollup,
               vizCache,
             }),
-          );
+          });
   } catch (e) {
     initialSrcdocError = e.toString();
   }

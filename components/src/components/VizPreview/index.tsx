@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { UpvoteWidget } from '../UpvoteWidget';
-import './styles.scss';
 import { Spinner } from '../..';
+import './styles.scss';
 
 // If we're in thr browser
 let canvas: HTMLCanvasElement;
@@ -62,10 +62,10 @@ export const VizPreview = ({
       </div>
 
       <div className="content-container">
+        <div className="title">{title}</div>
         <div className="last-updated-date">
           {lastUpdatedDateFormatted}
         </div>
-        <div className="title">{title}</div>
       </div>
       <div className="meta-container">
         <div className="owner">

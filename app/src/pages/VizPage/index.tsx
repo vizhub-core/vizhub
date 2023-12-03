@@ -22,6 +22,7 @@ import { VizKit } from 'api/src/VizKit';
 import {
   getConnection,
   useData,
+  useDataRecord,
   useShareDBDoc,
   useShareDBDocData,
   useShareDBDocPresence,
@@ -50,7 +51,6 @@ const vizKit = VizKit({ baseUrl: '/api' });
 
 export type VizPageData = PageData & {
   infoSnapshot: Snapshot<Info>;
-  contentSnapshot: Snapshot<Content>;
   ownerUserSnapshot: Snapshot<User>;
   forkedFromInfoSnapshot: Snapshot<Info> | null;
   forkedFromOwnerUserSnapshot: Snapshot<User> | null;
@@ -75,7 +75,6 @@ export const VizPage: Page = ({
   // Unpack server-rendered data.
   const {
     infoSnapshot,
-    contentSnapshot,
     ownerUserSnapshot,
     initialReadmeHTML,
     forkedFromInfoSnapshot,
@@ -97,12 +96,20 @@ export const VizPage: Page = ({
   const submitInfoOperation =
     useSubmitOperation<Info>(infoShareDBDoc);
 
-  const contentShareDBDoc: ShareDBDoc<Content> =
-    useShareDBDoc<Content>(contentSnapshot, 'Content');
-  const content: Content = useData(
-    contentSnapshot,
-    contentShareDBDoc,
+  const vizCacheShareDBDocs = useShareDBDocs(
+    vizCacheContentSnapshots,
+    'Content',
   );
+  const vizCacheContents: Record<string, Content> =
+    useDataRecord(
+      vizCacheContentSnapshots,
+      vizCacheShareDBDocs,
+    );
+
+  const contentShareDBDoc: ShareDBDoc<Content> =
+    vizCacheShareDBDocs[id];
+  const content: Content = vizCacheContents[id];
+
   const submitContentOperation: (
     next: (content: Content) => Content,
   ) => void = useSubmitOperation<Content>(
@@ -126,22 +133,6 @@ export const VizPage: Page = ({
     forkedFromOwnerUserSnapshot,
     'User',
   );
-
-  // const vizCacheShareDBDocs: Record<
-  //   string,
-  //   ShareDBDoc<Content>
-  // > = useShareDBDocs<Content>(
-  //   vizCacheContentSnapshots,
-  //   'Content',
-  // );
-  // const vizCacheContents: Content = useData(
-  //   contentSnapshot,
-  //   contentShareDBDoc,
-  // );
-
-  // This updates dynamically whenever imported vizzes are updated.
-  const vizCacheContents: Record<string, Content> =
-    useShareDBDocsData(vizCacheContentSnapshots, 'Content');
 
   // /////////////////////////////////////////
   ////////////// URL State ///////////////////
