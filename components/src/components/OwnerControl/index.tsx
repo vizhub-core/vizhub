@@ -2,6 +2,11 @@ import { useMemo } from 'react';
 import { UserId } from 'entities';
 import { Form, Dropdown } from '../bootstrap';
 
+export type PossibleOwner = {
+  id: UserId;
+  label: string;
+};
+
 // Allows the user to select an owner from a list of possible owners.
 export const OwnerControl = ({
   owner,
@@ -10,10 +15,7 @@ export const OwnerControl = ({
 }: {
   owner: UserId;
   setOwner: (owner: UserId) => void;
-  possibleOwners: Array<{
-    id: UserId;
-    label: string;
-  }>;
+  possibleOwners: Array<PossibleOwner>;
 }) => {
   // Possible owners that are not the current owner.
   const otherPossibleOwners = useMemo(
@@ -53,7 +55,7 @@ export const OwnerControl = ({
         </Dropdown.Menu>
       </Dropdown>
       <Form.Text className="text-muted">
-        Select which account will own the viz.
+        The account that owns the viz.
       </Form.Text>
     </Form.Group>
   );
