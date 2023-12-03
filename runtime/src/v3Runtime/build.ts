@@ -16,6 +16,7 @@ import { vizResolve } from './vizResolve';
 import { VizCache } from './vizCache';
 import { vizLoadCSS } from './vizLoadCSS';
 import { vizLoadJS } from './vizLoadJS';
+import { vizLoadDSV } from './vizLoadDSV';
 
 const debug = false;
 
@@ -80,9 +81,9 @@ export const build = async ({
       plugins: [
         vizResolve({ vizId }),
         // vizLoad({ vizCache, trackCSSImport }),
-        vizLoadCSS({ vizCache, trackCSSImport }),
+        vizLoadCSS({ trackCSSImport }),
+        vizLoadDSV({ vizCache }),
         vizLoadJS({ vizCache }),
-        // vizLoadCSV({ vizCache }),
 
         // cssResolve
         // csvResolve

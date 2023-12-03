@@ -453,6 +453,28 @@ export const sampleContentWithCSS: Content = {
   title: 'Sample Content for CSS Importing',
 };
 
+export const sampleContentWithCSV: Content = {
+  id: 'sample-content-with-csv',
+  files: {
+    '5473849': {
+      name: 'index.js',
+      text: `
+        import data from './data.csv';
+        export { data };
+      `,
+    },
+    '0175432': {
+      name: 'data.csv',
+      text: `"sepal.length","sepal.width","petal.length","petal.width","variety"
+      5.1,3.5,1.4,.2,"Setosa"
+      4.9,3,1.4,.2,"Setosa"
+      4.7,3.2,1.3,.2,"Setosa"
+      4.6,3.1,1.5,.2,"Setosa"`,
+    },
+  },
+  title: 'Sample Content for CSV Importing',
+};
+
 // Sample content for testing JS imports
 // across vizzes
 export const sampleContentVizImport: Content = {

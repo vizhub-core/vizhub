@@ -1,5 +1,4 @@
 import { InputPluginOption } from 'rollup';
-import { VizCache } from './vizCache';
 import { ResolvedVizFileId } from './types';
 import { parseId } from './parseId';
 
@@ -7,10 +6,8 @@ const debug = false;
 
 // Responsible for tracking which CSS files are imported.
 export const vizLoadCSS = ({
-  vizCache,
   trackCSSImport,
 }: {
-  vizCache: VizCache;
   trackCSSImport: (cssFile: ResolvedVizFileId) => void;
 }): InputPluginOption => ({
   name: 'vizLoadCSS',

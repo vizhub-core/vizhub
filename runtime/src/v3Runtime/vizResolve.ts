@@ -41,7 +41,8 @@ export const vizResolve = ({
       // e.g. `import { foo } from './foo'`
       if (
         !fileName.endsWith('.js') &&
-        !fileName.endsWith('.css')
+        !fileName.endsWith('.css') &&
+        !fileName.endsWith('.csv')
       ) {
         fileName += '.js';
       }

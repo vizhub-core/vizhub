@@ -7,6 +7,7 @@ import {
   sampleContentWithCSS,
   sampleContentVizImport,
   sampleContentVizImportWithCSS,
+  sampleContentWithCSV,
 } from 'entities/test/fixtures';
 
 describe('v3 build', () => {
@@ -85,7 +86,7 @@ describe('v3 build', () => {
     });
     expect(vi.fn()).toHaveBeenCalledTimes(0);
 
-    console.log(JSON.stringify(buildResult, null, 2));
+    // console.log(JSON.stringify(buildResult, null, 2));
 
     expect(buildResult).toBeDefined();
     expect(buildResult.errors).toHaveLength(0);
@@ -101,6 +102,31 @@ describe('v3 build', () => {
     expect(buildResult.cssFiles[0]).toBe(
       'sample-content-with-css/styles.css',
     );
+  });
+
+  it('Should build successfully with csv imports', async () => {
+    const vizCache = createVizCache({
+      initialContents: [sampleContentWithCSV],
+      handleCacheMiss: vi.fn(),
+    });
+    const buildResult = await build({
+      vizId: sampleContentWithCSV.id,
+      rollup,
+      vizCache,
+    });
+    expect(vi.fn()).toHaveBeenCalledTimes(0);
+
+    console.log(JSON.stringify(buildResult, null, 2));
+
+    expect(buildResult).toBeDefined();
+    expect(buildResult.errors).toHaveLength(0);
+    expect(buildResult.warnings).toHaveLength(0);
+    expect(buildResult.cssFiles).toHaveLength(0);
+    expect(buildResult.src).toBeDefined();
+    expect(buildResult.time).toBeDefined();
+    expect(buildResult.pkg).toBeUndefined();
+
+    expect(buildResult.src).toContain('sepal.width');
   });
 
   it('Import from viz: should build successfully with valid inputs', async () => {
@@ -155,7 +181,7 @@ describe('v3 build', () => {
     });
     expect(vi.fn()).toHaveBeenCalledTimes(0);
 
-    console.log(JSON.stringify(buildResult, null, 2));
+    // console.log(JSON.stringify(buildResult, null, 2));
 
     expect(buildResult).toBeDefined();
     expect(buildResult.errors).toHaveLength(0);
