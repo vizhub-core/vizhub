@@ -5,7 +5,7 @@ import { VizCache } from './vizCache';
 import { ResolvedVizFileId } from './types';
 import { parseId } from './parseId';
 
-const debug = true;
+const debug = false;
 
 // Responsible for loading CSV and TSV files, which are
 // in general called Delimiter-Separated Values (DSV).

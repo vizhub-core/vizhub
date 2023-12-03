@@ -193,13 +193,23 @@ export const useRuntime = ({
         break;
       }
     }
-    console.log('isInteracting', isInteracting);
+    if (debug) {
+      console.log('isInteracting', isInteracting);
+    }
+    // Sanity check, should never happen.
+    if (v3Runtime.current === null) {
+      throw new Error('v3Runtime.current is null');
+    }
     if (isInteracting) {
       v3Runtime.current.invalidateVizCache(changedVizIds);
     } else {
       // Otherwise, debounce the updates.
       clearTimeout(v3Timeout.current);
       v3Timeout.current = window.setTimeout(() => {
+        // Sanity check, should never happen.
+        if (v3Runtime.current === null) {
+          throw new Error('v3Runtime.current is null');
+        }
         v3Runtime.current.invalidateVizCache(changedVizIds);
       }, v3RunDebounceMs);
     }

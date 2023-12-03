@@ -1,7 +1,7 @@
 import { getFileText } from 'entities';
 import { ResolvedVizFileId, V3BuildResult } from './types';
-import { parseId } from './vizResolve';
 import { VizCache } from './vizCache';
+import { parseId } from './parseId';
 
 const debug = false;
 
