@@ -414,7 +414,7 @@ export const fakeSnapshot = <T>(data: T) => ({
 
 // Sample content for testing JS imports
 export const sampleContent: Content = {
-  id: 'sampleContent',
+  id: 'sample-content',
   files: {
     '7548392': {
       name: 'index.js',
@@ -435,7 +435,7 @@ export const sampleContent: Content = {
 
 // Sample content for testing CSS imports
 export const sampleContentForCSS: Content = {
-  id: 'sampleContent',
+  id: 'sample-content-for-css',
   files: {
     '5473849': {
       name: 'index.js',
@@ -451,4 +451,20 @@ export const sampleContentForCSS: Content = {
     },
   },
   title: 'Sample Content for CSS Importing',
+};
+
+// Sample content for testing JS imports
+// across vizzes
+export const sampleContentVizImport: Content = {
+  id: 'sample-content-viz-import',
+  files: {
+    '7548392': {
+      name: 'index.js',
+      text: `
+        import { message } from '@joe/sample-content';
+        export const message2 = "Imported from viz: " + message;
+      `,
+    },
+  },
+  title: 'Sample Content for Viz Importing',
 };

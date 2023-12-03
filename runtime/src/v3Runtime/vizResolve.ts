@@ -89,7 +89,7 @@ export const vizResolve = ({
 
   // `id` here is of the form
   // `{vizId}/{fileName}`
-  load: async (id: string) => {
+  load: async (id: ResolvedVizFileId) => {
     if (debug) {
       console.log('vizResolve: load() ' + id);
     }
