@@ -4,6 +4,7 @@ import {
   Snapshot,
   User,
   getUserDisplayName,
+  timestampToDate,
 } from 'entities';
 import { VizPreview } from 'components/src/components/VizPreview';
 import { useShareDBDocData } from '../useShareDBDocData';
@@ -24,7 +25,7 @@ export const VizPreviewPresenter = ({
     'Info',
   );
 
-  const { id, title, end, updated } = info;
+  const { id, title, end, updated, upvotesCount } = info;
   const { userName, picture } = ownerUser;
 
   const ownerName = useMemo(
@@ -37,20 +38,25 @@ export const VizPreviewPresenter = ({
     [end, thumbnailWidth],
   );
 
-  // // TODO add lastUpdatedDateFormatted
-  // use updated
-  // const lastUpdatedDateFormatted =
-  //   useMemo();
-  //   // () => formatLastUpdatedDate(lastUpdatedDate),
-  //   // [lastUpdatedDate],
+  const lastUpdatedDateFormatted = useMemo(() => {
+    const date = timestampToDate(updated);
+    // Example: "January 1, 2020"
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+  }, [updated]);
 
   return (
     <VizPreview
       title={title}
       thumbnailImageURL={thumbnailImageURL}
+      lastUpdatedDateFormatted={lastUpdatedDateFormatted}
       ownerName={ownerName}
       ownerAvatarURL={picture}
       href={`/${userName}/${id}`}
+      upvotesCount={upvotesCount}
     />
   );
 };

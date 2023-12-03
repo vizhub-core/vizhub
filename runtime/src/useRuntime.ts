@@ -12,7 +12,7 @@ import {
 } from 'entities';
 import { V3Runtime } from './v3Runtime/setupV3Runtime';
 
-const debug = true;
+const debug = false;
 
 // Debounce the v3 runtime updates when not interacting
 // by this many milliseconds.
