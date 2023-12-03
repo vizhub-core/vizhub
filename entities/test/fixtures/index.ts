@@ -414,7 +414,7 @@ export const fakeSnapshot = <T>(data: T) => ({
 
 // Sample content for testing JS imports
 export const sampleContent: Content = {
-  id: 'sampleContent',
+  id: 'sample-content',
   files: {
     '7548392': {
       name: 'index.js',
@@ -434,8 +434,8 @@ export const sampleContent: Content = {
 };
 
 // Sample content for testing CSS imports
-export const sampleContentForCSS: Content = {
-  id: 'sampleContent',
+export const sampleContentWithCSS: Content = {
+  id: 'sample-content-with-css',
   files: {
     '5473849': {
       name: 'index.js',
@@ -451,4 +451,58 @@ export const sampleContentForCSS: Content = {
     },
   },
   title: 'Sample Content for CSS Importing',
+};
+
+export const sampleContentWithCSV: Content = {
+  id: 'sample-content-with-csv',
+  files: {
+    '5473849': {
+      name: 'index.js',
+      text: `
+        import data from './data.csv';
+        export { data };
+      `,
+    },
+    '0175432': {
+      name: 'data.csv',
+      text: `"sepal.length","sepal.width","petal.length","petal.width","variety"
+      5.1,3.5,1.4,.2,"Setosa"
+      4.9,3,1.4,.2,"Setosa"
+      4.7,3.2,1.3,.2,"Setosa"
+      4.6,3.1,1.5,.2,"Setosa"`,
+    },
+  },
+  title: 'Sample Content for CSV Importing',
+};
+
+// Sample content for testing JS imports
+// across vizzes
+export const sampleContentVizImport: Content = {
+  id: 'sample-content-viz-import',
+  files: {
+    '7548392': {
+      name: 'index.js',
+      text: `
+        import { message } from '@joe/sample-content';
+        export const message2 = "Imported from viz: " + message;
+      `,
+    },
+  },
+  title: 'Sample Content for Viz Importing',
+};
+
+// Sample content for testing CSS imports
+// across vizzes
+export const sampleContentVizImportWithCSS: Content = {
+  id: 'sample-content-viz-import-with-css',
+  files: {
+    '7548392': {
+      name: 'index.js',
+      text: `
+        // Import for the CSS side effect
+        import '@joe/sample-content-with-css';
+      `,
+    },
+  },
+  title: 'Sample Content for Viz Importing with CSS',
 };

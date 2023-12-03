@@ -5,32 +5,16 @@
 // Combines functionalities of 'virtual' and 'importFromViz' plugins
 import { InputPluginOption } from 'rollup';
 import { extractVizImport } from './extractVizImport';
-import { Content, VizId, getFileText } from 'entities';
-import { VizCache } from './vizCache';
+import { VizId } from 'entities';
 import { ResolvedVizFileId } from './types';
+import { parseId } from './parseId';
 
 const debug = false;
 
-export const parseId = (
-  id: ResolvedVizFileId,
-): {
-  vizId: VizId;
-  fileName: string;
-} => {
-  const [vizId, fileName]: [VizId, string] = id.split(
-    '/',
-  ) as [VizId, string];
-  return { vizId, fileName };
-};
-
 export const vizResolve = ({
   vizId,
-  vizCache,
-  trackCSSImport,
 }: {
   vizId: VizId;
-  vizCache: VizCache;
-  trackCSSImport: (cssFile: ResolvedVizFileId) => void;
 }): InputPluginOption => ({
   name: 'vizResolve',
   resolveId: (
@@ -38,7 +22,7 @@ export const vizResolve = ({
     importer: string | undefined,
   ): ResolvedVizFileId | undefined => {
     if (debug) {
-      console.log('vizResolve: resolveId() ' + id);
+      console.log('[vizIdResolve] resolveId() ' + id);
       console.log('  importer: ' + importer);
     }
 
@@ -57,7 +41,8 @@ export const vizResolve = ({
       // e.g. `import { foo } from './foo'`
       if (
         !fileName.endsWith('.js') &&
-        !fileName.endsWith('.css')
+        !fileName.endsWith('.css') &&
+        !fileName.endsWith('.csv')
       ) {
         fileName += '.js';
       }
@@ -85,44 +70,5 @@ export const vizResolve = ({
 
     // If neither condition is met, return null
     return undefined;
-  },
-
-  // `id` here is of the form
-  // `{vizId}/{fileName}`
-  load: async (id: string) => {
-    if (debug) {
-      console.log('vizResolve: load() ' + id);
-    }
-
-    const { vizId, fileName } = parseId(id);
-
-    if (debug) {
-      console.log('  [vizResolve] vizId: ' + vizId);
-      console.log('  [vizResolve] fileName: ' + fileName);
-    }
-
-    // For CSS imports, all we need to do here is
-    // keep track of them so they can be injected
-    // into the IFrame later.
-    if (fileName.endsWith('.css')) {
-      if (debug) {
-        console.log(
-          '    [vizResolve] tracking CSS import for ' + id,
-        );
-      }
-      trackCSSImport(id);
-      return '';
-    }
-
-    if (debug) {
-      console.log(
-        '    [vizResolve] tracking JS import for ' + id,
-      );
-    }
-
-    // For JS imports, we need to recursively resolve
-    // the imports of the imported viz.
-    const content: Content = await vizCache.get(vizId);
-    return getFileText(content, fileName);
   },
 });
