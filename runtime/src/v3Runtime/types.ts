@@ -48,7 +48,7 @@ export type V3WorkerMessage =
   //  * When the main thread requests a build.
   | {
       type: 'buildRequest';
-      content: Content;
+      vizId: VizId;
       enableSourcemap: boolean;
     }
 

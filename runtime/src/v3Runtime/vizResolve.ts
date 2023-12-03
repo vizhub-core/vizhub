@@ -9,7 +9,7 @@ import { Content, VizId, getFileText } from 'entities';
 import { VizCache } from './vizCache';
 import { ResolvedVizFileId } from './types';
 
-const debug = true;
+const debug = false;
 
 export const parseId = (
   id: ResolvedVizFileId,

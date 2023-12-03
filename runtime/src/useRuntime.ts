@@ -12,6 +12,8 @@ import {
 } from 'entities';
 import { V3Runtime } from './v3Runtime/setupV3Runtime';
 
+const debug = true;
+
 // Debounce the v3 runtime updates when not interacting
 // by this many milliseconds.
 const v3RunDebounceMs = 1000;
@@ -19,13 +21,13 @@ const v3RunDebounceMs = 1000;
 // Sets up either the v2 or v3 runtime environment.
 // Meant to support dynamic switching between the two.
 export const useRuntime = ({
-  iframeRef,
   content,
+  iframeRef,
   setSrcdocError,
   vizCacheContents,
 }: {
-  iframeRef: RefObject<HTMLIFrameElement>;
   content: Content;
+  iframeRef: RefObject<HTMLIFrameElement>;
   setSrcdocError: (error: string | null) => void;
   vizCacheContents: Record<string, Content>;
 }) => {
@@ -40,8 +42,6 @@ export const useRuntime = ({
   );
 
   const v3Runtime = useRef<V3Runtime | null>(null);
-
-  const initialContentRef = useRef<Content | null>(content);
 
   const vizCacheContentsRef = useRef(vizCacheContents);
 
@@ -92,18 +92,11 @@ export const useRuntime = ({
             throw new Error('iframe is null');
           }
 
-          // Should never happen. Added to pacify TypeScript.
-          if (initialContentRef.current === null) {
-            throw new Error(
-              'initialContentRef.current is null',
-            );
-          }
-
           v3Runtime.current = setupV3Runtime({
+            vizId: content.id,
             iframe,
             setSrcdocError,
             getLatestContent,
-            initialContent: initialContentRef.current,
           });
         },
       );
@@ -114,51 +107,50 @@ export const useRuntime = ({
   const v3Timeout = useRef<number | undefined>(undefined);
 
   // Executes a "run" on the v3 runtime when the entry viz changes.
-  const v3Run = useCallback(
-    (content: Content) => {
-      if (v3Runtime.current && content) {
-        v3Runtime.current.handleCodeChange(content);
-      }
-    },
-    [v3Runtime],
-  );
+  // const v3Run = useCallback(
+  //   (content: Content) => {
+  //     if (v3Runtime.current && content) {
+  //       v3Runtime.current.handleCodeChange(content);
+  //       console.log('Code change');
+  //       console.log(JSON.stringify(content));
+  //       // v3Runtime.current.invalidateVizCache([content.id]);
+  //     }
+  //   },
+  //   [content],
+  // );
 
   // Executes a "run" on the v3 runtime when any imported viz changes.
   // Happens whenever vizCacheContents changes.
-  const v3RunImports = useCallback(
-    (changedVizIds: Array<VizId>) => {
-      if (v3Runtime.current && content) {
-        // console.log(
-        //   'TODO invalidateVizCache with ids: ' +
-        //     changedVizIds,
-        // );
-        v3Runtime.current.invalidateVizCache(changedVizIds);
-      }
-    },
-    [v3Runtime],
-  );
+  // const v3RunImports = useCallback(
+  //   (changedVizIds: Array<VizId>) => {
+  //     if (v3Runtime.current) {
 
-  // Send file updates to the V3 runtime
-  useEffect(() => {
-    // We don't need to execute a "run" on first render,
-    // because SSR handles the initial run by injecting
-    // the srcdoc into the page server-side.
-    if (initialMount.current === true) {
-      return;
-    }
+  //     }
+  //   },
+  //   [],
+  // );
 
-    // If we're 'interacting' using code widgets,
-    // we want to hot reload as frequently as possible.
-    if (content.isInteracting) {
-      v3Run(content);
-    } else {
-      // Otherwise, debounce the updates.
-      clearTimeout(v3Timeout.current);
-      v3Timeout.current = window.setTimeout(() => {
-        v3Run(content);
-      }, v3RunDebounceMs);
-    }
-  }, [content, runtimeVersion, v3Runtime]);
+  // // Send file updates to the V3 runtime
+  // useEffect(() => {
+  //   // We don't need to execute a "run" on first render,
+  //   // because SSR handles the initial run by injecting
+  //   // the srcdoc into the page server-side.
+  //   if (initialMount.current === true) {
+  //     return;
+  //   }
+
+  //   // If we're 'interacting' using code widgets,
+  //   // we want to hot reload as frequently as possible.
+  //   if (content.isInteracting) {
+  //     v3Run(content);
+  //   } else {
+  //     // Otherwise, debounce the updates.
+  //     clearTimeout(v3Timeout.current);
+  //     v3Timeout.current = window.setTimeout(() => {
+  //       v3Run(content);
+  //     }, v3RunDebounceMs);
+  //   }
+  // }, [content, runtimeVersion, v3Runtime]);
 
   // Send updates of imported vizzes to the V3 runtime.
   const previousVizCacheContents = useRef(vizCacheContents);
@@ -182,7 +174,12 @@ export const useRuntime = ({
     });
     previousVizCacheContents.current = vizCacheContents;
 
-    console.log('changedVizIds', changedVizIds);
+    if (debug) {
+      console.log(
+        '[useRuntime] changedVizIds',
+        changedVizIds,
+      );
+    }
 
     if (changedVizIds.length === 0) {
       return;
@@ -198,12 +195,12 @@ export const useRuntime = ({
     }
     console.log('isInteracting', isInteracting);
     if (isInteracting) {
-      v3RunImports(changedVizIds);
+      v3Runtime.current.invalidateVizCache(changedVizIds);
     } else {
       // Otherwise, debounce the updates.
       clearTimeout(v3Timeout.current);
       v3Timeout.current = window.setTimeout(() => {
-        v3RunImports(changedVizIds);
+        v3Runtime.current.invalidateVizCache(changedVizIds);
       }, v3RunDebounceMs);
     }
   }, [vizCacheContents]);

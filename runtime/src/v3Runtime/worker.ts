@@ -40,7 +40,7 @@ addEventListener('message', async ({ data }) => {
 
   switch (message.type) {
     case 'buildRequest': {
-      const { content, enableSourcemap } = message;
+      const { vizId, enableSourcemap } = message;
 
       if (debug) {
         console.log(
@@ -49,14 +49,11 @@ addEventListener('message', async ({ data }) => {
         );
       }
 
-      // Update viz cache with the latest version
-      vizCache.set(content);
-
       // Post the result of the build process
       const responseMessage: V3WorkerMessage = {
         type: 'buildResponse',
         buildResult: await build({
-          vizId: content.id,
+          vizId,
           enableSourcemap,
           rollup,
           vizCache,

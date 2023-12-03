@@ -10,7 +10,7 @@ import { Content, VizId, getFileText } from 'entities';
 import { parseId } from './vizResolve';
 
 // Flag for debugging.
-const debug = true;
+const debug = false;
 
 // Nothing happening.
 const IDLE = 'IDLE';
@@ -34,15 +34,15 @@ export type V3Runtime = {
 };
 
 export const setupV3Runtime = ({
+  vizId,
   iframe,
   setSrcdocError,
   getLatestContent,
-  initialContent,
 }: {
+  vizId: VizId;
   iframe: HTMLIFrameElement;
   setSrcdocError: (error: string | null) => void;
   getLatestContent: (vizId: VizId) => Promise<Content>;
-  initialContent: Content;
 }): V3Runtime => {
   // The "build worker", a Web Worker that does the building.
   const worker = new Worker();
@@ -84,12 +84,6 @@ export const setupV3Runtime = ({
       console.log('state', state);
     }, 1000);
   }
-
-  // Tracks the latest content.
-  // Note: This must be defined before the first call
-  // to `runLatestContent`, such as if an imported viz changes
-  // before the entry viz is changed.
-  let latestContent: Content = initialContent;
 
   // Pending promise resolvers.
   let pendingBuildPromise:
@@ -169,7 +163,7 @@ export const setupV3Runtime = ({
         message,
       );
       // Leverage existing infra for executing the hot reloading.
-      runLatestContent();
+      handleCodeChange();
     }
   });
 
@@ -196,19 +190,13 @@ export const setupV3Runtime = ({
     }
   });
 
-  const runLatestContent = () => {
+  const handleCodeChange = () => {
     if (state === IDLE) {
       state = ENQUEUED;
       update();
     } else if (state === PENDING_CLEAN) {
       state = PENDING_DIRTY;
     }
-  };
-
-  // This runs when any file is changed.
-  const handleCodeChange = (content: Content): void => {
-    latestContent = content;
-    runLatestContent();
   };
 
   // This runs when one or more imported vizzes are changed.
@@ -245,11 +233,8 @@ export const setupV3Runtime = ({
     if (debug) {
       console.log('update: before run');
     }
-    if (latestContent === null) {
-      // Should never happen.
-      throw new Error('latestContent is null');
-    }
-    await run(await build(latestContent));
+
+    await run(await build());
     if (debug) {
       console.log('update: after run');
     }
@@ -265,12 +250,12 @@ export const setupV3Runtime = ({
     }
   };
 
-  const build = (content: Content) => {
+  const build = () => {
     return new Promise<V3BuildResult>((resolve) => {
       pendingBuildPromise = resolve;
       const message: V3WorkerMessage = {
         type: 'buildRequest',
-        content,
+        vizId,
         enableSourcemap: true,
       };
       worker.postMessage(message);
