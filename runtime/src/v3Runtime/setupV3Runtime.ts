@@ -1,11 +1,13 @@
 // @ts-ignore
 import Worker from './worker.ts?worker';
 import {
+  ResolvedVizFileId,
   V3BuildResult,
   V3WindowMessage,
   V3WorkerMessage,
 } from './types';
-import { Content, VizId } from 'entities';
+import { Content, VizId, getFileText } from 'entities';
+import { parseId } from './vizResolve';
 
 // Flag for debugging.
 const debug = false;
@@ -32,16 +34,15 @@ export type V3Runtime = {
 };
 
 export const setupV3Runtime = ({
+  vizId,
   iframe,
   setSrcdocError,
-  handleCacheMiss,
-  initialContent,
+  getLatestContent,
 }: {
+  vizId: VizId;
   iframe: HTMLIFrameElement;
-  // initialFiles: V3RuntimeFiles;
   setSrcdocError: (error: string | null) => void;
-  handleCacheMiss: (vizId: VizId) => Promise<Content>;
-  initialContent: Content;
+  getLatestContent: (vizId: VizId) => Promise<Content>;
 }): V3Runtime => {
   // The "build worker", a Web Worker that does the building.
   const worker = new Worker();
@@ -83,12 +84,6 @@ export const setupV3Runtime = ({
       console.log('state', state);
     }, 1000);
   }
-
-  // Tracks the latest content.
-  // Note: This must be defined before the first call
-  // to `runLatestContent`, such as if an imported viz changes
-  // before the entry viz is changed.
-  let latestContent: Content = initialContent;
 
   // Pending promise resolvers.
   let pendingBuildPromise:
@@ -147,7 +142,7 @@ export const setupV3Runtime = ({
     if (message.type === 'contentRequest') {
       const { vizId } = message;
 
-      const content = await handleCacheMiss(vizId);
+      const content = await getLatestContent(vizId);
 
       const contentResponseMessage: V3WorkerMessage = {
         type: 'contentResponse',
@@ -168,7 +163,7 @@ export const setupV3Runtime = ({
         message,
       );
       // Leverage existing infra for executing the hot reloading.
-      runLatestContent();
+      handleCodeChange();
     }
   });
 
@@ -195,19 +190,13 @@ export const setupV3Runtime = ({
     }
   });
 
-  const runLatestContent = () => {
+  const handleCodeChange = () => {
     if (state === IDLE) {
       state = ENQUEUED;
       update();
     } else if (state === PENDING_CLEAN) {
       state = PENDING_DIRTY;
     }
-  };
-
-  // This runs when any file is changed.
-  const handleCodeChange = (content: Content): void => {
-    latestContent = content;
-    runLatestContent();
   };
 
   // This runs when one or more imported vizzes are changed.
@@ -244,11 +233,8 @@ export const setupV3Runtime = ({
     if (debug) {
       console.log('update: before run');
     }
-    if (latestContent === null) {
-      // Should never happen.
-      throw new Error('latestContent is null');
-    }
-    await run(await build(latestContent));
+
+    await run(await build());
     if (debug) {
       console.log('update: after run');
     }
@@ -264,21 +250,23 @@ export const setupV3Runtime = ({
     }
   };
 
-  const build = (content: Content) => {
+  const build = () => {
     return new Promise<V3BuildResult>((resolve) => {
       pendingBuildPromise = resolve;
       const message: V3WorkerMessage = {
         type: 'buildRequest',
-        content,
+        vizId,
         enableSourcemap: true,
       };
       worker.postMessage(message);
     });
   };
 
+  let previousCSSFiles: Array<ResolvedVizFileId> = [];
   const run = (buildResult: V3BuildResult) => {
     return new Promise<void>((resolve) => {
-      const { src, warnings, errors } = buildResult;
+      const { src, warnings, errors, cssFiles } =
+        buildResult;
 
       // Handle build errors
       if (errors.length > 0) {
@@ -322,12 +310,68 @@ export const setupV3Runtime = ({
       }
 
       if (iframe.contentWindow) {
-        const message: V3WindowMessage = {
+        // For each cssFiles
+        for (const cssFile of cssFiles) {
+          const { vizId, fileName } = parseId(cssFile);
+
+          getLatestContent(vizId).then((content) => {
+            const src = getFileText(content, fileName);
+
+            if (src === null) {
+              // The file doesn't exist.
+              // TODO surface this error to the user
+              // in a nicer way than this.
+              console.warn(
+                `Imported CSS file ${fileName} doesn't exist.`,
+              );
+              return;
+            }
+
+            // TODO only inject CSS if it has changed.
+            const runCSSMessage: V3WindowMessage = {
+              type: 'runCSS',
+              id: cssFile,
+              src,
+            };
+
+            if (debug) {
+              console.log('runCSSMessage', runCSSMessage);
+            }
+
+            iframe.contentWindow?.postMessage(
+              runCSSMessage,
+              window.location.origin,
+            );
+          });
+        }
+
+        // Detect which CSS files have been removed
+        // and remove them from the iframe.
+        const removedCSSFiles = previousCSSFiles.filter(
+          (id) => !cssFiles.includes(id),
+        );
+        previousCSSFiles = cssFiles;
+        if (debug) {
+          console.log('removedCSSFiles', removedCSSFiles);
+        }
+        for (const id of removedCSSFiles) {
+          const removeCSSMessage: V3WindowMessage = {
+            type: 'runCSS',
+            id,
+            src: '',
+          };
+          iframe.contentWindow?.postMessage(
+            removeCSSMessage,
+            window.location.origin,
+          );
+        }
+
+        const runJSMessage: V3WindowMessage = {
           type: 'runJS',
           src,
         };
         iframe.contentWindow.postMessage(
-          message,
+          runJSMessage,
           window.location.origin,
         );
       }

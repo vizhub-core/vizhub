@@ -8,6 +8,11 @@ export type V3BuildResult = {
   errors: Array<V3BuildError>;
   warnings: Array<V3BuildError>;
   time: number;
+
+  // A list of CSS files to be injected into the IFrame.
+  // e.g. `['./styles.css']`
+  // TODO e.g. `['@curran/scatter-plot/styles.css']`
+  cssFiles: Array<ResolvedVizFileId>;
 };
 
 // The shape of a build error.
@@ -15,6 +20,10 @@ export type V3BuildError = {
   code: string;
   message: string;
 };
+
+// A resolved viz file id is of the form
+// `{vizId}/{fileName}`
+export type ResolvedVizFileId = string;
 
 // Messages sent to and from the build worker.
 export type V3WorkerMessage =
@@ -39,7 +48,7 @@ export type V3WorkerMessage =
   //  * When the main thread requests a build.
   | {
       type: 'buildRequest';
-      content: Content;
+      vizId: VizId;
       enableSourcemap: boolean;
     }
 
@@ -78,6 +87,15 @@ export type V3WindowMessage =
   | {
       type: 'runJS';
       src: string;
+    }
+
+  // `runCSS`
+  //  * Sent from the main thread to the IFrame.
+  //  * Triggers hot reloading of CSS within the V3 runtime.
+  | {
+      type: 'runCSS';
+      src: string;
+      id: ResolvedVizFileId;
     }
 
   // `runDone`

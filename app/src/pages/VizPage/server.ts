@@ -180,7 +180,7 @@ VizPage.getPageData = async ({
     const vizCacheContentSnapshots: Record<
       VizId,
       Snapshot<Content>
-    > = {};
+    > = { [id]: contentSnapshot };
 
     const vizCache: VizCache = createVizCache({
       initialContents: [content],
@@ -224,7 +224,6 @@ VizPage.getPageData = async ({
 
     return {
       infoSnapshot,
-      contentSnapshot,
       ownerUserSnapshot,
       forkedFromInfoSnapshot,
       forkedFromOwnerUserSnapshot,

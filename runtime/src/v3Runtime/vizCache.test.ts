@@ -1,28 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
-import { Content, Snapshot } from 'entities';
-import { fakeSnapshot } from 'entities/test/fixtures';
+import { Content } from 'entities';
+import { sampleContent } from 'entities/test/fixtures';
 import { createVizCache } from './vizCache';
-
-// Sample content for testing imports
-const sampleContent: Content = {
-  id: 'sampleContent',
-  files: {
-    '7548392': {
-      name: 'index.js',
-      text: `
-        import { innerMessage } from './message';
-        export const message = "Outer " + innerMessage;
-      `,
-    },
-    '6714854': {
-      name: 'message.js',
-      text: `
-        export const innerMessage = "Inner";
-      `,
-    },
-  },
-  title: 'Sample Content for Exporting',
-};
 
 describe('VizCache', () => {
   describe('VizCache - get method', () => {
