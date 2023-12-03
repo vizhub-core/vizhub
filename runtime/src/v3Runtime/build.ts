@@ -13,8 +13,9 @@ import {
   getFileText,
 } from 'entities';
 import { vizResolve } from './vizResolve';
-import { vizLoad } from './vizLoad';
 import { VizCache } from './vizCache';
+import { vizLoadCSS } from './vizLoadCSS';
+import { vizLoadJS } from './vizLoadJS';
 
 const debug = false;
 
@@ -78,7 +79,11 @@ export const build = async ({
       input: './index.js',
       plugins: [
         vizResolve({ vizId }),
-        vizLoad({ vizCache, trackCSSImport }),
+        // vizLoad({ vizCache, trackCSSImport }),
+        vizLoadCSS({ vizCache, trackCSSImport }),
+        vizLoadJS({ vizCache }),
+        // vizLoadCSV({ vizCache }),
+
         // cssResolve
         // csvResolve
         // jsonResolve
