@@ -7,7 +7,7 @@ import {
   V3WorkerMessage,
 } from './types';
 import { Content, VizId, getFileText } from 'entities';
-import { parseId } from './vizResolve';
+import { parseId } from './parseId';
 
 // Flag for debugging.
 const debug = false;

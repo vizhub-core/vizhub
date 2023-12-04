@@ -14,6 +14,9 @@ import {
 } from 'entities';
 import { vizResolve } from './vizResolve';
 import { VizCache } from './vizCache';
+import { vizLoadCSS } from './vizLoadCSS';
+import { vizLoadJS } from './vizLoadJS';
+import { vizLoadDSV } from './vizLoadDSV';
 
 const debug = false;
 
@@ -76,7 +79,16 @@ export const build = async ({
     const inputOptions: RollupOptions = {
       input: './index.js',
       plugins: [
-        vizResolve({ vizId, vizCache, trackCSSImport }),
+        vizResolve({ vizId }),
+        // vizLoad({ vizCache, trackCSSImport }),
+        vizLoadCSS({ trackCSSImport }),
+        vizLoadDSV({ vizCache }),
+        vizLoadJS({ vizCache }),
+
+        // cssResolve
+        // csvResolve
+        // jsonResolve
+        // defaultResolve - protect against file system access
       ],
       onwarn: (warning: RollupLog) => {
         warnings.push(JSON.parse(JSON.stringify(warning)));
