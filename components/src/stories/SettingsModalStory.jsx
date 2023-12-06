@@ -15,6 +15,10 @@ export const args = {
   },
   currentPlan: 'pro',
   pricingHref: 'pricingHref',
+  profileHref: 'https://vizhub.com/joe',
+  initialSlug: '21f72bf74ef04ea0b9c9b82aaaec859a',
+  userName: 'joe',
+  enableURLChange: true,
 };
 
 const Story = () => {
