@@ -1,0 +1,9 @@
+.vh-settings-modal {
+  .modal-dialog {
+    max-width: 550px;
+  }
+  .sample-import {
+    font-family: var(--vh-font-family-monospace);
+    font-size: 14px;
+  }
+}
