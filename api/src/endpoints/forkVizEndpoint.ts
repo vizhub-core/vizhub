@@ -8,6 +8,7 @@ import {
   UserId,
   Visibility,
   VizId,
+  dateToTimestamp,
 } from 'entities';
 import {
   Gateways,
@@ -82,7 +83,7 @@ export const forkVizEndpoint = ({
           newVizId?: VizId; // The ID of the new viz (optional).
         } = {
           forkedFrom,
-          timestamp: Date.now(),
+          timestamp: dateToTimestamp(new Date()),
           newOwner: owner,
           content,
           title,
