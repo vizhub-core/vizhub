@@ -37,6 +37,11 @@ export const generateImageId = (
   width: number,
 ): ImageId => `${commitId}-${width}`;
 
+// The image's hash, used to detect changes and
+// avoid generating the same image twice.
+//  * Stored in metadata once the image is generated.
+export type ImageHash = string;
+
 // ImageMetadata
 //  * Represents the status and access details of an image associated with a Viz commit.
 //  * This type provides a structured way to track the lifecycle of an image,
@@ -59,16 +64,20 @@ export interface ImageMetadata {
   status: 'generating' | 'generated';
 
   // Timestamp of the last time the image was accessed
+  // * Includes the time that generation was kicked off.
+  // * Includes when users view the image.
   lastAccessed: Timestamp;
+
+  // Only present when status is 'generated'.
+  hash?: ImageHash;
 }
 
 // StoredImage
 //  * Represents an image stored in the database.
 //  * This type is used for database queries and updates.
 export interface StoredImage {
-  // A unique identifier for the image
-  // Format: `${commitId}-${width}`
-  id: ImageId;
+  // Each image is identified by its hash.
+  id: ImageHash;
 
   // The image data as a base64 encoded string
   base64: string;
