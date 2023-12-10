@@ -15,7 +15,7 @@ import {
   ts2,
   ts3,
   userJoe,
-} from 'gateways/test';
+} from 'entities/test/fixtures';
 import { initGateways } from './initGateways';
 import {
   SaveViz,

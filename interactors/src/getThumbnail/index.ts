@@ -23,6 +23,8 @@ import { GetImage } from './getImage';
 import { FetchImageMetadata } from './fetchImageMetadata';
 import { PollImageGenerationStatus } from './PollImageGenerationStatus';
 
+export { GetImage };
+
 const debug = false;
 
 // getThumbnail

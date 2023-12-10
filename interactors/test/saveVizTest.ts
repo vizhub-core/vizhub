@@ -1,5 +1,5 @@
-import { describe, it, expect } from 'vitest';
-import { primordialViz } from 'gateways/test';
+import { describe, it, expect, assert } from 'vitest';
+import { primordialViz } from 'entities/test/fixtures';
 import { initGateways } from './initGateways';
 import { SaveViz } from '../src';
 
@@ -11,6 +11,7 @@ export const saveVizTest = () => {
       const saveViz = SaveViz(gateways);
 
       const result = await saveViz(primordialViz);
+      assert(result.outcome === 'success');
       expect(result.outcome).toEqual('success');
       expect(result.value).toEqual('success');
 

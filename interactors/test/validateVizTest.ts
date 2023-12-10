@@ -6,7 +6,7 @@ import {
   sampleFolder,
   sampleVizEmbedding,
   userJoe,
-} from 'gateways/test';
+} from 'entities/test/fixtures';
 import { initGateways } from './initGateways';
 import { ValidateViz } from '../src';
 

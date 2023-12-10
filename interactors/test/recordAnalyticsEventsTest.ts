@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { ts1, ts2, ts3 } from 'gateways/test';
+import { ts1, ts2, ts3 } from 'entities/test/fixtures';
 import { initGateways } from './initGateways';
 
 import { RecordAnalyticsEvents } from '../src';

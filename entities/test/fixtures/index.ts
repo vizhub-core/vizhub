@@ -400,6 +400,7 @@ export const sampleImageMetadata: ImageMetadata = {
   lastAccessed: ts1,
 };
 
+export { sampleImageBase64 };
 export const sampleStoredImage: StoredImage = {
   id: 'commit1',
   base64: sampleImageBase64,
