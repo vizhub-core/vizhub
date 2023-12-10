@@ -23,7 +23,7 @@ import {
   createVizCache,
 } from 'runtime/src/v3Runtime/vizCache';
 
-const debug = false;
+const debug = true;
 
 // getImage
 //  * Gets an image for a commit
@@ -47,8 +47,10 @@ export const GetImage = (gateways: Gateways) => {
 
   return async ({
     commitId,
+    waitTime,
   }: {
     commitId: CommitId;
+    waitTime?: number;
   }): Promise<Result<Image | null>> => {
     if (debug) {
       console.log('getImage for commit ' + commitId);
@@ -98,6 +100,11 @@ export const GetImage = (gateways: Gateways) => {
       }
       const content: Content = contentResult.value;
 
+      if (debug) {
+        console.log('  content:');
+        console.log(content);
+      }
+
       const vizCache: VizCache = createVizCache({
         initialContents: [content],
         handleCacheMiss: async (vizId: VizId) => {
@@ -146,6 +153,7 @@ export const GetImage = (gateways: Gateways) => {
         srcDoc: initialSrcdoc,
         width: defaultVizWidth,
         height: getHeight(content.height),
+        waitTime,
       });
 
       if (debug) {

@@ -50,10 +50,12 @@ export const GetThumbnail = (gateways: Gateways) => {
     commitId,
     authenticatedUserId,
     width,
+    waitTime,
   }: {
     commitId: CommitId;
     authenticatedUserId: UserId | undefined;
     width: number;
+    waitTime?: number;
   }): Promise<Result<Image | null>> => {
     if (debug) {
       console.log('getThumbnail for commit ' + commitId);
@@ -132,6 +134,7 @@ export const GetThumbnail = (gateways: Gateways) => {
 
       const fullSizeImageResult = await getImage({
         commitId,
+        waitTime,
       });
       if (fullSizeImageResult.outcome === 'failure') {
         return err(fullSizeImageResult.error);
