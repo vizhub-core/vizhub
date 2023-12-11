@@ -9,6 +9,7 @@ import {
   defaultVizHeight,
   CommitId,
   VizV2,
+  dateToTimestamp,
 } from 'entities';
 import {
   CommitViz,
@@ -66,6 +67,11 @@ export const migratePrimordialViz = async ({
       end: start,
       committed: true,
       commitAuthors: [owner],
+      // True for vizzes that were migrated from V2.
+      migratedFromV2: true,
+
+      // When this viz was last migrated from V2.
+      migratedTimestamp: dateToTimestamp(new Date()),
     },
     content: {
       id: vizV2.info.id,
