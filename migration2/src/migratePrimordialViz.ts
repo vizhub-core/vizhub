@@ -55,8 +55,8 @@ export const migratePrimordialViz = async ({
       forkedFrom: null,
       forksCount: 0,
       created: vizV2.info.createdTimestamp,
-      // updated: vizV2.info.lastUpdatedTimestamp,
-      updated: vizV2.info.createdTimestamp,
+      updated: vizV2.info.lastUpdatedTimestamp,
+      // updated: vizV2.info.createdTimestamp,
       visibility: vizV2.info.privacy || 'public',
       upvotesCount: 0,
 
