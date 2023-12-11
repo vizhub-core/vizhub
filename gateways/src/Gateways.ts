@@ -56,6 +56,7 @@ import {
   MigrationBatchId,
   MigrationStatusId,
 } from 'entities/src/Migration';
+import { ImageHash } from 'entities/src/Images';
 
 // The maximum number of Info documents to return in a single page from `getInfos()`
 // export const pageSize = 5;
@@ -250,8 +251,12 @@ export interface Gateways {
   saveStoredImage(
     storedImage: StoredImage,
   ): Promise<Result<Success>>;
-  getStoredImage(id: ImageId): Promise<Result<StoredImage>>;
-  deleteStoredImage(id: ImageId): Promise<Result<Success>>;
+  getStoredImage(
+    id: ImageHash,
+  ): Promise<Result<StoredImage>>;
+  deleteStoredImage(
+    id: ImageHash,
+  ): Promise<Result<Success>>;
 
   // TODO implement these backed by `pgvector` in Supabase
   // saveEmbedding(

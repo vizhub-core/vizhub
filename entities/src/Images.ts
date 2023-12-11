@@ -69,7 +69,7 @@ export interface ImageMetadata {
   lastAccessed: Timestamp;
 
   // Only present when status is 'generated'.
-  hash?: ImageHash;
+  imageHash?: ImageHash;
 }
 
 // StoredImage

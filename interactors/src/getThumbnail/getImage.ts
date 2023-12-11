@@ -15,15 +15,19 @@ import {
 import { computeSrcDoc } from 'runtime';
 import { GetContentAtCommit } from '../getContentAtCommit';
 import { takeScreenshot } from './takeScreenshot';
-import { generateImageId } from 'entities/src/Images';
+import {
+  ImageHash,
+  generateImageId,
+} from 'entities/src/Images';
 import { FetchImageMetadata } from './fetchImageMetadata';
 import { PollImageGenerationStatus } from './PollImageGenerationStatus';
 import {
   VizCache,
   createVizCache,
 } from 'runtime/src/v3Runtime/vizCache';
+import { generateImageHash } from './generateImageHash';
 
-const debug = false;
+const debug = true;
 
 // getImage
 //  * Gets an image for a commit
@@ -162,13 +166,32 @@ export const GetImage = (gateways: Gateways) => {
         );
       }
 
-      // Save the image
-      const saveResult = await saveStoredImage({
-        id: commitId,
-        base64: image.buffer.toString('base64'),
-      });
-      if (saveResult.outcome === 'failure') {
-        return err(saveResult.error);
+      // Generate hash for the image
+      const imageHash: ImageHash = generateImageHash(
+        image.buffer,
+      );
+
+      // Check if the image already exists using the hash
+      const existingStoredImageResult =
+        await getStoredImage(imageHash);
+      if (
+        existingStoredImageResult.outcome === 'success' &&
+        existingStoredImageResult.value
+      ) {
+        if (debug) {
+          console.log(
+            '  Image already exists, using stored image',
+          );
+        }
+      } else {
+        // Save the image
+        const saveResult = await saveStoredImage({
+          id: imageHash,
+          base64: image.buffer.toString('base64'),
+        });
+        if (saveResult.outcome === 'failure') {
+          return err(saveResult.error);
+        }
       }
 
       if (debug) {
@@ -179,11 +202,11 @@ export const GetImage = (gateways: Gateways) => {
 
       // Store the metadata that indicates the image
       // has been generated.
-
       await saveImageMetadata({
         id: imageId,
         commitId,
         status: 'generated',
+        imageHash,
         lastAccessed: dateToTimestamp(new Date()),
       });
 
@@ -216,7 +239,9 @@ export const GetImage = (gateways: Gateways) => {
         );
       }
       // Fetch and return the stored image
-      const result = await getStoredImage(commitId);
+      const result = await getStoredImage(
+        imageMetadata.imageHash,
+      );
       if (result.outcome === 'failure') {
         return err(result.error);
       }
