@@ -155,6 +155,10 @@ export const useRuntime = ({
   // Send updates of imported vizzes to the V3 runtime.
   const previousVizCacheContents = useRef(vizCacheContents);
   useEffect(() => {
+    // Don't crash for v2 runtime!
+    if (runtimeVersion !== 3) {
+      return;
+    }
     if (initialMount.current === true) {
       return;
     }
@@ -213,7 +217,7 @@ export const useRuntime = ({
         v3Runtime.current.invalidateVizCache(changedVizIds);
       }, v3RunDebounceMs);
     }
-  }, [vizCacheContents]);
+  }, [vizCacheContents, runtimeVersion]);
 
   // Compute V2 updates on the main thread.
   useEffect(() => {

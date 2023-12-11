@@ -121,9 +121,18 @@ export const VerifyVizAccess = (gateways: Gateways) => {
         continue;
       }
 
-      if (action === WRITE && info.anyoneCanEdit) {
-        vizAccess[action] = true;
-        continue;
+      if (action === WRITE) {
+        // Disallow editing of V2 vizzes.
+        if (info.migratedFromV2) {
+          vizAccess[action] = false;
+          continue;
+        }
+
+        // If "Anyone can edit" is enabled, then allow editing.
+        if (info.anyoneCanEdit) {
+          vizAccess[action] = true;
+          continue;
+        }
       }
 
       await fetchDataIfNeeded();

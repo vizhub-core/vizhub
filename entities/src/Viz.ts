@@ -124,6 +124,12 @@ export interface Info {
   // If true, content is null.
   // If false or `undefined`, content is defined.
   frozen?: boolean;
+
+  // True for vizzes that were migrated from V2.
+  migratedFromV2?: boolean;
+
+  // When this viz was last migrated from V2.
+  migratedTimestamp?: Timestamp;
 }
 
 // Configuration

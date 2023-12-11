@@ -56,9 +56,10 @@ export const migratePrimordialViz = async ({
     start: 'invalid',
     end: 'invalid',
     folder: null,
-    isFrozen: false,
+    frozen: false,
     committed: false,
     commitAuthors: [],
+    migratedFromV2: true,
   };
 
   // If the forkedFrom is backfilled, set the flag.
