@@ -1,9 +1,8 @@
-// import xss from 'xss';
-
+import xss from 'xss';
 import { marked, Renderer } from 'marked';
-import { gfmHeadingId } from 'marked-gfm-heading-id';
+// import { gfmHeadingId } from 'marked-gfm-heading-id';
 
-const xss = (d) => d;
+// const xss = (d) => d;
 
 // Use a custom renderer to open links in a new tab.
 // Draws from
@@ -16,13 +15,19 @@ renderer.link = function (href, title, text) {
     .replace('<a', '<a target="_blank"');
 };
 
-marked
-  // Set up the renderer to add IDs to headings.
-  .use(
-    gfmHeadingId({
-      prefix: 'heading-',
-    }),
-  );
+marked.use(
+  {
+    renderer,
+  },
+  // TODO try getting this to work some time maybe
+  // gfmHeadingId({
+  //   prefix: 'heading-',
+  // }),
+);
+// marked.use();
+
+// Set up the renderer to add IDs to headings.
+
 // Opt out of the default behavior of mangling emails (gets rid of warning).
 // .use({ mangle: false, renderer });
 
@@ -32,10 +37,9 @@ marked
 const responsiveYouTube = (html) =>
   html.replace(
     /<iframe(.+)youtube(.+)<\/iframe>/g,
-    (match) =>
+    (match: string) =>
       `<div class='responsive-youtube'>${match}</div>`,
   );
-
 // Renders README text as HTML.
 // Usage:
 //   const html = renderREADME('# Hello World!');

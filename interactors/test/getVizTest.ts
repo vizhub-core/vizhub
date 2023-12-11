@@ -1,8 +1,10 @@
 import { describe, it, expect, assert } from 'vitest';
-import { primordialViz } from 'gateways/test';
+import {
+  primordialViz,
+  fakeSnapshot,
+} from 'entities/test/fixtures';
 import { initGateways } from './initGateways';
 import { GetViz } from '../src';
-import { fakeSnapshot } from 'gateways/src/MemoryGateways';
 
 export const getVizTest = () => {
   describe('getViz', async () => {

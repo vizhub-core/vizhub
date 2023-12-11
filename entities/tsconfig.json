@@ -1,6 +1,11 @@
 {
   "compilerOptions": {
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "jsx": "react-jsx",
+    "types": ["vite/client"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler"
   },
   "include": ["src/**/*"]
 }

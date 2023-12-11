@@ -15,7 +15,7 @@ import {
   primordialVizV3,
   userJoe,
   ts2,
-} from 'gateways/test';
+} from 'entities/test/fixtures';
 import { initGateways } from './initGateways';
 import {
   SaveViz,

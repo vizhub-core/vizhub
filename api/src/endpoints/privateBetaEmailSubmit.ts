@@ -1,5 +1,10 @@
-import express from 'express';
-import { err, missingParameterError, ok } from 'gateways';
+import express, { Express } from 'express';
+import {
+  Gateways,
+  err,
+  missingParameterError,
+  ok,
+} from 'gateways';
 import {
   generateId,
   RecordAnalyticsEvents,
@@ -8,6 +13,9 @@ import {
 export const privateBetaEmailSubmit = ({
   app,
   gateways,
+}: {
+  app: Express;
+  gateways: Gateways;
 }) => {
   const { saveBetaProgramSignup } = gateways;
   const recordAnalyticsEvents =
@@ -41,7 +49,7 @@ export const privateBetaEmailSubmit = ({
 
   app.get(
     '/api/private-beta-email-submit-debug',
-    async (req, res) => {
+    async (_, __) => {
       throw new Error('private-beta-email-submit-debug');
     },
   );

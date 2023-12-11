@@ -15,13 +15,17 @@ import {
 import { computeSrcDoc } from 'runtime';
 import { GetContentAtCommit } from '../getContentAtCommit';
 import { takeScreenshot } from './takeScreenshot';
-import { generateImageId } from 'entities/src/Images';
+import {
+  ImageHash,
+  generateImageId,
+} from 'entities/src/Images';
 import { FetchImageMetadata } from './fetchImageMetadata';
 import { PollImageGenerationStatus } from './PollImageGenerationStatus';
 import {
   VizCache,
   createVizCache,
 } from 'runtime/src/v3Runtime/vizCache';
+import { generateImageHash } from './generateImageHash';
 
 const debug = false;
 
@@ -47,11 +51,15 @@ export const GetImage = (gateways: Gateways) => {
 
   return async ({
     commitId,
+    waitTime,
   }: {
     commitId: CommitId;
+    waitTime?: number;
   }): Promise<Result<Image | null>> => {
     if (debug) {
-      console.log('getImage for commit ' + commitId);
+      console.log(
+        '  [GetImage] getImage for commit ' + commitId,
+      );
     }
 
     // Fetch the image metadata
@@ -71,7 +79,7 @@ export const GetImage = (gateways: Gateways) => {
     if (!imageMetadata) {
       if (debug) {
         console.log(
-          '  image metadata not found, generating',
+          '  [GetImage] image metadata not found, generating',
         );
       }
       // Store the metadata that indicates the image
@@ -85,7 +93,7 @@ export const GetImage = (gateways: Gateways) => {
 
       if (debug) {
         console.log(
-          '  saved image metadata with status "generating"',
+          '  [GetImage] saved image metadata with status "generating"',
         );
       }
 
@@ -98,26 +106,33 @@ export const GetImage = (gateways: Gateways) => {
       }
       const content: Content = contentResult.value;
 
+      // if (debug) {
+      //   console.log('  content:');
+      //   console.log(content);
+      // }
+
       const vizCache: VizCache = createVizCache({
         initialContents: [content],
         handleCacheMiss: async (vizId: VizId) => {
           if (debug) {
             console.log(
-              'Handling cache miss for vizId',
+              '  [GetImage] Handling cache miss for vizId',
               vizId,
             );
           }
           const contentResult = await getContent(vizId);
           if (contentResult.outcome === 'failure') {
             console.log(
-              'Error when fetching content for viz cache:',
+              '  [GetImage] Error when fetching content for viz cache:',
             );
             console.log(contentResult.error);
             return null;
           }
 
           if (debug) {
-            console.log('Fetched content for viz cache');
+            console.log(
+              '  [GetImage] Fetched content for viz cache',
+            );
             console.log(contentResult.value.data);
           }
           return contentResult.value.data;
@@ -129,7 +144,7 @@ export const GetImage = (gateways: Gateways) => {
 
       if (initialSrcdocError) {
         console.log(
-          'initialSrcdocError',
+          '  [GetImage] initialSrcdocError',
           initialSrcdocError,
         );
       }
@@ -138,7 +153,7 @@ export const GetImage = (gateways: Gateways) => {
 
       if (debug) {
         console.log(
-          '  generated srcdoc, taking screenshot',
+          '  [GetImage] generated srcdoc, taking screenshot',
         );
       }
       // Take the screenshot
@@ -146,36 +161,56 @@ export const GetImage = (gateways: Gateways) => {
         srcDoc: initialSrcdoc,
         width: defaultVizWidth,
         height: getHeight(content.height),
+        waitTime,
       });
 
       if (debug) {
         console.log(
-          '  took screenshot, saving stored image',
+          '  [GetImage] took screenshot, saving stored image',
         );
       }
 
-      // Save the image
-      const saveResult = await saveStoredImage({
-        id: commitId,
-        base64: image.buffer.toString('base64'),
-      });
-      if (saveResult.outcome === 'failure') {
-        return err(saveResult.error);
+      // Generate hash for the image
+      const imageHash: ImageHash = generateImageHash(
+        image.buffer,
+      );
+
+      // Check if the image already exists using the hash
+      const existingStoredImageResult =
+        await getStoredImage(imageHash);
+      if (
+        existingStoredImageResult.outcome === 'success' &&
+        existingStoredImageResult.value
+      ) {
+        if (debug) {
+          console.log(
+            '  [GetImage] Image by hash already exists, using stored image',
+          );
+        }
+      } else {
+        // Save the image
+        const saveResult = await saveStoredImage({
+          id: imageHash,
+          base64: image.buffer.toString('base64'),
+        });
+        if (saveResult.outcome === 'failure') {
+          return err(saveResult.error);
+        }
       }
 
       if (debug) {
         console.log(
-          '  saving image metadata with status "generated"',
+          '  [GetImage] saving image metadata with status "generated"',
         );
       }
 
       // Store the metadata that indicates the image
       // has been generated.
-
       await saveImageMetadata({
         id: imageId,
         commitId,
         status: 'generated',
+        imageHash,
         lastAccessed: dateToTimestamp(new Date()),
       });
 
@@ -185,7 +220,7 @@ export const GetImage = (gateways: Gateways) => {
       if (imageMetadata.status === 'generating') {
         if (debug) {
           console.log(
-            '  image metadata found with status "generating", polling',
+            '  [GetImage] image metadata found with status "generating", polling',
           );
         }
         const polledImageMetadataResult: Result<ImageMetadata> =
@@ -204,11 +239,13 @@ export const GetImage = (gateways: Gateways) => {
 
       if (debug) {
         console.log(
-          '  Fetching and returning the stored image',
+          '  [GetImage] Fetching and returning the stored image',
         );
       }
       // Fetch and return the stored image
-      const result = await getStoredImage(commitId);
+      const result = await getStoredImage(
+        imageMetadata.imageHash,
+      );
       if (result.outcome === 'failure') {
         return err(result.error);
       }

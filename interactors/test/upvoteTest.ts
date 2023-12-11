@@ -1,12 +1,16 @@
-import { describe, it, expect } from 'vitest';
-import { primordialViz, ts3, userJoe } from 'gateways/test';
+import { describe, it, expect, assert } from 'vitest';
+import {
+  primordialViz,
+  ts3,
+  userJoe,
+} from 'entities/test/fixtures';
 import { initGateways } from './initGateways';
 import {
   SaveViz,
   UpvoteViz,
   generateUpvoteId,
-  setPredictableGenerateId,
 } from '../src';
+import { as } from 'vitest/dist/reporters-LLiOBu3g';
 
 export const upvoteTest = () => {
   describe('upvoteViz', async () => {
@@ -23,8 +27,12 @@ export const upvoteTest = () => {
       const upvoteId = generateUpvoteId(userJoe.id, id);
 
       // TODO consider unifying getUpvotesCount definitions
-      const getUpvotesCount = async () =>
-        (await getInfo(id)).value.data.upvotesCount;
+
+      const getUpvotesCount = async () => {
+        const result = await getInfo(id);
+        assert(result.outcome === 'success');
+        return result.value.data.upvotesCount;
+      };
 
       // Verify that initially upvotesCount is 0
       const originalUpvotesCount =
@@ -39,6 +47,7 @@ export const upvoteTest = () => {
         timestamp: ts3,
       });
       expect(upvoteVizResult.outcome).toEqual('success');
+      assert(upvoteVizResult.outcome === 'success');
       expect(upvoteVizResult.value).toEqual('success');
 
       // Verify upvotesCount is incremented
@@ -47,9 +56,9 @@ export const upvoteTest = () => {
       );
 
       // Verify the upvote has been saved
-      expect(
-        (await getUpvote(upvoteId)).value.data,
-      ).toEqual({
+      const getUpvoteResult = await getUpvote(upvoteId);
+      assert(getUpvoteResult.outcome === 'success');
+      expect(getUpvoteResult.value.data).toEqual({
         id: upvoteId,
         user: userJoe.id,
         viz: id,

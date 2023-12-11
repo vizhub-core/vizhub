@@ -48,6 +48,11 @@ const injectDependenciesScript = (htmlTemplate, files) => {
 
   if (deps.length === 0) return htmlTemplate;
 
+  if (!parser)
+    throw new Error(
+      'DOM parser is not defined. Did you forget to call setJSDOM()?',
+    );
+
   const doc = parser.parseFromString(
     htmlTemplate,
     'text/html',

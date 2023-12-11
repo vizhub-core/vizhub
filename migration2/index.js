@@ -6,9 +6,13 @@ import { createServer } from 'vite';
 
 const vite = await createServer();
 
-const { migrate } =
-  await vite.ssrLoadModule('./migrate.ts');
+const { migrate } = await vite.ssrLoadModule(
+  './src/migrate.ts',
+);
 
-await migrate({ isTest: false, maxNumberOfVizzes: 5 });
+await migrate({
+  isTest: false,
+  maxNumberOfVizzes: Infinity,
+});
 
 process.exit();

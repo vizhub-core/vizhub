@@ -18,10 +18,16 @@ import {
 } from '../verifyVizAccess';
 import { accessDeniedError } from 'gateways/src/errors';
 import { resizeImage } from './resizeImage';
-import { generateImageId } from 'entities/src/Images';
+import {
+  ImageHash,
+  generateImageId,
+} from 'entities/src/Images';
 import { GetImage } from './getImage';
 import { FetchImageMetadata } from './fetchImageMetadata';
 import { PollImageGenerationStatus } from './PollImageGenerationStatus';
+import { generateImageHash } from './generateImageHash';
+
+export { GetImage };
 
 const debug = false;
 
@@ -48,13 +54,18 @@ export const GetThumbnail = (gateways: Gateways) => {
     commitId,
     authenticatedUserId,
     width,
+    waitTime,
   }: {
     commitId: CommitId;
     authenticatedUserId: UserId | undefined;
     width: number;
+    waitTime?: number;
   }): Promise<Result<Image | null>> => {
     if (debug) {
-      console.log('getThumbnail for commit ' + commitId);
+      console.log(
+        '[GetThumbnail] getThumbnail for commit ' +
+          commitId,
+      );
     }
     // Get the vizId for this commit, so that we
     // can enforce access control on thumbnails.
@@ -130,6 +141,7 @@ export const GetThumbnail = (gateways: Gateways) => {
 
       const fullSizeImageResult = await getImage({
         commitId,
+        waitTime,
       });
       if (fullSizeImageResult.outcome === 'failure') {
         return err(fullSizeImageResult.error);
@@ -145,18 +157,42 @@ export const GetThumbnail = (gateways: Gateways) => {
         width,
       });
 
-      // Save the resized image
-      const saveResult = await saveStoredImage({
-        id: imageId,
-        base64: resizedImage.buffer.toString('base64'),
-      });
-      if (saveResult.outcome === 'failure') {
-        return err(saveResult.error);
+      // Generate hash for the image
+      const resizedImageHash: ImageHash = generateImageHash(
+        resizedImage.buffer,
+      );
+
+      // Check if the image already exists using the hash
+      const existingStoredImageResult =
+        await getStoredImage(resizedImageHash);
+      if (
+        existingStoredImageResult.outcome === 'success' &&
+        existingStoredImageResult.value
+      ) {
+        if (debug) {
+          console.log(
+            '  [GetThumbnail] Resized image already exists, using stored image',
+          );
+        }
+      } else {
+        if (debug) {
+          console.log(
+            '  [GetThumbnail] Saving resized image',
+          );
+        }
+        // Save the image
+        const saveResult = await saveStoredImage({
+          id: resizedImageHash,
+          base64: resizedImage.buffer.toString('base64'),
+        });
+        if (saveResult.outcome === 'failure') {
+          return err(saveResult.error);
+        }
       }
 
       if (debug) {
         console.log(
-          '  saving image metadata with status "generated"',
+          '  [GetThumbnail] saving image metadata with status "generated"',
         );
       }
 
@@ -168,6 +204,7 @@ export const GetThumbnail = (gateways: Gateways) => {
         width,
         status: 'generated',
         lastAccessed: dateToTimestamp(new Date()),
+        imageHash: resizedImageHash,
       });
 
       // Return the image
@@ -176,7 +213,7 @@ export const GetThumbnail = (gateways: Gateways) => {
       if (imageMetadata.status === 'generating') {
         if (debug) {
           console.log(
-            '  image metadata found with status "generating", polling',
+            '  [GetThumbnail] image metadata found with status "generating", polling',
           );
         }
         const polledImageMetadataResult: Result<ImageMetadata> =
@@ -195,11 +232,13 @@ export const GetThumbnail = (gateways: Gateways) => {
 
       if (debug) {
         console.log(
-          '  Fetching and returning the stored image',
+          '  [GetThumbnail] Fetching and returning the stored image',
         );
       }
       // Fetch and return the stored image
-      const result = await getStoredImage(imageId);
+      const result = await getStoredImage(
+        imageMetadata.imageHash,
+      );
       if (result.outcome === 'failure') {
         return err(result.error);
       }
