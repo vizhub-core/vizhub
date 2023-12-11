@@ -1,12 +1,6 @@
 import express from 'express';
 import {
-  CommitId,
-  Content,
-  Info,
   Timestamp,
-  User,
-  UserId,
-  Visibility,
   VizId,
   dateToTimestamp,
 } from 'entities';
@@ -14,7 +8,6 @@ import {
   Gateways,
   err,
   missingParameterError,
-  ok,
 } from 'gateways';
 import { TrashViz } from 'interactors';
 

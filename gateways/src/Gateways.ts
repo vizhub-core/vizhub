@@ -50,6 +50,7 @@ import {
   ImageMetadata,
   StoredImage,
   ImageId,
+  BetaProgramSignup,
 } from 'entities';
 import { Result, Success } from './Result';
 import {
@@ -256,6 +257,16 @@ export interface Gateways {
   ): Promise<Result<StoredImage>>;
   deleteStoredImage(
     id: ImageHash,
+  ): Promise<Result<Success>>;
+
+  saveBetaProgramSignup(
+    betaProgramSignup: BetaProgramSignup,
+  ): Promise<Result<Success>>;
+  getBetaProgramSignup(
+    id: string,
+  ): Promise<Result<BetaProgramSignup>>;
+  deleteBetaProgramSignup(
+    id: string,
   ): Promise<Result<Success>>;
 
   // TODO implement these backed by `pgvector` in Supabase

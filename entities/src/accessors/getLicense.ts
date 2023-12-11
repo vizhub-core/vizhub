@@ -1,5 +1,4 @@
-import { V3PackageJson } from 'runtime';
-import { defaultLicense } from 'entities';
+import { V3PackageJson, defaultLicense } from 'entities';
 
 // Gets the license of the given viz content.
 export const getLicense = (

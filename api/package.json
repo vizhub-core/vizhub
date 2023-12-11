@@ -6,7 +6,7 @@
   "main": "src/index.ts",
   "scripts": {
     "test": "",
-    "tsc": "",
+    "tsc": "tsc --noEmit",
     "prettier": "prettier {*.*,**/*.*} --single-quote --write",
     "dev": "node server.js",
     "build": "vite build --ssr src/entry-server.jsx --outDir dist/server",
