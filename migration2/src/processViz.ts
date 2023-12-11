@@ -3,7 +3,13 @@
 import { generateEmbeddingOpenAI } from './generateEmbeddingOpenAI';
 // import { computeForkedFrom } from './computeForkedFrom';
 import { isolateGoodFiles } from './isolateGoodFiles';
-import { FilesV2, VizV2, Timestamp, Info } from 'entities';
+import {
+  FilesV2,
+  VizV2,
+  Timestamp,
+  Info,
+  VizEmbedding,
+} from 'entities';
 import { Gateways } from 'gateways';
 import { Collection } from 'mongodb-legacy';
 import { migratePrimordialViz } from './migratePrimordialViz';
@@ -194,10 +200,10 @@ export const processViz = async ({
   }
   // console.log('  embedding:', embedding);
 
-  // gateways.saveVizEmbedding({
-  //   vizId: id,
-  //   embedding,
-  // });
+  const vizEmbedding: VizEmbedding = {
+    vizId: id,
+    embedding,
+  };
 
   // process.exit();
 

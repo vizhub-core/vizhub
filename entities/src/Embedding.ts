@@ -4,12 +4,10 @@
 // * Always computed from the latest commit of a Viz.
 // * Needs to be updated when latest commit changes.
 
-import { CommitId } from './RevisionHistory';
 import { VizId } from './Viz';
 
 export interface VizEmbedding {
   vizId: VizId;
-  commitId: CommitId;
   // The length is from OpenAI, so 1536
   embedding: Array<number>;
 }

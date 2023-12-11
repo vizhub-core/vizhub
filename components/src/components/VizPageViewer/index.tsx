@@ -162,8 +162,8 @@ export const VizPageViewer = ({
             <div>{authorDisplayName}</div>
           </a>
           <div className="meta-info-right">
-            <div>Last edited {createdDateFormatted}</div>
-            <div>Created on {updatedDateFormatted}</div>
+            <div>Last edited {updatedDateFormatted}</div>
+            <div>Created on {createdDateFormatted}</div>
             {forkedFromVizHref ? (
               <>
                 <div>
