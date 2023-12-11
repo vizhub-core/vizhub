@@ -4,7 +4,7 @@ import { setJSDOM } from 'runtime';
 import { GetThumbnail } from '../src';
 import { initGateways } from './initGateways';
 import {
-  sampleImageBase64,
+  primordialVizThumbnail,
   primordialCommit,
   primordialViz,
   sampleImageMetadata,
@@ -16,7 +16,6 @@ setJSDOM(JSDOM);
 
 export const getThumbnailTest = () => {
   describe('GetThumbnail', () => {
-    // TODO bring this back
     it.only('GetThumbnail, success case', async () => {
       const gateways = initGateways();
       const {
@@ -40,7 +39,9 @@ export const getThumbnailTest = () => {
       });
       expect(result.outcome).toEqual('success');
       assert(result.outcome === 'success');
-      expect(result.value).toEqual(sampleImageBase64);
+      expect(
+        result.value.buffer.toString('base64'),
+      ).toEqual(primordialVizThumbnail);
     });
 
     it('GetThumbnail, commit retrieval failure', async () => {

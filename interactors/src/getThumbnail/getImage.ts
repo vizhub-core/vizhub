@@ -23,7 +23,7 @@ import {
   createVizCache,
 } from 'runtime/src/v3Runtime/vizCache';
 
-const debug = true;
+const debug = false;
 
 // getImage
 //  * Gets an image for a commit
