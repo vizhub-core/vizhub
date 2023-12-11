@@ -1,9 +1,12 @@
 import { describe, it, expect, assert } from 'vitest';
-import { primordialViz, userJoe } from 'gateways/test';
+import { defaultSortOption } from 'entities';
+import {
+  fakeSnapshot,
+  primordialViz,
+  userJoe,
+} from 'entities/test/fixtures';
 import { initGateways } from './initGateways';
 import { GetInfosAndOwners } from '../src';
-import { fakeSnapshot } from 'gateways/src/MemoryGateways';
-import { defaultSortOption } from 'entities';
 
 export const getInfosAndOwnersTest = () => {
   describe('getInfosAndOwners', async () => {
@@ -21,6 +24,7 @@ export const getInfosAndOwnersTest = () => {
       });
       assert(result.outcome === 'success');
       expect(result.value).toEqual({
+        hasMore: false,
         infoSnapshots: [fakeSnapshot(primordialViz.info)],
         ownerUserSnapshots: [fakeSnapshot(userJoe)],
       });
@@ -40,6 +44,7 @@ export const getInfosAndOwnersTest = () => {
       });
       assert(result.outcome === 'success');
       expect(result.value).toEqual({
+        hasMore: false,
         infoSnapshots: [fakeSnapshot(primordialViz.info)],
         ownerUserSnapshots: [],
       });

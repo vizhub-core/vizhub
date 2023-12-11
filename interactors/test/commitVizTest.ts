@@ -7,7 +7,7 @@ import {
   ts3,
   userJoe,
   sampleReadmeText,
-} from 'gateways/test';
+} from 'entities/test/fixtures';
 import { initGateways } from './initGateways';
 import {
   SaveViz,

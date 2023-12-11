@@ -5,7 +5,7 @@ import {
   primordialCommit,
   primordialViz,
   ts3,
-} from 'gateways/test';
+} from 'entities/test/fixtures';
 import { initGateways } from './initGateways';
 import { GetContentAtTimestamp } from '../src';
 

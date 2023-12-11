@@ -17,7 +17,7 @@ import {
   sampleFolder,
   folder2,
   folder3,
-} from 'gateways/test';
+} from 'entities/test/fixtures';
 import { initGateways } from './initGateways';
 import { VerifyVizAccess } from '../src';
 import { VizAccess } from '../src/verifyVizAccess';

@@ -158,6 +158,6 @@ describe('v2 computeSrcDocV2', () => {
       
     })()</script><meta charset="utf-8"><script>var __filesURI = "%7B%22README.md%22%3A%22Test%20%5BMarkdown%5D(https%3A%2F%2Fwww.markdownguide.org%2F).%5Cn%23%20Introduction%5Cn%5CnThis%20is%20a%20test.%22%7D";
 var __files = JSON.parse(decodeURIComponent(__filesURI));
-var __fileNames = ["README.md"];</script><body>Hello</body>`);
+var __fileNames = ["README.md"];</script><body style="font-size:26em">Hello</body>`);
   });
 });

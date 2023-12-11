@@ -1,17 +1,22 @@
 import { describe, it, expect, assert } from 'vitest';
-import { GetImage } from '../src';
+import { JSDOM } from 'jsdom';
+import { setJSDOM } from 'runtime';
+import { GetThumbnail } from '../src';
 import { initGateways } from './initGateways';
 import {
-  sampleImageBase64,
+  primordialVizThumbnail,
   primordialCommit,
   primordialViz,
   sampleImageMetadata,
+  userJoe,
 } from 'entities/test/fixtures';
 
-export const getImageTest = () => {
-  describe('GetImage', () => {
-    // TODO bring this back
-    it.skip('GetImage, success case', async () => {
+// Required for image generation.
+setJSDOM(JSDOM);
+
+export const getThumbnailTest = () => {
+  describe('GetThumbnail', () => {
+    it.only('GetThumbnail, success case', async () => {
       const gateways = initGateways();
       const {
         saveCommit,
@@ -19,27 +24,34 @@ export const getImageTest = () => {
         saveContent,
         saveImageMetadata,
       } = gateways;
-      const getImage = GetImage(gateways);
+      const getThumbnail = GetThumbnail(gateways);
 
       await saveCommit(primordialCommit);
       await saveInfo(primordialViz.info);
       await saveContent(primordialViz.content);
       await saveImageMetadata(sampleImageMetadata);
 
-      const result = await getImage({
+      const result = await getThumbnail({
         commitId: primordialCommit.id,
+        authenticatedUserId: userJoe.id,
+        width: 100,
+        waitTime: 10,
       });
       expect(result.outcome).toEqual('success');
       assert(result.outcome === 'success');
-      expect(result.value).toEqual(sampleImageBase64);
+      expect(
+        result.value.buffer.toString('base64'),
+      ).toEqual(primordialVizThumbnail);
     });
 
-    it('GetImage, commit retrieval failure', async () => {
+    it('GetThumbnail, commit retrieval failure', async () => {
       const gateways = initGateways();
-      const getImage = GetImage(gateways);
+      const getThumbnail = GetThumbnail(gateways);
 
-      const result = await getImage({
+      const result = await getThumbnail({
         commitId: 'invalid-commit-id',
+        authenticatedUserId: userJoe.id,
+        width: 100,
       });
       expect(result.outcome).toEqual('failure');
       assert(result.outcome === 'failure');
@@ -50,16 +62,18 @@ export const getImageTest = () => {
     });
 
     // TODO bring this back, but for GetThumbnail
-    it.skip('GetImage, info retrieval failure', async () => {
+    it.skip('GetThumbnail, info retrieval failure', async () => {
       const gateways = initGateways();
       const { saveCommit } = gateways;
-      const getImage = GetImage(gateways);
+      const getThumbnail = GetThumbnail(gateways);
 
       // Set up commit but no info
       await saveCommit(primordialCommit);
 
-      const result = await getImage({
+      const result = await getThumbnail({
         commitId: primordialCommit.id,
+        authenticatedUserId: userJoe.id,
+        width: 100,
       });
       expect(result.outcome).toEqual('failure');
       assert(result.outcome === 'failure');
@@ -70,17 +84,19 @@ export const getImageTest = () => {
     });
 
     // TODO finish this one
-    it.skip('GetImage, image metadata retrieval failure', async () => {
+    it.skip('GetThumbnail, image metadata retrieval failure', async () => {
       const gateways = initGateways();
       const { saveCommit, saveInfo } = gateways;
-      const getImage = GetImage(gateways);
+      const getThumbnail = GetThumbnail(gateways);
 
       // Set up commit and info but no image metadata
       await saveCommit(primordialCommit);
       await saveInfo(primordialViz.info);
 
-      const result = await getImage({
+      const result = await getThumbnail({
         commitId: primordialCommit.id,
+        authenticatedUserId: userJoe.id,
+        width: 100,
       });
 
       // TODO test that metadata is generated and set to "generating"
@@ -93,10 +109,10 @@ export const getImageTest = () => {
     });
 
     // TODO bring this back, but for GetThumbnail
-    it.skip('GetImage, access control failure', async () => {
+    it.skip('GetThumbnail, access control failure', async () => {
       const gateways = initGateways();
       const { saveCommit, saveInfo } = gateways;
-      const getImage = GetImage(gateways);
+      const getThumbnail = GetThumbnail(gateways);
 
       await saveCommit(primordialCommit);
       await saveInfo({
@@ -104,8 +120,10 @@ export const getImageTest = () => {
         visibility: 'private',
       });
 
-      const result = await getImage({
+      const result = await getThumbnail({
         commitId: primordialCommit.id,
+        authenticatedUserId: userJoe.id,
+        width: 100,
       });
       expect(result.outcome).toEqual('failure');
       assert(result.outcome === 'failure');
@@ -117,4 +135,4 @@ export const getImageTest = () => {
   });
 };
 
-getImageTest();
+getThumbnailTest();

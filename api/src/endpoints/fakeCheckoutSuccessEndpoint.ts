@@ -6,7 +6,6 @@ import {
   missingParameterError,
   ok,
 } from 'gateways';
-import e from 'express';
 
 export const fakeCheckoutSuccessEndpoint = ({
   app,

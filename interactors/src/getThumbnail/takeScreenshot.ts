@@ -70,6 +70,9 @@ export const takeScreenshot = async ({
   srcDoc,
   width,
   height,
+
+  // Exposed here only so we can override it in tests
+  waitTime = maxPageLoadTimeMS,
 }) => {
   if (debug) {
     console.log('Launching puppeteer');
@@ -92,9 +95,7 @@ export const takeScreenshot = async ({
     await page.setContent(srcDoc);
 
     if (debug) {
-      console.log(
-        `Waiting for ${maxPageLoadTimeMS / 1000} seconds`,
-      );
+      console.log(`Waiting for ${waitTime / 1000} seconds`);
     }
 
     // Wait for document.readyState to be "complete",
@@ -108,7 +109,7 @@ export const takeScreenshot = async ({
     //   ),
     // ]);
     await new Promise((resolve) =>
-      setTimeout(resolve, maxPageLoadTimeMS),
+      setTimeout(resolve, waitTime),
     );
 
     if (debug) {

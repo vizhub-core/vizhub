@@ -1,5 +1,5 @@
 import { VizId } from 'entities';
-import { ResolvedVizFileId } from './v3Runtime/types';
+import { ResolvedVizFileId } from './types';
 
 export const parseId = (
   id: ResolvedVizFileId,

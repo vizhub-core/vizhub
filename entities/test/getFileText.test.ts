@@ -26,6 +26,6 @@ describe('getFileText', () => {
   it('should return text for a given file', () => {
     expect(
       getFileText(primordialViz.content, 'index.html'),
-    ).toBe('<body>Hello</body>');
+    ).toBe('<body style="font-size:26em">Hello</body>');
   });
 });

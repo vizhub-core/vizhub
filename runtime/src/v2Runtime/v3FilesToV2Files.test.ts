@@ -9,7 +9,7 @@ describe('v2 v3FilesToV2Files', () => {
     ).toEqual([
       {
         name: 'index.html',
-        text: '<body>Hello</body>',
+        text: '<body style="font-size:26em">Hello</body>',
       },
       {
         name: 'README.md',

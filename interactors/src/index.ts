@@ -23,4 +23,4 @@ export { GetCommitAtTimestamp } from './getCommitAtTimestamp';
 export { GetInfosAndOwners } from './getInfosAndOwners';
 export { ScoreViz } from './scoreViz';
 export { ValidateViz } from './validateViz';
-export { GetThumbnail } from './getThumbnail';
+export { GetThumbnail, GetImage } from './getThumbnail';
