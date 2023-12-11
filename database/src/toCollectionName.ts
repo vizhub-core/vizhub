@@ -3,5 +3,5 @@ import { EntityName } from 'entities';
 
 // Generates the MongoDB collecton names for each entity.
 export const toCollectionName = (entityName: EntityName) =>
-  // TODO adopt ts-string to type this transformation
-  entityName.toLowerCase() + 's';
+  // TODO maybe adopt ts-string to type this transformation
+  entityName.toLowerCase();
