@@ -27,7 +27,7 @@ import {
 } from 'runtime/src/v3Runtime/vizCache';
 import { generateImageHash } from './generateImageHash';
 
-const debug = true;
+const debug = false;
 
 // getImage
 //  * Gets an image for a commit
@@ -57,7 +57,9 @@ export const GetImage = (gateways: Gateways) => {
     waitTime?: number;
   }): Promise<Result<Image | null>> => {
     if (debug) {
-      console.log('getImage for commit ' + commitId);
+      console.log(
+        '  [GetImage] getImage for commit ' + commitId,
+      );
     }
 
     // Fetch the image metadata
@@ -77,7 +79,7 @@ export const GetImage = (gateways: Gateways) => {
     if (!imageMetadata) {
       if (debug) {
         console.log(
-          '  image metadata not found, generating',
+          '  [GetImage] image metadata not found, generating',
         );
       }
       // Store the metadata that indicates the image
@@ -91,7 +93,7 @@ export const GetImage = (gateways: Gateways) => {
 
       if (debug) {
         console.log(
-          '  saved image metadata with status "generating"',
+          '  [GetImage] saved image metadata with status "generating"',
         );
       }
 
@@ -104,31 +106,33 @@ export const GetImage = (gateways: Gateways) => {
       }
       const content: Content = contentResult.value;
 
-      if (debug) {
-        console.log('  content:');
-        console.log(content);
-      }
+      // if (debug) {
+      //   console.log('  content:');
+      //   console.log(content);
+      // }
 
       const vizCache: VizCache = createVizCache({
         initialContents: [content],
         handleCacheMiss: async (vizId: VizId) => {
           if (debug) {
             console.log(
-              'Handling cache miss for vizId',
+              '  [GetImage] Handling cache miss for vizId',
               vizId,
             );
           }
           const contentResult = await getContent(vizId);
           if (contentResult.outcome === 'failure') {
             console.log(
-              'Error when fetching content for viz cache:',
+              '  [GetImage] Error when fetching content for viz cache:',
             );
             console.log(contentResult.error);
             return null;
           }
 
           if (debug) {
-            console.log('Fetched content for viz cache');
+            console.log(
+              '  [GetImage] Fetched content for viz cache',
+            );
             console.log(contentResult.value.data);
           }
           return contentResult.value.data;
@@ -140,7 +144,7 @@ export const GetImage = (gateways: Gateways) => {
 
       if (initialSrcdocError) {
         console.log(
-          'initialSrcdocError',
+          '  [GetImage] initialSrcdocError',
           initialSrcdocError,
         );
       }
@@ -149,7 +153,7 @@ export const GetImage = (gateways: Gateways) => {
 
       if (debug) {
         console.log(
-          '  generated srcdoc, taking screenshot',
+          '  [GetImage] generated srcdoc, taking screenshot',
         );
       }
       // Take the screenshot
@@ -162,7 +166,7 @@ export const GetImage = (gateways: Gateways) => {
 
       if (debug) {
         console.log(
-          '  took screenshot, saving stored image',
+          '  [GetImage] took screenshot, saving stored image',
         );
       }
 
@@ -180,7 +184,7 @@ export const GetImage = (gateways: Gateways) => {
       ) {
         if (debug) {
           console.log(
-            '  Image already exists, using stored image',
+            '  [GetImage] Image by hash already exists, using stored image',
           );
         }
       } else {
@@ -196,7 +200,7 @@ export const GetImage = (gateways: Gateways) => {
 
       if (debug) {
         console.log(
-          '  saving image metadata with status "generated"',
+          '  [GetImage] saving image metadata with status "generated"',
         );
       }
 
@@ -216,7 +220,7 @@ export const GetImage = (gateways: Gateways) => {
       if (imageMetadata.status === 'generating') {
         if (debug) {
           console.log(
-            '  image metadata found with status "generating", polling',
+            '  [GetImage] image metadata found with status "generating", polling',
           );
         }
         const polledImageMetadataResult: Result<ImageMetadata> =
@@ -235,7 +239,7 @@ export const GetImage = (gateways: Gateways) => {
 
       if (debug) {
         console.log(
-          '  Fetching and returning the stored image',
+          '  [GetImage] Fetching and returning the stored image',
         );
       }
       // Fetch and return the stored image

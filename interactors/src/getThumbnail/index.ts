@@ -29,7 +29,7 @@ import { generateImageHash } from './generateImageHash';
 
 export { GetImage };
 
-const debug = true;
+const debug = false;
 
 // getThumbnail
 //  * Gets a resized image for a commit
