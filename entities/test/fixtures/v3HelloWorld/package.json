@@ -1,0 +1,13 @@
+{
+  "dependencies": {
+    "d3": "7.8.5"
+  },
+  "vizhub": {
+    "libraries": {
+      "d3": {
+        "global": "d3",
+        "path": "/dist/d3.min.js"
+      }
+    }
+  }
+}
