@@ -1,9 +1,9 @@
 import { KitchenSinkPage } from './index';
 
-KitchenSinkPage.getPageData = async ({ gateways }) => {
-  const pageData = {};
+// KitchenSinkPage.getPageData = async () => {
+//   const pageData = {};
 
-  return pageData;
-};
+//   return pageData;
+// };
 
 export { KitchenSinkPage };

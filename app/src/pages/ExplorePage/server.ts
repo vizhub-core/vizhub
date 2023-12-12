@@ -13,6 +13,7 @@ import { Gateways } from 'gateways';
 import { Auth0User } from '../Page';
 import { GetInfosAndOwners } from 'interactors';
 import { parseAuth0Sub } from 'api';
+import { getAuthenticatedUser } from '../getAuthenticatedUser';
 
 ExplorePage.getPageData = async ({
   gateways,
@@ -42,22 +43,11 @@ ExplorePage.getPageData = async ({
   const { infoSnapshots, ownerUserSnapshots } =
     infosAndOwnersResult.value;
 
-  // If the user is currently authenticated...
-  let authenticatedUserSnapshot = null;
-  if (auth0User) {
-    const authenticatedUserResult = await getUser(
-      parseAuth0Sub(auth0User.sub),
-    );
-    if (authenticatedUserResult.outcome === 'failure') {
-      console.log(
-        'Error when fetching authenticated user:',
-      );
-      console.log(authenticatedUserResult.error);
-      return null;
-    }
-    authenticatedUserSnapshot =
-      authenticatedUserResult.value;
-  }
+  const { authenticatedUserSnapshot } =
+    await getAuthenticatedUser({
+      gateways,
+      auth0User,
+    });
 
   return {
     title: `Explore VizHub`,
