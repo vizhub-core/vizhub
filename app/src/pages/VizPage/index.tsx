@@ -265,12 +265,6 @@ export const VizPage: Page = ({
     submitInfoOperation,
   );
 
-  useMarkUncommitted({
-    contentShareDBDoc,
-    infoShareDBDoc,
-    setUncommitted,
-  });
-
   // /////////////////////////////////////////
   /////////////// Analytics///////////////////
   // /////////////////////////////////////////
@@ -313,6 +307,7 @@ export const VizPage: Page = ({
             submitContentOperation,
             toggleDeleteVizConfirmationModal,
             vizCacheContents,
+            setUncommitted,
           }}
         />
       </SplitPaneResizeProvider>

@@ -91,16 +91,9 @@ VizPage.getPageData = async ({
         // return err(commitVizResult.error);
         console.log('Error when committing viz:');
         console.log(commitVizResult.error);
+      } else {
+        info = commitVizResult.value;
       }
-
-      // Get the latest version with updated end commit.
-      infoResult = await getInfo(id);
-      if (infoResult.outcome === 'failure') {
-        // Indicates viz not found
-        return null;
-      }
-      infoSnapshot = infoResult.value;
-      info = infoSnapshot.data;
     }
     const { title, owner, forkedFrom } = info;
 
