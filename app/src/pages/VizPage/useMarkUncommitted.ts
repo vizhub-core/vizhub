@@ -1,10 +1,17 @@
+import { User } from '@sentry/node';
+import { Content } from 'entities';
 import { useEffect } from 'react';
+import { ShareDBDoc } from 'vzcode';
 
 // Marks a Viz as uncommitted when its content is changed.
 export const useMarkUncommitted = ({
   contentShareDBDoc,
-  infoShareDBDoc,
   setUncommitted,
+  authenticatedUser,
+}: {
+  contentShareDBDoc: ShareDBDoc<Content>;
+  setUncommitted: (authenticatedUser: User | null) => void;
+  authenticatedUser: User | null;
 }) => {
   useEffect(() => {
     const handleOp = (op, source) => {
@@ -16,15 +23,16 @@ export const useMarkUncommitted = ({
       // Only mark the Viz as uncommitted if the Viz is committed.
       // Otherwise, the Viz is already uncommitted and it would
       // be a no-op.
-      const isVizCommitted = infoShareDBDoc.data.committed;
-
-      if (isChangeLocal && isVizCommitted) {
-        setUncommitted();
+      // Not true! It's not a no-op if another user makes a change,
+      // because that would add that user to the list of commit authors.
+      // const isVizCommitted = infoShareDBDoc.data.committed;
+      if (isChangeLocal) {
+        setUncommitted(authenticatedUser);
       }
     };
     contentShareDBDoc.on('op', handleOp);
     return () => {
       contentShareDBDoc.removeListener('op', handleOp);
     };
-  }, [contentShareDBDoc, infoShareDBDoc, setUncommitted]);
+  }, [contentShareDBDoc, setUncommitted]);
 };
