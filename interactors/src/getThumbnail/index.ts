@@ -102,7 +102,7 @@ export const GetThumbnail = (gateways: Gateways) => {
           'Viz is not committed, committing it now',
         );
       }
-      const commitVizResult = await commitViz(id);
+      const commitVizResult = await commitViz(info.id);
       if (commitVizResult.outcome === 'failure') {
         // TODO handle this error better
         // Needs a refactor of the returned type
