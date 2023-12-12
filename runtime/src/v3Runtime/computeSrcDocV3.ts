@@ -64,12 +64,12 @@ export const computeSrcDocV3 = async ({
   <head>
     <meta charset="utf-8">${cdn}${styles}
   </head>
-  <body style="margin:0">
+  <body style="margin:0; height: 100vh;">
     <script id="injected-script">${src}</script>
     <script>
       (() => {
         const render = () => {
-          Viz.main(document.body, { state: window.state, setState });
+          Viz.viz(document.body, { state: window.state, setState });
         };
         const setState = (next) => {
           window.state = next(window.state);
