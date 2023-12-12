@@ -35,7 +35,7 @@ import { useRenderMarkdownHTML } from './useRenderMarkdownHTML';
 import { VizPageEditor } from './VizPageEditor';
 import { useMarkUncommitted } from '../useMarkUncommitted';
 
-const debug = false;
+// const debug = true;
 
 export const VizPageBody = ({
   info,

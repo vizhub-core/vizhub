@@ -8,6 +8,7 @@ import { parseAuth0Sub } from 'api';
 import { Gateways, Result } from 'gateways';
 import { Action, Info, READ, VizId, WRITE } from 'entities';
 import { VizAccess } from 'interactors/src/verifyVizAccess';
+import { INFO_COLLECTION } from 'database/src/collectionNames';
 
 // Useful for debugging agent identification.
 const debug = false;
@@ -134,8 +135,11 @@ const vizVerify = (gateways: Gateways, action: Action) => {
       return next();
     }
 
-    // Vet ops against viz content documents.
-    if (collection === CONTENT_COLLECTION) {
+    // Vet ops against viz Info and Content documents.
+    if (
+      collection === CONTENT_COLLECTION ||
+      collection === INFO_COLLECTION
+    ) {
       const id: VizId = snapshot
         ? snapshot.id
         : snapshots[0].id;
@@ -146,11 +150,17 @@ const vizVerify = (gateways: Gateways, action: Action) => {
         );
       }
 
-      const infoResult = await getInfo(id);
-      if (infoResult.outcome === 'failure') {
-        throw infoResult.error;
+      let info: Info;
+      if (collection === CONTENT_COLLECTION) {
+        const infoResult = await getInfo(id);
+        if (infoResult.outcome === 'failure') {
+          throw infoResult.error;
+        }
+        info = infoResult.value.data;
+      } else {
+        info = snapshot.data;
       }
-      const info: Info = infoResult.value.data;
+
       const verifyResult: Result<VizAccess> =
         await verifyVizAccess({
           authenticatedUserId: userId,
