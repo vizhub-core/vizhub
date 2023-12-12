@@ -1,8 +1,8 @@
 import { KitchenSinkApp } from 'components';
-
+import { Page } from '../Page';
 import './styles.css';
 
-export const KitchenSinkPage = () => {
+export const KitchenSinkPage: Page = () => {
   return <KitchenSinkApp />;
 };
 

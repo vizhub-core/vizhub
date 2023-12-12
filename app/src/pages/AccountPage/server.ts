@@ -1,3 +1,4 @@
+import { getAuthenticatedUser } from '../getAuthenticatedUser';
 import { AccountPage, AccountPageData } from './index';
 import { parseAuth0Sub } from 'api';
 
@@ -5,24 +6,11 @@ AccountPage.getPageData = async ({
   gateways,
   auth0User,
 }): Promise<AccountPageData> => {
-  const { getUser } = gateways;
-  // If the user is currently authenticated...
-  // TODO reduce duplication between pages
-  let authenticatedUserSnapshot = null;
-  if (auth0User) {
-    const authenticatedUserResult = await getUser(
-      parseAuth0Sub(auth0User.sub),
-    );
-    if (authenticatedUserResult.outcome === 'failure') {
-      console.log(
-        'Error when fetching authenticated user:',
-      );
-      console.log(authenticatedUserResult.error);
-      return null;
-    }
-    authenticatedUserSnapshot =
-      authenticatedUserResult.value;
-  }
+  const { authenticatedUserSnapshot } =
+    await getAuthenticatedUser({
+      gateways,
+      auth0User,
+    });
 
   const pageData: AccountPageData = {
     title: 'VizHub Account',

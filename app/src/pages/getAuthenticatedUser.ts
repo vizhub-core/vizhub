@@ -9,7 +9,9 @@ export const getAuthenticatedUser = async ({
   authenticatedUserSnapshot: Snapshot<User> | undefined;
 }> => {
   // If the user is currently authenticated...
-  let authenticatedUserSnapshot: Snapshot<User> | undefined;
+  let authenticatedUserSnapshot:
+    | Snapshot<User>
+    | undefined = undefined;
 
   let authenticatedUserId: UserId | undefined = undefined;
 

@@ -1,4 +1,4 @@
-import { Info, UserId, Visibility } from 'entities';
+import { Info, User, UserId, Visibility } from 'entities';
 import { useCallback } from 'react';
 
 const debug = false;
@@ -42,14 +42,29 @@ export const useSetAnyoneCanEdit = (
 export const useSetUncommitted = (
   submitInfoOperation: (next: (info: Info) => Info) => void,
 ) =>
-  useCallback(() => {
-    submitInfoOperation(
-      (info: Info): Info => ({
-        ...info,
-        committed: false,
-      }),
-    );
-  }, [submitInfoOperation]);
+  useCallback(
+    (authenticatedUser: User | null) => {
+      submitInfoOperation(
+        (info: Info): Info => ({
+          ...info,
+          committed: false,
+
+          // Add the authenticated user to the list of commit authors
+          commitAuthors: authenticatedUser
+            ? info.commitAuthors.includes(
+                authenticatedUser.id,
+              )
+              ? info.commitAuthors
+              : [
+                  ...info.commitAuthors,
+                  authenticatedUser.id,
+                ]
+            : info.commitAuthors,
+        }),
+      );
+    },
+    [submitInfoOperation],
+  );
 
 export const useOnSettingsSave = (
   submitInfoOperation: (

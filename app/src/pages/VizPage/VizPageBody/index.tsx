@@ -33,6 +33,9 @@ import {
 } from '../../../accessors';
 import { useRenderMarkdownHTML } from './useRenderMarkdownHTML';
 import { VizPageEditor } from './VizPageEditor';
+import { useMarkUncommitted } from '../useMarkUncommitted';
+
+const debug = false;
 
 export const VizPageBody = ({
   info,
@@ -57,6 +60,7 @@ export const VizPageBody = ({
   submitContentOperation,
   toggleDeleteVizConfirmationModal,
   vizCacheContents,
+  setUncommitted,
 }: {
   info: Info;
   content: Content;
@@ -82,11 +86,26 @@ export const VizPageBody = ({
   ) => void;
   toggleDeleteVizConfirmationModal: () => void;
   vizCacheContents: Record<string, Content>;
+  setUncommitted: (authenticatedUser: User | null) => void;
 }) => {
   // The currently authenticated user, if any.
   const authenticatedUser: User | null = useContext(
     AuthenticatedUserContext,
   );
+
+  // Marks the viz as uncommitted and adds the
+  // authenticated user to the list of commit authors.
+  useMarkUncommitted({
+    contentShareDBDoc,
+    setUncommitted,
+    authenticatedUser,
+  });
+
+  if (debug) {
+    // Log the info object for debugging the commit authors.
+    console.log('[VizPageBody] Info:');
+    console.log(JSON.stringify(info, null, 2));
+  }
 
   // A function that renders markdown to HTML.
   // This supports server-rendering of markdown.
