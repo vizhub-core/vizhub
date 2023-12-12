@@ -12,16 +12,17 @@ import {
   imageFromBase64,
   ImageId,
 } from 'entities';
-import {
-  VerifyVizAccess,
-  VizAccess,
-} from '../verifyVizAccess';
 import { accessDeniedError } from 'gateways/src/errors';
-import { resizeImage } from './resizeImage';
 import {
   ImageHash,
   generateImageId,
 } from 'entities/src/Images';
+import {
+  VerifyVizAccess,
+  VizAccess,
+} from '../verifyVizAccess';
+import { CommitViz } from '../commitViz';
+import { resizeImage } from './resizeImage';
 import { GetImage } from './getImage';
 import { FetchImageMetadata } from './fetchImageMetadata';
 import { PollImageGenerationStatus } from './PollImageGenerationStatus';
@@ -45,6 +46,7 @@ export const GetThumbnail = (gateways: Gateways) => {
   } = gateways;
 
   const verifyVizAccess = VerifyVizAccess(gateways);
+  const commitViz = CommitViz(gateways);
   const getImage = GetImage(gateways);
   const fetchImageMetadata = FetchImageMetadata(gateways);
   const pollImageGenerationStatus =
@@ -85,6 +87,30 @@ export const GetThumbnail = (gateways: Gateways) => {
     }
     const infoSnapshot: Snapshot<Info> = infoResult.value;
     const info = infoSnapshot.data;
+
+    // If the viz is not committed, then commit it.
+    // This is necessary because the thumbnail is
+    // out of date if the viz is not committed.
+    // The desired effect of doing this is:
+    //  * The old thumbnail loads immediately
+    //  * The new thumbnail loads in the background,
+    //    showing a loading spinner on top of the old one
+    //  * The old thumbnail is replaced with the new thumbnail
+    if (!info.committed) {
+      if (debug) {
+        console.log(
+          'Viz is not committed, committing it now',
+        );
+      }
+      const commitVizResult = await commitViz(id);
+      if (commitVizResult.outcome === 'failure') {
+        // TODO handle this error better
+        // Needs a refactor of the returned type
+        // return err(commitVizResult.error);
+        console.log('Error when committing viz:');
+        console.log(commitVizResult.error);
+      }
+    }
 
     // Verify access
     const vizAccessResult: Result<VizAccess> =

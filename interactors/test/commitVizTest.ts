@@ -1,6 +1,6 @@
 // See also
 //  * https://gitlab.com/curran/vizhub-ee/-/blob/main/vizhub-ee-interactors/test/CommitVizTest.ts
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, assert } from 'vitest';
 import {
   primordialViz,
   primordialCommit,
@@ -16,12 +16,11 @@ import {
 } from '../src';
 
 export const commitVizTest = () => {
-  describe('commitViz', async () => {
+  describe.only('commitViz', async () => {
     // This is a no-op case.
     // It should do nothing and return "success".
     it('commitViz, committed case', async () => {
       const gateways = initGateways();
-      const { getInfo, saveCommit, getCommit } = gateways;
       const saveViz = SaveViz(gateways);
       const commitViz = CommitViz(gateways);
 
@@ -30,7 +29,8 @@ export const commitVizTest = () => {
       const result = await commitViz(primordialViz.info.id);
 
       expect(result.outcome).toEqual('success');
-      expect(result.value).toEqual('success');
+      assert(result.outcome === 'success');
+      expect(result.value).toEqual(primordialViz.info);
     });
 
     // This is the case where it actually does something.
@@ -70,32 +70,49 @@ export const commitVizTest = () => {
       const result = await commitViz(primordialViz.info.id);
 
       expect(result.outcome).toEqual('success');
-      expect(result.value).toEqual(newCommitId);
+      assert(result.outcome === 'success');
 
-      expect(
-        (await getInfo(primordialViz.info.id)).value.data,
-      ).toEqual({
+      const expectedInfo = {
         ...uncommitted.info,
         end: newCommitId,
         committed: true,
         commitAuthors: [],
-      });
+      };
+      expect(result.value).toEqual(expectedInfo);
+
+      const getInfoResult = await getInfo(
+        primordialViz.info.id,
+      );
+      assert(getInfoResult.outcome === 'success');
+      expect(getInfoResult.value.data).toEqual(
+        expectedInfo,
+      );
+
+      const getCommitResult = await getCommit(newCommitId);
+
+      assert(getCommitResult.outcome === 'success');
       // console.log(
-      //   JSON.stringify((await getCommit(newCommitId)).value, null, 2)
+      //   JSON.stringify(getCommitResult.value, null, 2),
       // );
-      expect((await getCommit(newCommitId)).value).toEqual({
-        id: newCommitId,
-        parent: primordialViz.info.start,
-        viz: primordialViz.info.id,
-        authors: [userJoe.id],
-        timestamp: ts3,
+      expect(getCommitResult.value).toEqual({
+        id: '100',
+        parent: 'commit1',
+        viz: 'viz1',
+        authors: ['47895473289547832938754'],
+        timestamp: 1638300000,
         ops: [
           'files',
           [
             '7548392',
             'text',
             {
-              es: [11, ' Beautiful World'],
+              es: [
+                5,
+                '>Hello Beautiful World',
+                {
+                  d: ' style="font-size:26em">Hello',
+                },
+              ],
             },
           ],
           [
@@ -103,12 +120,11 @@ export const commitVizTest = () => {
             {
               r: {
                 name: 'README.md',
-                text: sampleReadmeText,
+                text: 'Test [Markdown](https://www.markdownguide.org/).\n# Introduction\n\nThis is a test.',
               },
             },
           ],
         ],
-
         milestone: null,
       });
     });

@@ -15,7 +15,7 @@ export const CommitViz = (gateways: Gateways) => {
   const getViz = GetViz(gateways);
   const getContentAtCommit = GetContentAtCommit(gateways);
 
-  return async (id: VizId): Promise<Result<CommitId>> => {
+  return async (id: VizId): Promise<Result<Info>> => {
     // TODORedLock
     const getVizResult = await getViz(id);
     if (getVizResult.outcome === 'failure')
@@ -25,7 +25,9 @@ export const CommitViz = (gateways: Gateways) => {
 
     // commitViz only makes sense to call if viz.committed is false.
     // If the viz is already committed, then nothing is left to be done.
-    if (info.committed) return ok('success');
+    if (info.committed) {
+      return ok(info);
+    }
 
     // Reconstruct the viz content as it was before the current
     // uncommitted changes were made. The new commit ops will diff
@@ -75,6 +77,6 @@ export const CommitViz = (gateways: Gateways) => {
     if (saveInfoResult.outcome !== 'success')
       return saveInfoResult;
 
-    return ok(newCommitId);
+    return ok(newInfo);
   };
 };
