@@ -5,6 +5,10 @@ import { parseId } from './parseId';
 
 const debug = false;
 
+function randomDigits() {
+  return Math.random().toString().slice(2, 7);
+}
+
 // Generates iframe srcdoc for first run.
 export const computeSrcDocV3 = async ({
   vizCache,
@@ -59,17 +63,32 @@ export const computeSrcDocV3 = async ({
     }
   }
 
+  const containerSuffix = randomDigits();
+
+  const vizContainerId = `viz-container-${containerSuffix}`;
+
   return `<!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">${cdn}${styles}
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+      }
+      #${vizContainerId} {
+        height: 100vh;
+      }
+    </style>
   </head>
-  <body style="margin:0; height: 100vh;">
+  <body>
+    <div id="${vizContainerId}"></div>
     <script id="injected-script">${src}</script>
     <script>
       (() => {
         const render = () => {
-          Viz.viz(document.body, { state: window.state, setState });
+          const container = document.getElementById('${vizContainerId}');
+          Viz.viz(container, { state: window.state, setState });
         };
         const setState = (next) => {
           window.state = next(window.state);
