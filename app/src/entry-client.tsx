@@ -12,11 +12,7 @@ import 'vizhub-ui/dist/vizhub-ui.css';
 // @ts-ignore
 const pageData = window.pageData;
 
-console.log('Welcome to VizHub!');
-console.log('  version:', pageData.version);
-
 const renderApp = () => {
-  console.log('Rendering app...');
   hydrateRoot(
     document.getElementById('app'),
     <BrowserRouter>

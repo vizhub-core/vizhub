@@ -45,7 +45,7 @@ export const Header = ({
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="me-auto" />
         <Nav className="align-items-md-center">
-          <Nav.Link>About</Nav.Link>
+          <Nav.Link href="/explore">Explore</Nav.Link>
 
           <Nav.Link
             onClick={onForumClick}
@@ -99,17 +99,17 @@ export const Header = ({
                 ></img>
               </Dropdown.Toggle>
               <Dropdown.Menu>
-                <Dropdown.Item onClick={onCreateVizClick}>
+                {/* <Dropdown.Item onClick={onCreateVizClick}>
                   Create Viz
                 </Dropdown.Item>
-                <Dropdown.Divider />
+                <Dropdown.Divider /> */}
                 <Dropdown.Item href={profileHref}>
                   Profile
                 </Dropdown.Item>
                 <Dropdown.Divider />
-                <Dropdown.Item href={accountHref}>
+                {/* <Dropdown.Item href={accountHref}>
                   Account
-                </Dropdown.Item>
+                </Dropdown.Item> */}
                 <Dropdown.Divider />
                 <Dropdown.Item href={logoutHref}>
                   Log out
