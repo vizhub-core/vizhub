@@ -143,13 +143,12 @@ export const VizPageBody = ({
   const [srcdocErrorMessage, setSrcdocErrorMessage] =
     useState<string | null>(initialSrcdocError);
 
-  const setSrcdocError = useCallback((setSrcdocError) => {
-    if (setSrcdocError !== null) {
-      console.log('setSrcdocError');
-      console.log(setSrcdocError);
-    }
-    // setSrcdocErrorMessage(errorMessage);
-  }, []);
+  const setSrcdocError = useCallback(
+    (errorMessage: string | null) => {
+      setSrcdocErrorMessage(errorMessage);
+    },
+    [],
+  );
 
   // Set up the runtime environment.
   useRuntime({

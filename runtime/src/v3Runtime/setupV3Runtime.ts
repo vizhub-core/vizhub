@@ -8,6 +8,7 @@ import {
 } from './types';
 import { Content, VizId, getFileText } from 'entities';
 import { parseId } from './parseId';
+import { generateRollupErrorMessage } from './generateRollupErrorMessage';
 
 // Flag for debugging.
 const debug = false;
@@ -158,10 +159,12 @@ export const setupV3Runtime = ({
     // These are sent by the worker in response to
     // an 'invalidateVizCacheRequest' message.
     if (message.type === 'invalidateVizCacheResponse') {
-      console.log(
-        '[v3 runtime] received invalidateVizCacheResponse',
-        message,
-      );
+      if (debug) {
+        console.log(
+          '[v3 runtime] received invalidateVizCacheResponse',
+          message,
+        );
+      }
       // Leverage existing infra for executing the hot reloading.
       handleCodeChange();
     }
@@ -271,7 +274,9 @@ export const setupV3Runtime = ({
       // Handle build errors
       if (errors.length > 0) {
         setSrcdocError(
-          errors.map((error) => error.message).join('\n\n'),
+          errors
+            .map(generateRollupErrorMessage)
+            .join('\n\n'),
         );
         resolve();
         return;
