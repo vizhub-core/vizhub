@@ -1,92 +1,52 @@
 .vh-pricing-page {
   overflow: auto;
-  // .card {
-  //   box-shadow: var(--vh-box-shadow);
-  //   background-color: white;
-  //   font-size: 18px;
-  // }
+  position: relative;
 
-  .plans {
-    font-family: 'Arial', sans-serif;
-    padding: 20px;
-    background-color: #f5f5f5;
-    max-width: 800px;
-    margin: auto;
+  img.header-background {
+    position: absolute;
+    width: 100%;
   }
 
-  .plan-cards {
+  .pricing-page-body {
+    position: absolute;
+    width: 100%;
+
     display: flex;
-    justify-content: space-around;
-    margin-bottom: 20px;
-  }
+    align-items: center;
+    justify-content: center;
 
-  .card {
-    background-color: #ffffff;
-    border-radius: 8px;
-    padding: 20px;
-    width: 350px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
+    .pricing-page-content {
+      width: 100%;
+      max-width: 1280px;
 
-  .card h2 {
-    margin-top: 0;
-  }
+      .pricing-page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 70px;
 
-  .current {
-    background-color: #4caf50;
-    color: white;
-    border: none;
-    padding: 10px;
-    border-radius: 20px;
-    cursor: pointer;
-  }
+        h1 {
+          color: white;
+        }
 
-  .upgrade {
-    background-color: #2196f3;
-    color: white;
-    border: none;
-    padding: 10px;
-    border-radius: 20px;
-    cursor: pointer;
-  }
+        /* TODO move these into vizhub-ui */
+        .btn-secondary {
+          background-color: #e0e8ff;
+          color: #3866e9;
+          font-weight: bold;
+        }
 
-  .price {
-    display: flex;
-    align-items: baseline;
-  }
+        .btn-outline-secondary {
+          color: #ffffff;
+        }
+        .btn-outline-secondary:hover {
+          background-color: #e0e8ff2a;
+        }
 
-  .price span:first-child {
-    font-size: 24px;
-    font-weight: bold;
-  }
-
-  .price span:last-child {
-    margin-left: 5px;
-  }
-
-  ul {
-    list-style: none;
-    padding: 0;
-  }
-
-  ul li {
-    padding: 5px 0;
-    border-bottom: 1px solid #ddd;
-  }
-
-  ul li:last-child {
-    border-bottom: none;
-  }
-
-  .toggle-buttons {
-    text-align: center;
-  }
-
-  .toggle-buttons button {
-    background-color: transparent;
-    border: 1px solid #ddd;
-    padding: 10px 20px;
-    margin: 0 5px;
-    cursor: pointer;
+        .btn {
+          border: 1px solid #e0e8ff;
+        }
+      }
+    }
   }
 }
