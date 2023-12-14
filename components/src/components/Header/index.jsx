@@ -110,7 +110,7 @@ export const Header = ({
                 {/* <Dropdown.Item href={accountHref}>
                   Account
                 </Dropdown.Item> */}
-                <Dropdown.Divider />
+                {/* <Dropdown.Divider /> */}
                 <Dropdown.Item href={logoutHref}>
                   Log out
                 </Dropdown.Item>
