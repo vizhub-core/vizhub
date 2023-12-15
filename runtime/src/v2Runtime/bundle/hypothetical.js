@@ -223,8 +223,10 @@ function unixStylePath(p) {
 
 function dneMessage(id) {
   return (
-    '"' +
+    'Import failed: `' +
     id +
-    '" does not exist in the hypothetical file system!'
+    '` not found. Double check that the file `' +
+    id +
+    '` exists.'
   );
 }

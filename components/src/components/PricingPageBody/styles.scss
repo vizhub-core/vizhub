@@ -73,86 +73,98 @@
 
         .pricing-page-plan {
           flex: 1;
-          padding: 32px 36px;
           display: flex;
           flex-direction: column;
           background-color: white;
           border-radius: 8px;
           box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.05);
 
-          .plan-header {
-            display: flex;
-            justify-content: space-between;
-
-            .plan-header-left {
-              color: #202e46;
-            }
-            .plan-header-right {
-              display: flex;
-              color: #576786;
-            }
-            .plan-header-right-faint {
-              color: #bdc7dc;
-              line-height: 50px;
-              margin-left: 5px;
-
-              /* Prevents this offset from impacting the layout */
-              margin-bottom: -10px;
-            }
+          img.plan-spirit {
+            height: 300px;
+            object-fit: cover;
+            border-top-right-radius: inherit;
+            border-top-left-radius: inherit;
           }
 
-          .pricing-page-plan-button {
-            margin: 40px 0;
-            font-weight: 500;
-          }
-
-          .pricing-page-plan-button.btn-success {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            pointer-events: none;
-            gap: 8px;
-          }
-
-          p {
-            color: #576786;
-            margin-bottom: 0px;
-          }
-
-          .feature {
+          .pricing-page-plan-body {
+            padding: 32px;
             display: flex;
             flex-direction: column;
-            cursor: pointer;
-            padding: 10px 0;
 
-            .feature-header {
+            .plan-header {
               display: flex;
               justify-content: space-between;
 
-              .feature-title {
-                font-weight: bold;
-                display: flex;
-                align-items: center;
-                gap: 8px;
+              .plan-header-left {
+                color: #202e46;
               }
-
-              .feature-toggle {
-                padding: 6px;
-                border-radius: 4px;
+              .plan-header-right {
                 display: flex;
+                color: #576786;
+              }
+              .plan-header-right-faint {
+                color: #bdc7dc;
+                line-height: 50px;
+                margin-left: 5px;
+
+                /* Prevents this offset from impacting the layout */
+                margin-bottom: -10px;
               }
             }
-            .feature-description {
+
+            .pricing-page-plan-button {
+              margin: 40px 0;
+              font-weight: 500;
+            }
+
+            .pricing-page-plan-button.btn-success {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              pointer-events: none;
+              gap: 8px;
+            }
+
+            p {
               color: #576786;
-              margin-bottom: 6px;
+              margin-bottom: 0px;
             }
-          }
 
-          .feature:hover .feature-toggle {
-            background-color: #e0e8ff;
-          }
-          .feature.has-bottom-border {
-            border-bottom: 1px solid #e6eaf2;
+            .feature {
+              display: flex;
+              flex-direction: column;
+              cursor: pointer;
+              padding: 10px 0;
+
+              .feature-header {
+                display: flex;
+                justify-content: space-between;
+
+                .feature-title {
+                  font-weight: bold;
+                  display: flex;
+                  align-items: center;
+                  gap: 8px;
+                }
+
+                .feature-toggle {
+                  padding: 6px;
+                  border-radius: 4px;
+                  display: flex;
+                }
+              }
+              .feature-description {
+                color: #576786;
+                margin-bottom: 6px;
+              }
+            }
+
+            .feature:hover .feature-toggle {
+              background-color: #e0e8ff;
+            }
+            .feature.has-bottom-border {
+              border-bottom: 1px solid #e6eaf2;
+            }
           }
         }
       }
