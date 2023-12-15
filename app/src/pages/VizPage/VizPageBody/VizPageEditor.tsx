@@ -74,8 +74,10 @@ export const VizPageEditor = ({
       codeError={srcdocErrorMessage}
       submitOperation={submitContentOperation}
     >
-      {showEditor ? <VZLeft /> : null}
-      <VZMiddle />
+      {showEditor ? (
+        <VZLeft enableUsernameField={false} />
+      ) : null}
+      <VZMiddle enableAIAssist={false} />
       <VZResizer side="left" />
       <VZResizer side="right" />
     </VZCodeProvider>
