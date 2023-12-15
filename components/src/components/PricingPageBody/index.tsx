@@ -1,5 +1,9 @@
+import { useCallback, useState } from 'react';
+import { GreenCheckSVG } from '../Icons/sam/GreenCheckSVG';
 import { Button, ButtonGroup } from '../bootstrap';
 import './styles.scss';
+import { ChevronDownSVG } from '../Icons/sam/ChevronDownSVG';
+import { ChevronUpSVG } from '../Icons/sam/ChevronUpSVG';
 
 const headerBackgroundSrc =
   'https://gist.github.com/assets/68416/5c51a6f3-2665-4117-82c7-069b089deaca.png';
@@ -51,7 +55,40 @@ const headerBackgroundSrc =
 //     </div>
 //   );
 // }
+const Feature = ({
+  title,
+  description,
+  hasBottomBorder,
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
 
+  const toggleIsOpen = useCallback(() => {
+    setIsOpen((isOpen) => !isOpen);
+  }, []);
+  return (
+    <div
+      className={`feature${
+        hasBottomBorder ? ' has-bottom-border' : ''
+      }`}
+      onClick={toggleIsOpen}
+    >
+      <div className="feature-header">
+        <div className="feature-title">
+          <GreenCheckSVG />
+          {title}
+        </div>
+        <div className="feature-toggle">
+          {isOpen ? <ChevronUpSVG /> : <ChevronDownSVG />}
+        </div>
+      </div>
+      {isOpen && (
+        <div className="feature-description">
+          {description}
+        </div>
+      )}
+    </div>
+  );
+};
 export const PricingPageBody = ({
   onFreeClick,
   onProClick,
@@ -79,24 +116,43 @@ export const PricingPageBody = ({
           </div>
           <div className="pricing-page-plans">
             <div className="pricing-page-plan">
-              <h3>Starter</h3>
-              <p>
-                Free forever. For individuals and small
-                teams.
-              </p>
+              <div className="plan-header">
+                <h3 className="plan-header-left">
+                  Starter
+                </h3>
+                <h3 className="plan-header-right">Free</h3>
+              </div>
+
+              <p>Free forever. Ideal for students.</p>
               <Button
-                variant="primary"
-                onClick={onFreeClick}
+                variant="success"
                 className="pricing-page-plan-button"
               >
-                Get Started
+                Current
+                <GreenCheckSVG />
               </Button>
-              <ul>
-                <li>Public Vizzes</li>
-                <li>Export Code</li>
-                <li>Real-time Collaboration</li>
-                <li>Unfurling</li>
-              </ul>
+              <div className="pricing-page-plan-features">
+                <Feature
+                  title="Public Vizzes"
+                  description="View, fork and modify visualizations viewable by everyone."
+                  hasBottomBorder={true}
+                />
+                <Feature
+                  title="Export Code"
+                  description="Export industry-standard code files for easy integration into existing codebases."
+                  hasBottomBorder={true}
+                />
+                <Feature
+                  title="Real-time Collaboration"
+                  description="Allow anyone to edit with you in real time."
+                  hasBottomBorder={true}
+                />
+                <Feature
+                  title="Unfurling"
+                  description="See rich previews when sharing viz links in social media."
+                  hasBottomBorder={false}
+                />
+              </div>
             </div>
             <div className="pricing-page-plan">
               <h3>Premium</h3>
@@ -119,26 +175,6 @@ export const PricingPageBody = ({
               </ul>
             </div>
           </div>
-          {/* <div className="pricing-page-plan">
-              <h2>Enterprise</h2>
-              <p>
-                $100 / mo. For large teams and organizations.
-              </p>
-              <Button
-                variant="primary"
-                onClick={onEnterpriseClick}
-                className="pricing-page-plan-button"
-              >
-                Contact Us
-              </Button>
-              <ul>
-                <li>Private Vizzes</li>
-                <li>Public Vizzes</li>
-                <li>Export Code</li>
-                <li>Real-time Collaboration</li>
-                <li>Unfurling</li>
-              </ul>
-            </div> */}
         </div>
       </div>
     </div>
