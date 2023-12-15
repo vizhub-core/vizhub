@@ -3,32 +3,31 @@
   position: relative;
 
   /* TODO move these into vizhub-ui */
-  .btn-secondary {
-    background-color: #e0e8ff;
-    color: #3866e9;
-    font-weight: bold;
-    border: 1px solid #e0e8ff;
-  }
-  .btn-outline-secondary {
-    color: #ffffff;
-    border: 1px solid #e0e8ff;
-  }
-  .btn-outline-secondary:hover {
-    background-color: #e0e8ff2a;
-  }
+  // .btn-secondary {
+  //   background-color: #e0e8ff;
+  //   color: #3866e9;
+  //   font-weight: bold;
+  //   border: 1px solid #e0e8ff;
+  // }
+  // .btn-outline-secondary {
+  //   color: #ffffff;
+  //   border: 1px solid #e0e8ff;
+  // }
+  // .btn-outline-secondary:hover {
+  //   background-color: #e0e8ff2a;
+  // }
 
-  .btn-success {
-    background-color: #d7f6dc;
-    color: #576786;
-    font-weight: 500;
-    border: none;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    pointer-events: none;
-    gap: 8px;
-    margin: 40px 0;
-  }
+  // .btn-success {
+  //   background-color: #d7f6dc;
+  //   color: #576786;
+  //   font-weight: 500;
+  //   border: none;
+  //   display: flex;
+  //   justify-content: center;
+  //   align-items: center;
+  //   pointer-events: none;
+  //   gap: 8px;
+  // }
 
   img.header-background {
     position: absolute;
@@ -89,8 +88,27 @@
               color: #202e46;
             }
             .plan-header-right {
+              display: flex;
               color: #576786;
             }
+            .plan-header-right-faint {
+              color: #bdc7dc;
+              line-height: 50px;
+              margin-left: 5px;
+            }
+          }
+
+          .pricing-page-plan-button {
+            margin: 40px 0;
+            font-weight: 500;
+          }
+
+          .pricing-page-plan-button.btn-success {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            pointer-events: none;
+            gap: 8px;
           }
 
           p {

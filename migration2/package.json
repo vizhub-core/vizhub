@@ -22,14 +22,14 @@
   "devDependencies": {
     "@types/d3-time": "^3.0.3",
     "@types/uuid": "^9.0.7",
-    "vite": "^5.0.9",
+    "vite": "^5.0.10",
     "vitest": "^1.0.4"
   },
   "dependencies": {
     "d3-time": "^3.1.0",
     "gpt-3-encoder": "^1.1.4",
     "mongodb-legacy": "^6.0.1",
-    "openai": "^4.21.0",
+    "openai": "^4.22.0",
     "prompt-sync": "^4.2.0"
   }
 }
