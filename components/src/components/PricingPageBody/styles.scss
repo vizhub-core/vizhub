@@ -95,6 +95,9 @@
               color: #bdc7dc;
               line-height: 50px;
               margin-left: 5px;
+
+              /* Prevents this offset from impacting the layout */
+              margin-bottom: -10px;
             }
           }
 

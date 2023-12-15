@@ -1,53 +1,29 @@
 import { useCallback, useState } from 'react';
 import { GreenCheckSVG } from '../Icons/sam/GreenCheckSVG';
 import { Button, ButtonGroup } from '../bootstrap';
-import { ChevronDownSVG } from '../Icons/sam/ChevronDownSVG';
-import { ChevronUpSVG } from '../Icons/sam/ChevronUpSVG';
+import { Feature } from './Feature';
 import './styles.scss';
 
 const headerBackgroundSrc =
   'https://gist.github.com/assets/68416/5c51a6f3-2665-4117-82c7-069b089deaca.png';
 
-const Feature = ({
-  title,
-  description,
-  hasBottomBorder,
-  startsExpanded = false,
-}) => {
-  const [isOpen, setIsOpen] = useState(startsExpanded);
-
-  const toggleIsOpen = useCallback(() => {
-    setIsOpen((isOpen) => !isOpen);
-  }, []);
-  return (
-    <div
-      className={`feature${
-        hasBottomBorder ? ' has-bottom-border' : ''
-      }`}
-      onClick={toggleIsOpen}
-    >
-      <div className="feature-header">
-        <div className="feature-title">
-          <GreenCheckSVG />
-          {title}
-        </div>
-        <div className="feature-toggle">
-          {isOpen ? <ChevronUpSVG /> : <ChevronDownSVG />}
-        </div>
-      </div>
-      {isOpen && (
-        <div className="feature-description">
-          {description}
-        </div>
-      )}
-    </div>
-  );
-};
 export const PricingPageBody = ({
   onFreeClick,
   onProClick,
   // onEnterpriseClick,
 }) => {
+  const [isMonthly, setIsMonthly] = useState(false);
+
+  const handleMonthlyClick = useCallback(() => {
+    setIsMonthly(true);
+  }, []);
+
+  const handleAnnuallyClick = useCallback(() => {
+    setIsMonthly(false);
+  }, []);
+
+  const premiumPricePerMonth = isMonthly ? 20 : 12;
+
   return (
     <div className="vh-page vh-pricing-page">
       <img
@@ -60,10 +36,24 @@ export const PricingPageBody = ({
           <div className="pricing-page-header">
             <h1>VizHub Plans</h1>
             <ButtonGroup aria-label="Billing Cadences">
-              <Button variant="secondary">
+              <Button
+                variant={
+                  isMonthly
+                    ? 'secondary'
+                    : 'outline-secondary'
+                }
+                onClick={handleMonthlyClick}
+              >
                 Billed Monthly
               </Button>
-              <Button variant="outline-secondary">
+              <Button
+                variant={
+                  isMonthly
+                    ? 'outline-secondary'
+                    : 'secondary'
+                }
+                onClick={handleAnnuallyClick}
+              >
                 Billed Annually
               </Button>
             </ButtonGroup>
@@ -116,7 +106,7 @@ export const PricingPageBody = ({
                   Premium
                 </h3>
                 <div className="plan-header-right">
-                  <h3>$12</h3>
+                  <h3>${premiumPricePerMonth}</h3>
                   <h3 className="plan-header-right-faint">
                     /mo
                   </h3>
