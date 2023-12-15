@@ -5,6 +5,7 @@ import InputGroup from 'react-bootstrap/cjs/InputGroup.js';
 import Form from 'react-bootstrap/cjs/Form.js';
 import FormControl from 'react-bootstrap/cjs/FormControl.js';
 import Button from 'react-bootstrap/cjs/Button.js';
+import ButtonGroup from 'react-bootstrap/cjs/ButtonGroup.js';
 import Modal from 'react-bootstrap/cjs/Modal.js';
 import Nav from 'react-bootstrap/cjs/Nav.js';
 import Navbar from 'react-bootstrap/cjs/Navbar.js';
@@ -26,6 +27,7 @@ export {
   Form,
   FormControl,
   Button,
+  ButtonGroup,
   Modal,
   Nav,
   Navbar,
