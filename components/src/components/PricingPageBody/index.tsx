@@ -77,6 +77,68 @@ export const PricingPageBody = ({
               </Button>
             </ButtonGroup>
           </div>
+          <div className="pricing-page-plans">
+            <div className="pricing-page-plan">
+              <h3>Starter</h3>
+              <p>
+                Free forever. For individuals and small
+                teams.
+              </p>
+              <Button
+                variant="primary"
+                onClick={onFreeClick}
+                className="pricing-page-plan-button"
+              >
+                Get Started
+              </Button>
+              <ul>
+                <li>Public Vizzes</li>
+                <li>Export Code</li>
+                <li>Real-time Collaboration</li>
+                <li>Unfurling</li>
+              </ul>
+            </div>
+            <div className="pricing-page-plan">
+              <h3>Premium</h3>
+              <p>
+                $10 / mo. For individuals and small teams.
+              </p>
+              <Button
+                variant="primary"
+                onClick={onProClick}
+                className="pricing-page-plan-button"
+              >
+                Upgrade
+              </Button>
+              <ul>
+                <li>Private Vizzes</li>
+                <li>Public Vizzes</li>
+                <li>Export Code</li>
+                <li>Real-time Collaboration</li>
+                <li>Unfurling</li>
+              </ul>
+            </div>
+          </div>
+          {/* <div className="pricing-page-plan">
+              <h2>Enterprise</h2>
+              <p>
+                $100 / mo. For large teams and organizations.
+              </p>
+              <Button
+                variant="primary"
+                onClick={onEnterpriseClick}
+                className="pricing-page-plan-button"
+              >
+                Contact Us
+              </Button>
+              <ul>
+                <li>Private Vizzes</li>
+                <li>Public Vizzes</li>
+                <li>Export Code</li>
+                <li>Real-time Collaboration</li>
+                <li>Unfurling</li>
+              </ul>
+            </div> */}
         </div>
       </div>
     </div>
