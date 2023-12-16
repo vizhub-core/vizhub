@@ -1,3 +1,4 @@
+import { Button } from '../bootstrap';
 import { image } from '../image';
 import './styles.scss';
 
@@ -20,6 +21,9 @@ export const LandingPageBody = () => {
             Develop custom data visualizations faster and
             more collaboratively than ever.
           </h1>
+          <Button variant="secondary" size="lg">
+            Try Vizhub for free
+          </Button>
         </div>
       </div>
     </div>
