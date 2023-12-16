@@ -7,7 +7,11 @@ import {
   useRef,
   useState,
 } from 'react';
-import { ShareDBDoc, SplitPaneResizeContext } from 'vzcode';
+import {
+  ShareDBDoc,
+  SplitPaneResizeContext,
+  shouldTriggerRun,
+} from 'vzcode';
 import {
   defaultVizWidth,
   Content,
@@ -165,7 +169,7 @@ export const VizPageBody = ({
   useEffect(() => {
     if (!enableManualRun) return;
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.ctrlKey && event.key === 's') {
+      if (shouldTriggerRun(event)) {
         event.preventDefault();
         // Add your custom code here
         // alert('Ctrl+S has been pressed');
