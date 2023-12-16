@@ -2,21 +2,15 @@ import { useCallback, useState } from 'react';
 import { GreenCheckSVG } from '../Icons/sam/GreenCheckSVG';
 import { Button, ButtonGroup } from '../bootstrap';
 import { Feature } from './Feature';
+import { image } from '../image';
 import './styles.scss';
 
-const baseSrc = 'https://vizhub-images.s3.amazonaws.com';
-
-const headerBackgroundSrc =
-  baseSrc + '/pricing-header-bkg.webp';
-
-const starterSpiritSrc =
-  baseSrc + '/pricing-spirit-starter.webp';
-
-const premiumSpiritSrc =
-  baseSrc + '/pricing-spirit-premium.webp';
-
-const professionalSpiritSrc =
-  baseSrc + '/pricing-spirit-professional.webp';
+const headerBackgroundSrc = image('pricing-header-bkg');
+const starterSpiritSrc = image('pricing-spirit-starter');
+const premiumSpiritSrc = image('pricing-spirit-premium');
+const professionalSpiritSrc = image(
+  'pricing-spirit-professional',
+);
 
 const StarterFeatures = () => {
   return (
