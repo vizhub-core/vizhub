@@ -8,4 +8,38 @@
     height: 836px;
     object-fit: cover;
   }
+
+  .landing-page-body {
+    position: absolute;
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .landing-page-content {
+      width: 100%;
+      max-width: 1200px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      .landing-page-tagline {
+        color: white;
+        opacity: 0.5;
+        font-size: 26px;
+        font-weight: 600;
+        padding-top: 128px;
+      }
+
+      .landing-page-headline {
+        color: white;
+        font-weight: 700;
+        font-size: 52px;
+        text-align: center;
+        line-height: 72px;
+      }
+    }
+  }
 }
