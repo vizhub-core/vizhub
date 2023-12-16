@@ -2,33 +2,6 @@
   overflow: auto;
   position: relative;
 
-  /* TODO move these into vizhub-ui */
-  // .btn-secondary {
-  //   background-color: #e0e8ff;
-  //   color: #3866e9;
-  //   font-weight: bold;
-  //   border: 1px solid #e0e8ff;
-  // }
-  // .btn-outline-secondary {
-  //   color: #ffffff;
-  //   border: 1px solid #e0e8ff;
-  // }
-  // .btn-outline-secondary:hover {
-  //   background-color: #e0e8ff2a;
-  // }
-
-  // .btn-success {
-  //   background-color: #d7f6dc;
-  //   color: #576786;
-  //   font-weight: 500;
-  //   border: none;
-  //   display: flex;
-  //   justify-content: center;
-  //   align-items: center;
-  //   pointer-events: none;
-  //   gap: 8px;
-  // }
-
   img.header-background {
     position: absolute;
     width: 100%;
@@ -96,14 +69,14 @@
               justify-content: space-between;
 
               .plan-header-left {
-                color: #202e46;
+                color: var(--vh-color-neutral-02);
               }
               .plan-header-right {
                 display: flex;
-                color: #576786;
+                color: var(--vh-color-neutral-03);
               }
               .plan-header-right-faint {
-                color: #bdc7dc;
+                color: var(--vh-color-neutral-04);
                 line-height: 50px;
                 margin-left: 5px;
 
@@ -126,7 +99,7 @@
             }
 
             p {
-              color: #576786;
+              color: var(--vh-color-neutral-03);
               margin-bottom: 0px;
             }
 
@@ -154,16 +127,17 @@
                 }
               }
               .feature-description {
-                color: #576786;
+                color: var(--vh-color-neutral-03);
                 margin-bottom: 6px;
               }
             }
 
             .feature:hover .feature-toggle {
-              background-color: #e0e8ff;
+              background-color: var(--vh-color-action-03);
             }
             .feature.has-bottom-border {
-              border-bottom: 1px solid #e6eaf2;
+              border-bottom: 1px solid
+                var(--vh-color-rule-01);
             }
           }
         }
