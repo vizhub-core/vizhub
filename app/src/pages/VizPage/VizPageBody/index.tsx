@@ -159,6 +159,9 @@ export const VizPageBody = ({
   });
 
   // Handle manual runs.
+  // TODO reduce duplication between here and VZCode/usePrettier
+  // by introducing a new field in the content object called
+  // `numRuns`
   useEffect(() => {
     if (!enableManualRun) return;
     const handleKeyDown = (event: KeyboardEvent) => {
