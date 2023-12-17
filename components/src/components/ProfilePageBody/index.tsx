@@ -1,7 +1,6 @@
 import { VizPreviewCollection } from '../VizPreviewCollection';
 import { SortControl } from '../SortControl';
 import { More } from '../More';
-import './styles.scss';
 import { PublicSVG } from '../Icons/sam/PublicSVG';
 import { PrivateSVG } from '../Icons/sam/PrivateSVG';
 import { OrganizationsSVG } from '../Icons/sam/OrganizationsSVG';
@@ -9,6 +8,8 @@ import { SharedSVG } from '../Icons/sam/SharedSVG';
 import { StarSVG } from '../Icons/sam/StarSVG';
 import { PlusSVG } from '../Icons/sam/PlusSVG';
 import { Button } from '../bootstrap';
+import './styles.scss';
+import { HomeStarter } from '../HomeStarter';
 
 export const ProfilePageBody = ({
   // Viz preview list props.
@@ -62,6 +63,7 @@ export const ProfilePageBody = ({
           </div>
         </div>
         <div className="profile-content">
+          <HomeStarter />
           <div className="profile-header">
             <h2>My public vizzes</h2>
             <div className="profile-header-controls">
