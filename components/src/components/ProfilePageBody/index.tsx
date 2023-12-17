@@ -2,6 +2,11 @@ import { VizPreviewCollection } from '../VizPreviewCollection';
 import { SortControl } from '../SortControl';
 import { More } from '../More';
 import './styles.scss';
+import { PublicSVG } from '../Icons/sam/PublicSVG';
+import { PrivateSVG } from '../Icons/sam/PrivateSVG';
+import { OrganizationsSVG } from '../Icons/sam/OrganizationsSVG';
+import { SharedSVG } from '../Icons/sam/SharedSVG';
+import { StarSVG } from '../Icons/sam/StarSVG';
 
 export const ProfilePageBody = ({
   // Viz preview list props.
@@ -14,6 +19,7 @@ export const ProfilePageBody = ({
   userName,
   displayName,
   picture,
+  bio,
 
   // Sort control props.
   sortId,
@@ -22,38 +28,56 @@ export const ProfilePageBody = ({
 }) => {
   return (
     <div className="vh-page vh-profile-page">
-      <div className="p-4 py-3">
-        <div className="d-flex mb-3 justify-content-between align-items-end">
-          <div className="d-flex">
-            <img
-              className="vh-profile-page__avatar me-3 rounded-circle"
-              src={picture}
-            />
-            <div className="d-flex flex-column justify-content-center">
-              <div className="vh-profile-page__full-name">
-                {displayName}
-              </div>
-              <div className="vh-profile-page__user-name">
-                {userName}
-              </div>
+      <div className="profile-body">
+        <div className="profile-sidebar">
+          <div>
+            <img className="profile-avatar" src={picture} />
+            <h3 className="profile-name">{displayName}</h3>
+            <div className="vh-lede-01">@{userName}</div>
+          </div>
+          <div>
+            <div>{bio}</div>
+            <div className="vh-base-02 edit-bio">
+              Edit Bio
             </div>
           </div>
-          {sortOptions ? (
-            <SortControl
-              sortId={sortId}
-              setSortId={setSortId}
-              sortOptions={sortOptions}
-            />
-          ) : null}
+          <div className="profile-sidebar-sections">
+            <div className="profile-sidebar-section vh-base-01">
+              <PublicSVG /> My public vizzes
+            </div>
+            <div className="profile-sidebar-section vh-base-01 active">
+              <PrivateSVG /> My private vizzes
+            </div>
+            <div className="profile-sidebar-section vh-base-01">
+              <OrganizationsSVG /> My organizations
+            </div>
+            <div className="profile-sidebar-section vh-base-01">
+              <SharedSVG /> Shared with me
+            </div>
+            <div className="profile-sidebar-section vh-base-01">
+              <StarSVG /> My starred vizzes
+            </div>
+          </div>
         </div>
-        <VizPreviewCollection>
-          {renderVizPreviews()}
-        </VizPreviewCollection>
-        <More
-          hasMore={hasMore}
-          onMoreClick={onMoreClick}
-          isLoadingNextPage={isLoadingNextPage}
-        />
+        <div className="profile-content">
+          <div className="d-flex mb-3 justify-content-between align-items-end">
+            {sortOptions ? (
+              <SortControl
+                sortId={sortId}
+                setSortId={setSortId}
+                sortOptions={sortOptions}
+              />
+            ) : null}
+          </div>
+          <VizPreviewCollection>
+            {renderVizPreviews()}
+          </VizPreviewCollection>
+          <More
+            hasMore={hasMore}
+            onMoreClick={onMoreClick}
+            isLoadingNextPage={isLoadingNextPage}
+          />
+        </div>
       </div>
     </div>
   );
