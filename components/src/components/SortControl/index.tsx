@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
-import { Form, Dropdown, Row, Col } from '../bootstrap';
+import { Form, Dropdown, Row } from '../bootstrap';
+import './styles.scss';
 
 export const SortControl = ({
   sortId,
@@ -36,12 +37,19 @@ export const SortControl = ({
       controlId="sort"
       as={isVertical ? 'div' : Row}
     >
-      <Form.Label column sm="auto">
+      <Form.Label
+        column
+        sm="auto"
+        className="sort-by-label"
+      >
         Sort by
       </Form.Label>
       <div className="px-0 col">
         <Dropdown onSelect={setSortId}>
-          <Dropdown.Toggle id="dropdown-sort">
+          <Dropdown.Toggle
+            id="dropdown-sort"
+            variant="secondary"
+          >
             {sortsById.get(sortId)?.label + ' '}
           </Dropdown.Toggle>
           <Dropdown.Menu>

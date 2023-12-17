@@ -23,11 +23,14 @@
 .vh-profile-page {
   overflow: auto;
   padding: 70px;
+  display: flex;
+  align-items: center;
 
   .profile-body {
     display: flex;
     flex-direction: row;
     gap: 70px;
+    max-width: 1280px;
     .profile-sidebar {
       display: flex;
       flex-direction: column;
@@ -77,6 +80,26 @@
       }
     }
     .profile-content {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      .profile-header {
+        display: flex;
+        justify-content: space-between;
+
+        .profile-header-controls {
+          display: flex;
+          gap: 28px;
+          align-items: center;
+
+          .create-new-button {
+            display: flex;
+            gap: 8px;
+            padding-right: 16px;
+            padding-left: 8px;
+          }
+        }
+      }
     }
   }
 }

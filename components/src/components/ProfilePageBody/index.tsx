@@ -7,6 +7,8 @@ import { PrivateSVG } from '../Icons/sam/PrivateSVG';
 import { OrganizationsSVG } from '../Icons/sam/OrganizationsSVG';
 import { SharedSVG } from '../Icons/sam/SharedSVG';
 import { StarSVG } from '../Icons/sam/StarSVG';
+import { PlusSVG } from '../Icons/sam/PlusSVG';
+import { Button } from '../bootstrap';
 
 export const ProfilePageBody = ({
   // Viz preview list props.
@@ -60,14 +62,21 @@ export const ProfilePageBody = ({
           </div>
         </div>
         <div className="profile-content">
-          <div className="d-flex mb-3 justify-content-between align-items-end">
-            {sortOptions ? (
-              <SortControl
-                sortId={sortId}
-                setSortId={setSortId}
-                sortOptions={sortOptions}
-              />
-            ) : null}
+          <div className="profile-header">
+            <h2>My public vizzes</h2>
+            <div className="profile-header-controls">
+              {sortOptions ? (
+                <SortControl
+                  sortId={sortId}
+                  setSortId={setSortId}
+                  sortOptions={sortOptions}
+                />
+              ) : null}
+              <Button className="create-new-button">
+                <PlusSVG />
+                Create new
+              </Button>
+            </div>
           </div>
           <VizPreviewCollection>
             {renderVizPreviews()}
