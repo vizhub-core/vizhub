@@ -30,7 +30,8 @@ export const migrateViz = async ({
   gateways: Gateways;
   isPrimordialViz: boolean;
 }): Promise<void> => {
-  const { saveCommit, saveInfo, saveContent } = gateways;
+  const { saveCommit, saveInfo, saveContent, getInfo } =
+    gateways;
   const commitViz = CommitViz(gateways);
 
   // Sometimes titles have leading or trailing spaces, so trim that.
@@ -51,6 +52,12 @@ export const migrateViz = async ({
 
   const goodFiles: FilesV2 | null =
     isolateGoodFiles(contentV2);
+
+  if (goodFiles === null) {
+    console.log('  No valid files. Skipping...');
+    return;
+  }
+
   const files: Files = computeV3Files(goodFiles) as Files;
 
   // Scaffold the V3 viz at the start commit.
