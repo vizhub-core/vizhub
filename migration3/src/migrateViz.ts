@@ -23,6 +23,7 @@ import { isolateGoodFiles } from './isolateGoodFiles';
 import { computeV3Files } from './computeV3Files';
 import { diff } from 'ot';
 import { computeForkedFrom } from './computeForkedFrom';
+import { removeEmoji } from './removeEmoji';
 
 // Migrates the info and content of a viz.
 // Returns true if successful, false if not.
@@ -57,15 +58,42 @@ export const migrateViz = async ({
     console.log('    No valid files. Skipping...');
     return false;
   }
-  const files: Files = computeV3Files(goodFiles) as Files;
+
+  // If we're not migrating the primordial viz, then we need
+  // to figure out which viz this viz is forked from.
+  const { forkedFrom, forkedFromCommitId } = isPrimordialViz
+    ? {
+        forkedFrom: null,
+        forkedFromCommitId: null,
+      }
+    : await computeForkedFrom({
+        forkedFromV2: infoV2.forkedFrom,
+        createdTimestamp: infoV2.createdTimestamp,
+        gateways,
+      });
+
+  let oldContentV3: Content | undefined;
+  if (!isPrimordialViz) {
+    const forkedFromContentResult =
+      await gateways.getContent(forkedFrom);
+    if (forkedFromContentResult.outcome === 'failure') {
+      throw new Error('Failed to get forked from content!');
+    }
+    oldContentV3 = forkedFromContentResult.value.data;
+  }
+
+  const files: Files = computeV3Files(
+    goodFiles,
+    oldContentV3,
+  );
 
   // Construct the V3 content.
-  const contentV3: Content = {
+  const contentV3: Content = removeEmoji({
     id,
     height,
     title,
     files,
-  };
+  });
 
   // `infoV2.lastUpdatedTimestamp` can be undefined.
   const updated =
@@ -82,7 +110,7 @@ export const migrateViz = async ({
 
   if (isPrimordialViz) {
     // Scaffold the V3 viz at the start commit.
-    infoV3 = {
+    infoV3 = removeEmoji({
       id,
       owner,
       title,
@@ -105,7 +133,7 @@ export const migrateViz = async ({
 
       // When this viz was last migrated from V2.
       migratedTimestamp: dateToTimestamp(new Date()),
-    };
+    });
 
     const saveStartResult = await saveCommit({
       id: start,
@@ -128,15 +156,6 @@ export const migrateViz = async ({
       throw new Error('Failed to save content!');
     }
   } else {
-    // If we're not migrating the primordial viz, then we need
-    // to figure out which viz this viz is forked from.
-    const { forkedFrom, forkedFromCommitId } =
-      await computeForkedFrom({
-        forkedFromV2: infoV2.forkedFrom,
-        createdTimestamp: infoV2.createdTimestamp,
-        gateways,
-      });
-
     const forkResult = await forkViz({
       forkedFrom,
       timestamp: infoV2.createdTimestamp,
