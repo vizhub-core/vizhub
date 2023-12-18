@@ -12,7 +12,6 @@ import {
   SplitPaneResizeContext,
   shouldTriggerRun,
   FileId,
-  ShareDBDoc,
 } from 'vzcode';
 import {
   defaultVizWidth,
