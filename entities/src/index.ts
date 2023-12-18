@@ -141,10 +141,7 @@ export type {
   SortId,
 } from './Sorting';
 
-export type {
-  MigrationStatus,
-  MigrationBatch,
-} from './Migration';
+export type { MigrationStatus } from './Migration';
 
 export type {
   Image,

@@ -162,14 +162,6 @@ export const migrate = async (): Promise<void> => {
       //     ],
       //   }
 
-      if (
-        infoV2.collaborators &&
-        infoV2.collaborators.length > 0
-      ) {
-        console.log('  Collaborators found!');
-        console.log(infoV2.collaborators);
-      }
-
       await migrateUsers({
         referencedUsers: getReferencedUsers(infoV2),
         v2UserCollection,
@@ -182,8 +174,12 @@ export const migrate = async (): Promise<void> => {
         gateways,
         isPrimordialViz,
       });
-      // await migrateUpvotes(infoV2);
-      // await migrateCollaborators(infoV2);
+      // if (infoV2.upvotes) {
+      //   await migrateUpvotes(infoV2.upvotes);
+      // }
+      // if (infoV2.collaborators) {
+      //   await migrateCollaborators(infoV2.collaborators);
+      // }
     }
 
     const newMigrationStatus: MigrationStatus = {

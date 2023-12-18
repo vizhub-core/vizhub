@@ -71,8 +71,8 @@ export const vizThumbnailEndpoint = ({
 
         if (imageOrNull !== null) {
           const image: Image = imageOrNull;
-          // Set the proper header for the image response
-          res.setHeader('content-type', image.mimeType);
+          // Set the proper header for the image response (WebP)
+          res.setHeader('content-type', 'image/webp');
 
           // Send the image buffer as the response
           res.send(image.buffer);

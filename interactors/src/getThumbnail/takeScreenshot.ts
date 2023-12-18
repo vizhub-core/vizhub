@@ -1,6 +1,7 @@
 import { Image } from 'entities';
 import puppeteer from 'puppeteer';
 import type { Browser } from 'puppeteer';
+import sharp from 'sharp';
 
 const debug = false;
 
@@ -10,6 +11,9 @@ const maxSimultaneousScreenshots = 3;
 // The maximum time to wait for a page to load (in ms)
 const maxPageLoadTimeMS = 8000;
 
+// Limit JS heap size to this many megabytes
+const maxMemoryMB = 512;
+
 let browser: Browser; // Reusable browser instance
 
 const launchBrowser = async () => {
@@ -17,7 +21,12 @@ const launchBrowser = async () => {
     browser = await puppeteer.launch({
       executablePath: 'google-chrome-stable',
       headless: 'new',
-      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+      args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage',
+        `--js-flags="--max-old-space-size=${maxMemoryMB}"`,
+      ],
     });
   }
   return browser;
@@ -98,16 +107,6 @@ export const takeScreenshot = async ({
       console.log(`Waiting for ${waitTime / 1000} seconds`);
     }
 
-    // Wait for document.readyState to be "complete",
-    // or a maximum of 5 seconds
-    // await Promise.race([
-    //   page.waitForFunction(
-    //     'document.readyState === "complete"',
-    //   ),
-    //   new Promise((resolve) =>
-    //     setTimeout(resolve, maxPageLoadTimeMS),
-    //   ),
-    // ]);
     await new Promise((resolve) =>
       setTimeout(resolve, waitTime),
     );
@@ -116,25 +115,18 @@ export const takeScreenshot = async ({
       console.log(`Done waiting`);
     }
 
-    // // Wait for all network requests to finish
-    // await page.waitForFunction(
-    //   'document.readyState === "complete"',
-    // );
-
-    // // Wait for an additional second, just in case
-    // // for various graphics to finish rendering.
-    // await new Promise((resolve) =>
-    //   setTimeout(resolve, 1000),
-    // );
-
     // Take a screenshot of the page
-    const screenshotBuffer = await page.screenshot({
+    const pngBuffer = await page.screenshot({
       fullPage: true,
     });
 
+    // Convert the screenshot to WebP format using sharp
+    const webpBuffer = await sharp(pngBuffer)
+      .webp()
+      .toBuffer();
+
     const image: Image = {
-      buffer: screenshotBuffer,
-      mimeType: 'image/png',
+      buffer: webpBuffer,
     };
     if (debug) {
       console.log('Closing page');
