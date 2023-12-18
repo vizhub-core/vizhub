@@ -8,8 +8,10 @@ import { SharedSVG } from '../Icons/sam/SharedSVG';
 import { StarSVG } from '../Icons/sam/StarSVG';
 import { PlusSVG } from '../Icons/sam/PlusSVG';
 import { Button } from '../bootstrap';
-import './styles.scss';
 import { HomeStarter } from '../HomeStarter';
+import './styles.scss';
+
+const enableEditBio = false;
 
 export const ProfilePageBody = ({
   // Viz preview list props.
@@ -40,15 +42,17 @@ export const ProfilePageBody = ({
           </div>
           <div>
             <div>{bio}</div>
-            <div className="vh-base-02 edit-bio">
-              Edit Bio
-            </div>
+            {enableEditBio && (
+              <div className="vh-base-02 edit-bio">
+                Edit Bio
+              </div>
+            )}
           </div>
           <div className="profile-sidebar-sections">
-            <div className="profile-sidebar-section vh-base-01">
+            <div className="profile-sidebar-section vh-base-01 active">
               <PublicSVG /> My public vizzes
             </div>
-            <div className="profile-sidebar-section vh-base-01 active">
+            {/* <div className="profile-sidebar-section vh-base-01">
               <PrivateSVG /> My private vizzes
             </div>
             <div className="profile-sidebar-section vh-base-01">
@@ -59,7 +63,7 @@ export const ProfilePageBody = ({
             </div>
             <div className="profile-sidebar-section vh-base-01">
               <StarSVG /> My starred vizzes
-            </div>
+            </div> */}
           </div>
         </div>
         <div className="profile-content">

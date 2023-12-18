@@ -18,7 +18,8 @@ export const args = {
   profileHref: 'https://vizhub.com/joe',
   initialSlug: '21f72bf74ef04ea0b9c9b82aaaec859a',
   userName: 'joe',
-  enableURLChange: true,
+  // TODO make this work
+  enableURLChange: false,
 };
 
 const Story = () => {
