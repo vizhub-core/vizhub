@@ -1,4 +1,4 @@
-import { Visibility } from '.';
+import { Timestamp, UserId, Visibility } from '.';
 import { VizId } from './Viz';
 
 export type FileV2 = {
@@ -7,12 +7,23 @@ export type FileV2 = {
 };
 export type FilesV2 = Array<FileV2>;
 
+export type UpvoteV2 = {
+  userId: UserId;
+  timestamp: Timestamp;
+};
+
+export type CollaboratorV2 = {
+  userId: UserId;
+};
+
 export type InfoV2 = {
   id: VizId;
+
+  forkedFrom: VizId | null;
   title: string;
   description: string;
   owner: string;
-  collaborators: Array<any>;
+  collaborators: Array<CollaboratorV2>;
 
   // Can be "public", "private",
   // or undefined which means public.
@@ -21,7 +32,12 @@ export type InfoV2 = {
   createdTimestamp: number;
   lastUpdatedTimestamp: number;
   imagesUpdatedTimestamp: number;
-  upvotes: Array<any>;
+
+  //     upvotes: [
+  //       { userId: '68527925', timestamp: 1701248508 },
+  //       { userId: '133046444', timestamp: 1699810423 },
+  //
+  upvotes: Array<UpvoteV2>;
   forksCount: number;
   upvotesCount: number;
   scoreWilson: number;

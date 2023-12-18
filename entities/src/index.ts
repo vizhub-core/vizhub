@@ -99,6 +99,8 @@ export type {
   FilesV2,
   FileV2,
   UserV2,
+  UpvoteV2,
+  CollaboratorV2,
 } from './V2';
 
 export type {
@@ -139,10 +141,7 @@ export type {
   SortId,
 } from './Sorting';
 
-export type {
-  MigrationStatus,
-  MigrationBatch,
-} from './Migration';
+export type { MigrationStatus } from './Migration';
 
 export type {
   Image,
@@ -188,4 +187,5 @@ export {
   getPackageJson,
   getRuntimeVersion,
   getUserDisplayName,
+  getBio,
 } from './accessors';
