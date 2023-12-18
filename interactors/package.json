@@ -26,7 +26,7 @@
     "deep-equal": "^2.2.3",
     "multiscale-timeseries": "^2.0.0",
     "puppeteer": "^21.6.1",
-    "sharp": "^0.33.0",
+    "sharp": "^0.33.1",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
