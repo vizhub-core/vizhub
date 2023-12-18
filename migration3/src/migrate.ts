@@ -1,22 +1,26 @@
-import { Gateways, Result } from 'gateways';
+import { Result } from 'gateways';
 import { setupConnections } from './setupConnections/setupConnections';
 import {
-  ContentV2,
+  UpvoteV2,
   MigrationStatus,
   Snapshot,
+  UserId,
+  CollaboratorV2,
 } from 'entities';
 import { migrateViz } from './migrateViz';
+import { getReferencedUsers } from './getReferencedUsers';
+import { migrateUsers } from './migrateUsers';
 
 const {
-  v2MongoDBDatabase,
-  v2MongoClient,
+  // v2MongoDBDatabase,
+  // v2MongoClient,
   v2InfoCollection,
   v2ContentCollection,
-  v2ContentOpCollection,
+  // v2ContentOpCollection,
   v2UserCollection,
   gateways,
-  mongoDBDatabase,
-  mongoDBConnection,
+  // mongoDBDatabase,
+  // mongoDBConnection,
 } = await setupConnections({});
 
 export const migrate = async (): Promise<void> => {
@@ -77,7 +81,7 @@ export const migrate = async (): Promise<void> => {
         continue;
       }
 
-      console.log(infoV2);
+      // console.log(infoV2);
 
       // {
       //     id: '86a75dc8bdbe4965ba353a79d4bd44c8',
@@ -166,10 +170,12 @@ export const migrate = async (): Promise<void> => {
         console.log(infoV2.collaborators);
       }
 
-      // await migrateUsers([
-      //   infoV2.owner,
-      //   ...infoV2.upvotes.map((upvote) => upvote.userId),
-      // ]);
+      await migrateUsers({
+        referencedUsers: getReferencedUsers(infoV2),
+        v2UserCollection,
+        gateways,
+      });
+
       await migrateViz({
         infoV2,
         contentV2,

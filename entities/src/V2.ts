@@ -12,12 +12,16 @@ export type UpvoteV2 = {
   timestamp: Timestamp;
 };
 
+export type CollaboratorV2 = {
+  userId: UserId;
+};
+
 export type InfoV2 = {
   id: VizId;
   title: string;
   description: string;
   owner: string;
-  collaborators: Array<any>;
+  collaborators: Array<CollaboratorV2>;
 
   // Can be "public", "private",
   // or undefined which means public.

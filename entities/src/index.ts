@@ -99,6 +99,8 @@ export type {
   FilesV2,
   FileV2,
   UserV2,
+  UpvoteV2,
+  CollaboratorV2,
 } from './V2';
 
 export type {
