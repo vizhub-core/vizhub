@@ -6,6 +6,10 @@ export const More = ({
   hasMore,
   isLoadingNextPage,
   onMoreClick,
+}: {
+  hasMore: boolean;
+  isLoadingNextPage: boolean;
+  onMoreClick: () => void;
 }) => (
   <div className="mt-5 mb-3 d-flex justify-content-center">
     {isLoadingNextPage ? (

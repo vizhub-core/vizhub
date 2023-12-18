@@ -1,12 +1,6 @@
 import { Result } from 'gateways';
 import { setupConnections } from './setupConnections/setupConnections';
-import {
-  UpvoteV2,
-  MigrationStatus,
-  Snapshot,
-  UserId,
-  CollaboratorV2,
-} from 'entities';
+import { MigrationStatus, Snapshot } from 'entities';
 import { migrateViz } from './migrateViz';
 import { getReferencedUsers } from './getReferencedUsers';
 import { migrateUsers } from './migrateUsers';
@@ -15,18 +9,20 @@ import { migrateCollaborators } from './migrateCollaborators';
 
 export const migrate = async (): Promise<void> => {
   const {
-    // v2MongoDBDatabase,
-    // v2MongoClient,
     v2InfoCollection,
     v2ContentCollection,
-    // v2ContentOpCollection,
     v2UserCollection,
     gateways,
-    // mongoDBDatabase,
-    // mongoDBConnection,
   } = await setupConnections({});
 
-  while (true) {
+  let keepGoing = true;
+
+  process.on('SIGINT', () => {
+    console.log('RECEIVED SIGINT');
+    keepGoing = false;
+  });
+
+  while (keepGoing) {
     const { getMigrationStatus, saveMigrationStatus } =
       gateways;
 
@@ -221,5 +217,10 @@ export const migrate = async (): Promise<void> => {
     await new Promise((resolve) =>
       setTimeout(resolve, 500),
     );
+  }
+  if (!keepGoing) {
+    console.log('Exited cleanly!');
+  } else {
+    console.log('Migrated all vizzes!');
   }
 };

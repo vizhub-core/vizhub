@@ -14,6 +14,7 @@ export const Body = () => {
     fetchNextPage,
     ownerUserSnapshotsById,
     isLoadingNextPage,
+    hasMore,
   } = useContext(InfosAndOwnersContext);
 
   return (
@@ -38,6 +39,7 @@ export const Body = () => {
         sortId={sortId}
         setSortId={setSortId}
         sortOptions={sortOptions}
+        hasMore={hasMore}
         onMoreClick={fetchNextPage}
         isLoadingNextPage={isLoadingNextPage}
       />

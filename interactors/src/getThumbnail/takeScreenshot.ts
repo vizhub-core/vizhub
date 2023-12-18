@@ -1,7 +1,5 @@
-import { CommitId, Image } from 'entities';
+import { Image } from 'entities';
 import puppeteer from 'puppeteer';
-import type { Browser } from 'puppeteer';
-import sharp from 'sharp';
 
 const debug = false;
 
@@ -9,26 +7,27 @@ const debug = false;
 const maxSimultaneousScreenshots = 3;
 
 // The maximum time to wait for a page to load (in ms)
-const maxPageLoadTimeMS = 8000;
+const maxPageLoadTimeMS = 5000;
 
 // Limit JS heap size to this many megabytes
-const maxMemoryMB = 512;
+const maxMemoryMB = 50;
 
-let browser: Browser; // Reusable browser instance
+// This seems to cause takeScreenshot to hang
+// let browser: Browser; // Reusable browser instance
 
 const launchBrowser = async () => {
-  if (!browser) {
-    browser = await puppeteer.launch({
-      executablePath: 'google-chrome-stable',
-      headless: 'new',
-      args: [
-        '--no-sandbox',
-        '--disable-setuid-sandbox',
-        '--disable-dev-shm-usage',
-        `--js-flags="--max-old-space-size=${maxMemoryMB}"`,
-      ],
-    });
-  }
+  // if (!browser) {
+  const browser = await puppeteer.launch({
+    executablePath: 'google-chrome-stable',
+    headless: 'new',
+    args: [
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
+      '--disable-dev-shm-usage',
+      `--js-flags="--max-old-space-size=${maxMemoryMB}"`,
+    ],
+  });
+  // }
   return browser;
 };
 
@@ -90,7 +89,7 @@ export const takeScreenshot = async ({
 }) => {
   if (debug) {
     console.log('Launching puppeteer');
-    console.log('srcDoc', srcDoc);
+
     console.log('width', width);
     console.log('height', height);
   }
@@ -100,10 +99,12 @@ export const takeScreenshot = async ({
   }
   await screenshotSemaphore.acquire();
 
-  try {
-    const browser = await launchBrowser();
+  let browser;
+  let page;
 
-    const page = await browser.newPage();
+  try {
+    browser = await launchBrowser();
+    page = await browser.newPage();
     await page.setViewport({ width, height });
 
     await page.setContent(srcDoc);
@@ -118,25 +119,21 @@ export const takeScreenshot = async ({
 
     if (debug) {
       console.log(`Done waiting`);
+      console.log('srcDoc', srcDoc);
+      console.log(`Taking screenshot`);
     }
 
     // Take a screenshot of the page
-    const pngBuffer = await page.screenshot({
-      fullPage: true,
+    const buffer = await page.screenshot({
+      // fullPage: true,
+      type: 'webp',
     });
 
-    // Convert the screenshot to WebP format using sharp
-    const webpBuffer = await sharp(pngBuffer)
-      .webp()
-      .toBuffer();
-
-    const image: Image = {
-      buffer: webpBuffer,
-    };
+    const image: Image = { buffer };
     if (debug) {
+      console.log(`Took screenshot`);
       console.log('Closing page');
     }
-    await page.close();
 
     return image;
   } catch (error) {
@@ -146,8 +143,12 @@ export const takeScreenshot = async ({
     throw error;
   } finally {
     if (debug) {
-      console.log('Releasing screenshot semaphore');
+      console.log(
+        'Releasing screenshot semaphore and closing browser',
+      );
     }
+    await page.close();
+    await browser.close();
     screenshotSemaphore.release();
   }
 };

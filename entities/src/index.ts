@@ -187,4 +187,5 @@ export {
   getPackageJson,
   getRuntimeVersion,
   getUserDisplayName,
+  getBio,
 } from './accessors';

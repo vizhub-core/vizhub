@@ -72,6 +72,14 @@ export const migrateViz = async ({
     infoV2.lastUpdatedTimestamp || infoV2.createdTimestamp;
 
   let infoV3: Info;
+
+  const getInfoResult = await getInfo(id);
+  const alreadyMigrated =
+    getInfoResult.outcome === 'success';
+  if (alreadyMigrated) {
+    console.log(`  "${infoV2.title?.trim()}"`);
+  }
+
   if (isPrimordialViz) {
     // Scaffold the V3 viz at the start commit.
     infoV3 = {
