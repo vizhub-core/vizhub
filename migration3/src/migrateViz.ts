@@ -13,11 +13,16 @@ import {
   dateToTimestamp,
   defaultVizHeight,
 } from 'entities';
-import { CommitViz, generateId } from 'interactors';
+import {
+  CommitViz,
+  ForkViz,
+  generateId,
+} from 'interactors';
 import { Gateways } from 'gateways';
 import { isolateGoodFiles } from './isolateGoodFiles';
 import { computeV3Files } from './computeV3Files';
 import { diff } from 'ot';
+import { computeForkedFrom } from './computeForkedFrom';
 
 // Migrates the info and content of a viz.
 // Returns true if successful, false if not.
@@ -35,6 +40,7 @@ export const migrateViz = async ({
   const { saveCommit, saveInfo, saveContent, getInfo } =
     gateways;
   const commitViz = CommitViz(gateways);
+  const forkViz = ForkViz(gateways);
 
   // Sometimes titles have leading or trailing spaces, so trim that.
   const title = infoV2.title.trim();
@@ -45,45 +51,15 @@ export const migrateViz = async ({
   const start: CommitId = generateId();
   const height: number = infoV2.height || defaultVizHeight;
 
-  // TODO - migrate forkedFrom
-  const forkedFrom: VizId | null = null;
-
   const goodFiles: FilesV2 | null =
     isolateGoodFiles(contentV2);
-
   if (goodFiles === null) {
     console.log('    No valid files. Skipping...');
     return false;
   }
-
   const files: Files = computeV3Files(goodFiles) as Files;
 
-  // Scaffold the V3 viz at the start commit.
-  const infoV3: Info = {
-    id,
-    owner,
-    title,
-    forkedFrom: null,
-    forksCount: 0,
-    created: infoV2.createdTimestamp,
-    // updated: infoV2.lastUpdatedTimestamp,
-    updated: infoV2.createdTimestamp,
-    visibility,
-    upvotesCount: 0,
-
-    // At the first save of the viz, the start commit and
-    // end commit are the same.
-    start,
-    end: start,
-    committed: true,
-    commitAuthors: [],
-    // True for vizzes that were migrated from V2.
-    migratedFromV2: true,
-
-    // When this viz was last migrated from V2.
-    migratedTimestamp: dateToTimestamp(new Date()),
-  };
-
+  // Construct the V3 content.
   const contentV3: Content = {
     id,
     height,
@@ -91,31 +67,96 @@ export const migrateViz = async ({
     files,
   };
 
-  const saveStartResult = await saveCommit({
-    id: start,
-    viz: id,
-    authors: [owner],
-    timestamp: infoV2.createdTimestamp,
-    ops: diff({}, contentV3),
-  });
-  if (saveStartResult.outcome === 'failure') {
-    throw new Error('Failed to save start commit!');
+  // `infoV2.lastUpdatedTimestamp` can be undefined.
+  const updated =
+    infoV2.lastUpdatedTimestamp || infoV2.createdTimestamp;
+
+  let infoV3: Info;
+  if (isPrimordialViz) {
+    // Scaffold the V3 viz at the start commit.
+    infoV3 = {
+      id,
+      owner,
+      title,
+      forkedFrom: null,
+      forksCount: 0,
+      created: infoV2.createdTimestamp,
+      // updated: infoV2.lastUpdatedTimestamp,
+      updated: infoV2.createdTimestamp,
+      visibility,
+      upvotesCount: 0,
+
+      // At the first save of the viz, the start commit and
+      // end commit are the same.
+      start,
+      end: start,
+      committed: true,
+      commitAuthors: [],
+      // True for vizzes that were migrated from V2.
+      migratedFromV2: true,
+
+      // When this viz was last migrated from V2.
+      migratedTimestamp: dateToTimestamp(new Date()),
+    };
+
+    const saveStartResult = await saveCommit({
+      id: start,
+      viz: id,
+      authors: [owner],
+      timestamp: infoV2.createdTimestamp,
+      ops: diff({}, contentV3),
+    });
+    if (saveStartResult.outcome === 'failure') {
+      throw new Error('Failed to save start commit!');
+    }
+
+    const saveInfoResult = await saveInfo(infoV3);
+    if (saveInfoResult.outcome === 'failure') {
+      throw new Error('Failed to save info!');
+    }
+
+    const saveContentResult = await saveContent(contentV3);
+    if (saveContentResult.outcome === 'failure') {
+      throw new Error('Failed to save content!');
+    }
+  } else {
+    // If we're not migrating the primordial viz, then we need
+    // to figure out which viz this viz is forked from.
+    const { forkedFrom, forkedFromCommitId } =
+      await computeForkedFrom({
+        forkedFromV2: infoV2.forkedFrom,
+        createdTimestamp: infoV2.createdTimestamp,
+        gateways,
+      });
+
+    const forkResult = await forkViz({
+      forkedFrom,
+      timestamp: infoV2.createdTimestamp,
+      newOwner: owner,
+
+      // We set the new content on the initial fork, so that
+      // when this viz is forked again, the content will be
+      // correct, even from the start commit. This reduces
+      // the overall size of the diffs.
+      content: contentV3,
+      title,
+      visibility,
+      forkedFromCommitId,
+      newVizId: id,
+    });
+
+    if (forkResult.outcome === 'failure') {
+      throw new Error('Failed to fork viz!');
+    }
+    infoV3 = forkResult.value;
+
+    // Update to latest timestamp.
   }
 
-  const saveInfoResult = await saveInfo(infoV3);
-  if (saveInfoResult.outcome === 'failure') {
-    throw new Error('Failed to save info!');
-  }
-
-  const saveContentResult = await saveContent(contentV3);
-  if (saveContentResult.outcome === 'failure') {
-    throw new Error('Failed to save content!');
-  }
-
-  // Simulates the user doing all the work to create the files.
+  // Simulates the user edits between created and updated times.
   const uncommittedInfoV3: Info = {
     ...infoV3,
-    updated: infoV2.lastUpdatedTimestamp,
+    updated,
     committed: false,
     commitAuthors: [owner],
   };
@@ -128,10 +169,5 @@ export const migrateViz = async ({
   }
 
   await commitViz(id);
-
   return true;
-
-  //   if (isPrimordialViz) {
-  //     console.log('    Migrating the Primordial Viz...');
-  //   }
 };

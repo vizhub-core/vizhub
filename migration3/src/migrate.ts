@@ -219,7 +219,7 @@ export const migrate = async (): Promise<void> => {
 
     // Wait a bit between vizzes so we don't overload the database.
     await new Promise((resolve) =>
-      setTimeout(resolve, 1000),
+      setTimeout(resolve, 500),
     );
   }
 };

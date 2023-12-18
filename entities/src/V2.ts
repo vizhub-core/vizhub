@@ -18,6 +18,8 @@ export type CollaboratorV2 = {
 
 export type InfoV2 = {
   id: VizId;
+
+  forkedFrom: VizId | null;
   title: string;
   description: string;
   owner: string;
