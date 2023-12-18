@@ -167,8 +167,6 @@ export const VizPageBody = ({
     return !(isSingleFile && isReadme);
   }, [content]);
 
-  console.log('isVisual', isVisual);
-
   // Set up the runtime environment.
   useRuntime({
     content,

@@ -1,4 +1,10 @@
-import { Info, User, UserId, Visibility } from 'entities';
+import {
+  Info,
+  User,
+  UserId,
+  Visibility,
+  dateToTimestamp,
+} from 'entities';
 import { useCallback } from 'react';
 
 const debug = false;
@@ -60,6 +66,10 @@ export const useSetUncommitted = (
                   authenticatedUser.id,
                 ]
             : info.commitAuthors,
+
+          // Update the last updated timestamp, as this is used as the
+          // timestamp for the next commit.
+          updated: dateToTimestamp(new Date()),
         }),
       );
     },
