@@ -196,6 +196,7 @@ export interface VizAuthorship {
 
 // UpvoteId
 //  * Unique identifier string for a Upvote.
+//  * Of the form `${userId}-${vizId}`;
 export type UpvoteId = string;
 
 // Upvote

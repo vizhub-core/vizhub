@@ -25,6 +25,7 @@ export const DELETE: Action = 'delete';
 
 // PermissionId
 //  * Unique identifier string for a Permission.
+//  * Of the form `${userId}-${resourceId}`;
 export type PermissionId = string;
 
 // A viz or a folder are considered "resources".

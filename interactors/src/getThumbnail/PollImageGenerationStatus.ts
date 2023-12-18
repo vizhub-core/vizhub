@@ -1,4 +1,10 @@
-import { Gateways, Result, ok, err } from 'gateways';
+import {
+  Gateways,
+  Result,
+  ok,
+  err,
+  resourceNotFoundError,
+} from 'gateways';
 import { ImageMetadata, ImageId } from 'entities';
 
 export const PollImageGenerationStatus = (
@@ -9,7 +15,7 @@ export const PollImageGenerationStatus = (
   return async (
     imageId: ImageId,
   ): Promise<Result<ImageMetadata>> => {
-    const retries = 20;
+    const retries = 30;
     const interval = 1000; // 1 second
     let imageMetadata: ImageMetadata | undefined;
 
@@ -33,6 +39,8 @@ export const PollImageGenerationStatus = (
     }
 
     // After all retries, if the image is still not generated, handle accordingly
-    return err(/* appropriate error indicating timeout or retry failure */);
+    return err(
+      resourceNotFoundError(imageId, 'StoredImage'),
+    );
   };
 };

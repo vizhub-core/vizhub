@@ -14,6 +14,8 @@ export const migrateUsers = async ({
   gateways: Gateways;
 }) => {
   const { saveUser } = gateways;
+
+  process.stdout.write('    ');
   for (const userId of referencedUsers) {
     // Check if the user is already migrated.
     // If so, don't migrate again.
@@ -57,4 +59,5 @@ export const migrateUsers = async ({
       );
     }
   }
+  process.stdout.write('\n');
 };

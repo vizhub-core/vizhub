@@ -10,20 +10,22 @@ import {
 import { migrateViz } from './migrateViz';
 import { getReferencedUsers } from './getReferencedUsers';
 import { migrateUsers } from './migrateUsers';
-
-const {
-  // v2MongoDBDatabase,
-  // v2MongoClient,
-  v2InfoCollection,
-  v2ContentCollection,
-  // v2ContentOpCollection,
-  v2UserCollection,
-  gateways,
-  // mongoDBDatabase,
-  // mongoDBConnection,
-} = await setupConnections({});
+import { migrateUpvotes } from './migrateUpvotes';
+import { migrateCollaborators } from './migrateCollaborators';
 
 export const migrate = async (): Promise<void> => {
+  const {
+    // v2MongoDBDatabase,
+    // v2MongoClient,
+    v2InfoCollection,
+    v2ContentCollection,
+    // v2ContentOpCollection,
+    v2UserCollection,
+    gateways,
+    // mongoDBDatabase,
+    // mongoDBConnection,
+  } = await setupConnections({});
+
   while (true) {
     const { getMigrationStatus, saveMigrationStatus } =
       gateways;
@@ -46,9 +48,6 @@ export const migrate = async (): Promise<void> => {
     } else {
       // Case B.) If we're continuing a migration, get the current status
       migrationStatus = migrationStatusResult.value.data;
-      console.log(
-        `Found existing migration status. Continuing migration from ${migrationStatus.numVizzesProcessed} vizzes.`,
-      );
     }
 
     const { numVizzesProcessed } = migrationStatus;
@@ -60,6 +59,10 @@ export const migrate = async (): Promise<void> => {
       .limit(1);
 
     for await (const infoV2 of infoV2Iterator) {
+      console.log(
+        `\nMigrating viz #${migrationStatus.numVizzesProcessed}`,
+      );
+
       // If it looks like this, then we have a deleted viz:
       // {
       //   _id: 'b150671795f14951a1e6d367ece8cfcc',
@@ -162,24 +165,48 @@ export const migrate = async (): Promise<void> => {
       //     ],
       //   }
 
+      console.log(`  "${infoV2.title?.trim()}"`);
+
+      const success: boolean = await migrateViz({
+        infoV2,
+        contentV2,
+        gateways,
+        isPrimordialViz,
+      });
+
+      if (!success) {
+        console.log(
+          `  Migration failed for "${infoV2.title?.trim()}". Skipping...`,
+        );
+        continue;
+      }
+
+      console.log(`  Migrating referenced users...`);
       await migrateUsers({
         referencedUsers: getReferencedUsers(infoV2),
         v2UserCollection,
         gateways,
       });
 
-      await migrateViz({
-        infoV2,
-        contentV2,
-        gateways,
-        isPrimordialViz,
-      });
-      // if (infoV2.upvotes) {
-      //   await migrateUpvotes(infoV2.upvotes);
-      // }
-      // if (infoV2.collaborators) {
-      //   await migrateCollaborators(infoV2.collaborators);
-      // }
+      if (infoV2.upvotes) {
+        console.log(`  Migrating upvotes...`);
+
+        await migrateUpvotes({
+          vizId: infoV2.id,
+          upvotesV2: infoV2.upvotes,
+          gateways,
+        });
+      }
+      if (infoV2.collaborators) {
+        console.log(`  Migrating collaborators...`);
+        await migrateCollaborators({
+          vizId: infoV2.id,
+          collaboratorsV2: infoV2.collaborators,
+          lastUpdatedTimestamp: infoV2.lastUpdatedTimestamp,
+          owner: infoV2.owner,
+          gateways,
+        });
+      }
     }
 
     const newMigrationStatus: MigrationStatus = {
@@ -189,5 +216,10 @@ export const migrate = async (): Promise<void> => {
     };
 
     await saveMigrationStatus(newMigrationStatus);
+
+    // Wait a bit between vizzes so we don't overload the database.
+    await new Promise((resolve) =>
+      setTimeout(resolve, 1000),
+    );
   }
 };

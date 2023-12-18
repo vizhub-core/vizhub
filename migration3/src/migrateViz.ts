@@ -19,6 +19,8 @@ import { isolateGoodFiles } from './isolateGoodFiles';
 import { computeV3Files } from './computeV3Files';
 import { diff } from 'ot';
 
+// Migrates the info and content of a viz.
+// Returns true if successful, false if not.
 export const migrateViz = async ({
   infoV2,
   contentV2,
@@ -29,17 +31,13 @@ export const migrateViz = async ({
   contentV2: ContentV2;
   gateways: Gateways;
   isPrimordialViz: boolean;
-}): Promise<void> => {
+}): Promise<boolean> => {
   const { saveCommit, saveInfo, saveContent, getInfo } =
     gateways;
   const commitViz = CommitViz(gateways);
 
   // Sometimes titles have leading or trailing spaces, so trim that.
   const title = infoV2.title.trim();
-
-  console.log('**************************************');
-  console.log(`*** Migrating viz "${title}"`);
-  console.log('**************************************');
 
   const id: VizId = infoV2.id;
   const owner: UserId = infoV2.owner;
@@ -54,8 +52,8 @@ export const migrateViz = async ({
     isolateGoodFiles(contentV2);
 
   if (goodFiles === null) {
-    console.log('  No valid files. Skipping...');
-    return;
+    console.log('    No valid files. Skipping...');
+    return false;
   }
 
   const files: Files = computeV3Files(goodFiles) as Files;
@@ -130,6 +128,8 @@ export const migrateViz = async ({
   }
 
   await commitViz(id);
+
+  return true;
 
   //   if (isPrimordialViz) {
   //     console.log('    Migrating the Primordial Viz...');

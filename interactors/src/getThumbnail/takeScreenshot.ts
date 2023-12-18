@@ -1,4 +1,4 @@
-import { Image } from 'entities';
+import { CommitId, Image } from 'entities';
 import puppeteer from 'puppeteer';
 import type { Browser } from 'puppeteer';
 import sharp from 'sharp';
@@ -82,6 +82,11 @@ export const takeScreenshot = async ({
 
   // Exposed here only so we can override it in tests
   waitTime = maxPageLoadTimeMS,
+}: {
+  srcDoc: string;
+  width: number;
+  height: number;
+  waitTime?: number;
 }) => {
   if (debug) {
     console.log('Launching puppeteer');
