@@ -1,3 +1,4 @@
+import { Visibility } from '.';
 import { VizId } from './Viz';
 
 export type FileV2 = {
@@ -12,7 +13,10 @@ export type InfoV2 = {
   description: string;
   owner: string;
   collaborators: Array<any>;
-  privacy: PrivacyV2;
+
+  // Can be "public", "private",
+  // or undefined which means public.
+  privacy: Visibility;
   files: Array<any>;
   createdTimestamp: number;
   lastUpdatedTimestamp: number;
@@ -27,8 +31,6 @@ export type InfoV2 = {
   scoreHackerHotLastUpdated: number;
   height?: number;
 };
-
-export type PrivacyV2 = 'public' | 'private';
 
 export type ContentV2 = {
   id: VizId;

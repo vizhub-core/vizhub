@@ -25,11 +25,15 @@ export const useRuntime = ({
   iframeRef,
   setSrcdocError,
   vizCacheContents,
+  isVisual,
 }: {
   content: Content;
   iframeRef: RefObject<HTMLIFrameElement>;
   setSrcdocError: (error: string | null) => void;
   vizCacheContents: Record<string, Content>;
+
+  // If this is false, there is no iframeRef.current.
+  isVisual: boolean;
 }) => {
   // This ref is used to skip the first mount.
   const initialMount = useRef(true);
@@ -80,7 +84,16 @@ export const useRuntime = ({
   );
 
   // Set up the v3 runtime.
+  // TODO QA the following:
+  //  * Adding and removing index.js
+  //  * Adding and removing index.html
+  //  * Switching between versions of the runtime
   useEffect(() => {
+    // If the viz is not visual (README.md only), then
+    // we don't need to set up the v3 runtime.
+    if (isVisual === false) {
+      return;
+    }
     if (runtimeVersion === 3) {
       // Load the v3 runtime.
       import('./v3Runtime/setupV3Runtime').then(
@@ -101,7 +114,7 @@ export const useRuntime = ({
         },
       );
     }
-  }, [runtimeVersion]);
+  }, [runtimeVersion, isVisual]);
 
   // Used to debounce updates to the v3 runtime.
   const v3Timeout = useRef<number | undefined>(undefined);
