@@ -8,6 +8,7 @@ import {
   SortField,
   Snapshot,
   VizId,
+  Visibility,
 } from 'entities';
 
 export type InfosAndOwners = {
@@ -45,6 +46,7 @@ export const GetInfosAndOwners = (gateways: Gateways) => {
       sortField,
       pageNumber,
       vizIds,
+      visibilities: ['public'],
     });
     if (infoSnapshotsResult.outcome === 'failure')
       return infoSnapshotsResult;

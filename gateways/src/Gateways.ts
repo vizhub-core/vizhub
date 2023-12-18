@@ -51,6 +51,7 @@ import {
   StoredImage,
   ImageId,
   BetaProgramSignup,
+  Visibility,
 } from 'entities';
 import { Result, Success } from './Result';
 import {
@@ -412,6 +413,9 @@ export interface Gateways {
     // True if we want to only include trashed vizzes
     // in the results (for trash page).
     includeTrashed?: boolean;
+
+    // Visibilities to include in the results.
+    visibilities?: Array<Visibility>;
   }): Promise<Result<Array<Snapshot<Info>>>>;
 
   // getUsersByIds

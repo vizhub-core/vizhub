@@ -106,29 +106,31 @@ export const SettingsModal = ({
           </Form.Text>
         </Form.Group>
 
-        <Form.Group className="mb-3" controlId="viz-url">
-          <Form.Label htmlFor="viz-url-control">
-            URL
-          </Form.Label>
-          <InputGroup>
-            <InputGroup.Text id="viz-url-prefix">
-              {profileHref}
-            </InputGroup.Text>
-            <Form.Control
-              id="viz-url-control"
-              aria-describedby="viz-url-prefix"
-              value={slug}
-              onChange={handleSlugChange}
-            />
-          </InputGroup>
-          <Form.Text className="text-muted">
-            <div className="mb-3">
-              Choose a URL for your viz.
-            </div>
-            <div>Sample import:</div>
-            <div className="sample-import">{`import { ... } from "@${userName}/${slug}"`}</div>
-          </Form.Text>
-        </Form.Group>
+        {enableURLChange && (
+          <Form.Group className="mb-3" controlId="viz-url">
+            <Form.Label htmlFor="viz-url-control">
+              URL
+            </Form.Label>
+            <InputGroup>
+              <InputGroup.Text id="viz-url-prefix">
+                {profileHref}
+              </InputGroup.Text>
+              <Form.Control
+                id="viz-url-control"
+                aria-describedby="viz-url-prefix"
+                value={slug}
+                onChange={handleSlugChange}
+              />
+            </InputGroup>
+            <Form.Text className="text-muted">
+              <div className="mb-3">
+                Choose a URL for your viz.
+              </div>
+              <div>Sample import:</div>
+              <div className="sample-import">{`import { ... } from "@${userName}/${slug}"`}</div>
+            </Form.Text>
+          </Form.Group>
+        )}
 
         <VisibilityControl
           visibility={visibility}
