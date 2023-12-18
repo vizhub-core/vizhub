@@ -15,40 +15,47 @@ export const fakeCheckoutSuccessEndpoint = ({
   gateways: Gateways;
 }) => {
   const { getUser, saveUser } = gateways;
-  app.post(
-    '/api/fake-checkout-success',
-    express.json(),
-    async (req: express.Request, res: express.Response) => {
-      // TODO Get the authenticated user from the request
-      // to verify authorization.
 
-      const { userId } = req.body;
+  // Only enable this for local testing.
+  if (import.meta.env.DEV) {
+    app.post(
+      '/api/fake-checkout-success',
+      express.json(),
+      async (
+        req: express.Request,
+        res: express.Response,
+      ) => {
+        // TODO Get the authenticated user from the request
+        // to verify authorization.
 
-      if (!userId) {
-        return res.send(missingParameterError('userId'));
-      }
+        const { userId } = req.body;
 
-      // TODO redlock
+        if (!userId) {
+          return res.send(missingParameterError('userId'));
+        }
 
-      const userResult = await getUser(userId);
-      if (userResult.outcome === 'failure') {
-        return res.send(err(userResult.error));
-      }
-      const user: User = userResult.value.data;
+        // TODO redlock
 
-      user.plan = 'pro';
-      // TODO stripe
-      // user.stripeCustomerId = 'fake-stripe-customer-id';
-      // user.stripeSubscriptionId = 'fake-stripe-subscription-id';
-      // user.stripeSubscriptionItemId = 'fake-stripe-subscription-item-id';
-      // user.stripeSubscriptionStatus = 'active';
+        const userResult = await getUser(userId);
+        if (userResult.outcome === 'failure') {
+          return res.send(err(userResult.error));
+        }
+        const user: User = userResult.value.data;
 
-      const saveUserResult = await saveUser(user);
-      if (saveUserResult.outcome === 'failure') {
-        return res.send(err(saveUserResult.error));
-      }
+        user.plan = 'pro';
+        // TODO stripe
+        // user.stripeCustomerId = 'fake-stripe-customer-id';
+        // user.stripeSubscriptionId = 'fake-stripe-subscription-id';
+        // user.stripeSubscriptionItemId = 'fake-stripe-subscription-item-id';
+        // user.stripeSubscriptionStatus = 'active';
 
-      res.send(ok('success'));
-    },
-  );
+        const saveUserResult = await saveUser(user);
+        if (saveUserResult.outcome === 'failure') {
+          return res.send(err(saveUserResult.error));
+        }
+
+        res.send(ok('success'));
+      },
+    );
+  }
 };

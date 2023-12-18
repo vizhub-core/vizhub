@@ -260,6 +260,7 @@ export const DatabaseGateways = ({
     pageNumber = 0,
     sortOrder = defaultSortOrder,
     includeTrashed = false,
+    visibilities = ['public'],
   }) =>
     new Promise((resolve) => {
       const entityName = 'Info';
@@ -274,6 +275,7 @@ export const DatabaseGateways = ({
         $sort: {
           [sortField]: sortOrder === 'ascending' ? 1 : -1,
         },
+        visibility: { $in: visibilities },
       };
 
       // // If this viz is currently in the "trash",
