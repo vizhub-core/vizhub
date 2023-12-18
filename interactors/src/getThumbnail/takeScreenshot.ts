@@ -1,6 +1,5 @@
 import { Image } from 'entities';
 import puppeteer from 'puppeteer';
-import type { Browser } from 'puppeteer';
 
 const debug = false;
 
@@ -8,18 +7,27 @@ const debug = false;
 const maxSimultaneousScreenshots = 3;
 
 // The maximum time to wait for a page to load (in ms)
-const maxPageLoadTimeMS = 8000;
+const maxPageLoadTimeMS = 5000;
 
-let browser: Browser; // Reusable browser instance
+// Limit JS heap size to this many megabytes
+const maxMemoryMB = 50;
+
+// This seems to cause takeScreenshot to hang
+// let browser: Browser; // Reusable browser instance
 
 const launchBrowser = async () => {
-  if (!browser) {
-    browser = await puppeteer.launch({
-      executablePath: 'google-chrome-stable',
-      headless: 'new',
-      args: ['--no-sandbox', '--disable-setuid-sandbox'],
-    });
-  }
+  // if (!browser) {
+  const browser = await puppeteer.launch({
+    executablePath: 'google-chrome-stable',
+    headless: 'new',
+    args: [
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
+      '--disable-dev-shm-usage',
+      `--js-flags="--max-old-space-size=${maxMemoryMB}"`,
+    ],
+  });
+  // }
   return browser;
 };
 
@@ -73,10 +81,15 @@ export const takeScreenshot = async ({
 
   // Exposed here only so we can override it in tests
   waitTime = maxPageLoadTimeMS,
+}: {
+  srcDoc: string;
+  width: number;
+  height: number;
+  waitTime?: number;
 }) => {
   if (debug) {
     console.log('Launching puppeteer');
-    console.log('srcDoc', srcDoc);
+
     console.log('width', width);
     console.log('height', height);
   }
@@ -86,10 +99,12 @@ export const takeScreenshot = async ({
   }
   await screenshotSemaphore.acquire();
 
-  try {
-    const browser = await launchBrowser();
+  let browser;
+  let page;
 
-    const page = await browser.newPage();
+  try {
+    browser = await launchBrowser();
+    page = await browser.newPage();
     await page.setViewport({ width, height });
 
     await page.setContent(srcDoc);
@@ -98,48 +113,27 @@ export const takeScreenshot = async ({
       console.log(`Waiting for ${waitTime / 1000} seconds`);
     }
 
-    // Wait for document.readyState to be "complete",
-    // or a maximum of 5 seconds
-    // await Promise.race([
-    //   page.waitForFunction(
-    //     'document.readyState === "complete"',
-    //   ),
-    //   new Promise((resolve) =>
-    //     setTimeout(resolve, maxPageLoadTimeMS),
-    //   ),
-    // ]);
     await new Promise((resolve) =>
       setTimeout(resolve, waitTime),
     );
 
     if (debug) {
       console.log(`Done waiting`);
+      console.log('srcDoc', srcDoc);
+      console.log(`Taking screenshot`);
     }
-
-    // // Wait for all network requests to finish
-    // await page.waitForFunction(
-    //   'document.readyState === "complete"',
-    // );
-
-    // // Wait for an additional second, just in case
-    // // for various graphics to finish rendering.
-    // await new Promise((resolve) =>
-    //   setTimeout(resolve, 1000),
-    // );
 
     // Take a screenshot of the page
-    const screenshotBuffer = await page.screenshot({
-      fullPage: true,
+    const buffer = await page.screenshot({
+      // fullPage: true,
+      type: 'webp',
     });
 
-    const image: Image = {
-      buffer: screenshotBuffer,
-      mimeType: 'image/png',
-    };
+    const image: Image = { buffer };
     if (debug) {
+      console.log(`Took screenshot`);
       console.log('Closing page');
     }
-    await page.close();
 
     return image;
   } catch (error) {
@@ -149,8 +143,12 @@ export const takeScreenshot = async ({
     throw error;
   } finally {
     if (debug) {
-      console.log('Releasing screenshot semaphore');
+      console.log(
+        'Releasing screenshot semaphore and closing browser',
+      );
     }
+    await page.close();
+    await browser.close();
     screenshotSemaphore.release();
   }
 };

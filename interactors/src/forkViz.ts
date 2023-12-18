@@ -83,7 +83,7 @@ export const ForkViz = (gateways: Gateways) => {
         await commitViz(forkedFrom);
       if (parentCommitIdResult.outcome === 'failure')
         return err(parentCommitIdResult.error);
-      parentCommitId = parentCommitIdResult.value;
+      parentCommitId = parentCommitIdResult.value.end;
     }
 
     const newInfo: Info = {

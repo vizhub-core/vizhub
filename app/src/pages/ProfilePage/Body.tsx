@@ -1,10 +1,14 @@
 import { useContext } from 'react';
-import { User, sortOptions } from 'entities';
+import {
+  User,
+  sortOptions,
+  getBio,
+  getUserDisplayName,
+} from 'entities';
 import { ProfilePageBody } from 'components';
 import { SmartHeader } from '../../smartComponents/SmartHeader';
 import { VizPreviewPresenter } from '../../smartComponents/VizPreviewPresenter';
 import { SortContext } from '../../contexts/SortContext';
-import { getUserDisplayName } from 'entities/src/accessors/getUserDisplayName';
 import { InfosAndOwnersContext } from '../../contexts/InfosAndOwnersContext';
 
 export const Body = ({
@@ -38,6 +42,7 @@ export const Body = ({
         }
         displayName={getUserDisplayName(profileUser)}
         userName={userName}
+        bio={getBio(profileUser)}
         picture={picture}
         sortId={sortId}
         setSortId={setSortId}

@@ -10,17 +10,18 @@ export { GetContentAtCommit } from './getContentAtCommit';
 export { GetContentAtTimestamp } from './getContentAtTimestamp';
 export { CommitViz } from './commitViz';
 export { ForkViz } from './forkViz';
-export {
-  generateId,
-  setPredictableGenerateId,
-} from './generateId';
 export { UpvoteViz } from './upvoteViz';
 export { TrashViz } from './trashViz';
 export { RecordAnalyticsEvents } from './recordAnalyticsEvents';
 export { VerifyVizAccess } from './verifyVizAccess';
-export { generateUpvoteId } from './generateUpvoteId';
 export { GetCommitAtTimestamp } from './getCommitAtTimestamp';
 export { GetInfosAndOwners } from './getInfosAndOwners';
 export { ScoreViz } from './scoreViz';
 export { ValidateViz } from './validateViz';
 export { GetThumbnail, GetImage } from './getThumbnail';
+export {
+  generateId,
+  setPredictableGenerateId,
+} from './generateId';
+export { generateUpvoteId } from './generateUpvoteId';
+export { generatePermissionId } from './generatePermissionId';

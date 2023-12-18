@@ -40,7 +40,7 @@ ExplorePage.getPageData = async ({
     console.log(infosAndOwnersResult.error);
     return null;
   }
-  const { infoSnapshots, ownerUserSnapshots } =
+  const { infoSnapshots, ownerUserSnapshots, hasMore } =
     infosAndOwnersResult.value;
 
   const { authenticatedUserSnapshot } =
@@ -55,6 +55,7 @@ ExplorePage.getPageData = async ({
     infoSnapshots,
     ownerUserSnapshots,
     sortId,
+    hasMore,
   };
 };
 

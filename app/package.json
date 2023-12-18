@@ -52,7 +52,7 @@
     "sharedb-mongo": "^4.1.0",
     "stripe": "^14.9.0",
     "vizhub-libraries": "^1.8.0",
-    "vizhub-ui": "^3.12.0",
+    "vizhub-ui": "^3.13.0",
     "vzcode": "^0.43.0",
     "ws": "^8.15.1",
     "xss": "^1.0.14"

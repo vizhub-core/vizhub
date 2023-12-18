@@ -19,6 +19,8 @@ export type ExplorePageData = PageData &
     // The initial sort order for the results,
     // before the user has changed it client-side
     sortId: SortId;
+
+    hasMore: boolean;
   };
 
 // The type for the query parameters for this page
@@ -42,6 +44,9 @@ export const ExplorePage: Page = ({
       <InfosAndOwnersProvider
         infoSnapshots={pageData.infoSnapshots}
         ownerUserSnapshots={pageData.ownerUserSnapshots}
+        // hasMoreInitially={pageData.hasMore}
+        // TODO make this work on this page
+        hasMoreInitially={false}
       >
         <Body />
       </InfosAndOwnersProvider>

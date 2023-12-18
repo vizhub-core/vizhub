@@ -13,6 +13,7 @@ export const ExplorePageBody = ({
   sortId,
   setSortId,
   sortOptions,
+  hasMore,
 }) => {
   return (
     <div className="vh-page vh-explore-page">
@@ -32,6 +33,7 @@ export const ExplorePageBody = ({
           {renderVizPreviews()}
         </VizPreviewCollection>
         <More
+          hasMore={hasMore}
           onMoreClick={onMoreClick}
           isLoadingNextPage={isLoadingNextPage}
         />

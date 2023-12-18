@@ -30,6 +30,7 @@ export const VizPageViewer = ({
   defaultVizWidth,
   isPrivate,
   isUnlisted,
+  isVisual,
 }) => {
   // This SVG element is used only for its dynamic resizing behavior.
   // It's invisible, nothing is rendered into it.
@@ -85,6 +86,7 @@ export const VizPageViewer = ({
   );
 
   useEffect(() => {
+    if (!isVisual) return;
     const resizeObserver = new ResizeObserver(() => {
       if (svgRef.current) {
         const { clientWidth } = svgRef.current;
@@ -98,13 +100,15 @@ export const VizPageViewer = ({
   return (
     <div className="vh-viz-page-viewer">
       <div className="viewer-content">
-        <div className="viz-frame">
-          <svg
-            ref={svgRef}
-            viewBox={`0 0 ${defaultVizWidth} ${vizHeight}`}
-          />
-          {renderVizRunner(iframeScale)}
-        </div>
+        {isVisual && (
+          <div className="viz-frame">
+            <svg
+              ref={svgRef}
+              viewBox={`0 0 ${defaultVizWidth} ${vizHeight}`}
+            />
+            {renderVizRunner(iframeScale)}
+          </div>
+        )}
         <div className="title-bar">
           {isEditingTitle ? (
             <input

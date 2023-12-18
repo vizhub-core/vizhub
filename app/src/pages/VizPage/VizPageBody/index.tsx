@@ -7,7 +7,12 @@ import {
   useRef,
   useState,
 } from 'react';
-import { ShareDBDoc, SplitPaneResizeContext } from 'vzcode';
+import {
+  ShareDBDoc,
+  SplitPaneResizeContext,
+  shouldTriggerRun,
+  FileId,
+} from 'vzcode';
 import {
   defaultVizWidth,
   Content,
@@ -20,7 +25,6 @@ import {
   getHeight,
   getUserDisplayName,
   formatTimestamp,
-  VizId,
 } from 'entities';
 import { useRuntime } from 'runtime';
 import { VizPageHead, VizPageViewer } from 'components';
@@ -34,6 +38,7 @@ import {
 import { useRenderMarkdownHTML } from './useRenderMarkdownHTML';
 import { VizPageEditor } from './VizPageEditor';
 import { useMarkUncommitted } from '../useMarkUncommitted';
+import { enableManualRun } from 'runtime/src/useRuntime';
 
 const debug = false;
 
@@ -150,13 +155,61 @@ export const VizPageBody = ({
     [],
   );
 
+  // Allow vizzes to just be documentation / articles
+  // if there is only one file and that file is README.md.
+  const isVisual = useMemo(() => {
+    const fileIds: Array<FileId> = Object.keys(
+      content.files,
+    );
+    const isSingleFile =
+      Object.keys(content.files).length === 1;
+    const isReadme =
+      content.files[fileIds[0]].name === 'README.md';
+    return !(isSingleFile && isReadme);
+  }, [content]);
+
   // Set up the runtime environment.
   useRuntime({
     content,
     iframeRef,
     setSrcdocError,
     vizCacheContents,
+    isVisual,
   });
+
+  // Handle manual runs.
+  // TODO reduce duplication between here and VZCode/usePrettier
+  // by introducing a new field in the content object called
+  // `numRuns`
+  useEffect(() => {
+    if (!enableManualRun) return;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (shouldTriggerRun(event)) {
+        event.preventDefault();
+        // Add your custom code here
+        // alert('Ctrl+S has been pressed');
+        // Set `isInteracting = true` for a split second
+        // to trigger a manual run.
+        submitContentOperation((content) => ({
+          ...content,
+          isInteracting: true,
+        }));
+        setTimeout(() => {
+          submitContentOperation((content) => ({
+            ...content,
+            isInteracting: false,
+          }));
+        }, 0);
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener(
+        'keydown',
+        handleKeyDown,
+      );
+    };
+  }, []);
 
   // Render the viz runner iframe.
   const renderVizRunner = useCallback(
@@ -286,6 +339,7 @@ export const VizPageBody = ({
             license={license}
             isPrivate={info.visibility === 'private'}
             isUnlisted={info.visibility === 'unlisted'}
+            isVisual={isVisual}
           />
         </div>
       </div>

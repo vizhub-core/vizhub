@@ -12,6 +12,21 @@ import {
 } from 'entities';
 import { V3Runtime } from './v3Runtime/setupV3Runtime';
 
+// When `true`, the user can manually trigger a run of the viz
+// using various keyboard shortcuts such as CTRL+S.
+// TODO enable the following keyboard shortcuts:
+// F5: Widely used in many IDEs like Visual Studio, PyCharm, and SQL Server Management Studio to start debugging or run the code.
+// Ctrl + Enter: Common in notebook interfaces like Jupyter Notebooks and some SQL editors to execute the current cell or code block.
+// Shift + Enter: Also used in Jupyter Notebooks and similar interfaces to run the current cell and move to the next cell.
+// Ctrl + F5: In some environments like Visual Studio, it runs the code without starting the debugger.
+// F9: Used in some Python IDEs and editors like IDLE to run the selected code.
+// Cmd (or Ctrl) + R: Often used in macOS-based IDEs or text editors to run scripts.
+// Alt + Enter: Used in some contexts like IntelliJ IDEA to execute code and sometimes for context-specific actions like importing libraries.
+// Ctrl + Shift + B: Commonly used in Visual Studio Code to build the project.
+// Ctrl + Shift + F10: In IntelliJ IDEA and PyCharm, it's used to run a script or an application.
+// F8: In PowerShell ISE and other script editors, it runs the selected portion of the script.
+export const enableManualRun = true;
+
 const debug = false;
 
 // Debounce the v3 runtime updates when not interacting
@@ -25,11 +40,15 @@ export const useRuntime = ({
   iframeRef,
   setSrcdocError,
   vizCacheContents,
+  isVisual,
 }: {
   content: Content;
   iframeRef: RefObject<HTMLIFrameElement>;
   setSrcdocError: (error: string | null) => void;
   vizCacheContents: Record<string, Content>;
+
+  // If this is false, there is no iframeRef.current.
+  isVisual: boolean;
 }) => {
   // This ref is used to skip the first mount.
   const initialMount = useRef(true);
@@ -80,7 +99,16 @@ export const useRuntime = ({
   );
 
   // Set up the v3 runtime.
+  // TODO QA the following:
+  //  * Adding and removing index.js
+  //  * Adding and removing index.html
+  //  * Switching between versions of the runtime
   useEffect(() => {
+    // If the viz is not visual (README.md only), then
+    // we don't need to set up the v3 runtime.
+    if (isVisual === false) {
+      return;
+    }
     if (runtimeVersion === 3) {
       // Load the v3 runtime.
       import('./v3Runtime/setupV3Runtime').then(
@@ -101,56 +129,10 @@ export const useRuntime = ({
         },
       );
     }
-  }, [runtimeVersion]);
+  }, [runtimeVersion, isVisual]);
 
   // Used to debounce updates to the v3 runtime.
   const v3Timeout = useRef<number | undefined>(undefined);
-
-  // Executes a "run" on the v3 runtime when the entry viz changes.
-  // const v3Run = useCallback(
-  //   (content: Content) => {
-  //     if (v3Runtime.current && content) {
-  //       v3Runtime.current.handleCodeChange(content);
-  //       console.log('Code change');
-  //       console.log(JSON.stringify(content));
-  //       // v3Runtime.current.invalidateVizCache([content.id]);
-  //     }
-  //   },
-  //   [content],
-  // );
-
-  // Executes a "run" on the v3 runtime when any imported viz changes.
-  // Happens whenever vizCacheContents changes.
-  // const v3RunImports = useCallback(
-  //   (changedVizIds: Array<VizId>) => {
-  //     if (v3Runtime.current) {
-
-  //     }
-  //   },
-  //   [],
-  // );
-
-  // // Send file updates to the V3 runtime
-  // useEffect(() => {
-  //   // We don't need to execute a "run" on first render,
-  //   // because SSR handles the initial run by injecting
-  //   // the srcdoc into the page server-side.
-  //   if (initialMount.current === true) {
-  //     return;
-  //   }
-
-  //   // If we're 'interacting' using code widgets,
-  //   // we want to hot reload as frequently as possible.
-  //   if (content.isInteracting) {
-  //     v3Run(content);
-  //   } else {
-  //     // Otherwise, debounce the updates.
-  //     clearTimeout(v3Timeout.current);
-  //     v3Timeout.current = window.setTimeout(() => {
-  //       v3Run(content);
-  //     }, v3RunDebounceMs);
-  //   }
-  // }, [content, runtimeVersion, v3Runtime]);
 
   // Send updates of imported vizzes to the V3 runtime.
   const previousVizCacheContents = useRef(vizCacheContents);
@@ -207,15 +189,19 @@ export const useRuntime = ({
     if (isInteracting) {
       v3Runtime.current.invalidateVizCache(changedVizIds);
     } else {
-      // Otherwise, debounce the updates.
-      clearTimeout(v3Timeout.current);
-      v3Timeout.current = window.setTimeout(() => {
-        // Sanity check, should never happen.
-        if (v3Runtime.current === null) {
-          throw new Error('v3Runtime.current is null');
-        }
-        v3Runtime.current.invalidateVizCache(changedVizIds);
-      }, v3RunDebounceMs);
+      if (!enableManualRun) {
+        // Otherwise, debounce the updates.
+        clearTimeout(v3Timeout.current);
+        v3Timeout.current = window.setTimeout(() => {
+          // Sanity check, should never happen.
+          if (v3Runtime.current === null) {
+            throw new Error('v3Runtime.current is null');
+          }
+          v3Runtime.current.invalidateVizCache(
+            changedVizIds,
+          );
+        }, v3RunDebounceMs);
+      }
     }
   }, [vizCacheContents, runtimeVersion]);
 

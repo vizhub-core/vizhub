@@ -16,7 +16,6 @@ export const resizeImage = async ({
       buffer: await sharp(image.buffer)
         .resize(width)
         .toBuffer(),
-      mimeType: 'image/png',
     };
   } catch (error) {
     console.error('Error resizing image:', error);

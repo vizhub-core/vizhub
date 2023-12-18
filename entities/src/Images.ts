@@ -4,25 +4,14 @@ import { Timestamp } from './common';
 // Image
 // * Not an entity, just used internally.
 // * Represents the image generated from a Puppeteer screenshot.
-// * Can be stored as either a Buffer or a base64 encoded string.
-// * The 'buffer' property holds the image as a Buffer object, commonly used for binary data in Node.js.
-//     - Used when the image is generated as a file or a binary stream.
-// * The 'base64' property holds the image as a base64 encoded string, commonly used for data transfer.
-//     - Used when the image is generated as a data URI.
-// * The 'buffer' and 'base64' properties are mutually exclusive.
-// * The 'mimeType' property indicates the image format, typically 'image/png' or 'image/jpeg'.
-//     - Essential for correct interpretation and display of the image data.
+// * Contains a WebP image buffer.
 export type Image = {
-  // buffer = Buffer.from(base64, 'base64'),
-  // base64 = buffer.toString('base64'),
   buffer: Buffer;
-  // base64: string;
-  mimeType: 'image/png' | 'image/jpeg';
 };
 
 export const imageFromBase64 = (base64: string): Image => {
   const buffer = Buffer.from(base64, 'base64');
-  return { buffer, mimeType: 'image/png' };
+  return { buffer };
 };
 
 // ImageId
