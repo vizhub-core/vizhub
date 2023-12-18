@@ -42,7 +42,6 @@ import {
   useSetUncommitted,
   useSetVizTitle,
 } from './useVizMutations';
-import { useMarkUncommitted } from './useMarkUncommitted';
 import { useToggleState } from './useToggleState';
 import { VizPageModals } from './VizPageModals';
 import './styles.scss';

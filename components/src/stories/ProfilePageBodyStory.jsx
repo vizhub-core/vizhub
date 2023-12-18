@@ -6,6 +6,7 @@ import { args as sortControlArgs } from './SortControlStoryHorizontal';
 const args = {
   userName: 'schmoe',
   displayName: 'Joe Schmoe',
+  bio: 'Mauris tristique purus risus cursus. Ornare feugiat ut congue aliquet dolor ut. Nisl porta enim orci molestie ligula nulla et eu fringilla. Vitae id quisque elit eget a nec morbi tortor sit.',
   renderVizPreviews,
   onMoreClick: () => {
     console.log('More clicked');

@@ -1,19 +1,105 @@
+/* TODO move this into vizhub-ui */
+
+.vh-lede-01 {
+  color: var(--vh-color-neutral-01);
+  font-family: Poppins;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 32px;
+}
+
+.vh-base-01,
+.vh-base-02 {
+  font-family: Inter;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 16px;
+}
+.vh-base-02 {
+  font-weight: 700;
+}
+
 .vh-profile-page {
   overflow: auto;
+  padding: 70px;
+  display: flex;
+  align-items: center;
 
-  &__avatar {
-    width: 80px;
-    height: 80px;
-    box-shadow: var(--vh-box-shadow);
-  }
+  .profile-body {
+    display: flex;
+    flex-direction: row;
+    gap: 70px;
+    max-width: 1280px;
+    .profile-sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      // width: 300px;
+      flex: 0 0 300px;
+      .profile-avatar {
+        width: 164px;
+        height: 164px;
+        border-radius: 50%;
+        margin-bottom: 20px;
+      }
 
-  &__full-name {
-    font-weight: bold;
-    font-size: var(--vh-h3-font-size);
-  }
+      .profile-name {
+        color: var(--vh-color-neutral-02);
+      }
 
-  &__user-name {
-    color: var(--vh-foreground-color-light);
-    font-size: var(--vh-small-font-size);
+      .edit-bio {
+        margin-top: 16px;
+        color: var(--vh-color-action-01);
+        cursor: pointer;
+      }
+
+      .profile-sidebar-sections {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        .profile-sidebar-section {
+          padding: 8px;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          cursor: pointer;
+
+          svg {
+            color: var(--vh-color-neutral-04);
+          }
+        }
+        .profile-sidebar-section.active {
+          background-color: var(--vh-color-action-03);
+          color: var(--vh-color-action-01);
+
+          svg {
+            color: var(--vh-color-action-01);
+          }
+        }
+      }
+    }
+    .profile-content {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      .profile-header {
+        display: flex;
+        justify-content: space-between;
+
+        .profile-header-controls {
+          display: flex;
+          gap: 28px;
+          align-items: center;
+
+          .create-new-button {
+            display: flex;
+            gap: 8px;
+            padding-right: 16px;
+            padding-left: 8px;
+          }
+        }
+      }
+    }
   }
 }

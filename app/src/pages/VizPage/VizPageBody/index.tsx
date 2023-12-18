@@ -11,6 +11,8 @@ import {
   ShareDBDoc,
   SplitPaneResizeContext,
   shouldTriggerRun,
+  FileId,
+  ShareDBDoc,
 } from 'vzcode';
 import {
   defaultVizWidth,
@@ -154,12 +156,26 @@ export const VizPageBody = ({
     [],
   );
 
+  // Allow vizzes to just be documentation / articles
+  // if there is only one file and that file is README.md.
+  const isVisual = useMemo(() => {
+    const fileIds: Array<FileId> = Object.keys(
+      content.files,
+    );
+    const isSingleFile =
+      Object.keys(content.files).length === 1;
+    const isReadme =
+      content.files[fileIds[0]].name === 'README.md';
+    return !(isSingleFile && isReadme);
+  }, [content]);
+
   // Set up the runtime environment.
   useRuntime({
     content,
     iframeRef,
     setSrcdocError,
     vizCacheContents,
+    isVisual,
   });
 
   // Handle manual runs.
@@ -324,6 +340,7 @@ export const VizPageBody = ({
             license={license}
             isPrivate={info.visibility === 'private'}
             isUnlisted={info.visibility === 'unlisted'}
+            isVisual={isVisual}
           />
         </div>
       </div>
