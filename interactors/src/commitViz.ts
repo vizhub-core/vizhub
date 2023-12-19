@@ -40,13 +40,15 @@ export const CommitViz = (gateways: Gateways) => {
 
     const newCommitId = generateId();
 
+    const ops = diff(previousContent, content);
+
     const newCommit: Commit = {
       id: newCommitId,
       parent: end,
       viz: id,
       authors: info.commitAuthors,
       timestamp: info.updated,
-      ops: diff(previousContent, content),
+      ops,
       milestone: null,
     };
     if (debug) {

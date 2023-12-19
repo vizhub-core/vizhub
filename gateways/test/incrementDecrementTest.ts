@@ -14,12 +14,15 @@ export const incrementDecrementTest = () => {
         decrementForksCount,
       } = gateways;
       await saveInfo(primordialViz.info);
-      const infoResult = await getInfo(
-        primordialViz.info.id,
-      );
-      assert(infoResult.outcome === 'success');
-      const getForksCount = async () =>
-        infoResult.value.data.forksCount;
+
+      const getForksCount = async () => {
+        const infoResult = await getInfo(
+          primordialViz.info.id,
+        );
+        assert(infoResult.outcome === 'success');
+        return infoResult.value.data.forksCount;
+      };
+
       expect(await getForksCount()).toEqual(0);
 
       // Increment
@@ -79,12 +82,14 @@ export const incrementDecrementTest = () => {
 
       const originalUpvotesCount =
         primordialViz.info.upvotesCount;
-      const infoResult = await getInfo(
-        primordialViz.info.id,
-      );
-      assert(infoResult.outcome === 'success');
-      const getUpvotesCount = async () =>
-        infoResult.value.data.upvotesCount;
+
+      const getUpvotesCount = async () => {
+        const infoResult = await getInfo(
+          primordialViz.info.id,
+        );
+        assert(infoResult.outcome === 'success');
+        return infoResult.value.data.upvotesCount;
+      };
       expect(await getUpvotesCount()).toEqual(
         originalUpvotesCount,
       );

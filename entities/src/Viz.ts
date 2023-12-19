@@ -142,13 +142,13 @@ export type Configuration = any;
 export type Content = VZCodeContent & {
   // id
   // * The viz that this content is associated with
-  id: VizId;
+  id?: VizId;
 
   // title
   //  * The title of the viz, same as Info.title
   //  * Tracked here so that it can be versioned
   //  * Restoring an old version should restore its old title
-  title: string;
+  title?: string;
 
   // height
   // * The customized height of the viz in pixels
