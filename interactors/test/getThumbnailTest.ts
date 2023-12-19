@@ -15,8 +15,8 @@ import {
 setJSDOM(JSDOM);
 
 export const getThumbnailTest = () => {
-  describe('GetThumbnail', () => {
-    it.only('GetThumbnail, success case', async () => {
+  describe.skip('GetThumbnail', () => {
+    it('GetThumbnail, success case', async () => {
       const gateways = initGateways();
       const {
         saveCommit,

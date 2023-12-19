@@ -1,6 +1,6 @@
 // See also
 //  * https://gitlab.com/curran/vizhub-ee/-/blob/main/vizhub-ee-interactors/test/GetContentAtCommitTest.ts
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, assert } from 'vitest';
 import { VizHubErrorCode } from 'gateways';
 import { diff } from 'ot';
 import {
@@ -22,6 +22,7 @@ import {
   GetContentAtCommit,
   setPredictableGenerateId,
 } from '../src';
+import { CommitId } from 'entities';
 
 export const getContentAtCommitTest = () => {
   describe('getContentAtCommitTest', async () => {
@@ -30,11 +31,13 @@ export const getContentAtCommitTest = () => {
       const { saveCommit } = gateways;
       const getContentAtCommit =
         GetContentAtCommit(gateways);
+
       await saveCommit(primordialCommit);
       const result = await getContentAtCommit(
         primordialCommit.id,
       );
       expect(result.outcome).toEqual('success');
+      assert(result.outcome === 'success');
       expect(result.value).toEqual(primordialViz.content);
     });
 
@@ -47,6 +50,7 @@ export const getContentAtCommitTest = () => {
       await saveCommit(commit2);
       const result = await getContentAtCommit(commit2.id);
       expect(result.outcome).toEqual('success');
+      assert(result.outcome === 'success');
       expect(result.value).toEqual(primordialVizV2.content);
     });
 
@@ -60,6 +64,7 @@ export const getContentAtCommitTest = () => {
       await saveCommit(commit3);
       const result = await getContentAtCommit(commit3.id);
       expect(result.outcome).toEqual('success');
+      assert(result.outcome === 'success');
       expect(result.value).toEqual(primordialVizV3.content);
     });
 
@@ -74,6 +79,7 @@ export const getContentAtCommitTest = () => {
         commit2InvalidOp.id,
       );
       expect(result.outcome).toEqual('failure');
+      assert(result.outcome === 'failure');
       expect(result.error.code).toEqual(
         VizHubErrorCode.invalidCommitOp,
       );
@@ -101,6 +107,7 @@ commit.ops:
         GetContentAtCommit(gateways);
       const result = await getContentAtCommit('bogus-id');
       expect(result.outcome).toEqual('failure');
+      assert(result.outcome === 'failure');
       expect(result.error.code).toEqual(
         VizHubErrorCode.resourceNotFound,
       );
@@ -120,6 +127,7 @@ commit.ops:
 
       const result = await getContentAtCommit(commit3.id);
       expect(result.outcome).toEqual('failure');
+      assert(result.outcome === 'failure');
       expect(result.error.code).toEqual(
         VizHubErrorCode.resourceNotFound,
       );
@@ -140,6 +148,7 @@ commit.ops:
       await saveCommit(commit3);
       const result = await getContentAtCommit(commit3.id);
       expect(result.outcome).toEqual('failure');
+      assert(result.outcome === 'failure');
       expect(result.error.code).toEqual(
         VizHubErrorCode.resourceNotFound,
       );
@@ -165,19 +174,29 @@ commit.ops:
 
       const result = await getContentAtCommit(commit3.id);
       expect(result.outcome).toEqual('success');
+      assert(result.outcome === 'success');
       expect(result.value).toEqual(primordialVizV3.content);
     });
 
-    it('getContentAtCommit, creating new Milestones', async () => {
+    // Generates content for a specific commit number
+    const contentForCommit = (i: number) => ({
+      ...primordialViz.content,
+      files: {
+        7548392: {
+          name: 'index.html',
+          text: `<body>Hello number ${i}</body>`,
+        },
+      },
+    });
+
+    it('getContentAtCommit, creating new Milestones based on milestoneFrequency', async () => {
       setPredictableGenerateId();
       const gateways = initGateways();
       const {
         saveCommit,
-        saveMilestone,
         getCommit,
         getMilestone,
         deleteCommit,
-        deleteMilestone,
       } = gateways;
       const saveViz = SaveViz(gateways);
 
@@ -186,21 +205,11 @@ commit.ops:
         gateways,
         {
           milestoneFrequency: 20,
+          maxAncestorOpsSizeKB: Infinity,
         },
       );
 
       await saveCommit(primordialCommit);
-
-      // Generates content for a specific commit number
-      const contentForCommit = (i) => ({
-        ...primordialViz.content,
-        files: {
-          7548392: {
-            name: 'index.html',
-            text: `<body>Hello number ${i}</body>`,
-          },
-        },
-      });
 
       // Generate 100 commits
       const n = 100;
@@ -235,26 +244,34 @@ commit.ops:
 
       // Verify there is no milestone at this point
       // and that our commits were set up as expected
-      const commit9 = (await getCommit('new-commit-9'))
-        .value;
+      const getCommitResult =
+        await getCommit('new-commit-9');
+      assert(getCommitResult.outcome === 'success');
+      const commit9 = getCommitResult.value;
       expect(commit9.parent).toEqual('new-commit-8');
       expect(commit9.milestone).toEqual(undefined);
 
-      // This invocation should generate the milestones.
-      expect(
-        (await getContentAtCommit(previousCommit.id)).value,
-      ).toEqual(previousContent);
+      // This invocation should generate a milestone
+      // at commit 20.
+      const contentResult = await getContentAtCommit(
+        previousCommit.id,
+      );
+      assert(contentResult.outcome === 'success');
+      expect(contentResult.value).toEqual(previousContent);
+
       // Verifies there is a milestone at the given commitId.
-      const verifyMilestone = async (id) => {
+      const verifyMilestone = async (id: CommitId) => {
         // Verify that commit.milestone is a string id
-        const milestone = (await getCommit(id)).value
-          .milestone;
+        const result = await getCommit(id);
+        assert(result.outcome === 'success');
+        const milestone = result.value.milestone;
         expect(typeof milestone).toEqual('string');
 
         // Verify that the milestone is stored
         const milestoneResult =
           await getMilestone(milestone);
         expect(milestoneResult.outcome).toEqual('success');
+        assert(milestoneResult.outcome === 'success');
 
         // "new-commit-80" --> "80"
         const i = id.substring(11);
@@ -267,41 +284,200 @@ commit.ops:
 
       // Verify there are milestones at the expected commits.
       await verifyMilestone('new-commit-20');
+
+      // This invocation should use the milestone
+      // at commit 20, and generate a new one at commit 40.
+      const contentResult2 = await getContentAtCommit(
+        previousCommit.id,
+      );
+      assert(contentResult2.outcome === 'success');
+      expect(contentResult2.value).toEqual(previousContent);
+
       await verifyMilestone('new-commit-40');
+
+      // This invocation should use the milestone
+      // at commit 40, and generate a new one at commit 60.
+      const contentResult3 = await getContentAtCommit(
+        previousCommit.id,
+      );
+      assert(contentResult3.outcome === 'success');
+      expect(contentResult3.value).toEqual(previousContent);
       await verifyMilestone('new-commit-60');
+
+      // This invocation should use the milestone
+      // at commit 60, and generate a new one at commit 80.
+      const contentResult4 = await getContentAtCommit(
+        previousCommit.id,
+      );
+      assert(contentResult4.outcome === 'success');
+      expect(contentResult4.value).toEqual(previousContent);
       await verifyMilestone('new-commit-80');
+
+      // This invocation should use the milestone
+      // at commit 80, and generate a new one at commit 100.
+      const contentResult5 = await getContentAtCommit(
+        previousCommit.id,
+      );
+      assert(contentResult5.outcome === 'success');
+      expect(contentResult5.value).toEqual(previousContent);
       await verifyMilestone('new-commit-100');
 
-      // This invocation should use milestone 100
-      await deleteCommit('new-commit-99');
-      expect(
-        (await getContentAtCommit('new-commit-100')).value,
-      ).toEqual(contentForCommit(100));
-
-      // This invocation should use milestone 60
-      await deleteCommit('new-commit-59');
-      expect(
-        (await getContentAtCommit('new-commit-70')).value,
-      ).toEqual(contentForCommit(70));
-
-      // This invocation should fail if we delete milestone 60
-      const milestoneToDelete = (
-        await getCommit('new-commit-60')
-      ).value.milestone;
-      await deleteMilestone(milestoneToDelete);
-      const result =
-        await getContentAtCommit('new-commit-70');
-      expect(result.outcome).toEqual('failure');
-      expect(result.error.code).toEqual(
-        VizHubErrorCode.resourceNotFound,
+      // This invocation should use the at commit 100.
+      const contentResult6 = await getContentAtCommit(
+        previousCommit.id,
       );
-      expect(result.error.message).toEqual(
-        `Resource (Milestone) not found with id: ${milestoneToDelete}`,
+      assert(contentResult6.outcome === 'success');
+      expect(contentResult6.value).toEqual(previousContent);
+
+      // Just to be absolutely sure that the milestones are being used,
+      // let's delete the commits.
+      const deleteResult =
+        await deleteCommit('new-commit-99');
+      assert(deleteResult.outcome === 'success');
+
+      // This invocation should use the at commit 100.
+      const contentResult7 = await getContentAtCommit(
+        previousCommit.id,
       );
+      assert(contentResult7.outcome === 'success');
+      expect(contentResult7.value).toEqual(previousContent);
+    });
+
+    // The core idea here is that we want to prevent this MongoDB error:
+    //    MongoServerError: PlanExecutor error during aggregation :: caused by ::
+    //    BSONObj size: 30340192 (0x1CEF460) is invalid.
+    //    Size must be between 0 and 16793600(16MB)
+    // which happens when the number of commits traversed in getCommitAncestors
+    // is too large. This could happen if, for example, a user uploads a large
+    // dataset. The solution is to create new Milestones along the way, so that
+    // the number of commits traversed is limited, and the size of the MongoDB
+    // aggregation query result is limited.
+    it('getContentAtCommit, creating new Milestones based on op size', async () => {
+      setPredictableGenerateId();
+
+      const gateways = initGateways();
+      const {
+        getCommitAncestors,
+        saveCommit,
+        getCommit,
+        getMilestone,
+        deleteCommit,
+      } = gateways;
+      const saveViz = SaveViz(gateways);
+
+      // Configure the interactor to save milestones every 20 commits.
+      const getContentAtCommit = GetContentAtCommit(
+        gateways,
+        {
+          // Prevent this code path from being taken.
+          milestoneFrequency: Infinity,
+
+          // Set the max ancestor ops size.
+          // This is what we want to test.
+          maxAncestorOpsSizeKB: 3,
+        },
+      );
+
+      await saveCommit(primordialCommit);
+
+      let previousContent = primordialViz.content;
+      let previousCommit = primordialCommit;
+
+      let commitCounter = 1;
+      const generate10Commits = async () => {
+        const n = 10;
+        for (let i = 1; i < n + 1; i++) {
+          const newContent =
+            contentForCommit(commitCounter);
+
+          const newCommit = {
+            id: `new-commit-${commitCounter}`,
+            parent: previousCommit.id,
+            viz: primordialViz.info.id,
+            authors: [userJoe.id],
+            timestamp: ts2 + i * 100000,
+            ops: diff(previousContent, newContent),
+          };
+
+          await saveCommit(newCommit);
+          previousCommit = newCommit;
+          previousContent = newContent;
+          commitCounter++;
+        }
+
+        // Save the latest that matches with commits added
+        await saveViz({
+          info: {
+            ...primordialViz.info,
+            end: previousCommit.id,
+            committed: true,
+            commitAuthors: [],
+          },
+          content: previousContent,
+        });
+      };
+
+      const expectNoMilestones = async () => {
+        // Verify there is no milestone at this point
+        // and that our commits were set up as expected
+        const getCommitAncestorsResult =
+          await getCommitAncestors(previousCommit.id);
+        assert(
+          getCommitAncestorsResult.outcome === 'success',
+        );
+        const commitAncestors =
+          getCommitAncestorsResult.value;
+        for (const commit of commitAncestors) {
+          expect(commit.milestone).toEqual(undefined);
+        }
+      };
+      await expectNoMilestones();
+
+      // Generate 10 commits.
+      // This should be under the max ancestor ops size.
+      await generate10Commits();
+      const contentResult = await getContentAtCommit(
+        previousCommit.id,
+      );
+      assert(contentResult.outcome === 'success');
+      expect(contentResult.value).toEqual(previousContent);
+      await expectNoMilestones();
+
+      // Generate 10 more commits.
+      // This should be over the max ancestor ops size.
+      await generate10Commits();
+      const contentResult2 = await getContentAtCommit(
+        previousCommit.id,
+      );
+      assert(contentResult2.outcome === 'success');
+      expect(contentResult2.value).toEqual(previousContent);
+      // await expectNoMilestones();
+
+      // Verifies there is a milestone at the given commitId.
+      const verifyMilestone = async (id: CommitId) => {
+        // Verify that commit.milestone is a string id
+        const result = await getCommit(id);
+        assert(result.outcome === 'success');
+        const milestone = result.value.milestone;
+        expect(typeof milestone).toEqual('string');
+
+        // Verify that the milestone is stored
+        const milestoneResult =
+          await getMilestone(milestone);
+        expect(milestoneResult.outcome).toEqual('success');
+        assert(milestoneResult.outcome === 'success');
+
+        // "new-commit-80" --> "80"
+        const i = id.substring(11);
+
+        // Verify that the stored milestone content is correct
+        expect(milestoneResult.value.content).toEqual(
+          contentForCommit(i),
+        );
+      };
+
+      // Verify there are milestones at the expected commits.
+      await verifyMilestone('new-commit-20');
     });
   });
-  // TODO bring back milestones
-  // Somehow this was causing a problem with the migration.
-  // If the second argument is passed, and there are no milestones,
-  // the first commit was being omitted. TODO add a test for this case.
 };
