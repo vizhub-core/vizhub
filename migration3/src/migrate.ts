@@ -7,6 +7,11 @@ import { migrateUsers } from './migrateUsers';
 import { migrateUpvotes } from './migrateUpvotes';
 import { migrateCollaborators } from './migrateCollaborators';
 
+// Disable upvotes and collaborators for now,
+// until we have the rollbacks working for those.
+const enableUpvotes = false;
+const enableCollaborators = false;
+
 export const migrate = async (): Promise<void> => {
   const {
     v2InfoCollection,
@@ -184,7 +189,7 @@ export const migrate = async (): Promise<void> => {
         gateways,
       });
 
-      if (infoV2.upvotes) {
+      if (enableUpvotes && infoV2.upvotes) {
         console.log(`  Migrating upvotes...`);
 
         await migrateUpvotes({
@@ -193,7 +198,7 @@ export const migrate = async (): Promise<void> => {
           gateways,
         });
       }
-      if (infoV2.collaborators) {
+      if (enableCollaborators && infoV2.collaborators) {
         console.log(`  Migrating collaborators...`);
         await migrateCollaborators({
           vizId: infoV2.id,
@@ -214,9 +219,9 @@ export const migrate = async (): Promise<void> => {
     await saveMigrationStatus(newMigrationStatus);
 
     // Wait a bit between vizzes so we don't overload the database.
-    await new Promise((resolve) =>
-      setTimeout(resolve, 500),
-    );
+    // await new Promise((resolve) =>
+    //   setTimeout(resolve, 500),
+    // );
   }
   if (!keepGoing) {
     console.log('Exited cleanly!');

@@ -24,6 +24,7 @@ import { computeV3Files } from './computeV3Files';
 import { diff } from 'ot';
 import { computeForkedFrom } from './computeForkedFrom';
 import { removeEmoji } from './removeEmoji';
+import { rollback } from './rollback';
 
 // Migrates the info and content of a viz.
 // Returns true if successful, false if not.
@@ -105,7 +106,20 @@ export const migrateViz = async ({
   const alreadyMigrated =
     getInfoResult.outcome === 'success';
   if (alreadyMigrated) {
-    console.log(`  "${infoV2.title?.trim()}"`);
+    console.log(`  This viz has already been migrated!`);
+    // process.exit(1);
+
+    console.log(
+      `    Assuming it was not migrated cleanly. Rolling back...`,
+    );
+    const migratedInfo = getInfoResult.value.data;
+    await rollback({
+      migratedInfo,
+      gateways,
+    });
+    console.log(
+      `    Rolled back. Continuing with migration...`,
+    );
   }
 
   if (isPrimordialViz) {
