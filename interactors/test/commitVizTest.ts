@@ -16,7 +16,7 @@ import {
 } from '../src';
 
 export const commitVizTest = () => {
-  describe.only('commitViz', async () => {
+  describe('commitViz', async () => {
     // This is a no-op case.
     // It should do nothing and return "success".
     it('commitViz, committed case', async () => {

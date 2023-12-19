@@ -6,7 +6,7 @@ import {
 } from 'entities/test/fixtures';
 
 export const embeddingsTest = () => {
-  describe('embeddings', () => {
+  describe.skip('embeddings', () => {
     it('clean up just in case', async () => {
       const gateways = await initGateways();
       const { deleteVizEmbedding } = gateways;

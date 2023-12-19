@@ -292,7 +292,7 @@ export const DatabaseGateways = ({
       // }
 
       // TODO add test for basic access control - exclude non-public infos
-      mongoQuery['visibility'] = 'public';
+      // mongoQuery['visibility'] = 'public';
 
       const query = shareDBConnection.createFetchQuery(
         toCollectionName(entityName),
