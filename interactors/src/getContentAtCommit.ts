@@ -15,10 +15,23 @@ import {
 } from 'entities';
 import { generateId } from './generateId';
 
-const debug = true;
+const debug = false;
 
 const defaultOptions = {
-  milestoneFrequency: 100,
+  // The maximum number of commits between milestones.
+  // This is to limit the number of commits that must be traversed
+  // to reconstruct content at a given commit.
+  milestoneFrequency: 1000,
+
+  // The maximum size of the ancestor ops array in KB.
+  // This is to limit the amount of memory required to reconstruct
+  // content at a given commit. In particular, this is to prevent
+  // the case where the ancestor ops array exceeds MongoDB's 16MB
+  // document size limit.
+  //
+  // This limit it set to 5MB, which is roughly 1/3 of the 16MB limit.
+  // Milestone creation is triggered when this limit is exceeded.
+  maxAncestorOpsSizeKB: 1024 * 5,
 };
 
 // https://gitlab.com/curran/vizhub-ee/-/blob/main/vizhub-ee-interactors/src/GetContentAtCommit.ts
@@ -27,6 +40,7 @@ export const GetContentAtCommit =
     gateways: Gateways,
     options: {
       milestoneFrequency: number;
+      maxAncestorOpsSizeKB: number;
     } = defaultOptions,
   ) =>
   async (id: CommitId): Promise<Result<Content>> => {
@@ -45,6 +59,16 @@ export const GetContentAtCommit =
       return commitsResult;
     const commits = commitsResult.value;
     const { milestone } = commits[0];
+
+    // Compute the size of the ancestor ops array in KB.
+    const ancestorOpsSizeKB =
+      JSON.stringify(commits).length / 1024;
+    if (debug) {
+      console.log(
+        '[GetContentAtCommit]   ancestorOpsSizeKB: ' +
+          ancestorOpsSizeKB,
+      );
+    }
 
     // Start with empty content in case of not starting from a milestone.
     // In this case we traverse the entire commit history, all the way
@@ -83,7 +107,7 @@ export const GetContentAtCommit =
       // be invalid when applied to the milestone.
       commits.shift();
 
-      // Consistency!
+      // Consistency is key!
       maxNumCommits--;
     }
 
@@ -116,17 +140,34 @@ export const GetContentAtCommit =
         );
       }
 
+      const overMilestoneFrequency = i >= maxNumCommits;
+      const overAncestorOpsSize =
+        ancestorOpsSizeKB > options.maxAncestorOpsSizeKB;
+
       // If we need to traverse too many commits,
       // create new milestones such that the max number of commits
       // between milestones is `milestoneFrequency`.
       if (
+        // If we have not yet created a milestone during this invocation
         !milestoneCreated &&
-        options?.milestoneFrequency &&
-        i >= maxNumCommits
+        // and EITHER we have exceeded the max number of commits
+        (overMilestoneFrequency ||
+          // OR the ancestor ops array is too large.
+          // In this case, we want to add a milestone to
+          // the last commit in our sequence.
+          (i === commits.length - 1 && overAncestorOpsSize))
       ) {
         if (debug) {
           console.log(
             '[GetContentAtCommit]   creating a new milestone!',
+          );
+          console.log(
+            '[GetContentAtCommit]     overMilestoneFrequency: ' +
+              overMilestoneFrequency,
+          );
+          console.log(
+            '[GetContentAtCommit]     overAncestorOpsSize: ' +
+              overAncestorOpsSize,
           );
         }
         // Save the milestone

@@ -42,15 +42,6 @@ export const CommitViz = (gateways: Gateways) => {
 
     const ops = diff(previousContent, content);
 
-    // // TODO if ops is larger than a certain size, then
-    // // create a new milestone. This is to prevent the
-    // // case where a viz has a huge number of commits
-    // // and the commit history becomes unwieldy to
-    // // traverse. This is a temporary solution until
-    // // we implement a better way to traverse commit
-    // // history, such as a graph database.
-    // const opSizeKB = JSON.stringify(ops).length / 1024;
-
     const newCommit: Commit = {
       id: newCommitId,
       parent: end,
