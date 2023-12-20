@@ -25,3 +25,4 @@ export {
 } from './generateId';
 export { generateUpvoteId } from './generateUpvoteId';
 export { generatePermissionId } from './generatePermissionId';
+export { DeleteViz } from './deleteViz';

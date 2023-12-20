@@ -107,19 +107,20 @@ export const migrateViz = async ({
     getInfoResult.outcome === 'success';
   if (alreadyMigrated) {
     console.log(`  This viz has already been migrated!`);
-    // process.exit(1);
+    console.log('TODO get rollback working flawlessly');
+    process.exit(1);
 
-    console.log(
-      `    Assuming it was not migrated cleanly. Rolling back...`,
-    );
-    const migratedInfo = getInfoResult.value.data;
-    await rollback({
-      migratedInfo,
-      gateways,
-    });
-    console.log(
-      `    Rolled back. Continuing with migration...`,
-    );
+    // console.log(
+    //   `    Assuming it was not migrated cleanly. Rolling back...`,
+    // );
+    // const migratedInfo = getInfoResult.value.data;
+    // await rollback({
+    //   migratedInfo,
+    //   gateways,
+    // });
+    // console.log(
+    //   `    Rolled back. Continuing with migration...`,
+    // );
   }
 
   if (isPrimordialViz) {

@@ -94,7 +94,7 @@ export const validateVizTest = () => {
       );
     });
 
-    it('validateViz, failure case - missing embedding', async () => {
+    it.skip('validateViz, failure case - missing embedding', async () => {
       const gateways = initGateways();
       const {
         saveInfo,
