@@ -16,6 +16,9 @@ const enableCollaborators = false;
 // Max 5MB content size
 const maxContentSizeKB = 5 * 1024;
 
+// The number of vizzes migrated at a time
+const batchSize = 100;
+
 export const migrate = async (): Promise<void> => {
   const {
     v2InfoCollection,
@@ -25,6 +28,7 @@ export const migrate = async (): Promise<void> => {
   } = await setupConnections({});
 
   let keepGoing = true;
+  let numVizzesProcessedThisBatch = 0;
 
   process.on('SIGINT', () => {
     console.log('RECEIVED SIGINT');
@@ -249,6 +253,11 @@ export const migrate = async (): Promise<void> => {
 
     // Wait a bit between vizzes so we don't overload the database.
     await new Promise((resolve) => setTimeout(resolve, 50));
+
+    numVizzesProcessedThisBatch++;
+    if (numVizzesProcessedThisBatch >= batchSize) {
+      keepGoing = false;
+    }
   }
   if (!keepGoing) {
     console.log('Exited cleanly!');

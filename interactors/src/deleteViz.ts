@@ -28,7 +28,17 @@ import { CommitViz } from './commitViz';
 //  * Deletes all commits, info, and content
 //  * Updates forked from viz and forks for data integrity
 export const DeleteViz = (gateways: Gateways) => {
-  const { getInfo, deleteInfo, deleteContent } = gateways;
+  const {
+    getInfo,
+    deleteInfo,
+    deleteContent,
+
+    // TODO full commit deletion algorithm
+    // * Find all commits where the deleted commit is the parent
+    // * Set the parent of those commits to the parent of the deleted commit
+    // * Update the ops of those commits to reflect the change
+    deleteCommit,
+  } = gateways;
 
   return async (id: VizId): Promise<Result<Success>> => {
     // Get the info so we can find out about forks and forkedFrom.
@@ -38,13 +48,25 @@ export const DeleteViz = (gateways: Gateways) => {
     const info: Info = infoResult.value.data;
 
     // TODO Decrement forksCount on forkedFrom viz
-    // TODO
 
     // Delete the start commit
-    // TODO define delete commit such that it
-    // * finds all commits where that commit is the parent
-    // * sets the parent of those commits to the parent of the deleted commit
-    // * updates the ops of those commits to reflect the change
+    const deleteStartCommitResult = await deleteCommit(
+      info.start,
+    );
+    if (deleteStartCommitResult.outcome === 'failure') {
+      return err(deleteStartCommitResult.error);
+    }
+
+    // If the start and end commits are different,
+    // delete the end commit
+    if (info.start !== info.end) {
+      const deleteEndCommitResult = await deleteCommit(
+        info.end,
+      );
+      if (deleteEndCommitResult.outcome === 'failure') {
+        return err(deleteEndCommitResult.error);
+      }
+    }
 
     // Delete the info
     const deleteInfoResult = await deleteInfo(id);

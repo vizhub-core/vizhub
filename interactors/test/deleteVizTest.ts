@@ -37,8 +37,9 @@ export const deleteVizTest = () => {
       await saveCommit(primordialCommit);
 
       // Sanity check
-      assertExists(await getInfo(primordialViz.info.id));
-      assertExists(await getContent(primordialViz.info.id));
+      const id = primordialViz.info.id;
+      assertExists(await getInfo(id));
+      assertExists(await getContent(id));
       assertExists(await getCommit(primordialCommit.id));
       expect(primordialViz.info.start).toEqual(
         primordialCommit.id,
@@ -48,16 +49,15 @@ export const deleteVizTest = () => {
       );
 
       const deleteViz = DeleteViz(gateways);
-      const result = await deleteViz(primordialViz.info.id);
+      const result = await deleteViz(id);
       expect(result.outcome).toEqual('success');
       assert(result.outcome === 'success');
       expect(result.value).toEqual('success');
 
       // assertNotExists(await getCommit(primordialCommit.id));
-      assertNotExists(await getInfo(primordialViz.info.id));
-      assertNotExists(
-        await getContent(primordialViz.info.id),
-      );
+      assertNotExists(await getInfo(id));
+      assertNotExists(await getContent(id));
+      assertNotExists(await getCommit(primordialCommit.id));
 
       // Modifications to the viz itself being deleted
       //  * Start and end commit should be deleted
