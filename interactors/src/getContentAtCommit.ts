@@ -21,7 +21,8 @@ const defaultOptions = {
   // The maximum number of commits between milestones.
   // This is to limit the number of commits that must be traversed
   // to reconstruct content at a given commit.
-  milestoneFrequency: 1000,
+  // milestoneFrequency: 500,
+  milestoneFrequency: 5,
 
   // The maximum size of the ancestor ops array in KB.
   // This is to limit the amount of memory required to reconstruct
@@ -29,9 +30,9 @@ const defaultOptions = {
   // the case where the ancestor ops array exceeds MongoDB's 16MB
   // document size limit.
   //
-  // This limit it set to 5MB, which is roughly 1/3 of the 16MB limit.
   // Milestone creation is triggered when this limit is exceeded.
-  maxAncestorOpsSizeKB: 1024 * 5,
+  // maxAncestorOpsSizeKB: 1024 * 2,
+  maxAncestorOpsSizeKB: 2,
 };
 
 // https://gitlab.com/curran/vizhub-ee/-/blob/main/vizhub-ee-interactors/src/GetContentAtCommit.ts

@@ -170,6 +170,9 @@ export const migrateViz = async ({
       throw new Error('Failed to save content!');
     }
   } else {
+    console.log(
+      `  Forking forkedFrom viz ${forkedFrom}...`,
+    );
     const forkResult = await forkViz({
       forkedFrom,
       timestamp: infoV2.createdTimestamp,
@@ -189,6 +192,7 @@ export const migrateViz = async ({
     if (forkResult.outcome === 'failure') {
       throw new Error('Failed to fork viz!');
     }
+    console.log(`  Forked viz!`);
     infoV3 = forkResult.value;
 
     // Update to latest timestamp.

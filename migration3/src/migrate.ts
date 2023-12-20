@@ -6,11 +6,15 @@ import { getReferencedUsers } from './getReferencedUsers';
 import { migrateUsers } from './migrateUsers';
 import { migrateUpvotes } from './migrateUpvotes';
 import { migrateCollaborators } from './migrateCollaborators';
+import { ValidateViz } from 'interactors';
 
 // Disable upvotes and collaborators for now,
 // until we have the rollbacks working for those.
 const enableUpvotes = false;
 const enableCollaborators = false;
+
+// Max 5MB content size
+const maxContentSizeKB = 5 * 1024;
 
 export const migrate = async (): Promise<void> => {
   const {
@@ -30,6 +34,7 @@ export const migrate = async (): Promise<void> => {
   while (keepGoing) {
     const { getMigrationStatus, saveMigrationStatus } =
       gateways;
+    const validateViz = ValidateViz(gateways);
 
     // Get the current migration status.
     const migrationStatusResult: Result<
@@ -107,6 +112,16 @@ export const migrate = async (): Promise<void> => {
       const contentV2 = await v2ContentCollection.findOne({
         _id: infoV2.id,
       });
+
+      const contentSizeKB =
+        JSON.stringify(contentV2).length / 1024;
+      if (contentSizeKB > maxContentSizeKB) {
+        console.log(
+          `  Skipping viz with content size ${contentSizeKB}KB > ${maxContentSizeKB}KB...`,
+        );
+        continue;
+      }
+
       // console.log(content);
 
       // {
@@ -166,7 +181,16 @@ export const migrate = async (): Promise<void> => {
       //     ],
       //   }
 
-      console.log(`  "${infoV2.title?.trim()}"`);
+      console.log(
+        `  Viz: "${infoV2.title?.trim()}" ${infoV2.id}`,
+      );
+
+      console.log(`  Migrating referenced users...`);
+      await migrateUsers({
+        referencedUsers: getReferencedUsers(infoV2),
+        v2UserCollection,
+        gateways,
+      });
 
       const success: boolean = await migrateViz({
         infoV2,
@@ -181,13 +205,18 @@ export const migrate = async (): Promise<void> => {
         );
         continue;
       }
+      console.log(`  Migration succeeded! Validating...`);
 
-      console.log(`  Migrating referenced users...`);
-      await migrateUsers({
-        referencedUsers: getReferencedUsers(infoV2),
-        v2UserCollection,
-        gateways,
-      });
+      const validateVizResult = await validateViz(
+        infoV2.id,
+      );
+      if (validateVizResult.outcome === 'failure') {
+        console.log(
+          `  Validation failed for "${infoV2.title?.trim()}"!`,
+        );
+        process.exit(1);
+      }
+      console.log(`  Validation passed!`);
 
       if (enableUpvotes && infoV2.upvotes) {
         console.log(`  Migrating upvotes...`);
@@ -219,9 +248,7 @@ export const migrate = async (): Promise<void> => {
     await saveMigrationStatus(newMigrationStatus);
 
     // Wait a bit between vizzes so we don't overload the database.
-    // await new Promise((resolve) =>
-    //   setTimeout(resolve, 500),
-    // );
+    await new Promise((resolve) => setTimeout(resolve, 50));
   }
   if (!keepGoing) {
     console.log('Exited cleanly!');

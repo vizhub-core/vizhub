@@ -11,6 +11,10 @@ export const rollback = async ({
   const { deleteCommit, deleteContent, deleteInfo } =
     gateways;
 
+  throw new Error(
+    'TODO: Implement rollback! Should delete the viz and all forks recursively.',
+  );
+
   console.log(`    Deleting migrated commits...`);
   console.log(`      Deleting start commit`);
   console.log(
