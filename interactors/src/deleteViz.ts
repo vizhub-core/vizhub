@@ -28,30 +28,34 @@ import { CommitViz } from './commitViz';
 //  * Deletes all commits, info, and content
 //  * Updates forked from viz and forks for data integrity
 export const DeleteViz = (gateways: Gateways) => {
-  const { getInfo, deleteInfo } = gateways;
+  const { getInfo, deleteInfo, deleteContent } = gateways;
 
-  return async ({
-    id,
-    deleteForks,
-  }: {
-    // The id of the viz to permanently delete.
-    id: VizId;
-
-    // Whether to delete all forks of the viz.
-    // Should be `false` for when a user deletes a viz.
-    // Should be `true` for when a corrupt viz is detected
-    //   during migration and rolled back.
-    deleteForks: boolean;
-  }): Promise<Result<Success>> => {
+  return async (id: VizId): Promise<Result<Success>> => {
+    // Get the info so we can find out about forks and forkedFrom.
     const infoResult = await getInfo(id);
     if (infoResult.outcome === 'failure')
       return err(infoResult.error);
     const info: Info = infoResult.value.data;
 
-    // deleteInfo(id);
-    const deleteResult = await deleteInfo(id);
-    if (deleteResult.outcome === 'failure') {
-      return err(deleteResult.error);
+    // TODO Decrement forksCount on forkedFrom viz
+    // TODO
+
+    // Delete the start commit
+    // TODO define delete commit such that it
+    // * finds all commits where that commit is the parent
+    // * sets the parent of those commits to the parent of the deleted commit
+    // * updates the ops of those commits to reflect the change
+
+    // Delete the info
+    const deleteInfoResult = await deleteInfo(id);
+    if (deleteInfoResult.outcome === 'failure') {
+      return err(deleteInfoResult.error);
+    }
+
+    // Delete the content
+    const deleteContentResult = await deleteContent(id);
+    if (deleteContentResult.outcome === 'failure') {
+      return err(deleteContentResult.error);
     }
 
     return ok('success');
