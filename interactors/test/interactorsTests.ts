@@ -20,6 +20,7 @@ import { updateUserStripeIdTest } from './updateUserStripeIdTest';
 import { validateVizTest } from './validateVizTest';
 import { getImageTest } from './getImageTest';
 import { getThumbnailTest } from './getThumbnailTest';
+import { deleteVizTest } from './deleteVizTest';
 
 export const interactorsTests = () => {
   describe('Interactors', () => {
@@ -40,19 +41,7 @@ export const interactorsTests = () => {
     getImageTest();
     getThumbnailTest();
 
-    // TODO allow to specify a timestamp
-    // Why? Useful for migration
-    // Let forkedFromContent = getContentAtTimestamp(viz.forkedFrom, viz.created)
-    //  forkViz(oldViz.forkedFrom, viz.created)
-    //
-    // updateViz
-    //  * Simulates a user editing a viz
-    //  * Makes uncommitted changes
-    //  * Sets viz.committed to false
-    // updateVizTest();
-    //
-    //
-    // deleteVizTest();
+    deleteVizTest();
     // restoreVersionTest();
     // mergeTest();
 
