@@ -10,8 +10,14 @@ import { PlusSVG } from '../Icons/sam/PlusSVG';
 import { Button } from '../bootstrap';
 import { HomeStarter } from '../HomeStarter';
 import './styles.scss';
+import { useMemo } from 'react';
 
 const enableEditBio = false;
+const enablePrivateSection = false;
+const enableOrgsSection = false;
+const enableSharedWithMeSection = false;
+const enableStarredSection = false;
+const enableCreateVizButton = false;
 
 export const ProfilePageBody = ({
   // Viz preview list props.
@@ -25,12 +31,31 @@ export const ProfilePageBody = ({
   displayName,
   picture,
   bio,
+  isViewingOwnProfile,
 
   // Sort control props.
   sortId,
   setSortId,
   sortOptions,
 }) => {
+  const copy = useMemo(
+    () =>
+      isViewingOwnProfile
+        ? {
+            publicVizzes: 'My public vizzes',
+            privateVizzes: 'My private vizzes',
+            orgs: 'My organizations',
+            starred: 'My starred vizzes',
+          }
+        : {
+            publicVizzes: 'Public vizzes',
+            privateVizzes: 'Private vizzes',
+            orgs: 'Organizations',
+            starred: 'Starred vizzes',
+          },
+    [isViewingOwnProfile],
+  );
+
   return (
     <div className="vh-page vh-profile-page">
       <div className="profile-body">
@@ -50,26 +75,39 @@ export const ProfilePageBody = ({
           </div>
           <div className="profile-sidebar-sections">
             <div className="profile-sidebar-section vh-base-01 active">
-              <PublicSVG /> My public vizzes
+              <PublicSVG /> {copy.publicVizzes}
             </div>
-            {/* <div className="profile-sidebar-section vh-base-01">
-              <PrivateSVG /> My private vizzes
-            </div>
-            <div className="profile-sidebar-section vh-base-01">
-              <OrganizationsSVG /> My organizations
-            </div>
-            <div className="profile-sidebar-section vh-base-01">
-              <SharedSVG /> Shared with me
-            </div>
-            <div className="profile-sidebar-section vh-base-01">
-              <StarSVG /> My starred vizzes
-            </div> */}
+            {enablePrivateSection && (
+              <div className="profile-sidebar-section vh-base-01">
+                <PrivateSVG /> {copy.privateVizzes}
+              </div>
+            )}
+            {enableOrgsSection && (
+              <div className="profile-sidebar-section vh-base-01">
+                <OrganizationsSVG /> {copy.orgs}
+              </div>
+            )}
+            {enableStarredSection && (
+              <div className="profile-sidebar-section vh-base-01">
+                <StarSVG /> {copy.starred}
+              </div>
+            )}
+            {enableSharedWithMeSection &&
+              isViewingOwnProfile && (
+                <div className="profile-sidebar-section vh-base-01">
+                  <SharedSVG /> Shared with me
+                </div>
+              )}
           </div>
         </div>
         <div className="profile-content">
-          <HomeStarter />
+          {isViewingOwnProfile && <HomeStarter />}
           <div className="profile-header">
-            <h2>My public vizzes</h2>
+            <h2>
+              {isViewingOwnProfile
+                ? 'My public vizzes'
+                : 'Public vizzes'}
+            </h2>
             <div className="profile-header-controls">
               {sortOptions ? (
                 <SortControl
@@ -78,10 +116,13 @@ export const ProfilePageBody = ({
                   sortOptions={sortOptions}
                 />
               ) : null}
-              <Button className="create-new-button">
-                <PlusSVG />
-                Create new
-              </Button>
+              {enableCreateVizButton &&
+                isViewingOwnProfile && (
+                  <Button className="create-new-button">
+                    <PlusSVG />
+                    Create new
+                  </Button>
+                )}
             </div>
           </div>
           <VizPreviewCollection>

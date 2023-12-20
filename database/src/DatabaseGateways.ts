@@ -28,6 +28,8 @@ import { toCollectionName } from './toCollectionName';
 import { pageSize } from 'gateways/src/Gateways';
 import { embeddingMethods } from './embeddingMethods';
 
+const debug = false;
+
 // An in-database implementation for gateways,
 // for use in production.
 export const DatabaseGateways = ({
@@ -381,6 +383,13 @@ export const DatabaseGateways = ({
     }
     ancestors.push(result);
 
+    if (debug) {
+      console.log(
+        '[DatabaseGateways/getCommitAncestors] ancestors before',
+      );
+      console.log(JSON.stringify(ancestors, null, 2));
+    }
+
     if (toNearestMilestone) {
       // Handle the case that the commit we searched from itself has a milestone.
       const mostRecentCommit =
@@ -403,9 +412,29 @@ export const DatabaseGateways = ({
             await collection.findOne({
               _id: firstCommitWithoutMilestone.parent,
             });
+          if (commitWithMilestone === null) {
+            throw new Error(
+              'commitWithMilestone should not be null! This is a case of invalid data where the parent of a commit is undefined!\n' +
+                'firstCommitWithoutMilestone.parent: ' +
+                firstCommitWithoutMilestone.parent +
+                '\n' +
+                'ancestors: ' +
+                JSON.stringify(ancestors, null, 2) +
+                '\n' +
+                'results: ' +
+                JSON.stringify(results, null, 2),
+            );
+          }
           ancestors.unshift(commitWithMilestone);
         }
       }
+    }
+
+    if (debug) {
+      console.log(
+        '[DatabaseGateways/getCommitAncestors] ancestors after',
+      );
+      console.log(JSON.stringify(ancestors, null, 2));
     }
 
     // Remove Mongo's internal id.

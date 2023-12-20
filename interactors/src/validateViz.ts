@@ -115,19 +115,19 @@ export const ValidateViz =
       }
     }
 
-    // If the viz is in a folder...
-    if (info.folder) {
-      // The folder should exist.
-      const folderResult = await getFolder(info.folder);
-      if (folderResult.outcome === 'failure') {
-        return folderResult;
-      }
-      const folder = folderResult.value.data;
+    // // If the viz is in a folder...
+    // if (info.folder) {
+    //   // The folder should exist.
+    //   const folderResult = await getFolder(info.folder);
+    //   if (folderResult.outcome === 'failure') {
+    //     return folderResult;
+    //   }
+    //   const folder = folderResult.value.data;
 
-      // TODO consider: when moving a viz into a folder
-      // owned by a different user, should we change the owner
-      // of the viz to match the owner of the folder?
-    }
+    //   // TODO consider: when moving a viz into a folder
+    //   // owned by a different user, should we change the owner
+    //   // of the viz to match the owner of the folder?
+    // }
 
     // In all cases:
     //  * startCommit.timestamp <= endCommit.timestamp
@@ -146,10 +146,10 @@ export const ValidateViz =
     // }
 
     // TODO check there is an associated embedding using getVizEmbedding
-    const embeddingResult = await getVizEmbedding(id);
-    if (embeddingResult.outcome === 'failure') {
-      return embeddingResult;
-    }
+    // const embeddingResult = await getVizEmbedding(id);
+    // if (embeddingResult.outcome === 'failure') {
+    //   return embeddingResult;
+    // }
 
     return ok('success');
   };
