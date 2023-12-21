@@ -1,11 +1,19 @@
-import { useCallback, useContext, useMemo } from 'react';
+import {
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+} from 'react';
 import {
   User,
   sortOptions,
   getBio,
   getUserDisplayName,
 } from 'entities';
-import { ProfilePageBody } from 'components';
+import {
+  ProfilePageBody,
+  ProfilePageSection,
+} from 'components';
 import { SmartHeader } from '../../smartComponents/SmartHeader';
 import { VizPreviewPresenter } from '../../smartComponents/VizPreviewPresenter';
 import { SortContext } from '../../contexts/SortContext';
@@ -23,6 +31,12 @@ export const Body = ({
   );
 
   const { sortId, setSortId } = useContext(SortContext);
+
+  // TODO make this part of the URL
+  // Public: https://vizhub.com/curran
+  // Private https://vizhub.com/curran?section=private
+  const [activeSection, setActiveSection] =
+    useState<ProfilePageSection>('public');
 
   const {
     allInfoSnapshots,
@@ -72,6 +86,8 @@ export const Body = ({
         onMoreClick={fetchNextPage}
         isLoadingNextPage={isLoadingNextPage}
         isViewingOwnProfile={isViewingOwnProfile}
+        activeSection={activeSection}
+        setActiveSection={setActiveSection}
       />
     </div>
   );
