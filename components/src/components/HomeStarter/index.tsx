@@ -36,6 +36,12 @@ export const HomeStarter = () => {
         >
           Explore Courses
         </Button>
+        <Button
+          variant="secondary"
+          href="https://vizhub.com/forum/t/vizhub-product-feedback/843"
+        >
+          Feedback
+        </Button>
       </div>
       {/* <div className="home-starter-content">
         <h2>Discover the VizHub Community</h2>
