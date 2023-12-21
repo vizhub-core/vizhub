@@ -15,6 +15,7 @@ import {
 } from 'entities';
 import { VizKit } from 'api/src/VizKit';
 import { SortContext } from './SortContext';
+import { SectionContext } from './SectionContext';
 
 export const InfosAndOwnersContext = createContext<{
   allInfoSnapshots: Array<Snapshot<Info>>;
@@ -34,43 +35,60 @@ const vizKit = VizKit({ baseUrl: '/api' });
 const SETTLED = 'SETTLED';
 const NEXT_PAGE_REQUESTED = 'NEXT_PAGE_NEEDED';
 
+// A key that represents a section and sort.
+// This is used to index the pages object in the state.
+// Of the form `${action.section}-${action.sortId}`;
+type SectionAndSortKey = string;
+
+const sectionAndSortKey = (
+  sectionId: string,
+  sortId: SortId,
+): SectionAndSortKey => `${sectionId}-${sortId}`;
+
 // The shape of the state for tracking pages of results
 type PaginationState = {
-  // If a request for the next page is in flight, this will be NEXT_PAGE_REQUESTED
-  // Otherwise, it will be SETTLED
-  nextPageStatus:
-    | typeof SETTLED
-    | typeof NEXT_PAGE_REQUESTED;
+  sectionsAndSorts: {
+    [key: SectionAndSortKey]: {
+      // If a request for the next page is in flight, this will be NEXT_PAGE_REQUESTED
+      // Otherwise, it will be SETTLED
+      nextPageStatus:
+        | typeof SETTLED
+        | typeof NEXT_PAGE_REQUESTED;
 
-  // The results for each page, indexed by sortId and page number
-  pages: { [sortId: string]: Array<Array<Snapshot<Info>>> };
+      // The results for each page, indexed by sortId and page number
+      pages: Array<Array<Snapshot<Info>>>;
+
+      // If there was an error fetching the next page, it will be reported here
+      // TODO: Handle errors better - check types match
+      error?: Error;
+
+      // True if the "more" button should be shown for this section and sort
+      hasMore: boolean;
+    };
+  };
 
   // The owner users for each info, indexed by userId
   ownerUserSnapshotsById: {
     [userId: string]: Snapshot<User>;
   };
-
-  // If there was an error fetching the next page, it will be reported here
-  // TODO: Handle errors better - check types match
-  error?: Error;
-
-  // True if the "more" button should be shown
-  hasMore: boolean;
 };
 
 type PaginationAction =
-  | { type: 'RequestNextPage' }
+  | { type: 'RequestNextPage'; key: SectionAndSortKey }
   | {
       type: 'ResolveNextPage';
-      sortId: SortId;
+      key: SectionAndSortKey;
       infoSnapshots: Array<Snapshot<Info>>;
       ownerUserSnapshots: Array<Snapshot<User>>;
       hasMore: boolean;
     }
-  | { type: 'ReportError'; error: Error };
+  | {
+      type: 'ReportError';
+      error: Error;
+      key: SectionAndSortKey;
+    };
 
 // Inspired by https://github.com/vizhub-core/vizhub/blob/f0d1fbc6cd0f8d124d6424ec8bd948785209d6c4/vizhub-v3/vizhub-app/src/presenters/HomePagePresenter/useVizInfos.js#L19
-
 const reducer = (
   state: PaginationState,
   action: PaginationAction,
@@ -80,20 +98,39 @@ const reducer = (
     case 'RequestNextPage':
       return {
         ...state,
-        nextPageStatus: NEXT_PAGE_REQUESTED,
+        sectionsAndSorts: {
+          ...state.sectionsAndSorts,
+          [action.key]: {
+            ...state.sectionsAndSorts[action.key],
+            nextPageStatus: NEXT_PAGE_REQUESTED,
+          },
+        },
       };
 
     // When the request comes back with data
     case 'ResolveNextPage':
       return {
         ...state,
-        nextPageStatus: SETTLED,
-        pages: {
-          ...state.pages,
-          [action.sortId]: [
-            ...state.pages[action.sortId],
-            action.infoSnapshots,
-          ],
+        // nextPageStatus: SETTLED,
+        // pages: {
+        //   ...state.pages,
+        //   [action.sortId]: [
+        //     ...state.pages[action.sortId],
+        //     action.infoSnapshots,
+        //   ],
+        // },
+        sectionsAndSorts: {
+          ...state.sectionsAndSorts,
+          [action.key]: {
+            ...state.sectionsAndSorts[action.key],
+            pages: [
+              ...(state.sectionsAndSorts[action.key]
+                ?.pages || []),
+              action.infoSnapshots,
+            ],
+            nextPageStatus: SETTLED,
+            hasMore: action.hasMore,
+          },
         },
         ownerUserSnapshotsById: {
           ...state.ownerUserSnapshotsById,
@@ -110,7 +147,18 @@ const reducer = (
 
     // When the request comes back with an error
     case 'ReportError':
-      return { ...state, error: action.error };
+      // return { ...state, error: action.error };
+      return {
+        ...state,
+        sectionsAndSorts: {
+          ...state.sectionsAndSorts,
+          [action.key]: {
+            ...state.sectionsAndSorts[action.key],
+            error: action.error,
+            nextPageStatus: SETTLED,
+          },
+        },
+      };
 
     default:
       throw new Error('This should never happen.');
@@ -130,6 +178,36 @@ export type InfosAndOwnersPageData = {
   forkedFrom?: VizId;
 };
 
+// Define an initializer function for the reducer state.
+const init = ({
+  currentKey,
+  infoSnapshots,
+  ownerUserSnapshots,
+  hasMoreInitially,
+}: {
+  currentKey: SectionAndSortKey;
+  infoSnapshots: Array<Snapshot<Info>>;
+  ownerUserSnapshots: Array<Snapshot<User>>;
+  hasMoreInitially: boolean;
+}) => {
+  return {
+    sectionsAndSorts: {
+      [currentKey]: {
+        nextPageStatus: SETTLED,
+        pages: [infoSnapshots],
+        hasMore: hasMoreInitially,
+      },
+    },
+    ownerUserSnapshotsById: ownerUserSnapshots.reduce(
+      (accumulator, snapshot) => ({
+        ...accumulator,
+        [snapshot.data.id]: snapshot,
+      }),
+      {},
+    ),
+  };
+};
+
 export const InfosAndOwnersProvider = ({
   infoSnapshots,
   ownerUserSnapshots,
@@ -146,12 +224,25 @@ export const InfosAndOwnersProvider = ({
   hasMoreInitially: boolean;
 }) => {
   const { sortId } = useContext(SortContext);
+  const { sectionId } = useContext(SectionContext);
+
+  const currentKey = useMemo(
+    () => sectionAndSortKey(sectionId, sortId),
+    [sectionId, sortId],
+  );
 
   // The initial pagination state, from server-rendered first page.
   const initialPaginationState: PaginationState = useMemo(
     () => ({
-      nextPageStatus: SETTLED,
-      pages: { [sortId]: [infoSnapshots] },
+      sectionsAndSorts: {
+        [currentKey]: {
+          nextPageStatus: SETTLED,
+          pages: [infoSnapshots],
+          hasMore: hasMoreInitially,
+        },
+      },
+      // nextPageStatus: SETTLED,
+      // pages: { [sortId]: [infoSnapshots] },
       ownerUserSnapshotsById: ownerUserSnapshots.reduce(
         (accumulator, snapshot) => ({
           ...accumulator,
@@ -159,7 +250,6 @@ export const InfosAndOwnersProvider = ({
         }),
         {},
       ),
-      hasMore: hasMoreInitially,
     }),
     [
       sortId,
@@ -171,13 +261,22 @@ export const InfosAndOwnersProvider = ({
 
   const [paginationState, paginationDispatch] = useReducer(
     reducer,
-    initialPaginationState,
+    {
+      currentKey,
+      infoSnapshots,
+      ownerUserSnapshots,
+      hasMoreInitially,
+    },
+    init,
   );
 
   const fetchNextPage = useCallback(() => {
-    paginationDispatch({ type: 'RequestNextPage' });
+    paginationDispatch({
+      type: 'RequestNextPage',
+      key: currentKey,
+    });
 
-    async function fetchNextPage() {
+    async function fetchNextPageAsync() {
       const result = await vizKit.rest.getInfosAndOwners({
         forkedFrom,
         owner,
@@ -185,7 +284,10 @@ export const InfosAndOwnersProvider = ({
           paginationState.ownerUserSnapshotsById,
         ),
         sortId,
-        pageNumber: paginationState.pages[sortId].length,
+        // pageNumber: paginationState.pages[sortId].length,
+        pageNumber:
+          paginationState.sectionsAndSorts[currentKey]
+            ?.pages.length || 0,
       });
       if (result.outcome === 'success') {
         const {
@@ -193,9 +295,16 @@ export const InfosAndOwnersProvider = ({
           ownerUserSnapshots,
           hasMore,
         } = result.value;
+        // paginationDispatch({
+        //   type: 'ResolveNextPage',
+        //   sortId,
+        //   infoSnapshots,
+        //   ownerUserSnapshots,
+        //   hasMore,
+        // });
         paginationDispatch({
           type: 'ResolveNextPage',
-          sortId,
+          key: currentKey,
           infoSnapshots,
           ownerUserSnapshots,
           hasMore,
@@ -204,16 +313,39 @@ export const InfosAndOwnersProvider = ({
         paginationDispatch({
           type: 'ReportError',
           error: result.error,
+          key: currentKey,
         });
       }
     }
-    fetchNextPage();
-  }, [paginationState, sortId]);
+    fetchNextPageAsync();
+  }, [paginationState, currentKey]);
+
+  // const allInfoSnapshots = useMemo(
+  //   () => paginationState.pages[sortId].flat(),
+  //   [paginationState.pages, sortId],
+  // );
 
   const allInfoSnapshots = useMemo(
-    () => paginationState.pages[sortId].flat(),
-    [paginationState.pages, sortId],
+    () =>
+      paginationState.sectionsAndSorts[
+        currentKey
+      ]?.pages.flat() || [],
+    [paginationState, currentKey],
   );
+
+  // const value = useMemo(
+  //   () => ({
+  //     allInfoSnapshots,
+  //     fetchNextPage,
+  //     ownerUserSnapshotsById:
+  //       paginationState.ownerUserSnapshotsById,
+  //     isLoadingNextPage:
+  //       paginationState.nextPageStatus ===
+  //       NEXT_PAGE_REQUESTED,
+  //     hasMore: paginationState.hasMore,
+  //   }),
+  //   [allInfoSnapshots, fetchNextPage, paginationState],
+  // );
 
   const value = useMemo(
     () => ({
@@ -222,11 +354,18 @@ export const InfosAndOwnersProvider = ({
       ownerUserSnapshotsById:
         paginationState.ownerUserSnapshotsById,
       isLoadingNextPage:
-        paginationState.nextPageStatus ===
-        NEXT_PAGE_REQUESTED,
-      hasMore: paginationState.hasMore,
+        paginationState.sectionsAndSorts[currentKey]
+          ?.nextPageStatus === NEXT_PAGE_REQUESTED,
+      hasMore:
+        paginationState.sectionsAndSorts[currentKey]
+          ?.hasMore || false,
     }),
-    [allInfoSnapshots, fetchNextPage, paginationState],
+    [
+      allInfoSnapshots,
+      fetchNextPage,
+      paginationState,
+      currentKey,
+    ],
   );
 
   return (

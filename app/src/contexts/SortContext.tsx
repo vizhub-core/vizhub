@@ -21,23 +21,34 @@ export const SortProvider = ({ children }) => {
     asSortId(searchParams.get('sort')) ||
     defaultSortOption.id;
 
-  // Update URL param when sortId changes.
+  // // Update URL param when sortId changes.
+  // const setSortId = useCallback(
+  //   (newSortId: SortId) => {
+  //     // TODO client side update
+  //     setSearchParams(
+  //       (urlSearchParams: URLSearchParams) => {
+  //         urlSearchParams.set('sort', newSortId);
+  //         console.log(urlSearchParams.toString());
+
+  //         // Do a hard navigation to the new URL.
+  //         // Temporary until client side update is implemented.
+  //         window.location.search = `?sort=${newSortId}`;
+  //         return urlSearchParams;
+  //       },
+  //     );
+  //   },
+  //   [setSearchParams],
+  // );
+  // Update URL param when sortId changes, without hard navigation.
   const setSortId = useCallback(
     (newSortId: SortId) => {
-      // TODO client side update
-      setSearchParams(
-        (urlSearchParams: URLSearchParams) => {
-          urlSearchParams.set('sort', newSortId);
-          console.log(urlSearchParams.toString());
-
-          // Do a hard navigation to the new URL.
-          // Temporary until client side update is implemented.
-          window.location.search = `?sort=${newSortId}`;
-          return urlSearchParams;
-        },
+      const newSearchParams = new URLSearchParams(
+        searchParams,
       );
+      newSearchParams.set('sort', newSortId);
+      setSearchParams(newSearchParams);
     },
-    [setSearchParams],
+    [searchParams, setSearchParams],
   );
 
   const value = useMemo(

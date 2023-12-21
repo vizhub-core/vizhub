@@ -13,13 +13,6 @@ import { useCallback, useMemo } from 'react';
 import { SortId } from 'entities';
 import './styles.scss';
 
-export type ProfilePageSection =
-  | 'public'
-  | 'private'
-  | 'orgs'
-  | 'starred'
-  | 'shared';
-
 // Feature flags
 const enabledSections = {
   public: true,

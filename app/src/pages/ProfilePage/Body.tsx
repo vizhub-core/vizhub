@@ -10,10 +10,7 @@ import {
   getBio,
   getUserDisplayName,
 } from 'entities';
-import {
-  ProfilePageBody,
-  ProfilePageSection,
-} from 'components';
+import { ProfilePageBody } from 'components';
 import { SmartHeader } from '../../smartComponents/SmartHeader';
 import { VizPreviewPresenter } from '../../smartComponents/VizPreviewPresenter';
 import { SortContext } from '../../contexts/SortContext';
