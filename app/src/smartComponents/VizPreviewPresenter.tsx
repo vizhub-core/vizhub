@@ -25,7 +25,14 @@ export const VizPreviewPresenter = ({
     'Info',
   );
 
-  const { id, title, end, updated, upvotesCount } = info;
+  const {
+    id,
+    title,
+    end,
+    updated,
+    upvotesCount,
+    forksCount,
+  } = info;
   const { userName, picture } = ownerUser;
 
   const ownerName = useMemo(
@@ -57,6 +64,7 @@ export const VizPreviewPresenter = ({
       ownerAvatarURL={picture}
       href={`/${userName}/${id}`}
       upvotesCount={upvotesCount}
+      forksCount={forksCount}
     />
   );
 };

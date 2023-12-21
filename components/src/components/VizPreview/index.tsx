@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import { UpvoteWidget } from '../UpvoteWidget';
 import { Spinner } from '../..';
+import { UpvoteWidget } from '../UpvoteWidget';
+import { ForksWidget } from '../ForksWidget';
 import './styles.scss';
 
 // If we're in thr browser
@@ -23,6 +24,7 @@ export const VizPreview = ({
   ownerAvatarURL,
   href,
   upvotesCount,
+  forksCount,
 }) => {
   // Data URL for the thumbnail image, or null if not yet loaded.
   const [backgroundImage, setBackgroundImage] = useState<
@@ -78,6 +80,7 @@ export const VizPreview = ({
           <div className="owner-name">{ownerName}</div>
         </div>
         <UpvoteWidget upvotesCount={upvotesCount} />
+        <ForksWidget forksCount={forksCount} />
       </div>
     </a>
   );
