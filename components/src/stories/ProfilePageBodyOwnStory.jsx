@@ -1,7 +1,8 @@
-import { useState } from 'react';
 import { ProfilePageBody } from '../components/ProfilePageBody';
-import { args as profilePageBodyArgs } from './ProfilePageBodyStory';
-import { args as sortControlArgs } from './SortControlStoryHorizontal';
+import {
+  args as profilePageBodyArgs,
+  useProfilePageState,
+} from './ProfilePageBodyStory';
 
 const args = {
   ...profilePageBodyArgs,
@@ -9,18 +10,11 @@ const args = {
 };
 
 const Story = () => {
-  const [sortId, setSortId] = useState(
-    sortControlArgs.initialSortId,
-  );
+  const stateArgs = useProfilePageState();
 
   return (
     <div className="layout-fullscreen">
-      <ProfilePageBody
-        {...args}
-        sortId={sortId}
-        setSortId={setSortId}
-        sortOptions={sortControlArgs.sortOptions}
-      />
+      <ProfilePageBody {...args} {...stateArgs} />
     </div>
   );
 };
