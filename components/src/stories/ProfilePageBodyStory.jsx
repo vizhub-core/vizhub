@@ -15,19 +15,29 @@ export const args = {
     'https://avatars.githubusercontent.com/u/98681?v=4',
 };
 
-const Story = () => {
+export const useProfilePageState = () => {
   const [sortId, setSortId] = useState(
     sortControlArgs.initialSortId,
   );
 
+  const [activeSection, setActiveSection] =
+    useState('public');
+
+  return {
+    sortId,
+    setSortId,
+    activeSection,
+    setActiveSection,
+    sortOptions: sortControlArgs.sortOptions,
+  };
+};
+
+const Story = () => {
+  const stateArgs = useProfilePageState();
+
   return (
     <div className="layout-fullscreen">
-      <ProfilePageBody
-        {...args}
-        sortId={sortId}
-        setSortId={setSortId}
-        sortOptions={sortControlArgs.sortOptions}
-      />
+      <ProfilePageBody {...args} {...stateArgs} />
     </div>
   );
 };
