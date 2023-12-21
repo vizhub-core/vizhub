@@ -1,32 +1,39 @@
+@keyframes backgroundScroll {
+  0% {
+    background-position: left center;
+  }
+  50% {
+    background-position: right center;
+  }
+  100% {
+    background-position: left center;
+  }
+}
+
 .home-starter {
-  position: relative;
   border-radius: 12px;
-  height: 400px;
   box-shadow: var(--vh-box-shadow);
 
-  .home-starter-background {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: inherit;
-  }
-  .home-starter-content {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    padding: 70px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+  background-image: url(https://vizhub-images.s3.amazonaws.com/home-starter-background.webp);
+  // background-size: cover;
+  background-size: 120% auto;
+  background-position: center;
+  animation: backgroundScroll 90s ease-in-out infinite;
 
-    h2 {
-      margin-bottom: 20px;
-    }
-    .home-starter-buttons {
-      display: flex;
-      gap: 12px;
-      margin-top: 40px;
-    }
+  padding: 70px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  h2 {
+    margin-bottom: 20px;
+  }
+  .vh-lede-01 {
+    max-width: 830px;
+  }
+  .home-starter-buttons {
+    display: flex;
+    gap: 12px;
+    margin-top: 40px;
   }
 }
