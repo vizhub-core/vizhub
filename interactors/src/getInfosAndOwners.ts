@@ -9,6 +9,7 @@ import {
   Snapshot,
   VizId,
   Visibility,
+  SectionId,
 } from 'entities';
 
 export type InfosAndOwners = {
@@ -22,6 +23,7 @@ export const GetInfosAndOwners = (gateways: Gateways) => {
 
   return async ({
     noNeedToFetchUsers,
+    sectionId,
     sortId,
     pageNumber,
     owner,
@@ -29,6 +31,7 @@ export const GetInfosAndOwners = (gateways: Gateways) => {
     vizIds,
   }: {
     noNeedToFetchUsers: Array<UserId>;
+    sectionId?: SectionId;
     sortId?: SortId;
     pageNumber: number;
     owner?: UserId;
@@ -40,13 +43,16 @@ export const GetInfosAndOwners = (gateways: Gateways) => {
       ? getSortField(sortId)
       : undefined;
 
+    const visibilities: Array<Visibility> =
+      sectionId === 'private' ? ['private'] : ['public'];
+
     const infoSnapshotsResult = await getInfos({
       owner,
       forkedFrom,
       sortField,
       pageNumber,
       vizIds,
-      visibilities: ['public'],
+      visibilities,
     });
     if (infoSnapshotsResult.outcome === 'failure')
       return infoSnapshotsResult;
