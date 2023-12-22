@@ -42,9 +42,9 @@ export const PricingPageBody = ({
   onFreeClick,
   onProClick,
   // onEnterpriseClick,
+  isMonthly,
+  setIsMonthly,
 }) => {
-  const [isMonthly, setIsMonthly] = useState(false);
-
   const handleMonthlyClick = useCallback(() => {
     setIsMonthly(true);
   }, []);

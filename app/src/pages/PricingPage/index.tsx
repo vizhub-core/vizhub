@@ -1,4 +1,9 @@
-import { useCallback, useContext, useEffect } from 'react';
+import {
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import { PricingPageBody } from 'components/src/components/PricingPageBody';
 import { VizKit } from 'api/src/VizKit';
 import { SmartHeader } from '../../smartComponents/SmartHeader';
@@ -21,6 +26,8 @@ const Body = () => {
   const authenticatedUser: User | null = useContext(
     AuthenticatedUserContext,
   );
+
+  const [isMonthly, setIsMonthly] = useState(false);
 
   const handleProClick = useCallback(async () => {
     // If the user is not logged in,
@@ -52,12 +59,14 @@ const Body = () => {
       // res.redirect(303, session.url);
     }
     // Invoke vizKit.rest.createCheckoutSession to create a Stripe Checkout Session.
-    const createCheckoutSessionResult =
-      await vizKit.rest.createCheckoutSession(
-        authenticatedUser.id,
-      );
 
-    if (createCheckoutSessionResult.result === 'error') {
+    const createCheckoutSessionResult =
+      await vizKit.rest.createCheckoutSession({
+        userId: authenticatedUser.id,
+        isMonthly,
+      });
+
+    if (createCheckoutSessionResult.outcome === 'failure') {
       console.error(
         'TODO handle error',
         createCheckoutSessionResult.error,
@@ -85,9 +94,20 @@ const Body = () => {
     // Navigate to the account page.
     // const url = '/account';
     // window.location.href = url;
-  }, [authenticatedUser]);
+  }, [authenticatedUser, isMonthly]);
 
-  return <PricingPageBody onProClick={handleProClick} />;
+  const handleFreeClick = useCallback(() => {
+    console.log('TODO handle free plan click');
+  }, []);
+
+  return (
+    <PricingPageBody
+      onProClick={handleProClick}
+      onFreeClick={handleFreeClick}
+      isMonthly={isMonthly}
+      setIsMonthly={setIsMonthly}
+    />
+  );
 };
 
 // Decoupled navigation from interaction, to support
