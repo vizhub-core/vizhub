@@ -168,20 +168,19 @@ export const VizPageViewer = ({
           <div className="meta-info-right">
             <div>Last edited {updatedDateFormatted}</div>
             <div>Created on {createdDateFormatted}</div>
-            {forkedFromVizHref ? (
-              <>
-                <div>
-                  Forked from{' '}
-                  <a href={forkedFromVizHref}>
-                    {forkedFromVizTitle}
-                  </a>
-                </div>
-                <a href={forksPageHref}>
-                  {forksCount} fork
-                  {forksCount === 1 ? '' : 's'}
+
+            {forkedFromVizHref && (
+              <div>
+                Forked from{' '}
+                <a href={forkedFromVizHref}>
+                  {forkedFromVizTitle}
                 </a>
-              </>
-            ) : null}
+              </div>
+            )}
+            <a href={forksPageHref}>
+              {forksCount} fork
+              {forksCount === 1 ? '' : 's'}
+            </a>
           </div>
         </div>
         <div className="vh-markdown-body">
