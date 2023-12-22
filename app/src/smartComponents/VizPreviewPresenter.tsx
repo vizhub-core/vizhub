@@ -32,6 +32,7 @@ export const VizPreviewPresenter = ({
     updated,
     upvotesCount,
     forksCount,
+    visibility,
   } = info;
   const { userName, picture } = ownerUser;
 
@@ -65,6 +66,7 @@ export const VizPreviewPresenter = ({
       href={`/${userName}/${id}`}
       upvotesCount={upvotesCount}
       forksCount={forksCount}
+      visibility={visibility}
     />
   );
 };

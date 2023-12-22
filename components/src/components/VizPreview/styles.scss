@@ -97,6 +97,15 @@
     font-weight: 500;
     line-height: 16px;
   }
+
+  position: relative;
+  .private-notice {
+    position: absolute;
+    color: var(--vh-foreground-color-light);
+    padding: 8px;
+    top: 230px;
+    left: 235px;
+  }
 }
 
 .vh-viz-preview:hover {

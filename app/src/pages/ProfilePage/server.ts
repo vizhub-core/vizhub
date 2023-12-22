@@ -32,12 +32,20 @@ ProfilePage.getPageData = async ({
     const sectionId: SectionId | null =
       asSectionId(query.section) || defaultSectionId;
 
+    const { authenticatedUserSnapshot } =
+      await getAuthenticatedUser({
+        gateways,
+        auth0User,
+      });
+
     const infosAndOwnersResult = await getInfosAndOwners({
       owner,
       noNeedToFetchUsers: [owner],
       sectionId,
       sortId,
       pageNumber: 0,
+      authenticatedUserId:
+        authenticatedUserSnapshot?.data?.id,
     });
     if (infosAndOwnersResult.outcome === 'failure') {
       console.log('Error when fetching infos and owners:');
@@ -46,12 +54,6 @@ ProfilePage.getPageData = async ({
     }
     const { infoSnapshots, hasMore } =
       infosAndOwnersResult.value;
-
-    const { authenticatedUserSnapshot } =
-      await getAuthenticatedUser({
-        gateways,
-        auth0User,
-      });
 
     const pageData: ProfilePageData = {
       title: `${userName} on VizHub`,

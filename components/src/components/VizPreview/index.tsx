@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import { Spinner } from '../..';
+import { Spinner } from '../../';
 import { UpvoteWidget } from '../UpvoteWidget';
 import { ForksWidget } from '../ForksWidget';
+import { PrivateSVG } from '../Icons/sam/PrivateSVG';
 import './styles.scss';
 
 // If we're in thr browser
@@ -25,6 +26,7 @@ export const VizPreview = ({
   href,
   upvotesCount,
   forksCount,
+  visibility,
 }) => {
   // Data URL for the thumbnail image, or null if not yet loaded.
   const [backgroundImage, setBackgroundImage] = useState<
@@ -82,6 +84,11 @@ export const VizPreview = ({
         <UpvoteWidget upvotesCount={upvotesCount} />
         <ForksWidget forksCount={forksCount} />
       </div>
+      {visibility === 'private' && (
+        <div className="private-notice">
+          <PrivateSVG />
+        </div>
+      )}
     </a>
   );
 };
