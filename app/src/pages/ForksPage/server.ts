@@ -1,8 +1,4 @@
-import {
-  ForksPage,
-  ForksPageData,
-  ForksPageQuery,
-} from './index';
+import xss from 'xss';
 import {
   Info,
   SortId,
@@ -10,11 +6,15 @@ import {
   asSortId,
   defaultSortOption,
 } from 'entities';
+import { GetInfosAndOwners } from 'interactors';
 import { Gateways } from 'gateways';
 import { Auth0User } from '../Page';
-import { GetInfosAndOwners } from 'interactors';
-import xss from 'xss';
 import { getAuthenticatedUser } from '../getAuthenticatedUser';
+import {
+  ForksPage,
+  ForksPageData,
+  ForksPageQuery,
+} from './index';
 
 ForksPage.getPageData = async ({
   gateways,
@@ -45,7 +45,7 @@ ForksPage.getPageData = async ({
     console.log(infosAndOwnersResult.error);
     return null;
   }
-  const { infoSnapshots, ownerUserSnapshots } =
+  const { infoSnapshots, ownerUserSnapshots, hasMore } =
     infosAndOwnersResult.value;
 
   const { authenticatedUserSnapshot } =
@@ -85,6 +85,7 @@ ForksPage.getPageData = async ({
     forkedFrom,
     forkedFromInfoSnapshot,
     forkedFromOwnerUserSnapshot,
+    hasMore,
   };
 };
 

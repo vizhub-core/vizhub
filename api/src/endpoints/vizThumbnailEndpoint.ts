@@ -74,6 +74,19 @@ export const vizThumbnailEndpoint = ({
           // Set the proper header for the image response (WebP)
           res.setHeader('content-type', 'image/webp');
 
+          // Set aggressive caching headers, since the image
+          // for a given commitId will NEVER change.
+          res.setHeader(
+            'Cache-Control',
+            'public, max-age=31536000, immutable',
+          ); // 1 year
+          res.setHeader(
+            'Expires',
+            new Date(
+              Date.now() + 31536000000,
+            ).toUTCString(),
+          ); // 1 year from now
+
           // Send the image buffer as the response
           res.send(image.buffer);
         } else {

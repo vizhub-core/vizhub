@@ -141,6 +141,9 @@ export type {
   SortId,
 } from './Sorting';
 
+export { defaultSectionId, asSectionId } from './Sections';
+export type { SectionId } from './Sections';
+
 export type { MigrationStatus } from './Migration';
 
 export type {

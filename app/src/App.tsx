@@ -9,6 +9,8 @@ import {
 import { pages } from './pages/client';
 import { useMemo } from 'react';
 
+const debug = false;
+
 export const App = ({ pageData }) => {
   // TODO handle client-side navigation.
   // See https://github.com/vizhub-core/vizhub3/issues/98
@@ -19,9 +21,11 @@ export const App = ({ pageData }) => {
     [location.pathname, location.search],
   );
   if (!import.meta.env.SSR && url !== pageData.url) {
-    console.log(
-      'Might need to fetch page data from client',
-    );
+    if (debug) {
+      console.log(
+        'Might need to fetch page data from client',
+      );
+    }
   }
 
   return (

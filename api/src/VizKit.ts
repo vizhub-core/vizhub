@@ -4,6 +4,7 @@ import {
   VizId,
   Content,
   Visibility,
+  SectionId,
 } from 'entities';
 import { Result, Success } from 'gateways';
 import { InfosAndOwners } from 'interactors/src/getInfosAndOwners';
@@ -24,6 +25,9 @@ export interface VizKitAPI {
 
       // An array of user ids that we already have in the client
       noNeedToFetchUsers: Array<UserId>;
+
+      // The section id that we want to use for filtering results
+      sectionId?: SectionId;
 
       // The sort id that we want to use for sorting results
       sortId: SortId;
@@ -72,9 +76,9 @@ export interface VizKitAPI {
     }>;
   };
 }
+
 // Modeled after https://github.com/octokit/octokit.js/#constructor-options
 // See also https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#uploading_json_data
-
 export const VizKit = ({
   baseUrl,
   ssrFetch = null,
@@ -123,14 +127,9 @@ export const VizKit = ({
       getInfosAndOwners: async (options: {
         forkedFrom: VizId;
         owner: UserId;
-
-        // An array of user ids that we already have in the client
         noNeedToFetchUsers: Array<UserId>;
-
-        // The sort id that we want to use for sorting results
+        sectionId?: SectionId;
         sortId: SortId;
-
-        // The page number that we want to use for pagination
         pageNumber: number;
       }) =>
         await postJSON(
@@ -139,23 +138,10 @@ export const VizKit = ({
         ),
 
       forkViz: async (options: {
-        // The viz that we want to fork
         forkedFrom: VizId;
-
-        // The new owner of the forked viz
         owner: UserId;
-
-        // The title of the forked viz
         title?: string;
-
-        // The new content of the forked viz
-        // If undefined, the forked viz will have the same content as the original viz
-        // This is only populated when the user has made changes to the viz
-        // but doesn't have the access permissions to actually change the original viz.
-        // In this case, forking is a way for the user to save their changes.
         content?: Content;
-
-        // The visibility of the forked viz
         visibility?: Visibility;
       }) => await postJSON(`${baseUrl}/fork-viz`, options),
 

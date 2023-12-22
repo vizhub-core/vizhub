@@ -6,6 +6,7 @@ import './styles.scss';
 export const ForksPageBody = ({
   // Viz preview list props.
   renderVizPreviews,
+  hasMore,
   onMoreClick,
   isLoadingNextPage,
 
@@ -40,6 +41,7 @@ export const ForksPageBody = ({
         <More
           onMoreClick={onMoreClick}
           isLoadingNextPage={isLoadingNextPage}
+          hasMore={hasMore}
         />
       </div>
     </div>

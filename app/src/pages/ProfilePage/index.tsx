@@ -1,14 +1,14 @@
 import { Info, Snapshot, User } from 'entities';
 import { AuthenticatedUserProvider } from '../../contexts/AuthenticatedUserContext';
-import { SortProvider } from '../../contexts/SortContext';
 import { useShareDBDocData } from '../../useShareDBDocData';
-import { Page, PageData } from '../Page';
-import { Body } from './Body';
 import {
   InfosAndOwnersPageData,
   InfosAndOwnersProvider,
 } from '../../contexts/InfosAndOwnersContext';
+import { SectionSortProvider } from '../../contexts/SectionSortContext';
+import { Page, PageData } from '../Page';
 import { ProfilePageToasts } from './ProfilePageToasts';
+import { Body } from './Body';
 
 export type ProfilePageData = PageData &
   InfosAndOwnersPageData & {
@@ -39,7 +39,7 @@ export const ProfilePage: Page = ({
     <AuthenticatedUserProvider
       authenticatedUserSnapshot={authenticatedUserSnapshot}
     >
-      <SortProvider>
+      <SectionSortProvider>
         <InfosAndOwnersProvider
           infoSnapshots={pageData.infoSnapshots}
           ownerUserSnapshots={pageData.ownerUserSnapshots}
@@ -49,7 +49,7 @@ export const ProfilePage: Page = ({
           <Body profileUser={profileUser} />
           <ProfilePageToasts />
         </InfosAndOwnersProvider>
-      </SortProvider>
+      </SectionSortProvider>
     </AuthenticatedUserProvider>
   );
 };

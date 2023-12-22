@@ -16,6 +16,7 @@ import {
 import {
   CommitViz,
   ForkViz,
+  ValidateViz,
   generateId,
 } from 'interactors';
 import { Gateways } from 'gateways';
@@ -43,6 +44,7 @@ export const migrateViz = async ({
     gateways;
   const commitViz = CommitViz(gateways);
   const forkViz = ForkViz(gateways);
+  const validateViz = ValidateViz(gateways);
 
   // Sometimes titles have leading or trailing spaces, so trim that.
   const title = infoV2.title.trim();
@@ -107,6 +109,49 @@ export const migrateViz = async ({
     getInfoResult.outcome === 'success';
   if (alreadyMigrated) {
     console.log(`  This viz has already been migrated!`);
+    // It turns out that some vizzes EXIST twice in the V2 DB!
+    // This query demonstrates that:
+    // > db.documentInfo.aggregate([
+    //   ...     {
+    //   ...         $group: {
+    //   ...             _id: "$id", // Group by the 'id' field
+    //   ...             count: { $sum: 1 } // Count the number of documents in each group
+    //   ...         }
+    //   ...     },
+    //   ...     {
+    //   ...         $match: {
+    //   ...             count: { $gt: 1 } // Filter groups that have more than 1 document
+    //   ...         }
+    //   ...     }
+    //   ... ])
+    //   { "_id" : "e54aba86481147a482f339763d4fc598", "count" : 2 }
+    //   { "_id" : "7ceafa9ac9cd420bb90d04744d58ab3c", "count" : 2 }
+    //   { "_id" : null, "count" : 12538 }
+    //
+    // Therefore, if it's one of these two, let's just skip it.
+    if (
+      id === 'e54aba86481147a482f339763d4fc598' ||
+      id === '7ceafa9ac9cd420bb90d04744d58ab3c'
+    ) {
+      console.log(
+        '    This is one of those special ones that exists twice. Skipping...',
+      );
+      return false;
+    }
+
+    // If the viz is already migrated AND it's valid,
+    // then we can skip it.
+    console.log(`    Validating already migrated viz...`);
+    const validateVizResult = await validateViz(id);
+    if (validateVizResult.outcome === 'success') {
+      console.log(
+        `    Validation passed! Skipping migration...`,
+      );
+      return true;
+    }
+    console.log(`    Validation failed!`);
+    console.log(validateVizResult.error);
+
     console.log('TODO get rollback working flawlessly');
     process.exit(1);
 
