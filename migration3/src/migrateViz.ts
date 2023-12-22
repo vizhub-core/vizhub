@@ -143,12 +143,14 @@ export const migrateViz = async ({
     // then we can skip it.
     console.log(`    Validating already migrated viz...`);
     const validateVizResult = await validateViz(id);
-    if (validateVizResult.outcome === 'failure') {
-      console.log(`    Validation failed!`);
-      console.log(validateVizResult.error);
-      process.exit(1);
+    if (validateVizResult.outcome === 'success') {
+      console.log(
+        `    Validation passed! Skipping migration...`,
+      );
+      return true;
     }
-    console.log(`    Validation passed!`);
+    console.log(`    Validation failed!`);
+    console.log(validateVizResult.error);
 
     console.log('TODO get rollback working flawlessly');
     process.exit(1);
