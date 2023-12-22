@@ -3,12 +3,14 @@ import { Plan, Visibility } from 'entities';
 import { Form, Alert, Button } from '../bootstrap';
 import './styles.css';
 
+const enableUnlisted = false;
+
 const visibilities: {
   [K in Visibility]: string;
 } = {
-  public: 'Anyone can see this viz.',
-  private: 'Only collaborators can see this viz.',
-  unlisted: 'Anyone with the link can see this viz.',
+  public: 'Anyone can access this viz.',
+  private: 'Only you can access this viz.',
+  unlisted: 'Anyone with the link can access this viz.',
 };
 
 export const VisibilityControl = ({
@@ -32,23 +34,28 @@ export const VisibilityControl = ({
     <Form.Group className="mb-3" controlId="visibility">
       <Form.Label>Visibility</Form.Label>
       <div>
-        {Object.keys(visibilities).map((value) => (
-          <Form.Check
-            inline
-            key={value}
-            type="radio"
-            id={value}
-            value={value}
-            label={value}
-            checked={visibility === value}
-            onChange={handleChange}
-            // Disable the private option if the current plan is free
-            disabled={
-              currentPlan === 'free' &&
-              (value === 'private' || value === 'unlisted')
-            }
-          />
-        ))}
+        {Object.keys(visibilities)
+          .filter((value) =>
+            enableUnlisted ? true : value !== 'unlisted',
+          )
+          .map((value) => (
+            <Form.Check
+              inline
+              key={value}
+              type="radio"
+              id={value}
+              value={value}
+              label={value}
+              checked={visibility === value}
+              onChange={handleChange}
+              // Disable the private option if the current plan is free
+              disabled={
+                currentPlan === 'free' &&
+                (value === 'private' ||
+                  value === 'unlisted')
+              }
+            />
+          ))}
       </div>
       <Form.Text className="text-muted">
         {visibilities[visibility]}
