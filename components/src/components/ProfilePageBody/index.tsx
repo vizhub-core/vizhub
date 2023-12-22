@@ -62,12 +62,12 @@ export const ProfilePageBody = ({
   sectionId: SectionId;
   setSectionId: (sectionId: SectionId) => void;
 }) => {
-  const copy = useMemo(
+  const copy: { [K in SectionId]: string } = useMemo(
     () => ({
-      publicVizzes: isViewingOwnProfile
+      public: isViewingOwnProfile
         ? 'My public vizzes'
         : 'Public vizzes',
-      privateVizzes: isViewingOwnProfile
+      private: isViewingOwnProfile
         ? 'My private vizzes'
         : 'Private vizzes',
       orgs: isViewingOwnProfile
@@ -76,6 +76,9 @@ export const ProfilePageBody = ({
       starred: isViewingOwnProfile
         ? 'My starred vizzes'
         : 'Starred vizzes',
+      shared: isViewingOwnProfile
+        ? 'Shared with me'
+        : 'Shared',
     }),
     [isViewingOwnProfile],
   );
@@ -101,14 +104,14 @@ export const ProfilePageBody = ({
             <SidebarSection
               sectionId="public"
               SVGComponent={PublicSVG}
-              label={copy.publicVizzes}
+              label={copy.public}
               isActive={sectionId === 'public'}
               setSectionId={setSectionId}
             />
             <SidebarSection
               sectionId="private"
               SVGComponent={PrivateSVG}
-              label={copy.privateVizzes}
+              label={copy.private}
               isActive={sectionId === 'private'}
               setSectionId={setSectionId}
             />
@@ -140,11 +143,7 @@ export const ProfilePageBody = ({
         <div className="profile-content">
           {isViewingOwnProfile && <HomeStarter />}
           <div className="profile-header">
-            <h2>
-              {isViewingOwnProfile
-                ? 'My public vizzes'
-                : 'Public vizzes'}
-            </h2>
+            <h2>{copy[sectionId]}</h2>
             <div className="profile-header-controls">
               {sortOptions ? (
                 <SortControl

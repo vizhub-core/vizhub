@@ -17,9 +17,11 @@ export const getInfosAndOwnersEndpoint = ({
           forkedFrom,
           owner,
           noNeedToFetchUsers,
+          sectionId,
           sortId,
           pageNumber,
         } = req.body;
+
         if (noNeedToFetchUsers === undefined) {
           return res.send(
             err(
@@ -43,6 +45,7 @@ export const getInfosAndOwnersEndpoint = ({
             forkedFrom,
             owner,
             noNeedToFetchUsers,
+            sectionId,
             sortId,
             pageNumber,
           }),
