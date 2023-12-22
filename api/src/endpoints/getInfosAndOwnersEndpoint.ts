@@ -1,6 +1,8 @@
 import express from 'express';
 import { err, missingParameterError } from 'gateways';
 import { GetInfosAndOwners } from 'interactors';
+import { getAuthenticatedUserId } from '../parseAuth0User';
+import { UserId } from 'entities';
 
 // Requests a page of infos and their correponding owner users.
 export const getInfosAndOwnersEndpoint = ({
@@ -40,6 +42,9 @@ export const getInfosAndOwnersEndpoint = ({
           );
         }
 
+        const authenticatedUserId: UserId =
+          getAuthenticatedUserId(req);
+
         res.send(
           await getInfosAndOwners({
             forkedFrom,
@@ -48,6 +53,7 @@ export const getInfosAndOwnersEndpoint = ({
             sectionId,
             sortId,
             pageNumber,
+            authenticatedUserId,
           }),
         );
       }

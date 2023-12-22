@@ -9,8 +9,6 @@ import { VizId, Info, Timestamp } from 'entities';
 
 // trashViz
 //  * Moves a viz to the "trash"
-//  * TODO updates `forkedFrom` on all forks
-//  * TODO DeleteViz should rewrite commit history
 export const TrashViz = (gateways: Gateways) => {
   const { getInfo, saveInfo } = gateways;
 
@@ -20,6 +18,9 @@ export const TrashViz = (gateways: Gateways) => {
   }): Promise<Result<Success>> => {
     const { id, timestamp } = options;
     // TODORedLock
+
+    // TODO verify permission
+
     const getInfoResult = await getInfo(id);
     if (getInfoResult.outcome === 'failure')
       return err(getInfoResult.error);

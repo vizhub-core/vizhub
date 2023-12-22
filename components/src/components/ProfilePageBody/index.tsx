@@ -67,18 +67,14 @@ export const ProfilePageBody = ({
       public: isViewingOwnProfile
         ? 'My public vizzes'
         : 'Public vizzes',
-      private: isViewingOwnProfile
-        ? 'My private vizzes'
-        : 'Private vizzes',
+      private: 'My private vizzes',
+      shared: 'Shared with me',
       orgs: isViewingOwnProfile
         ? 'My organizations'
         : 'Organizations',
       starred: isViewingOwnProfile
         ? 'My starred vizzes'
         : 'Starred vizzes',
-      shared: isViewingOwnProfile
-        ? 'Shared with me'
-        : 'Shared',
     }),
     [isViewingOwnProfile],
   );
@@ -108,13 +104,24 @@ export const ProfilePageBody = ({
               isActive={sectionId === 'public'}
               setSectionId={setSectionId}
             />
-            <SidebarSection
-              sectionId="private"
-              SVGComponent={PrivateSVG}
-              label={copy.private}
-              isActive={sectionId === 'private'}
-              setSectionId={setSectionId}
-            />
+            {isViewingOwnProfile && (
+              <>
+                <SidebarSection
+                  sectionId="private"
+                  SVGComponent={PrivateSVG}
+                  label={copy.private}
+                  isActive={sectionId === 'private'}
+                  setSectionId={setSectionId}
+                />
+                <SidebarSection
+                  sectionId="shared"
+                  SVGComponent={SharedSVG}
+                  label={copy.shared}
+                  isActive={sectionId === 'shared'}
+                  setSectionId={setSectionId}
+                />
+              </>
+            )}
             <SidebarSection
               sectionId="orgs"
               SVGComponent={OrganizationsSVG}
@@ -129,15 +136,6 @@ export const ProfilePageBody = ({
               isActive={sectionId === 'starred'}
               setSectionId={setSectionId}
             />
-            {isViewingOwnProfile && (
-              <SidebarSection
-                sectionId="shared"
-                SVGComponent={SharedSVG}
-                label="Shared with me"
-                isActive={sectionId === 'shared'}
-                setSectionId={setSectionId}
-              />
-            )}
           </div>
         </div>
         <div className="profile-content">
