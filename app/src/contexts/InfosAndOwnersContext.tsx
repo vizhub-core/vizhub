@@ -2,6 +2,7 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useReducer,
 } from 'react';
@@ -14,8 +15,7 @@ import {
   VizId,
 } from 'entities';
 import { VizKit } from 'api/src/VizKit';
-import { SortContext } from './SortContext';
-import { SectionContext } from './SectionContext';
+import { SectionSortContext } from './SectionSortContext';
 
 export const InfosAndOwnersContext = createContext<{
   allInfoSnapshots: Array<Snapshot<Info>>;
@@ -38,17 +38,17 @@ const NEXT_PAGE_REQUESTED = 'NEXT_PAGE_NEEDED';
 // A key that represents a section and sort.
 // This is used to index the pages object in the state.
 // Of the form `${action.section}-${action.sortId}`;
-type SectionAndSortKey = string;
+type SectionSortKey = string;
 
-const sectionAndSortKey = (
+const sectionSortKey = (
   sectionId: string,
   sortId: SortId,
-): SectionAndSortKey => `${sectionId}-${sortId}`;
+): SectionSortKey => `${sectionId}-${sortId}`;
 
 // The shape of the state for tracking pages of results
 type PaginationState = {
   sectionsAndSorts: {
-    [key: SectionAndSortKey]: {
+    [key: SectionSortKey]: {
       // If a request for the next page is in flight, this will be NEXT_PAGE_REQUESTED
       // Otherwise, it will be SETTLED
       nextPageStatus:
@@ -74,10 +74,10 @@ type PaginationState = {
 };
 
 type PaginationAction =
-  | { type: 'RequestNextPage'; key: SectionAndSortKey }
+  | { type: 'RequestNextPage'; key: SectionSortKey }
   | {
       type: 'ResolveNextPage';
-      key: SectionAndSortKey;
+      key: SectionSortKey;
       infoSnapshots: Array<Snapshot<Info>>;
       ownerUserSnapshots: Array<Snapshot<User>>;
       hasMore: boolean;
@@ -85,7 +85,7 @@ type PaginationAction =
   | {
       type: 'ReportError';
       error: Error;
-      key: SectionAndSortKey;
+      key: SectionSortKey;
     };
 
 // Inspired by https://github.com/vizhub-core/vizhub/blob/f0d1fbc6cd0f8d124d6424ec8bd948785209d6c4/vizhub-v3/vizhub-app/src/presenters/HomePagePresenter/useVizInfos.js#L19
@@ -176,6 +176,9 @@ export type InfosAndOwnersPageData = {
   // Optional, query filter for forks page
   // Passed as forkedFrom option into gateways.getInfos
   forkedFrom?: VizId;
+
+  // True if there are more pages of results
+  hasMore: boolean;
 };
 
 // Define an initializer function for the reducer state.
@@ -185,7 +188,7 @@ const init = ({
   ownerUserSnapshots,
   hasMoreInitially,
 }: {
-  currentKey: SectionAndSortKey;
+  currentKey: SectionSortKey;
   infoSnapshots: Array<Snapshot<Info>>;
   ownerUserSnapshots: Array<Snapshot<User>>;
   hasMoreInitially: boolean;
@@ -223,40 +226,13 @@ export const InfosAndOwnersProvider = ({
   children: React.ReactNode;
   hasMoreInitially: boolean;
 }) => {
-  const { sortId } = useContext(SortContext);
-  const { sectionId } = useContext(SectionContext);
-
-  const currentKey = useMemo(
-    () => sectionAndSortKey(sectionId, sortId),
-    [sectionId, sortId],
+  const { sectionId, sortId } = useContext(
+    SectionSortContext,
   );
 
-  // The initial pagination state, from server-rendered first page.
-  const initialPaginationState: PaginationState = useMemo(
-    () => ({
-      sectionsAndSorts: {
-        [currentKey]: {
-          nextPageStatus: SETTLED,
-          pages: [infoSnapshots],
-          hasMore: hasMoreInitially,
-        },
-      },
-      // nextPageStatus: SETTLED,
-      // pages: { [sortId]: [infoSnapshots] },
-      ownerUserSnapshotsById: ownerUserSnapshots.reduce(
-        (accumulator, snapshot) => ({
-          ...accumulator,
-          [snapshot.data.id]: snapshot,
-        }),
-        {},
-      ),
-    }),
-    [
-      sortId,
-      infoSnapshots,
-      ownerUserSnapshots,
-      hasMoreInitially,
-    ],
+  const currentKey = useMemo(
+    () => sectionSortKey(sectionId, sortId),
+    [sectionId, sortId],
   );
 
   const [paginationState, paginationDispatch] = useReducer(
@@ -284,10 +260,9 @@ export const InfosAndOwnersProvider = ({
           paginationState.ownerUserSnapshotsById,
         ),
         sortId,
-        // pageNumber: paginationState.pages[sortId].length,
         pageNumber:
           paginationState.sectionsAndSorts[currentKey]
-            ?.pages.length || 0,
+            ?.pages?.length || 0,
       });
       if (result.outcome === 'success') {
         const {
@@ -295,13 +270,6 @@ export const InfosAndOwnersProvider = ({
           ownerUserSnapshots,
           hasMore,
         } = result.value;
-        // paginationDispatch({
-        //   type: 'ResolveNextPage',
-        //   sortId,
-        //   infoSnapshots,
-        //   ownerUserSnapshots,
-        //   hasMore,
-        // });
         paginationDispatch({
           type: 'ResolveNextPage',
           key: currentKey,
@@ -320,32 +288,27 @@ export const InfosAndOwnersProvider = ({
     fetchNextPageAsync();
   }, [paginationState, currentKey]);
 
-  // const allInfoSnapshots = useMemo(
-  //   () => paginationState.pages[sortId].flat(),
-  //   [paginationState.pages, sortId],
-  // );
-
   const allInfoSnapshots = useMemo(
     () =>
       paginationState.sectionsAndSorts[
         currentKey
-      ]?.pages.flat() || [],
+      ]?.pages?.flat() || [],
     [paginationState, currentKey],
   );
 
-  // const value = useMemo(
-  //   () => ({
-  //     allInfoSnapshots,
-  //     fetchNextPage,
-  //     ownerUserSnapshotsById:
-  //       paginationState.ownerUserSnapshotsById,
-  //     isLoadingNextPage:
-  //       paginationState.nextPageStatus ===
-  //       NEXT_PAGE_REQUESTED,
-  //     hasMore: paginationState.hasMore,
-  //   }),
-  //   [allInfoSnapshots, fetchNextPage, paginationState],
-  // );
+  // If the user switches to a currentKey that we haven't
+  // fetched the first page of yet, fetch the first page.
+  // Handles the case where the user switches the sorting
+  // or the section client-side.
+  useEffect(() => {
+    const fetchedFirstPage =
+      paginationState.sectionsAndSorts[currentKey] !==
+      undefined;
+    if (!fetchedFirstPage) {
+      fetchNextPage();
+    }
+    // fetchNextPage();
+  }, [paginationState, currentKey]);
 
   const value = useMemo(
     () => ({

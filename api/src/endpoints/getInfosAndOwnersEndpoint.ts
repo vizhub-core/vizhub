@@ -22,17 +22,19 @@ export const getInfosAndOwnersEndpoint = ({
         } = req.body;
         if (noNeedToFetchUsers === undefined) {
           return res.send(
-            err(missingParameterError('eventIds')),
+            err(
+              missingParameterError('noNeedToFetchUsers'),
+            ),
           );
         }
         if (sortId === undefined) {
           return res.send(
-            err(missingParameterError('eventIds')),
+            err(missingParameterError('sortId')),
           );
         }
         if (pageNumber === undefined) {
           return res.send(
-            err(missingParameterError('eventIds')),
+            err(missingParameterError('pageNumber')),
           );
         }
 

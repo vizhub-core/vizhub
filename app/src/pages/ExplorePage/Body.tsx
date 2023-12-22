@@ -2,12 +2,14 @@ import { useContext } from 'react';
 import { Info, Snapshot, sortOptions } from 'entities';
 import { ExplorePageBody } from 'components';
 import { SmartHeader } from '../../smartComponents/SmartHeader';
-import { SortContext } from '../../contexts/SortContext';
 import { VizPreviewPresenter } from '../../smartComponents/VizPreviewPresenter';
 import { InfosAndOwnersContext } from '../../contexts/InfosAndOwnersContext';
+import { SectionSortContext } from '../../contexts/SectionSortContext';
 
 export const Body = () => {
-  const { sortId, setSortId } = useContext(SortContext);
+  const { sortId, setSortId } = useContext(
+    SectionSortContext,
+  );
 
   const {
     allInfoSnapshots,
