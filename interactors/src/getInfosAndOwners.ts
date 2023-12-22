@@ -1,4 +1,10 @@
-import { Gateways, Result, ok, pageSize } from 'gateways';
+import {
+  Gateways,
+  Result,
+  err,
+  ok,
+  pageSize,
+} from 'gateways';
 import {
   Info,
   UserId,
@@ -9,7 +15,9 @@ import {
   Snapshot,
   VizId,
   Visibility,
+  SectionId,
 } from 'entities';
+import { accessDeniedError } from 'gateways/src/errors';
 
 export type InfosAndOwners = {
   infoSnapshots: Array<Snapshot<Info>>;
@@ -22,23 +30,42 @@ export const GetInfosAndOwners = (gateways: Gateways) => {
 
   return async ({
     noNeedToFetchUsers,
+    sectionId,
     sortId,
     pageNumber,
     owner,
     forkedFrom,
     vizIds,
+    authenticatedUserId,
   }: {
     noNeedToFetchUsers: Array<UserId>;
+    sectionId?: SectionId;
     sortId?: SortId;
     pageNumber: number;
     owner?: UserId;
     forkedFrom?: VizId;
     vizIds?: Array<VizId>;
+    authenticatedUserId?: UserId;
   }): Promise<Result<InfosAndOwners>> => {
     // Get the sort field from the sort query parameter.
     const sortField: SortField | undefined = sortId
       ? getSortField(sortId)
       : undefined;
+
+    // Check access to private infos.
+    if (
+      sectionId === 'private' &&
+      authenticatedUserId !== owner
+    ) {
+      return err(
+        accessDeniedError(
+          "Can't access someone else's private vizzes.",
+        ),
+      );
+    }
+
+    const visibilities: Array<Visibility> =
+      sectionId === 'private' ? ['private'] : ['public'];
 
     const infoSnapshotsResult = await getInfos({
       owner,
@@ -46,7 +73,7 @@ export const GetInfosAndOwners = (gateways: Gateways) => {
       sortField,
       pageNumber,
       vizIds,
-      visibilities: ['public'],
+      visibilities,
     });
     if (infoSnapshotsResult.outcome === 'failure')
       return infoSnapshotsResult;

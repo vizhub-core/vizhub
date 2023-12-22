@@ -1,8 +1,11 @@
 import { ProfilePage, ProfilePageData } from './index';
 import { GetInfosAndOwners } from 'interactors';
 import {
+  SectionId,
   SortId,
+  asSectionId,
   asSortId,
+  defaultSectionId,
   defaultSortOption,
 } from 'entities';
 import { getAuthenticatedUser } from '../getAuthenticatedUser';
@@ -26,11 +29,23 @@ ProfilePage.getPageData = async ({
     const sortId: SortId | null =
       asSortId(query.sort) || defaultSortOption.id;
 
+    const sectionId: SectionId | null =
+      asSectionId(query.section) || defaultSectionId;
+
+    const { authenticatedUserSnapshot } =
+      await getAuthenticatedUser({
+        gateways,
+        auth0User,
+      });
+
     const infosAndOwnersResult = await getInfosAndOwners({
       owner,
       noNeedToFetchUsers: [owner],
+      sectionId,
       sortId,
       pageNumber: 0,
+      authenticatedUserId:
+        authenticatedUserSnapshot?.data?.id,
     });
     if (infosAndOwnersResult.outcome === 'failure') {
       console.log('Error when fetching infos and owners:');
@@ -39,12 +54,6 @@ ProfilePage.getPageData = async ({
     }
     const { infoSnapshots, hasMore } =
       infosAndOwnersResult.value;
-
-    const { authenticatedUserSnapshot } =
-      await getAuthenticatedUser({
-        gateways,
-        auth0User,
-      });
 
     const pageData: ProfilePageData = {
       title: `${userName} on VizHub`,

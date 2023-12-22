@@ -7,10 +7,10 @@ import {
 } from 'entities';
 import { ForksPageBody } from 'components';
 import { SmartHeader } from '../../smartComponents/SmartHeader';
-import { SortContext } from '../../contexts/SortContext';
 import { VizPreviewPresenter } from '../../smartComponents/VizPreviewPresenter';
 import { InfosAndOwnersContext } from '../../contexts/InfosAndOwnersContext';
 import { getVizPageHref } from '../../accessors';
+import { SectionSortContext } from '../../contexts/SectionSortContext';
 
 export const Body = ({
   forkedFromInfo,
@@ -19,13 +19,16 @@ export const Body = ({
   forkedFromInfo: Info;
   forkedFromOwnerUser: User;
 }) => {
-  const { sortId, setSortId } = useContext(SortContext);
+  const { sortId, setSortId } = useContext(
+    SectionSortContext,
+  );
 
   const {
     allInfoSnapshots,
     fetchNextPage,
     ownerUserSnapshotsById,
     isLoadingNextPage,
+    hasMore,
   } = useContext(InfosAndOwnersContext);
 
   return (
@@ -50,6 +53,7 @@ export const Body = ({
         sortId={sortId}
         setSortId={setSortId}
         sortOptions={sortOptions}
+        hasMore={hasMore}
         onMoreClick={fetchNextPage}
         isLoadingNextPage={isLoadingNextPage}
         forkedFromTitle={forkedFromInfo.title}

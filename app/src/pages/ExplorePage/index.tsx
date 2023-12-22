@@ -1,12 +1,12 @@
 import { Info, Snapshot, SortId, User } from 'entities';
 import { AuthenticatedUserProvider } from '../../contexts/AuthenticatedUserContext';
-import { SortProvider } from '../../contexts/SortContext';
 import { Page, PageData } from '../Page';
 import { Body } from './Body';
 import {
   InfosAndOwnersPageData,
   InfosAndOwnersProvider,
 } from '../../contexts/InfosAndOwnersContext';
+import { SectionSortProvider } from '../../contexts/SectionSortContext';
 
 export type ExplorePageData = PageData &
   InfosAndOwnersPageData & {
@@ -19,8 +19,6 @@ export type ExplorePageData = PageData &
     // The initial sort order for the results,
     // before the user has changed it client-side
     sortId: SortId;
-
-    hasMore: boolean;
   };
 
 // The type for the query parameters for this page
@@ -40,17 +38,15 @@ export const ExplorePage: Page = ({
       pageData.authenticatedUserSnapshot
     }
   >
-    <SortProvider>
+    <SectionSortProvider publicOnly>
       <InfosAndOwnersProvider
         infoSnapshots={pageData.infoSnapshots}
         ownerUserSnapshots={pageData.ownerUserSnapshots}
-        // hasMoreInitially={pageData.hasMore}
-        // TODO make this work on this page
-        hasMoreInitially={false}
+        hasMoreInitially={pageData.hasMore}
       >
         <Body />
       </InfosAndOwnersProvider>
-    </SortProvider>
+    </SectionSortProvider>
   </AuthenticatedUserProvider>
 );
 

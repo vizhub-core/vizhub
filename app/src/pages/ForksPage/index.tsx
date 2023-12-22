@@ -1,12 +1,12 @@
 import { Info, Snapshot, SortId, User } from 'entities';
 import { AuthenticatedUserProvider } from '../../contexts/AuthenticatedUserContext';
-import { SortProvider } from '../../contexts/SortContext';
 import { Page, PageData } from '../Page';
 import { Body } from './Body';
 import {
   InfosAndOwnersPageData,
   InfosAndOwnersProvider,
 } from '../../contexts/InfosAndOwnersContext';
+import { SectionSortProvider } from '../../contexts/SectionSortContext';
 
 export type ForksPageData = PageData &
   InfosAndOwnersPageData & {
@@ -44,11 +44,12 @@ export const ForksPage: Page = ({
       pageData.authenticatedUserSnapshot
     }
   >
-    <SortProvider>
+    <SectionSortProvider>
       <InfosAndOwnersProvider
         infoSnapshots={pageData.infoSnapshots}
         ownerUserSnapshots={pageData.ownerUserSnapshots}
         forkedFrom={pageData.forkedFrom}
+        hasMoreInitially={pageData.hasMore}
       >
         <Body
           forkedFromInfo={
@@ -59,7 +60,7 @@ export const ForksPage: Page = ({
           }
         />
       </InfosAndOwnersProvider>
-    </SortProvider>
+    </SectionSortProvider>
   </AuthenticatedUserProvider>
 );
 

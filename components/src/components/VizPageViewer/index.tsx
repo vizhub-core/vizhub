@@ -1,6 +1,7 @@
 import {
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -8,6 +9,7 @@ import { UpvoteWidget } from 'components';
 import { VisibilityPrivateSVG } from '../Icons/VisibilityPrivateSVG';
 import { VisibilityUnlistedSVG } from '../Icons/VisibilityUnlistedSVG';
 import './styles.scss';
+import { commaFormat } from '../commaFormat';
 
 export const VizPageViewer = ({
   vizTitle,
@@ -97,6 +99,11 @@ export const VizPageViewer = ({
     return () => resizeObserver.disconnect();
   }, []);
 
+  const forksCountFormatted = useMemo(
+    () => commaFormat.format(forksCount),
+    [forksCount],
+  );
+
   return (
     <div className="vh-viz-page-viewer">
       <div className="viewer-content">
@@ -168,20 +175,19 @@ export const VizPageViewer = ({
           <div className="meta-info-right">
             <div>Last edited {updatedDateFormatted}</div>
             <div>Created on {createdDateFormatted}</div>
-            {forkedFromVizHref ? (
-              <>
-                <div>
-                  Forked from{' '}
-                  <a href={forkedFromVizHref}>
-                    {forkedFromVizTitle}
-                  </a>
-                </div>
-                <a href={forksPageHref}>
-                  {forksCount} fork
-                  {forksCount === 1 ? '' : 's'}
+
+            {forkedFromVizHref && (
+              <div>
+                Forked from{' '}
+                <a href={forkedFromVizHref}>
+                  {forkedFromVizTitle}
                 </a>
-              </>
-            ) : null}
+              </div>
+            )}
+            <a href={forksPageHref}>
+              {forksCountFormatted} fork
+              {forksCount === 1 ? '' : 's'}
+            </a>
           </div>
         </div>
         <div className="vh-markdown-body">

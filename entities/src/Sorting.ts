@@ -2,11 +2,12 @@
 
 // The options for sorting views of many visualizations.
 export const sortOptions: Array<SortOption> = [
-  {
-    id: 'popular',
-    label: 'Most popular',
-    sortField: 'popularity',
-  },
+  // TODO bring this back after we compute popularity scores again
+  // {
+  //   id: 'popular',
+  //   label: 'Most popular',
+  //   sortField: 'popularity',
+  // },
   {
     id: 'mostRecent',
     label: 'Most recent',
@@ -17,11 +18,14 @@ export const sortOptions: Array<SortOption> = [
     label: 'Most forked',
     sortField: 'forksCount',
   },
-  {
-    id: 'mostUpvoted',
-    label: 'Most upvoted',
-    sortField: 'upvotesCount',
-  },
+  // TODO bring this back after we:
+  //  * Migrate upvotes from V2
+  //  * Implement the starring feature
+  // {
+  //   id: 'mostUpvoted',
+  //   label: 'Most upvoted',
+  //   sortField: 'upvotesCount',
+  // },
 ];
 
 const sortOptionsMap = new Map<SortId, SortOption>(
@@ -29,9 +33,8 @@ const sortOptionsMap = new Map<SortId, SortOption>(
 );
 
 // The default for sorting views of many visualizations.
-// TODO change this to popular after https://github.com/vizhub-core/vizhub3/issues/148
 export const defaultSortOption: SortOption =
-  sortOptionsMap.get('popular');
+  sortOptionsMap.get('mostRecent');
 
 // Convenience function for getting the sort field from the sort ID.
 export const getSortField = (

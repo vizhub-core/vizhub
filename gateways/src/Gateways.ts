@@ -45,7 +45,6 @@ import {
   // Embedding,
   // EmbeddingId,
   MigrationStatus,
-  MigrationBatch,
   VizEmbedding,
   ImageMetadata,
   StoredImage,
@@ -54,10 +53,7 @@ import {
   Visibility,
 } from 'entities';
 import { Result, Success } from './Result';
-import {
-  MigrationBatchId,
-  MigrationStatusId,
-} from 'entities/src/Migration';
+import { MigrationStatusId } from 'entities/src/Migration';
 import { ImageHash } from 'entities/src/Images';
 
 // The maximum number of Info documents to return in a single page from `getInfos()`
@@ -228,16 +224,6 @@ export interface Gateways {
   ): Promise<Result<Snapshot<MigrationStatus>>>;
   deleteMigrationStatus(
     id: MigrationStatusId,
-  ): Promise<Result<Success>>;
-
-  saveMigrationBatch(
-    migrationBatch: MigrationBatch,
-  ): Promise<Result<Success>>;
-  getMigrationBatch(
-    id: MigrationBatchId,
-  ): Promise<Result<Snapshot<MigrationBatch>>>;
-  deleteMigrationBatch(
-    id: MigrationBatchId,
   ): Promise<Result<Success>>;
 
   saveImageMetadata(

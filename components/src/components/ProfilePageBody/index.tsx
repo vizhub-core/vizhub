@@ -9,58 +9,13 @@ import { StarSVG } from '../Icons/sam/StarSVG';
 import { PlusSVG } from '../Icons/sam/PlusSVG';
 import { Button } from '../bootstrap';
 import { HomeStarter } from '../HomeStarter';
-import { useCallback, useMemo } from 'react';
-import { SortId } from 'entities';
+import { SectionId, SortId } from 'entities';
+import { useMemo } from 'react';
+import { SidebarSection } from './SidebarSection';
 import './styles.scss';
-
-export type ProfilePageSection =
-  | 'public'
-  | 'private'
-  | 'orgs'
-  | 'starred'
-  | 'shared';
-
-// Feature flags
-const enabledSections = {
-  public: true,
-  // private: false,
-  // orgs: false,
-  // shared: false,
-  // starred: false,
-  private: true,
-  // orgs: true,
-  // shared: true,
-  // starred: true,
-};
 
 const enableEditBio = false;
 const enableCreateVizButton = false;
-
-// One section of the sidebar
-const SidebarSection = ({
-  section,
-  SVGComponent,
-  label,
-  isActive,
-  setActiveSection,
-}) => {
-  if (!enabledSections[section]) return null;
-
-  const handleClick = useCallback(() => {
-    setActiveSection(section);
-  }, [setActiveSection, section]);
-
-  return (
-    <div
-      className={`profile-sidebar-section vh-base-01 ${
-        isActive ? 'active' : ''
-      }`}
-      onClick={handleClick}
-    >
-      <SVGComponent /> {label}
-    </div>
-  );
-};
 
 export const ProfilePageBody = ({
   // Viz preview list props.
@@ -82,8 +37,8 @@ export const ProfilePageBody = ({
   sortOptions,
 
   // Active section
-  activeSection,
-  setActiveSection,
+  sectionId,
+  setSectionId,
 }: {
   // Viz preview list props.
   renderVizPreviews: () => React.ReactNode;
@@ -104,17 +59,16 @@ export const ProfilePageBody = ({
   sortOptions: { id: SortId; label: string }[];
 
   // Active section
-  activeSection: ProfilePageSection;
-  setActiveSection: (section: ProfilePageSection) => void;
+  sectionId: SectionId;
+  setSectionId: (sectionId: SectionId) => void;
 }) => {
-  const copy = useMemo(
+  const copy: { [K in SectionId]: string } = useMemo(
     () => ({
-      publicVizzes: isViewingOwnProfile
+      public: isViewingOwnProfile
         ? 'My public vizzes'
         : 'Public vizzes',
-      privateVizzes: isViewingOwnProfile
-        ? 'My private vizzes'
-        : 'Private vizzes',
+      private: 'My private vizzes',
+      shared: 'Shared with me',
       orgs: isViewingOwnProfile
         ? 'My organizations'
         : 'Organizations',
@@ -144,52 +98,50 @@ export const ProfilePageBody = ({
           </div>
           <div className="profile-sidebar-sections">
             <SidebarSection
-              section="public"
+              sectionId="public"
               SVGComponent={PublicSVG}
-              label={copy.publicVizzes}
-              isActive={activeSection === 'public'}
-              setActiveSection={setActiveSection}
-            />
-            <SidebarSection
-              section="private"
-              SVGComponent={PrivateSVG}
-              label={copy.privateVizzes}
-              isActive={activeSection === 'private'}
-              setActiveSection={setActiveSection}
-            />
-            <SidebarSection
-              section="orgs"
-              SVGComponent={OrganizationsSVG}
-              label={copy.orgs}
-              isActive={activeSection === 'orgs'}
-              setActiveSection={setActiveSection}
-            />
-            <SidebarSection
-              section="starred"
-              SVGComponent={StarSVG}
-              label={copy.starred}
-              isActive={activeSection === 'starred'}
-              setActiveSection={setActiveSection}
+              label={copy.public}
+              isActive={sectionId === 'public'}
+              setSectionId={setSectionId}
             />
             {isViewingOwnProfile && (
-              <SidebarSection
-                section="shared"
-                SVGComponent={SharedSVG}
-                label="Shared with me"
-                isActive={activeSection === 'shared'}
-                setActiveSection={setActiveSection}
-              />
+              <>
+                <SidebarSection
+                  sectionId="private"
+                  SVGComponent={PrivateSVG}
+                  label={copy.private}
+                  isActive={sectionId === 'private'}
+                  setSectionId={setSectionId}
+                />
+                <SidebarSection
+                  sectionId="shared"
+                  SVGComponent={SharedSVG}
+                  label={copy.shared}
+                  isActive={sectionId === 'shared'}
+                  setSectionId={setSectionId}
+                />
+              </>
             )}
+            <SidebarSection
+              sectionId="orgs"
+              SVGComponent={OrganizationsSVG}
+              label={copy.orgs}
+              isActive={sectionId === 'orgs'}
+              setSectionId={setSectionId}
+            />
+            <SidebarSection
+              sectionId="starred"
+              SVGComponent={StarSVG}
+              label={copy.starred}
+              isActive={sectionId === 'starred'}
+              setSectionId={setSectionId}
+            />
           </div>
         </div>
         <div className="profile-content">
           {isViewingOwnProfile && <HomeStarter />}
           <div className="profile-header">
-            <h2>
-              {isViewingOwnProfile
-                ? 'My public vizzes'
-                : 'Public vizzes'}
-            </h2>
+            <h2>{copy[sectionId]}</h2>
             <div className="profile-header-controls">
               {sortOptions ? (
                 <SortControl

@@ -8,9 +8,9 @@ import {
 import { ProfilePageBody } from 'components';
 import { SmartHeader } from '../../smartComponents/SmartHeader';
 import { VizPreviewPresenter } from '../../smartComponents/VizPreviewPresenter';
-import { SortContext } from '../../contexts/SortContext';
 import { InfosAndOwnersContext } from '../../contexts/InfosAndOwnersContext';
 import { AuthenticatedUserContext } from '../../contexts/AuthenticatedUserContext';
+import { SectionSortContext } from '../../contexts/SectionSortContext';
 
 export const Body = ({
   profileUser,
@@ -22,7 +22,8 @@ export const Body = ({
     AuthenticatedUserContext,
   );
 
-  const { sortId, setSortId } = useContext(SortContext);
+  const { sectionId, setSectionId, sortId, setSortId } =
+    useContext(SectionSortContext);
 
   const {
     allInfoSnapshots,
@@ -72,6 +73,8 @@ export const Body = ({
         onMoreClick={fetchNextPage}
         isLoadingNextPage={isLoadingNextPage}
         isViewingOwnProfile={isViewingOwnProfile}
+        sectionId={sectionId}
+        setSectionId={setSectionId}
       />
     </div>
   );
