@@ -1,16 +1,23 @@
+import { useMemo } from 'react';
 import { ForkSVG } from '../Icons/sam/ForkSVG';
+import { commaFormat } from '../commaFormat';
 import './styles.scss';
 
-// TODO bring this back after upvotes are migrated and working again.
 const enableForksWidget = true;
 
 export const ForksWidget = ({
   forksCount,
   onClick = null,
-}) =>
-  enableForksWidget ? (
+}) => {
+  const forksCountFormatted = useMemo(
+    () => commaFormat.format(forksCount),
+    [forksCount],
+  );
+
+  return enableForksWidget ? (
     <div className="vh-forks-widget">
       <ForkSVG onClick={onClick} />
-      {forksCount}
+      {forksCountFormatted}
     </div>
   ) : null;
+};

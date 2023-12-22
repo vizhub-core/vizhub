@@ -307,7 +307,6 @@ export const InfosAndOwnersProvider = ({
     if (!fetchedFirstPage) {
       fetchNextPage();
     }
-    // fetchNextPage();
   }, [paginationState, currentKey]);
 
   const value = useMemo(

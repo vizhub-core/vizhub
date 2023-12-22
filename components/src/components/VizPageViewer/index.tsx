@@ -1,6 +1,7 @@
 import {
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -8,6 +9,7 @@ import { UpvoteWidget } from 'components';
 import { VisibilityPrivateSVG } from '../Icons/VisibilityPrivateSVG';
 import { VisibilityUnlistedSVG } from '../Icons/VisibilityUnlistedSVG';
 import './styles.scss';
+import { commaFormat } from '../commaFormat';
 
 export const VizPageViewer = ({
   vizTitle,
@@ -97,6 +99,11 @@ export const VizPageViewer = ({
     return () => resizeObserver.disconnect();
   }, []);
 
+  const forksCountFormatted = useMemo(
+    () => commaFormat.format(forksCount),
+    [forksCount],
+  );
+
   return (
     <div className="vh-viz-page-viewer">
       <div className="viewer-content">
@@ -178,7 +185,7 @@ export const VizPageViewer = ({
               </div>
             )}
             <a href={forksPageHref}>
-              {forksCount} fork
+              {forksCountFormatted} fork
               {forksCount === 1 ? '' : 's'}
             </a>
           </div>

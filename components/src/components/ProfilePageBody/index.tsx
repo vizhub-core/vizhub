@@ -10,9 +10,9 @@ import { PlusSVG } from '../Icons/sam/PlusSVG';
 import { Button } from '../bootstrap';
 import { HomeStarter } from '../HomeStarter';
 import { SectionId, SortId } from 'entities';
-import './styles.scss';
 import { useMemo } from 'react';
 import { SidebarSection } from './SidebarSection';
+import './styles.scss';
 
 const enableEditBio = false;
 const enableCreateVizButton = false;
