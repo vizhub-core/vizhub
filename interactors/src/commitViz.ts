@@ -5,18 +5,24 @@ import { generateId } from './generateId';
 import { GetViz } from './getViz';
 import { GetContentAtCommit } from './getContentAtCommit';
 
+
+// const lock = async (lockIds: Array<ResourceLockId>, fn) => {
+//   await redlock.using(lockIds, 5000, fn);
+// };
+
 const debug = false;
 // commitViz
 // * Mints a new commit for uncommitted changes.
 // * See also
 //   https://gitlab.com/curran/vizhub-ee/-/blob/main/vizhub-ee-interactors/src/CommitViz.ts
 export const CommitViz = (gateways: Gateways) => {
-  const { saveInfo, saveCommit } = gateways;
+  const { saveInfo, saveCommit, lock } = gateways;
   const getViz = GetViz(gateways);
   const getContentAtCommit = GetContentAtCommit(gateways);
 
   return async (id: VizId): Promise<Result<Info>> => {
     // TODORedLock
+    await lock([visLock], async () => {
     const getVizResult = await getViz(id);
     if (getVizResult.outcome === 'failure')
       return getVizResult;

@@ -22,6 +22,7 @@ import {
   User,
   ResourceId,
   EntityName,
+  ResourceLockId,
 } from 'entities';
 import { fakeSnapshot } from 'entities/test/fixtures';
 import { ok, err, Result } from './Result';
@@ -393,6 +394,19 @@ export const MemoryGateways = (): Gateways => {
       ...crud(entityName),
     };
   }
+
+  // lock(
+  //   lockIds: Array<ResourceLockId>,
+  //   // an async function that runs with the locks:
+  //   fn: () => Promise<void>,
+  // ): Promise<void>;
+
+  memoryGateways.lock = async (
+    lockIds: Array<ResourceLockId>,
+    fn: () => Promise<void>,
+  ) => {
+    await fn();
+  };
 
   // TODO (maybe): make TypeScript happy
   // Not sure it's worth it as we'd need to unroll

@@ -192,3 +192,6 @@ export {
   getUserDisplayName,
   getBio,
 } from './accessors';
+
+export type { ResourceLockId } from './Lock';
+export { vizLockId, commitLockId } from './Lock';
