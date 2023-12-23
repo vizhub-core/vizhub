@@ -35,7 +35,7 @@ const debug = false;
 export const DatabaseGateways = ({
   shareDBConnection,
   mongoDBDatabase,
-  supabase,
+  // supabase,
 }) => {
   // A generic "save" implementation for ShareDB.
   // TODORedLock
@@ -659,7 +659,7 @@ export const DatabaseGateways = ({
   // console.log('supabase defined?', supabase);
   databaseGateways = {
     ...databaseGateways,
-    ...embeddingMethods(supabase),
+    // ...embeddingMethods(supabase),
   };
 
   return databaseGateways;
