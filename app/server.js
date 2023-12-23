@@ -18,6 +18,12 @@ import { seoMetaTags } from './src/seoMetaTags.js';
 // TODO import this from package.json
 const version = '3.0.0-beta.25';
 
+let port = 5173;
+// const pubsubTest = true;
+// if (pubsubTest) {
+//   port = 5174;
+// }
+
 const env = process.env;
 
 const __dirname = path.dirname(
@@ -426,8 +432,7 @@ async function createServer(
   // The error handler must be before any other error middleware and after all controllers
   app.use(Sentry.Handlers.errorHandler());
 
-  const PORT = 5173;
-  const BASE_URL = `http://localhost:${PORT}`;
+  const BASE_URL = `http://localhost:${port}`;
   const ENDPOINTS = [
     '',
     '/joe',
@@ -441,7 +446,7 @@ async function createServer(
     '/search?query=map',
   ];
 
-  server.listen(PORT, () => {
+  server.listen(port, () => {
     console.log(
       `VizHub App Server listening at ${BASE_URL}`,
     );
