@@ -1,5 +1,6 @@
 import { initializeMongoDB } from './initializeMongoDB';
 import { initializeShareDB } from './initializeShareDB';
+import { initializeRedis } from './initializeRedis';
 import { DatabaseGateways } from './DatabaseGateways';
 import { Gateways } from 'gateways';
 import { initializeSupabase } from './initializeSupabase';
@@ -33,9 +34,12 @@ export const initializeGateways = async ({
       env,
     });
 
+  const { redisClient } = await initializeRedis();
+
   const { shareDBBackend, shareDBConnection } =
     await initializeShareDB({
       mongoDBConnection,
+      redisClient,
       attachMiddleware,
     });
 
