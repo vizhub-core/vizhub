@@ -15,7 +15,7 @@ import {
 } from 'entities';
 import { pageSize } from 'gateways';
 import { initGateways } from './initGateways';
-import { primordialViz } from 'entities/test/fixtures';
+import { primordialViz, ts2 } from 'entities/test/fixtures';
 import { Gateways, Result } from '../src';
 
 // TODO consider query aspects:
@@ -130,8 +130,9 @@ export const getInfosTest = () => {
         ...primordialViz.info,
         id: `viz${i}`,
         forkedFrom: primordialViz.info.id,
-        popularity: i * 3 + 100,
+        // popularity: i * 3 + 100,
         forksCount: 100 - i,
+        updated: ts2 + i * 30,
       }));
 
       // Randomize order to test sorting.

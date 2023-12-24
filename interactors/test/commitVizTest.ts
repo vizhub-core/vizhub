@@ -6,9 +6,8 @@ import {
   primordialCommit,
   ts3,
   userJoe,
-  sampleReadmeText,
 } from 'entities/test/fixtures';
-import { initGateways } from './initGateways';
+import { initGateways } from 'gateways/test';
 import {
   SaveViz,
   CommitViz,
@@ -20,7 +19,12 @@ export const commitVizTest = () => {
     // This is a no-op case.
     // It should do nothing and return "success".
     it('commitViz, committed case', async () => {
-      const gateways = initGateways();
+      const gateways = await initGateways();
+
+      console.log(
+        'commitVizTest: gateways.type',
+        gateways.type,
+      );
       const saveViz = SaveViz(gateways);
       const commitViz = CommitViz(gateways);
 
@@ -38,7 +42,7 @@ export const commitVizTest = () => {
       setPredictableGenerateId();
       const newCommitId = '100';
 
-      const gateways = initGateways();
+      const gateways = await initGateways();
       const { getInfo, saveCommit, getCommit } = gateways;
       const commitViz = CommitViz(gateways);
       const saveViz = SaveViz(gateways);

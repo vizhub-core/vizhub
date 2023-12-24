@@ -2,7 +2,7 @@ import { describe, it, expect, assert } from 'vitest';
 import { JSDOM } from 'jsdom';
 import { setJSDOM } from 'runtime';
 import { GetThumbnail } from '../src';
-import { initGateways } from './initGateways';
+import { initGateways } from 'gateways/test';
 import {
   primordialVizThumbnail,
   primordialCommit,
@@ -17,7 +17,7 @@ setJSDOM(JSDOM);
 export const getThumbnailTest = () => {
   describe.skip('GetThumbnail', () => {
     it('GetThumbnail, success case', async () => {
-      const gateways = initGateways();
+      const gateways = await initGateways();
       const {
         saveCommit,
         saveInfo,
@@ -45,7 +45,7 @@ export const getThumbnailTest = () => {
     });
 
     it('GetThumbnail, commit retrieval failure', async () => {
-      const gateways = initGateways();
+      const gateways = await initGateways();
       const getThumbnail = GetThumbnail(gateways);
 
       const result = await getThumbnail({
@@ -63,7 +63,7 @@ export const getThumbnailTest = () => {
 
     // TODO bring this back, but for GetThumbnail
     it.skip('GetThumbnail, info retrieval failure', async () => {
-      const gateways = initGateways();
+      const gateways = await initGateways();
       const { saveCommit } = gateways;
       const getThumbnail = GetThumbnail(gateways);
 
@@ -85,7 +85,7 @@ export const getThumbnailTest = () => {
 
     // TODO finish this one
     it.skip('GetThumbnail, image metadata retrieval failure', async () => {
-      const gateways = initGateways();
+      const gateways = await initGateways();
       const { saveCommit, saveInfo } = gateways;
       const getThumbnail = GetThumbnail(gateways);
 
@@ -110,7 +110,7 @@ export const getThumbnailTest = () => {
 
     // TODO bring this back, but for GetThumbnail
     it.skip('GetThumbnail, access control failure', async () => {
-      const gateways = initGateways();
+      const gateways = await initGateways();
       const { saveCommit, saveInfo } = gateways;
       const getThumbnail = GetThumbnail(gateways);
 

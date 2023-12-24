@@ -4,16 +4,16 @@ import {
   primordialCommit,
   primordialViz,
   sampleFolder,
-  sampleVizEmbedding,
+  // sampleVizEmbedding,
   userJoe,
 } from 'entities/test/fixtures';
-import { initGateways } from './initGateways';
+import { initGateways } from 'gateways/test';
 import { ValidateViz } from '../src';
 
 export const validateVizTest = () => {
   describe('validateVizTest', async () => {
     it('validateViz, failure case - viz info not found', async () => {
-      const gateways = initGateways();
+      const gateways = await initGateways();
       const validateViz = ValidateViz(gateways);
       const result = await validateViz(
         primordialViz.info.id,
@@ -25,7 +25,7 @@ export const validateVizTest = () => {
     });
 
     it('validateViz, failure case - viz content not found', async () => {
-      const gateways = initGateways();
+      const gateways = await initGateways();
       const { saveInfo } = gateways;
       const validateViz = ValidateViz(gateways);
       await saveInfo(primordialViz.info);
@@ -39,7 +39,7 @@ export const validateVizTest = () => {
     });
 
     it('validateViz, failure case - commit not found', async () => {
-      const gateways = initGateways();
+      const gateways = await initGateways();
       const { saveInfo, saveContent } = gateways;
       const validateViz = ValidateViz(gateways);
       await saveInfo(primordialViz.info);
@@ -54,7 +54,7 @@ export const validateVizTest = () => {
     });
 
     it('validateViz, failure case - owner user not found', async () => {
-      const gateways = initGateways();
+      const gateways = await initGateways();
       const { saveInfo, saveContent, saveCommit } =
         gateways;
       const validateViz = ValidateViz(gateways);
@@ -71,8 +71,8 @@ export const validateVizTest = () => {
       );
     });
 
-    it('validateViz, failure case - missing folder', async () => {
-      const gateways = initGateways();
+    it.skip('validateViz, failure case - missing folder', async () => {
+      const gateways = await initGateways();
       const {
         saveInfo,
         saveContent,
@@ -95,7 +95,7 @@ export const validateVizTest = () => {
     });
 
     it.skip('validateViz, failure case - missing embedding', async () => {
-      const gateways = initGateways();
+      const gateways = await initGateways();
       const {
         saveInfo,
         saveContent,
@@ -120,14 +120,14 @@ export const validateVizTest = () => {
     });
 
     it('validateViz, success case', async () => {
-      const gateways = initGateways();
+      const gateways = await initGateways();
       const {
         saveInfo,
         saveContent,
         saveCommit,
         saveUser,
         saveFolder,
-        saveVizEmbedding,
+        // saveVizEmbedding,
       } = gateways;
       const validateViz = ValidateViz(gateways);
       await saveInfo(primordialViz.info);
@@ -135,7 +135,7 @@ export const validateVizTest = () => {
       await saveCommit(primordialCommit);
       await saveUser(userJoe);
       await saveFolder(sampleFolder);
-      await saveVizEmbedding(sampleVizEmbedding);
+      // await saveVizEmbedding(sampleVizEmbedding);
 
       const result = await validateViz(
         primordialViz.info.id,

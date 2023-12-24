@@ -18,7 +18,7 @@ import {
   folder2,
   folder3,
 } from 'entities/test/fixtures';
-import { initGateways } from './initGateways';
+import { initGateways } from 'gateways/test';
 import { VerifyVizAccess } from '../src';
 import { VizAccess } from '../src/verifyVizAccess';
 import { Result } from 'gateways';
@@ -40,7 +40,7 @@ const verify =
     folders?: Folder[];
   }) =>
   async () => {
-    const gateways = initGateways();
+    const gateways = await initGateways();
     const { saveFolder, savePermission } = gateways;
     const verifyVizAccess = VerifyVizAccess(gateways);
 

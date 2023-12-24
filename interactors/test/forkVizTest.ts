@@ -16,7 +16,7 @@ import {
   ts3,
   userJoe,
 } from 'entities/test/fixtures';
-import { initGateways } from './initGateways';
+import { initGateways } from 'gateways/test';
 import {
   SaveViz,
   ForkViz,
@@ -32,7 +32,7 @@ export const forkVizTest = () => {
       const newCommitId = '100';
       const newVizId = '101';
 
-      const gateways = initGateways();
+      const gateways = await initGateways();
       const { saveCommit, getInfo, getContent, getCommit } =
         gateways;
       const saveViz = SaveViz(gateways);
@@ -114,7 +114,7 @@ export const forkVizTest = () => {
 
     it('error case not found', async () => {
       setPredictableGenerateId();
-      const gateways = initGateways();
+      const gateways = await initGateways();
       const forkViz = ForkViz(gateways);
 
       const result = await forkViz({
@@ -137,7 +137,7 @@ export const forkVizTest = () => {
       const newCommitId = '100';
       const newVizId = '101';
 
-      const gateways = initGateways();
+      const gateways = await initGateways();
       const { saveCommit, getInfo, getContent, getCommit } =
         gateways;
       const saveViz = SaveViz(gateways);
@@ -208,7 +208,7 @@ export const forkVizTest = () => {
       const newCommitId2 = '100';
       const newVizId = '101';
 
-      const gateways = initGateways();
+      const gateways = await initGateways();
       const { saveCommit, getInfo, getContent, getCommit } =
         gateways;
       const saveViz = SaveViz(gateways);
@@ -296,7 +296,7 @@ export const forkVizTest = () => {
       const newCommitId = '100';
       const newVizId = '101';
 
-      const gateways = initGateways();
+      const gateways = await initGateways();
       const { saveCommit, getInfo, getContent, getCommit } =
         gateways;
       const saveViz = SaveViz(gateways);

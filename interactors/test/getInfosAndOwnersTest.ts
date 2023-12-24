@@ -5,13 +5,13 @@ import {
   primordialViz,
   userJoe,
 } from 'entities/test/fixtures';
-import { initGateways } from './initGateways';
+import { initGateways } from 'gateways/test';
 import { GetInfosAndOwners } from '../src';
 
 export const getInfosAndOwnersTest = () => {
   describe('getInfosAndOwners', async () => {
     it('should get a list of vizzes and their owners', async () => {
-      const gateways = initGateways();
+      const gateways = await initGateways();
       const { saveInfo, saveUser } = gateways;
       const getInfosAndOwners = GetInfosAndOwners(gateways);
       await saveInfo(primordialViz.info);
@@ -31,7 +31,7 @@ export const getInfosAndOwnersTest = () => {
     });
 
     it('should respect noNeedToFetchUsers', async () => {
-      const gateways = initGateways();
+      const gateways = await initGateways();
       const { saveInfo, saveUser } = gateways;
       const getInfosAndOwners = GetInfosAndOwners(gateways);
       await saveInfo(primordialViz.info);

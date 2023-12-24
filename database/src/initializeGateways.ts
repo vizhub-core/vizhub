@@ -4,6 +4,7 @@ import { initializeRedis } from './initializeRedis';
 import { DatabaseGateways } from './DatabaseGateways';
 import { Gateways } from 'gateways';
 import { initializeSupabase } from './initializeSupabase';
+import { initializeRedlock } from './initializeRedlock';
 
 // `attachMiddleware` allows ShareDB middleware to be attached to the ShareDB backend
 // in the proper sequence such that the middleware handles the initial server-side connection.
@@ -44,14 +45,17 @@ export const initializeGateways = async ({
     });
 
   // TODO initialize postgres via Supabase
-  const supabase = initializeSupabase();
+  // const supabase = initializeSupabase();
+
+  const redlock = await initializeRedlock();
 
   // For ease of development, the DatabaseGateways are implemented in JavaScript.
   // @ts-ignore
   const gateways: Gateways = DatabaseGateways({
     shareDBConnection,
     mongoDBDatabase,
-    supabase,
+    redlock,
+    // supabase,
   }) as Gateways;
 
   return {

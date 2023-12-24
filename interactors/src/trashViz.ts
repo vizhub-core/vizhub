@@ -5,36 +5,70 @@ import {
   ok,
   err,
 } from 'gateways';
-import { VizId, Info, Timestamp } from 'entities';
+import {
+  VizId,
+  Info,
+  Timestamp,
+  infoLock,
+  DELETE,
+  UserId,
+} from 'entities';
+import {
+  VerifyVizAccess,
+  VizAccess,
+} from './verifyVizAccess';
+import { accessDeniedError } from 'gateways/src/errors';
 
 // trashViz
 //  * Moves a viz to the "trash"
 export const TrashViz = (gateways: Gateways) => {
-  const { getInfo, saveInfo } = gateways;
+  const { getInfo, saveInfo, lock } = gateways;
+  const verifyVizAccess = VerifyVizAccess(gateways);
 
-  return async (options: {
+  return async ({
+    id,
+    timestamp,
+    authenticatedUserId,
+  }: {
     id: VizId; // The ID of the viz being trashed.
     timestamp: Timestamp; // The timestamp at which this viz is trashed.
+    authenticatedUserId?: UserId;
   }): Promise<Result<Success>> => {
-    const { id, timestamp } = options;
-    // TODORedLock
+    return lock([infoLock(id)], async () => {
+      const getInfoResult = await getInfo(id);
+      if (getInfoResult.outcome === 'failure')
+        return err(getInfoResult.error);
+      const info = getInfoResult.value.data;
 
-    // TODO verify permission
+      // Verify delete permission
+      const verifyResult: Result<VizAccess> =
+        await verifyVizAccess({
+          authenticatedUserId,
+          info,
+          actions: [DELETE],
+        });
+      if (verifyResult.outcome === 'failure') {
+        throw verifyResult.error;
+      }
+      const canDelete = verifyResult.value[DELETE];
+      if (!canDelete) {
+        return err(
+          accessDeniedError(
+            `User ${authenticatedUserId} cannot delete viz ${id}`,
+          ),
+        );
+      }
 
-    const getInfoResult = await getInfo(id);
-    if (getInfoResult.outcome === 'failure')
-      return err(getInfoResult.error);
-    const info = getInfoResult.value.data;
+      const newInfo: Info = {
+        ...info,
+        trashed: timestamp,
+      };
 
-    const newInfo: Info = {
-      ...info,
-      trashed: timestamp,
-    };
+      const saveResult = await saveInfo(newInfo);
+      if (saveResult.outcome === 'failure')
+        return err(saveResult.error);
 
-    const saveResult = await saveInfo(newInfo);
-    if (saveResult.outcome === 'failure')
-      return err(saveResult.error);
-
-    return ok('success');
+      return ok('success');
+    });
   };
 };

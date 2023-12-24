@@ -410,7 +410,7 @@ export const sampleStoredImage: StoredImage = {
 export const fakeSnapshot = <T>(data: T) => ({
   data,
   v: 1,
-  type: 'json1',
+  type: 'p',
 });
 
 // Sample content for testing JS imports
