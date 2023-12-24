@@ -46,7 +46,29 @@ if (clientSideJS) {
     const dmp = new diffMatchPatch();
     const diff = dmp.diff_main(beforeHTML, afterHTML);
     dmp.diff_cleanupSemantic(diff);
-    console.log('Diff:', dmp.diff_prettyHtml(diff));
+
+    // This is too verbose to be useful
+    // console.log('Diff:', dmp.diff_prettyHtml(diff));
+
+    // Format and log the diff as plain text
+    const diffText = diff
+      .map(([operation, text]) => {
+        let operationText;
+        switch (operation) {
+          case -1:
+            operationText = 'Delete';
+            break;
+          case 1:
+            operationText = 'Insert';
+            break;
+          default:
+            operationText = 'Equal';
+        }
+        return `${operationText}: ${text}`;
+      })
+      .join('\n');
+
+    console.log('Diff:', diffText);
   }
 
   // } else {
