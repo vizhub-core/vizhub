@@ -6,10 +6,8 @@ import { TrashViz, SaveViz } from '../src';
 // Tests interactors related to "trash",
 // a temporary holding place for vizzes to be deleted.
 export const trashTest = () => {
-  describe('trash features', async () => {
-    // TODO test that this operation
-    // sets `forkedFrom` on its forks
-    it('trashViz', async () => {
+  describe('Trash Viz', async () => {
+    it('should trashViz', async () => {
       const gateways = await initGateways();
       const { getInfo } = gateways;
       const saveViz = SaveViz(gateways);
@@ -21,6 +19,7 @@ export const trashTest = () => {
       const trashVizResult = await trashViz({
         id: primordialViz.info.id,
         timestamp: ts3,
+        authenticatedUserId: primordialViz.info.owner,
       });
       expect(trashVizResult.outcome).toEqual('success');
       assert(trashVizResult.outcome === 'success');
@@ -34,6 +33,38 @@ export const trashTest = () => {
         ...primordialViz.info,
         trashed: ts3,
       });
+    });
+
+    it('should verify delete access', async () => {
+      const gateways = await initGateways();
+      const { getInfo } = gateways;
+      const saveViz = SaveViz(gateways);
+
+      const trashViz = TrashViz(gateways);
+      await saveViz(primordialViz);
+
+      // Should fail access control - unauthenticated case
+      const trashVizResult = await trashViz({
+        id: primordialViz.info.id,
+        timestamp: ts3,
+      });
+      expect(trashVizResult.outcome).toEqual('failure');
+      assert(trashVizResult.outcome === 'failure');
+      expect(trashVizResult.error.code).toEqual(
+        'accessDenied',
+      );
+
+      // Should fail access control - authenticated case
+      const trashVizResult2 = await trashViz({
+        id: primordialViz.info.id,
+        timestamp: ts3,
+        authenticatedUserId: 'someRandomUserIdNotTheOwner',
+      });
+      expect(trashVizResult2.outcome).toEqual('failure');
+      assert(trashVizResult2.outcome === 'failure');
+      expect(trashVizResult2.error.code).toEqual(
+        'accessDenied',
+      );
     });
   });
 };

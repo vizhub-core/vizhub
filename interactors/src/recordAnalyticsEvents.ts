@@ -5,6 +5,7 @@ import { ok, Result, Success } from 'gateways';
 import {
   AnalyticsEvent,
   AnalyticsEventId,
+  analyticsEventLock,
   Timestamp,
   timestampToDate,
 } from 'entities';
@@ -21,7 +22,7 @@ export const RecordAnalyticsEvents = (
   let initialized = false;
 
   const initQueueProcessor = (
-    { getAnalyticsEvent, saveAnalyticsEvent },
+    { getAnalyticsEvent, saveAnalyticsEvent, lock },
     testing,
   ) => {
     // Ensure a single setInterval call, even if multiple instances of SendEvent.
@@ -53,60 +54,71 @@ export const RecordAnalyticsEvents = (
         // This is intentional, to test that the system is working in production
         // console.log('Incrementing event records:', allEventIds);
 
-        // TODORedLock
+        const lockIds = allEventIds.map((eventId) =>
+          analyticsEventLock(eventId),
+        );
 
-        // Get the current version for all event records to be incremented.
-        // Note that a given record may be incremented more than once.
-        const existingAnalyticsEvents = (
+        await lock(lockIds, async () => {
+          // Get the current version for all event records to be incremented.
+          // Note that a given record may be incremented more than once.
+          const existingAnalyticsEvents = (
+            await Promise.all(
+              allEventIds.map((eventId) =>
+                getAnalyticsEvent(eventId),
+              ),
+            )
+          )
+            .filter(
+              (result) => result.outcome === 'success',
+            )
+            .map((d) => d.value.data);
+
+          // Build a lookup table by id.
+          const analyticsEvents: Map<
+            AnalyticsEventId,
+            AnalyticsEvent
+          > = new Map(
+            existingAnalyticsEvents.map(
+              (analyticsEvent) => [
+                analyticsEvent.id,
+                analyticsEvent,
+              ],
+            ),
+          );
+
+          // For each queue entry, increment its records (mutating recordsByID).
+          for (const { eventIds, date } of previousQueue) {
+            for (const eventId of eventIds) {
+              const analyticsEvent = analyticsEvents.get(
+                eventId,
+              ) || {
+                id: eventId,
+                intervals: {},
+              };
+              const newAnalyticsEvent = {
+                ...analyticsEvent,
+                intervals: increment(
+                  analyticsEvent.intervals,
+                  date,
+                  maxEntries,
+                ),
+              };
+              analyticsEvents.set(
+                eventId,
+                newAnalyticsEvent,
+              );
+            }
+          }
+
+          // Save the updated events.
           await Promise.all(
             allEventIds.map((eventId) =>
-              getAnalyticsEvent(eventId),
-            ),
-          )
-        )
-          .filter((result) => result.outcome === 'success')
-          .map((d) => d.value.data);
-
-        // Build a lookup table by id.
-        const analyticsEvents: Map<
-          AnalyticsEventId,
-          AnalyticsEvent
-        > = new Map(
-          existingAnalyticsEvents.map((analyticsEvent) => [
-            analyticsEvent.id,
-            analyticsEvent,
-          ]),
-        );
-
-        // For each queue entry, increment its records (mutating recordsByID).
-        for (const { eventIds, date } of previousQueue) {
-          for (const eventId of eventIds) {
-            const analyticsEvent = analyticsEvents.get(
-              eventId,
-            ) || {
-              id: eventId,
-              intervals: {},
-            };
-            const newAnalyticsEvent = {
-              ...analyticsEvent,
-              intervals: increment(
-                analyticsEvent.intervals,
-                date,
-                maxEntries,
+              saveAnalyticsEvent(
+                analyticsEvents.get(eventId),
               ),
-            };
-            analyticsEvents.set(eventId, newAnalyticsEvent);
-          }
-        }
-
-        // Save the updated events.
-        await Promise.all(
-          allEventIds.map((eventId) =>
-            saveAnalyticsEvent(
-              analyticsEvents.get(eventId),
             ),
-          ),
-        );
+          );
+        });
       }
     };
 

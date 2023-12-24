@@ -19,13 +19,25 @@ export const saveLock = (
 ): ResourceLockId =>
   `save-${entityLock(entityName, entityId)}`;
 
+export const infoLock = (vizId: VizId): ResourceLockId =>
+  entityLock('Info', vizId);
+
+export const contentLock = (vizId: VizId): ResourceLockId =>
+  entityLock('Content', vizId);
+
 // Locks an entire viz, including its info and content.
 export const vizLocks = (
   vizId: VizId,
 ): Array<ResourceLockId> => [
-  entityLock('Info', vizId),
-  entityLock('Content', vizId),
+  infoLock(vizId),
+  contentLock(vizId),
 ];
 
 export const userLock = (userId: UserId): ResourceLockId =>
   entityLock('User', userId);
+
+///analyticsEventLock
+
+export const analyticsEventLock = (
+  eventId: string,
+): ResourceLockId => entityLock('AnalyticsEvent', eventId);

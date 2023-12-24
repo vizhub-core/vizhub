@@ -65,7 +65,6 @@ export const DatabaseGateways = ({
   };
 
   // A generic "save" implementation for ShareDB.
-  // TODORedLock
   const shareDBSave =
     (entityName: EntityName, collectionName: string) =>
     async (entity) => {
@@ -203,7 +202,6 @@ export const DatabaseGateways = ({
       });
 
   // A generic "save" implementation for MongoDB.
-  // TODORedLock
   const mongoDBSave = (collectionName) => {
     const collection =
       mongoDBDatabase.collection(collectionName);
