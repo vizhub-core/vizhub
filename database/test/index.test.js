@@ -20,7 +20,12 @@ describe('DatabaseGateways', async () => {
         'mongodb://localhost:27017/vizhub-testing',
     });
 
-  const { redisClient } = await initializeRedis();
+  // const redisClient = await initializeRedis({
+  //   legacyMode: false,
+  // });
+  const redisClientLegacy = await initializeRedis({
+    legacyMode: true,
+  });
 
   const redlock = await initializeRedlock();
 
@@ -40,7 +45,7 @@ describe('DatabaseGateways', async () => {
       const { shareDBConnection } = await initializeShareDB(
         {
           mongoDBConnection,
-          redisClient,
+          redisClient: redisClientLegacy,
         },
       );
 

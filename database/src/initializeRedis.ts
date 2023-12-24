@@ -48,10 +48,10 @@ export const initializeRedis = async ({
   // Patch the client to support `evalsha`
   // see https://github.com/mike-marcacci/node-redlock/issues/286
 
-  if (!(redisClient as any).evalsha) {
-    (redisClient as any).evalsha =
-      redisClient.evalSha.bind(redisClient);
-  }
+  // if (!(redisClient as any).evalsha) {
+  //   (redisClient as any).evalsha =
+  //     redisClient.evalSha.bind(redisClient);
+  // }
 
   return redisClient;
 };

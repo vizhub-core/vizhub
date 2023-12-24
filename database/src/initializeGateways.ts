@@ -35,9 +35,9 @@ export const initializeGateways = async ({
       env,
     });
 
-  const redisClient = await initializeRedis({
-    legacyMode: false,
-  });
+  // const redisClient = await initializeRedis({
+  //   legacyMode: false,
+  // });
   const redisClientLegacy = await initializeRedis({
     legacyMode: true,
   });
@@ -52,7 +52,7 @@ export const initializeGateways = async ({
   // TODO initialize postgres via Supabase
   // const supabase = initializeSupabase();
 
-  const redlock = await initializeRedlock(redisClient);
+  const redlock = await initializeRedlock();
 
   // For ease of development, the DatabaseGateways are implemented in JavaScript.
   // @ts-ignore
