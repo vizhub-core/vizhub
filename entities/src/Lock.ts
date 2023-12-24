@@ -6,8 +6,5 @@ import { CommitId, VizId } from '.';
 // The same pattern holds for other entities.
 export type ResourceLockId = string;
 
-export const vizLockId = (vizId: VizId): ResourceLockId =>
+export const vizLock = (vizId: VizId): ResourceLockId =>
   `viz:${vizId}`;
-export const commitLockId = (
-  commitId: CommitId,
-): ResourceLockId => `commit:${commitId}`;

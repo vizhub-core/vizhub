@@ -455,9 +455,9 @@ export interface Gateways {
   // const lock = async (lockIds: Array<ResourceLockId>, fn) => {
   //   await redlock.using(lockIds, 5000, fn);
   // };
-  lock(
+  lock<T>(
     lockIds: Array<ResourceLockId>,
     // an async function that runs with the locks:
-    fn: () => Promise<void>,
-  ): Promise<void>;
+    fn: () => Promise<T>,
+  ): Promise<T>;
 }

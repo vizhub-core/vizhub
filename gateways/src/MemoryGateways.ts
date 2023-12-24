@@ -23,6 +23,7 @@ import {
   ResourceId,
   EntityName,
   ResourceLockId,
+  Info,
 } from 'entities';
 import { fakeSnapshot } from 'entities/test/fixtures';
 import { ok, err, Result } from './Result';
@@ -123,11 +124,11 @@ export const MemoryGateways = (): Gateways => {
       }
     };
 
-  const getForks = async (id: EntityId) =>
+  const getForks = async (id: VizId) =>
     ok(
       Object.values(documents.Info)
         .filter(({ forkedFrom }) => forkedFrom === id)
-        .map(fakeSnapshot),
+        .map(fakeSnapshot<Info>),
     );
 
   const getInfos = async ({
@@ -154,7 +155,7 @@ export const MemoryGateways = (): Gateways => {
             i >= pageNumber * pageSize &&
             i < (pageNumber + 1) * pageSize,
         )
-        .map(fakeSnapshot),
+        .map(fakeSnapshot<Info>),
     );
   };
 
@@ -359,22 +360,42 @@ export const MemoryGateways = (): Gateways => {
   };
 
   // Populate non-CRUD methods.
-  let memoryGateways = {
+  let memoryGateways: Gateways = {
     getForks,
     getInfos,
+
+    // TODO (maybe): make TypeScript happy
+    // Not sure it's worth it as we'd need to unroll
+    // the spread AND for loop above, filling in
+    // actual entity types for each entity name.
+
+    // @ts-ignore
     incrementForksCount,
+    // @ts-ignore
     decrementForksCount,
+    // @ts-ignore
     incrementUpvotesCount,
+    // @ts-ignore
     decrementUpvotesCount,
+    // @ts-ignore
     getCommitAncestors,
+    // @ts-ignore
     getFolderAncestors,
+    // @ts-ignore
     getUserByUserName,
+    // @ts-ignore
     getUserByEmails,
+    // @ts-ignore
     getUsersByIds,
+    // @ts-ignore
     getPermissions,
+    // @ts-ignore
     saveVizEmbedding,
+    // @ts-ignore
     getVizEmbedding,
+    // @ts-ignore
     deleteVizEmbedding,
+    // @ts-ignore
     knnVizEmbeddingSearch,
   };
 
@@ -401,17 +422,10 @@ export const MemoryGateways = (): Gateways => {
   //   fn: () => Promise<void>,
   // ): Promise<void>;
 
-  memoryGateways.lock = async (
+  memoryGateways.lock = async <T>(
     lockIds: Array<ResourceLockId>,
-    fn: () => Promise<void>,
-  ) => {
-    await fn();
-  };
+    fn: () => Promise<T>,
+  ) => await fn();
 
-  // TODO (maybe): make TypeScript happy
-  // Not sure it's worth it as we'd need to unroll
-  // the spread AND for loop above, filling in
-  // actual entity types for each entity name.
-  // @ts-expect-error
-  return memoryGateways as Gateways;
+  return memoryGateways;
 };
