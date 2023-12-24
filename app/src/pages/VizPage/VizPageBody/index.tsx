@@ -24,7 +24,6 @@ import {
   getLicense,
   getHeight,
   getUserDisplayName,
-  formatTimestamp,
 } from 'entities';
 import { useRuntime } from 'runtime';
 import { VizPageHead, VizPageViewer } from 'components';
