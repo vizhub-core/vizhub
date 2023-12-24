@@ -631,6 +631,7 @@ export const DatabaseGateways = ({
   );
 
   let databaseGateways = {
+    type: 'DatabaseGateways',
     getForks,
     getInfos,
     incrementForksCount,

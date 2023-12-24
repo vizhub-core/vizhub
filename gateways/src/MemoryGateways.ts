@@ -361,6 +361,7 @@ export const MemoryGateways = (): Gateways => {
 
   // Populate non-CRUD methods.
   let memoryGateways: Gateways = {
+    type: 'MemoryGateways',
     getForks,
     getInfos,
 
@@ -422,9 +423,9 @@ export const MemoryGateways = (): Gateways => {
   //   fn: () => Promise<void>,
   // ): Promise<void>;
 
-  memoryGateways.lock = async (
+  memoryGateways.lock = async <T>(
     lockIds: Array<ResourceLockId>,
-    fn: () => Promise<void>,
+    fn: () => Promise<T>,
   ) => await fn();
 
   return memoryGateways;

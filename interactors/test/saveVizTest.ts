@@ -1,12 +1,12 @@
 import { describe, it, expect, assert } from 'vitest';
 import { primordialViz } from 'entities/test/fixtures';
-import { initGateways } from './initGateways';
+import { initGateways } from 'gateways/test';
 import { SaveViz } from '../src';
 
 export const saveVizTest = () => {
   describe('saveViz', async () => {
     it('saveViz', async () => {
-      const gateways = initGateways();
+      const gateways = await initGateways();
       const { getInfo, getContent } = gateways;
       const saveViz = SaveViz(gateways);
 

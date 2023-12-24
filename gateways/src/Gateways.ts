@@ -62,6 +62,7 @@ import { ImageHash } from 'entities/src/Images';
 export const pageSize = 50;
 
 export interface Gateways {
+  type: 'DatabaseGateways' | 'MemoryGateways';
   // ***************************************************************
   // ******************** CRUD Operations **************************
   // ***************************************************************

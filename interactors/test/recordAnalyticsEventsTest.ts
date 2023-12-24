@@ -1,14 +1,13 @@
 import { describe, it, expect } from 'vitest';
 import { ts1, ts2, ts3 } from 'entities/test/fixtures';
-import { initGateways } from './initGateways';
-
+import { initGateways } from 'gateways/test';
 import { RecordAnalyticsEvents } from '../src';
 // Inspired by
 // https://github.com/vizhub-core/vizhub/blob/76d4ca43a8b0f3c543919ccc66a7228d75ba37cd/vizhub-v2/packages/useCases/test/eventRecords.js
 export const recordAnalyticsEventsTest = () => {
   describe('recordAnalyticsEvent', async () => {
     it('should create a new analytics event', async () => {
-      const gateways = initGateways();
+      const gateways = await initGateways();
       const { getAnalyticsEvent } = gateways;
       const recordAnalyticsEvents = RecordAnalyticsEvents(
         gateways,
@@ -54,7 +53,7 @@ export const recordAnalyticsEventsTest = () => {
     });
 
     it('should update existing analytics events', async () => {
-      const gateways = initGateways();
+      const gateways = await initGateways();
       const { getAnalyticsEvent } = gateways;
       const recordAnalyticsEvents = RecordAnalyticsEvents(
         gateways,
@@ -107,7 +106,7 @@ export const recordAnalyticsEventsTest = () => {
     });
 
     it('should update multiple nested analytics events', async () => {
-      const gateways = initGateways();
+      const gateways = await initGateways();
       const { getAnalyticsEvent } = gateways;
       const recordAnalyticsEvents = RecordAnalyticsEvents(
         gateways,

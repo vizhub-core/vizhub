@@ -1,7 +1,7 @@
 // See also
 // https://github.com/vizhub-core/vizhub/blob/main/vizhub-v3/vizhub-interactors/test/FindOrCreateUserTest.ts
 import { describe, it, expect, assert } from 'vitest';
-import { initGateways } from './initGateways';
+import { initGateways } from 'gateways/test';
 import { UpdateOrCreateUser } from '../src';
 import { User } from 'entities';
 
@@ -52,7 +52,7 @@ export const expectedUser: User = {
 export const updateOrCreateUserTest = () => {
   describe('updateOrCreateUser', async () => {
     it('should create a new user', async () => {
-      const gateways = initGateways();
+      const gateways = await initGateways();
       const { getUser } = gateways;
       const updateOrCreateUser =
         UpdateOrCreateUser(gateways);
@@ -71,7 +71,7 @@ export const updateOrCreateUserTest = () => {
     });
 
     it('should update an existing user', async () => {
-      const gateways = initGateways();
+      const gateways = await initGateways();
       const { saveUser, getUser } = gateways;
       const updateOrCreateUser =
         UpdateOrCreateUser(gateways);
@@ -104,7 +104,7 @@ export const updateOrCreateUserTest = () => {
     });
 
     it('should update an existing user and preserve plan', async () => {
-      const gateways = initGateways();
+      const gateways = await initGateways();
       const { saveUser, getUser } = gateways;
       const updateOrCreateUser =
         UpdateOrCreateUser(gateways);
@@ -139,7 +139,7 @@ export const updateOrCreateUserTest = () => {
     });
 
     //    it('should update an existing user', async () => {
-    //      const gateways = initGateways();
+    //      const gateways = await initGateways();
     //      const { saveUser } = gateways;
     //      const updateOrCreateUser = UpdateOrCreateUser(gateways);
     //

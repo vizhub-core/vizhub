@@ -1,6 +1,6 @@
 import { describe, it, expect, assert } from 'vitest';
 import { GetImage } from '../src';
-import { initGateways } from './initGateways';
+import { initGateways } from 'gateways/test';
 import {
   sampleImageBase64,
   primordialCommit,
@@ -12,7 +12,7 @@ export const getImageTest = () => {
   describe('GetImage', () => {
     // TODO bring this back
     it.skip('GetImage, success case', async () => {
-      const gateways = initGateways();
+      const gateways = await initGateways();
       const {
         saveCommit,
         saveInfo,
@@ -35,7 +35,7 @@ export const getImageTest = () => {
     });
 
     it('GetImage, commit retrieval failure', async () => {
-      const gateways = initGateways();
+      const gateways = await initGateways();
       const getImage = GetImage(gateways);
 
       const result = await getImage({
@@ -51,7 +51,7 @@ export const getImageTest = () => {
 
     // TODO bring this back, but for GetThumbnail
     it.skip('GetImage, info retrieval failure', async () => {
-      const gateways = initGateways();
+      const gateways = await initGateways();
       const { saveCommit } = gateways;
       const getImage = GetImage(gateways);
 
@@ -71,7 +71,7 @@ export const getImageTest = () => {
 
     // TODO finish this one
     it.skip('GetImage, image metadata retrieval failure', async () => {
-      const gateways = initGateways();
+      const gateways = await initGateways();
       const { saveCommit, saveInfo } = gateways;
       const getImage = GetImage(gateways);
 
@@ -94,7 +94,7 @@ export const getImageTest = () => {
 
     // TODO bring this back, but for GetThumbnail
     it.skip('GetImage, access control failure', async () => {
-      const gateways = initGateways();
+      const gateways = await initGateways();
       const { saveCommit, saveInfo } = gateways;
       const getImage = GetImage(gateways);
 

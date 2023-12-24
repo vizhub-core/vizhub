@@ -4,4 +4,7 @@ export { sampleEntities } from '../test/crudTests';
 // in the database package as well, as part of those tests.
 export { gatewaysTests } from './gatewaysTests';
 
-export { setInitGateways } from './initGateways';
+export {
+  initGateways,
+  setInitGateways,
+} from './initGateways';

@@ -1,6 +1,6 @@
 import { describe, it, expect, assert } from 'vitest';
 import { primordialViz, ts3 } from 'entities/test/fixtures';
-import { initGateways } from './initGateways';
+import { initGateways } from 'gateways/test';
 import { TrashViz, SaveViz } from '../src';
 
 // Tests interactors related to "trash",
@@ -10,7 +10,7 @@ export const trashTest = () => {
     // TODO test that this operation
     // sets `forkedFrom` on its forks
     it('trashViz', async () => {
-      const gateways = initGateways();
+      const gateways = await initGateways();
       const { getInfo } = gateways;
       const saveViz = SaveViz(gateways);
 
