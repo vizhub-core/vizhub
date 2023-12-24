@@ -25,8 +25,5 @@ export const infoLock = (vizId: VizId): ResourceLockId =>
 export const userLock = (userId: UserId): ResourceLockId =>
   entityLock('User', userId);
 
-///analyticsEventLock
-
-export const analyticsEventLock = (
-  eventId: string,
-): ResourceLockId => entityLock('AnalyticsEvent', eventId);
+export const analyticsEventLock: ResourceLockId =
+  entityLock('AnalyticsEvent', 'any');

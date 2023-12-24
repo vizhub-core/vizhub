@@ -10,9 +10,11 @@
     "prettier": "prettier {*.*,**/*.*} --single-quote --write",
     "dev": "node server.js",
     "build": "npm run build:client && npm run build:server",
-    "build:client": "vite build --outDir dist/client",
+    "old-build:client": "vite build --outDir dist/client",
+    "build:client": "NODE_ENV=development vite build --mode development --outDir dist/client",
     "build:server": "vite build --ssr src/entry-server.tsx --outDir dist/server",
-    "serve": "NODE_ENV=production node server"
+    "old-serve": "NODE_ENV=production node server",
+    "serve": "node server.js"
   },
   "repository": {
     "type": "git",
