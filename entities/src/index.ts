@@ -182,7 +182,6 @@ export type EntityName =
   | 'StoredImage';
 
 export {
-  formatTimestamp,
   getFileText,
   getHeight,
   getLicense,
