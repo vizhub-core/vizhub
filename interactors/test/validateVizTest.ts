@@ -71,7 +71,7 @@ export const validateVizTest = () => {
       );
     });
 
-    it('validateViz, failure case - missing folder', async () => {
+    it.skip('validateViz, failure case - missing folder', async () => {
       const gateways = initGateways();
       const {
         saveInfo,

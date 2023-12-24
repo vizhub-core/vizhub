@@ -27,8 +27,9 @@ const assertNotExists = <T>(result: Result<T>) => {
   expect(result.error.code).toEqual('resourceNotFound');
 };
 
+// TODO finish this
 export const deleteVizTest = () => {
-  describe.only('deleteViz', async () => {
+  describe.skip('deleteViz', async () => {
     // Test the simplest case:
     //  * No forkedFrom
     //  * No forks

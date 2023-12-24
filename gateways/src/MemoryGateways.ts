@@ -422,9 +422,9 @@ export const MemoryGateways = (): Gateways => {
   //   fn: () => Promise<void>,
   // ): Promise<void>;
 
-  memoryGateways.lock = async <T>(
+  memoryGateways.lock = async (
     lockIds: Array<ResourceLockId>,
-    fn: () => Promise<T>,
+    fn: () => Promise<void>,
   ) => await fn();
 
   return memoryGateways;
