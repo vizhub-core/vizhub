@@ -54,11 +54,7 @@ export const RecordAnalyticsEvents = (
         // This is intentional, to test that the system is working in production
         // console.log('Incrementing event records:', allEventIds);
 
-        const lockIds = allEventIds.map((eventId) =>
-          analyticsEventLock(eventId),
-        );
-
-        await lock(lockIds, async () => {
+        await lock([analyticsEventLock], async () => {
           // Get the current version for all event records to be incremented.
           // Note that a given record may be incremented more than once.
           const existingAnalyticsEvents = (
