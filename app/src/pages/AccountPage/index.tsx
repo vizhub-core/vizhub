@@ -75,6 +75,7 @@ const Body = () => {
     <AccountPageBody
       isUserAuthenticated={authenticatedUser !== null}
       pricingHref={'/pricing'}
+      loginHref={'/login'}
       onUnsubscribeClick={handleUnsubscribeClick}
       currentPlan={authenticatedUser?.plan}
     />

@@ -71,9 +71,14 @@ export interface VizKitAPI {
       userId: UserId,
     ) => Promise<Result<Success>>;
 
-    createCheckoutSession: (userId: UserId) => Promise<{
-      sessionId: string;
-    }>;
+    createCheckoutSession: (options: {
+      userId: UserId;
+      isMonthly: boolean;
+    }) => Promise<
+      Result<{
+        sessionURL: string;
+      }>
+    >;
   };
 }
 
@@ -161,11 +166,15 @@ export const VizKit = ({
           },
         ),
 
-      createCheckoutSession: async (userId: UserId) => {
+      createCheckoutSession: async ({
+        userId,
+        isMonthly,
+      }) => {
         const result = await postJSON(
           `${baseUrl}/create-checkout-session`,
           {
             userId,
+            isMonthly,
           },
         );
 
