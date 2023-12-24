@@ -4,7 +4,7 @@ import {
   primordialCommit,
   primordialViz,
   sampleFolder,
-  sampleVizEmbedding,
+  // sampleVizEmbedding,
   userJoe,
 } from 'entities/test/fixtures';
 import { initGateways } from 'gateways/test';
@@ -127,7 +127,7 @@ export const validateVizTest = () => {
         saveCommit,
         saveUser,
         saveFolder,
-        saveVizEmbedding,
+        // saveVizEmbedding,
       } = gateways;
       const validateViz = ValidateViz(gateways);
       await saveInfo(primordialViz.info);
@@ -135,7 +135,7 @@ export const validateVizTest = () => {
       await saveCommit(primordialCommit);
       await saveUser(userJoe);
       await saveFolder(sampleFolder);
-      await saveVizEmbedding(sampleVizEmbedding);
+      // await saveVizEmbedding(sampleVizEmbedding);
 
       const result = await validateViz(
         primordialViz.info.id,

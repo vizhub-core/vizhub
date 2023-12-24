@@ -7,7 +7,8 @@ import { interactorsTests } from 'interactors/test';
 import { DatabaseGateways } from '../src';
 import { initializeMongoDB } from '../src/initializeMongoDB';
 import { initializeShareDB } from '../src/initializeShareDB';
-import { initializeSupabase } from '../src/initializeSupabase';
+import { initializeRedis } from '../src/initializeRedis';
+import { initializeRedlock } from '../src/initializeRedlock';
 
 describe('DatabaseGateways', async () => {
   // Make the MongoDB connection only once, for all tests,
@@ -19,6 +20,10 @@ describe('DatabaseGateways', async () => {
         'mongodb://localhost:27017/vizhub-testing',
     });
 
+  const { redisClient } = await initializeRedis();
+
+  const redlock = await initializeRedlock();
+
   beforeAll(() => {
     // Swap out the initGateways function used by gatewaysTests
     // so that it uses an instance of DatabaseGateways
@@ -29,21 +34,20 @@ describe('DatabaseGateways', async () => {
       await mongoDBDatabase.dropDatabase();
 
       // Create a new ShareDB instance for each test,
-      // otherwise context leaks between them as
+      // otherwise context leaks between them because
       // ShareDB keeps things in memory that are supposed to sync
       // with Mongo.
       const { shareDBConnection } = await initializeShareDB(
         {
           mongoDBConnection,
+          redisClient,
         },
       );
-
-      const supabase = initializeSupabase();
 
       const databaseGateways = DatabaseGateways({
         shareDBConnection,
         mongoDBDatabase,
-        supabase,
+        redlock,
       });
 
       return databaseGateways;

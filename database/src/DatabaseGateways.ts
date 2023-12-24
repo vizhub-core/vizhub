@@ -11,6 +11,7 @@ import {
   CommitId,
   EntityName,
   FolderId,
+  ResourceLockId,
   UserName,
   defaultSortField,
   defaultSortOrder,
@@ -26,7 +27,7 @@ import {
 import { otType, diff } from 'ot';
 import { toCollectionName } from './toCollectionName';
 import { pageSize } from 'gateways/src/Gateways';
-import { embeddingMethods } from './embeddingMethods';
+// import { embeddingMethods } from './embeddingMethods';
 
 const debug = false;
 
@@ -35,6 +36,7 @@ const debug = false;
 export const DatabaseGateways = ({
   shareDBConnection,
   mongoDBDatabase,
+  redlock,
   // supabase,
 }) => {
   // A generic "save" implementation for ShareDB.
@@ -630,6 +632,22 @@ export const DatabaseGateways = ({
     -1,
   );
 
+  // memoryGateways.lock = async <T>(
+  //   lockIds: Array<ResourceLockId>,
+  //   fn: () => Promise<T>,
+  // ) => await fn();
+  const lock = async <T>(
+    lockIds: Array<ResourceLockId>,
+    fn: () => Promise<T>,
+  ) => {
+    let returnValue: T;
+    await redlock.using(lockIds, 5000, async () => {
+      returnValue = await fn();
+    });
+    // @ts-ignore
+    return returnValue;
+  };
+
   let databaseGateways = {
     type: 'DatabaseGateways',
     getForks,
@@ -644,6 +662,7 @@ export const DatabaseGateways = ({
     getUserByEmails,
     getUsersByIds,
     getPermissions,
+    lock,
   };
 
   for (const entityName of crudEntityNames) {
@@ -657,11 +676,11 @@ export const DatabaseGateways = ({
     };
   }
 
-  // console.log('supabase defined?', supabase);
-  databaseGateways = {
-    ...databaseGateways,
-    // ...embeddingMethods(supabase),
-  };
+  // // console.log('supabase defined?', supabase);
+  // databaseGateways = {
+  //   ...databaseGateways,
+  //   // ...embeddingMethods(supabase),
+  // };
 
   return databaseGateways;
 };

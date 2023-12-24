@@ -452,10 +452,6 @@ export interface Gateways {
     k: number,
   ): Promise<Result<Array<VizId>>>;
 
-  // TODO implement it like this in database gateways:
-  // const lock = async (lockIds: Array<ResourceLockId>, fn) => {
-  //   await redlock.using(lockIds, 5000, fn);
-  // };
   lock<T>(
     lockIds: Array<ResourceLockId>,
     // an async function that runs with the locks:

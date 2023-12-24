@@ -54,7 +54,7 @@ export const initializeGateways = async ({
   const gateways: Gateways = DatabaseGateways({
     shareDBConnection,
     mongoDBDatabase,
-    // redlock,
+    redlock,
     // supabase,
   }) as Gateways;
 
