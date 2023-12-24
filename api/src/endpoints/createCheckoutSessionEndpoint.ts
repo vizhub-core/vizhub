@@ -1,18 +1,21 @@
 import express from 'express';
-import { err, ok } from 'gateways';
+import { Gateways, err, ok } from 'gateways';
 import { authenticationRequiredError } from 'gateways/src/errors';
 import { getAuthenticatedUserId } from '../parseAuth0User';
 import { getStripe } from './getStripe';
-import {
-  RequestWithAuth,
-  ResponseWithJSON,
-} from '../types';
+import { User } from 'entities';
 
-export const createCheckoutSession = ({ app }) => {
+export const createCheckoutSession = ({
+  app,
+  gateways,
+}: {
+  app: express.Express;
+  gateways: Gateways;
+}) => {
   app.post(
     '/api/create-checkout-session',
     express.json({ type: 'application/json' }),
-    async (req: RequestWithAuth, res: ResponseWithJSON) => {
+    async (req, res) => {
       const authenticatedUserId =
         getAuthenticatedUserId(req);
 
@@ -25,19 +28,40 @@ export const createCheckoutSession = ({ app }) => {
         return;
       }
 
+      const userResult = await gateways.getUser(
+        authenticatedUserId,
+      );
+      if (userResult.outcome === 'failure') {
+        res.json(err(userResult.error));
+        return;
+      }
+      const authenticatedUser: User = userResult.value.data;
+
       const stripe = getStripe();
+
+      // @ts-ignore
+      const urlBase = req.headers.origin;
+
+      // Redirect to the profile page after successful payment.
+      const success_url = `${urlBase}/${authenticatedUser.userName}`;
+      const cancel_url = success_url;
+
+      const { isMonthly } = req.body;
+
+      const price = isMonthly
+        ? process.env.VIZHUB_PREMIUM_MONTHLY_STRIPE_PRICE_ID
+        : process.env.VIZHUB_PREMIUM_ANNUAL_STRIPE_PRICE_ID;
 
       // https://stripe.com/docs/api/checkout/sessions/create#create_checkout_session-client_reference_id
       const session = await stripe.checkout.sessions.create(
         {
           mode: 'subscription',
-          // TODO consider making the base URL configurable
-          success_url: 'https://beta.vizhub.com/account',
-          cancel_url: 'https://beta.vizhub.com/account',
+          success_url,
+          cancel_url,
           client_reference_id: authenticatedUserId,
           line_items: [
             {
-              price: process.env.VIZHUB_STRIPE_PRICE_ID,
+              price,
               quantity: 1,
             },
           ],

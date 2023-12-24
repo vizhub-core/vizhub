@@ -1,11 +1,12 @@
 import express from 'express';
-
 import { UserId } from 'entities';
 import { getStripe } from './getStripe';
 import { UpdateUserStripeId } from 'interactors';
 
+const debug = false;
+
 // Critical for Stripe development - run this incantation
-// stripe listen --forward-to localhost:3000/api/stripe-webhooks
+// stripe listen --forward-to localhost:5173/api/stripe-webhook
 
 // Click "Try it online" from this page to trigger Webhook
 // https://stripe.com/docs/stripe-cli
@@ -23,6 +24,12 @@ export const stripeWebhookEndpoint = ({
     '/api/stripe-webhook',
     express.raw({ type: 'application/json' }),
     async (request, response) => {
+      if (debug) {
+        console.log(
+          '[stripe-webhook] request.body',
+          request.body,
+        );
+      }
       // Verify signature to prevent spoofing
       // See https://stripe.com/docs/webhooks#verify-official-libraries
       const sig = request.headers['stripe-signature'];
@@ -33,11 +40,21 @@ export const stripeWebhookEndpoint = ({
       const stripe = getStripe();
 
       try {
+        if (debug) {
+          console.log(
+            '[stripe-webhook] verifying signature',
+          );
+        }
         event = stripe.webhooks.constructEvent(
           request.body,
           sig,
           endpointSecret,
         );
+        if (debug) {
+          console.log(
+            '[stripe-webhook] successfully verified signature!',
+          );
+        }
       } catch (err) {
         console.log(err);
         return response
@@ -46,9 +63,21 @@ export const stripeWebhookEndpoint = ({
       }
 
       // console.log(JSON.stringify(event, null, 2));
+      if (debug) {
+        console.log(
+          '[stripe-webhook] received event',
+          event,
+        );
+      }
 
       // Handle the event
       if (event.type === 'checkout.session.completed') {
+        if (debug) {
+          console.log(
+            '[stripe-webhook] received checkout.session.completed event',
+          );
+        }
+
         const checkoutSessionCompleted = event.data.object;
 
         const userId: UserId =
@@ -56,6 +85,14 @@ export const stripeWebhookEndpoint = ({
 
         const stripeCustomerId =
           checkoutSessionCompleted.customer;
+
+        if (debug) {
+          console.log(
+            '[stripe-webhook] Updating user stripe id',
+            userId,
+            stripeCustomerId,
+          );
+        }
 
         const result = await updateUserStripeId({
           userId,

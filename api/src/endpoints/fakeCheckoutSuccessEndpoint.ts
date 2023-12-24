@@ -34,6 +34,7 @@ export const fakeCheckoutSuccessEndpoint = ({
           return res.send(missingParameterError('userId'));
         }
 
+
         lock([userLock(userId)], async () => {
           const userResult = await getUser(userId);
           if (userResult.outcome === 'failure') {
@@ -41,7 +42,7 @@ export const fakeCheckoutSuccessEndpoint = ({
           }
           const user: User = userResult.value.data;
 
-          user.plan = 'pro';
+          user.plan = 'premium';
           // TODO stripe
           // user.stripeCustomerId = 'fake-stripe-customer-id';
           // user.stripeSubscriptionId = 'fake-stripe-subscription-id';
