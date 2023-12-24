@@ -415,16 +415,11 @@ export const DatabaseGateways = ({
               _id: firstCommitWithoutMilestone.parent,
             });
           if (commitWithMilestone === null) {
-            throw new Error(
-              'commitWithMilestone should not be null! This is a case of invalid data where the parent of a commit is undefined!\n' +
-                'firstCommitWithoutMilestone.parent: ' +
-                firstCommitWithoutMilestone.parent +
-                '\n' +
-                'ancestors: ' +
-                JSON.stringify(ancestors, null, 2) +
-                '\n' +
-                'results: ' +
-                JSON.stringify(results, null, 2),
+            return err(
+              resourceNotFoundError(
+                firstCommitWithoutMilestone.parent,
+                entityName,
+              ),
             );
           }
           ancestors.unshift(commitWithMilestone);

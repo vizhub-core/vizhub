@@ -274,7 +274,7 @@ commit.ops:
         assert(milestoneResult.outcome === 'success');
 
         // "new-commit-80" --> "80"
-        const i = id.substring(11);
+        const i = +id.substring(11);
 
         // Verify that the stored milestone content is correct
         expect(milestoneResult.value.content).toEqual(
@@ -468,7 +468,7 @@ commit.ops:
         assert(milestoneResult.outcome === 'success');
 
         // "new-commit-80" --> "80"
-        const i = id.substring(11);
+        const i = +id.substring(11);
 
         // Verify that the stored milestone content is correct
         expect(milestoneResult.value.content).toEqual(
