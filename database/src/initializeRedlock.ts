@@ -1,5 +1,8 @@
 import Client from 'ioredis';
 import Redlock from 'redlock';
+
+// TODO try https://github.com/sesamecare/redlock
+// if it still fails in prod
 import { redisURL } from './initializeRedis';
 
 export const initializeRedlock = async () => {
