@@ -194,4 +194,4 @@ export {
 } from './accessors';
 
 export type { ResourceLockId } from './Lock';
-export { vizLock } from './Lock';
+export { saveLock, vizLocks, userLock } from './Lock';
