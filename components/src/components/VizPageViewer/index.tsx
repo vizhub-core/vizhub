@@ -8,8 +8,8 @@ import {
 import { UpvoteWidget } from 'components';
 import { VisibilityPrivateSVG } from '../Icons/VisibilityPrivateSVG';
 import { VisibilityUnlistedSVG } from '../Icons/VisibilityUnlistedSVG';
-import './styles.scss';
 import { commaFormat } from '../commaFormat';
+import './styles.scss';
 
 export const VizPageViewer = ({
   vizTitle,
