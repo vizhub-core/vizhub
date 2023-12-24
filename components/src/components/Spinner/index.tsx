@@ -1,5 +1,5 @@
 // From https://github.com/vizhub-core/vizhub/commit/6ca078935b9771dc6e05a6065bcfd522a4724dcf
-import React from 'react';
+import { useEffect, useState } from 'react';
 import './styles.css';
 
 // const minRadius = 4;
@@ -39,20 +39,38 @@ export const Spinner = ({
   height = 40,
   fill = 'currentcolor',
   fadeIn = true,
-}) => (
-  <div className={`vh-spinner${fadeIn ? ' fade-in' : ''}`}>
-    <svg
-      height={height}
-      viewBox="0 0 100 100"
-      style={{ opacity: 1 }}
-    >
-      <g transform="translate(50, 50)" fill={fill}>
-        <g className="vh-spinner-dots">
-          {dots.map(({ x, y, r }, i) => (
-            <circle key={i} cx={x} cy={y} r={r}></circle>
-          ))}
-        </g>
-      </g>
-    </svg>
-  </div>
-);
+}) => {
+  const [show, setShow] = useState(false);
+
+  // Avoid SSR of all the SVG elements.
+  useEffect(() => {
+    setShow(true);
+  }, []);
+
+  return (
+    show && (
+      <div
+        className={`vh-spinner${fadeIn ? ' fade-in' : ''}`}
+      >
+        <svg
+          height={height}
+          viewBox="0 0 100 100"
+          style={{ opacity: 1 }}
+        >
+          <g transform="translate(50, 50)" fill={fill}>
+            <g className="vh-spinner-dots">
+              {dots.map(({ x, y, r }, i) => (
+                <circle
+                  key={i}
+                  cx={x}
+                  cy={y}
+                  r={r}
+                ></circle>
+              ))}
+            </g>
+          </g>
+        </svg>
+      </div>
+    )
+  );
+};
