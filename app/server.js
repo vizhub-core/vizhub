@@ -18,6 +18,9 @@ import { seoMetaTags } from './src/seoMetaTags.js';
 // TODO import this from package.json
 const version = '3.0.0-beta.26';
 
+// Generate a random server ID for debugging scaling.
+const serverId = Math.random().toString(36).slice(2);
+
 let port = 5173;
 // const pubsubTest = true;
 // if (pubsubTest) {
@@ -371,6 +374,7 @@ async function createServer(
 
       // Expose the current version to the client.
       pageData.version = version;
+      pageData.serverId = serverId;
 
       const titleSanitized = xss(pageData.title);
       const descriptionSanitized = xss(

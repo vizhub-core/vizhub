@@ -35,19 +35,24 @@ export const initializeGateways = async ({
       env,
     });
 
-  const { redisClient } = await initializeRedis();
+  const redisClient = await initializeRedis({
+    legacyMode: false,
+  });
+  const redisClientLegacy = await initializeRedis({
+    legacyMode: true,
+  });
 
   const { shareDBBackend, shareDBConnection } =
     await initializeShareDB({
       mongoDBConnection,
-      redisClient,
+      redisClient: redisClientLegacy,
       attachMiddleware,
     });
 
   // TODO initialize postgres via Supabase
   // const supabase = initializeSupabase();
 
-  const redlock = await initializeRedlock();
+  const redlock = await initializeRedlock(redisClient);
 
   // For ease of development, the DatabaseGateways are implemented in JavaScript.
   // @ts-ignore

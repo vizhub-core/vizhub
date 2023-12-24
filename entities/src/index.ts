@@ -196,8 +196,6 @@ export {
 export type { ResourceLockId } from './Lock';
 export {
   infoLock,
-  contentLock,
-  vizLocks,
   saveLock,
   userLock,
   analyticsEventLock,
