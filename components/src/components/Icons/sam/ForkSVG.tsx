@@ -14,8 +14,6 @@ export const ForkSVG = ({ onClick = null }) => {
         r="2.5"
         stroke="currentColor"
         strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
       />
       <circle
         cx="17.5"
@@ -23,8 +21,6 @@ export const ForkSVG = ({ onClick = null }) => {
         r="2.5"
         stroke="currentColor"
         strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
       />
       <circle
         cx="12"
@@ -32,8 +28,6 @@ export const ForkSVG = ({ onClick = null }) => {
         r="2.5"
         stroke="currentColor"
         strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
       />
       <path
         d="M12 17C12 10.5714 17.5 14.4286 17.5 8"
