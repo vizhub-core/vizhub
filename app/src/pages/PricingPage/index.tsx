@@ -38,13 +38,6 @@ const Body = () => {
         'TODO handle unauthenticated user - redirect to login?',
       );
 
-      //   <Button
-      //   as="a"
-      //   href={`/login?redirect=${currentPageURL}`}
-      //   className="vh-header-button"
-      // >
-      //   Log in
-      // </Button>;
       const url = '/login?redirect=pricing';
 
       window.location.href = url;

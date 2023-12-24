@@ -7,8 +7,8 @@ import './styles.scss';
 import { Plan } from 'entities';
 
 const headerBackgroundSrc = image('pricing-header-bkg');
-const starterSpiritSrc = image('pricing-spirit-starter');
-const premiumSpiritSrc = image('pricing-spirit-premium');
+const starterSpiritSrc = image('pricing-spirit-starter-1');
+const premiumSpiritSrc = image('pricing-spirit-premium-1');
 const professionalSpiritSrc = image(
   'pricing-spirit-professional',
 );
