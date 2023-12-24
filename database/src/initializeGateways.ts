@@ -35,12 +35,17 @@ export const initializeGateways = async ({
       env,
     });
 
-  const { redisClient } = await initializeRedis();
+  // const redisClient = await initializeRedis({
+  //   legacyMode: false,
+  // });
+  const redisClientLegacy = await initializeRedis({
+    legacyMode: true,
+  });
 
   const { shareDBBackend, shareDBConnection } =
     await initializeShareDB({
       mongoDBConnection,
-      redisClient,
+      redisClient: redisClientLegacy,
       attachMiddleware,
     });
 

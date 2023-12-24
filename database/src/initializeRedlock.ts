@@ -13,6 +13,9 @@ export const initializeRedlock = async () => {
   try {
     const pingResponse = await ioRedisClient.ping();
     console.log('    Redis ping response:', pingResponse); // Should log "PONG" if successful
+    if (pingResponse !== 'PONG') {
+      throw new Error('Redis ping response was not PONG');
+    }
   } catch (error) {
     console.error('    Failed to ping Redis:', error);
     throw error; // Optionally re-throw the error to handle it outside this function
@@ -26,7 +29,7 @@ export const initializeRedlock = async () => {
 
     // The max number of times Redlock will attempt to lock a resource
     // before erroring.
-    retryCount: 10,
+    retryCount: 20,
 
     // the time in ms between attempts
     retryDelay: 200, // time in ms
@@ -38,7 +41,7 @@ export const initializeRedlock = async () => {
 
     // The minimum remaining time on a lock before an extension is automatically
     // attempted with the `using` API.
-    automaticExtensionThreshold: 500, // time in ms
+    automaticExtensionThreshold: 1000, // time in ms
   });
 
   return redlock;

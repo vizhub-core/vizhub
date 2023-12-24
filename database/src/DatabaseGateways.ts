@@ -50,7 +50,7 @@ export const DatabaseGateways = ({
   ) => {
     let returnValue: T | null = null;
 
-    await redlock.using(lockIds, 5000, async () => {
+    await redlock.using(lockIds, 10000, async () => {
       returnValue = await fn();
     });
 

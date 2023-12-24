@@ -29,7 +29,7 @@ export default defineConfig({
       // Uncomment the following to use npm link with Vite.
       // Exclude VZCode, so that we can use `npm link` locally
       // and still have it work with Vite.
-      'vzcode',
+      // 'vzcode',
     ],
 
     // Fixes "React is undefined" error with VZCode imports

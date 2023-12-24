@@ -1,6 +1,12 @@
 import { Gateways, Result, ok } from 'gateways';
 import { diff } from 'ot';
-import { VizId, Info, Commit, vizLocks } from 'entities';
+import {
+  VizId,
+  Info,
+  Commit,
+  vizLocks,
+  infoLock,
+} from 'entities';
 import { generateId } from './generateId';
 import { GetViz } from './getViz';
 import { GetContentAtCommit } from './getContentAtCommit';
@@ -20,7 +26,7 @@ export const CommitViz = (gateways: Gateways) => {
   const getContentAtCommit = GetContentAtCommit(gateways);
 
   return async (id: VizId): Promise<Result<Info>> =>
-    await lock(vizLocks(id), async () => {
+    await lock([infoLock(id)], async () => {
       const getVizResult = await getViz(id);
       if (getVizResult.outcome === 'failure')
         return getVizResult;
