@@ -31,7 +31,10 @@ export const VisibilityControl = ({
     [],
   );
   return (
-    <Form.Group className="mb-3" controlId="visibility">
+    <Form.Group
+      className="mb-3 vh-visibility-control"
+      controlId="visibility"
+    >
       <Form.Label>Visibility</Form.Label>
       <div>
         {Object.keys(visibilities)
@@ -64,17 +67,17 @@ export const VisibilityControl = ({
       {currentPlan === 'free' ? (
         <Alert
           variant="info"
-          className="my-3 p-2 d-flex flex-column"
+          className="my-3 p-3 d-flex flex-column upgrade-nudge-alert"
         >
           <strong>Want more privacy?</strong>
           <Button
             variant="primary"
             href={pricingHref}
-            className="my-2 btn-gradient fw-bold"
+            className="my-2"
           >
-            Upgrade to Pro
+            Upgrade
           </Button>
-          to make your viz private or unlisted.
+          to make your viz private.
         </Alert>
       ) : null}
     </Form.Group>

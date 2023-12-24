@@ -2,7 +2,6 @@ import { Gateways, Result, Success, ok } from 'gateways';
 import { User, UserId } from 'entities';
 
 // updateUserStripeId
-// TODO rename to upgradeUser
 //
 // * This is for when a user upgrades
 // * we link their Stripe customer ID to their user
@@ -29,8 +28,8 @@ export const UpdateUserStripeId =
       // Update the stripeCustomerId
       user.stripeCustomerId = stripeCustomerId;
 
-      // Update the plan to be pro
-      user.plan = 'pro';
+      // Update the plan to be premium
+      user.plan = 'premium';
 
       // Save the updated or newly created user.
       await saveUser(user);

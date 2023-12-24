@@ -18,13 +18,16 @@ export type EmailAddress = string;
 
 // Plan
 //  * What level of paying customer this user is.
-export type Plan = 'free' | 'pro';
+export type Plan = 'free' | 'premium' | 'professional';
 
 // Not a paying customer.
 export const FREE: Plan = 'free';
 
-// A paying customer.
-export const PRO: Plan = 'pro';
+// A paying customer on the premium plan.
+export const PREMIUM: Plan = 'premium';
+
+// A paying customer on the professional plan.
+export const PRO: Plan = 'professional';
 
 // User
 //  * A representation of a user on the platform

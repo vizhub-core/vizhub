@@ -106,6 +106,7 @@ const Body = () => {
       onFreeClick={handleFreeClick}
       isMonthly={isMonthly}
       setIsMonthly={setIsMonthly}
+      currentPlan={authenticatedUser?.plan}
     />
   );
 };

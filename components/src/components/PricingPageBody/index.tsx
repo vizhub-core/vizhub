@@ -4,6 +4,7 @@ import { Button, ButtonGroup } from '../bootstrap';
 import { Feature } from './Feature';
 import { image } from '../image';
 import './styles.scss';
+import { Plan } from 'entities';
 
 const headerBackgroundSrc = image('pricing-header-bkg');
 const starterSpiritSrc = image('pricing-spirit-starter');
@@ -38,12 +39,31 @@ const StarterFeatures = () => {
     </>
   );
 };
+
+const CurrentButton = () => (
+  <Button
+    variant="success"
+    className="pricing-page-plan-button"
+  >
+    Current
+    <GreenCheckSVG />
+  </Button>
+);
+
 export const PricingPageBody = ({
   onFreeClick,
   onProClick,
   // onEnterpriseClick,
   isMonthly,
   setIsMonthly,
+  currentPlan = 'free',
+}: {
+  onFreeClick: () => void;
+  onProClick: () => void;
+  // onEnterpriseClick: () => void;
+  isMonthly: boolean;
+  setIsMonthly: (isMonthly: boolean) => void;
+  currentPlan: Plan;
 }) => {
   const handleMonthlyClick = useCallback(() => {
     setIsMonthly(true);
@@ -107,13 +127,18 @@ export const PricingPageBody = ({
                 </div>
 
                 <p>Free forever. Ideal for students.</p>
-                <Button
-                  variant="success"
-                  className="pricing-page-plan-button"
-                >
-                  Current
-                  <GreenCheckSVG />
-                </Button>
+                {currentPlan === 'free' ? (
+                  <CurrentButton />
+                ) : (
+                  <Button
+                    variant="primary"
+                    className="pricing-page-plan-button"
+                    onClick={onFreeClick}
+                  >
+                    Downgrade
+                  </Button>
+                )}
+
                 <div className="pricing-page-plan-features">
                   <StarterFeatures />
                 </div>
@@ -141,13 +166,18 @@ export const PricingPageBody = ({
                   Ideal for freelancers and professionals.
                   30-day free trial.
                 </p>
-                <Button
-                  variant="primary"
-                  className="pricing-page-plan-button"
-                  onClick={onProClick}
-                >
-                  Upgrade
-                </Button>
+                {currentPlan === 'premium' ? (
+                  <CurrentButton />
+                ) : (
+                  <Button
+                    variant="primary"
+                    className="pricing-page-plan-button"
+                    onClick={onProClick}
+                  >
+                    Upgrade
+                  </Button>
+                )}
+
                 <div className="pricing-page-plan-features">
                   <Feature
                     title="Private Vizzes"
