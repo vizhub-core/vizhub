@@ -27,7 +27,6 @@ import {
   useShareDBDocData,
   useShareDBDocPresence,
   useShareDBDocs,
-  useShareDBDocsData,
 } from '../../useShareDBDocData';
 import { AuthenticatedUserProvider } from '../../contexts/AuthenticatedUserContext';
 import { Page, PageData } from '../Page';
