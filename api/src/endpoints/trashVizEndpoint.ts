@@ -1,6 +1,7 @@
 import express from 'express';
 import {
   Timestamp,
+  UserId,
   VizId,
   dateToTimestamp,
 } from 'entities';
@@ -10,6 +11,7 @@ import {
   missingParameterError,
 } from 'gateways';
 import { TrashViz } from 'interactors';
+import { getAuthenticatedUserId } from '../parseAuth0User';
 
 // Used for debugging trashing flow.
 const debug = false;
@@ -39,12 +41,17 @@ export const trashVizEndpoint = ({
           return;
         }
 
+        const authenticatedUserId =
+          getAuthenticatedUserId(req);
+
         const trashVizOptions: {
           id: VizId;
           timestamp: Timestamp;
+          authenticatedUserId: UserId | undefined;
         } = {
           id,
           timestamp: dateToTimestamp(new Date()),
+          authenticatedUserId,
         };
 
         if (debug) {

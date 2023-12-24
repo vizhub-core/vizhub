@@ -3,13 +3,13 @@ import {
   primordialViz,
   fakeSnapshot,
 } from 'entities/test/fixtures';
-import { initGateways } from './initGateways';
+import { initGateways } from 'gateways/test';
 import { GetViz } from '../src';
 
 export const getVizTest = () => {
   describe('getViz', async () => {
     it('getViz, success case', async () => {
-      const gateways = initGateways();
+      const gateways = await initGateways();
       const { saveInfo, saveContent } = gateways;
       const getViz = GetViz(gateways);
       await saveInfo(primordialViz.info);
@@ -28,7 +28,7 @@ export const getVizTest = () => {
     });
 
     it('getViz, failure case', async () => {
-      const gateways = initGateways();
+      const gateways = await initGateways();
       const { saveInfo, saveContent } = gateways;
       const getViz = GetViz(gateways);
       await saveInfo(primordialViz.info);

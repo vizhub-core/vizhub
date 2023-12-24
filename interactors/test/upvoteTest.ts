@@ -4,18 +4,17 @@ import {
   ts3,
   userJoe,
 } from 'entities/test/fixtures';
-import { initGateways } from './initGateways';
+import { initGateways } from 'gateways/test';
 import {
   SaveViz,
   UpvoteViz,
   generateUpvoteId,
 } from '../src';
-import { as } from 'vitest/dist/reporters-LLiOBu3g';
 
 export const upvoteTest = () => {
   describe('upvoteViz', async () => {
     it('upvoteViz', async () => {
-      const gateways = initGateways();
+      const gateways = await initGateways();
       const { getInfo, getUpvote } = gateways;
       const saveViz = SaveViz(gateways);
       const upvoteViz = UpvoteViz(gateways);

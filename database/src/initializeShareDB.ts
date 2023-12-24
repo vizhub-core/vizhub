@@ -24,6 +24,7 @@ export const initializeShareDB = async ({
         callback(null, mongoDBConnection);
       },
     }),
+    // @ts-ignore
     pubsub: ShareDBRedisPubSub({
       client: redisClient,
     }),

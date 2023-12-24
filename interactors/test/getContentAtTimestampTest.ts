@@ -6,13 +6,14 @@ import {
   primordialViz,
   ts3,
 } from 'entities/test/fixtures';
-import { initGateways } from './initGateways';
+import { initGateways } from 'gateways/test';
 import { GetContentAtTimestamp } from '../src';
+import { assert } from 'console';
 
 export const getContentAtTimestampTest = () => {
   describe('getContentAtTimestampTest', async () => {
     it('getContentAtTimestamp, 1 commit', async () => {
-      const gateways = initGateways();
+      const gateways = await initGateways();
       const { saveInfo, saveCommit } = gateways;
       const getContentAtTimestamp =
         GetContentAtTimestamp(gateways);
@@ -25,6 +26,7 @@ export const getContentAtTimestampTest = () => {
       );
 
       expect(result.outcome).toEqual('success');
+      assert(result.outcome === 'success');
       expect(result.value).toEqual(primordialViz.content);
     });
   });
