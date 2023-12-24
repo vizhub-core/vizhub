@@ -60,7 +60,35 @@ export const useRuntime = ({
     [content],
   );
 
-  const v3Runtime = useRef<V3Runtime | null>(null);
+  const v3RuntimeRef = useRef<V3Runtime | null>(null);
+
+  const getV3Runtime = useCallback(async () => {
+    if (v3RuntimeRef.current === null) {
+      // throw new Error('v3Runtime.current is null');
+      // Poll for this to be defined.
+      // const interval = setInterval(() => {
+      //   if (debug) {
+      //     console.log('polling for v3Runtime.current...');
+      //   }
+      //   if (v3RuntimeRef.current !== null) {
+      //     clearInterval(interval);
+      //     return v3RuntimeRef.current;
+      //   }
+      // }, 100);
+      return new Promise<V3Runtime>((resolve) => {
+        const interval = setInterval(() => {
+          if (debug) {
+            console.log('polling for v3Runtime.current...');
+          }
+          if (v3RuntimeRef.current !== null) {
+            clearInterval(interval);
+            resolve(v3RuntimeRef.current);
+          }
+        }, 100);
+      });
+    }
+    return v3RuntimeRef.current;
+  }, []);
 
   const vizCacheContentsRef = useRef(vizCacheContents);
 
@@ -120,7 +148,11 @@ export const useRuntime = ({
             throw new Error('iframe is null');
           }
 
-          v3Runtime.current = setupV3Runtime({
+          if (!content.id) {
+            throw new Error('content.id is not defined');
+          }
+
+          v3RuntimeRef.current = setupV3Runtime({
             vizId: content.id,
             iframe,
             setSrcdocError,
@@ -141,7 +173,14 @@ export const useRuntime = ({
     if (runtimeVersion !== 3) {
       return;
     }
+
+    // Don't run on first render.
     if (initialMount.current === true) {
+      return;
+    }
+
+    // Don't run if the viz is not visual (README.md only).
+    if (isVisual === false) {
       return;
     }
 
@@ -182,27 +221,30 @@ export const useRuntime = ({
     if (debug) {
       console.log('isInteracting', isInteracting);
     }
-    // Sanity check, should never happen.
-    if (v3Runtime.current === null) {
-      throw new Error('v3Runtime.current is null');
-    }
-    if (isInteracting) {
-      v3Runtime.current.invalidateVizCache(changedVizIds);
-    } else {
-      if (!enableManualRun) {
-        // Otherwise, debounce the updates.
-        clearTimeout(v3Timeout.current);
-        v3Timeout.current = window.setTimeout(() => {
-          // Sanity check, should never happen.
-          if (v3Runtime.current === null) {
-            throw new Error('v3Runtime.current is null');
-          }
-          v3Runtime.current.invalidateVizCache(
-            changedVizIds,
-          );
-        }, v3RunDebounceMs);
+
+    const update = async () => {
+      const v3Runtime = await getV3Runtime();
+      // Sanity check, should never happen.
+      if (v3Runtime === null) {
+        throw new Error('v3Runtime is null');
       }
-    }
+      if (isInteracting) {
+        v3Runtime.invalidateVizCache(changedVizIds);
+      } else {
+        if (!enableManualRun) {
+          // Otherwise, debounce the updates.
+          clearTimeout(v3Timeout.current);
+          v3Timeout.current = window.setTimeout(() => {
+            // Sanity check, should never happen.
+            if (v3Runtime === null) {
+              throw new Error('v3Runtime.current is null');
+            }
+            v3Runtime.invalidateVizCache(changedVizIds);
+          }, v3RunDebounceMs);
+        }
+      }
+    };
+    update();
   }, [vizCacheContents, runtimeVersion]);
 
   // Compute V2 updates on the main thread.

@@ -51,6 +51,7 @@ import {
   ImageId,
   BetaProgramSignup,
   Visibility,
+  ResourceLockId,
 } from 'entities';
 import { Result, Success } from './Result';
 import { MigrationStatusId } from 'entities/src/Migration';
@@ -61,6 +62,7 @@ import { ImageHash } from 'entities/src/Images';
 export const pageSize = 50;
 
 export interface Gateways {
+  type: 'DatabaseGateways' | 'MemoryGateways';
   // ***************************************************************
   // ******************** CRUD Operations **************************
   // ***************************************************************
@@ -449,4 +451,10 @@ export interface Gateways {
     embedding: Array<number>,
     k: number,
   ): Promise<Result<Array<VizId>>>;
+
+  lock<T>(
+    lockIds: Array<ResourceLockId>,
+    // an async function that runs with the locks:
+    fn: () => Promise<T>,
+  ): Promise<T>;
 }

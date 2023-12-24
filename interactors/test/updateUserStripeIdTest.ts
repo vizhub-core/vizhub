@@ -1,7 +1,7 @@
 // See also
 // https://github.com/vizhub-core/vizhub/blob/main/vizhub-v3/vizhub-interactors/test/FindOrCreateUserTest.ts
 import { describe, it, expect, assert } from 'vitest';
-import { initGateways } from './initGateways';
+import { initGateways } from 'gateways/test';
 import { UpdateUserStripeId } from '../src';
 import { expectedUser as existingUser } from './updateOrCreateUserTest';
 import { UserId } from 'entities';
@@ -10,7 +10,7 @@ export const updateUserStripeIdTest = () => {
   describe('updateUserStripeId', async () => {
     it('should update a user stripe id', async () => {
       ////////// Setup
-      const gateways = initGateways();
+      const gateways = await initGateways();
       const { saveUser, getUser } = gateways;
       await saveUser(existingUser);
       const userId: UserId = existingUser.id;

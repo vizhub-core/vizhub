@@ -11,9 +11,11 @@ import {
   CommitId,
   EntityName,
   FolderId,
+  ResourceLockId,
   UserName,
   defaultSortField,
   defaultSortOrder,
+  saveLock,
 } from 'entities';
 import {
   resourceNotFoundError,
@@ -26,7 +28,7 @@ import {
 import { otType, diff } from 'ot';
 import { toCollectionName } from './toCollectionName';
 import { pageSize } from 'gateways/src/Gateways';
-import { embeddingMethods } from './embeddingMethods';
+// import { embeddingMethods } from './embeddingMethods';
 
 const debug = false;
 
@@ -35,37 +37,75 @@ const debug = false;
 export const DatabaseGateways = ({
   shareDBConnection,
   mongoDBDatabase,
-  supabase,
+  redlock,
+  // supabase,
 }) => {
-  // A generic "save" implementation for ShareDB.
-  // TODORedLock
-  const shareDBSave = (collectionName) => (entity) =>
-    new Promise((resolve) => {
-      const shareDBDoc = shareDBConnection.get(
-        collectionName,
-        entity.id,
-      );
-      shareDBDoc.fetch((error) => {
-        if (error) {
-          return resolve(err(error));
-        }
+  // A function that locks a set or resources,
+  // and then executes a function.
+  // Uses RedLock to ensure that the lock is acquired.
+  // This is important for data integrity if the server is scaled up.
+  const lock = async <T>(
+    lockIds: Array<ResourceLockId>,
+    fn: () => Promise<T>,
+  ) => {
+    let returnValue: T | null = null;
 
-        const callback = (error) => {
-          if (error) return resolve(err(error));
-          resolve(ok('success'));
-        };
-
-        if (!shareDBDoc.type) {
-          shareDBDoc.create(entity, otType.uri, callback);
-        } else {
-          shareDBDoc.submitOp(
-            diff(shareDBDoc.data, entity),
-            callback,
-          );
-        }
-      });
+    await redlock.using(lockIds, 10000, async () => {
+      returnValue = await fn();
     });
 
+    if (returnValue === null) {
+      throw new Error(
+        'Function did not return a value for locks ' +
+          lockIds.join(', '),
+      );
+    }
+
+    return returnValue;
+  };
+
+  // A generic "save" implementation for ShareDB.
+  const shareDBSave =
+    (entityName: EntityName, collectionName: string) =>
+    async (entity) => {
+      return lock(
+        // We lock the entity here because we want to ensure that
+        // the entity is not modified after we fetch it but before
+        // we save it.
+        [saveLock(entityName, entity.id)],
+        () => {
+          return new Promise((resolve) => {
+            const shareDBDoc = shareDBConnection.get(
+              collectionName,
+              entity.id,
+            );
+            shareDBDoc.fetch((error) => {
+              if (error) {
+                return resolve(err(error));
+              }
+
+              const callback = (error) => {
+                if (error) return resolve(err(error));
+                resolve(ok('success'));
+              };
+
+              if (!shareDBDoc.type) {
+                shareDBDoc.create(
+                  entity,
+                  otType.uri,
+                  callback,
+                );
+              } else {
+                shareDBDoc.submitOp(
+                  diff(shareDBDoc.data, entity),
+                  callback,
+                );
+              }
+            });
+          });
+        },
+      );
+    };
   // A generic "get" implementation for ShareDB.
   const shareDBGet =
     (entityName: EntityName, collectionName: string) =>
@@ -162,7 +202,6 @@ export const DatabaseGateways = ({
       });
 
   // A generic "save" implementation for MongoDB.
-  // TODORedLock
   const mongoDBSave = (collectionName) => {
     const collection =
       mongoDBDatabase.collection(collectionName);
@@ -223,7 +262,7 @@ export const DatabaseGateways = ({
   ) => ({
     [`save${entityName}`]:
       layer === 'sharedb'
-        ? shareDBSave(collectionName)
+        ? shareDBSave(entityName, collectionName)
         : mongoDBSave(collectionName),
     [`get${entityName}`]:
       layer === 'sharedb'
@@ -413,16 +452,11 @@ export const DatabaseGateways = ({
               _id: firstCommitWithoutMilestone.parent,
             });
           if (commitWithMilestone === null) {
-            throw new Error(
-              'commitWithMilestone should not be null! This is a case of invalid data where the parent of a commit is undefined!\n' +
-                'firstCommitWithoutMilestone.parent: ' +
-                firstCommitWithoutMilestone.parent +
-                '\n' +
-                'ancestors: ' +
-                JSON.stringify(ancestors, null, 2) +
-                '\n' +
-                'results: ' +
-                JSON.stringify(results, null, 2),
+            return err(
+              resourceNotFoundError(
+                firstCommitWithoutMilestone.parent,
+                entityName,
+              ),
             );
           }
           ancestors.unshift(commitWithMilestone);
@@ -631,6 +665,7 @@ export const DatabaseGateways = ({
   );
 
   let databaseGateways = {
+    type: 'DatabaseGateways',
     getForks,
     getInfos,
     incrementForksCount,
@@ -643,6 +678,7 @@ export const DatabaseGateways = ({
     getUserByEmails,
     getUsersByIds,
     getPermissions,
+    lock,
   };
 
   for (const entityName of crudEntityNames) {
@@ -656,11 +692,11 @@ export const DatabaseGateways = ({
     };
   }
 
-  // console.log('supabase defined?', supabase);
-  databaseGateways = {
-    ...databaseGateways,
-    ...embeddingMethods(supabase),
-  };
+  // // console.log('supabase defined?', supabase);
+  // databaseGateways = {
+  //   ...databaseGateways,
+  //   // ...embeddingMethods(supabase),
+  // };
 
   return databaseGateways;
 };

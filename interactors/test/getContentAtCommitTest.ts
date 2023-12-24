@@ -16,7 +16,7 @@ import {
   userJoe,
   ts2,
 } from 'entities/test/fixtures';
-import { initGateways } from './initGateways';
+import { initGateways } from 'gateways/test';
 import {
   SaveViz,
   GetContentAtCommit,
@@ -27,7 +27,7 @@ import { CommitId } from 'entities';
 export const getContentAtCommitTest = () => {
   describe('getContentAtCommitTest', async () => {
     it('getContentAtCommit, 1 commit', async () => {
-      const gateways = initGateways();
+      const gateways = await initGateways();
       const { saveCommit } = gateways;
       const getContentAtCommit =
         GetContentAtCommit(gateways);
@@ -42,7 +42,7 @@ export const getContentAtCommitTest = () => {
     });
 
     it('getContentAtCommit, 2 commits', async () => {
-      const gateways = initGateways();
+      const gateways = await initGateways();
       const { saveCommit } = gateways;
       const getContentAtCommit =
         GetContentAtCommit(gateways);
@@ -55,7 +55,7 @@ export const getContentAtCommitTest = () => {
     });
 
     it('getContentAtCommit, 3 commits', async () => {
-      const gateways = initGateways();
+      const gateways = await initGateways();
       const { saveCommit } = gateways;
       const getContentAtCommit =
         GetContentAtCommit(gateways);
@@ -69,7 +69,7 @@ export const getContentAtCommitTest = () => {
     });
 
     it('getContentAtCommit, invalid op error', async () => {
-      const gateways = initGateways();
+      const gateways = await initGateways();
       const { saveCommit } = gateways;
       const getContentAtCommit =
         GetContentAtCommit(gateways);
@@ -102,7 +102,7 @@ commit.ops:
     });
 
     it('getContentAtCommit, commit not found error', async () => {
-      const gateways = initGateways();
+      const gateways = await initGateways();
       const getContentAtCommit =
         GetContentAtCommit(gateways);
       const result = await getContentAtCommit('bogus-id');
@@ -117,7 +117,7 @@ commit.ops:
     });
 
     it('getContentAtCommit, commit not found error for intermediate commit', async () => {
-      const gateways = initGateways();
+      const gateways = await initGateways();
       const { saveCommit } = gateways;
       const getContentAtCommit =
         GetContentAtCommit(gateways);
@@ -137,7 +137,7 @@ commit.ops:
     });
 
     it('getContentAtCommit, using Milestones, missing milestone error case', async () => {
-      const gateways = initGateways();
+      const gateways = await initGateways();
       const { saveCommit } = gateways;
       const getContentAtCommit =
         GetContentAtCommit(gateways);
@@ -158,7 +158,7 @@ commit.ops:
     });
 
     it('getContentAtCommit, using Milestones', async () => {
-      const gateways = initGateways();
+      const gateways = await initGateways();
       const { saveCommit, saveMilestone } = gateways;
       const getContentAtCommit =
         GetContentAtCommit(gateways);
@@ -191,7 +191,7 @@ commit.ops:
 
     it('getContentAtCommit, creating new Milestones based on milestoneFrequency', async () => {
       setPredictableGenerateId();
-      const gateways = initGateways();
+      const gateways = await initGateways();
       const {
         saveCommit,
         getCommit,
@@ -274,7 +274,7 @@ commit.ops:
         assert(milestoneResult.outcome === 'success');
 
         // "new-commit-80" --> "80"
-        const i = id.substring(11);
+        const i = +id.substring(11);
 
         // Verify that the stored milestone content is correct
         expect(milestoneResult.value.content).toEqual(
@@ -355,7 +355,7 @@ commit.ops:
     it('getContentAtCommit, creating new Milestones based on op size', async () => {
       setPredictableGenerateId();
 
-      const gateways = initGateways();
+      const gateways = await initGateways();
       const {
         getCommitAncestors,
         saveCommit,
@@ -468,7 +468,7 @@ commit.ops:
         assert(milestoneResult.outcome === 'success');
 
         // "new-commit-80" --> "80"
-        const i = id.substring(11);
+        const i = +id.substring(11);
 
         // Verify that the stored milestone content is correct
         expect(milestoneResult.value.content).toEqual(

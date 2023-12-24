@@ -192,3 +192,11 @@ export {
   getUserDisplayName,
   getBio,
 } from './accessors';
+
+export type { ResourceLockId } from './Lock';
+export {
+  infoLock,
+  saveLock,
+  userLock,
+  analyticsEventLock,
+} from './Lock';

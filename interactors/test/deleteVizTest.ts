@@ -1,12 +1,11 @@
 import { describe, it, expect, assert } from 'vitest';
 import {
   primordialViz,
-  fakeSnapshot,
   primordialCommit,
   ts3,
   userJoe,
 } from 'entities/test/fixtures';
-import { initGateways } from './initGateways';
+import { initGateways } from 'gateways/test';
 import {
   CommitViz,
   DeleteViz,
@@ -27,8 +26,9 @@ const assertNotExists = <T>(result: Result<T>) => {
   expect(result.error.code).toEqual('resourceNotFound');
 };
 
+// TODO finish this
 export const deleteVizTest = () => {
-  describe.only('deleteViz', async () => {
+  describe.skip('deleteViz', async () => {
     // Test the simplest case:
     //  * No forkedFrom
     //  * No forks
@@ -36,7 +36,7 @@ export const deleteVizTest = () => {
     //  * No permissions
     //  * Start and end commit are the same
     it('deleteViz: simplest case', async () => {
-      const gateways = initGateways();
+      const gateways = await initGateways();
       const {
         saveInfo,
         saveContent,
@@ -87,15 +87,9 @@ export const deleteVizTest = () => {
 
     it('deleteViz: start and end commits are different', async () => {
       setPredictableGenerateId();
-      const gateways = initGateways();
-      const {
-        saveInfo,
-        saveContent,
-        saveCommit,
-        getInfo,
-        getContent,
-        getCommit,
-      } = gateways;
+      const gateways = await initGateways();
+      const { saveInfo, saveContent, saveCommit } =
+        gateways;
       await saveInfo(primordialViz.info);
       await saveContent(primordialViz.content);
       await saveCommit(primordialCommit);

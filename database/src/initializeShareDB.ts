@@ -4,11 +4,13 @@
 import ShareDB from 'sharedb';
 import ShareDBMongo from 'sharedb-mongo';
 import { otType } from 'ot';
+import ShareDBRedisPubSub from 'sharedb-redis-pubsub';
 
 ShareDB.types.register(otType);
 
 export const initializeShareDB = async ({
   mongoDBConnection,
+  redisClient,
   attachMiddleware,
 }) => {
   // TODO Redis PubSub
@@ -21,6 +23,10 @@ export const initializeShareDB = async ({
       mongo: (callback) => {
         callback(null, mongoDBConnection);
       },
+    }),
+    // @ts-ignore
+    pubsub: ShareDBRedisPubSub({
+      client: redisClient,
     }),
   });
 
