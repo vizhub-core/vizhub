@@ -4,6 +4,8 @@ import { getAuthenticatedUserId } from '../parseAuth0User';
 import { Gateways } from 'gateways';
 import { User } from 'entities';
 
+const debug = true;
+
 export const billingPortalSession = ({
   app,
   gateways,
@@ -30,23 +32,37 @@ export const billingPortalSession = ({
           .status(500)
           .send('Internal Server Error');
       }
-      const user: User = userResult.value.data;
-      if (!user) {
+      const authenticatedUser: User = userResult.value.data;
+
+      if (!authenticatedUser) {
         return res.status(404).send('User not found');
       }
-      if (!user.stripeCustomerId) {
+      if (!authenticatedUser.stripeCustomerId) {
         return res
           .status(400)
           .send('User has no Stripe ID');
       }
-      const stripeCustomerId = user.stripeCustomerId;
+      const stripeCustomerId =
+        authenticatedUser.stripeCustomerId;
+
+      if (debug) {
+        console.log(
+          '[billingPortalSession] stripeCustomerId: ' +
+            stripeCustomerId,
+        );
+      }
+      // @ts-ignore
+      const urlBase = req.headers.origin;
+
+      // Redirect to the profile page after
+      const return_url = `${urlBase}/${authenticatedUser.userName}`;
 
       const stripe = getStripe();
       try {
         const session =
           await stripe.billingPortal.sessions.create({
             customer: stripeCustomerId,
-            return_url: 'https://yourwebsite.com/account',
+            return_url,
           });
         res.json({ url: session.url });
       } catch (err) {
