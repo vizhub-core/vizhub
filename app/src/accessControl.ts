@@ -10,7 +10,7 @@ import { Action, Info, READ, VizId, WRITE } from 'entities';
 import { VizAccess } from 'interactors/src/verifyVizAccess';
 
 // Useful for debugging agent identification.
-const debug = false;
+const debug = true;
 
 // For client-side connections (in the browser), leverage the
 // existing auth middleware to populate the ShareDB agent's user ID.
@@ -57,41 +57,6 @@ export const identifyServerAgent = (request, next) => {
 
   next();
 };
-// import { getVizInfo } from './getVizInfo';
-// import { DOCUMENT_CONTENT, DOCUMENT_INFO } from 'vizhub-database';
-// import { allowWrite } from 'vizhub-use-cases';
-
-// import { DOCUMENT_CONTENT, DOCUMENT_INFO } from 'vizhub-database';
-// import { getVizInfo } from './getVizInfo';
-// import { allowRead } from 'vizhub-use-cases';
-
-// const vizReadAsync = async (request) => {
-//   //   // Unpack the ShareDB request object.
-//   //   const {
-//   //     agent: { isServer, userId },
-//   //     collection,
-//   //     snapshots,
-//   //   } = request;
-//   //   // Only vet ops against viz info and content documents.
-//   //   if (collection !== DOCUMENT_CONTENT && collection === DOCUMENT_INFO) {
-//   //     return;
-//   //   }
-//   //   // Let the server do whatever it wants, because
-//   //   // all interactions there are mediated by interactors.
-//   //   if (isServer) {
-//   //     return;
-//   //   }
-//   //   return Promise.all(
-//   //     snapshots.map(async (snapshot) => {
-//   //       const vizInfo = await getVizInfo(collection, snapshot);
-//   //       if (!allowRead(vizInfo, userId)) {
-//   //         throw new Error('This visualization is private.');
-//   //       }
-//   //     }),
-//   //   );
-//   return true;
-// };
-
 // The way ShareDB middleware works is like this:
 // 1. The middleware is invoked with a request object.
 // 2. The middleware can do whatever it wants with the request object.
@@ -121,9 +86,10 @@ const vizVerify = (gateways: Gateways, action: Action) => {
     } = context;
 
     if (debug) {
-      console.log('Inside access control', {
+      console.log('[vizVerify] ', {
         isServer,
         userId,
+        action,
       });
     }
 
@@ -160,6 +126,13 @@ const vizVerify = (gateways: Gateways, action: Action) => {
         });
       if (verifyResult.outcome === 'failure') {
         throw verifyResult.error;
+      }
+
+      if (debug) {
+        console.log(
+          '[vizVerify] verifyResult',
+          verifyResult,
+        );
       }
       const hasPermission = verifyResult.value[action];
       if (!hasPermission) {

@@ -52,8 +52,8 @@ export const VerifyVizAccess = (gateways: Gateways) => {
 
     if (debug) {
       console.log(
-        'VerifyVizAccess',
-        JSON.stringify(options),
+        '[VerifyVizAccess] ',
+        JSON.stringify(options, null, 2),
       );
     }
 
@@ -123,10 +123,10 @@ export const VerifyVizAccess = (gateways: Gateways) => {
 
       if (action === WRITE) {
         // Disallow editing of V2 vizzes.
-        if (info.migratedFromV2) {
-          vizAccess[action] = false;
-          continue;
-        }
+        // if (info.migratedFromV2) {
+        //   vizAccess[action] = false;
+        //   continue;
+        // }
 
         // If "Anyone can edit" is enabled, then allow editing.
         if (info.anyoneCanEdit) {
