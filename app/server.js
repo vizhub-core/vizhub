@@ -15,8 +15,7 @@ import { matchPath } from 'react-router-dom';
 import * as Sentry from '@sentry/node';
 import { seoMetaTags } from './src/seoMetaTags.js';
 
-// TODO import this from package.json
-const version = '3.0.0-beta.29';
+const version = '3.0.0-beta.30';
 
 // Generate a random server ID for debugging scaling.
 const serverId = Math.random().toString(36).slice(2);
