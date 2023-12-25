@@ -100,6 +100,11 @@ export const ForkViz = (gateways: Gateways) => {
       committed: true,
     };
 
+    // If we're forking in v3, this viz was not migrated from v2.
+    if (newInfo.migratedFromV2) {
+      delete newInfo.migratedFromV2;
+    }
+
     // If the title is specified, use it.
     if (title !== undefined) {
       newInfo.title = title;

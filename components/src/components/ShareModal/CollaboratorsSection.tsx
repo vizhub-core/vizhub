@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { Form, InputGroup } from '../bootstrap';
 
 export const CollaboratorsSection = ({
@@ -8,7 +8,6 @@ export const CollaboratorsSection = ({
   anyoneCanEdit: boolean;
   setAnyoneCanEdit: (anyoneCanEdit: boolean) => void;
 }) => {
-  // Handler to change the state when checkbox is clicked, memoized with useCallback
   const handleCheckboxChange = useCallback(() => {
     setAnyoneCanEdit(!anyoneCanEdit);
   }, [anyoneCanEdit, setAnyoneCanEdit]);
