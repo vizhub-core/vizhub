@@ -10,7 +10,7 @@ import { Action, Info, READ, VizId, WRITE } from 'entities';
 import { VizAccess } from 'interactors/src/verifyVizAccess';
 
 // Useful for debugging agent identification.
-const debug = true;
+const debug = false;
 
 // For client-side connections (in the browser), leverage the
 // existing auth middleware to populate the ShareDB agent's user ID.
