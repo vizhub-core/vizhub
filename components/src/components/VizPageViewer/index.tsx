@@ -100,7 +100,7 @@ export const VizPageViewer = ({
   }, []);
 
   const forksCountFormatted = useMemo(
-    () => commaFormat.format(forksCount),
+    () => commaFormat(forksCount),
     [forksCount],
   );
 
