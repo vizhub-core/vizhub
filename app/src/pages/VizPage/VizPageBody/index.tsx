@@ -38,6 +38,7 @@ import { useRenderMarkdownHTML } from './useRenderMarkdownHTML';
 import { VizPageEditor } from './VizPageEditor';
 import { useMarkUncommitted } from '../useMarkUncommitted';
 import { enableManualRun } from 'runtime/src/useRuntime';
+import { formatTimestamp } from '../../../accessors/formatTimestamp';
 
 const debug = false;
 

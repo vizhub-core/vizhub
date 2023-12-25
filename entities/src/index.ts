@@ -190,6 +190,7 @@ export {
   getRuntimeVersion,
   getUserDisplayName,
   getBio,
+  getAnyoneCanEdit,
 } from './accessors';
 
 export type { ResourceLockId } from './Lock';

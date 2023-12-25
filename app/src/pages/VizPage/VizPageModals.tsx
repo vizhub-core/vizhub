@@ -9,6 +9,7 @@ import {
   User,
   UserId,
   Visibility,
+  getAnyoneCanEdit,
   getUserDisplayName,
 } from 'entities';
 import { VizSettings } from './useVizMutations';
@@ -81,7 +82,10 @@ export const VizPageModals = ({
     [authenticatedUser],
   );
 
-  const anyoneCanEdit = info.anyoneCanEdit;
+  const anyoneCanEdit = useMemo(
+    () => getAnyoneCanEdit(info),
+    [info],
+  );
 
   const linkToCopy = useMemo(
     () => getVizPageHref(ownerUser, info, true),

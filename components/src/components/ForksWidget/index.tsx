@@ -10,7 +10,7 @@ export const ForksWidget = ({
   onClick = null,
 }) => {
   const forksCountFormatted = useMemo(
-    () => commaFormat.format(forksCount),
+    () => commaFormat(forksCount),
     [forksCount],
   );
 
