@@ -9,6 +9,7 @@ import {
 import { VizPreview } from 'components/src/components/VizPreview';
 import { useShareDBDocData } from '../useShareDBDocData';
 import { getVizThumbnailURL } from '../accessors';
+import { formatTimestamp } from '../accessors/formatTimestamp';
 
 // The width in pixels of the thumbnail image
 const thumbnailWidth = 300;
@@ -46,15 +47,10 @@ export const VizPreviewPresenter = ({
     [end, thumbnailWidth],
   );
 
-  const lastUpdatedDateFormatted = useMemo(() => {
-    const date = timestampToDate(updated);
-    // Example: "January 1, 2020"
-    return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    });
-  }, [updated]);
+  const lastUpdatedDateFormatted = useMemo(
+    () => formatTimestamp(updated),
+    [updated],
+  );
 
   return (
     <VizPreview
