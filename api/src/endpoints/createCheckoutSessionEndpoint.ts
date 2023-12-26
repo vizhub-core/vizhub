@@ -1,16 +1,16 @@
 import express from 'express';
-import { Gateways, err, ok } from 'gateways';
+import { err, ok } from 'gateways';
 import { authenticationRequiredError } from 'gateways/src/errors';
 import { getAuthenticatedUserId } from '../parseAuth0User';
 import { getStripe } from './getStripe';
-import { User } from 'entities';
+// import { User } from 'entities';
 
 export const createCheckoutSession = ({
   app,
-  gateways,
+  // gateways,
 }: {
   app: express.Express;
-  gateways: Gateways;
+  // gateways: Gateways;
 }) => {
   app.post(
     '/api/create-checkout-session',
@@ -28,14 +28,14 @@ export const createCheckoutSession = ({
         return;
       }
 
-      const userResult = await gateways.getUser(
-        authenticatedUserId,
-      );
-      if (userResult.outcome === 'failure') {
-        res.json(err(userResult.error));
-        return;
-      }
-      const authenticatedUser: User = userResult.value.data;
+      // const userResult = await gateways.getUser(
+      //   authenticatedUserId,
+      // );
+      // if (userResult.outcome === 'failure') {
+      //   res.json(err(userResult.error));
+      //   return;
+      // }
+      // const authenticatedUser: User = userResult.value.data;
 
       const stripe = getStripe();
 
@@ -43,7 +43,8 @@ export const createCheckoutSession = ({
       const urlBase = req.headers.origin;
 
       // Redirect to the profile page after successful payment.
-      const success_url = `${urlBase}/${authenticatedUser.userName}`;
+      // const success_url = `${urlBase}/${authenticatedUser.userName}`;
+      const success_url = `${urlBase}/pricing`;
       const cancel_url = success_url;
 
       const { isMonthly } = req.body;

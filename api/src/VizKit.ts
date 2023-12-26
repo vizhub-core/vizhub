@@ -79,6 +79,14 @@ export interface VizKitAPI {
         sessionURL: string;
       }>
     >;
+
+    createBillingPortalSession: (options: {
+      userId: UserId;
+    }) => Promise<
+      Result<{
+        sessionURL: string;
+      }>
+    >;
   };
 }
 
@@ -169,17 +177,22 @@ export const VizKit = ({
       createCheckoutSession: async ({
         userId,
         isMonthly,
-      }) => {
-        const result = await postJSON(
+      }) =>
+        await postJSON(
           `${baseUrl}/create-checkout-session`,
           {
             userId,
             isMonthly,
           },
-        );
+        ),
 
-        return result;
-      },
+      createBillingPortalSession: async ({ userId }) =>
+        await postJSON(
+          `${baseUrl}/create-billing-portal-session`,
+          {
+            userId,
+          },
+        ),
     },
   };
 };

@@ -1,18 +1,23 @@
 import { Gateways, Result, Success, ok } from 'gateways';
-import { User, UserId, userLock } from 'entities';
+import { Plan, User, UserId, userLock } from 'entities';
 
 // updateUserStripeId
+// TODO rename to updateUserPlan
 //
 // * This is for when a user upgrades
 // * we link their Stripe customer ID to their user
 // * we also update their user to be a pro user
 export const UpdateUserStripeId =
   (gateways: Gateways) =>
-  async (options: {
+  async ({
+    userId,
+    stripeCustomerId,
+    plan,
+  }: {
     userId: UserId;
     stripeCustomerId: string;
+    plan: Plan;
   }): Promise<Result<Success>> => {
-    const { userId, stripeCustomerId } = options;
     const { saveUser, getUser, lock } = gateways;
 
     return lock([userLock(userId)], async () => {
@@ -27,8 +32,9 @@ export const UpdateUserStripeId =
 
         // Update the stripeCustomerId
         user.stripeCustomerId = stripeCustomerId;
-      // Update the plan to be premium
-      user.plan = 'premium';
+
+        // Update the plan.
+        user.plan = plan;
 
         // Save the updated or newly created user.
         await saveUser(user);

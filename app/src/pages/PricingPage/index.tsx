@@ -29,74 +29,95 @@ const Body = () => {
 
   const [isMonthly, setIsMonthly] = useState(false);
 
-  const handleProClick = useCallback(async () => {
-    // If the user is not logged in,
-
-    // make them log in first.
-    if (!authenticatedUser) {
-      console.log(
-        'TODO handle unauthenticated user - redirect to login?',
+  // When the user clicks "Upgrade" in the Premium card.
+  const handlePremiumUpgradeClick =
+    useCallback(async () => {
+      // Record analytics of the click.
+      vizKit.rest.recordAnalyticsEvents(
+        'event.click.pricing.premium.upgrade',
       );
 
-      const url = '/login?redirect=pricing';
+      // If the user is not logged in,
 
-      window.location.href = url;
+      // make them log in first.
+      if (!authenticatedUser) {
+        console.log(
+          'TODO handle unauthenticated user - redirect to login?',
+        );
 
-      return;
-    } else {
-      // https://stripe.com/docs/checkout/quickstart
-      //   <form action="/create-checkout-session" method="POST">
-      //   <button type="submit" id="checkout-button">Checkout</button>
-      // </form>
-      //
-      // res.redirect(303, session.url);
-    }
-    // Invoke vizKit.rest.createCheckoutSession to create a Stripe Checkout Session.
+        // TODO get this redirect working
+        const url = '/login?redirect=pricing';
 
-    const createCheckoutSessionResult =
-      await vizKit.rest.createCheckoutSession({
-        userId: authenticatedUser.id,
-        isMonthly,
-      });
+        window.location.href = url;
 
-    if (createCheckoutSessionResult.outcome === 'failure') {
-      console.error(
-        'TODO handle error',
-        createCheckoutSessionResult.error,
+        return;
+      }
+
+      // Create a Stripe Checkout session.
+      const createCheckoutSessionResult =
+        await vizKit.rest.createCheckoutSession({
+          userId: authenticatedUser.id,
+          isMonthly,
+        });
+      if (
+        createCheckoutSessionResult.outcome === 'failure'
+      ) {
+        console.error(
+          'Error creating checkout session',
+          createCheckoutSessionResult.error,
+        );
+        return;
+      }
+
+      // Redirect the user to the Stripe Checkout page.
+      const { sessionURL } =
+        createCheckoutSessionResult.value;
+      window.location.href = sessionURL;
+
+      // TODO bring back toast
+      // // Set the cookie to show upgrade success toast on the account page.
+      // setCookie('showUpgradeSuccessToast', 'true', 1);
+    }, [authenticatedUser, isMonthly]);
+
+  // When the user clicks "Downgrade" in the Starter card.
+  const handleStarterDowngradeClick =
+    useCallback(async () => {
+      // Record analytics of the click.
+      vizKit.rest.recordAnalyticsEvents(
+        'event.click.pricing.starter.downgrade',
       );
-      return;
-    }
 
-    const { sessionURL } =
-      createCheckoutSessionResult.value;
-    // Redirect the user to the Stripe Checkout page.
-    window.location.href = sessionURL;
+      // Create a Stripe Billing Portal session.
+      const createBillingPortalSessionResult =
+        await vizKit.rest.createBillingPortalSession({
+          userId: authenticatedUser.id,
+        });
+      if (
+        createBillingPortalSessionResult.outcome ===
+        'failure'
+      ) {
+        console.error(
+          'Error creating billiung portal session',
+          createBillingPortalSessionResult.error,
+        );
+        return;
+      }
 
-    vizKit.rest.recordAnalyticsEvents(
-      'event.click.pricing.pro',
-    );
-    // // Pretend that the user goes through a checkout process...
+      // console.log(
+      //   'createBillingPortalSessionResult',
+      //   createBillingPortalSessionResult,
+      // );
 
-    // TODO bring back toast
-    // // Set the cookie to show upgrade success toast on the account page.
-    // setCookie('showUpgradeSuccessToast', 'true', 1);
-    // // Invoke the fake WebHook to simulate a successful payment.
-    // await vizKit.rest.fakeCheckoutSuccess(
-    //   authenticatedUser.id,
-    // );
-    // Navigate to the account page.
-    // const url = '/account';
-    // window.location.href = url;
-  }, [authenticatedUser, isMonthly]);
-
-  const handleFreeClick = useCallback(() => {
-    console.log('TODO handle free plan click');
-  }, []);
+      // Redirect the user to the Stripe Billing Portal page.
+      const { sessionURL } =
+        createBillingPortalSessionResult.value;
+      window.location.href = sessionURL;
+    }, [authenticatedUser, isMonthly]);
 
   return (
     <PricingPageBody
-      onProClick={handleProClick}
-      onFreeClick={handleFreeClick}
+      onPremiumUpgradeClick={handlePremiumUpgradeClick}
+      onStarterDowngradeClick={handleStarterDowngradeClick}
       isMonthly={isMonthly}
       setIsMonthly={setIsMonthly}
       currentPlan={authenticatedUser?.plan}
