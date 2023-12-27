@@ -10,7 +10,7 @@ import { stripeWebhookEndpoint } from './stripeWebhookEndpoint';
 import { createCheckoutSession } from './createCheckoutSessionEndpoint';
 import { aiAssistEndpoint } from './aiAssistEndpoint';
 import { vizThumbnailEndpoint } from './vizThumbnailEndpoint';
-import { billingPortalSession } from './billingPortalSession';
+import { billingPortalSessionEndpoint } from './billingPortalSessionEndpoint';
 
 export const endpoints = [
   healthCheck,
@@ -25,5 +25,5 @@ export const endpoints = [
   createCheckoutSession,
   aiAssistEndpoint,
   vizThumbnailEndpoint,
-  billingPortalSession,
+  billingPortalSessionEndpoint,
 ];

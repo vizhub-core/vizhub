@@ -19,11 +19,19 @@ export const saveLock = (
 ): ResourceLockId =>
   `save-${entityLock(entityName, entityId)}`;
 
+// Lock for Info documents.
 export const infoLock = (vizId: VizId): ResourceLockId =>
   entityLock('Info', vizId);
 
+// Lock for User documents.
 export const userLock = (userId: UserId): ResourceLockId =>
   entityLock('User', userId);
 
+// Lock for AnalyticsEvent documents.
 export const analyticsEventLock: ResourceLockId =
   entityLock('AnalyticsEvent', 'any');
+
+// Lock for ImageMetadata documents.
+export const imageMetadataLock = (
+  imageId: string,
+): ResourceLockId => entityLock('ImageMetadata', imageId);

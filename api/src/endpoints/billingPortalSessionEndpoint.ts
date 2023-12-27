@@ -1,12 +1,12 @@
 import express from 'express';
 import { getStripe } from './getStripe';
 import { getAuthenticatedUserId } from '../parseAuth0User';
-import { Gateways } from 'gateways';
+import { Gateways, ok } from 'gateways';
 import { User } from 'entities';
 
 const debug = true;
 
-export const billingPortalSession = ({
+export const billingPortalSessionEndpoint = ({
   app,
   gateways,
 }: {
@@ -64,7 +64,7 @@ export const billingPortalSession = ({
             customer: stripeCustomerId,
             return_url,
           });
-        res.json({ url: session.url });
+        res.json(ok({ sessionURL: session.url }));
       } catch (err) {
         console.error(err);
         res.status(500).send('Internal Server Error');
