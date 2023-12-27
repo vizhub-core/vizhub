@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
+import { WebSocket as PartySocket } from 'partysocket';
 import ShareDBClient from 'sharedb-client-browser/dist/sharedb-client-umd.cjs';
 import { otType } from 'ot';
 import { toCollectionName } from 'database/src/toCollectionName';
@@ -21,8 +22,7 @@ export const getConnection = (() => {
         window.location.protocol === 'https:'
           ? 'wss://'
           : 'ws://';
-      // TODO consider using reconnecting WebSocket
-      const socket = new WebSocket(
+      const socket = new PartySocket(
         wsProtocol + window.location.host,
       );
       connection = new Connection(socket);
