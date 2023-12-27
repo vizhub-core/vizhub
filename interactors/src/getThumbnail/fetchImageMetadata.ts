@@ -3,7 +3,9 @@ import {
   ImageMetadata,
   ImageId,
   dateToTimestamp,
+  infoLock,
 } from 'entities';
+import { imageMetadataLock } from 'entities/src/Lock';
 
 // The maximum amount of time to wait for an image to be generated.
 // If the image has been generating for longer than this, we assume
