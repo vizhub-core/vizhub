@@ -1,10 +1,20 @@
+import { User } from 'entities';
 import { useCallback } from 'react';
 
 export const useOpenBillingPortal = ({
   vizKit,
   authenticatedUser,
+}: {
+  vizKit: any;
+  authenticatedUser: User | null;
 }) =>
   useCallback(async () => {
+    if (!authenticatedUser) {
+      console.error(
+        'Cannot open billing portal for unauthenticated user',
+      );
+      return;
+    }
     // Create a Stripe Billing Portal session.
     const createBillingPortalSessionResult =
       await vizKit.rest.createBillingPortalSession({
@@ -24,4 +34,4 @@ export const useOpenBillingPortal = ({
     const { sessionURL } =
       createBillingPortalSessionResult.value;
     window.location.href = sessionURL;
-  }, [authenticatedUser.id, vizKit.rest]);
+  }, [authenticatedUser, vizKit]);
