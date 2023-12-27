@@ -1,5 +1,6 @@
 import { Result, Success, ok } from 'gateways';
 import { User, UserId } from 'entities';
+import { a } from 'vitest/dist/suite-dF4WyktM';
 
 // findOrCreateUser
 //
@@ -25,38 +26,40 @@ export const UpdateOrCreateUser =
   }): Promise<Result<Success>> => {
     const { id, userName, displayName, email, picture } =
       options;
-    const { saveUser, getUser } = gateways;
+    const { saveUser, getUser, lock } = gateways;
 
-    // Attempt to find an existing user with those emails.
-    const result = await getUser(id);
+    return await lock([userLock(id)], async () => {
+      // Attempt to find an existing user with those emails.
+      const result = await getUser(id);
 
-    // This user will be either an existing user or a newly created user.
-    let user: User;
+      // This user will be either an existing user or a newly created user.
+      let user: User;
 
-    // If we found one, great, use that one.
-    if (result.outcome === 'success') {
-      user = result.value.data;
+      // If we found one, great, use that one.
+      if (result.outcome === 'success') {
+        user = result.value.data;
 
-      // Update the latest upstream profile data for the existing user
-      user.displayName = displayName;
-      user.primaryEmail = email;
-      user.picture = picture;
-    } else {
-      // If we didn't find an existing user,
-      // create a brand new one.
-      user = {
-        id,
-        primaryEmail: email,
-        secondaryEmails: [],
-        userName,
-        displayName,
-        picture,
-        plan: 'free',
-      };
-    }
+        // Update the latest upstream profile data for the existing user
+        user.displayName = displayName;
+        user.primaryEmail = email;
+        user.picture = picture;
+      } else {
+        // If we didn't find an existing user,
+        // create a brand new one.
+        user = {
+          id,
+          primaryEmail: email,
+          secondaryEmails: [],
+          userName,
+          displayName,
+          picture,
+          plan: 'free',
+        };
+      }
 
-    // Save the updated or newly created user.
-    await saveUser(user);
+      // Save the updated or newly created user.
+      await saveUser(user);
 
-    return ok('success');
+      return ok('success');
+    });
   };
