@@ -24,12 +24,6 @@ export const stripeWebhookEndpoint = ({
     '/api/stripe-webhook',
     express.raw({ type: 'application/json' }),
     async (request, response) => {
-      if (debug) {
-        console.log(
-          '[stripe-webhook] request.body',
-          request.body,
-        );
-      }
       // Verify signature to prevent spoofing
       // See https://stripe.com/docs/webhooks#verify-official-libraries
       const sig = request.headers['stripe-signature'];
@@ -70,8 +64,12 @@ export const stripeWebhookEndpoint = ({
         );
       }
 
-      // Handle the event
-      if (event.type === 'checkout.session.completed') {
+      if (debug) {
+        console.log('[stripe-webhook] event:', event);
+      }
+
+      // Upgrade via checkout session
+      if (event.type == 'checkout.session.completed') {
         if (debug) {
           console.log(
             '[stripe-webhook] received checkout.session.completed event',
@@ -88,15 +86,57 @@ export const stripeWebhookEndpoint = ({
 
         if (debug) {
           console.log(
-            '[stripe-webhook] Updating user stripe id',
+            '[stripe-webhook] Updating user stripe id and plan',
             userId,
             stripeCustomerId,
           );
         }
 
+        const upgradeResult = await updateUserStripeId({
+          userId,
+          stripeCustomerId,
+          plan: 'premium',
+        });
+
+        if (upgradeResult.outcome === 'failure') {
+          console.log(
+            'error updating user stripe id',
+            upgradeResult.error,
+          );
+        }
+      }
+
+      if (event.type === 'customer.subscription.updated') {
+        if (debug) {
+          console.log(
+            '\n\n[stripe-webhook] received customer.updated.deleted event',
+          );
+          console.log(JSON.stringify(event, null, 2));
+        }
+      }
+
+      // Downgrade via Billing Portal
+      if (event.type === 'customer.subscription.deleted') {
+        if (debug) {
+          console.log(
+            '\n\n[stripe-webhook] received customer.subscription.deleted event',
+          );
+          console.log(JSON.stringify(event, null, 2));
+        }
+        const subscriptionDeleted = event.data.object;
+
+        const checkoutSessionCompleted = event.data.object;
+
+        const userId: UserId =
+          subscriptionDeleted.client_reference_id;
+
+        const stripeCustomerId =
+          checkoutSessionCompleted.customer;
+
         const result = await updateUserStripeId({
           userId,
           stripeCustomerId,
+          plan: 'free',
         });
 
         if (result.outcome === 'failure') {

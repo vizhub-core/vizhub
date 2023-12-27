@@ -51,15 +51,15 @@ const CurrentButton = () => (
 );
 
 export const PricingPageBody = ({
-  onFreeClick,
-  onProClick,
+  onStarterDowngradeClick,
+  onPremiumUpgradeClick,
   // onEnterpriseClick,
   isMonthly,
   setIsMonthly,
   currentPlan = 'free',
 }: {
-  onFreeClick: () => void;
-  onProClick: () => void;
+  onStarterDowngradeClick: () => void;
+  onPremiumUpgradeClick: () => void;
   // onEnterpriseClick: () => void;
   isMonthly: boolean;
   setIsMonthly: (isMonthly: boolean) => void;
@@ -133,7 +133,7 @@ export const PricingPageBody = ({
                   <Button
                     variant="primary"
                     className="pricing-page-plan-button"
-                    onClick={onFreeClick}
+                    onClick={onStarterDowngradeClick}
                   >
                     Downgrade
                   </Button>
@@ -172,7 +172,7 @@ export const PricingPageBody = ({
                   <Button
                     variant="primary"
                     className="pricing-page-plan-button"
-                    onClick={onProClick}
+                    onClick={onPremiumUpgradeClick}
                   >
                     Upgrade
                   </Button>

@@ -16,20 +16,28 @@ const enableHelpSVG = false;
 const enableResourcesLink = false;
 
 // Feature flag to enable/disable pricing page link
-const enablePricingLink = false;
+const enablePricingLink = true;
 
 export const Header = ({
   authenticatedUserAvatarURL,
   loginHref,
   logoutHref,
   profileHref,
-  accountHref,
   onCreateVizClick,
-  onForumClick,
   onVizHubClick,
   pricingHref,
   resourcesHref,
-  aboutHref,
+  onBillingClick,
+}: {
+  authenticatedUserAvatarURL: string;
+  loginHref: string;
+  logoutHref: string;
+  profileHref: string;
+  onCreateVizClick?: () => void;
+  onVizHubClick: () => void;
+  pricingHref: string;
+  resourcesHref: string;
+  onBillingClick: () => void;
 }) => (
   <Navbar bg="dark" variant="dark" expand="md">
     <Container fluid>
@@ -48,7 +56,6 @@ export const Header = ({
           <Nav.Link href="/explore">Explore</Nav.Link>
 
           <Nav.Link
-            onClick={onForumClick}
             href="https://vizhub.com/forum/"
             target="_blank"
             rel="noopener noreferrer"
@@ -106,11 +113,16 @@ export const Header = ({
                 <Dropdown.Item href={profileHref}>
                   Profile
                 </Dropdown.Item>
-                <Dropdown.Divider />
+                {/* <Dropdown.Divider /> */}
                 {/* <Dropdown.Item href={accountHref}>
                   Account
                 </Dropdown.Item> */}
                 {/* <Dropdown.Divider /> */}
+                {onBillingClick && (
+                  <Dropdown.Item onClick={onBillingClick}>
+                    Billing
+                  </Dropdown.Item>
+                )}
                 <Dropdown.Item href={logoutHref}>
                   Log out
                 </Dropdown.Item>
