@@ -13,6 +13,7 @@ import {
 } from '../../contexts/AuthenticatedUserContext';
 import { Page, PageData } from '../Page';
 import { User } from 'entities';
+import { useOpenBillingPortal } from '../useOpenBillingPortal';
 import './styles.scss';
 
 const vizKit = VizKit({ baseUrl: './api' });
@@ -79,6 +80,11 @@ const Body = () => {
       // setCookie('showUpgradeSuccessToast', 'true', 1);
     }, [authenticatedUser, isMonthly]);
 
+  const openBillingPortal = useOpenBillingPortal({
+    vizKit,
+    authenticatedUser,
+  });
+
   // When the user clicks "Downgrade" in the Starter card.
   const handleStarterDowngradeClick =
     useCallback(async () => {
@@ -86,33 +92,8 @@ const Body = () => {
       vizKit.rest.recordAnalyticsEvents(
         'event.click.pricing.starter.downgrade',
       );
-
-      // Create a Stripe Billing Portal session.
-      const createBillingPortalSessionResult =
-        await vizKit.rest.createBillingPortalSession({
-          userId: authenticatedUser.id,
-        });
-      if (
-        createBillingPortalSessionResult.outcome ===
-        'failure'
-      ) {
-        console.error(
-          'Error creating billiung portal session',
-          createBillingPortalSessionResult.error,
-        );
-        return;
-      }
-
-      // console.log(
-      //   'createBillingPortalSessionResult',
-      //   createBillingPortalSessionResult,
-      // );
-
-      // Redirect the user to the Stripe Billing Portal page.
-      const { sessionURL } =
-        createBillingPortalSessionResult.value;
-      window.location.href = sessionURL;
-    }, [authenticatedUser, isMonthly]);
+      openBillingPortal();
+    }, [openBillingPortal]);
 
   return (
     <PricingPageBody

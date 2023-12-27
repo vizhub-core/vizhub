@@ -3,7 +3,7 @@ import { UserId } from 'entities';
 import { getStripe } from './getStripe';
 import { UpdateUserStripeId } from 'interactors';
 
-const debug = true;
+const debug = false;
 
 // Critical for Stripe development - run this incantation
 // stripe listen --forward-to localhost:5173/api/stripe-webhook
