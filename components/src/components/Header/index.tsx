@@ -27,6 +27,7 @@ export const Header = ({
   onVizHubClick,
   pricingHref,
   resourcesHref,
+  showBillingLink,
   onBillingClick,
 }: {
   authenticatedUserAvatarURL: string;
@@ -37,6 +38,7 @@ export const Header = ({
   onVizHubClick: () => void;
   pricingHref: string;
   resourcesHref: string;
+  showBillingLink?: boolean;
   onBillingClick: () => void;
 }) => (
   <Navbar bg="dark" variant="dark" expand="md">
@@ -118,7 +120,7 @@ export const Header = ({
                   Account
                 </Dropdown.Item> */}
                 {/* <Dropdown.Divider /> */}
-                {onBillingClick && (
+                {showBillingLink && (
                   <Dropdown.Item onClick={onBillingClick}>
                     Billing
                   </Dropdown.Item>
