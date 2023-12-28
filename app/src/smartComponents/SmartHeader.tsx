@@ -1,4 +1,4 @@
-import { useCallback, useContext } from 'react';
+import { useCallback, useContext, useMemo } from 'react';
 import { Header } from 'components';
 import { AuthenticatedUserContext } from '../contexts/AuthenticatedUserContext';
 import { useOpenBillingPortal } from '../pages/useOpenBillingPortal';
@@ -30,6 +30,14 @@ export const SmartHeader = () => {
     openBillingPortal();
   }, [vizKit, openBillingPortal]);
 
+  // Whether or not to show the billing link in the user menu.
+  // If the user has a Stripe customer ID, then show the link.
+  const showBillingLink = useMemo(() => {
+    return (
+      authenticatedUser?.stripeCustomerId !== undefined
+    );
+  }, [authenticatedUser]);
+
   return (
     <Header
       loginHref={`/login`}
@@ -42,6 +50,7 @@ export const SmartHeader = () => {
         authenticatedUser?.picture
       }
       onVizHubClick={handleVizHubClick}
+      showBillingLink={showBillingLink}
       onBillingClick={handleBillingClick}
     />
   );
