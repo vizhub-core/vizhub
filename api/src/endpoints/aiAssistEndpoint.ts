@@ -71,6 +71,21 @@ export const aiAssistEndpoint = ({
         vizId,
       );
 
+      // Subscribe to updates from the ShareDB document.
+      await new Promise<void>((resolve, reject) => {
+        shareDBDoc.subscribe((error) => {
+          if (error) {
+            console.error(
+              'shareDBDoc.subscribe error:',
+              error,
+            );
+            reject(error);
+            return;
+          }
+          resolve();
+        });
+      });
+
       try {
         await generateAIResponse({
           inputText,
@@ -89,6 +104,9 @@ export const aiAssistEndpoint = ({
           message: 'Internal Server Error',
           error: error.message,
         });
+      } finally {
+        // Unsubscribe from updates to the ShareDB document.
+        shareDBDoc.unsubscribe();
       }
     },
   );
