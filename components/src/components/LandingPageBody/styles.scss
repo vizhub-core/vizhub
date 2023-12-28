@@ -9,6 +9,13 @@
     object-fit: cover;
   }
 
+  img.header-foreground {
+    width: 1128px;
+    border-radius: 16px;
+    box-shadow: 0px 64px 60px 0px rgba(0, 0, 0, 0.11);
+    margin-top: 100px;
+  }
+
   .landing-page-body {
     position: absolute;
     width: 100%;

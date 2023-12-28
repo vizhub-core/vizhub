@@ -3,6 +3,9 @@ import { image } from '../image';
 import './styles.scss';
 
 const headerBackgroundSrc = image('landing-header-bkg');
+const headerForegroundSrc = image(
+  'landing-page-ui-example',
+);
 
 export const LandingPageBody = () => {
   return (
@@ -10,7 +13,6 @@ export const LandingPageBody = () => {
       <img
         className="header-background"
         src={headerBackgroundSrc}
-        alt="header"
       />
       <div className="landing-page-body">
         <div className="landing-page-content">
@@ -24,6 +26,10 @@ export const LandingPageBody = () => {
           <Button variant="secondary" size="lg">
             Try Vizhub for free
           </Button>
+          <img
+            className="header-foreground"
+            src={headerForegroundSrc}
+          />
         </div>
       </div>
     </div>
