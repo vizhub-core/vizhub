@@ -278,12 +278,10 @@ export const useRuntime = ({
           if (iframeRef.current) {
             iframeRef.current.srcdoc = srcdoc;
           }
-        } catch (e) {
-          // TODO QA this code path, ideally add tests
-          console.log(
-            'TODO QA this code path, ideally add tests',
-          );
-          setSrcdocError(e.message);
+        } catch (error) {
+          console.error(error);
+
+          setSrcdocError(error.message);
         }
       }, 800);
 
