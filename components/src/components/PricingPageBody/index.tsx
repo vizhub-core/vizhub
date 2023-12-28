@@ -1,40 +1,44 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo } from 'react';
+import { Plan } from 'entities';
 import { GreenCheckSVG } from '../Icons/sam/GreenCheckSVG';
 import { Button, ButtonGroup } from '../bootstrap';
 import { Feature } from './Feature';
 import { image } from '../image';
 import './styles.scss';
-import { Plan } from 'entities';
+
+const randomImage = (options) =>
+  image(
+    options[Math.floor(Math.random() * options.length)],
+  );
 
 const headerBackgroundSrc = image('pricing-header-bkg');
-const starterSpiritSrc = image('pricing-spirit-starter-1');
-const premiumSpiritSrc = image('pricing-spirit-premium-1');
-const professionalSpiritSrc = image(
-  'pricing-spirit-professional',
-);
+// const starterSpiritSrc = image('pricing-spirit-starter');
 
-const StarterFeatures = () => {
+// image('pricing-spirit-premium-2');
+// const professionalSpiritSrc = image(
+//   'pricing-spirit-professional',
+// );
+
+const StarterFeatures = ({ startsExpanded = true }) => {
   return (
     <>
       <Feature
         title="Public Vizzes"
         description="View, fork and modify visualizations viewable by everyone."
         hasBottomBorder={true}
+        startsExpanded={startsExpanded}
       />
       <Feature
         title="Export Code"
         description="Export code for easy integration into existing codebases."
         hasBottomBorder={true}
-      />
-      <Feature
-        title="Real-time Collaboration"
-        description="Allow anyone to edit with you in real time."
-        hasBottomBorder={true}
+        startsExpanded={startsExpanded}
       />
       <Feature
         title="Unfurling"
         description="See rich previews when sharing viz links in social media."
         hasBottomBorder={false}
+        startsExpanded={startsExpanded}
       />
     </>
   );
@@ -75,6 +79,25 @@ export const PricingPageBody = ({
 
   const premiumPricePerMonth = isMonthly ? 20 : 12;
 
+  const starterSpiritSrc = useMemo(
+    () =>
+      randomImage([
+        'pricing-spirit-starter',
+        'pricing-spirit-starter-1',
+        'pricing-spirit-starter-2',
+      ]),
+    [],
+  );
+
+  const premiumSpiritSrc = useMemo(
+    () =>
+      randomImage([
+        'pricing-spirit-premium',
+        'pricing-spirit-premium-2',
+        'pricing-spirit-premium-4',
+      ]),
+    [],
+  );
   return (
     <div className="vh-page vh-pricing-page">
       <img
@@ -181,11 +204,23 @@ export const PricingPageBody = ({
                 <div className="pricing-page-plan-features">
                   <Feature
                     title="Private Vizzes"
-                    description="Develop visualizations accessible only by you and your collaborators."
-                    hasBottomBorder={false}
+                    description="Develop visualizations accessible only by you"
+                    hasBottomBorder={true}
                     startsExpanded={true}
                   />
-                  <StarterFeatures />
+                  <Feature
+                    title="AI-Assisted Coding"
+                    description="Request coding assistance from artificial intelligence"
+                    hasBottomBorder={true}
+                    startsExpanded={true}
+                  />
+                  <Feature
+                    title="Real-time Collaboration"
+                    description="Allow anyone to edit your public vizzes with you in real time."
+                    hasBottomBorder={true}
+                    startsExpanded={true}
+                  />
+                  <StarterFeatures startsExpanded={false} />
                 </div>
               </div>
             </div>
