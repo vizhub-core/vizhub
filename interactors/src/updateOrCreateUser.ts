@@ -1,6 +1,5 @@
 import { Result, Success, ok } from 'gateways';
-import { User, UserId } from 'entities';
-import { a } from 'vitest/dist/suite-dF4WyktM';
+import { User, UserId, userLock } from 'entities';
 
 // findOrCreateUser
 //
