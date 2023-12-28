@@ -9,7 +9,7 @@ import {
   authenticationRequiredError,
 } from 'gateways/src/errors';
 
-const debug = true;
+const debug = false;
 
 export const aiAssistEndpoint = ({
   app,
