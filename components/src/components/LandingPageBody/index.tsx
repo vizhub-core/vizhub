@@ -31,6 +31,19 @@ export const LandingPageBody = () => {
             src={headerForegroundSrc}
           />
         </div>
+        <div className="white-background-section">
+          <div className="landing-page-content">
+            <h1 className="section-heading">
+              What is VizHub?
+            </h1>
+            <div className="vh-lede-01">
+              VizHub is an interactive data visualization
+              platform that caters to teaching and
+              showcasing data visualizations using web
+              technologies like D3.js and React.
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
