@@ -41,9 +41,6 @@ export const VizPageEditor = ({
     next: (content: Content) => Content,
   ) => void;
 }) => {
-  /////////////////////////////////////////////////////////
-  /////////////////////////////////////////////////////////
-
   // These are undefined during SSR, defined in the browser.
   const localPresence =
     contentShareDBDocPresence?.localPresence;
@@ -51,10 +48,12 @@ export const VizPageEditor = ({
     contentShareDBDocPresence?.docPresence;
 
   // AI assist needs to know which viz we're in.
-  // TODO bring this back
-  // const aiAssistOptions = {
-  //   vizId: content?.id,
-  // };
+  const aiAssistOptions = {
+    vizId: content?.id,
+  };
+
+  // Custom AI assist endpoint for VizHub.
+  const aiAssistEndpoint = '/api/ai-assist';
 
   // Propagate the initial username from VizHub's platform auth
   // into VZCode for use in presence features.
@@ -79,7 +78,10 @@ export const VizPageEditor = ({
       {showEditor ? (
         <VZLeft enableUsernameField={false} />
       ) : null}
-      <VZMiddle enableAIAssist={false} />
+      <VZMiddle
+        aiAssistEndpoint={aiAssistEndpoint}
+        aiAssistOptions={aiAssistOptions}
+      />
       <VZResizer side="left" />
       <VZResizer side="right" />
     </VZCodeProvider>

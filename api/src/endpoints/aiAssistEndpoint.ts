@@ -1,49 +1,68 @@
 import bodyParser from 'body-parser';
 import { EntityName } from 'entities';
-import { generateAIResponse } from 'vzcode/src/server/handleAIAssist';
+import { generateAIResponse } from 'vzcode/src/server/generateAIResponse';
 import { toCollectionName } from 'database/src/toCollectionName';
+import { getAuthenticatedUserId } from '../parseAuth0User';
+import { err } from 'gateways';
+import {
+  accessDeniedError,
+  authenticationRequiredError,
+} from 'gateways/src/errors';
 
-/**
- * Middleware to validate the body of the request.
- */
-function validateRequestBody(req, res, next) {
-  const { vizId, text, fileId, cursorLocation } = req.body;
-
-  // Check if all required fields are provided
-  if (
-    !vizId ||
-    typeof vizId !== 'string' ||
-    !text ||
-    typeof text !== 'string' ||
-    !fileId ||
-    typeof fileId !== 'string' ||
-    typeof cursorLocation !== 'number'
-  ) {
-    return res.status(400).send({
-      message:
-        'Invalid request body. Missing or invalid fields.',
-    });
-  }
-
-  next();
-}
+const debug = false;
 
 export const aiAssistEndpoint = ({
   app,
   shareDBConnection,
+  gateways,
 }) => {
+  const { getUser } = gateways;
   // Handle AI Assist requests.
   app.post(
     '/api/ai-assist/',
     bodyParser.json(),
-    validateRequestBody,
     async (req, res) => {
+      if (debug)
+        console.log(
+          '[aiAssistEndpoint] req.body:',
+          req.body,
+        );
+
       const {
         vizId,
-        text: inputText,
-        cursorLocation: insertionCursor,
+        inputText,
+        insertionCursor,
         fileId,
+        aiStreamId,
       } = req.body;
+
+      // TODO only allow AI Assist requests users with edit access to the viz.
+      // And, only allow AI assist requests if the user requesting it
+      // is on the Premium plan.
+      const authenticatedUserId =
+        getAuthenticatedUserId(req);
+
+      if (!authenticatedUserId) {
+        res.json(err(authenticationRequiredError()));
+        return;
+      }
+
+      const userResult = await getUser(authenticatedUserId);
+      if (userResult.outcome === 'failure') {
+        res.json(err(userResult.error));
+        return;
+      }
+      const authenticatedUser = userResult.value.data;
+      if (authenticatedUser.plan !== 'premium') {
+        res.json(
+          err(
+            accessDeniedError(
+              'Only Premium users can use AI Assist. Please upgrade your plan.',
+            ),
+          ),
+        );
+        return;
+      }
 
       // Get the ShareDB document for the viz content
       const entityName: EntityName = 'Content';
@@ -58,6 +77,7 @@ export const aiAssistEndpoint = ({
           insertionCursor,
           fileId,
           shareDBDoc,
+          streamId: aiStreamId,
         });
 
         res

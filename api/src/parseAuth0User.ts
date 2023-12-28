@@ -1,5 +1,4 @@
 import { UserId } from 'entities';
-import { EnhancedRequest } from './types';
 
 // Gets the VizHub user ID from the Auth0 user `sub` property.
 export const parseAuth0Sub = (
@@ -27,9 +26,7 @@ export const parseAuth0User = (auth0User) => ({
     : null,
 });
 
-export const getAuthenticatedUserId = (
-  req: EnhancedRequest,
-) => {
+export const getAuthenticatedUserId = (req) => {
   const auth0User = req?.oidc?.user || null;
 
   const { authenticatedUserId } = parseAuth0User(auth0User);

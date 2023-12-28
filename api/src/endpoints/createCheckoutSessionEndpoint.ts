@@ -75,6 +75,8 @@ export const createCheckoutSession = ({
                 missing_payment_method: 'cancel',
               },
             },
+            // TODO only allow one free trial per user
+            // by checking if user.stripeCustomerId is null
             trial_period_days: 30,
           },
 

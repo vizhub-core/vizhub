@@ -8,16 +8,6 @@ export default defineConfig({
     react(),
     // visualizer({ open: true })
   ],
-  build: {
-    // minify: false,
-    // rollupOptions: {
-    //
-    // },
-    // rollupOptions: {
-    //   // https://rollupjs.org/configuration-options/
-    //   external: ['rollup'],
-    // },
-  },
   // Support Rollup v4
   // See https://github.com/curran/rollup-v4-browser-vite-demo/
   optimizeDeps: {
@@ -29,7 +19,7 @@ export default defineConfig({
       // Uncomment the following to use npm link with Vite.
       // Exclude VZCode, so that we can use `npm link` locally
       // and still have it work with Vite.
-      // 'vzcode',
+      'vzcode',
     ],
 
     // Fixes "React is undefined" error with VZCode imports

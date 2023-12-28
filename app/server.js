@@ -8,14 +8,13 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import http from 'http';
 import express from 'express';
-import jsesc from 'jsesc';
 import { WebSocketServer } from 'ws';
 import WebSocketJSONStream from '@teamwork/websocket-json-stream';
 import { matchPath } from 'react-router-dom';
 import * as Sentry from '@sentry/node';
 import { seoMetaTags } from './src/seoMetaTags.js';
 
-const version = '3.0.0-beta.30';
+const version = '3.0.0-beta.31';
 
 // Generate a random server ID for debugging scaling.
 const serverId = Math.random().toString(36).slice(2);
@@ -41,6 +40,27 @@ const send404 = (res) => {
     .set({ 'Content-Type': 'text/html' })
     .end('Not found');
 };
+
+// Safely transporting page data to the client via JSON in a <script> tag.
+// We need to escape script ending tags, so we can transport HTML within JSON.
+
+// Inspired by:
+// https://github.com/ember-fastboot/fastboot/pull/85/commits/08d6e0ad653723be2096a0fab326164bd8f63ebf
+// https://www.man42.net/blog/2016/12/safely-escape-user-data-in-a-script-tag/
+// https://github.com/yahoo/serialize-javascript/blob/7f3ac252d86b802454cb43782820aea2e0f6dc25/index.js#L25
+// https://pragmaticwebsecurity.com/articles/spasecurity/json-stringify-xss.html
+// https://redux.js.org/usage/server-rendering/#security-considerations
+const escaped = {
+  '&': '\\u0026',
+  '>': '\\u003e',
+  '<': '\\u003c',
+  '\u2028': '\\u2028',
+  '\u2029': '\\u2029',
+};
+const regex = /[\u2028\u2029&><]/g;
+const replacer = (match) => escaped[match];
+const escapeProperly = (str) =>
+  str.replace(regex, replacer);
 
 async function createServer(
   root = process.cwd(),
@@ -395,30 +415,9 @@ async function createServer(
         .replace(`<!--app-html-->`, render(pageData))
         .replace(
           `<!--data-html-->`,
-          `<script>window.pageData = ${jsesc(pageData)
-            // Safely transporting page data to the client via JSON in a <script> tag.
-            // We need to escape script ending tags, so we can transport HTML within JSON.
-
-            // Inspired by:
-            // https://github.com/ember-fastboot/fastboot/pull/85/commits/08d6e0ad653723be2096a0fab326164bd8f63ebf
-
-            //const escaped = {
-            //  '&': '\\u0026',
-            //  '>': '\\u003e',
-            //  '<': '\\u003c',
-            //  '\u2028': '\\u2028',
-            //  '\u2029': '\\u2029',
-            //};
-            //
-            //const regex = /[\u2028\u2029&><]/g;
-            //const replacer = (match) => escaped[match];
-            //const escapeJSON = (json) => json.replace(regex, replacer);
-
-            // https://www.man42.net/blog/2016/12/safely-escape-user-data-in-a-script-tag/
-            // https://github.com/yahoo/serialize-javascript/blob/7f3ac252d86b802454cb43782820aea2e0f6dc25/index.js#L25
-            // https://pragmaticwebsecurity.com/articles/spasecurity/json-stringify-xss.html
-            // https://redux.js.org/usage/server-rendering/#security-considerations
-            .replace(/</g, '\\u003c')};</script>`,
+          `<script>window.pageData = ${escapeProperly(
+            JSON.stringify(pageData),
+          )};</script>`,
         );
 
       res
