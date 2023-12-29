@@ -4,10 +4,7 @@ import react from '@vitejs/plugin-react';
 // import { visualizer } from 'rollup-plugin-visualizer';
 
 export default defineConfig({
-  plugins: [
-    react(),
-    // visualizer({ open: true })
-  ],
+  plugins: [react(), visualizer({ open: true })],
   // Support Rollup v4
   // See https://github.com/curran/rollup-v4-browser-vite-demo/
   optimizeDeps: {

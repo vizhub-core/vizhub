@@ -3,6 +3,7 @@ import { Modal, Button } from '../bootstrap';
 import { LinkSection } from './LinkSection';
 import { CollaboratorsSection } from './CollaboratorsSection';
 import { ShareSectionsNav } from './ShareSectionsNav';
+import { User } from 'entities';
 
 const navItems = [
   { key: 'link', title: 'Link' },
@@ -23,6 +24,7 @@ export const ShareModal = ({
   onEmbedSectionNavigate,
   onSnippetSectionNavigate,
   onCollaboratorsSectionNavigate,
+  handleCollaboratorSearch,
 }: {
   show: boolean;
   linkToCopy: string;
@@ -34,6 +36,9 @@ export const ShareModal = ({
   onEmbedSectionNavigate?: () => void;
   onSnippetSectionNavigate?: () => void;
   onCollaboratorsSectionNavigate?: () => void;
+  handleCollaboratorSearch: (
+    query: string,
+  ) => Promise<User[]>;
 }) => {
   const [section, setSection] = useState('link');
 
@@ -87,6 +92,9 @@ export const ShareModal = ({
           <CollaboratorsSection
             anyoneCanEdit={anyoneCanEdit}
             setAnyoneCanEdit={setAnyoneCanEdit}
+            handleCollaboratorSearch={
+              handleCollaboratorSearch
+            }
           />
         )}
         {section === 'link' && (
