@@ -5,7 +5,7 @@ import { initGateways } from './initGateways';
 import { Result } from '../src';
 
 export const getUsersForTypeaheadTest = () => {
-  describe.only('getUsersForTypeahead', () => {
+  describe('getUsersForTypeahead', () => {
     it('getUsersForTypeahead', async () => {
       const gateways = await initGateways();
       const { saveUser, getUsersForTypeahead } = gateways;

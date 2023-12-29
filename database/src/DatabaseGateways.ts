@@ -664,6 +664,49 @@ export const DatabaseGateways = ({
     -1,
   );
 
+  // From v2
+  // const pageSize = 10;
+
+  // export const searchUsers = (connection) => async ({ query, offset }) => {
+  //   const mongoQuery = {
+  //     $limit: pageSize,
+  //     $skip: offset * pageSize,
+  //     $or: [
+  //       { userName: { $regex: query, $options: 'i' } },
+  //       { fullName: { $regex: query, $options: 'i' } },
+  //     ],
+  //   };
+  //   const results = await fetchShareDBQuery(USER, mongoQuery, connection);
+
+  //   // Uncomment to introduce delay for manual testing.
+  //   //const foo = await new Promise(resolve => {setTimeout(() => resolve(), 3000);});
+  //   return results.map((shareDBDoc) => new User(shareDBDoc.data));
+  // };
+
+  const typeaheadPageSize = 20;
+  const getUsersForTypeahead = (query: string) =>
+    new Promise((resolve) => {
+      const entityName = 'User';
+      const fetchQuery = shareDBConnection.createFetchQuery(
+        toCollectionName(entityName),
+        {
+          $limit: typeaheadPageSize,
+          $or: [
+            { userName: { $regex: query, $options: 'i' } },
+            { fullName: { $regex: query, $options: 'i' } },
+          ],
+        },
+        {},
+        (error, results) => {
+          fetchQuery.destroy();
+          if (error) return resolve(err(error));
+          resolve(
+            ok(results.map((doc) => doc.toSnapshot())),
+          );
+        },
+      );
+    });
+
   let databaseGateways = {
     type: 'DatabaseGateways',
     getForks,
@@ -679,6 +722,7 @@ export const DatabaseGateways = ({
     getUsersByIds,
     getPermissions,
     lock,
+    getUsersForTypeahead,
   };
 
   for (const entityName of crudEntityNames) {
