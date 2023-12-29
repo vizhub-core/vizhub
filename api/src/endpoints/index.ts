@@ -12,6 +12,7 @@ import { aiAssistEndpoint } from './aiAssistEndpoint';
 import { vizThumbnailEndpoint } from './vizThumbnailEndpoint';
 import { billingPortalSessionEndpoint } from './billingPortalSessionEndpoint';
 import { getUsersForTypeaheadEndpoint } from './getUsersForTypeaheadEndpoint';
+import { addCollaboratorEndpoint } from './addCollaboratorEndpoint';
 
 export const endpoints = [
   healthCheck,
@@ -28,4 +29,5 @@ export const endpoints = [
   vizThumbnailEndpoint,
   billingPortalSessionEndpoint,
   getUsersForTypeaheadEndpoint,
+  addCollaboratorEndpoint,
 ];

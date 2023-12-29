@@ -5,7 +5,6 @@ import {
   Content,
   Visibility,
   SectionId,
-  Snapshot,
   User,
 } from 'entities';
 import { Result, Success } from 'gateways';
@@ -94,6 +93,11 @@ export interface VizKitAPI {
     getUsersForTypeahead: (
       query: string,
     ) => Promise<Result<Array<User>>>;
+
+    addCollaborator: (options: {
+      vizId: VizId;
+      userId: UserId;
+    }) => Promise<Result<Success>>;
   };
 }
 
@@ -207,6 +211,15 @@ export const VizKit = ({
           {
             query,
           },
+        ),
+
+      addCollaborator: async (options: {
+        vizId: VizId;
+        userId: UserId;
+      }) =>
+        await postJSON(
+          `${baseUrl}/add-collaborator`,
+          options,
         ),
     },
   };

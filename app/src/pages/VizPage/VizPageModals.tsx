@@ -129,6 +129,7 @@ export const VizPageModals = ({
     }
   }, [linkToCopy]);
 
+  // Support typeahead for adding collaborators
   const handleCollaboratorSearch = useCallback(
     async (query: string) => {
       const result =
@@ -143,6 +144,25 @@ export const VizPageModals = ({
       return result.value;
     },
     [],
+  );
+
+  // Actually add a collaborator to the viz
+  const handleCollaboratorAdd = useCallback(
+    async (user: User) => {
+      const result = await vizKit.rest.addCollaborator({
+        vizId: info.id,
+        userId: user.id,
+      });
+      if (result.outcome === 'failure') {
+        console.error(
+          'Failed to add collaborator: ',
+          result.error,
+        );
+        return;
+      }
+      return result.value;
+    },
+    [info.id],
   );
 
   return (
@@ -185,6 +205,7 @@ export const VizPageModals = ({
           handleCollaboratorSearch={
             handleCollaboratorSearch
           }
+          handleCollaboratorAdd={handleCollaboratorAdd}
         />
       )}
       {showDeleteVizConfirmationModal && (

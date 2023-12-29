@@ -15,6 +15,7 @@ export const CollaboratorsSection = ({
   anyoneCanEdit,
   setAnyoneCanEdit,
   handleCollaboratorSearch,
+  handleCollaboratorAdd,
   showAnyoneCanEdit,
 }: {
   anyoneCanEdit: boolean;
@@ -22,6 +23,7 @@ export const CollaboratorsSection = ({
   handleCollaboratorSearch: (
     query: string,
   ) => Promise<Array<User>>;
+  handleCollaboratorAdd: (user: User) => Promise<void>;
   showAnyoneCanEdit: boolean;
 }) => {
   // True when the async handleCollaboratorSearch is in progress
@@ -65,20 +67,31 @@ export const CollaboratorsSection = ({
 
   // When the user selects a collaborator
   const handleChange = useCallback(
-    (selectedUsers: Array<User>) => {
-      console.log(
-        'TODO add this user to the list of collaborators.',
-      );
-      console.log(selectedUsers);
+    async (selectedUsers: Array<User>) => {
       if (selectedUsers.length !== 1) {
         console.error(
           'Expected exactly one user to be selected.',
         );
         return;
       }
-      addCollaborator(selectedUsers[0]);
+
+      const newCollaborator = selectedUsers[0];
+
+      // Check if new collaborator is already in the list
+      const alreadyAdded = collaborators.some(
+        (collaborator) =>
+          collaborator.userName ===
+          newCollaborator.userName,
+      );
+      if (!alreadyAdded) {
+        // Add the user in the client-side list
+        addCollaborator(newCollaborator);
+
+        // Add the permission in the database
+        await handleCollaboratorAdd(newCollaborator);
+      }
     },
-    [addCollaborator],
+    [addCollaborator, collaborators, handleCollaboratorAdd],
   );
 
   return (
