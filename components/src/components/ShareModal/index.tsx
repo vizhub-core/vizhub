@@ -25,6 +25,7 @@ export const ShareModal = ({
   onSnippetSectionNavigate,
   onCollaboratorsSectionNavigate,
   handleCollaboratorSearch,
+  showAnyoneCanEdit,
 }: {
   show: boolean;
   linkToCopy: string;
@@ -39,6 +40,7 @@ export const ShareModal = ({
   handleCollaboratorSearch: (
     query: string,
   ) => Promise<User[]>;
+  showAnyoneCanEdit: boolean;
 }) => {
   const [section, setSection] = useState('link');
 
@@ -95,6 +97,7 @@ export const ShareModal = ({
             handleCollaboratorSearch={
               handleCollaboratorSearch
             }
+            showAnyoneCanEdit={showAnyoneCanEdit}
           />
         )}
         {section === 'link' && (

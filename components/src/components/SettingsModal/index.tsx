@@ -37,7 +37,7 @@ export const SettingsModal = ({
     slug,
   }: {
     title: string;
-    visibility: string;
+    visibility: Visibility;
     owner: string;
     slug: string;
   }) => void;

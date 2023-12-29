@@ -87,6 +87,13 @@ export const VizPageModals = ({
     [info],
   );
 
+  // Only show the option to allow anyone to edit
+  // if the viz is public.
+  const showAnyoneCanEdit = useMemo(
+    () => info.visibility === 'public',
+    [info.visibility],
+  );
+
   const linkToCopy = useMemo(
     () => getVizPageHref(ownerUser, info, true),
     [ownerUser, info],
@@ -158,6 +165,7 @@ export const VizPageModals = ({
           onLinkCopy={handleLinkCopy}
           anyoneCanEdit={anyoneCanEdit}
           setAnyoneCanEdit={setAnyoneCanEdit}
+          showAnyoneCanEdit={showAnyoneCanEdit}
         />
       )}
       {showDeleteVizConfirmationModal && (

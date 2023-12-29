@@ -37,6 +37,7 @@ export const args = {
     console.log('handleCollaboratorSearch: ' + query);
     return [userJoe, userJane];
   },
+  showAnyoneCanEdit: true,
 };
 
 const Story = () => {

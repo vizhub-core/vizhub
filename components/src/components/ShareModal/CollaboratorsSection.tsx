@@ -14,12 +14,14 @@ export const CollaboratorsSection = ({
   anyoneCanEdit,
   setAnyoneCanEdit,
   handleCollaboratorSearch,
+  showAnyoneCanEdit,
 }: {
   anyoneCanEdit: boolean;
   setAnyoneCanEdit: (anyoneCanEdit: boolean) => void;
   handleCollaboratorSearch: (
     query: string,
   ) => Promise<User[]>;
+  showAnyoneCanEdit: boolean;
 }) => {
   // True when the async handleCollaboratorSearch is in progress
   const [isLoading, setIsLoading] = useState(false);
@@ -60,18 +62,19 @@ export const CollaboratorsSection = ({
   }, [selection]);
 
   return (
-    <Form.Group
-      className="mb-3 mt-3"
-      controlId="formShareLink"
-    >
-      <Form.Group>
+    <>
+      <Form.Group
+        className="mb-3 mt-3"
+        controlId="collaboratorsControl"
+      >
         <Form.Label>Add Collaborator</Form.Label>
         <AsyncTypeahead
           filterBy={filterBy}
-          id="async-example"
+          className="mb-2"
+          id="async-collaborator-search"
           isLoading={isLoading}
-          labelKey="login"
-          minLength={3}
+          labelKey="userName"
+          minLength={2}
           onSearch={handleSearch}
           onChange={handleChange}
           options={options}
@@ -93,20 +96,28 @@ export const CollaboratorsSection = ({
             </>
           )}
         />
-        <Button onClick={handleAddCollaborator}>Add</Button>
+        <Form.Text className="text-muted">
+          Start typing to search for collaborators to add.{' '}
+        </Form.Text>
       </Form.Group>
-      <InputGroup>
-        <Form.Check
-          type="checkbox"
-          label="Anyone can edit"
-          checked={anyoneCanEdit}
-          onChange={handleCheckboxChange}
-        />
-      </InputGroup>
-      <Form.Text className="text-muted">
-        If you check this box, anyone with the link can edit
-        this viz.
-      </Form.Text>
-    </Form.Group>
+      {showAnyoneCanEdit && (
+        <Form.Group
+          className="mb-3 mt-3"
+          controlId="anyoneCanEditControl"
+        >
+          <Form.Label>Allow Anyone to Edit</Form.Label>
+          <Form.Check
+            type="checkbox"
+            label="Anyone can edit"
+            checked={anyoneCanEdit}
+            onChange={handleCheckboxChange}
+          />
+          <Form.Text className="text-muted">
+            If you check this box, anyone with the link can
+            edit this viz.
+          </Form.Text>
+        </Form.Group>
+      )}
+    </>
   );
 };
