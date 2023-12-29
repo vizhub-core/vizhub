@@ -371,7 +371,7 @@ export const MemoryGateways = (): Gateways => {
           .toLowerCase()
           .includes(query.toLowerCase()),
     );
-    return ok(users.map(fakeSnapshot));
+    return ok(users);
   };
 
   // Populate non-CRUD methods.

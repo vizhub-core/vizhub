@@ -463,5 +463,5 @@ export interface Gateways {
   // which could be a partial username or full name.
   getUsersForTypeahead(
     query: string,
-  ): Promise<Result<Array<Snapshot<User>>>>;
+  ): Promise<Result<Array<User>>>;
 }

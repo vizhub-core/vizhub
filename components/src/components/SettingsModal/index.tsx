@@ -42,14 +42,14 @@ export const SettingsModal = ({
     slug: string;
   }) => void;
   initialTitle: string;
-  initialSlug: string;
+  initialSlug?: string;
   initialVisibility: Visibility;
   initialOwner: UserId;
   possibleOwners: Array<PossibleOwner>;
   currentPlan: Plan;
   pricingHref: string;
-  profileHref: string;
-  userName: string;
+  profileHref?: string;
+  userName?: string;
   enableURLChange?: boolean;
 }) => {
   // Local state for the title

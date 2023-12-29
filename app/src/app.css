@@ -5,8 +5,3 @@ body,
 #app {
   height: 100%;
 }
-
-/* TODO move to vizhub-ui */
-.form-label {
-  font-weight: 500;
-}

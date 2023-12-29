@@ -129,6 +129,22 @@ export const VizPageModals = ({
     }
   }, [linkToCopy]);
 
+  const handleCollaboratorSearch = useCallback(
+    async (query: string) => {
+      const result =
+        await vizKit.rest.getUsersForTypeahead(query);
+      if (result.outcome === 'failure') {
+        console.error(
+          'Failed to search for collaborators: ',
+          result.error,
+        );
+        return;
+      }
+      return result.value;
+    },
+    [],
+  );
+
   return (
     <>
       {showForkModal && (
@@ -166,6 +182,9 @@ export const VizPageModals = ({
           anyoneCanEdit={anyoneCanEdit}
           setAnyoneCanEdit={setAnyoneCanEdit}
           showAnyoneCanEdit={showAnyoneCanEdit}
+          handleCollaboratorSearch={
+            handleCollaboratorSearch
+          }
         />
       )}
       {showDeleteVizConfirmationModal && (

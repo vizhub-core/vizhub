@@ -13,28 +13,22 @@ export const getUsersForTypeaheadTest = () => {
       await saveUser(userJane);
 
       // Search for joe
-      const result: Result<Array<Snapshot<User>>> =
+      const result: Result<Array<User>> =
         await getUsersForTypeahead('jo');
       assert(result.outcome === 'success');
-      expect(result.value.map(({ data }) => data)).toEqual([
-        userJoe,
-      ]);
+      expect(result.value).toEqual([userJoe]);
 
       // Search for jane
-      const result2: Result<Array<Snapshot<User>>> =
+      const result2: Result<Array<User>> =
         await getUsersForTypeahead('ja');
       assert(result2.outcome === 'success');
-      expect(result2.value.map(({ data }) => data)).toEqual(
-        [userJane],
-      );
+      expect(result2.value).toEqual([userJane]);
 
       // Search for "j"
-      const result3: Result<Array<Snapshot<User>>> =
+      const result3: Result<Array<User>> =
         await getUsersForTypeahead('j');
       assert(result3.outcome === 'success');
-      expect(result3.value.map(({ data }) => data)).toEqual(
-        [userJoe, userJane],
-      );
+      expect(result3.value).toEqual([userJoe, userJane]);
     });
   });
 };

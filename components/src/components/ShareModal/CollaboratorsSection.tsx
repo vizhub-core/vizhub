@@ -88,6 +88,7 @@ export const CollaboratorsSection = ({
                   height: '24px',
                   marginRight: '10px',
                   width: '24px',
+                  borderRadius: '50%',
                 }}
               />
               <span>

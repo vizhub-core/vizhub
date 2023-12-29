@@ -12,6 +12,7 @@ import {
   EntityName,
   FolderId,
   ResourceLockId,
+  User,
   UserName,
   defaultSortField,
   defaultSortOrder,
@@ -28,6 +29,7 @@ import {
 import { otType, diff } from 'ot';
 import { toCollectionName } from './toCollectionName';
 import { pageSize } from 'gateways/src/Gateways';
+import { ShareDBDoc } from 'vzcode';
 // import { embeddingMethods } from './embeddingMethods';
 
 const debug = false;
@@ -701,7 +703,11 @@ export const DatabaseGateways = ({
           fetchQuery.destroy();
           if (error) return resolve(err(error));
           resolve(
-            ok(results.map((doc) => doc.toSnapshot())),
+            ok(
+              results.map(
+                (doc: ShareDBDoc<User>) => doc.data,
+              ),
+            ),
           );
         },
       );

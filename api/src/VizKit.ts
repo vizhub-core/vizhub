@@ -5,6 +5,8 @@ import {
   Content,
   Visibility,
   SectionId,
+  Snapshot,
+  User,
 } from 'entities';
 import { Result, Success } from 'gateways';
 import { InfosAndOwners } from 'interactors/src/getInfosAndOwners';
@@ -87,6 +89,11 @@ export interface VizKitAPI {
         sessionURL: string;
       }>
     >;
+
+    // get-users-for-typeahead
+    getUsersForTypeahead: (
+      query: string,
+    ) => Promise<Result<Array<User>>>;
   };
 }
 
@@ -191,6 +198,14 @@ export const VizKit = ({
           `${baseUrl}/create-billing-portal-session`,
           {
             userId,
+          },
+        ),
+
+      getUsersForTypeahead: async (query: string) =>
+        await postJSON(
+          `${baseUrl}/get-users-for-typeahead`,
+          {
+            query,
           },
         ),
     },

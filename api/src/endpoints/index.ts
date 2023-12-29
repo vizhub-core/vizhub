@@ -11,6 +11,7 @@ import { createCheckoutSession } from './createCheckoutSessionEndpoint';
 import { aiAssistEndpoint } from './aiAssistEndpoint';
 import { vizThumbnailEndpoint } from './vizThumbnailEndpoint';
 import { billingPortalSessionEndpoint } from './billingPortalSessionEndpoint';
+import { getUsersForTypeaheadEndpoint } from './getUsersForTypeaheadEndpoint';
 
 export const endpoints = [
   healthCheck,
@@ -26,4 +27,5 @@ export const endpoints = [
   aiAssistEndpoint,
   vizThumbnailEndpoint,
   billingPortalSessionEndpoint,
+  getUsersForTypeaheadEndpoint,
 ];
