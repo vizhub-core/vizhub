@@ -457,4 +457,11 @@ export interface Gateways {
     // an async function that runs with the locks:
     fn: () => Promise<T>,
   ): Promise<T>;
+
+  // Gets a list of users to power the typeahead search.
+  // The query is a string that the user has typed so far,
+  // which could be a partial username or full name.
+  getUsersForTypeahead(
+    query: string,
+  ): Promise<Result<Array<Snapshot<User>>>>;
 }
