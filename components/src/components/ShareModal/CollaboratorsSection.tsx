@@ -67,10 +67,10 @@ export const CollaboratorsSection = ({
         className="mb-3 mt-3"
         controlId="collaboratorsControl"
       >
-        <Form.Label>Add Collaborator</Form.Label>
+        <Form.Label>Manage Collaborators</Form.Label>
         <AsyncTypeahead
           filterBy={filterBy}
-          className="mb-2"
+          className="mb-1"
           id="async-collaborator-search"
           isLoading={isLoading}
           labelKey="userName"
@@ -97,16 +97,17 @@ export const CollaboratorsSection = ({
           )}
         />
         <Form.Text className="text-muted">
-          Start typing to search for collaborators to add.{' '}
+          Start typing to search for collaborators to add.
         </Form.Text>
       </Form.Group>
       {showAnyoneCanEdit && (
         <Form.Group
-          className="mb-3 mt-3"
+          className="mb-3 mt-4"
           controlId="anyoneCanEditControl"
         >
           <Form.Label>Allow Anyone to Edit</Form.Label>
           <Form.Check
+            className="mb-1"
             type="checkbox"
             label="Anyone can edit"
             checked={anyoneCanEdit}

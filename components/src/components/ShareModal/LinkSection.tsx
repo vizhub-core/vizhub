@@ -29,11 +29,8 @@ export const LinkSection = ({ linkToCopy, onLinkCopy }) => {
   }, [onLinkCopy]);
 
   return (
-    <Form.Group
-      className="mb-3 mt-3"
-      controlId="formShareLink"
-    >
-      <InputGroup>
+    <Form.Group className="mt-4" controlId="formShareLink">
+      <InputGroup className="mb-1">
         <FormControl
           aria-label="Link URL"
           aria-describedby="button-copy"

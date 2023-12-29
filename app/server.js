@@ -225,6 +225,7 @@ async function createServer(
     'readSnapshots',
     accessControl.vizRead(gateways),
   );
+  shareDBBackend.use('query', accessControl.query());
 
   // TODO investigate if any of these AI suggestions carry any weight
   // shareDBBackend.use('query', accessControl.vizRead(gateways));

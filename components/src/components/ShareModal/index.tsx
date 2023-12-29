@@ -82,9 +82,9 @@ export const ShareModal = ({
         <Modal.Title>Share</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <div className="vh-form-note contextual">
+        {/* <div className="vh-form-note contextual">
           SHARE WITH
-        </div>
+        </div> */}
         <ShareSectionsNav
           section={section}
           handleSectionSelect={handleSectionSelect}
