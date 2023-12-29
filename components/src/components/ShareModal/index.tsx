@@ -4,6 +4,7 @@ import { LinkSection } from './LinkSection';
 import { CollaboratorsSection } from './CollaboratorsSection';
 import { ShareSectionsNav } from './ShareSectionsNav';
 import { User } from 'entities';
+import './styles.scss';
 
 const navItems = [
   { key: 'link', title: 'Link' },
@@ -77,7 +78,12 @@ export const ShareModal = ({
   );
 
   return show ? (
-    <Modal show={show} onHide={onClose} animation={false}>
+    <Modal
+      show={show}
+      onHide={onClose}
+      animation={false}
+      className="vh-share-modal"
+    >
       <Modal.Header closeButton>
         <Modal.Title>Share</Modal.Title>
       </Modal.Header>

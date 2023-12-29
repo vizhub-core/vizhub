@@ -155,7 +155,7 @@ export const vizRead = (gateways: Gateways) =>
   vizVerify(gateways, READ);
 
 export const query = () => (request, next) => {
-  console.log('query', request);
+  // console.log('query', request);
   if (request.agent.isServer) {
     return next();
   }

@@ -1,7 +1,8 @@
 import { useCallback, useState } from 'react';
-import { Button, Form, InputGroup } from '../bootstrap';
+import { Form } from '../bootstrap';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { User } from 'entities';
+import { Button } from 'react-bootstrap';
 
 // Inspired by
 // https://ericgio.github.io/react-bootstrap-typeahead/#asynchronous-searching
@@ -20,17 +21,32 @@ export const CollaboratorsSection = ({
   setAnyoneCanEdit: (anyoneCanEdit: boolean) => void;
   handleCollaboratorSearch: (
     query: string,
-  ) => Promise<User[]>;
+  ) => Promise<Array<User>>;
   showAnyoneCanEdit: boolean;
 }) => {
   // True when the async handleCollaboratorSearch is in progress
   const [isLoading, setIsLoading] = useState(false);
 
   // The list of users to show in the typeahead
-  const [options, setOptions] = useState<User[]>([]);
+  const [options, setOptions] = useState<Array<User>>([]);
 
-  // The selected user
-  const [selection, setSelection] = useState<User[]>([]);
+  // The collaborators on this viz
+  // TODO:
+  //  * Populate this from the server on page load
+  //  * Synchronize this to the server when the user adds or removes a collaborator
+  const [collaborators, setCollaborators] = useState<
+    Array<User>
+  >([]);
+
+  const addCollaborator = useCallback(
+    (user: User) => {
+      setCollaborators((collaborators) => [
+        ...collaborators,
+        user,
+      ]);
+    },
+    [setCollaborators],
+  );
 
   // When the user checks the "Anyone can edit" checkbox
   const handleCheckboxChange = useCallback(() => {
@@ -49,17 +65,21 @@ export const CollaboratorsSection = ({
 
   // When the user selects a collaborator
   const handleChange = useCallback(
-    (selected: User[]) => {
-      setSelection(selected);
+    (selectedUsers: Array<User>) => {
+      console.log(
+        'TODO add this user to the list of collaborators.',
+      );
+      console.log(selectedUsers);
+      if (selectedUsers.length !== 1) {
+        console.error(
+          'Expected exactly one user to be selected.',
+        );
+        return;
+      }
+      addCollaborator(selectedUsers[0]);
     },
-    [setSelection],
+    [addCollaborator],
   );
-
-  // When the user clicks the "Add" button
-  const handleAddCollaborator = useCallback(() => {
-    console.log('handleAddCollaborator');
-    console.log('selection', selection);
-  }, [selection]);
 
   return (
     <>
@@ -68,6 +88,31 @@ export const CollaboratorsSection = ({
         controlId="collaboratorsControl"
       >
         <Form.Label>Manage Collaborators</Form.Label>
+        <Form.Group>
+          {collaborators.map((collaborator) => (
+            <div className="collaborator-entry mb-3">
+              <Form.Control
+                as="div"
+                key={collaborator.userName}
+              >
+                <img
+                  alt={collaborator.userName}
+                  src={collaborator.picture}
+                  style={{
+                    height: '24px',
+                    marginRight: '10px',
+                    marginTop: '-4px',
+                    width: '24px',
+                    borderRadius: '50%',
+                  }}
+                />
+                {collaborator.displayName ||
+                  collaborator.userName}
+              </Form.Control>
+              <Button variant="secondary">Remove</Button>
+            </div>
+          ))}
+        </Form.Group>
         <AsyncTypeahead
           filterBy={filterBy}
           className="mb-1"
