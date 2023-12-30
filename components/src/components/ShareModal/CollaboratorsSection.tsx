@@ -1,8 +1,9 @@
 import { useCallback, useState } from 'react';
 import { Form } from '../bootstrap';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
-import { User } from 'entities';
+import { User, UserId } from 'entities';
 import { Button } from 'react-bootstrap';
+import { CollaboratorEntry } from './CollaboratorEntry';
 
 // Inspired by
 // https://ericgio.github.io/react-bootstrap-typeahead/#asynchronous-searching
@@ -16,6 +17,7 @@ export const CollaboratorsSection = ({
   setAnyoneCanEdit,
   handleCollaboratorSearch,
   handleCollaboratorAdd,
+  handleCollaboratorRemove,
   showAnyoneCanEdit,
   initialCollaborators,
 }: {
@@ -25,6 +27,9 @@ export const CollaboratorsSection = ({
     query: string,
   ) => Promise<Array<User>>;
   handleCollaboratorAdd: (user: User) => Promise<'success'>;
+  handleCollaboratorRemove: (
+    userId: UserId,
+  ) => Promise<'success'>;
   showAnyoneCanEdit: boolean;
   initialCollaborators: Array<User>;
 }) => {
@@ -95,6 +100,22 @@ export const CollaboratorsSection = ({
     [addCollaborator, collaborators, handleCollaboratorAdd],
   );
 
+  const removeCollaborator = useCallback(
+    async (userId: UserId) => {
+      // Remove the collaborator from the client-side list
+      setCollaborators((collaborators) =>
+        collaborators.filter(
+          (collaborator) => collaborator.id !== userId,
+        ),
+      );
+
+      // Remove the permission in the database
+      // Add the permission in the database
+      await handleCollaboratorRemove(userId);
+    },
+    [setCollaborators, handleCollaboratorRemove],
+  );
+
   return (
     <>
       <Form.Group
@@ -104,27 +125,11 @@ export const CollaboratorsSection = ({
         <Form.Label>Manage Collaborators</Form.Label>
         <Form.Group>
           {collaborators.map((collaborator) => (
-            <div
-              className="collaborator-entry mb-3"
-              key={collaborator.userName}
-            >
-              <Form.Control as="div">
-                <img
-                  alt={collaborator.userName}
-                  src={collaborator.picture}
-                  style={{
-                    height: '24px',
-                    marginRight: '10px',
-                    marginTop: '-4px',
-                    width: '24px',
-                    borderRadius: '50%',
-                  }}
-                />
-                {collaborator.displayName ||
-                  collaborator.userName}
-              </Form.Control>
-              <Button variant="secondary">Remove</Button>
-            </div>
+            <CollaboratorEntry
+              key={collaborator.id}
+              collaborator={collaborator}
+              removeCollaborator={removeCollaborator}
+            />
           ))}
         </Form.Group>
         <AsyncTypeahead

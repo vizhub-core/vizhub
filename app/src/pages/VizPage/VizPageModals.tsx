@@ -167,6 +167,25 @@ export const VizPageModals = ({
     [info.id],
   );
 
+  // Actually remove a collaborator from the viz
+  const handleCollaboratorRemove = useCallback(
+    async (userId: UserId) => {
+      const result = await vizKit.rest.removeCollaborator({
+        vizId: info.id,
+        userId,
+      });
+      if (result.outcome === 'failure') {
+        console.error(
+          'Failed to remove collaborator: ',
+          result.error,
+        );
+        return;
+      }
+      return result.value;
+    },
+    [info.id],
+  );
+
   return (
     <>
       {showForkModal && (
@@ -208,6 +227,9 @@ export const VizPageModals = ({
             handleCollaboratorSearch
           }
           handleCollaboratorAdd={handleCollaboratorAdd}
+          handleCollaboratorRemove={
+            handleCollaboratorRemove
+          }
           initialCollaborators={initialCollaborators}
         />
       )}

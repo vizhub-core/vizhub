@@ -98,6 +98,11 @@ export interface VizKitAPI {
       vizId: VizId;
       userId: UserId;
     }) => Promise<Result<Success>>;
+
+    removeCollaborator: (options: {
+      vizId: VizId;
+      userId: UserId;
+    }) => Promise<Result<Success>>;
   };
 }
 
@@ -219,6 +224,15 @@ export const VizKit = ({
       }) =>
         await postJSON(
           `${baseUrl}/add-collaborator`,
+          options,
+        ),
+
+      removeCollaborator: async (options: {
+        vizId: VizId;
+        userId: UserId;
+      }) =>
+        await postJSON(
+          `${baseUrl}/remove-collaborator`,
           options,
         ),
     },

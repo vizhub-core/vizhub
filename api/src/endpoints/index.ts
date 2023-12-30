@@ -13,6 +13,7 @@ import { vizThumbnailEndpoint } from './vizThumbnailEndpoint';
 import { billingPortalSessionEndpoint } from './billingPortalSessionEndpoint';
 import { getUsersForTypeaheadEndpoint } from './getUsersForTypeaheadEndpoint';
 import { addCollaboratorEndpoint } from './addCollaboratorEndpoint';
+import { removeCollaboratorEndpoint } from './removeCollaboratorEndpoint';
 
 export const endpoints = [
   healthCheck,
@@ -30,4 +31,5 @@ export const endpoints = [
   billingPortalSessionEndpoint,
   getUsersForTypeaheadEndpoint,
   addCollaboratorEndpoint,
+  removeCollaboratorEndpoint,
 ];

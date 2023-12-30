@@ -27,6 +27,7 @@ export const ShareModal = ({
   onCollaboratorsSectionNavigate,
   handleCollaboratorSearch,
   handleCollaboratorAdd,
+  handleCollaboratorRemove,
   showAnyoneCanEdit,
   initialCollaborators,
 }: {
@@ -44,6 +45,9 @@ export const ShareModal = ({
     query: string,
   ) => Promise<User[]>;
   handleCollaboratorAdd: (user: User) => Promise<'success'>;
+  handleCollaboratorRemove: (
+    userId: string,
+  ) => Promise<'success'>;
   showAnyoneCanEdit: boolean;
   initialCollaborators: Array<User>;
 }) => {
@@ -108,6 +112,9 @@ export const ShareModal = ({
               handleCollaboratorSearch
             }
             handleCollaboratorAdd={handleCollaboratorAdd}
+            handleCollaboratorRemove={
+              handleCollaboratorRemove
+            }
             showAnyoneCanEdit={showAnyoneCanEdit}
             initialCollaborators={initialCollaborators}
           />
