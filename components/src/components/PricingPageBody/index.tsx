@@ -117,6 +117,7 @@ export const PricingPageBody = ({
         // 'pricing-spirit-premium',
         'pricing-spirit-premium-2',
         'pricing-spirit-premium-4',
+        'pricing-spirit-premium-5',
       ]),
     [],
   );
