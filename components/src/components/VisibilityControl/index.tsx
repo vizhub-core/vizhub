@@ -8,9 +8,9 @@ const enableUnlisted = false;
 const visibilities: {
   [K in Visibility]: string;
 } = {
-  public: 'Anyone can access this viz.',
-  private: 'Only you can access this viz.',
-  unlisted: 'Anyone with the link can access this viz.',
+  public: 'Anyone can view this viz.',
+  private: 'Only you can view this viz.',
+  unlisted: 'Anyone with the link can view this viz.',
 };
 
 export const VisibilityControl = ({

@@ -20,10 +20,6 @@ const version = '3.0.0-beta.31';
 const serverId = Math.random().toString(36).slice(2);
 
 let port = 5173;
-// const pubsubTest = true;
-// if (pubsubTest) {
-//   port = 5174;
-// }
 
 const env = process.env;
 
@@ -126,13 +122,37 @@ async function createServer(
     app.use((await import('compression')).default());
 
     // Serve the build as static files.
+    // app.use(
+    //   (await import('serve-static')).default(
+    //     resolve('dist/client'),
+    //     {
+    //       index: false,
+    //     },
+    //   ),
+    // );
+
+    // Set the max-age for the Cache-Control header to 1 year (in seconds)
+    const oneYearInSeconds = 365 * 24 * 60 * 60;
+
     app.use(
-      (await import('serve-static')).default(
-        resolve('dist/client'),
-        {
-          index: false,
+      serveStatic(resolve('dist/client'), {
+        index: false,
+        setHeaders: (res) => {
+          if (!isProd) {
+            // Custom Cache-Control for dev
+            res.setHeader(
+              'Cache-Control',
+              'public, max-age=0',
+            );
+          } else {
+            // Aggressive Cache-Control for prod
+            res.setHeader(
+              'Cache-Control',
+              `public, max-age=${oneYearInSeconds}`,
+            );
+          }
         },
-      ),
+      }),
     );
 
     // Set up Sentry, prod only.
@@ -225,67 +245,10 @@ async function createServer(
     'readSnapshots',
     accessControl.vizRead(gateways),
   );
-
-  // TODO investigate if any of these AI suggestions carry any weight
-  // shareDBBackend.use('query', accessControl.vizRead(gateways));
-  // shareDBBackend.use('submit', accessControl.vizWrite(gateways));
-  // shareDBBackend.use('submitRequest', accessControl.vizWrite(gateways));
-  // shareDBBackend.use('submitPresence', accessControl.vizWrite(gateways));
-  // shareDBBackend.use('submitResponse', accessControl.vizWrite(gateways));
-  // shareDBBackend.use('submitSnapshot', accessControl.vizWrite(gateways));
-  // shareDBBackend.use('submitOp', accessControl.vizWrite(gateways));
-  // shareDBBackend.use('afterSubmit', accessControl.vizWrite(gateways));
-  // shareDBBackend.use('receive', accessControl.vizWrite(gateways));
-  // shareDBBackend.use('receiveRequest', accessControl.vizWrite(gateways));
-  // shareDBBackend.use('receivePresence', accessControl.vizWrite(gateways));
-  // shareDBBackend.use('receiveResponse', accessControl.vizWrite(gateways));
-  // shareDBBackend.use('receiveSnapshot', accessControl.vizWrite(gateways));
-  // shareDBBackend.use('receiveOp', accessControl.vizWrite(gateways));
-  // shareDBBackend.use('afterReceive', accessControl.vizWrite(gateways));
-  // shareDBBackend.use('querySnapshots', accessControl.vizRead(gateways));
-  // shareDBBackend.use('queryOps', accessControl.vizRead(gateways));
-  // shareDBBackend.use('queryPresence', accessControl.vizRead(gateways));
-  // shareDBBackend.use('queryFetch', accessControl.vizRead(gateways));
-  // shareDBBackend.use('queryPoll', accessControl.vizRead(gateways));
-  // shareDBBackend.use('queryListen', accessControl.vizRead(gateways));
-  // shareDBBackend.use('querySubscribe', accessControl.vizRead(gateways));
-  // shareDBBackend.use('queryUnsubscribe', accessControl.vizRead(gateways));
-  // shareDBBackend.use('queryCreateFetchQuery', accessControl.vizRead(gateways));
-  // shareDBBackend.use('queryCreatePollQuery', accessControl.vizRead(gateways));
-  // shareDBBackend.use('queryCreateListenQuery', accessControl.vizRead(gateways));
-  // shareDBBackend.use('queryCreateSubscribeQuery', accessControl.vizRead(gateways));
-  // shareDBBackend.use('queryCreateUnsubscribeQuery', accessControl.vizRead(gateways));
-  // shareDBBackend.use('queryCreatePresenceQuery', accessControl.vizRead(gateways));
+  shareDBBackend.use('query', accessControl.query());
 
   // Listen for ShareDB connections over WebSocket.
   const wss = new WebSocketServer({ server });
-  // const wss = new WebSocketServer({ noServer: true });
-
-  // From https://github.com/adamjmcgrath/eoidc-testing-example/blob/ws/index.js
-  // server.on('upgrade', (req, socket, head) => {
-  //   console.log('Handling upgrade');
-  //   let res = new http.ServerResponse(req);
-  //   res.assignSocket(socket);
-  //   res.on('finish', () => res.socket.destroy());
-  //   app.handle(req, res, () => {
-  //     // if (req.oidc.isAuthenticated()) {
-  //     try {
-  //       wss.handleUpgrade(req, socket, head, (ws) => {
-  //         wss.emit('connection', ws, req, { user: req.oidc?.user });
-  //       });
-  //     } catch (e) {
-  //       console.log('ERROR', e);
-  //     }
-  //     // } else {
-  //     //   socket.write('HTTP/1.1 401 Unauthorized\r\n\r\n');
-  //     //   socket.destroy();
-  //     // }
-  //   });
-  // });
-
-  // wss.on('connection', (ws) => {
-  //   shareDBBackend.listen(new WebSocketJSONStream(ws));
-  // });
 
   // Set up new connections to interact with ShareDB.
   wss.on('connection', (ws, req) => {

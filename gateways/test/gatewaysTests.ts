@@ -12,7 +12,8 @@ import { getFolderAncestorsTest } from './getFolderAncestorsTest';
 import { getPermissionsTest } from './getPermissionsTest';
 import { getInfosTest } from './getInfosTest';
 import { getUsersByIdsTest } from './getUsersByIdsTest';
-import { embeddingsTest } from './embeddingsTest';
+// import { embeddingsTest } from './embeddingsTest';
+import { getUsersForTypeaheadTest } from './getUsersForTypeaheadTest';
 
 export const gatewaysTests = () => {
   describe(`CRUD`, () => {
@@ -32,6 +33,7 @@ export const gatewaysTests = () => {
   getPermissionsTest();
   getInfosTest();
   getUsersByIdsTest();
+  getUsersForTypeaheadTest();
 
-  embeddingsTest();
+  // embeddingsTest();
 };

@@ -6,6 +6,8 @@ import {
   READ,
   WRITE,
   DELETE,
+  Permission,
+  User,
 } from 'entities';
 import { rollup } from 'rollup';
 import { JSDOM } from 'jsdom';
@@ -35,10 +37,18 @@ VizPage.getPageData = async ({
   auth0User,
 }): Promise<VizPageData> => {
   const id: VizId = params.id;
-  const { getUser, getInfo, getContent } = gateways;
+  const {
+    getUser,
+    getInfo,
+    getContent,
+    getPermissions,
+    getUsersByIds,
+  } = gateways;
   const verifyVizAccess = VerifyVizAccess(gateways);
   const commitViz = CommitViz(gateways);
 
+  // TODO move all this into an interactor called
+  // getVizPageData or something like that.
   try {
     // Get the Info entity of the Viz.
     let infoResult = await getInfo(id);
@@ -215,6 +225,48 @@ VizPage.getPageData = async ({
       console.log(initialSrcdoc.substring(0, 200));
     }
 
+    // Get the collaborators on the viz.
+    // TODO use a ShareDB query instead of fetching
+    let initialCollaborators: Array<User> = [];
+    const getPermissionsResult = await getPermissions(
+      null,
+      [id],
+    );
+    if (getPermissionsResult.outcome === 'failure') {
+      console.log(
+        'Error when fetching permissions for viz:',
+      );
+      console.log(getPermissionsResult.error);
+      return null;
+    }
+    const permissions: Array<Permission> =
+      getPermissionsResult.value.map(
+        (snapshot) => snapshot.data,
+      );
+    if (permissions.length > 0) {
+      const collaboratorsResult: Result<
+        Array<Snapshot<User>>
+      > = await getUsersByIds(
+        permissions.map((permission) => permission.user),
+      );
+      if (collaboratorsResult.outcome === 'failure') {
+        console.log(
+          'Error when fetching collaborators for viz:',
+        );
+        console.log(collaboratorsResult.error);
+        return null;
+      }
+      initialCollaborators = collaboratorsResult.value.map(
+        (snapshot) => snapshot.data,
+      );
+    }
+
+    // TODO unify user fetching into a single call
+    // for all the users that we need to fetch, including
+    //  * the owner
+    //  * the forkedFrom owner
+    //  * the collaborators
+
     return {
       infoSnapshot,
       ownerUserSnapshot,
@@ -228,6 +280,7 @@ VizPage.getPageData = async ({
       canUserEditViz,
       canUserDeleteViz,
       vizCacheContentSnapshots,
+      initialCollaborators,
     };
   } catch (e) {
     console.log('error fetching viz with id ', id);

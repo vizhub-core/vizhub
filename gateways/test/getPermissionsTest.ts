@@ -126,5 +126,21 @@ export const getPermissionsTest = () => {
         samplePermission,
       ]);
     });
+
+    // This case supports getting the permissions for a viz.
+    it('getPermissions, no user', async () => {
+      const gateways = await initGateways();
+      const { savePermission, getPermissions } = gateways;
+
+      await savePermission(samplePermission);
+
+      const permissionsResult = await getPermissions(null, [
+        primordialViz.info.id,
+      ]);
+      expect(permissionsResult.outcome).toEqual('success');
+      expect(unpack(permissionsResult)).toEqual([
+        samplePermission,
+      ]);
+    });
   });
 };

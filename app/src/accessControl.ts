@@ -154,6 +154,18 @@ export const vizWrite = (gateways: Gateways) =>
 export const vizRead = (gateways: Gateways) =>
   vizVerify(gateways, READ);
 
+export const query = () => (request, next) => {
+  // console.log('query', request);
+  if (request.agent.isServer) {
+    return next();
+  }
+  // Otherwise, the query is coming from the browser.
+  // Block all queries.
+  return next(
+    'Client queries are not allowed. Use the API instead.',
+  );
+};
+
 // V2 Code for reference
 // TODO handle access control for upvoting.
 // const info = await getInfo();

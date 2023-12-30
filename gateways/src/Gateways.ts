@@ -332,7 +332,9 @@ export interface Gateways {
   // Looks up the permissions that match the given user
   // and any of the given resources.
   getPermissions(
-    user: UserId,
+    // user can be null, in which case we look up permissions
+    // across all users.
+    user: UserId | null,
     resources: Array<ResourceId>,
   ): Promise<Result<Array<Snapshot<Permission>>>>;
 
@@ -457,4 +459,11 @@ export interface Gateways {
     // an async function that runs with the locks:
     fn: () => Promise<T>,
   ): Promise<T>;
+
+  // Gets a list of users to power the typeahead search.
+  // The query is a string that the user has typed so far,
+  // which could be a partial username or full name.
+  getUsersForTypeahead(
+    query: string,
+  ): Promise<Result<Array<User>>>;
 }

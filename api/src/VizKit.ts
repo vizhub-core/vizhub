@@ -5,6 +5,7 @@ import {
   Content,
   Visibility,
   SectionId,
+  User,
 } from 'entities';
 import { Result, Success } from 'gateways';
 import { InfosAndOwners } from 'interactors/src/getInfosAndOwners';
@@ -87,6 +88,21 @@ export interface VizKitAPI {
         sessionURL: string;
       }>
     >;
+
+    // get-users-for-typeahead
+    getUsersForTypeahead: (
+      query: string,
+    ) => Promise<Result<Array<User>>>;
+
+    addCollaborator: (options: {
+      vizId: VizId;
+      userId: UserId;
+    }) => Promise<Result<Success>>;
+
+    removeCollaborator: (options: {
+      vizId: VizId;
+      userId: UserId;
+    }) => Promise<Result<Success>>;
   };
 }
 
@@ -192,6 +208,32 @@ export const VizKit = ({
           {
             userId,
           },
+        ),
+
+      getUsersForTypeahead: async (query: string) =>
+        await postJSON(
+          `${baseUrl}/get-users-for-typeahead`,
+          {
+            query,
+          },
+        ),
+
+      addCollaborator: async (options: {
+        vizId: VizId;
+        userId: UserId;
+      }) =>
+        await postJSON(
+          `${baseUrl}/add-collaborator`,
+          options,
+        ),
+
+      removeCollaborator: async (options: {
+        vizId: VizId;
+        userId: UserId;
+      }) =>
+        await postJSON(
+          `${baseUrl}/remove-collaborator`,
+          options,
         ),
     },
   };
