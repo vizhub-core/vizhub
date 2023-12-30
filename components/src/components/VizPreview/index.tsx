@@ -86,6 +86,7 @@ export const VizPreview = ({
       </div>
       {visibility === 'private' && (
         <div className="private-notice">
+          PRIVATE
           <PrivateSVG />
         </div>
       )}

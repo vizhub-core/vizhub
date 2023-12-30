@@ -5,8 +5,8 @@ import { useCallback } from 'react';
 const enabledSections = {
   public: true,
   private: true,
+  shared: true,
   // orgs: true,
-  // shared: true,
   // starred: true,
 };
 
