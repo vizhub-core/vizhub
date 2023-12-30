@@ -54,7 +54,7 @@ export const GetInfosAndOwners = (gateways: Gateways) => {
 
     // Check access to private infos.
     if (
-      sectionId === 'private' &&
+      (sectionId === 'private' || sectionId === 'shared') &&
       authenticatedUserId !== owner
     ) {
       return err(
@@ -67,14 +67,49 @@ export const GetInfosAndOwners = (gateways: Gateways) => {
     const visibilities: Array<Visibility> =
       sectionId === 'private' ? ['private'] : ['public'];
 
-    const infoSnapshotsResult = await getInfos({
+    const getInfosOptions = {
       owner,
       forkedFrom,
       sortField,
       pageNumber,
       vizIds,
       visibilities,
-    });
+    };
+
+    // Handle the "Shared with me" section.
+    if (sectionId === 'shared') {
+      // The "owner" that we pass to getInfos() is the
+      // authenticated user, because we want to get the
+      // infos that have been shared with them.
+      // They are not actually the owner of the vizzes,
+      // so we delete the owner property from the options.
+      delete getInfosOptions.owner;
+
+      // Figure out which vizzes have been shared with the
+      // authenticated user.
+      const permissionsResult =
+        await gateways.getPermissions(
+          authenticatedUserId,
+          null,
+        );
+      if (permissionsResult.outcome === 'failure') {
+        return permissionsResult;
+      }
+      const permissions = permissionsResult.value.map(
+        (snapshot) => snapshot.data,
+      );
+
+      // Deduplicate sharedVizIds, just in case
+      const sharedVizIds = new Set(
+        permissions.map(
+          (permission) => permission.resource,
+        ),
+      );
+      getInfosOptions.vizIds = Array.from(sharedVizIds);
+    }
+
+    const infoSnapshotsResult =
+      await getInfos(getInfosOptions);
     if (infoSnapshotsResult.outcome === 'failure')
       return infoSnapshotsResult;
     const infoSnapshots = infoSnapshotsResult.value;

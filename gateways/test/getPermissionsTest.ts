@@ -127,7 +127,7 @@ export const getPermissionsTest = () => {
       ]);
     });
 
-    // This case supports getting the permissions for a viz.
+    // This case supports getting the permissions for a viz, across all users.
     it('getPermissions, no user', async () => {
       const gateways = await initGateways();
       const { savePermission, getPermissions } = gateways;
@@ -137,6 +137,23 @@ export const getPermissionsTest = () => {
       const permissionsResult = await getPermissions(null, [
         primordialViz.info.id,
       ]);
+      expect(permissionsResult.outcome).toEqual('success');
+      expect(unpack(permissionsResult)).toEqual([
+        samplePermission,
+      ]);
+    });
+
+    // This case supports getting the permissions for a user, across all vizzes.
+    it('getPermissions, no viz', async () => {
+      const gateways = await initGateways();
+      const { savePermission, getPermissions } = gateways;
+
+      await savePermission(samplePermission);
+
+      const permissionsResult = await getPermissions(
+        userJane.id,
+        null,
+      );
       expect(permissionsResult.outcome).toEqual('success');
       expect(unpack(permissionsResult)).toEqual([
         samplePermission,
