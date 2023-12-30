@@ -335,7 +335,7 @@ export interface Gateways {
     // user can be null, in which case we look up permissions
     // across all users.
     user: UserId | null,
-    resources: Array<ResourceId>,
+    resources: Array<ResourceId> | null,
   ): Promise<Result<Array<Snapshot<Permission>>>>;
 
   // getInfos
@@ -405,7 +405,7 @@ export interface Gateways {
     includeTrashed?: boolean;
 
     // Visibilities to include in the results.
-    visibilities?: Array<Visibility>;
+    visibilities?: Array<Visibility> | null;
   }): Promise<Result<Array<Snapshot<Info>>>>;
 
   // getUsersByIds

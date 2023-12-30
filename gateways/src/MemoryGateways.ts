@@ -271,20 +271,23 @@ export const MemoryGateways = (): Gateways => {
   };
 
   const getPermissions = async (
-    user: User,
-    resources: Array<ResourceId>,
+    user: User | null,
+    resources: Array<ResourceId> | null,
   ) => {
     const allPermissions = Object.values(
       documents.Permission,
     );
     const permissions = allPermissions
       .filter((permission) =>
-        user ? permission.user === user : true,
+        user !== null ? permission.user === user : true,
       )
       .filter((permission) =>
-        resources.some(
-          (resource) => resource === permission.resource,
-        ),
+        resources !== null
+          ? resources.some(
+              (resource) =>
+                resource === permission.resource,
+            )
+          : true,
       );
     return ok(permissions.map(fakeSnapshot));
   };
