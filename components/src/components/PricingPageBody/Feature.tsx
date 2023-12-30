@@ -5,9 +5,10 @@ import { ChevronDownSVG } from '../Icons/sam/ChevronDownSVG';
 
 export const Feature = ({
   title,
-  description,
   hasBottomBorder,
+  heavyBottomBorder = false,
   startsExpanded = false,
+  children,
 }) => {
   const [isOpen, setIsOpen] = useState(startsExpanded);
 
@@ -17,7 +18,11 @@ export const Feature = ({
   return (
     <div
       className={`feature${
-        hasBottomBorder ? ' has-bottom-border' : ''
+        hasBottomBorder
+          ? ` ${
+              heavyBottomBorder ? 'heavy' : 'light'
+            }-bottom-border`
+          : ''
       }`}
       onClick={toggleIsOpen}
     >
@@ -32,7 +37,7 @@ export const Feature = ({
       </div>
       {isOpen && (
         <div className="feature-description">
-          {description}
+          {children}
         </div>
       )}
     </div>

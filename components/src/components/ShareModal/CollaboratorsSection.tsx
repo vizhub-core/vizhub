@@ -123,7 +123,7 @@ export const CollaboratorsSection = ({
         controlId="collaboratorsControl"
       >
         <Form.Label>Manage Collaborators</Form.Label>
-        <Form.Group>
+        <Form.Group className="mb-3">
           {collaborators.map((collaborator) => (
             <CollaboratorEntry
               key={collaborator.id}
@@ -143,6 +143,7 @@ export const CollaboratorsSection = ({
           onChange={handleChange}
           options={options}
           placeholder="Search for a user..."
+          selected={[]}
           renderMenuItemChildren={(user: User) => (
             <>
               <img

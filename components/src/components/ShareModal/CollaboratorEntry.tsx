@@ -14,7 +14,7 @@ export const CollaboratorEntry = ({
   }, [collaborator.id]);
 
   return (
-    <div className="collaborator-entry mb-3">
+    <div className="collaborator-entry mb-2">
       <Form.Control as="div">
         <img
           alt={collaborator.userName}

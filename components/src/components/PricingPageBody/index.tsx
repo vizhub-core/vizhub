@@ -24,22 +24,44 @@ const StarterFeatures = ({ startsExpanded = true }) => {
     <>
       <Feature
         title="Public Vizzes"
-        description="View, fork and modify visualizations viewable by everyone."
         hasBottomBorder={true}
         startsExpanded={startsExpanded}
-      />
+      >
+        View, fork and modify visualizations viewable by
+        everyone.
+      </Feature>
       <Feature
         title="Export Code"
-        description="Export code for easy integration into existing codebases."
         hasBottomBorder={true}
         startsExpanded={startsExpanded}
-      />
+      >
+        Export code for easy integration into existing
+        codebases.
+      </Feature>
       <Feature
         title="Unfurling"
-        description="See rich previews when sharing viz links in social media."
+        hasBottomBorder={true}
+        startsExpanded={startsExpanded}
+      >
+        See rich previews when sharing viz links in social
+        media.
+      </Feature>
+      <Feature
+        title="Community Access"
+        hasBottomBorder={true}
+        startsExpanded={startsExpanded}
+      >
+        Join our Discord and Forum to connect with our
+        community.
+      </Feature>
+      <Feature
+        title="Free Courses"
         hasBottomBorder={false}
         startsExpanded={startsExpanded}
-      />
+      >
+        Learn to code and visualize data with our free
+        online courses.
+      </Feature>
     </>
   );
 };
@@ -92,7 +114,7 @@ export const PricingPageBody = ({
   const premiumSpiritSrc = useMemo(
     () =>
       randomImage([
-        'pricing-spirit-premium',
+        // 'pricing-spirit-premium',
         'pricing-spirit-premium-2',
         'pricing-spirit-premium-4',
       ]),
@@ -204,22 +226,29 @@ export const PricingPageBody = ({
                 <div className="pricing-page-plan-features">
                   <Feature
                     title="Private Vizzes"
-                    description="Develop visualizations accessible only by you"
                     hasBottomBorder={true}
                     startsExpanded={true}
-                  />
-                  <Feature
-                    title="AI-Assisted Coding"
-                    description="Request coding assistance from artificial intelligence"
-                    hasBottomBorder={true}
-                    startsExpanded={true}
-                  />
+                  >
+                    Develop visualizations accessible only
+                    by you and your collaborators.
+                  </Feature>
                   <Feature
                     title="Real-time Collaboration"
-                    description="Allow anyone to edit your public vizzes with you in real time."
                     hasBottomBorder={true}
                     startsExpanded={true}
-                  />
+                  >
+                    Invite colleagues to collaborate on your
+                    public and private vizzes.
+                  </Feature>
+                  <Feature
+                    title="AI-Assisted Coding"
+                    hasBottomBorder={true}
+                    heavyBottomBorder={true}
+                    startsExpanded={true}
+                  >
+                    Request coding assistance from advanced
+                    artificial intelligence.
+                  </Feature>
                   <StarterFeatures startsExpanded={false} />
                 </div>
               </div>
