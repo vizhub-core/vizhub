@@ -11,8 +11,12 @@ import {
   CommitId,
   EntityName,
   FolderId,
+  ResourceId,
   ResourceLockId,
+  User,
+  UserId,
   UserName,
+  VizId,
   defaultSortField,
   defaultSortOrder,
   saveLock,
@@ -28,6 +32,7 @@ import {
 import { otType, diff } from 'ot';
 import { toCollectionName } from './toCollectionName';
 import { pageSize } from 'gateways/src/Gateways';
+import { ShareDBDoc } from 'vzcode';
 // import { embeddingMethods } from './embeddingMethods';
 
 const debug = false;
@@ -302,6 +307,16 @@ export const DatabaseGateways = ({
     sortOrder = defaultSortOrder,
     includeTrashed = false,
     visibilities = ['public'],
+    vizIds,
+  }: {
+    owner?: UserId;
+    forkedFrom?: ResourceId;
+    sortField?: string;
+    pageNumber?: number;
+    sortOrder?: string;
+    includeTrashed?: boolean;
+    visibilities?: Array<string>;
+    vizIds?: Array<VizId>;
   }) =>
     new Promise((resolve) => {
       const entityName = 'Info';
@@ -316,8 +331,13 @@ export const DatabaseGateways = ({
         $sort: {
           [sortField]: sortOrder === 'ascending' ? 1 : -1,
         },
-        visibility: { $in: visibilities },
+        ...(visibilities && {
+          visibility: { $in: visibilities },
+        }),
+        ...(vizIds && { id: { $in: vizIds } }),
       };
+
+      // console.log(JSON.stringify(mongoQuery, null, 2));
 
       // // If this viz is currently in the "trash",
       // // this field represents when it was put there.
@@ -616,15 +636,22 @@ export const DatabaseGateways = ({
       );
     });
 
-  const getPermissions = (user, resources) =>
+  const getPermissions = (
+    user: UserId | null,
+    resources: Array<ResourceId> | null,
+  ) =>
     new Promise((resolve) => {
       const entityName = 'Permission';
       const query = shareDBConnection.createFetchQuery(
         toCollectionName(entityName),
         {
           $and: [
-            { user },
-            { resource: { $in: resources } },
+            // user could be null
+            ...(user !== null ? [{ user }] : []),
+            // resources could be null
+            ...(resources !== null
+              ? [{ resource: { $in: resources } }]
+              : []),
           ],
         },
         {},
@@ -664,6 +691,53 @@ export const DatabaseGateways = ({
     -1,
   );
 
+  // From v2
+  // const pageSize = 10;
+
+  // export const searchUsers = (connection) => async ({ query, offset }) => {
+  //   const mongoQuery = {
+  //     $limit: pageSize,
+  //     $skip: offset * pageSize,
+  //     $or: [
+  //       { userName: { $regex: query, $options: 'i' } },
+  //       { fullName: { $regex: query, $options: 'i' } },
+  //     ],
+  //   };
+  //   const results = await fetchShareDBQuery(USER, mongoQuery, connection);
+
+  //   // Uncomment to introduce delay for manual testing.
+  //   //const foo = await new Promise(resolve => {setTimeout(() => resolve(), 3000);});
+  //   return results.map((shareDBDoc) => new User(shareDBDoc.data));
+  // };
+
+  const typeaheadPageSize = 20;
+  const getUsersForTypeahead = (query: string) =>
+    new Promise((resolve) => {
+      const entityName = 'User';
+      const fetchQuery = shareDBConnection.createFetchQuery(
+        toCollectionName(entityName),
+        {
+          $limit: typeaheadPageSize,
+          $or: [
+            { userName: { $regex: query, $options: 'i' } },
+            { fullName: { $regex: query, $options: 'i' } },
+          ],
+        },
+        {},
+        (error, results) => {
+          fetchQuery.destroy();
+          if (error) return resolve(err(error));
+          resolve(
+            ok(
+              results.map(
+                (doc: ShareDBDoc<User>) => doc.data,
+              ),
+            ),
+          );
+        },
+      );
+    });
+
   let databaseGateways = {
     type: 'DatabaseGateways',
     getForks,
@@ -679,6 +753,7 @@ export const DatabaseGateways = ({
     getUsersByIds,
     getPermissions,
     lock,
+    getUsersForTypeahead,
   };
 
   for (const entityName of crudEntityNames) {

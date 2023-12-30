@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { userJane, userJoe } from 'entities/test/fixtures';
 import { ShareModal } from '../components/ShareModal';
 
 export const args = {
@@ -19,6 +20,24 @@ export const args = {
   onSnippetSectionNavigate: () => {
     console.log('onSnippetSectionNavigate');
   },
+  handleCollaboratorSearch: async (query) => {
+    // // TODO implement API
+    // // fetch(
+    // //   `${SEARCH_URI}?q=${query}+in:login&page=1&per_page=50`,
+    // // )
+    // //   .then((resp) => resp.json())
+    // //   .then(({ items }: Response) => {
+    // //     setOptions(items);
+    // //     setIsLoading(false);
+    // //   });
+    // await new Promise((resolve) =>
+    //   setTimeout(resolve, 100),
+    // );
+    // setOptions([userJoe, userJane]);
+    console.log('handleCollaboratorSearch: ' + query);
+    return [userJoe, userJane];
+  },
+  showAnyoneCanEdit: true,
 };
 
 const Story = () => {

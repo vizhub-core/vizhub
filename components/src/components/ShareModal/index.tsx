@@ -3,6 +3,8 @@ import { Modal, Button } from '../bootstrap';
 import { LinkSection } from './LinkSection';
 import { CollaboratorsSection } from './CollaboratorsSection';
 import { ShareSectionsNav } from './ShareSectionsNav';
+import { User } from 'entities';
+import './styles.scss';
 
 const navItems = [
   { key: 'link', title: 'Link' },
@@ -23,6 +25,11 @@ export const ShareModal = ({
   onEmbedSectionNavigate,
   onSnippetSectionNavigate,
   onCollaboratorsSectionNavigate,
+  handleCollaboratorSearch,
+  handleCollaboratorAdd,
+  handleCollaboratorRemove,
+  showAnyoneCanEdit,
+  initialCollaborators,
 }: {
   show: boolean;
   linkToCopy: string;
@@ -34,6 +41,15 @@ export const ShareModal = ({
   onEmbedSectionNavigate?: () => void;
   onSnippetSectionNavigate?: () => void;
   onCollaboratorsSectionNavigate?: () => void;
+  handleCollaboratorSearch: (
+    query: string,
+  ) => Promise<User[]>;
+  handleCollaboratorAdd: (user: User) => Promise<'success'>;
+  handleCollaboratorRemove: (
+    userId: string,
+  ) => Promise<'success'>;
+  showAnyoneCanEdit: boolean;
+  initialCollaborators: Array<User>;
 }) => {
   const [section, setSection] = useState('link');
 
@@ -70,14 +86,19 @@ export const ShareModal = ({
   );
 
   return show ? (
-    <Modal show={show} onHide={onClose} animation={false}>
+    <Modal
+      show={show}
+      onHide={onClose}
+      animation={false}
+      className="vh-share-modal"
+    >
       <Modal.Header closeButton>
         <Modal.Title>Share</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <div className="vh-form-note contextual">
+        {/* <div className="vh-form-note contextual">
           SHARE WITH
-        </div>
+        </div> */}
         <ShareSectionsNav
           section={section}
           handleSectionSelect={handleSectionSelect}
@@ -87,6 +108,15 @@ export const ShareModal = ({
           <CollaboratorsSection
             anyoneCanEdit={anyoneCanEdit}
             setAnyoneCanEdit={setAnyoneCanEdit}
+            handleCollaboratorSearch={
+              handleCollaboratorSearch
+            }
+            handleCollaboratorAdd={handleCollaboratorAdd}
+            handleCollaboratorRemove={
+              handleCollaboratorRemove
+            }
+            showAnyoneCanEdit={showAnyoneCanEdit}
+            initialCollaborators={initialCollaborators}
           />
         )}
         {section === 'link' && (

@@ -101,10 +101,22 @@
   position: relative;
   .private-notice {
     position: absolute;
-    color: var(--vh-foreground-color-light);
-    padding: 8px;
-    top: 230px;
-    left: 235px;
+    top: 131px;
+    left: 0px;
+    font-size: 14px;
+    background-color: var(--vh-color-warning-01);
+    color: white;
+
+    font-size: 14px;
+    font-weight: bold;
+
+    border-top-right-radius: 16px;
+    border-bottom-right-radius: 16px;
+    padding: 0 10px 0 10px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
   }
 }
 

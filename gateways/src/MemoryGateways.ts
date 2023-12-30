@@ -271,18 +271,23 @@ export const MemoryGateways = (): Gateways => {
   };
 
   const getPermissions = async (
-    user: User,
-    resources: Array<ResourceId>,
+    user: User | null,
+    resources: Array<ResourceId> | null,
   ) => {
     const allPermissions = Object.values(
       documents.Permission,
     );
     const permissions = allPermissions
-      .filter((permission) => permission.user === user)
       .filter((permission) =>
-        resources.some(
-          (resource) => resource === permission.resource,
-        ),
+        user !== null ? permission.user === user : true,
+      )
+      .filter((permission) =>
+        resources !== null
+          ? resources.some(
+              (resource) =>
+                resource === permission.resource,
+            )
+          : true,
       );
     return ok(permissions.map(fakeSnapshot));
   };
@@ -359,6 +364,21 @@ export const MemoryGateways = (): Gateways => {
     return ok(sorted.map((item) => item[0]));
   };
 
+  const lock = async (_, fn) => await fn();
+
+  const getUsersForTypeahead = async (query: string) => {
+    const users = Object.values(documents.User).filter(
+      (user: User) =>
+        user.userName
+          .toLowerCase()
+          .includes(query.toLowerCase()) ||
+        user.displayName
+          .toLowerCase()
+          .includes(query.toLowerCase()),
+    );
+    return ok(users);
+  };
+
   // Populate non-CRUD methods.
   let memoryGateways: Gateways = {
     type: 'MemoryGateways',
@@ -398,6 +418,10 @@ export const MemoryGateways = (): Gateways => {
     deleteVizEmbedding,
     // @ts-ignore
     knnVizEmbeddingSearch,
+    // @ts-ignore
+    lock,
+    // @ts-ignore
+    getUsersForTypeahead,
   };
 
   // Packages up save, get, and delete
@@ -416,17 +440,6 @@ export const MemoryGateways = (): Gateways => {
       ...crud(entityName),
     };
   }
-
-  // lock(
-  //   lockIds: Array<ResourceLockId>,
-  //   // an async function that runs with the locks:
-  //   fn: () => Promise<void>,
-  // ): Promise<void>;
-
-  memoryGateways.lock = async <T>(
-    lockIds: Array<ResourceLockId>,
-    fn: () => Promise<T>,
-  ) => await fn();
 
   return memoryGateways;
 };

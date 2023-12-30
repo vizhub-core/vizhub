@@ -34,6 +34,7 @@ export const VizPageModals = ({
   showDeleteVizConfirmationModal,
   toggleDeleteVizConfirmationModal,
   vizKit,
+  initialCollaborators,
 }: {
   info: Info;
   ownerUser: User;
@@ -57,6 +58,7 @@ export const VizPageModals = ({
   showDeleteVizConfirmationModal: boolean;
   toggleDeleteVizConfirmationModal: () => void;
   vizKit: VizKitAPI;
+  initialCollaborators: Array<User>;
 }) => {
   // The currently authenticated user, if any.
   const authenticatedUser: User | null = useContext(
@@ -85,6 +87,13 @@ export const VizPageModals = ({
   const anyoneCanEdit = useMemo(
     () => getAnyoneCanEdit(info),
     [info],
+  );
+
+  // Only show the option to allow anyone to edit
+  // if the viz is public.
+  const showAnyoneCanEdit = useMemo(
+    () => info.visibility === 'public',
+    [info.visibility],
   );
 
   const linkToCopy = useMemo(
@@ -122,6 +131,61 @@ export const VizPageModals = ({
     }
   }, [linkToCopy]);
 
+  // Support typeahead for adding collaborators
+  const handleCollaboratorSearch = useCallback(
+    async (query: string) => {
+      const result =
+        await vizKit.rest.getUsersForTypeahead(query);
+      if (result.outcome === 'failure') {
+        console.error(
+          'Failed to search for collaborators: ',
+          result.error,
+        );
+        return;
+      }
+      return result.value;
+    },
+    [],
+  );
+
+  // Actually add a collaborator to the viz
+  const handleCollaboratorAdd = useCallback(
+    async (user: User) => {
+      const result = await vizKit.rest.addCollaborator({
+        vizId: info.id,
+        userId: user.id,
+      });
+      if (result.outcome === 'failure') {
+        console.error(
+          'Failed to add collaborator: ',
+          result.error,
+        );
+        return;
+      }
+      return result.value;
+    },
+    [info.id],
+  );
+
+  // Actually remove a collaborator from the viz
+  const handleCollaboratorRemove = useCallback(
+    async (userId: UserId) => {
+      const result = await vizKit.rest.removeCollaborator({
+        vizId: info.id,
+        userId,
+      });
+      if (result.outcome === 'failure') {
+        console.error(
+          'Failed to remove collaborator: ',
+          result.error,
+        );
+        return;
+      }
+      return result.value;
+    },
+    [info.id],
+  );
+
   return (
     <>
       {showForkModal && (
@@ -158,6 +222,15 @@ export const VizPageModals = ({
           onLinkCopy={handleLinkCopy}
           anyoneCanEdit={anyoneCanEdit}
           setAnyoneCanEdit={setAnyoneCanEdit}
+          showAnyoneCanEdit={showAnyoneCanEdit}
+          handleCollaboratorSearch={
+            handleCollaboratorSearch
+          }
+          handleCollaboratorAdd={handleCollaboratorAdd}
+          handleCollaboratorRemove={
+            handleCollaboratorRemove
+          }
+          initialCollaborators={initialCollaborators}
         />
       )}
       {showDeleteVizConfirmationModal && (

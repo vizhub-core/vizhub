@@ -1,9 +1,4 @@
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
   Files,
   ShareDBDoc,
@@ -62,6 +57,7 @@ export type VizPageData = PageData & {
     VizId,
     Snapshot<Content>
   >;
+  initialCollaborators: Array<User>;
 };
 
 // Inspired by https://github.com/vitejs/vite-plugin-react/blob/main/playground/ssr-react/src/pages/Home.jsx
@@ -82,6 +78,7 @@ export const VizPage: Page = ({
     canUserEditViz,
     canUserDeleteViz,
     vizCacheContentSnapshots,
+    initialCollaborators,
   } = pageData;
 
   // /////////////////////////////////////////
@@ -329,6 +326,7 @@ export const VizPage: Page = ({
           showDeleteVizConfirmationModal,
           toggleDeleteVizConfirmationModal,
           vizKit,
+          initialCollaborators,
         }}
       />
     </AuthenticatedUserProvider>
