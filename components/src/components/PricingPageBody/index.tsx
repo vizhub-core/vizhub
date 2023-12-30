@@ -118,6 +118,8 @@ export const PricingPageBody = ({
         'pricing-spirit-premium-2',
         'pricing-spirit-premium-4',
         'pricing-spirit-premium-5',
+        'pricing-spirit-premium-6',
+        'pricing-spirit-premium-7',
       ]),
     [],
   );
