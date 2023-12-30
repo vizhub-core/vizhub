@@ -59,7 +59,11 @@ import { ImageHash } from 'entities/src/Images';
 
 // The maximum number of Info documents to return in a single page from `getInfos()`
 // export const pageSize = 5;
-export const pageSize = 50;
+
+// Make it a multiple of 4 so that on the profile page,
+// which defaults to 4 vizzes per row, we don't have
+// a partially filled row at the end.
+export const pageSize = 4 * 20;
 
 export interface Gateways {
   type: 'DatabaseGateways' | 'MemoryGateways';
