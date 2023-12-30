@@ -17,14 +17,16 @@ export const CollaboratorsSection = ({
   handleCollaboratorSearch,
   handleCollaboratorAdd,
   showAnyoneCanEdit,
+  initialCollaborators,
 }: {
   anyoneCanEdit: boolean;
   setAnyoneCanEdit: (anyoneCanEdit: boolean) => void;
   handleCollaboratorSearch: (
     query: string,
   ) => Promise<Array<User>>;
-  handleCollaboratorAdd: (user: User) => Promise<void>;
+  handleCollaboratorAdd: (user: User) => Promise<'success'>;
   showAnyoneCanEdit: boolean;
+  initialCollaborators: Array<User>;
 }) => {
   // True when the async handleCollaboratorSearch is in progress
   const [isLoading, setIsLoading] = useState(false);
@@ -33,12 +35,11 @@ export const CollaboratorsSection = ({
   const [options, setOptions] = useState<Array<User>>([]);
 
   // The collaborators on this viz
-  // TODO:
-  //  * Populate this from the server on page load
-  //  * Synchronize this to the server when the user adds or removes a collaborator
+  // TODO consider using a ShareDB query instead,
+  // so that we get real-time updates
   const [collaborators, setCollaborators] = useState<
     Array<User>
-  >([]);
+  >(initialCollaborators);
 
   const addCollaborator = useCallback(
     (user: User) => {
@@ -103,11 +104,11 @@ export const CollaboratorsSection = ({
         <Form.Label>Manage Collaborators</Form.Label>
         <Form.Group>
           {collaborators.map((collaborator) => (
-            <div className="collaborator-entry mb-3">
-              <Form.Control
-                as="div"
-                key={collaborator.userName}
-              >
+            <div
+              className="collaborator-entry mb-3"
+              key={collaborator.userName}
+            >
+              <Form.Control as="div">
                 <img
                   alt={collaborator.userName}
                   src={collaborator.picture}

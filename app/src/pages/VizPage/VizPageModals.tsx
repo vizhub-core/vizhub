@@ -34,6 +34,7 @@ export const VizPageModals = ({
   showDeleteVizConfirmationModal,
   toggleDeleteVizConfirmationModal,
   vizKit,
+  initialCollaborators,
 }: {
   info: Info;
   ownerUser: User;
@@ -57,6 +58,7 @@ export const VizPageModals = ({
   showDeleteVizConfirmationModal: boolean;
   toggleDeleteVizConfirmationModal: () => void;
   vizKit: VizKitAPI;
+  initialCollaborators: Array<User>;
 }) => {
   // The currently authenticated user, if any.
   const authenticatedUser: User | null = useContext(
@@ -206,6 +208,7 @@ export const VizPageModals = ({
             handleCollaboratorSearch
           }
           handleCollaboratorAdd={handleCollaboratorAdd}
+          initialCollaborators={initialCollaborators}
         />
       )}
       {showDeleteVizConfirmationModal && (

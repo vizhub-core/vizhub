@@ -278,7 +278,9 @@ export const MemoryGateways = (): Gateways => {
       documents.Permission,
     );
     const permissions = allPermissions
-      .filter((permission) => permission.user === user)
+      .filter((permission) =>
+        user ? permission.user === user : true,
+      )
       .filter((permission) =>
         resources.some(
           (resource) => resource === permission.resource,

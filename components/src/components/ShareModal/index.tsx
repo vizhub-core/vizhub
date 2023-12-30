@@ -28,6 +28,7 @@ export const ShareModal = ({
   handleCollaboratorSearch,
   handleCollaboratorAdd,
   showAnyoneCanEdit,
+  initialCollaborators,
 }: {
   show: boolean;
   linkToCopy: string;
@@ -42,8 +43,9 @@ export const ShareModal = ({
   handleCollaboratorSearch: (
     query: string,
   ) => Promise<User[]>;
-  handleCollaboratorAdd: (user: User) => Promise<void>;
+  handleCollaboratorAdd: (user: User) => Promise<'success'>;
   showAnyoneCanEdit: boolean;
+  initialCollaborators: Array<User>;
 }) => {
   const [section, setSection] = useState('link');
 
@@ -107,6 +109,7 @@ export const ShareModal = ({
             }
             handleCollaboratorAdd={handleCollaboratorAdd}
             showAnyoneCanEdit={showAnyoneCanEdit}
+            initialCollaborators={initialCollaborators}
           />
         )}
         {section === 'link' && (

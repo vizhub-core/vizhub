@@ -11,8 +11,10 @@ import {
   CommitId,
   EntityName,
   FolderId,
+  ResourceId,
   ResourceLockId,
   User,
+  UserId,
   UserName,
   defaultSortField,
   defaultSortOrder,
@@ -618,14 +620,18 @@ export const DatabaseGateways = ({
       );
     });
 
-  const getPermissions = (user, resources) =>
+  const getPermissions = (
+    user: UserId | null,
+    resources: Array<ResourceId>,
+  ) =>
     new Promise((resolve) => {
       const entityName = 'Permission';
       const query = shareDBConnection.createFetchQuery(
         toCollectionName(entityName),
         {
           $and: [
-            { user },
+            // user could be null
+            ...(user ? [{ user }] : []),
             { resource: { $in: resources } },
           ],
         },
