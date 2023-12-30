@@ -27,7 +27,7 @@ import { GetImage } from './getImage';
 import { FetchImageMetadata } from './fetchImageMetadata';
 import { PollImageGenerationStatus } from './PollImageGenerationStatus';
 import { generateImageHash } from './generateImageHash';
-import { imageMetadataLock } from 'entities/src/Lock';
+// import { imageMetadataLock } from 'entities/src/Lock';
 
 export { GetImage };
 
@@ -142,149 +142,153 @@ export const GetThumbnail = (gateways: Gateways) => {
           imageId,
       );
     }
-    return lock([imageMetadataLock(imageId)], async () => {
+    // TODO consider bringing this back?
+    // It's not clear if it's necessary.
+    // It was causing the server to crash.
+    // return lock([imageMetadataLock(imageId)], async () => {
+    if (debug) {
+      console.log(
+        '  [GetThumbnail] inside lock for imageId ' +
+          imageId,
+      );
+    }
+    const imageMetadataResult: Result<ImageMetadata | null> =
+      await fetchImageMetadata(imageId);
+    if (imageMetadataResult.outcome === 'failure') {
+      return err(imageMetadataResult.error);
+    }
+    const imageMetadata = imageMetadataResult.value;
+
+    // If the image metadata is not found, assume
+    // the image status is 'not started'.
+    if (!imageMetadata) {
       if (debug) {
         console.log(
-          '  [GetThumbnail] inside lock for imageId ' +
-            imageId,
+          '  [GetThumbnail] image metadata not found, invoking getImage',
         );
       }
-      const imageMetadataResult: Result<ImageMetadata | null> =
-        await fetchImageMetadata(imageId);
-      if (imageMetadataResult.outcome === 'failure') {
-        return err(imageMetadataResult.error);
+      // Store the metadata that indicates the image
+      // is being generated.
+      await saveImageMetadata({
+        id: imageId,
+        commitId,
+        width,
+        status: 'generating',
+        lastAccessed: dateToTimestamp(new Date()),
+      });
+
+      if (debug) {
+        console.log(
+          '  [GetThumbnail] saved image metadata with status "generating"',
+        );
       }
-      const imageMetadata = imageMetadataResult.value;
 
-      // If the image metadata is not found, assume
-      // the image status is 'not started'.
-      if (!imageMetadata) {
+      const fullSizeImageResult = await getImage({
+        commitId,
+        waitTime,
+      });
+      if (fullSizeImageResult.outcome === 'failure') {
+        return err(fullSizeImageResult.error);
+      }
+      const fullSizeImage = fullSizeImageResult.value;
+
+      if (debug) {
+        console.log('  [GetThumbnail] resizing image');
+      }
+      // Resize the image
+      const resizedImage: Image = await resizeImage({
+        image: fullSizeImage,
+        width,
+      });
+
+      // Generate hash for the image
+      const resizedImageHash: ImageHash = generateImageHash(
+        resizedImage.buffer,
+      );
+
+      // Check if the image already exists using the hash
+      const existingStoredImageResult =
+        await getStoredImage(resizedImageHash);
+      if (
+        existingStoredImageResult.outcome === 'success' &&
+        existingStoredImageResult.value
+      ) {
         if (debug) {
           console.log(
-            '  [GetThumbnail] image metadata not found, invoking getImage',
+            '  [GetThumbnail] Resized image already exists, using stored image',
           );
         }
-        // Store the metadata that indicates the image
-        // is being generated.
-        await saveImageMetadata({
-          id: imageId,
-          commitId,
-          width,
-          status: 'generating',
-          lastAccessed: dateToTimestamp(new Date()),
-        });
-
-        if (debug) {
-          console.log(
-            '  [GetThumbnail] saved image metadata with status "generating"',
-          );
-        }
-
-        const fullSizeImageResult = await getImage({
-          commitId,
-          waitTime,
-        });
-        if (fullSizeImageResult.outcome === 'failure') {
-          return err(fullSizeImageResult.error);
-        }
-        const fullSizeImage = fullSizeImageResult.value;
-
-        if (debug) {
-          console.log('  [GetThumbnail] resizing image');
-        }
-        // Resize the image
-        const resizedImage: Image = await resizeImage({
-          image: fullSizeImage,
-          width,
-        });
-
-        // Generate hash for the image
-        const resizedImageHash: ImageHash =
-          generateImageHash(resizedImage.buffer);
-
-        // Check if the image already exists using the hash
-        const existingStoredImageResult =
-          await getStoredImage(resizedImageHash);
-        if (
-          existingStoredImageResult.outcome === 'success' &&
-          existingStoredImageResult.value
-        ) {
-          if (debug) {
-            console.log(
-              '  [GetThumbnail] Resized image already exists, using stored image',
-            );
-          }
-        } else {
-          if (debug) {
-            console.log(
-              '  [GetThumbnail] Saving resized image',
-            );
-          }
-          // Save the image
-          const saveResult = await saveStoredImage({
-            id: resizedImageHash,
-            base64: resizedImage.buffer.toString('base64'),
-          });
-          if (saveResult.outcome === 'failure') {
-            return err(saveResult.error);
-          }
-        }
-
-        if (debug) {
-          console.log(
-            '  [GetThumbnail] saving image metadata with status "generated"',
-          );
-        }
-
-        // Store the metadata that indicates the image
-        // has been generated.
-        await saveImageMetadata({
-          id: imageId,
-          commitId,
-          width,
-          status: 'generated',
-          lastAccessed: dateToTimestamp(new Date()),
-          imageHash: resizedImageHash,
-        });
-
-        // Return the image
-        return ok(resizedImage);
       } else {
-        if (imageMetadata.status === 'generating') {
-          if (debug) {
-            console.log(
-              '  [GetThumbnail] image metadata found with status "generating", polling',
-            );
-          }
-          const polledImageMetadataResult: Result<ImageMetadata> =
-            await pollImageGenerationStatus(imageId);
-          if (
-            polledImageMetadataResult.outcome === 'failure'
-          ) {
-            return err(polledImageMetadataResult.error);
-          }
-          const polledImageMetadata =
-            polledImageMetadataResult.value;
-          if (polledImageMetadata.status !== 'generated') {
-            return ok(null);
-          }
-        }
-
         if (debug) {
           console.log(
-            '  [GetThumbnail] Fetching and returning the stored image',
+            '  [GetThumbnail] Saving resized image',
           );
         }
-        // Fetch and return the stored image
-        const result = await getStoredImage(
-          imageMetadata.imageHash,
-        );
-        if (result.outcome === 'failure') {
-          return err(result.error);
+        // Save the image
+        const saveResult = await saveStoredImage({
+          id: resizedImageHash,
+          base64: resizedImage.buffer.toString('base64'),
+        });
+        if (saveResult.outcome === 'failure') {
+          return err(saveResult.error);
         }
-        const storedImage = result.value;
-        return ok(imageFromBase64(storedImage.base64));
       }
-    });
+
+      if (debug) {
+        console.log(
+          '  [GetThumbnail] saving image metadata with status "generated"',
+        );
+      }
+
+      // Store the metadata that indicates the image
+      // has been generated.
+      await saveImageMetadata({
+        id: imageId,
+        commitId,
+        width,
+        status: 'generated',
+        lastAccessed: dateToTimestamp(new Date()),
+        imageHash: resizedImageHash,
+      });
+
+      // Return the image
+      return ok(resizedImage);
+    } else {
+      if (imageMetadata.status === 'generating') {
+        if (debug) {
+          console.log(
+            '  [GetThumbnail] image metadata found with status "generating", polling',
+          );
+        }
+        const polledImageMetadataResult: Result<ImageMetadata> =
+          await pollImageGenerationStatus(imageId);
+        if (
+          polledImageMetadataResult.outcome === 'failure'
+        ) {
+          return err(polledImageMetadataResult.error);
+        }
+        const polledImageMetadata =
+          polledImageMetadataResult.value;
+        if (polledImageMetadata.status !== 'generated') {
+          return ok(null);
+        }
+      }
+
+      if (debug) {
+        console.log(
+          '  [GetThumbnail] Fetching and returning the stored image',
+        );
+      }
+      // Fetch and return the stored image
+      const result = await getStoredImage(
+        imageMetadata.imageHash,
+      );
+      if (result.outcome === 'failure') {
+        return err(result.error);
+      }
+      const storedImage = result.value;
+      return ok(imageFromBase64(storedImage.base64));
+    }
+    // });
   };
 };
