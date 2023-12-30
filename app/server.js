@@ -12,9 +12,10 @@ import { WebSocketServer } from 'ws';
 import WebSocketJSONStream from '@teamwork/websocket-json-stream';
 import { matchPath } from 'react-router-dom';
 import * as Sentry from '@sentry/node';
+import { createProxyMiddleware } from 'http-proxy-middleware';
 import { seoMetaTags } from './src/seoMetaTags.js';
 
-const version = '3.0.0-beta.31';
+const version = '3.0.0-beta.32';
 
 // Generate a random server ID for debugging scaling.
 const serverId = Math.random().toString(36).slice(2);
@@ -83,6 +84,27 @@ async function createServer(
     : null;
 
   const app = express();
+
+  // Configuration for the proxy to /forum
+  const forumProxyConfig = {
+    target:
+      process.env.VIZHUB3_FORUM_PROXY_TARGET ||
+      'http://54.198.173.108:80',
+    changeOrigin: true,
+    pathRewrite: {
+      '^/forum': '',
+    },
+    onProxyReq: (proxyReq, req, res) => {
+      proxyReq.setHeader('X-Forwarded-For', req.ip);
+      proxyReq.setHeader('X-Forwarded-Proto', req.protocol);
+      proxyReq.setHeader('X-Forwarded-Host', req.hostname);
+      proxyReq.setHeader('Host', req.hostname);
+    },
+  };
+  app.use(
+    '/forum',
+    createProxyMiddleware(forumProxyConfig),
+  );
 
   // Support parsing of JSON bodies in API requests.
   // Removed as this interferes with the Stripe webhook signing.
