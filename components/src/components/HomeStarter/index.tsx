@@ -5,7 +5,7 @@ const enableCreateVizButton = false;
 
 export const HomeStarter = () => {
   return (
-    <div className="home-starter">
+    <div className="home-starter mb-3">
       <h2>Join our community</h2>
       <div className="vh-lede-01">
         Join the VizHub Discord or use the VizHub Forum to
