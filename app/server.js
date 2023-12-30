@@ -156,6 +156,9 @@ async function createServer(
     // Set the max-age for the Cache-Control header to 1 year (in seconds)
     const oneYearInSeconds = 365 * 24 * 60 * 60;
 
+    const serveStatic = (await import('serve-static'))
+      .default;
+
     app.use(
       serveStatic(resolve('dist/client'), {
         index: false,
