@@ -405,7 +405,7 @@ export interface Gateways {
     includeTrashed?: boolean;
 
     // Visibilities to include in the results.
-    visibilities?: Array<Visibility>;
+    visibilities?: Array<Visibility> | null;
   }): Promise<Result<Array<Snapshot<Info>>>>;
 
   // getUsersByIds

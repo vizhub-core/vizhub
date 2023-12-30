@@ -78,6 +78,9 @@ export const GetInfosAndOwners = (gateways: Gateways) => {
 
     // Handle the "Shared with me" section.
     if (sectionId === 'shared') {
+      console.log(
+        '[GetInfosAndOwners] handling shared with me',
+      );
       // The "owner" that we pass to getInfos() is the
       // authenticated user, because we want to get the
       // infos that have been shared with them.
@@ -99,6 +102,11 @@ export const GetInfosAndOwners = (gateways: Gateways) => {
         (snapshot) => snapshot.data,
       );
 
+      console.log(
+        '[GetInfosAndOwners] permissions',
+        permissions,
+      );
+
       // Deduplicate sharedVizIds, just in case
       const sharedVizIds = new Set(
         permissions.map(
@@ -106,6 +114,14 @@ export const GetInfosAndOwners = (gateways: Gateways) => {
         ),
       );
       getInfosOptions.vizIds = Array.from(sharedVizIds);
+
+      console.log(
+        '[GetInfosAndOwners] getInfosOptions',
+        getInfosOptions,
+      );
+
+      // We want to query against all visibilities.
+      getInfosOptions.visibilities = null;
     }
 
     const infoSnapshotsResult =

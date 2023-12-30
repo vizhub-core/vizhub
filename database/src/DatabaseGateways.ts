@@ -16,6 +16,7 @@ import {
   User,
   UserId,
   UserName,
+  VizId,
   defaultSortField,
   defaultSortOrder,
   saveLock,
@@ -306,6 +307,16 @@ export const DatabaseGateways = ({
     sortOrder = defaultSortOrder,
     includeTrashed = false,
     visibilities = ['public'],
+    vizIds,
+  }: {
+    owner?: UserId;
+    forkedFrom?: ResourceId;
+    sortField?: string;
+    pageNumber?: number;
+    sortOrder?: string;
+    includeTrashed?: boolean;
+    visibilities?: Array<string>;
+    vizIds?: Array<VizId>;
   }) =>
     new Promise((resolve) => {
       const entityName = 'Info';
@@ -320,8 +331,13 @@ export const DatabaseGateways = ({
         $sort: {
           [sortField]: sortOrder === 'ascending' ? 1 : -1,
         },
-        visibility: { $in: visibilities },
+        ...(visibilities && {
+          visibility: { $in: visibilities },
+        }),
+        ...(vizIds && { id: { $in: vizIds } }),
       };
+
+      console.log(JSON.stringify(mongoQuery, null, 2));
 
       // // If this viz is currently in the "trash",
       // // this field represents when it was put there.
@@ -622,7 +638,7 @@ export const DatabaseGateways = ({
 
   const getPermissions = (
     user: UserId | null,
-    resources: Array<ResourceId>,
+    resources: Array<ResourceId> | null,
   ) =>
     new Promise((resolve) => {
       const entityName = 'Permission';
@@ -631,8 +647,11 @@ export const DatabaseGateways = ({
         {
           $and: [
             // user could be null
-            ...(user ? [{ user }] : []),
-            { resource: { $in: resources } },
+            ...(user !== null ? [{ user }] : []),
+            // resources could be null
+            ...(resources !== null
+              ? [{ resource: { $in: resources } }]
+              : []),
           ],
         },
         {},
