@@ -337,7 +337,7 @@ export const DatabaseGateways = ({
         ...(vizIds && { id: { $in: vizIds } }),
       };
 
-      console.log(JSON.stringify(mongoQuery, null, 2));
+      // console.log(JSON.stringify(mongoQuery, null, 2));
 
       // // If this viz is currently in the "trash",
       // // this field represents when it was put there.
