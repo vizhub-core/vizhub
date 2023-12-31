@@ -8,6 +8,7 @@ import {
   DELETE,
   Permission,
   User,
+  defaultVizWidth,
 } from 'entities';
 import { rollup } from 'rollup';
 import { JSDOM } from 'jsdom';
@@ -23,6 +24,8 @@ import {
   VizCache,
   createVizCache,
 } from 'runtime/src/v3Runtime/vizCache';
+import { getVizThumbnailURL } from '../../accessors';
+import { absoluteURL } from '../../seoMetaTags';
 
 setJSDOM(JSDOM);
 
@@ -105,7 +108,7 @@ VizPage.getPageData = async ({
         info = commitVizResult.value;
       }
     }
-    const { title, owner, forkedFrom } = info;
+    const { title, owner, forkedFrom, end } = info;
 
     // Access control: Verify that the user has write access to the viz.
     // This is used to determine whether to show the "Settings" button.
@@ -267,12 +270,18 @@ VizPage.getPageData = async ({
     //  * the forkedFrom owner
     //  * the collaborators
 
+    // The unfurl image URL for the page.
+    const image = absoluteURL(
+      getVizThumbnailURL(end, defaultVizWidth),
+    );
+
     return {
       infoSnapshot,
       ownerUserSnapshot,
       forkedFromInfoSnapshot,
       forkedFromOwnerUserSnapshot,
       title,
+      image,
       authenticatedUserSnapshot,
       initialReadmeHTML,
       initialSrcdoc,
