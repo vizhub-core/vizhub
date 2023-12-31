@@ -13,6 +13,7 @@ import { Gateways } from 'gateways';
 import { Auth0User } from '../Page';
 import { GetInfosAndOwners } from 'interactors';
 import { getAuthenticatedUser } from '../getAuthenticatedUser';
+import { curatedVizzes } from './curatedVizzes';
 
 CreateVizPage.getPageData = async ({
   gateways,
@@ -29,6 +30,7 @@ CreateVizPage.getPageData = async ({
     noNeedToFetchUsers: [],
     sortId: 'mostForked',
     pageNumber: 0,
+    vizIds: curatedVizzes,
   });
   if (infosAndOwnersResult.outcome === 'failure') {
     console.log('Error when fetching infos and owners:');

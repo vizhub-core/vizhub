@@ -27,6 +27,12 @@
       h1 {
         color: var(--vh-color-neutral-02);
       }
+      .vh-lede-01 {
+        color: var(--vh-color-neutral-01);
+        .emphasized {
+          font-weight: 600;
+        }
+      }
     }
   }
 }

@@ -11,8 +11,9 @@ export const CreateVizPageBody = ({
         <div className="create-viz-header">
           <h1>Create Viz</h1>
           <div className="vh-lede-01">
-            Create a new viz by forking one of these starter
-            templates.
+            Create a new viz by{' '}
+            <span className="emphasized">forking</span> one
+            of these starter templates.
           </div>
         </div>
         <VizPreviewCollection>
