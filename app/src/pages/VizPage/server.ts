@@ -8,6 +8,7 @@ import {
   DELETE,
   Permission,
   User,
+  defaultVizWidth,
 } from 'entities';
 import { rollup } from 'rollup';
 import { JSDOM } from 'jsdom';
@@ -23,6 +24,7 @@ import {
   VizCache,
   createVizCache,
 } from 'runtime/src/v3Runtime/vizCache';
+import { getVizThumbnailURL } from '../../accessors';
 
 setJSDOM(JSDOM);
 
@@ -267,12 +269,19 @@ VizPage.getPageData = async ({
     //  * the forkedFrom owner
     //  * the collaborators
 
+    // The unfurl image URL for the page.
+    const image = getVizThumbnailURL(
+      info.end,
+      defaultVizWidth,
+    );
+
     return {
       infoSnapshot,
       ownerUserSnapshot,
       forkedFromInfoSnapshot,
       forkedFromOwnerUserSnapshot,
       title,
+      image,
       authenticatedUserSnapshot,
       initialReadmeHTML,
       initialSrcdoc,

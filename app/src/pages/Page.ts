@@ -43,7 +43,7 @@ export type PageData = {
   // Should be plain text, no HTML or Markdown.
   description?: string;
 
-  // The image URL for the page.
+  // The unfurl image URL for the page.
   image?: string;
 
   // The authenticated user, if any.
