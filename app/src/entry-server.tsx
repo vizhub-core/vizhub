@@ -7,6 +7,7 @@ export { api } from 'api';
 export { initializeGateways } from 'database';
 export { authentication } from './authentication';
 export * as accessControl from './accessControl';
+export { seoMetaTags } from './seoMetaTags';
 
 export const render = (pageData) =>
   renderToString(

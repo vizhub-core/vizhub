@@ -13,7 +13,6 @@ import WebSocketJSONStream from '@teamwork/websocket-json-stream';
 import { matchPath } from 'react-router-dom';
 import * as Sentry from '@sentry/node';
 import { createProxyMiddleware } from 'http-proxy-middleware';
-import { seoMetaTags } from './src/seoMetaTags.js';
 
 const version = '3.0.0-beta.32';
 
@@ -225,6 +224,7 @@ async function createServer(
     api,
     authentication,
     accessControl,
+    seoMetaTags,
   } = entry;
 
   // This API is required for the ShareDB WebSocket server.

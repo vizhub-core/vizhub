@@ -25,6 +25,7 @@ import {
   createVizCache,
 } from 'runtime/src/v3Runtime/vizCache';
 import { getVizThumbnailURL } from '../../accessors';
+import { absoluteURL } from '../../seoMetaTags';
 
 setJSDOM(JSDOM);
 
@@ -107,7 +108,7 @@ VizPage.getPageData = async ({
         info = commitVizResult.value;
       }
     }
-    const { title, owner, forkedFrom } = info;
+    const { title, owner, forkedFrom, end } = info;
 
     // Access control: Verify that the user has write access to the viz.
     // This is used to determine whether to show the "Settings" button.
@@ -270,9 +271,8 @@ VizPage.getPageData = async ({
     //  * the collaborators
 
     // The unfurl image URL for the page.
-    const image = getVizThumbnailURL(
-      info.end,
-      defaultVizWidth,
+    const image = absoluteURL(
+      getVizThumbnailURL(end, defaultVizWidth),
     );
 
     return {
