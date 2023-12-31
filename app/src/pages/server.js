@@ -12,6 +12,7 @@ import { PricingPage } from './PricingPage/server';
 import { AccountPage } from './AccountPage/server';
 import { ResourcesPage } from './ResourcesPage/server';
 import { KitchenSinkPage } from './KitchenSinkPage/server';
+import { CreateVizPage } from './CreateVizPage/server';
 
 // Note: order matters (profile page should come last)
 // Need to update `client.js` as well
@@ -29,5 +30,6 @@ export const pages = [
   SearchPage,
   ResourcesPage,
   KitchenSinkPage,
+  CreateVizPage,
   ProfilePage,
 ];

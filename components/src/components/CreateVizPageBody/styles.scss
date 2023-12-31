@@ -3,6 +3,21 @@
 
   .create-viz-content {
     padding: 70px 360px;
+
+    // TODO make this better
+    // Less padding on smaller screens
+    @media (max-width: 1200px) {
+      padding: 70px 200px;
+    }
+    // Even less padding on smaller screens
+    @media (max-width: 900px) {
+      padding: 70px 100px;
+    }
+    // Even less padding on mobile
+    @media (max-width: 600px) {
+      padding: 70px 10px;
+    }
+
     display: flex;
     flex-direction: column;
     gap: 70px;

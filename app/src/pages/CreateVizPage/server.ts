@@ -1,7 +1,7 @@
 import {
-  ExplorePage,
-  ExplorePageData,
-  ExplorePageQuery,
+  CreateVizPage,
+  CreateVizPageData,
+  CreateVizPageQuery,
 } from './index';
 
 import {
@@ -14,23 +14,20 @@ import { Auth0User } from '../Page';
 import { GetInfosAndOwners } from 'interactors';
 import { getAuthenticatedUser } from '../getAuthenticatedUser';
 
-ExplorePage.getPageData = async ({
+CreateVizPage.getPageData = async ({
   gateways,
   auth0User,
   query,
 }: {
   gateways: Gateways;
   auth0User: Auth0User | null;
-  query: ExplorePageQuery;
-}): Promise<ExplorePageData> => {
+  query: CreateVizPageQuery;
+}): Promise<CreateVizPageData> => {
   const getInfosAndOwners = GetInfosAndOwners(gateways);
-
-  const sortId: SortId | null =
-    asSortId(query.sort) || defaultSortOption.id;
 
   const infosAndOwnersResult = await getInfosAndOwners({
     noNeedToFetchUsers: [],
-    sortId,
+    sortId: 'mostForked',
     pageNumber: 0,
   });
   if (infosAndOwnersResult.outcome === 'failure') {
@@ -48,13 +45,12 @@ ExplorePage.getPageData = async ({
     });
 
   return {
-    title: `Explore VizHub`,
+    title: `Create Viz`,
     authenticatedUserSnapshot,
     infoSnapshots,
     ownerUserSnapshots,
-    sortId,
     hasMore,
   };
 };
 
-export { ExplorePage };
+export { CreateVizPage };
