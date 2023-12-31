@@ -13,6 +13,7 @@ export { ResourcesPageBody } from './components/ResourcesPageBody';
 export { SettingsModal } from './components/SettingsModal';
 export { ShareModal } from './components/ShareModal';
 export { DeleteVizConfirmationModal } from './components/DeleteVizConfirmationModal';
+export { CreateVizPageBody } from './components/CreateVizPageBody';
 export { KitchenSinkApp } from './KitchenSinkApp';
 
 import './components/index.scss';

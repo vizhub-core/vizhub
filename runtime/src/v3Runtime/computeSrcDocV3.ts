@@ -88,7 +88,7 @@ export const computeSrcDocV3 = async ({
       (() => {
         const render = () => {
           const container = document.getElementById('${vizContainerId}');
-          Viz.viz(container, { state: window.state, setState });
+          Viz.main(container, { state: window.state, setState });
         };
         const setState = (next) => {
           window.state = next(window.state);
