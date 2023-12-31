@@ -10,12 +10,6 @@ import { SectionSortProvider } from '../../contexts/SectionSortContext';
 
 export type ExplorePageData = PageData &
   InfosAndOwnersPageData & {
-    // The first page of results
-    infoSnapshots: Array<Snapshot<Info>>;
-
-    // The users that are owners of these Infos
-    ownerUserSnapshots: Array<Snapshot<User>>;
-
     // The initial sort order for the results,
     // before the user has changed it client-side
     sortId: SortId;

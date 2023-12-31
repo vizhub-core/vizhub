@@ -432,6 +432,7 @@ async function createServer(
     '/account',
     '/pricing',
     '/resources',
+    '/create-viz',
     '/vizhub-ui-kitchen-sink',
     '/search?query=map',
   ];
