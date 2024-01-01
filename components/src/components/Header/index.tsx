@@ -108,10 +108,10 @@ export const Header = ({
                 ></img>
               </Dropdown.Toggle>
               <Dropdown.Menu>
-                {/* <Dropdown.Item onClick={onCreateVizClick}>
+                <Dropdown.Item onClick={onCreateVizClick}>
                   Create Viz
                 </Dropdown.Item>
-                <Dropdown.Divider /> */}
+                <Dropdown.Divider />
                 <Dropdown.Item href={profileHref}>
                   Profile
                 </Dropdown.Item>
