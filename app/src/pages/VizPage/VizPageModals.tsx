@@ -238,6 +238,7 @@ export const VizPageModals = ({
             handleCollaboratorRemove
           }
           initialCollaborators={initialCollaborators}
+          currentPlan={authenticatedUser?.plan || 'free'}
         />
       )}
       {showDeleteVizConfirmationModal && (
