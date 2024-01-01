@@ -26,6 +26,7 @@ export const Body = ({
     useContext(SectionSortContext);
 
   const {
+    ownerUserSnapshotsById,
     allInfoSnapshots,
     fetchNextPage,
     isLoadingNextPage,
@@ -38,7 +39,15 @@ export const Body = ({
         <VizPreviewPresenter
           key={infoSnapshot.data.id}
           infoSnapshot={infoSnapshot}
-          ownerUser={profileUser}
+          ownerUser={
+            // Usually it's the profile user, but not in the
+            // "Shared with me" section
+            infoSnapshot.data.owner === profileUser.id
+              ? profileUser
+              : ownerUserSnapshotsById[
+                  infoSnapshot.data.owner
+                ].data
+          }
         />
       )),
     [allInfoSnapshots, profileUser],
