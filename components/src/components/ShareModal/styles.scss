@@ -1,4 +1,8 @@
 .vh-share-modal {
+  .disabled-form-group {
+    opacity: 0.5;
+    pointer-events: none;
+  }
   .collaborator-entry {
     display: flex;
     gap: 10px;

@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { Plan, Visibility } from 'entities';
 import { Form, Alert, Button } from '../bootstrap';
 import './styles.css';
@@ -30,13 +30,23 @@ export const VisibilityControl = ({
     },
     [],
   );
+
+  const [showUpgradeCallout, setShowUpgradeCallout] =
+    useState(false);
+
+  const handleMouseOver = useCallback(() => {
+    if (currentPlan === 'free') {
+      setShowUpgradeCallout(true);
+    }
+  }, [currentPlan]);
+
   return (
     <Form.Group
       className="mb-3 vh-visibility-control"
       controlId="visibility"
     >
       <Form.Label>Visibility</Form.Label>
-      <div>
+      <div onMouseOver={handleMouseOver}>
         {Object.keys(visibilities)
           .filter((value) =>
             enableUnlisted ? true : value !== 'unlisted',
@@ -64,22 +74,12 @@ export const VisibilityControl = ({
         {visibilities[visibility]}
       </Form.Text>
 
-      {currentPlan === 'free' ? (
-        <Alert
-          variant="info"
-          className="my-3 p-3 d-flex flex-column upgrade-nudge-alert"
-        >
-          <strong>Want more privacy?</strong>
-          <Button
-            variant="primary"
-            href={pricingHref}
-            className="my-2"
-          >
-            Upgrade
-          </Button>
-          to make your viz private.
-        </Alert>
-      ) : null}
+      {showUpgradeCallout && (
+        <p className="mt-3 upgrade-callout-text">
+          Please <a href="/pricing">upgrade your plan</a> to
+          make this viz private.
+        </p>
+      )}
     </Form.Group>
   );
 };
