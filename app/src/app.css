@@ -5,3 +5,10 @@ body,
 #app {
   height: 100%;
 }
+
+.upgrade-callout-text {
+  color: var(--vh-color-warning-01);
+  a {
+    color: var(--vh-color-warning-01);
+  }
+}

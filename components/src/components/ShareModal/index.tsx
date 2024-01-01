@@ -3,7 +3,7 @@ import { Modal, Button } from '../bootstrap';
 import { LinkSection } from './LinkSection';
 import { CollaboratorsSection } from './CollaboratorsSection';
 import { ShareSectionsNav } from './ShareSectionsNav';
-import { User } from 'entities';
+import { Plan, User } from 'entities';
 import './styles.scss';
 
 const navItems = [
@@ -30,6 +30,7 @@ export const ShareModal = ({
   handleCollaboratorRemove,
   showAnyoneCanEdit,
   initialCollaborators,
+  currentPlan,
 }: {
   show: boolean;
   linkToCopy: string;
@@ -50,6 +51,7 @@ export const ShareModal = ({
   ) => Promise<'success'>;
   showAnyoneCanEdit: boolean;
   initialCollaborators: Array<User>;
+  currentPlan: Plan;
 }) => {
   const [section, setSection] = useState('link');
 
@@ -117,6 +119,7 @@ export const ShareModal = ({
             }
             showAnyoneCanEdit={showAnyoneCanEdit}
             initialCollaborators={initialCollaborators}
+            currentPlan={currentPlan}
           />
         )}
         {section === 'link' && (

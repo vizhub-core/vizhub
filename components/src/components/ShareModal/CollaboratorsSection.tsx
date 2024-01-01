@@ -1,8 +1,7 @@
 import { useCallback, useState } from 'react';
 import { Form } from '../bootstrap';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
-import { User, UserId } from 'entities';
-import { Button } from 'react-bootstrap';
+import { Plan, User, UserId } from 'entities';
 import { CollaboratorEntry } from './CollaboratorEntry';
 
 // Inspired by
@@ -20,6 +19,7 @@ export const CollaboratorsSection = ({
   handleCollaboratorRemove,
   showAnyoneCanEdit,
   initialCollaborators,
+  currentPlan,
 }: {
   anyoneCanEdit: boolean;
   setAnyoneCanEdit: (anyoneCanEdit: boolean) => void;
@@ -32,6 +32,7 @@ export const CollaboratorsSection = ({
   ) => Promise<'success'>;
   showAnyoneCanEdit: boolean;
   initialCollaborators: Array<User>;
+  currentPlan: Plan;
 }) => {
   // True when the async handleCollaboratorSearch is in progress
   const [isLoading, setIsLoading] = useState(false);
@@ -118,73 +119,89 @@ export const CollaboratorsSection = ({
 
   return (
     <>
+      {currentPlan === 'free' && (
+        <p className="mt-3 upgrade-callout-text">
+          Please <a href="/pricing">upgrade your plan</a> to
+          add collaborators.
+        </p>
+      )}
       <Form.Group
-        className="mb-3 mt-3"
-        controlId="collaboratorsControl"
+        className={
+          currentPlan === 'free'
+            ? 'disabled-form-group'
+            : ''
+        }
       >
-        <Form.Label>Manage Collaborators</Form.Label>
-        <Form.Group className="mb-3">
-          {collaborators.map((collaborator) => (
-            <CollaboratorEntry
-              key={collaborator.id}
-              collaborator={collaborator}
-              removeCollaborator={removeCollaborator}
-            />
-          ))}
-        </Form.Group>
-        <AsyncTypeahead
-          filterBy={filterBy}
-          className="mb-1"
-          id="async-collaborator-search"
-          isLoading={isLoading}
-          labelKey="userName"
-          minLength={2}
-          onSearch={handleSearch}
-          onChange={handleChange}
-          options={options}
-          placeholder="Search for a user..."
-          selected={[]}
-          renderMenuItemChildren={(user: User) => (
-            <>
-              <img
-                alt={user.userName}
-                src={user.picture}
-                style={{
-                  height: '24px',
-                  marginRight: '10px',
-                  width: '24px',
-                  borderRadius: '50%',
-                }}
-              />
-              <span>
-                {user.displayName || user.userName}
-              </span>
-            </>
-          )}
-        />
-        <Form.Text className="text-muted">
-          Start typing to search for collaborators to add.
-        </Form.Text>
-      </Form.Group>
-      {showAnyoneCanEdit && (
         <Form.Group
-          className="mb-3 mt-4"
-          controlId="anyoneCanEditControl"
+          className="mb-3 mt-3"
+          controlId="collaboratorsControl"
         >
-          <Form.Label>Allow Anyone to Edit</Form.Label>
-          <Form.Check
+          <Form.Label>Manage Collaborators</Form.Label>
+          {collaborators.length > 0 && (
+            <Form.Group className="mb-3">
+              {collaborators.map((collaborator) => (
+                <CollaboratorEntry
+                  key={collaborator.id}
+                  collaborator={collaborator}
+                  removeCollaborator={removeCollaborator}
+                />
+              ))}
+            </Form.Group>
+          )}
+          <AsyncTypeahead
+            filterBy={filterBy}
             className="mb-1"
-            type="checkbox"
-            label="Anyone can edit"
-            checked={anyoneCanEdit}
-            onChange={handleCheckboxChange}
+            id="async-collaborator-search"
+            isLoading={isLoading}
+            labelKey="userName"
+            minLength={2}
+            onSearch={handleSearch}
+            onChange={handleChange}
+            options={options}
+            placeholder="Search for a user..."
+            selected={[]}
+            renderMenuItemChildren={(user: User) => (
+              <>
+                <img
+                  alt={user.userName}
+                  src={user.picture}
+                  style={{
+                    height: '24px',
+                    marginRight: '10px',
+                    width: '24px',
+                    borderRadius: '50%',
+                  }}
+                />
+                <span>
+                  {user.displayName || user.userName}
+                </span>
+              </>
+            )}
           />
           <Form.Text className="text-muted">
-            If you check this box, anyone with the link can
-            edit this viz.
+            Start typing to search for collaborators to add.
           </Form.Text>
         </Form.Group>
-      )}
+        {showAnyoneCanEdit && (
+          <Form.Group
+            className="mb-3 mt-4"
+            controlId="anyoneCanEditControl"
+          >
+            <Form.Label>Allow Anyone to Edit</Form.Label>
+            <Form.Check
+              className="mb-1"
+              type="checkbox"
+              label="Anyone can edit"
+              checked={anyoneCanEdit}
+              onChange={handleCheckboxChange}
+            />
+            <Form.Text className="text-muted">
+              If you check this box, anyone with the link
+              can edit this viz.
+            </Form.Text>
+          </Form.Group>
+        )}
+      </Form.Group>
     </>
   );
 };
