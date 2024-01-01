@@ -65,7 +65,8 @@ export const ProfilePageBody = ({
   sectionId: SectionId;
   setSectionId: (sectionId: SectionId) => void;
 
-  currentPlan: Plan;
+  // The current plan of the authenticated user.
+  currentPlan?: Plan;
 }) => {
   const copy: { [K in SectionId]: string } = useMemo(
     () => ({
@@ -83,6 +84,11 @@ export const ProfilePageBody = ({
     }),
     [isViewingOwnProfile],
   );
+
+  const showUpgradeCallout =
+    isViewingOwnProfile &&
+    currentPlan === 'free' &&
+    sectionId === 'private';
 
   return (
     <div className="vh-page vh-profile-page">
@@ -170,10 +176,10 @@ export const ProfilePageBody = ({
                 )}
             </div>
           </div>
-          {isViewingOwnProfile &&
-            currentPlan === 'free' &&
-            sectionId === 'private' && <UpgradeCallout />}
-          <VizPreviewCollection>
+          {showUpgradeCallout && <UpgradeCallout />}
+          <VizPreviewCollection
+            opacity={showUpgradeCallout ? 0.5 : 1}
+          >
             {renderVizPreviews()}
           </VizPreviewCollection>
           <More

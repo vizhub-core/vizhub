@@ -10,10 +10,12 @@ export const UpgradeCallout = () => {
       <div className="upgrade-callout-content">
         <h4>Upgrade to Premium</h4>
         <div className="vh-block-01">
-          To create private visualizations and share them
-          with collaborators, upgrade to a Premium plan. If
-          you have existing private visualizations, they
-          will be read-only until you upgrade.
+          To create private visualizations, upgrade to the
+          Premium plan. You'll also get access to other
+          premium features including AI-assisted coding and
+          real-time collaboration. If you have existing
+          private visualizations, they will be read-only
+          until you upgrade again.
         </div>
         <div className="upgrade-callout-buttons">
           <Button variant="secondary">
