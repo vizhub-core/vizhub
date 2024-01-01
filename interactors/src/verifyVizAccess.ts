@@ -39,7 +39,8 @@ const canRead = (info: Info) =>
 // * Determines whether or not a given user is allowed to perform
 //   a given action on a given viz.
 export const VerifyVizAccess = (gateways: Gateways) => {
-  const { getPermissions, getFolderAncestors } = gateways;
+  const { getPermissions, getFolderAncestors, getUser } =
+    gateways;
 
   return async (options: {
     authenticatedUserId: UserId | undefined;
@@ -55,6 +56,38 @@ export const VerifyVizAccess = (gateways: Gateways) => {
         '[VerifyVizAccess] ',
         JSON.stringify(options, null, 2),
       );
+    }
+
+    // If the viz is private, and the owner of the viz is
+    // on the free plan, then:
+    if (info.visibility === 'private') {
+      const userResult = await getUser(info.owner);
+      if (userResult.outcome === 'failure') {
+        return err(userResult.error);
+      }
+      const ownerUser = userResult.value.data;
+      if (ownerUser.plan === 'free') {
+        const vizAccess: VizAccess = {};
+        for (const action of actions) {
+          if (action === READ) {
+            //  * Only allow the owner to read it
+            vizAccess[action] =
+              authenticatedUserId === info.owner;
+          } else if (action === WRITE) {
+            //  * Don't allow the owner to edit it
+            vizAccess[action] = false;
+          } else if (action === DELETE) {
+            //  * Allow the owner to delete it
+            vizAccess[action] =
+              authenticatedUserId === info.owner;
+          } else {
+            //  * Don't allow anyone else to read, edit, or delete it,
+            //    even if they have been added as a collaborator.
+            vizAccess[action] = false;
+          }
+        }
+        return ok(vizAccess);
+      }
     }
 
     // If the user is the owner of the viz, then they can perform any action.

@@ -9,13 +9,14 @@ import { StarSVG } from '../Icons/sam/StarSVG';
 import { PlusSVG } from '../Icons/sam/PlusSVG';
 import { Button } from '../bootstrap';
 import { HomeStarter } from '../HomeStarter';
-import { SectionId, SortId } from 'entities';
+import { Plan, SectionId, SortId } from 'entities';
 import { useMemo } from 'react';
 import { SidebarSection } from './SidebarSection';
 import './styles.scss';
+import { UpgradeCallout } from '../UpgradeCallout';
 
 const enableEditBio = false;
-const enableCreateVizButton = false;
+const enableCreateVizButton = true;
 
 export const ProfilePageBody = ({
   // Viz preview list props.
@@ -39,6 +40,8 @@ export const ProfilePageBody = ({
   // Active section
   sectionId,
   setSectionId,
+
+  currentPlan,
 }: {
   // Viz preview list props.
   renderVizPreviews: () => React.ReactNode;
@@ -61,6 +64,9 @@ export const ProfilePageBody = ({
   // Active section
   sectionId: SectionId;
   setSectionId: (sectionId: SectionId) => void;
+
+  // The current plan of the authenticated user.
+  currentPlan?: Plan;
 }) => {
   const copy: { [K in SectionId]: string } = useMemo(
     () => ({
@@ -78,6 +84,11 @@ export const ProfilePageBody = ({
     }),
     [isViewingOwnProfile],
   );
+
+  const showUpgradeCallout =
+    isViewingOwnProfile &&
+    currentPlan === 'free' &&
+    sectionId === 'private';
 
   return (
     <div className="vh-page vh-profile-page">
@@ -139,9 +150,12 @@ export const ProfilePageBody = ({
           </div>
         </div>
         <div className="profile-content">
-          {isViewingOwnProfile && <HomeStarter />}
+          {isViewingOwnProfile &&
+            currentPlan === 'free' &&
+            sectionId === 'public' && <HomeStarter />}
           <div className="profile-header">
             <h2>{copy[sectionId]}</h2>
+
             <div className="profile-header-controls">
               {sortOptions ? (
                 <SortControl
@@ -152,14 +166,20 @@ export const ProfilePageBody = ({
               ) : null}
               {enableCreateVizButton &&
                 isViewingOwnProfile && (
-                  <Button className="create-new-button">
+                  <Button
+                    className="create-new-button"
+                    href="/create-viz"
+                  >
                     <PlusSVG />
                     Create new
                   </Button>
                 )}
             </div>
           </div>
-          <VizPreviewCollection>
+          {showUpgradeCallout && <UpgradeCallout />}
+          <VizPreviewCollection
+            opacity={showUpgradeCallout ? 0.5 : 1}
+          >
             {renderVizPreviews()}
           </VizPreviewCollection>
           <More
