@@ -13,21 +13,27 @@ export const args = {
   },
   picture:
     'https://avatars.githubusercontent.com/u/98681?v=4',
+  currentPlan: 'free',
 };
 
-export const useProfilePageState = () => {
+export const useProfilePageState = (
+  options = {
+    initialSectionId: 'public',
+  },
+) => {
   const [sortId, setSortId] = useState(
     sortControlArgs.initialSortId,
   );
 
-  const [activeSection, setActiveSection] =
-    useState('public');
+  const [sectionId, setSectionId] = useState(
+    options.initialSectionId,
+  );
 
   return {
     sortId,
     setSortId,
-    activeSection,
-    setActiveSection,
+    sectionId,
+    setSectionId,
     sortOptions: sortControlArgs.sortOptions,
   };
 };

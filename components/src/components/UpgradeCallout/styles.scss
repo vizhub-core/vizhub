@@ -1,0 +1,34 @@
+.upgrade-callout {
+  border-radius: 8px;
+  box-shadow: var(--vh-box-shadow);
+  display: flex;
+  background-color: white;
+
+  img {
+    width: 300px;
+    // TODO get this to fill the height of the container
+    // and scale the image to cover
+    height: 100%;
+    object-fit: cover;
+    border-top-left-radius: inherit;
+    border-bottom-left-radius: inherit;
+  }
+
+  .upgrade-callout-content {
+    flex: 1;
+    padding: 36px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  h4 {
+    margin-bottom: 8px;
+  }
+  .upgrade-callout-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 40px;
+  }
+}
