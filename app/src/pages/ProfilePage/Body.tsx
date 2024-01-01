@@ -75,6 +75,7 @@ export const Body = ({
         isViewingOwnProfile={isViewingOwnProfile}
         sectionId={sectionId}
         setSectionId={setSectionId}
+        currentPlan={authenticatedUser?.plan}
       />
     </div>
   );

@@ -135,7 +135,7 @@ export const GetInfosAndOwners = (gateways: Gateways) => {
       await getInfos(getInfosOptions);
     if (infoSnapshotsResult.outcome === 'failure')
       return infoSnapshotsResult;
-    const infoSnapshots = infoSnapshotsResult.value;
+    let infoSnapshots = infoSnapshotsResult.value;
 
     // Figure out the set of unique users that are owners of these infos.
     const ownerUsers: Array<UserId> = Array.from(
@@ -148,7 +148,10 @@ export const GetInfosAndOwners = (gateways: Gateways) => {
 
     // Remove any users that we don't need to fetch.
     const noNeedToFetchUsersSet = new Set(
-      noNeedToFetchUsers,
+      // For the "Shared with me" section, we always need
+      // to fetch the users, because we need to know if
+      // they are on the premium plan.
+      sectionId === 'shared' ? [] : noNeedToFetchUsers,
     );
     const ownerUsersToFetch = ownerUsers.filter(
       (ownerUser) => !noNeedToFetchUsersSet.has(ownerUser),
@@ -161,6 +164,37 @@ export const GetInfosAndOwners = (gateways: Gateways) => {
       return ownerUserSnapshotsResult;
     const ownerUserSnapshots =
       ownerUserSnapshotsResult.value;
+
+    //  Don't show shared private vizzes with collaborators
+    // if their owner is not on the premium plan.
+    if (sectionId === 'shared') {
+      const ownerMap = ownerUserSnapshots.reduce(
+        (acc, snapshot) => {
+          acc[snapshot.data.id] = snapshot.data;
+          return acc;
+        },
+        {},
+      );
+      infoSnapshots = infoSnapshots.filter(
+        (infoSnapshot) => {
+          const info: Info = infoSnapshot.data;
+          const ownerUser = ownerMap[info.owner];
+          // Should never happen
+          if (!ownerUser) {
+            throw new Error(
+              'Owner user snapshot not found',
+            );
+          }
+          if (
+            info.visibility === 'private' &&
+            ownerUser.plan === 'free'
+          ) {
+            return false;
+          }
+          return true;
+        },
+      );
+    }
 
     return ok({
       infoSnapshots,

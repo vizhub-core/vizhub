@@ -1,4 +1,5 @@
 import { Content, User } from 'entities';
+import { useMemo } from 'react';
 import { enableManualRun } from 'runtime/src/useRuntime';
 import type { ShareDBDoc } from 'vzcode';
 import {
@@ -62,6 +63,30 @@ export const VizPageEditor = ({
       ? authenticatedUser.userName
       : 'Anonymous';
 
+  const canUserUseAIAssist = useMemo(() => {
+    if (!authenticatedUser) return false;
+    if (authenticatedUser.plan === 'free') return false;
+    return true;
+  }, [authenticatedUser]);
+
+  // If the user is on the free plan,
+  // clicking the AI Assist button will
+  // navigate them to the pricing page.
+  const { aiAssistTooltipText, aiAssistClickOverride } =
+    useMemo(() => {
+      if (canUserUseAIAssist) {
+        // Both being undefined results in default behavior.
+        return {};
+      } else {
+        return {
+          aiAssistTooltipText: 'Upgrade to use AI Assist',
+          aiAssistClickOverride: () => {
+            window.location.href = '/pricing';
+          },
+        };
+      }
+    }, [canUserUseAIAssist]);
+
   return (
     <VZCodeProvider
       content={content}
@@ -81,6 +106,8 @@ export const VizPageEditor = ({
       <VZMiddle
         aiAssistEndpoint={aiAssistEndpoint}
         aiAssistOptions={aiAssistOptions}
+        aiAssistTooltipText={aiAssistTooltipText}
+        aiAssistClickOverride={aiAssistClickOverride}
       />
       <VZResizer side="left" />
       <VZResizer side="right" />

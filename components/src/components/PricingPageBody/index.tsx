@@ -222,7 +222,7 @@ export const PricingPageBody = ({
                     className="pricing-page-plan-button"
                     onClick={onPremiumUpgradeClick}
                   >
-                    Upgrade
+                    Start Free Trial
                   </Button>
                 )}
 

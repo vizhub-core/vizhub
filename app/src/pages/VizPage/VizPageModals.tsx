@@ -191,7 +191,14 @@ export const VizPageModals = ({
       {showForkModal && (
         <ForkModal
           initialTitle={'Fork of ' + info.title}
-          initialVisibility={info.visibility}
+          initialVisibility={
+            // If the authenticated user is on the free plan,
+            // and trying to fork a private viz, then make the
+            // forked viz public.
+            authenticatedUser?.plan === 'free'
+              ? 'public'
+              : info.visibility
+          }
           initialOwner={authenticatedUser?.id}
           possibleOwners={possibleOwners}
           show={showForkModal}
