@@ -18,13 +18,13 @@ export const UpgradeCallout = () => {
           until you upgrade again.
         </div>
         <div className="upgrade-callout-buttons">
-          <Button variant="secondary">
+          {/* <Button variant="secondary">
             Remind me Later
-          </Button>
+          </Button> */}
           <Button variant="primary" href="/pricing">
             Start Free Trial
           </Button>
-        </div>{' '}
+        </div>
       </div>
     </div>
   );
