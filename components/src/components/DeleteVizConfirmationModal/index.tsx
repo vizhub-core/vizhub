@@ -40,10 +40,7 @@ export const DeleteVizConfirmationModal = ({
       </Modal.Header>
 
       <Modal.Body>
-        <p>
-          Are you sure you want to permanently delete this
-          viz?
-        </p>
+        <p>This will permanently delete your viz.</p>
       </Modal.Body>
 
       <Modal.Footer>
