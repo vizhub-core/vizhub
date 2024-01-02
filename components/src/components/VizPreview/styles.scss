@@ -80,7 +80,8 @@
     .owner {
       display: flex;
       align-items: center;
-      flex: 1;
+      min-width: 0;
+
       .owner-avatar-image {
         width: 32px;
         height: 32px;
@@ -89,10 +90,11 @@
       }
       .owner-name {
         margin-left: 12px;
-        // Handle long names with ellipsis.
-        flex: 1;
+
+        // Truncate long names.
         overflow: hidden;
         text-overflow: ellipsis;
+        line-height: 1.5;
         white-space: nowrap;
       }
     }
