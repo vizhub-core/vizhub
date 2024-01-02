@@ -75,7 +75,7 @@ export const userJane: User = {
   userName: 'jane',
   displayName: 'Jane Shmoe',
   primaryEmail: 'jane@shmoe.com',
-  plan: 'free',
+  plan: 'premium',
 };
 
 export const sampleFolder: Folder = {
