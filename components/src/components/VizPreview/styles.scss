@@ -80,6 +80,7 @@
     .owner {
       display: flex;
       align-items: center;
+      flex: 1;
       .owner-avatar-image {
         width: 32px;
         height: 32px;
@@ -88,6 +89,11 @@
       }
       .owner-name {
         margin-left: 12px;
+        // Handle long names with ellipsis.
+        flex: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
     }
   }
