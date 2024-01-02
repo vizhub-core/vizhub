@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef } from 'react';
+import { useContext } from 'react';
 import { Info, Snapshot, sortOptions } from 'entities';
 import { ExplorePageBody } from 'components';
 import { SmartHeader } from '../../smartComponents/SmartHeader';
