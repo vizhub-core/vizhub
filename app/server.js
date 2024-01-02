@@ -14,7 +14,7 @@ import { matchPath } from 'react-router-dom';
 import * as Sentry from '@sentry/node';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 
-const version = '3.0.0-beta.32';
+const version = '3.0.0';
 
 // Generate a random server ID for debugging scaling.
 const serverId = Math.random().toString(36).slice(2);

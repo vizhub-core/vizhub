@@ -8,12 +8,12 @@ import { SharedSVG } from '../Icons/sam/SharedSVG';
 import { StarSVG } from '../Icons/sam/StarSVG';
 import { PlusSVG } from '../Icons/sam/PlusSVG';
 import { Button } from '../bootstrap';
-import { HomeStarter } from '../HomeStarter';
 import { Plan, SectionId, SortId } from 'entities';
 import { useMemo } from 'react';
 import { SidebarSection } from './SidebarSection';
-import './styles.scss';
 import { UpgradeCallout } from '../UpgradeCallout';
+import './styles.scss';
+import { CreateNewButton } from '../CreateNewButton';
 
 const enableEditBio = false;
 const enableCreateVizButton = true;
@@ -150,9 +150,9 @@ export const ProfilePageBody = ({
           </div>
         </div>
         <div className="profile-content">
-          {isViewingOwnProfile &&
+          {/* {isViewingOwnProfile &&
             currentPlan === 'free' &&
-            sectionId === 'public' && <HomeStarter />}
+            sectionId === 'public' && <HomeStarter />} */}
           <div className="profile-header">
             <h2>{copy[sectionId]}</h2>
 
@@ -165,15 +165,7 @@ export const ProfilePageBody = ({
                 />
               ) : null}
               {enableCreateVizButton &&
-                isViewingOwnProfile && (
-                  <Button
-                    className="create-new-button"
-                    href="/create-viz"
-                  >
-                    <PlusSVG />
-                    Create new
-                  </Button>
-                )}
+                isViewingOwnProfile && <CreateNewButton />}
             </div>
           </div>
           {showUpgradeCallout && <UpgradeCallout />}

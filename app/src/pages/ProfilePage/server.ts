@@ -52,14 +52,14 @@ ProfilePage.getPageData = async ({
       console.log(infosAndOwnersResult.error);
       return null;
     }
-    const { infoSnapshots, hasMore } =
+    const { infoSnapshots, ownerUserSnapshots, hasMore } =
       infosAndOwnersResult.value;
 
     const pageData: ProfilePageData = {
       title: `${userName} on VizHub`,
       authenticatedUserSnapshot,
       profileUserSnapshot,
-      ownerUserSnapshots: [profileUserSnapshot],
+      ownerUserSnapshots,
       infoSnapshots,
       hasMore,
     };

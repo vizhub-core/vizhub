@@ -2,7 +2,7 @@ import './styles.scss';
 
 export const VizPreviewCollection = ({
   children,
-  opacity,
+  opacity = 1,
 }) => (
   <div
     className="viz-preview-collection"

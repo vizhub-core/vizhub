@@ -1,3 +1,8 @@
 .vh-explore-page {
   overflow: auto;
+  .explore-header-controls {
+    display: flex;
+    gap: 28px;
+    align-items: center;
+  }
 }

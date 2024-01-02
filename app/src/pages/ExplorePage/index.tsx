@@ -1,4 +1,4 @@
-import { Info, Snapshot, SortId, User } from 'entities';
+import { SortId } from 'entities';
 import { AuthenticatedUserProvider } from '../../contexts/AuthenticatedUserContext';
 import { Page, PageData } from '../Page';
 import { Body } from './Body';
@@ -44,4 +44,4 @@ export const ExplorePage: Page = ({
   </AuthenticatedUserProvider>
 );
 
-ExplorePage.path = '/explore';
+ExplorePage.path = '/';

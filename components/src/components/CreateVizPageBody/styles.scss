@@ -3,19 +3,34 @@
 
   .create-viz-content {
     padding: 70px 360px;
+    // Reduced padding for large screens
+    @media (max-width: 1400px) {
+      padding: 70px 300px;
+    }
 
-    // TODO make this better
-    // Less padding on smaller screens
+    // Further reduced padding for medium-large screens
     @media (max-width: 1200px) {
       padding: 70px 200px;
     }
-    // Even less padding on smaller screens
-    @media (max-width: 900px) {
+
+    // Moderate padding for small screens/tablets
+    @media (max-width: 1000px) {
+      padding: 70px 150px;
+    }
+
+    // Lesser padding for smaller devices
+    @media (max-width: 800px) {
       padding: 70px 100px;
     }
-    // Even less padding on mobile
+
+    // Minimal padding for very small/mobile devices
     @media (max-width: 600px) {
-      padding: 70px 10px;
+      padding: 70px 50px;
+    }
+
+    // Extra minimal padding for extremely small screens
+    @media (max-width: 400px) {
+      padding: 70px 20px;
     }
 
     display: flex;

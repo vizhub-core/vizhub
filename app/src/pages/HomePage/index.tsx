@@ -63,4 +63,4 @@ export const HomePage: Page = ({ pageData }) => {
   );
 };
 
-HomePage.path = '/';
+HomePage.path = '/beta-landing';

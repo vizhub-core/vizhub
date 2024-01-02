@@ -18,12 +18,14 @@ const enableResourcesLink = false;
 // Feature flag to enable/disable pricing page link
 const enablePricingLink = true;
 
+const enableExploreLink = false;
+
 export const Header = ({
   authenticatedUserAvatarURL,
   loginHref,
   logoutHref,
   profileHref,
-  onCreateVizClick,
+  createVizHref,
   onVizHubClick,
   pricingHref,
   resourcesHref,
@@ -34,7 +36,7 @@ export const Header = ({
   loginHref: string;
   logoutHref: string;
   profileHref: string;
-  onCreateVizClick?: () => void;
+  createVizHref: string;
   onVizHubClick: () => void;
   pricingHref: string;
   resourcesHref: string;
@@ -55,7 +57,9 @@ export const Header = ({
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="me-auto" />
         <Nav className="align-items-md-center">
-          <Nav.Link href="/explore">Explore</Nav.Link>
+          {enableExploreLink && (
+            <Nav.Link href="/explore">Explore</Nav.Link>
+          )}
 
           <Nav.Link
             href="https://vizhub.com/forum/"
@@ -108,7 +112,7 @@ export const Header = ({
                 ></img>
               </Dropdown.Toggle>
               <Dropdown.Menu>
-                <Dropdown.Item onClick={onCreateVizClick}>
+                <Dropdown.Item href={createVizHref}>
                   Create Viz
                 </Dropdown.Item>
                 <Dropdown.Divider />
