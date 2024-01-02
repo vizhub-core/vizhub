@@ -85,6 +85,7 @@ async function createServer(
   const app = express();
 
   // Configuration for the proxy to /forum
+  app.set('trust proxy', true);
   const forumProxyConfig = {
     target:
       process.env.VIZHUB3_FORUM_PROXY_TARGET ||
@@ -93,11 +94,12 @@ async function createServer(
     pathRewrite: {
       '^/forum': '',
     },
-    onProxyReq: (proxyReq, req, res) => {
+    onProxyReq: (proxyReq, req) => {
       proxyReq.setHeader('X-Forwarded-For', req.ip);
-      proxyReq.setHeader('X-Forwarded-Proto', req.protocol);
-      proxyReq.setHeader('X-Forwarded-Host', req.hostname);
-      proxyReq.setHeader('Host', req.hostname);
+      // proxyReq.setHeader('X-Forwarded-Proto', req.protocol);
+      proxyReq.setHeader('X-Forwarded-Proto', 'https');
+      proxyReq.setHeader('X-Forwarded-Host', 'vizhub.com');
+      proxyReq.setHeader('Host', 'vizhub.com');
     },
   };
   app.use(
