@@ -109,7 +109,7 @@ export const stripeWebhookEndpoint = ({
       if (event.type === 'customer.subscription.updated') {
         if (debug) {
           console.log(
-            '\n\n[stripe-webhook] received customer.updated.deleted event',
+            '\n\n[stripe-webhook] received customer.subscription.updated event',
           );
           console.log(JSON.stringify(event, null, 2));
         }
