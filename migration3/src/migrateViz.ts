@@ -8,7 +8,6 @@ import {
   InfoV2,
   UserId,
   Visibility,
-  Viz,
   VizId,
   dateToTimestamp,
   defaultVizHeight,
@@ -16,6 +15,7 @@ import {
 import {
   CommitViz,
   ForkViz,
+  SaveViz,
   ValidateViz,
   generateId,
 } from 'interactors';
@@ -34,17 +34,25 @@ export const migrateViz = async ({
   contentV2,
   gateways,
   isPrimordialViz,
+  isSecondPass,
 }: {
   infoV2: InfoV2;
   contentV2: ContentV2;
   gateways: Gateways;
   isPrimordialViz: boolean;
+  isSecondPass: boolean;
 }): Promise<boolean> => {
-  const { saveCommit, saveInfo, saveContent, getInfo } =
-    gateways;
+  const {
+    saveCommit,
+    saveInfo,
+    saveContent,
+    getInfo,
+    getContent,
+  } = gateways;
   const commitViz = CommitViz(gateways);
   const forkViz = ForkViz(gateways);
   const validateViz = ValidateViz(gateways);
+  const saveViz = SaveViz(gateways);
 
   // Sometimes titles have leading or trailing spaces, so trim that.
   const title = infoV2.title.trim();
@@ -78,7 +86,7 @@ export const migrateViz = async ({
   let oldContentV3: Content | undefined;
   if (!isPrimordialViz) {
     const forkedFromContentResult =
-      await gateways.getContent(forkedFrom);
+      await getContent(forkedFrom);
     if (forkedFromContentResult.outcome === 'failure') {
       throw new Error('Failed to get forked from content!');
     }
@@ -147,7 +155,79 @@ export const migrateViz = async ({
       console.log(
         `    Validation passed! Skipping migration...`,
       );
-      return true;
+      if (isSecondPass) {
+        // If this is the second pass, then we need to
+        // check if the v2 viz has been updated since
+        // we last migrated it.
+        const v2Updated = infoV2.lastUpdatedTimestamp;
+        const previousInfo = getInfoResult.value.data;
+        const v3Updated = previousInfo.updated;
+        if (v2Updated > v3Updated) {
+          console.log(
+            `    V2 viz has been updated since last migration. Committing...`,
+          );
+
+          console.log(`      Check it out: ` + id);
+          process.exit();
+
+          // Get the content as it was from the previous migration.
+          const previousContentV3Result =
+            await getContent(id);
+          if (
+            previousContentV3Result.outcome === 'failure'
+          ) {
+            console.log('      Failed to get old content!');
+            process.exit();
+          }
+          const previousContentV3 =
+            previousContentV3Result.value.data;
+
+          const files: Files = computeV3Files(
+            goodFiles,
+            previousContentV3,
+          );
+
+          const uncommittedContentV3 = removeEmoji({
+            id,
+            height,
+            title,
+            files,
+          });
+
+          const uncommittedVizV3 = {
+            info: {
+              ...previousInfo,
+              updated: v2Updated,
+              committed: false,
+              commitAuthors: [owner],
+            },
+            content: uncommittedContentV3,
+          };
+          const saveResult = await saveViz(
+            uncommittedVizV3,
+          );
+          if (saveResult.outcome === 'failure') {
+            console.log('      Failed to save viz!');
+            process.exit();
+          }
+          const commitResult = await commitViz(id);
+          if (commitResult.outcome === 'failure') {
+            console.log('      Failed to commit viz!');
+            process.exit();
+          }
+          console.log(`      Committed new content!`);
+
+          return true;
+        } else {
+          console.log(
+            `    V2 viz has not been updated since last migration. Skipping...`,
+          );
+          return true;
+        }
+      } else {
+        console.log(`    Skipping migration...`);
+        return true;
+      }
     }
     console.log(`    Validation failed!`);
     console.log(validateVizResult.error);

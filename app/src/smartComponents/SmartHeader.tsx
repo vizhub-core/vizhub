@@ -43,7 +43,7 @@ export const SmartHeader = () => {
       loginHref={`/login`}
       logoutHref={'/logout'}
       pricingHref={'/pricing'}
-      // accountHref={'/account'}
+      createVizHref={'/create-viz'}
       resourcesHref={'/resources'}
       profileHref={`/${authenticatedUser?.userName}`}
       authenticatedUserAvatarURL={

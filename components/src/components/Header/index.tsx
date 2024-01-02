@@ -23,7 +23,7 @@ export const Header = ({
   loginHref,
   logoutHref,
   profileHref,
-  onCreateVizClick,
+  createVizHref,
   onVizHubClick,
   pricingHref,
   resourcesHref,
@@ -34,7 +34,7 @@ export const Header = ({
   loginHref: string;
   logoutHref: string;
   profileHref: string;
-  onCreateVizClick?: () => void;
+  createVizHref: string;
   onVizHubClick: () => void;
   pricingHref: string;
   resourcesHref: string;
@@ -108,7 +108,7 @@ export const Header = ({
                 ></img>
               </Dropdown.Toggle>
               <Dropdown.Menu>
-                <Dropdown.Item onClick={onCreateVizClick}>
+                <Dropdown.Item href={createVizHref}>
                   Create Viz
                 </Dropdown.Item>
                 <Dropdown.Divider />
