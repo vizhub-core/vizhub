@@ -48,12 +48,15 @@ ExplorePage.getPageData = async ({
     });
 
   return {
-    title: `Explore VizHub`,
+    title: `VizHub`,
+    description: 'Data visualization platform for the web',
     authenticatedUserSnapshot,
     infoSnapshots,
     ownerUserSnapshots,
     sortId,
     hasMore,
+    image:
+      'https://vizhub-images.s3.amazonaws.com/home-unfurl.webp',
   };
 };
 
