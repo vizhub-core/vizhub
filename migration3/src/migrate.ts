@@ -10,14 +10,19 @@ import { ValidateViz } from 'interactors';
 
 // Disable upvotes and collaborators for now,
 // until we have the rollbacks working for those.
-const enableUpvotes = false;
-const enableCollaborators = false;
+const enableUpvotes = true;
+const enableCollaborators = true;
 
 // Max 5MB content size
 const maxContentSizeKB = 5 * 1024;
 
 // The number of vizzes migrated at a time
 const batchSize = 100;
+
+// True for the second pass, where
+// we update the vizzes that have changed
+// since their first migration.
+const isSecondPass = true;
 
 export const migrate = async (): Promise<void> => {
   const {
@@ -201,6 +206,7 @@ export const migrate = async (): Promise<void> => {
         contentV2,
         gateways,
         isPrimordialViz,
+        isSecondPass,
       });
 
       if (!success) {

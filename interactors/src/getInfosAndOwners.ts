@@ -66,8 +66,14 @@ export const GetInfosAndOwners = (gateways: Gateways) => {
       );
     }
 
-    const visibilities: Array<Visibility> =
-      sectionId === 'private' ? ['private'] : ['public'];
+    const visibilities: Array<Visibility> | null =
+      sectionId === 'private'
+        ? ['private']
+        : // We want to query against all visibilities
+          // for the "Shared with me" section.
+          sectionId === 'shared'
+          ? null
+          : ['public'];
 
     const getInfosOptions = {
       owner,
@@ -126,9 +132,6 @@ export const GetInfosAndOwners = (gateways: Gateways) => {
           getInfosOptions,
         );
       }
-
-      // We want to query against all visibilities.
-      getInfosOptions.visibilities = null;
     }
 
     const infoSnapshotsResult =
@@ -136,6 +139,13 @@ export const GetInfosAndOwners = (gateways: Gateways) => {
     if (infoSnapshotsResult.outcome === 'failure')
       return infoSnapshotsResult;
     let infoSnapshots = infoSnapshotsResult.value;
+
+    if (debug) {
+      console.log(
+        '[GetInfosAndOwners] infoSnapshots',
+        infoSnapshots,
+      );
+    }
 
     // Figure out the set of unique users that are owners of these infos.
     const ownerUsers: Array<UserId> = Array.from(
@@ -147,15 +157,27 @@ export const GetInfosAndOwners = (gateways: Gateways) => {
     );
 
     // Remove any users that we don't need to fetch.
-    const noNeedToFetchUsersSet = new Set(
+    const noNeedToFetchUsersSet =
       // For the "Shared with me" section, we always need
       // to fetch the users, because we need to know if
       // they are on the premium plan.
-      sectionId === 'shared' ? [] : noNeedToFetchUsers,
-    );
+      sectionId === 'shared'
+        ? new Set()
+        : new Set(noNeedToFetchUsers);
     const ownerUsersToFetch = ownerUsers.filter(
       (ownerUser) => !noNeedToFetchUsersSet.has(ownerUser),
     );
+
+    if (debug) {
+      console.log(
+        '[GetInfosAndOwners] ownerUsers',
+        ownerUsersToFetch,
+      );
+      console.log(
+        '[GetInfosAndOwners] ownerUsersToFetch',
+        ownerUsersToFetch,
+      );
+    }
 
     // Fetch the user snapshots for these owners.
     const ownerUserSnapshotsResult =
