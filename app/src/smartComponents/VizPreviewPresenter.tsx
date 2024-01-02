@@ -10,6 +10,7 @@ import { VizPreview } from 'components/src/components/VizPreview';
 import { useShareDBDocData } from '../useShareDBDocData';
 import { getVizThumbnailURL } from '../accessors';
 import { formatTimestamp } from '../accessors/formatTimestamp';
+import { getAvatarURL } from '../accessors/getAvatarURL';
 
 // The width in pixels of the thumbnail image
 const thumbnailWidth = 300;
@@ -35,10 +36,15 @@ export const VizPreviewPresenter = ({
     forksCount,
     visibility,
   } = info;
-  const { userName, picture } = ownerUser;
+  const { userName } = ownerUser;
 
   const ownerName = useMemo(
     () => getUserDisplayName(ownerUser),
+    [ownerUser],
+  );
+
+  const ownerAvatarURL = useMemo(
+    () => getAvatarURL(ownerUser),
     [ownerUser],
   );
 
@@ -58,7 +64,7 @@ export const VizPreviewPresenter = ({
       thumbnailImageURL={thumbnailImageURL}
       lastUpdatedDateFormatted={lastUpdatedDateFormatted}
       ownerName={ownerName}
-      ownerAvatarURL={picture}
+      ownerAvatarURL={ownerAvatarURL}
       href={`/${userName}/${id}`}
       upvotesCount={upvotesCount}
       forksCount={forksCount}
