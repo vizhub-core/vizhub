@@ -31,20 +31,20 @@ const StarterFeatures = ({ startsExpanded = true }) => {
         everyone.
       </Feature>
       <Feature
+        title="Hot Reloading & Interactive Widgets"
+        hasBottomBorder={true}
+        startsExpanded={startsExpanded}
+      >
+        Develop with instant feedback, tweak numbers and
+        colors with ease.
+      </Feature>
+      <Feature
         title="Export Code"
         hasBottomBorder={true}
         startsExpanded={startsExpanded}
       >
-        Export code for easy integration into existing
-        codebases.
-      </Feature>
-      <Feature
-        title="Unfurling"
-        hasBottomBorder={true}
-        startsExpanded={startsExpanded}
-      >
-        See rich previews when sharing viz links in social
-        media.
+        Export Vanilla JavaScript for integration into
+        existing codebases.
       </Feature>
       <Feature
         title="Community Access"
@@ -174,7 +174,10 @@ export const PricingPageBody = ({
                   </div>
                 </div>
 
-                <p>Free forever. Ideal for students.</p>
+                <p>
+                  Free forever. Ideal for students and
+                  hobbyists.
+                </p>
                 {currentPlan === 'free' ? (
                   <CurrentButton />
                 ) : (
@@ -212,7 +215,7 @@ export const PricingPageBody = ({
                 </div>
                 <p>
                   Ideal for freelancers and professionals.
-                  30-day free trial.
+                  Includes 30-day free trial.
                 </p>
                 {currentPlan === 'premium' ? (
                   <CurrentButton />
@@ -222,7 +225,7 @@ export const PricingPageBody = ({
                     className="pricing-page-plan-button"
                     onClick={onPremiumUpgradeClick}
                   >
-                    Start Free Trial
+                    Upgrade
                   </Button>
                 )}
 
@@ -236,12 +239,12 @@ export const PricingPageBody = ({
                     by you and your collaborators.
                   </Feature>
                   <Feature
-                    title="Real-time Collaboration"
+                    title="Unlimited Collaborators"
                     hasBottomBorder={true}
                     startsExpanded={true}
                   >
-                    Invite colleagues to collaborate on your
-                    public and private vizzes.
+                    Invite colleagues to collaborate in
+                    real-time on your vizzes.
                   </Feature>
                   <Feature
                     title="AI-Assisted Coding"

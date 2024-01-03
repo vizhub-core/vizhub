@@ -38,9 +38,9 @@ export const HomeStarter = () => {
         </Button>
         <Button
           variant="secondary"
-          href="https://vizhub.com/forum/t/vizhub-product-feedback/843"
+          href="https://vizhub.com/forum/t/announcing-vizhub-3/939"
         >
-          Feedback
+          VizHub 3 Feedback
         </Button>
       </div>
       {/* <div className="home-starter-content">

@@ -8,6 +8,7 @@ import {
   accessDeniedError,
   authenticationRequiredError,
 } from 'gateways/src/errors';
+import { RecordAnalyticsEvents } from 'interactors';
 
 const debug = false;
 
@@ -17,6 +18,9 @@ export const aiAssistEndpoint = ({
   gateways,
 }) => {
   const { getUser } = gateways;
+  const recordAnalyticsEvents =
+    RecordAnalyticsEvents(gateways);
+
   // Handle AI Assist requests.
   app.post(
     '/api/ai-assist/',
@@ -107,6 +111,10 @@ export const aiAssistEndpoint = ({
       } finally {
         // Unsubscribe from updates to the ShareDB document.
         shareDBDoc.unsubscribe();
+
+        await recordAnalyticsEvents({
+          eventId: `event.aiAssist.${authenticatedUserId}`,
+        });
       }
     },
   );
