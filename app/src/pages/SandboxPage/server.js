@@ -9,6 +9,7 @@ SandboxPage.getPageData = async ({ gateways }) => {
     'event.login': 'Logins',
     'event.private-beta-email-submit':
       'Private Beta Signups',
+    'event.aiAssist': 'AI Assist Invocations',
   };
 
   const analyticsEventSnapshots = (
@@ -16,6 +17,7 @@ SandboxPage.getPageData = async ({ gateways }) => {
       getAnalyticsEvent('event.pageview.home'),
       getAnalyticsEvent('event.login'),
       getAnalyticsEvent('event.private-beta-email-submit'),
+      getAnalyticsEvent('event.aiAssist'),
     ])
   )
     .filter((result) => result.outcome === 'success')
