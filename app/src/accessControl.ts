@@ -8,6 +8,7 @@ import { parseAuth0Sub } from 'api';
 import { Gateways, Result } from 'gateways';
 import { Action, Info, READ, VizId, WRITE } from 'entities';
 import { VizAccess } from 'interactors/src/verifyVizAccess';
+import { INFO_COLLECTION } from 'database/src/collectionNames';
 
 // Useful for debugging agent identification.
 const debug = false;
@@ -100,7 +101,18 @@ const vizVerify = (gateways: Gateways, action: Action) => {
       return next();
     }
 
-    // Vet ops against viz content documents.
+    // Block all ops on all collections except viz info and content.
+    if (
+      collection !== CONTENT_COLLECTION &&
+      collection !== INFO_COLLECTION
+    ) {
+      return next(
+        'You do not have permissions to edit this collection.',
+      );
+    }
+
+    // Isolate the viz info.
+    let info: Info;
     if (collection === CONTENT_COLLECTION) {
       const id: VizId = snapshot
         ? snapshot.id
@@ -116,34 +128,35 @@ const vizVerify = (gateways: Gateways, action: Action) => {
       if (infoResult.outcome === 'failure') {
         throw infoResult.error;
       }
-      const info: Info = infoResult.value.data;
-      const verifyResult: Result<VizAccess> =
-        await verifyVizAccess({
-          authenticatedUserId: userId,
-          info,
-          actions: [action],
-          debug,
-        });
-      if (verifyResult.outcome === 'failure') {
-        throw verifyResult.error;
-      }
+      info = infoResult.value.data;
+    } else if (collection === INFO_COLLECTION) {
+      info = snapshot ? snapshot.data : snapshots[0].data;
+    }
 
-      if (debug) {
-        console.log(
-          '[vizVerify] verifyResult',
-          verifyResult,
-        );
-      }
-      const hasPermission = verifyResult.value[action];
-      if (!hasPermission) {
-        return next(
-          'You do not have permissions to edit this viz.\nThis viz is now disconnected from remote updates so that you can make edits locally, but they will not be saved unless you fork this viz.',
-        );
-      } else {
-        return next();
-      }
+    console.log('[vizVerify] info', info);
+
+    // Vet ops against viz info and content documents in the same way.
+    const verifyResult: Result<VizAccess> =
+      await verifyVizAccess({
+        authenticatedUserId: userId,
+        info,
+        actions: [action],
+        debug,
+      });
+    if (verifyResult.outcome === 'failure') {
+      throw verifyResult.error;
+    }
+
+    if (debug) {
+      console.log('[vizVerify] verifyResult', verifyResult);
+    }
+    const hasPermission = verifyResult.value[action];
+    if (!hasPermission) {
+      return next(
+        'You do not have permissions to edit this viz.\nThis viz is now disconnected from remote updates so that you can make edits locally, but they will not be saved unless you fork this viz.',
+      );
     } else {
-      // console.log('Allowing op on collection ', collection);
+      // Allow the op to proceed.
       return next();
     }
   };
