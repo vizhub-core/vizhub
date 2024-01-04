@@ -133,8 +133,6 @@ const vizVerify = (gateways: Gateways, action: Action) => {
       info = snapshot ? snapshot.data : snapshots[0].data;
     }
 
-    console.log('[vizVerify] info', info);
-
     // Vet ops against viz info and content documents in the same way.
     const verifyResult: Result<VizAccess> =
       await verifyVizAccess({
@@ -153,7 +151,7 @@ const vizVerify = (gateways: Gateways, action: Action) => {
     const hasPermission = verifyResult.value[action];
     if (!hasPermission) {
       return next(
-        'You do not have permissions to edit this viz.\nThis viz is now disconnected from remote updates so that you can make edits locally, but they will not be saved unless you fork this viz.',
+        'You do not have permissions to edit this viz.',
       );
     } else {
       // Allow the op to proceed.
