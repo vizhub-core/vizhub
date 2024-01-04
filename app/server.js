@@ -391,10 +391,12 @@ async function createServer(
       );
       const image = pageData.image;
 
+      // Functions are used as the second argument to `replace()`
+      // so that they are only evaluated when the template is rendered.
+      // This avoids issues with special characters like "$$" in the page data.
       const html = template
-        .replace(`<!--title-->`, titleSanitized)
-        .replace(
-          `<!--seo-meta-tags-->`,
+        .replace(/<!--title-->/, () => titleSanitized)
+        .replace(/<!--seo-meta-tags-->/, () =>
           seoMetaTags({
             titleSanitized,
             descriptionSanitized,
@@ -402,12 +404,13 @@ async function createServer(
             image,
           }),
         )
-        .replace(`<!--app-html-->`, render(pageData))
+        .replace(/<!--app-html-->/, () => render(pageData))
         .replace(
-          `<!--data-html-->`,
-          `<script>window.pageData = ${escapeProperly(
-            JSON.stringify(pageData),
-          )};</script>`,
+          /<!--data-html-->/,
+          () =>
+            `<script>window.pageData = ${escapeProperly(
+              JSON.stringify(pageData),
+            )};</script>`,
         );
 
       res
