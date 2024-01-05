@@ -154,6 +154,37 @@ const vizVerify = (gateways: Gateways, action: Action) => {
         'You do not have permissions to edit this viz.',
       );
     } else {
+      // If we get here, the user has permission to perform the op.
+      // Now all we need to do is verify that the size of the op
+      // is within the limits of the user's plan.
+      // We only need to do this for write ops.
+
+      if (action === WRITE) {
+        const opSizeKB =
+          JSON.stringify(context.op).length / 1024;
+
+        // TODO different limits for different tiers.
+        // const freeTierSizeLimitKB = 1000;
+        // const premiumTierSizeLimitKB = 5000;
+        const opSizeLimitKB = 3000;
+
+        if (opSizeKB > opSizeLimitKB) {
+          // return next(
+          //   `Your plan limits you to ${opSizeLimitKB}KB per write operation. This operation is ${opSizeKB}KB.`,
+          // );
+
+          // TODO replace checking startsWith('Data too large.') in VizPageToasts with
+          // error code checking.
+          return next(
+            `Data too large. Size limit is ${opSizeLimitKB}KB. This operation is ${Math.round(
+              opSizeKB,
+            )}KB.`,
+          );
+        }
+      }
+
+      // console.log('opSizeKB', opSizeKB);
+
       // Allow the op to proceed.
       return next();
     }
@@ -165,77 +196,17 @@ export const vizWrite = (gateways: Gateways) =>
 export const vizRead = (gateways: Gateways) =>
   vizVerify(gateways, READ);
 
+// This applies to database queries.
 export const query = () => (request, next) => {
-  // console.log('query', request);
+  // Allow the server to execute queries,
+  // via database gateways.
   if (request.agent.isServer) {
     return next();
   }
+
   // Otherwise, the query is coming from the browser.
-  // Block all queries.
+  // Block all client-originating queries.
   return next(
     'Client queries are not allowed. Use the API instead.',
   );
 };
-
-// V2 Code for reference
-// TODO handle access control for upvoting.
-// const info = await getInfo();
-
-// console.log(verifyVizAccess({ userId, info: {}, action: 'read' }));
-//   // Only vet ops against viz info and content documents.
-//   // TODO cover this logic with tests
-//   if (collection !== DOCUMENT_CONTENT && collection !== DOCUMENT_INFO) {
-//     return;
-//   }
-
-//   // For all ops, owner must be the logged in user.
-//   if (!userId) {
-//     throw new Error('You must be logged in to edit.');
-//   }
-//   // Do nothing in the case of create and delete ops.
-//   // TODO check that owner matches in case of create ops
-//   // TODO check that owner matches in case of delete ops
-//   if (op && (op.create || op.del)) {
-//     return;
-//   }
-//   // Let anyone add or remove their own upvotes to any viz.
-//   // TODO split this out.
-//   if (op && op.op && op.op.length > 0 && op.op[0].p[0] === 'upvotes') {
-//     for (let i = 0; i < op.op.length; i++) {
-//       const c = op.op[i];
-//       // Validate the upvote initialization op.
-//       // Looks like this: { p: [ 'upvotes' ], oi: [] }
-//       if (c.p[0] === 'upvotes' && c.p.length == 1) {
-//         if (JSON.stringify(c.oi) !== '[]') {
-//           throw new Error('Unauthorized vote manipulation.');
-//         }
-//       }
-//       // Validate the upvote addition or deletion ops.
-//       // Looks like this:
-//       // {
-//       //   p: [ 'upvotes', 0 ],
-//       //   li: { userId: '47895473289547832938754', timestamp: 1569094989 }
-//       // }
-//       // Or like this:
-//       // {
-//       //   p: [ 'upvotes', 0 ],
-//       //   ld: { userId: '47895473289547832938754', timestamp: 1569094989 }
-//       // }
-//       if (c.p[0] === 'upvotes' && c.p.length == 2) {
-//         const entry = c.li || c.ld;
-//         if (entry) {
-//           // Users may only submit ops that change their own entries.
-//           if (entry.userId !== userId) {
-//             throw new Error('Unauthorized vote manipulation.');
-//           }
-//         } else {
-//           throw new Error('Unauthorized vote manipulation.');
-//         }
-//       }
-//     }
-//     return;
-//   }
-//   const vizInfo = await getVizInfo(collection, snapshot);
-//   if (!allowWrite(vizInfo, userId)) {
-//     throw new Error('This visualization is unforked. Fork to save edits.');
-//   }
