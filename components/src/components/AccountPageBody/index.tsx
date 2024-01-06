@@ -29,9 +29,9 @@ export const AccountPageBody = ({
               </Button>
             </div>
           ) : null}
-          {currentPlan === 'pro' ? (
+          {currentPlan === 'premium' ? (
             <div>
-              <p>You are currently on the pro plan.</p>
+              <p>You are currently on the premium plan.</p>
               <Button onClick={onUnsubscribeClick}>
                 Unsubscribe
               </Button>

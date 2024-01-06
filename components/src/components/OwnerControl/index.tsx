@@ -37,7 +37,7 @@ export const OwnerControl = ({
 
   // Don't show the owner control if there are no other possible owners.
   return otherPossibleOwners.length === 0 ? null : (
-    <Form.Group controlId="owner">
+    <Form.Group className="mb-4" controlId="owner">
       <Form.Label>Owner</Form.Label>
       <Dropdown onSelect={setOwner} className="mb-1">
         <Dropdown.Toggle id="dropdown-owner">

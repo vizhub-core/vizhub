@@ -1,14 +1,4 @@
-import {
-  CreateVizPage,
-  CreateVizPageData,
-  CreateVizPageQuery,
-} from './index';
-
-import {
-  SortId,
-  asSortId,
-  defaultSortOption,
-} from 'entities';
+import { CreateVizPage, CreateVizPageData } from './index';
 import { Gateways } from 'gateways';
 import { Auth0User } from '../Page';
 import { GetInfosAndOwners } from 'interactors';
@@ -18,11 +8,9 @@ import { curatedVizzes } from './curatedVizzes';
 CreateVizPage.getPageData = async ({
   gateways,
   auth0User,
-  query,
 }: {
   gateways: Gateways;
   auth0User: Auth0User | null;
-  query: CreateVizPageQuery;
 }): Promise<CreateVizPageData> => {
   const getInfosAndOwners = GetInfosAndOwners(gateways);
 

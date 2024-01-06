@@ -244,10 +244,11 @@ export const VizPage: Page = ({
   ////////////////////////////////////////////
 
   // When the user clicks "Save" from within the settings modal.
-  const onSettingsSave = useOnSettingsSave(
+  const onSettingsSave = useOnSettingsSave({
     submitInfoOperation,
+    submitContentOperation,
     toggleSettingsModal,
-  );
+  });
 
   // Saves the title when the user edits it.
   const setVizTitle = useSetVizTitle(submitInfoOperation);
@@ -313,6 +314,7 @@ export const VizPage: Page = ({
       <VizPageModals
         {...{
           info,
+          content,
           ownerUser,
           showForkModal,
           toggleForkModal,

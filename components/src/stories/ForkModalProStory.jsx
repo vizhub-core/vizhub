@@ -14,7 +14,7 @@ export const args = {
     console.log('onFork');
     console.log(forkData);
   },
-  currentPlan: 'pro',
+  currentPlan: 'premium',
   pricingHref: 'pricingHref',
 };
 
