@@ -20,6 +20,7 @@ export const SettingsModal = ({
   initialTitle,
   initialSlug,
   initialVisibility,
+  initialHeight,
   initialOwner,
   possibleOwners,
   currentPlan,
@@ -35,15 +36,18 @@ export const SettingsModal = ({
     visibility,
     owner,
     slug,
+    height,
   }: {
     title: string;
     visibility: Visibility;
     owner: string;
     slug: string;
+    height: number;
   }) => void;
   initialTitle: string;
   initialSlug?: string;
   initialVisibility: Visibility;
+  initialHeight: number;
   initialOwner: UserId;
   possibleOwners: Array<PossibleOwner>;
   currentPlan: Plan;
@@ -78,10 +82,31 @@ export const SettingsModal = ({
   // Local state for the owner
   const [owner, setOwner] = useState(initialOwner);
 
+  // Local state for height
+  const [height, setHeight] = useState<string>(
+    '' + initialHeight,
+  );
+  const handleHeightChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setHeight(event.target.value);
+    },
+    [],
+  );
+
   // This runs when the user clicks the save button
   const handleSaveClick = useCallback(() => {
-    onSave({ title, visibility, owner, slug });
-  }, [title, visibility, owner, slug, onSave]);
+    let validHeight = parseInt(height, 10);
+    if (isNaN(validHeight)) {
+      validHeight = initialHeight;
+    }
+    onSave({
+      title,
+      visibility,
+      owner,
+      slug,
+      height: validHeight,
+    });
+  }, [title, visibility, owner, slug, height, onSave]);
 
   return show ? (
     <Modal
@@ -94,7 +119,7 @@ export const SettingsModal = ({
         <Modal.Title>Settings</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form.Group className="mb-3" controlId="viz-title">
+        <Form.Group className="mb-4" controlId="viz-title">
           <Form.Label>Title</Form.Label>
           <Form.Control
             type="text"
@@ -107,7 +132,7 @@ export const SettingsModal = ({
         </Form.Group>
 
         {enableURLChange && (
-          <Form.Group className="mb-3" controlId="viz-url">
+          <Form.Group className="mb-4" controlId="viz-url">
             <Form.Label htmlFor="viz-url-control">
               URL
             </Form.Label>
@@ -143,6 +168,18 @@ export const SettingsModal = ({
           setOwner={setOwner}
           possibleOwners={possibleOwners}
         />
+
+        <Form.Group controlId="viz-height">
+          <Form.Label>Height</Form.Label>
+          <Form.Control
+            type="text"
+            value={height}
+            onChange={handleHeightChange}
+          />
+          <Form.Text className="text-muted">
+            Set the height of the viz (in pixels).
+          </Form.Text>
+        </Form.Group>
       </Modal.Body>
       <Modal.Footer>
         <Button variant="primary" onClick={handleSaveClick}>

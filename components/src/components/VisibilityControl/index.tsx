@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 import { Plan, Visibility } from 'entities';
-import { Form, Alert, Button } from '../bootstrap';
+import { Form } from '../bootstrap';
 import './styles.css';
 
 const enableUnlisted = false;
@@ -9,7 +9,7 @@ const visibilities: {
   [K in Visibility]: string;
 } = {
   public: 'Anyone can view this viz.',
-  private: 'Only you can view this viz.',
+  private: 'Only you and collaborators can view this viz.',
   unlisted: 'Anyone with the link can view this viz.',
 };
 
@@ -42,7 +42,7 @@ export const VisibilityControl = ({
 
   return (
     <Form.Group
-      className="mb-3 vh-visibility-control"
+      className="mb-4 vh-visibility-control"
       controlId="visibility"
     >
       <Form.Label>Visibility</Form.Label>
@@ -76,8 +76,8 @@ export const VisibilityControl = ({
 
       {showUpgradeCallout && (
         <p className="mt-3 upgrade-callout-text">
-          Please <a href="/pricing">upgrade your plan</a> to
-          make this viz private.
+          Please <a href={pricingHref}>upgrade your plan</a>{' '}
+          to make this viz private.
         </p>
       )}
     </Form.Group>
