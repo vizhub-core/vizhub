@@ -73,7 +73,6 @@ export const VisibilityControl = ({
       <Form.Text className="text-muted">
         {visibilities[visibility]}
       </Form.Text>
-
       {showUpgradeCallout && (
         <p className="mt-3 upgrade-callout-text">
           Please <a href={pricingHref}>upgrade your plan</a>{' '}

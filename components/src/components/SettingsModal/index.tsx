@@ -130,7 +130,6 @@ export const SettingsModal = ({
             Choose a title for your viz
           </Form.Text>
         </Form.Group>
-
         {enableURLChange && (
           <Form.Group className="mb-4" controlId="viz-url">
             <Form.Label htmlFor="viz-url-control">
@@ -156,30 +155,32 @@ export const SettingsModal = ({
             </Form.Text>
           </Form.Group>
         )}
-
         <VisibilityControl
           visibility={visibility}
           setVisibility={setVisibility}
           currentPlan={currentPlan}
           pricingHref={pricingHref}
         />
-        <OwnerControl
+        <Form.Group controlId="viz-height">
+          <Form.Label>Height</Form.Label>
+          <div className="d-flex align-items-center">
+            <Form.Control
+              className="me-2"
+              style={{ width: '100px' }}
+              type="text"
+              value={height}
+              onChange={handleHeightChange}
+            />
+            <Form.Text className="text-muted mt-0">
+              pixels
+            </Form.Text>
+          </div>
+        </Form.Group>
+        {/* <OwnerControl
           owner={owner}
           setOwner={setOwner}
           possibleOwners={possibleOwners}
-        />
-
-        <Form.Group controlId="viz-height">
-          <Form.Label>Height</Form.Label>
-          <Form.Control
-            type="text"
-            value={height}
-            onChange={handleHeightChange}
-          />
-          <Form.Text className="text-muted">
-            Set the height of the viz (in pixels).
-          </Form.Text>
-        </Form.Group>
+        /> */}
       </Modal.Body>
       <Modal.Footer>
         <Button variant="primary" onClick={handleSaveClick}>
