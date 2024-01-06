@@ -1,4 +1,5 @@
 import {
+  Content,
   Info,
   User,
   UserId,
@@ -9,11 +10,12 @@ import { useCallback } from 'react';
 
 const debug = false;
 
+// These values come from the settings modal "save" button.
 export type VizSettings = {
-  // These values come from the settings modal
   owner: UserId;
   title: string;
   visibility: Visibility;
+  height: number;
 };
 
 export const useSetVizTitle = (
@@ -76,14 +78,19 @@ export const useSetUncommitted = (
     [submitInfoOperation],
   );
 
-export const useOnSettingsSave = (
-  submitInfoOperation: (
-    next: (content: Info) => Info,
-  ) => void,
-  toggleSettingsModal: () => void,
-) =>
+export const useOnSettingsSave = ({
+  submitInfoOperation,
+  submitContentOperation,
+  toggleSettingsModal,
+}: {
+  submitInfoOperation: (next: (info: Info) => Info) => void;
+  submitContentOperation: (
+    next: (content: Content) => Content,
+  ) => void;
+  toggleSettingsModal: () => void;
+}) =>
   useCallback(
-    ({ owner, title, visibility }: VizSettings) => {
+    ({ owner, title, visibility, height }: VizSettings) => {
       if (debug) {
         console.log('Saving viz settings', {
           owner,
@@ -91,11 +98,15 @@ export const useOnSettingsSave = (
           visibility,
         });
       }
-      submitInfoOperation((content) => ({
-        ...content,
+      submitInfoOperation((info) => ({
+        ...info,
         owner,
         title,
         visibility,
+      }));
+      submitContentOperation((content) => ({
+        ...content,
+        height,
       }));
 
       toggleSettingsModal();

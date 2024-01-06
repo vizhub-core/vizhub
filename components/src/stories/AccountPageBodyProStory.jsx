@@ -3,7 +3,7 @@ import { args as freeArgs } from './AccountPageBodyFreeStory';
 
 const args = {
   ...freeArgs,
-  currentPlan: 'pro',
+  currentPlan: 'premium',
 };
 
 const Story = () => {

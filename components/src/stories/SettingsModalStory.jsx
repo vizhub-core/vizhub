@@ -13,10 +13,11 @@ export const args = {
     console.log('onSave');
     console.log(saveData);
   },
-  currentPlan: 'pro',
+  currentPlan: 'premium',
   pricingHref: 'pricingHref',
   profileHref: 'https://vizhub.com/joe',
   initialSlug: '21f72bf74ef04ea0b9c9b82aaaec859a',
+  initialHeight: 500,
   userName: 'joe',
   // TODO make this work
   enableURLChange: false,
