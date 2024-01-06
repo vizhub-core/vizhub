@@ -269,6 +269,10 @@ async function createServer(
     accessControl.vizWrite(gateways),
   );
   shareDBBackend.use(
+    'commit',
+    accessControl.sizeCheck(gateways),
+  );
+  shareDBBackend.use(
     'readSnapshots',
     accessControl.vizRead(gateways),
   );

@@ -1,7 +1,7 @@
 // Populates request.agent.userId or request.agent.isServer.
 //
 // This ShareDB middleware triggers when new connections are made,
-
+import { format } from 'd3-format';
 import { VerifyVizAccess } from 'interactors';
 import { CONTENT_COLLECTION } from 'database';
 import { parseAuth0Sub } from 'api';
@@ -9,6 +9,9 @@ import { Gateways, Result } from 'gateways';
 import { Action, Info, READ, VizId, WRITE } from 'entities';
 import { VizAccess } from 'interactors/src/verifyVizAccess';
 import { INFO_COLLECTION } from 'database/src/collectionNames';
+import { tooLargeError } from 'gateways/src/errors';
+
+const commaFormat = format(',');
 
 // Useful for debugging agent identification.
 const debug = false;
@@ -71,8 +74,7 @@ const vizVerify = (gateways: Gateways, action: Action) => {
   const { getInfo } = gateways;
   const verifyVizAccess = VerifyVizAccess(gateways);
 
-  return async (context, next) => {
-    // console.log('vizWriteAsync', request);
+  return async (request, next) => {
     // Unpack the ShareDB request object.
     const {
       agent: { isServer, userId },
@@ -84,7 +86,7 @@ const vizVerify = (gateways: Gateways, action: Action) => {
 
       // `snapshots` is populated for read ops (ShareDB "readSnapshots" middleware)
       snapshots,
-    } = context;
+    } = request;
 
     if (debug) {
       console.log('[vizVerify] ', {
@@ -155,36 +157,6 @@ const vizVerify = (gateways: Gateways, action: Action) => {
       );
     } else {
       // If we get here, the user has permission to perform the op.
-      // Now all we need to do is verify that the size of the op
-      // is within the limits of the user's plan.
-      // We only need to do this for write ops.
-
-      if (action === WRITE) {
-        const opSizeKB =
-          JSON.stringify(context.op).length / 1024;
-
-        // TODO different limits for different tiers.
-        // const freeTierSizeLimitKB = 1000;
-        // const premiumTierSizeLimitKB = 5000;
-        const opSizeLimitKB = 3000;
-
-        if (opSizeKB > opSizeLimitKB) {
-          // return next(
-          //   `Your plan limits you to ${opSizeLimitKB}KB per write operation. This operation is ${opSizeKB}KB.`,
-          // );
-
-          // TODO replace checking startsWith('Data too large.') in VizPageToasts with
-          // error code checking.
-          return next(
-            `Data too large. Size limit is ${opSizeLimitKB}KB. This operation is ${Math.round(
-              opSizeKB,
-            )}KB.`,
-          );
-        }
-      }
-
-      // console.log('opSizeKB', opSizeKB);
-
       // Allow the op to proceed.
       return next();
     }
@@ -209,4 +181,50 @@ export const query = () => (request, next) => {
   return next(
     'Client queries are not allowed. Use the API instead.',
   );
+};
+
+// Checks the size of the document against the user's plan.
+export const sizeCheck = (gateways) => (request, next) => {
+  // Unpack the ShareDB request object.
+  const {
+    agent: { isServer, userId },
+    // op,
+    collection,
+
+    // `snapshot` here is the snapshot _after_ the op has been applied.
+    // We can check the size of this snapshot to see if it's too big.
+    snapshot,
+
+    // `snapshots` is populated for read ops (ShareDB "readSnapshots" middleware)
+    snapshots,
+  } = request;
+
+  const opSizeKB = JSON.stringify(snapshot).length / 1024;
+
+  // TODO different limits for different tiers.
+  // const freeTierSizeLimitKB = 1000;
+  // const premiumTierSizeLimitKB = 5000;
+  const opSizeLimitKB = 3000;
+
+  if (opSizeKB > opSizeLimitKB) {
+    // return next(
+    //   `Your plan limits you to ${opSizeLimitKB}KB per write operation. This operation is ${opSizeKB}KB.`,
+    // );
+
+    // TODO replace checking startsWith('Data too large.') in VizPageToasts with
+    // error code checking.
+    return next(
+      tooLargeError(
+        `The data size limit is ${commaFormat(
+          opSizeLimitKB,
+        )}KB. This document is ${commaFormat(
+          Math.ceil(opSizeKB),
+        )}KB.`,
+      ),
+    );
+  } else {
+    return next();
+  }
+
+  // console.log('opSizeKB', opSizeKB);
 };
