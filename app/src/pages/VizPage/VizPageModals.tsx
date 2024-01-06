@@ -5,6 +5,7 @@ import {
   ShareModal,
 } from 'components';
 import {
+  Content,
   Info,
   User,
   UserId,
@@ -21,6 +22,7 @@ import { useOnTrashViz } from './useOnTrashViz';
 
 export const VizPageModals = ({
   info,
+  content,
   ownerUser,
   showForkModal,
   toggleForkModal,
@@ -37,6 +39,7 @@ export const VizPageModals = ({
   initialCollaborators,
 }: {
   info: Info;
+  content: Content;
   ownerUser: User;
   showForkModal: boolean;
   toggleForkModal: () => void;
@@ -219,6 +222,7 @@ export const VizPageModals = ({
           onSave={onSettingsSave}
           currentPlan={authenticatedUser?.plan}
           pricingHref={'/pricing'}
+          initialHeight={content.height}
         />
       )}
       {showShareModal && (
