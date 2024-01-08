@@ -23,8 +23,8 @@ export const ForksPageBody = ({
 }) => {
   return (
     <div className="vh-page vh-explore-page">
-      <div className="px-4 py-3">
-        <div className="d-flex mb-3 justify-content-between align-items-end">
+      <div className="vh-page-container">
+        <div className="vh-page-header">
           <h1 className="mb-0">
             Forks of{' '}
             <a href={forkedFromHref}>{forkedFromTitle}</a>
