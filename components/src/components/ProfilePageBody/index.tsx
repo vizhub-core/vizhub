@@ -6,14 +6,12 @@ import { PrivateSVG } from '../Icons/sam/PrivateSVG';
 import { OrganizationsSVG } from '../Icons/sam/OrganizationsSVG';
 import { SharedSVG } from '../Icons/sam/SharedSVG';
 import { StarSVG } from '../Icons/sam/StarSVG';
-import { PlusSVG } from '../Icons/sam/PlusSVG';
-import { Button } from '../bootstrap';
 import { Plan, SectionId, SortId } from 'entities';
 import { useMemo } from 'react';
 import { SidebarSection } from './SidebarSection';
 import { UpgradeCallout } from '../UpgradeCallout';
-import './styles.scss';
 import { CreateNewButton } from '../CreateNewButton';
+import './styles.scss';
 
 const enableEditBio = false;
 const enableCreateVizButton = true;
@@ -92,7 +90,7 @@ export const ProfilePageBody = ({
 
   return (
     <div className="vh-page vh-profile-page">
-      <div className="profile-body">
+      <div className="profile-body vh-page-container">
         <div className="profile-sidebar">
           <div>
             <img className="profile-avatar" src={picture} />

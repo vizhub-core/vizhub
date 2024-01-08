@@ -1,16 +1,17 @@
 .vh-upvote-widget {
   display: flex;
   align-items: center;
-  // font-size: 12px;
   gap: 4px;
-  color: var(--vh-foreground-color-light);
+  color: var(--vh-color-neutral-03);
   font-weight: 500;
   svg {
+    color: var(--vh-color-neutral-04);
     cursor: pointer;
   }
 }
 .vh-upvote-widget.upvoted {
   svg path {
+    color: transparent;
     fill: var(--vh-color-caution-01);
   }
 }
