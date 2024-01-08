@@ -1,21 +1,20 @@
-// TODO upgrade this to new icon sam/StarSVG
-import { StarSVG } from '../Icons/StarSVG';
+import { StarSVG } from '../Icons/sam/StarSVG';
 import './styles.scss';
 
-// TODO bring this back after upvotes are migrated and working again.
-const enableUpvoteWidget = false;
+const enableUpvoteWidget = true;
 
 export const UpvoteWidget = ({
   upvotesCount,
+  isUpvoted,
   onClick = null,
 }) =>
   enableUpvoteWidget ? (
-    <div className="vh-upvote-widget">
-      <StarSVG
-        height={22}
-        onClick={onClick}
-        fill="#3866E9"
-      />
+    <div
+      className={`vh-upvote-widget${
+        isUpvoted ? ' upvoted' : ''
+      }`}
+    >
+      <StarSVG onClick={onClick} />
       {upvotesCount}
     </div>
   ) : null;

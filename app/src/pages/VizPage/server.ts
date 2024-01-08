@@ -9,10 +9,15 @@ import {
   Permission,
   User,
   defaultVizWidth,
+  UpvoteId,
 } from 'entities';
 import { rollup } from 'rollup';
 import { JSDOM } from 'jsdom';
-import { CommitViz, VerifyVizAccess } from 'interactors';
+import {
+  CommitViz,
+  VerifyVizAccess,
+  generateUpvoteId,
+} from 'interactors';
 import { getFileText } from 'entities/src/accessors/getFileText';
 import { VizPage, VizPageData } from './index';
 import { renderREADME } from './renderREADME';
@@ -46,6 +51,7 @@ VizPage.getPageData = async ({
     getContent,
     getPermissions,
     getUsersByIds,
+    getUpvote,
   } = gateways;
   const verifyVizAccess = VerifyVizAccess(gateways);
   const commitViz = CommitViz(gateways);
@@ -275,6 +281,19 @@ VizPage.getPageData = async ({
       getVizThumbnailURL(end, defaultVizWidth),
     );
 
+    // Figure out if the authenticated user has upvoted the viz.
+    let initialIsUpvoted: boolean = false;
+    if (info.upvotesCount > 0 && authenticatedUserId) {
+      const upvoteId: UpvoteId = generateUpvoteId(
+        authenticatedUserId,
+        id,
+      );
+      const upvoteResult = await getUpvote(upvoteId);
+      if (upvoteResult.outcome === 'success') {
+        initialIsUpvoted = true;
+      }
+    }
+
     return {
       infoSnapshot,
       ownerUserSnapshot,
@@ -290,6 +309,7 @@ VizPage.getPageData = async ({
       canUserDeleteViz,
       vizCacheContentSnapshots,
       initialCollaborators,
+      initialIsUpvoted,
     };
   } catch (e) {
     console.log('error fetching viz with id ', id);
