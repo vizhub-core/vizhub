@@ -19,10 +19,10 @@ export const ExplorePageBody = ({
 }) => {
   return (
     <div className="vh-page vh-explore-page">
-      <div className="px-4 py-3">
+      <div className="vh-page-container">
         <HomeStarter />
-        <div className="d-flex mb-3 justify-content-between align-items-end">
-          <h2 className="mb-0">Explore VizHub</h2>
+        <div className="vh-page-header">
+          <h2 className="mb-0">Explore</h2>
           <div className="explore-header-controls">
             {sortOptions ? (
               <SortControl

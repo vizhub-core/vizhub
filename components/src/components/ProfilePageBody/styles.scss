@@ -1,6 +1,5 @@
 .vh-profile-page {
   overflow: auto;
-  padding: 70px;
   display: flex;
   align-items: center;
 
@@ -8,12 +7,12 @@
     display: flex;
     flex-direction: row;
     gap: 70px;
-    // max-width: 1280px;
+    width: 100%;
+
     .profile-sidebar {
       display: flex;
       flex-direction: column;
       gap: 32px;
-      // width: 300px;
       flex: 0 0 300px;
       .profile-avatar {
         width: 164px;
