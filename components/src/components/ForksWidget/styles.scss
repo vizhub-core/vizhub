@@ -2,9 +2,10 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  svg {
-    cursor: pointer;
-  }
   color: var(--vh-color-neutral-03);
   font-weight: 500;
+  svg {
+    color: var(--vh-color-neutral-04);
+    cursor: pointer;
+  }
 }

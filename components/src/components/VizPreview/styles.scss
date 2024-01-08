@@ -67,12 +67,19 @@
       overflow: hidden;
     }
   }
+  .analytics-container,
   .meta-container {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 12px;
     border-top: 1px solid var(--vh-color-rule-01);
+    height: 60px;
+  }
+  .analytics-container {
+    padding: 0 18px;
+  }
+  .meta-container {
+    padding: 0 12px;
 
     .owner {
       display: flex;
@@ -86,17 +93,24 @@
         box-shadow: var(--vh-box-shadow);
       }
       .owner-meta {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 3px;
         margin-left: 12px;
+
         .owner-name {
-          // Truncate long names.
-          overflow: hidden;
-          text-overflow: ellipsis;
-          line-height: 1.5;
-          white-space: nowrap;
           color: var(--vh-color-neutral-03);
+          // Truncate long names.
+          // overflow: hidden;
+          // text-overflow: ellipsis;
+          // line-height: 1.5;
+          // white-space: nowrap;
         }
         .last-updated-date {
+          // color: var(--vh-color-neutral-03);
           color: var(--vh-color-neutral-04);
+          // font-size: 14px;
         }
       }
     }

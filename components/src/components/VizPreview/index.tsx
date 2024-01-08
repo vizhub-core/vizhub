@@ -68,7 +68,7 @@ export const VizPreview = ({
       <div className="content-container">
         <h4 className="title">{title}</h4>
       </div>
-      <div className="meta-container">
+      <div className="analytics-container">
         <ForksWidget forksCount={forksCount} />
         <UpvoteWidget
           upvotesCount={upvotesCount}
