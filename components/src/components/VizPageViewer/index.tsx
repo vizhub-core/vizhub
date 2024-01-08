@@ -33,17 +33,14 @@ export const VizPageViewer = ({
   isPrivate,
   isUnlisted,
   isVisual,
+  isUpvoted,
+  handleUpvoteClick,
 }) => {
   // This SVG element is used only for its dynamic resizing behavior.
   // It's invisible, nothing is rendered into it.
   const svgRef = useRef();
 
   const [iframeScale, setIframeScale] = useState(1);
-
-  const handleUpvoteClick = useCallback(() => {
-    console.log('upvote clicked');
-    alert('TODO handle upvoting');
-  }, []);
 
   // Editable title functionality
   const [isEditingTitle, setIsEditingTitle] =
@@ -143,6 +140,7 @@ export const VizPageViewer = ({
             <UpvoteWidget
               upvotesCount={upvotesCount}
               onClick={handleUpvoteClick}
+              isUpvoted={isUpvoted}
             />
             {isPrivate ? (
               <div className="visibility-label private">

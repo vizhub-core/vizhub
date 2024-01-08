@@ -38,6 +38,7 @@ import {
 } from './useVizMutations';
 import { useToggleState } from './useToggleState';
 import { VizPageModals } from './VizPageModals';
+import { useUpvoting } from './useUpvoting';
 import './styles.scss';
 
 const vizKit = VizKit({ baseUrl: '/api' });
@@ -58,6 +59,7 @@ export type VizPageData = PageData & {
     Snapshot<Content>
   >;
   initialCollaborators: Array<User>;
+  initialIsUpvoted: boolean;
 };
 
 // Inspired by https://github.com/vitejs/vite-plugin-react/blob/main/playground/ssr-react/src/pages/Home.jsx
@@ -79,6 +81,7 @@ export const VizPage: Page = ({
     canUserDeleteViz,
     vizCacheContentSnapshots,
     initialCollaborators,
+    initialIsUpvoted,
   } = pageData;
 
   // /////////////////////////////////////////
@@ -261,9 +264,9 @@ export const VizPage: Page = ({
     submitInfoOperation,
   );
 
-  // /////////////////////////////////////////
-  /////////////// Analytics///////////////////
-  // /////////////////////////////////////////
+  ///////////////////////////////////////////
+  /////////////// Analytics//////////////////
+  ///////////////////////////////////////////
 
   // Send an analytics event to track this page view.
   useEffect(() => {
@@ -271,6 +274,16 @@ export const VizPage: Page = ({
       `event.pageview.viz.owner:${ownerUser.id}.viz:${info.id}`,
     );
   }, []);
+
+  ///////////////////////////////////////////
+  /////////////// Upvoting //////////////////
+  ///////////////////////////////////////////
+
+  const { isUpvoted, handleUpvoteClick } = useUpvoting({
+    initialIsUpvoted,
+    vizKit,
+    id,
+  });
 
   return (
     <AuthenticatedUserProvider
@@ -304,6 +317,9 @@ export const VizPage: Page = ({
             toggleDeleteVizConfirmationModal,
             vizCacheContents,
             setUncommitted,
+            initialIsUpvoted,
+            isUpvoted,
+            handleUpvoteClick,
           }}
         />
       </SplitPaneResizeProvider>
