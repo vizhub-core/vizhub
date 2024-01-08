@@ -66,11 +66,16 @@ export const VizPreview = ({
       </div>
 
       <div className="content-container">
-        <div className="title">{title}</div>
-        <div className="last-updated-date">
-          {lastUpdatedDateFormatted}
-        </div>
+        <h4 className="title">{title}</h4>
       </div>
+      <div className="meta-container">
+        <ForksWidget forksCount={forksCount} />
+        <UpvoteWidget
+          upvotesCount={upvotesCount}
+          isUpvoted={false}
+        />
+      </div>
+
       <div className="meta-container">
         <div className="owner">
           <img
@@ -78,11 +83,13 @@ export const VizPreview = ({
             src={ownerAvatarURL}
             alt={ownerName}
           />
-
-          <div className="owner-name">{ownerName}</div>
+          <div className="owner-meta">
+            <div className="owner-name">{ownerName}</div>
+            <div className="last-updated-date">
+              {lastUpdatedDateFormatted}
+            </div>
+          </div>
         </div>
-        <UpvoteWidget upvotesCount={upvotesCount} />
-        <ForksWidget forksCount={forksCount} />
       </div>
       {visibility === 'private' && (
         <div className="private-notice">
