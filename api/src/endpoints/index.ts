@@ -15,6 +15,7 @@ import { getUsersForTypeaheadEndpoint } from './getUsersForTypeaheadEndpoint';
 import { addCollaboratorEndpoint } from './addCollaboratorEndpoint';
 import { removeCollaboratorEndpoint } from './removeCollaboratorEndpoint';
 import { upvoteVizEndpoint } from './upvoteVizEndpoint';
+import { unUpvoteVizEndpoint } from './unUpvoteVizEndpoint';
 
 export const endpoints = [
   healthCheck,
@@ -34,4 +35,5 @@ export const endpoints = [
   addCollaboratorEndpoint,
   removeCollaboratorEndpoint,
   upvoteVizEndpoint,
+  unUpvoteVizEndpoint,
 ];
