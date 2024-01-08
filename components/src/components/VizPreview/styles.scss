@@ -8,14 +8,15 @@
   cursor: pointer;
 
   /* Aspect ratio, original thumbnail size: 230 X 120*/
-  width: 280px;
+  width: 300px;
   /* 230 X 120 */
   /* 280 X 146 */
+  /* 300 X 156 */
   user-select: none;
 
   .thumbnail {
     width: 100%;
-    height: 146px;
+    height: 156px;
     border-top-right-radius: inherit;
     border-top-left-radius: inherit;
     background-position: left top;
@@ -47,21 +48,17 @@
   .content-container {
     display: flex;
     flex-direction: column;
-    padding: var(--vh-padding-lots);
-    border-top: 1px solid var(--vh-rule-color);
-    border-bottom: 1px solid var(--vh-rule-color);
+    padding: 20px;
+    border-top: 1px solid var(--vh-color-rule-01);
 
     /* Handle single-line titles. */
     flex: 1;
     justify-content: flex-start;
 
-    .last-updated-date {
-      padding-top: 16px;
-    }
     .title {
-      font-weight: bold;
-      font-size: 20px;
-
+      color: var(--vh-color-neutral-01);
+      margin-bottom: 0;
+      line-height: 28px;
       /* Truncate text at 2 lines. */
       /* Inspired by https://developer.mozilla.org/en-US/docs/Web/CSS/-webkit-line-clamp */
       display: -webkit-box;
@@ -70,12 +67,19 @@
       overflow: hidden;
     }
   }
+  .analytics-container,
   .meta-container {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: var(--vh-padding-little);
-    font-size: var(--small-font-size);
+    border-top: 1px solid var(--vh-color-rule-01);
+    height: 60px;
+  }
+  .analytics-container {
+    padding: 0 18px;
+  }
+  .meta-container {
+    padding: 0 12px;
 
     .owner {
       display: flex;
@@ -88,14 +92,26 @@
         border-radius: 16px;
         box-shadow: var(--vh-box-shadow);
       }
-      .owner-name {
+      .owner-meta {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 3px;
         margin-left: 12px;
 
-        // Truncate long names.
-        overflow: hidden;
-        text-overflow: ellipsis;
-        line-height: 1.5;
-        white-space: nowrap;
+        .owner-name {
+          color: var(--vh-color-neutral-03);
+          // Truncate long names.
+          // overflow: hidden;
+          // text-overflow: ellipsis;
+          // line-height: 1.5;
+          // white-space: nowrap;
+        }
+        .last-updated-date {
+          // color: var(--vh-color-neutral-03);
+          color: var(--vh-color-neutral-04);
+          // font-size: 14px;
+        }
       }
     }
   }

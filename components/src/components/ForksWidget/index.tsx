@@ -17,7 +17,8 @@ export const ForksWidget = ({
   return enableForksWidget ? (
     <div className="vh-forks-widget">
       <ForkSVG onClick={onClick} />
-      {forksCountFormatted}
+      <strong>{forksCountFormatted}</strong>
+      Fork{forksCount === 1 ? '' : 's'}
     </div>
   ) : null;
 };
