@@ -1,3 +1,4 @@
+import { VizKitAPI } from 'api/src/VizKit';
 import { VizId } from 'entities';
 import { useCallback, useState } from 'react';
 
@@ -8,7 +9,7 @@ export const useUpvoting = ({
   id,
 }: {
   initialIsUpvoted: boolean;
-  vizKit: any;
+  vizKit: VizKitAPI;
   id: VizId;
 }) => {
   // True if the authenticated user has upvoted this viz.
@@ -25,15 +26,15 @@ export const useUpvoting = ({
       return;
     }
     setIsUpvoted(true);
-    // setIsSubmitting(true);
-    // try {
-    //   await vizKit.rest.upvoteViz(id);
-    // } catch (e) {
-    //   console.log('Error upvoting viz');
-    //   console.log(e);
-    //   setIsUpvoted(false);
-    // }
-    // setIsSubmitting(false);
+    setIsSubmitting(true);
+
+    const upvoteVizResult = await vizKit.rest.upvoteViz(id);
+    if (upvoteVizResult.outcome === 'failure') {
+      console.log('Error upvoting viz');
+      console.log(upvoteVizResult.error);
+      setIsUpvoted(false);
+    }
+    setIsSubmitting(false);
   }, [id, isSubmitting, vizKit]);
 
   // Un-upvote the viz.
@@ -42,15 +43,15 @@ export const useUpvoting = ({
       return;
     }
     setIsUpvoted(false);
-    // setIsSubmitting(true);
-    // try {
-    //   await vizKit.rest.unUpvoteViz(id);
-    // } catch (e) {
-    //   console.log('Error un-upvoting viz');
-    //   console.log(e);
-    //   setIsUpvoted(true);
-    // }
-    // setIsSubmitting(false);
+    setIsSubmitting(true);
+    const unUpvoteVizResult =
+      await vizKit.rest.unUpvoteViz(id);
+    if (unUpvoteVizResult.outcome === 'failure') {
+      console.log('Error un-upvoting viz');
+      console.log(unUpvoteVizResult.error);
+      setIsUpvoted(true);
+    }
+    setIsSubmitting(false);
   }, [id, isSubmitting, vizKit]);
 
   // Handle the upvote button click.

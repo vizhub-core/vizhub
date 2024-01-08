@@ -103,6 +103,10 @@ export interface VizKitAPI {
       vizId: VizId;
       userId: UserId;
     }) => Promise<Result<Success>>;
+
+    upvoteViz: (vizId: VizId) => Promise<Result<Success>>;
+
+    unUpvoteViz: (vizId: VizId) => Promise<Result<Success>>;
   };
 }
 
@@ -235,6 +239,16 @@ export const VizKit = ({
           `${baseUrl}/remove-collaborator`,
           options,
         ),
+
+      upvoteViz: async (vizId: VizId) =>
+        await postJSON(`${baseUrl}/upvote-viz`, {
+          vizId,
+        }),
+
+      unUpvoteViz: async (vizId: VizId) =>
+        await postJSON(`${baseUrl}/un-upvote-viz`, {
+          vizId,
+        }),
     },
   };
 };
