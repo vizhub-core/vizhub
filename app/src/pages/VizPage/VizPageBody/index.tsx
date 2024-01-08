@@ -66,6 +66,8 @@ export const VizPageBody = ({
   toggleDeleteVizConfirmationModal,
   vizCacheContents,
   setUncommitted,
+  isUpvoted,
+  handleUpvoteClick,
 }: {
   info: Info;
   content: Content;
@@ -92,6 +94,8 @@ export const VizPageBody = ({
   toggleDeleteVizConfirmationModal: () => void;
   vizCacheContents: Record<string, Content>;
   setUncommitted: (authenticatedUser: User | null) => void;
+  isUpvoted: boolean;
+  handleUpvoteClick: () => void;
 }) => {
   // The currently authenticated user, if any.
   const authenticatedUser: User | null = useContext(
@@ -340,6 +344,8 @@ export const VizPageBody = ({
             isPrivate={info.visibility === 'private'}
             isUnlisted={info.visibility === 'unlisted'}
             isVisual={isVisual}
+            isUpvoted={isUpvoted}
+            handleUpvoteClick={handleUpvoteClick}
           />
         </div>
       </div>

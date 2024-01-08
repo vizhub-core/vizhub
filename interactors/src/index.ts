@@ -11,6 +11,7 @@ export { GetContentAtTimestamp } from './getContentAtTimestamp';
 export { CommitViz } from './commitViz';
 export { ForkViz } from './forkViz';
 export { UpvoteViz } from './upvoteViz';
+export { UnUpvoteViz } from './unUpvoteViz';
 export { TrashViz } from './trashViz';
 export { RecordAnalyticsEvents } from './recordAnalyticsEvents';
 export { VerifyVizAccess } from './verifyVizAccess';
