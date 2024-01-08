@@ -6,3 +6,37 @@
   display: flex;
   flex-direction: column;
 }
+
+/* This is for setting the padding on the page responsively */
+.vh-page-container {
+  padding: 70px 300px;
+
+  @media (max-width: 1400px) {
+    padding: 70px 200px;
+  }
+
+  /* Reduced padding for large screens (Bootstrap's xl breakpoint) */
+  @media (max-width: 1400px) {
+    padding: 70px 200px;
+  }
+
+  /* Further reduced padding for medium-large screens (Bootstrap's lg breakpoint) */
+  @media (max-width: 1200px) {
+    padding: 70px 150px;
+  }
+
+  /* Moderate padding for small screens/tablets (Bootstrap's md breakpoint) */
+  @media (max-width: 992px) {
+    padding: 70px 100px;
+  }
+
+  /* Lesser padding for smaller devices (Bootstrap's sm breakpoint) */
+  @media (max-width: 768px) {
+    padding: 70px 50px;
+  }
+
+  /* Minimal padding for very small/mobile devices (Bootstrap's xs breakpoint) */
+  @media (max-width: 576px) {
+    padding: 70px 20px;
+  }
+}

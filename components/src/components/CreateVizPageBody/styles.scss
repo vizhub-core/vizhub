@@ -2,37 +2,6 @@
   overflow: auto;
 
   .create-viz-content {
-    padding: 70px 360px;
-    // Reduced padding for large screens
-    @media (max-width: 1400px) {
-      padding: 70px 300px;
-    }
-
-    // Further reduced padding for medium-large screens
-    @media (max-width: 1200px) {
-      padding: 70px 200px;
-    }
-
-    // Moderate padding for small screens/tablets
-    @media (max-width: 1000px) {
-      padding: 70px 150px;
-    }
-
-    // Lesser padding for smaller devices
-    @media (max-width: 800px) {
-      padding: 70px 100px;
-    }
-
-    // Minimal padding for very small/mobile devices
-    @media (max-width: 600px) {
-      padding: 70px 50px;
-    }
-
-    // Extra minimal padding for extremely small screens
-    @media (max-width: 400px) {
-      padding: 70px 20px;
-    }
-
     display: flex;
     flex-direction: column;
     gap: 70px;
