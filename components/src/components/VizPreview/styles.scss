@@ -73,13 +73,12 @@
     align-items: center;
     justify-content: space-between;
     border-top: 1px solid var(--vh-color-rule-01);
-    height: 60px;
   }
   .analytics-container {
-    padding: 0 18px;
+    padding: 14px 18px;
   }
   .meta-container {
-    padding: 0 12px;
+    padding: 10px 12px;
 
     .owner {
       display: flex;
@@ -110,7 +109,7 @@
         .last-updated-date {
           // color: var(--vh-color-neutral-03);
           color: var(--vh-color-neutral-04);
-          // font-size: 14px;
+          font-size: 14px;
         }
       }
     }
