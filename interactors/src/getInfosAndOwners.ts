@@ -20,7 +20,7 @@ import {
 } from 'entities';
 import { accessDeniedError } from 'gateways/src/errors';
 
-const debug = true;
+const debug = false;
 
 export type InfosAndOwners = {
   infoSnapshots: Array<Snapshot<Info>>;
