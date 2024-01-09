@@ -137,13 +137,14 @@ export const MemoryGateways = (): Gateways => {
     sortField = defaultSortOption.sortField,
     pageNumber = 0,
     sortOrder = defaultSortOrder,
+    vizIds = null,
   }) => {
     const comparator =
       sortOrder === 'ascending' ? ascending : descending;
     return ok(
       Object.values(documents.Info)
-        .sort((a, b) =>
-          comparator(a[sortField], b[sortField]),
+        .filter(
+          (d) => vizIds === null || vizIds.includes(d.id),
         )
         .filter(
           (d, i) =>
@@ -154,6 +155,9 @@ export const MemoryGateways = (): Gateways => {
               d.forkedFrom === forkedFrom) &&
             i >= pageNumber * pageSize &&
             i < (pageNumber + 1) * pageSize,
+        )
+        .sort((a, b) =>
+          comparator(a[sortField], b[sortField]),
         )
         .map(fakeSnapshot<Info>),
     );
@@ -292,6 +296,23 @@ export const MemoryGateways = (): Gateways => {
     return ok(permissions.map(fakeSnapshot));
   };
 
+  const getUpvotes = async (
+    user: User | null,
+    vizzes: Array<VizId> | null,
+  ) => {
+    const allUpvotes = Object.values(documents.Upvote);
+    const upvotes = allUpvotes
+      .filter((upvote) =>
+        user !== null ? upvote.user === user : true,
+      )
+      .filter((upvote) =>
+        vizzes !== null
+          ? vizzes.some((viz) => viz === upvote.viz)
+          : true,
+      );
+    return ok(upvotes.map(fakeSnapshot));
+  };
+
   const saveVizEmbedding = async (
     vizEmbedding: VizEmbedding,
   ) => {
@@ -410,6 +431,8 @@ export const MemoryGateways = (): Gateways => {
     getUsersByIds,
     // @ts-ignore
     getPermissions,
+    // @ts-ignore
+    getUpvotes,
     // @ts-ignore
     saveVizEmbedding,
     // @ts-ignore
