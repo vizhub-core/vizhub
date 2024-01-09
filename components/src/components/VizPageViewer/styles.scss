@@ -50,10 +50,15 @@
       padding: var(--vh-padding-lots) 0px;
       border-bottom: 1px solid var(--vh-rule-color);
 
+      h2 {
+        margin-bottom: 0;
+        color: var(--vh-color-neutral-01);
+      }
+
       &-right {
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 12px;
 
         .visibility-label {
           font-size: 14px;
@@ -74,6 +79,9 @@
             background-color: #b1a28d;
           }
         }
+        .forks-link {
+          text-decoration: none;
+        }
       }
     }
     .meta-info {
@@ -84,12 +92,15 @@
       &-left {
         display: flex;
         align-items: center;
-        gap: 10px;
-        font-weight: bold;
-        color: currentColor;
+        gap: 12px;
+
         text-decoration: none;
         img {
           box-shadow: var(--vh-box-shadow);
+        }
+        h4 {
+          color: var(--vh-color-neutral-01);
+          margin-bottom: 0px;
         }
       }
       &-left:hover {
@@ -99,8 +110,9 @@
       &-right {
         display: flex;
         flex-direction: column;
-        font-size: 12px;
+        font-size: 14px;
         align-items: end;
+        color: var(--vh-color-neutral-03);
       }
     }
     .license {
