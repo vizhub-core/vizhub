@@ -292,6 +292,23 @@ export const MemoryGateways = (): Gateways => {
     return ok(permissions.map(fakeSnapshot));
   };
 
+  const getUpvotes = async (
+    user: User | null,
+    vizzes: Array<VizId> | null,
+  ) => {
+    const allUpvotes = Object.values(documents.Upvote);
+    const upvotes = allUpvotes
+      .filter((upvote) =>
+        user !== null ? upvote.user === user : true,
+      )
+      .filter((upvote) =>
+        vizzes !== null
+          ? vizzes.some((viz) => viz === upvote.viz)
+          : true,
+      );
+    return ok(upvotes.map(fakeSnapshot));
+  };
+
   const saveVizEmbedding = async (
     vizEmbedding: VizEmbedding,
   ) => {
@@ -410,6 +427,8 @@ export const MemoryGateways = (): Gateways => {
     getUsersByIds,
     // @ts-ignore
     getPermissions,
+    // @ts-ignore
+    getUpvotes,
     // @ts-ignore
     saveVizEmbedding,
     // @ts-ignore

@@ -9,11 +9,7 @@
 
 /* This is for setting the padding on the page responsively */
 .vh-page-container {
-  padding: 70px 300px;
-
-  @media (max-width: 1400px) {
-    padding: 70px 200px;
-  }
+  padding: 70px 290px;
 
   /* Reduced padding for large screens (Bootstrap's xl breakpoint) */
   @media (max-width: 1400px) {

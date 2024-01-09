@@ -10,6 +10,7 @@ import { getUserByUserNameTest } from './getUserByUserNameTest';
 import { incrementDecrementTest } from './incrementDecrementTest';
 import { getFolderAncestorsTest } from './getFolderAncestorsTest';
 import { getPermissionsTest } from './getPermissionsTest';
+import { getUpvotesTest } from './getUpvotesTest';
 import { getInfosTest } from './getInfosTest';
 import { getUsersByIdsTest } from './getUsersByIdsTest';
 // import { embeddingsTest } from './embeddingsTest';
@@ -31,6 +32,7 @@ export const gatewaysTests = () => {
   incrementDecrementTest();
   getFolderAncestorsTest();
   getPermissionsTest();
+  getUpvotesTest();
   getInfosTest();
   getUsersByIdsTest();
   getUsersForTypeaheadTest();
