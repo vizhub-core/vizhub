@@ -141,6 +141,13 @@ export const GetInfosAndOwners = (gateways: Gateways) => {
         console.log('[GetInfosAndOwners] handling starred');
       }
 
+      // The "owner" that we pass to getInfos() is the
+      // authenticated user, because we want to get the
+      // infos that have been shared with them.
+      // They are not actually the owner of the vizzes,
+      // so we delete the owner property from the options.
+      delete getInfosOptions.owner;
+
       // Figure out which vizzes have been starred by the
       // profile owner user.
       const upvoteResult = await gateways.getUpvotes(
