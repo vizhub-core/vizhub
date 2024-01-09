@@ -9,6 +9,7 @@ import { UpvoteWidget } from 'components';
 import { VisibilityUnlistedSVG } from '../Icons/VisibilityUnlistedSVG';
 import { commaFormat } from '../commaFormat';
 import { PrivateSVG } from '../Icons/sam/PrivateSVG';
+import { ForksWidget } from '../ForksWidget';
 import './styles.scss';
 
 export const VizPageViewer = ({
@@ -123,7 +124,7 @@ export const VizPageViewer = ({
               autoFocus
             />
           ) : (
-            <h4>{vizTitle}</h4>
+            <h2>{vizTitle}</h2>
           )}
           <div className="title-bar-right">
             {enableEditingTitle ? (
@@ -137,6 +138,11 @@ export const VizPageViewer = ({
                 title="Edit viz title"
               ></i>
             ) : null}
+            <a href={forksPageHref} className="forks-link">
+              {/* {forksCountFormatted} fork
+              {forksCount === 1 ? '' : 's'} */}
+              <ForksWidget forksCount={forksCount} />
+            </a>
             <UpvoteWidget
               upvotesCount={upvotesCount}
               onClick={handleUpvoteClick}
@@ -168,7 +174,7 @@ export const VizPageViewer = ({
               height="40"
               className="rounded-circle"
             ></img>
-            <div>{authorDisplayName}</div>
+            <h4>{authorDisplayName}</h4>
           </a>
           <div className="meta-info-right">
             <div>Last edited {updatedDateFormatted}</div>
@@ -182,10 +188,6 @@ export const VizPageViewer = ({
                 </a>
               </div>
             )}
-            <a href={forksPageHref}>
-              {forksCountFormatted} fork
-              {forksCount === 1 ? '' : 's'}
-            </a>
           </div>
         </div>
         <div className="vh-markdown-body">

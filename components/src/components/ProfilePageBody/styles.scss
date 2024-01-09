@@ -69,6 +69,10 @@
       .profile-header {
         display: flex;
         justify-content: space-between;
+        h2 {
+          color: var(--vh-color-neutral-01);
+          margin-bottom: 0;
+        }
 
         .profile-header-controls {
           display: flex;
