@@ -77,7 +77,7 @@ export interface Gateways {
   // get_
   //  * Gets the latest snapshot of the ShareDB document
   //  * Compatible with ShareDB's Doc.ingestSnapshot() method
-  //    https://share.github.io/sharedb/api/doc#ingestsnapshot
+  //         https://share.github.io/sharedb/api/doc#ingestsnapshot
   //
   // delete_
   //  * Permanently deletes the document
@@ -341,6 +341,17 @@ export interface Gateways {
     user: UserId | null,
     resources: Array<ResourceId> | null,
   ): Promise<Result<Array<Snapshot<Permission>>>>;
+
+  // getUpvotes
+  //
+  // Gets the upvotes that match the given user
+  // and any of the given resources.
+  getUpvotes(
+    // user can be null, in which case we look up upvotes
+    // across all users.
+    user: UserId | null,
+    resources: Array<ResourceId> | null,
+  ): Promise<Result<Array<Snapshot<Upvote>>>>;
 
   // getInfos
   //

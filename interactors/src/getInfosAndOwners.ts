@@ -16,6 +16,7 @@ import {
   VizId,
   Visibility,
   SectionId,
+  Upvote,
 } from 'entities';
 import { accessDeniedError } from 'gateways/src/errors';
 
@@ -134,6 +135,36 @@ export const GetInfosAndOwners = (gateways: Gateways) => {
       }
     }
 
+    // Handle the "Starred vizzes" section.
+    if (sectionId === 'starred') {
+      if (debug) {
+        console.log('[GetInfosAndOwners] handling starred');
+      }
+
+      // Figure out which vizzes have been starred by the
+      // profile owner user.
+      const upvoteResult = await gateways.getUpvotes(
+        getInfosOptions.owner,
+        null,
+      );
+      if (upvoteResult.outcome === 'failure') {
+        return upvoteResult;
+      }
+      const upvotes = upvoteResult.value.map(
+        (snapshot) => snapshot.data,
+      );
+
+      if (debug) {
+        console.log('[GetInfosAndOwners] upvotes', upvotes);
+      }
+
+      // Deduplicate starredVizIds, just in case
+      const starredVizIds = new Set<VizId>(
+        upvotes.map((upvote: Upvote) => upvote.viz),
+      );
+      getInfosOptions.vizIds = Array.from(starredVizIds);
+    }
+
     const infoSnapshotsResult =
       await getInfos(getInfosOptions);
     if (infoSnapshotsResult.outcome === 'failure')
@@ -143,7 +174,10 @@ export const GetInfosAndOwners = (gateways: Gateways) => {
     if (debug) {
       console.log(
         '[GetInfosAndOwners] infoSnapshots',
-        infoSnapshots,
+        JSON.stringify(infoSnapshots, null, 2).slice(
+          0,
+          1000,
+        ),
       );
     }
 

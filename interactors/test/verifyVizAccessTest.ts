@@ -41,7 +41,8 @@ const verify =
   }) =>
   async () => {
     const gateways = await initGateways();
-    const { saveFolder, savePermission } = gateways;
+    const { saveFolder, savePermission, saveUser } =
+      gateways;
     const verifyVizAccess = VerifyVizAccess(gateways);
 
     for (const folder of folders) {
@@ -50,6 +51,9 @@ const verify =
     for (const permission of permissions) {
       await savePermission(permission);
     }
+
+    await saveUser(userJoe);
+    await saveUser(userJane);
 
     const result: Result<VizAccess> = await verifyVizAccess(
       {

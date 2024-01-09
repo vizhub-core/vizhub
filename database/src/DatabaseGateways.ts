@@ -665,6 +665,35 @@ export const DatabaseGateways = ({
       );
     });
 
+  const getUpvotes = (
+    user: UserId | null,
+    vizzes: Array<VizId> | null,
+  ) =>
+    new Promise((resolve) => {
+      const entityName = 'Upvote';
+      const query = shareDBConnection.createFetchQuery(
+        toCollectionName(entityName),
+        {
+          $and: [
+            // user could be null
+            ...(user !== null ? [{ user }] : []),
+            // vizzes could be null
+            ...(vizzes !== null
+              ? [{ viz: { $in: vizzes } }]
+              : []),
+          ],
+        },
+        {},
+        (error, results) => {
+          query.destroy();
+          if (error) return resolve(err(error));
+          resolve(
+            ok(results.map((doc) => doc.toSnapshot())),
+          );
+        },
+      );
+    });
+
   const from = toCollectionName('Info');
   const incrementForksCount = shareDBAdd(
     'Info',
@@ -752,6 +781,7 @@ export const DatabaseGateways = ({
     getUserByEmails,
     getUsersByIds,
     getPermissions,
+    getUpvotes,
     lock,
     getUsersForTypeahead,
   };

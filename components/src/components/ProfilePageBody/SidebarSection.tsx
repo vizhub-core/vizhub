@@ -6,8 +6,8 @@ const enabledSections = {
   public: true,
   private: true,
   shared: true,
+  starred: true,
   // orgs: true,
-  // starred: true,
 };
 
 // One section of the sidebar
