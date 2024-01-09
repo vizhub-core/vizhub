@@ -137,13 +137,14 @@ export const MemoryGateways = (): Gateways => {
     sortField = defaultSortOption.sortField,
     pageNumber = 0,
     sortOrder = defaultSortOrder,
+    vizIds = null,
   }) => {
     const comparator =
       sortOrder === 'ascending' ? ascending : descending;
     return ok(
       Object.values(documents.Info)
-        .sort((a, b) =>
-          comparator(a[sortField], b[sortField]),
+        .filter(
+          (d) => vizIds === null || vizIds.includes(d.id),
         )
         .filter(
           (d, i) =>
@@ -154,6 +155,9 @@ export const MemoryGateways = (): Gateways => {
               d.forkedFrom === forkedFrom) &&
             i >= pageNumber * pageSize &&
             i < (pageNumber + 1) * pageSize,
+        )
+        .sort((a, b) =>
+          comparator(a[sortField], b[sortField]),
         )
         .map(fakeSnapshot<Info>),
     );

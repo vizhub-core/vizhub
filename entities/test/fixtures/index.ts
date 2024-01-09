@@ -65,7 +65,7 @@ export const userJoe: User = {
     'joe@hugecorp.com',
     'joe@joes-diner.com',
   ],
-  plan: 'free',
+  plan: 'premium',
   picture:
     'https://avatars.githubusercontent.com/u/68416?s=80&u=31d283c06af36e3cc7f6da3aac1e302064d68f81&v=4',
 };
