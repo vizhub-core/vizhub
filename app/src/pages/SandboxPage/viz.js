@@ -8,7 +8,7 @@ import { axisBottom, axisLeft } from 'd3-axis';
 
 const width = 600;
 const height = 150;
-const margin = { top: 10, right: 30, bottom: 20, left: 30 };
+const margin = { top: 10, right: 30, bottom: 20, left: 40 };
 
 const recordKey = 'days';
 const d3TimeInterval = utcDay;

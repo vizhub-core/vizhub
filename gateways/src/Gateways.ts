@@ -423,6 +423,15 @@ export interface Gateways {
     visibilities?: Array<Visibility> | null;
   }): Promise<Result<Array<Snapshot<Info>>>>;
 
+  // getStaleInfoIds
+  //
+  // Gets the ids of a batch of infos whose popularity scores
+  // are stale and need to be recomputed, or have never been computed.
+  // batchSize defaults to 500
+  getStaleInfoIds(
+    batchSize?: number,
+  ): Promise<Result<Array<VizId>>>;
+
   // getUsersByIds
   //
   // Gets all users that match the given ids.

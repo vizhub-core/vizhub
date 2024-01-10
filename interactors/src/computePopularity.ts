@@ -6,26 +6,31 @@ const hackerHotScore = decay.hackerHot();
 const infinityIfNaN = (number) =>
   isNaN(number) ? -Infinity : number;
 
+const debug = true;
+
 export const computePopularity = (info: Info): number => {
-  const { updated, upvotesCount, forksCount } = info;
+  const { created, updated, upvotesCount, forksCount } =
+    info;
 
-  //   const createdDate = timestampToDate(created);
-  const lastUpdatedDate = timestampToDate(updated);
-  let numUpvotes = upvotesCount ? upvotesCount : 0;
-  const numForks = forksCount ? forksCount : 0;
-
-  // Count each fork as half an upvote.
-  numUpvotes += numForks / 2;
-
-  // Weighted score of "activity".
-  //  * Forking counts as half of an "effective upvote"
-  //  * One upvote = one "effective upvote"
-  //const effectiveUpvotes = numForks / 2 + numUpvotes;
-  const effectiveUpvotes = numUpvotes;
-
-  const scoreHackerHotLastUpdated = infinityIfNaN(
-    hackerHotScore(effectiveUpvotes, lastUpdatedDate),
+  // Use the midpoint between created and updated as the date for scoring.
+  const midpointDate = timestampToDate(
+    (created + updated) / 2,
   );
 
-  return scoreHackerHotLastUpdated;
+  // Compute popularity "points" where:
+  // * One upvote = two points
+  // * One fork = one point
+  const numUpvotes = upvotesCount ? upvotesCount : 0;
+  const numForks = forksCount ? forksCount : 0;
+  const points = numUpvotes + numForks / 2;
+
+  const popularity = infinityIfNaN(
+    hackerHotScore(points, midpointDate),
+  );
+
+  if (debug) {
+    console.log('computed popularity score: ', popularity);
+  }
+
+  return popularity;
 };
