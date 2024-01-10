@@ -22,9 +22,9 @@ export type ExplorePageQuery = {
 };
 
 // Here we can change the default sort ID per page
-// export const defaultSortId: SortId = 'popular';
-export const explorePageDefaultSortId: SortId =
-  'mostRecent';
+export const explorePageDefaultSortId: SortId = 'popular';
+// export const explorePageDefaultSortId: SortId =
+//   'mostRecent';
 
 // Inspired by https://github.com/vitejs/vite-plugin-react/blob/main/playground/ssr-react/src/pages/Home.jsx
 export const ExplorePage: Page = ({
