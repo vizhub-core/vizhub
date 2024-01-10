@@ -1,5 +1,6 @@
 import { Image } from 'entities';
 import puppeteer from 'puppeteer';
+import { Semaphore } from '../Semaphore';
 
 const debug = false;
 
@@ -30,41 +31,6 @@ const launchBrowser = async () => {
   // }
   return browser;
 };
-
-// A semaphore to limit the number of concurrent screenshots
-class Semaphore {
-  max: number;
-  counter: number;
-  queue: Array<() => void>;
-  constructor(max: number) {
-    this.max = max;
-    this.counter = max;
-    this.queue = [];
-  }
-
-  async acquire() {
-    if (this.counter > 0) {
-      this.counter--;
-      return Promise.resolve();
-    }
-
-    // If counter is 0, wait until a resource is free
-    return new Promise<void>((resolve: () => void) => {
-      this.queue.push(resolve);
-    });
-  }
-
-  release() {
-    if (this.queue.length > 0) {
-      // Release the next task in the queue
-      const nextResolve = this.queue.shift();
-      nextResolve();
-    } else {
-      // Increment the counter if no tasks are waiting
-      this.counter++;
-    }
-  }
-}
 
 // Create a semaphore to govern concurrent tasks.
 // We limit concurrent tasks so that we don't
@@ -147,8 +113,8 @@ export const takeScreenshot = async ({
         'Releasing screenshot semaphore and closing browser',
       );
     }
+    screenshotSemaphore.release();
     await page.close();
     await browser.close();
-    screenshotSemaphore.release();
   }
 };

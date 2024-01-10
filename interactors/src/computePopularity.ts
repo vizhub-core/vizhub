@@ -6,8 +6,6 @@ const hackerHotScore = decay.hackerHot();
 const infinityIfNaN = (number) =>
   isNaN(number) ? -Infinity : number;
 
-const debug = true;
-
 export const computePopularity = (info: Info): number => {
   const { created, updated, upvotesCount, forksCount } =
     info;
@@ -27,10 +25,6 @@ export const computePopularity = (info: Info): number => {
   const popularity = infinityIfNaN(
     hackerHotScore(points, midpointDate),
   );
-
-  if (debug) {
-    console.log('computed popularity score: ', popularity);
-  }
 
   return popularity;
 };

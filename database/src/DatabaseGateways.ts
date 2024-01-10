@@ -53,10 +53,11 @@ export const DatabaseGateways = ({
   const lock = async <T>(
     lockIds: Array<ResourceLockId>,
     fn: () => Promise<T>,
+    duration = 20000,
   ) => {
     let returnValue: T | null = null;
 
-    await redlock.using(lockIds, 10000, async () => {
+    await redlock.using(lockIds, duration, async () => {
       returnValue = await fn();
     });
 
@@ -396,8 +397,6 @@ export const DatabaseGateways = ({
         { $limit: batchSize },
       ])
       .toArray();
-
-    console.log('results', results);
 
     return ok(results.map((result) => result._id));
   };

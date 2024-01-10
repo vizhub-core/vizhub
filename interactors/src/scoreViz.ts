@@ -1,10 +1,4 @@
-import {
-  Gateways,
-  Result,
-  ok,
-  err,
-  Success,
-} from 'gateways';
+import { Gateways, Result, ok, err } from 'gateways';
 import { VizId, Info, infoLock } from 'entities';
 import { computePopularity } from './computePopularity';
 
@@ -16,7 +10,7 @@ export const ScoreViz = (gateways: Gateways) => {
 
   return async (options: {
     viz: VizId;
-  }): Promise<Result<Success>> => {
+  }): Promise<Result<Info>> => {
     const { viz } = options;
 
     return lock([infoLock(viz)], async () => {
@@ -39,7 +33,7 @@ export const ScoreViz = (gateways: Gateways) => {
       if (saveInfoResult.outcome === 'failure') {
         return err(saveInfoResult.error);
       }
-      return ok('success');
+      return ok(newInfo);
     });
   };
 };

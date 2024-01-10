@@ -482,6 +482,9 @@ export interface Gateways {
     lockIds: Array<ResourceLockId>,
     // an async function that runs with the locks:
     fn: () => Promise<T>,
+    // Optional lock duration in ms.
+    // Defaults to 10 seconds.
+    lockDuration?: number,
   ): Promise<T>;
 
   // Gets a list of users to power the typeahead search.
