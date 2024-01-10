@@ -88,7 +88,10 @@ export const createCheckoutSession = ({
           // If they have a coupon for one free year that comes with
           // joining the beta, then they will get a free year.
 
-          payment_method_collection: 'always',
+          // payment_method_collection: 'always',
+
+          // Enable WPI signups without payment method
+          payment_method_collection: 'if_required',
 
           allow_promotion_codes: true,
 
