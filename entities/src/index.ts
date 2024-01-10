@@ -129,9 +129,7 @@ export {
   sortOptions,
   getSortField,
   asSortId,
-  defaultSortOption,
   defaultSortOrder,
-  defaultSortField,
 } from './Sorting';
 
 export type {

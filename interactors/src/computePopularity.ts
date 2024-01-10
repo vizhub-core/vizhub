@@ -2,28 +2,33 @@
 
 import { Info, timestampToDate } from 'entities';
 import decay from 'decay';
-const hackerHotScore = decay.hackerHot();
+
+// Default gravity is 1.8
+// The higher the gravity, the more quickly scores decay.
+const gravity = 2;
+
+const hackerHotScore = decay.hackerHot(gravity);
 const infinityIfNaN = (number) =>
   isNaN(number) ? -Infinity : number;
 
 export const computePopularity = (info: Info): number => {
-  const { created, updated, upvotesCount, forksCount } =
-    info;
+  const { created, upvotesCount, forksCount } = info;
 
   // Use the midpoint between created and updated as the date for scoring.
-  const midpointDate = timestampToDate(
-    (created + updated) / 2,
-  );
+  // const midpointDate = timestampToDate(
+  //   (created + updated) / 2,
+  // );
+  // Use the created date for scoring.
+  const createdDate = timestampToDate(created);
 
-  // Compute popularity "points" where:
-  // * One upvote = two points
-  // * One fork = one point
+  // Compute popularity "points" by weighting
+  // upvotes and forks.
   const numUpvotes = upvotesCount ? upvotesCount : 0;
   const numForks = forksCount ? forksCount : 0;
-  const points = numUpvotes + numForks / 2;
+  const points = numUpvotes + numForks;
 
   const popularity = infinityIfNaN(
-    hackerHotScore(points, midpointDate),
+    hackerHotScore(points, createdDate),
   );
 
   return popularity;
