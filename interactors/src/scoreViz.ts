@@ -1,5 +1,10 @@
 import { Gateways, Result, ok, err } from 'gateways';
-import { VizId, Info, infoLock } from 'entities';
+import {
+  VizId,
+  Info,
+  infoLock,
+  dateToTimestamp,
+} from 'entities';
 import { computePopularity } from './computePopularity';
 
 // scoreViz
@@ -25,9 +30,10 @@ export const ScoreViz = (gateways: Gateways) => {
       const popularity = computePopularity(info);
 
       // Update the viz Info
-      const newInfo = {
+      const newInfo: Info = {
         ...info,
         popularity,
+        popularityUpdated: dateToTimestamp(new Date()),
       };
       const saveInfoResult = await saveInfo(newInfo);
       if (saveInfoResult.outcome === 'failure') {

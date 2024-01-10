@@ -353,6 +353,11 @@ export const DatabaseGateways = ({
       );
     });
 
+  // Mongo query for popularity being defined:
+  // { popularity: { $exists: true } }
+  // Count of those:
+  // db.Info.count({ popularity: { $exists: true } })
+
   const getStaleInfoIds = async (batchSize) => {
     const entityName = 'Info';
     const from = toCollectionName(entityName);
