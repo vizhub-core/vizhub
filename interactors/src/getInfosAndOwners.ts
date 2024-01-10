@@ -35,6 +35,9 @@ export const GetInfosAndOwners = (gateways: Gateways) => {
     noNeedToFetchUsers,
     sectionId,
     sortId,
+    // For most cases, default sort is most recent.
+    // For the explore page, default sort is popular.
+    defaultSortId = 'mostRecent',
     pageNumber,
     owner,
     forkedFrom,
@@ -44,6 +47,7 @@ export const GetInfosAndOwners = (gateways: Gateways) => {
     noNeedToFetchUsers: Array<UserId>;
     sectionId?: SectionId;
     sortId?: SortId;
+    defaultSortId?: SortId;
     pageNumber: number;
     owner?: UserId;
     forkedFrom?: VizId;
@@ -51,9 +55,10 @@ export const GetInfosAndOwners = (gateways: Gateways) => {
     authenticatedUserId?: UserId;
   }): Promise<Result<InfosAndOwners>> => {
     // Get the sort field from the sort query parameter.
-    const sortField: SortField | undefined = sortId
-      ? getSortField(sortId)
-      : undefined;
+    const sortField: SortField = getSortField(
+      sortId,
+      defaultSortId,
+    );
 
     // Check access to private infos.
     if (

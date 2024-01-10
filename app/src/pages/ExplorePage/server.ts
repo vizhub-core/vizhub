@@ -2,12 +2,9 @@ import {
   ExplorePage,
   ExplorePageData,
   ExplorePageQuery,
+  explorePageDefaultSortId,
 } from './index';
-import {
-  SortId,
-  asSortId,
-  defaultSortOption,
-} from 'entities';
+import { SortId, asSortId } from 'entities';
 import { Gateways } from 'gateways';
 import { Auth0User } from '../Page';
 import { GetInfosAndOwners } from 'interactors';
@@ -22,15 +19,15 @@ ExplorePage.getPageData = async ({
   auth0User: Auth0User | null;
   query: ExplorePageQuery;
 }): Promise<ExplorePageData> => {
-  const { getUser } = gateways;
   const getInfosAndOwners = GetInfosAndOwners(gateways);
 
   const sortId: SortId | null =
-    asSortId(query.sort) || defaultSortOption.id;
+    asSortId(query.sort) || explorePageDefaultSortId;
 
   const infosAndOwnersResult = await getInfosAndOwners({
     noNeedToFetchUsers: [],
     sortId,
+    defaultSortId: 'popular',
     pageNumber: 0,
   });
   if (infosAndOwnersResult.outcome === 'failure') {

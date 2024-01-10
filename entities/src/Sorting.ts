@@ -3,11 +3,11 @@
 // The options for sorting views of many visualizations.
 export const sortOptions: Array<SortOption> = [
   // TODO bring this back after we compute popularity scores again
-  // {
-  //   id: 'popular',
-  //   label: 'Most popular',
-  //   sortField: 'popularity',
-  // },
+  {
+    id: 'popular',
+    label: 'Most popular',
+    sortField: 'popularity',
+  },
   {
     id: 'mostRecent',
     label: 'Most recent',
@@ -32,26 +32,18 @@ const sortOptionsMap = new Map<SortId, SortOption>(
   sortOptions.map((option) => [option.id, option]),
 );
 
-// The default for sorting views of many visualizations.
-export const defaultSortOption: SortOption =
-  sortOptionsMap.get('mostRecent');
-
 // Convenience function for getting the sort field from the sort ID.
 export const getSortField = (
   sortId: SortId | undefined,
+  defaultSortId: SortId,
 ): SortField =>
-  (sortId && sortOptionsMap.get(sortId)?.sortField) ||
-  defaultSortField;
+  sortOptionsMap.get(sortId || defaultSortId).sortField;
 
 // Convenience function for validating sort id.
 export const asSortId = (sortId: string): SortId | null =>
   sortOptionsMap.has(sortId as SortId)
     ? (sortId as SortId)
     : null;
-
-// Convenience unpacking of the default sort option.
-export const defaultSortField: SortField =
-  defaultSortOption.sortField;
 
 export type SortField =
   | 'updated'
