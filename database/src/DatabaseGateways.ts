@@ -365,14 +365,14 @@ export const DatabaseGateways = ({
 
     // Get info IDs where the 'popularityUpdated' field is older than 1 day
     // or nonexistent. Limited to 500 results. Soprted by priority.
-    const oneDayAgo = dateToTimestamp(
-      new Date(Date.now() - 1000 * 60 * 60 * 24),
-    );
+    // const oneDayAgo = dateToTimestamp(
+    //   new Date(Date.now() - 1000 * 60 * 60 * 24),
+    // );
 
     // Temporarily disable to recompute all vizzes sooner
-    // const oneDayAgo = dateToTimestamp(
-    //   new Date(Date.now() - 1000 * 60),
-    // );
+    const oneDayAgo = dateToTimestamp(
+      new Date(Date.now() - 1000 * 60),
+    );
 
     const results = await collection
       .aggregate([

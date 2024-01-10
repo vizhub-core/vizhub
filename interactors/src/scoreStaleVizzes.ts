@@ -3,7 +3,7 @@ import { ScoreViz } from './scoreViz';
 import { scoringLock } from 'entities/src/Lock';
 import { Semaphore } from './Semaphore';
 
-const debug = true;
+const debug = false;
 
 // Goal: keep vizzes up to date within 24 hours of their last update.
 // Considering:
@@ -12,7 +12,7 @@ const debug = true;
 //  * We invoke ScoreStaleVizzes once per viz page view
 //  * To score all vizzes daily, we need a batch size of
 //    100,000 / 1,000 = 100
-const batchSize = 100;
+const batchSize = 1000;
 
 // We set a lock duration of 60 seconds to allow the batch
 // to take a long time and not crash the lock system.
