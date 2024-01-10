@@ -32,6 +32,11 @@ const sortOptionsMap = new Map<SortId, SortOption>(
   sortOptions.map((option) => [option.id, option]),
 );
 
+export const defaultSortOption =
+  sortOptionsMap.get('mostRecent');
+export const defaultSortField: SortField =
+  defaultSortOption.sortField;
+
 // Convenience function for getting the sort field from the sort ID.
 export const getSortField = (
   sortId: SortId | undefined,

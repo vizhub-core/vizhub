@@ -15,11 +15,11 @@
   "dependencies": {
     "d3-format": "^3.1.0",
     "react": "^18.2.0",
-    "react-aria": "^3.31.0",
+    "react-aria": "^3.31.1",
     "react-bootstrap": "^2.9.2",
     "react-bootstrap-typeahead": "^6.3.2",
     "react-dom": "^18.2.0",
-    "react-stately": "^3.29.0",
+    "react-stately": "^3.29.1",
     "vizhub-ui": "^3.16.0"
   },
   "devDependencies": {

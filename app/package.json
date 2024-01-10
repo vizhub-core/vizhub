@@ -28,7 +28,7 @@
   "homepage": "https://github.com/vizhub-core/vizhub3#readme",
   "dependencies": {
     "@rollup/browser": "^4.9.4",
-    "@sentry/node": "^7.92.0",
+    "@sentry/node": "^7.93.0",
     "@teamwork/websocket-json-stream": "^2.0.0",
     "@types/react-router-dom": "^5.3.3",
     "@types/sharedb": "^3.3.8",
