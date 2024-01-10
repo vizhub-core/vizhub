@@ -1,11 +1,10 @@
+import { Gateways, Result, ok, err } from 'gateways';
 import {
-  Gateways,
-  Result,
-  ok,
-  err,
-  Success,
-} from 'gateways';
-import { VizId, Info, infoLock } from 'entities';
+  VizId,
+  Info,
+  infoLock,
+  dateToTimestamp,
+} from 'entities';
 import { computePopularity } from './computePopularity';
 
 // scoreViz
@@ -16,7 +15,7 @@ export const ScoreViz = (gateways: Gateways) => {
 
   return async (options: {
     viz: VizId;
-  }): Promise<Result<Success>> => {
+  }): Promise<Result<Info>> => {
     const { viz } = options;
 
     return lock([infoLock(viz)], async () => {
@@ -31,15 +30,16 @@ export const ScoreViz = (gateways: Gateways) => {
       const popularity = computePopularity(info);
 
       // Update the viz Info
-      const newInfo = {
+      const newInfo: Info = {
         ...info,
         popularity,
+        popularityUpdated: dateToTimestamp(new Date()),
       };
       const saveInfoResult = await saveInfo(newInfo);
       if (saveInfoResult.outcome === 'failure') {
         return err(saveInfoResult.error);
       }
-      return ok('success');
+      return ok(newInfo);
     });
   };
 };

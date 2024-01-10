@@ -6,6 +6,7 @@ SandboxPage.getPageData = async ({ gateways }) => {
   const titles = {
     event: 'Overall Activity',
     'event.pageview.home': 'Home Page Views',
+    'event.pageview.viz': 'Viz Page Views',
     'event.login': 'Logins',
     'event.private-beta-email-submit':
       'Private Beta Signups',
@@ -15,6 +16,7 @@ SandboxPage.getPageData = async ({ gateways }) => {
   const analyticsEventSnapshots = (
     await Promise.all([
       getAnalyticsEvent('event.pageview.home'),
+      getAnalyticsEvent('event.pageview.viz'),
       getAnalyticsEvent('event.login'),
       getAnalyticsEvent('event.private-beta-email-submit'),
       getAnalyticsEvent('event.aiAssist'),

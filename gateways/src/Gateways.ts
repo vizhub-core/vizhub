@@ -423,6 +423,15 @@ export interface Gateways {
     visibilities?: Array<Visibility> | null;
   }): Promise<Result<Array<Snapshot<Info>>>>;
 
+  // getStaleInfoIds
+  //
+  // Gets the ids of a batch of infos whose popularity scores
+  // are stale and need to be recomputed, or have never been computed.
+  // batchSize defaults to 500
+  getStaleInfoIds(
+    batchSize?: number,
+  ): Promise<Result<Array<VizId>>>;
+
   // getUsersByIds
   //
   // Gets all users that match the given ids.
@@ -473,6 +482,9 @@ export interface Gateways {
     lockIds: Array<ResourceLockId>,
     // an async function that runs with the locks:
     fn: () => Promise<T>,
+    // Optional lock duration in ms.
+    // Defaults to 10 seconds.
+    lockDuration?: number,
   ): Promise<T>;
 
   // Gets a list of users to power the typeahead search.
