@@ -5,7 +5,7 @@ import decay from 'decay';
 
 // Default gravity is 1.8
 // The higher the gravity, the more quickly scores decay.
-const gravity = 2;
+const gravity = 1.8;
 
 const hackerHotScore = decay.hackerHot(gravity);
 const infinityIfNaN = (number) =>
@@ -25,7 +25,7 @@ export const computePopularity = (info: Info): number => {
   // upvotes and forks.
   const numUpvotes = upvotesCount ? upvotesCount : 0;
   const numForks = forksCount ? forksCount : 0;
-  const points = numUpvotes + numForks;
+  const points = numUpvotes * 3 + numForks;
 
   const popularity = infinityIfNaN(
     hackerHotScore(points, createdDate),

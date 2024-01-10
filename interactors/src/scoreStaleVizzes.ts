@@ -3,7 +3,7 @@ import { ScoreViz } from './scoreViz';
 import { scoringLock } from 'entities/src/Lock';
 import { Semaphore } from './Semaphore';
 
-const debug = true;
+const debug = false;
 
 // Goal: keep vizzes up to date within 24 hours of their last update.
 // Considering:
