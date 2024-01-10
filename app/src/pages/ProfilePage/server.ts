@@ -6,9 +6,10 @@ import {
   asSectionId,
   asSortId,
   defaultSectionId,
-  defaultSortOption,
 } from 'entities';
 import { getAuthenticatedUser } from '../getAuthenticatedUser';
+
+const defaultSortId: SortId = 'mostRecent';
 
 ProfilePage.getPageData = async ({
   gateways,
@@ -27,7 +28,7 @@ ProfilePage.getPageData = async ({
     const owner = profileUserSnapshot.data.id;
 
     const sortId: SortId | null =
-      asSortId(query.sort) || defaultSortOption.id;
+      asSortId(query.sort) || defaultSortId;
 
     const sectionId: SectionId | null =
       asSectionId(query.section) || defaultSectionId;

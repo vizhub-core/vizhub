@@ -12,7 +12,6 @@ import {
   defaultSectionId,
   SortId,
   asSortId,
-  defaultSortOption,
 } from 'entities';
 
 // Define the context type
@@ -27,7 +26,7 @@ interface SectionSortContextType {
 export const SectionSortContext =
   createContext<SectionSortContextType>({
     sectionId: defaultSectionId,
-    sortId: defaultSortOption.id,
+    sortId: 'mostRecent',
     setSectionId: () => {},
     setSortId: () => {},
   });
@@ -36,7 +35,12 @@ export const SectionSortContext =
 export const SectionSortProvider: FC<{
   children: ReactNode;
   publicOnly?: boolean;
-}> = ({ children, publicOnly }) => {
+  defaultSortId?: SortId;
+}> = ({
+  children,
+  publicOnly,
+  defaultSortId = 'mostRecent',
+}) => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const sectionId = useMemo(
@@ -52,8 +56,7 @@ export const SectionSortProvider: FC<{
   );
   const sortId = useMemo(
     () =>
-      asSortId(searchParams.get('sort')) ||
-      defaultSortOption.id,
+      asSortId(searchParams.get('sort')) || defaultSortId,
     [searchParams],
   );
 

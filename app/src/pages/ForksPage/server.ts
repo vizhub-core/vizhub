@@ -1,11 +1,5 @@
 import xss from 'xss';
-import {
-  Info,
-  SortId,
-  VizId,
-  asSortId,
-  defaultSortOption,
-} from 'entities';
+import { Info, SortId, VizId, asSortId } from 'entities';
 import { GetInfosAndOwners } from 'interactors';
 import { Gateways } from 'gateways';
 import { Auth0User } from '../Page';
@@ -15,6 +9,8 @@ import {
   ForksPageData,
   ForksPageQuery,
 } from './index';
+
+const defaultSortId: SortId = 'mostRecent';
 
 ForksPage.getPageData = async ({
   gateways,
@@ -32,7 +28,7 @@ ForksPage.getPageData = async ({
   const getInfosAndOwners = GetInfosAndOwners(gateways);
 
   const sortId: SortId | null =
-    asSortId(query.sort) || defaultSortOption.id;
+    asSortId(query.sort) || defaultSortId;
 
   const infosAndOwnersResult = await getInfosAndOwners({
     forkedFrom,
