@@ -12,7 +12,7 @@ const debug = false;
 //  * We invoke ScoreStaleVizzes once per viz page view
 //  * To score all vizzes daily, we need a batch size of
 //    100,000 / 1,000 = 100
-const batchSize = 1000;
+const batchSize = 100;
 
 // We set a lock duration of 60 seconds to allow the batch
 // to take a long time and not crash the lock system.
