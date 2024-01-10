@@ -31,6 +31,9 @@ export const userLock = (userId: UserId): ResourceLockId =>
 export const analyticsEventLock: ResourceLockId =
   entityLock('AnalyticsEvent', 'any');
 
+// Lock for scoring batches.
+export const scoringLock: ResourceLockId = 'scoring';
+
 // Lock for ImageMetadata documents.
 export const imageMetadataLock = (
   imageId: string,

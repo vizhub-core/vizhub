@@ -15,6 +15,7 @@ import { rollup } from 'rollup';
 import { JSDOM } from 'jsdom';
 import {
   CommitViz,
+  ScoreStaleVizzes,
   VerifyVizAccess,
   generateUpvoteId,
 } from 'interactors';
@@ -55,6 +56,7 @@ VizPage.getPageData = async ({
   } = gateways;
   const verifyVizAccess = VerifyVizAccess(gateways);
   const commitViz = CommitViz(gateways);
+  const scoreStaleVizzes = ScoreStaleVizzes(gateways);
 
   // TODO move all this into an interactor called
   // getVizPageData or something like that.
@@ -293,6 +295,8 @@ VizPage.getPageData = async ({
         initialIsUpvoted = true;
       }
     }
+
+    scoreStaleVizzes();
 
     return {
       infoSnapshot,

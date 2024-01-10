@@ -107,6 +107,9 @@ export interface Info {
   // Populated by the scoreHackerHot algorithm.
   popularity?: number;
 
+  // When the popularity score was last updated.
+  popularityUpdated?: Timestamp;
+
   // True if forkedFrom was backfilled (guessed)
   // by the V2 --> V3 migration script,
   // or by an earlier backfilling initiative.

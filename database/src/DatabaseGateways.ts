@@ -17,6 +17,7 @@ import {
   UserId,
   UserName,
   VizId,
+  dateToTimestamp,
   defaultSortField,
   defaultSortOrder,
   saveLock,
@@ -52,10 +53,11 @@ export const DatabaseGateways = ({
   const lock = async <T>(
     lockIds: Array<ResourceLockId>,
     fn: () => Promise<T>,
+    duration = 20000,
   ) => {
     let returnValue: T | null = null;
 
-    await redlock.using(lockIds, 10000, async () => {
+    await redlock.using(lockIds, duration, async () => {
       returnValue = await fn();
     });
 
@@ -337,24 +339,6 @@ export const DatabaseGateways = ({
         ...(vizIds && { id: { $in: vizIds } }),
       };
 
-      // console.log(JSON.stringify(mongoQuery, null, 2));
-
-      // // If this viz is currently in the "trash",
-      // // this field represents when it was put there.
-      // // If this viz is not in the "trash",
-      // // this field is undefined.
-      // trashed?: Timestamp;
-      // if (includeTrashed) {
-      //   // Match all documents where trashed is defined.
-      //   mongoQuery.trashed = { $exists: true };
-      // } else {
-      //   // Match all documents where trashed is undefined.
-      //   mongoQuery.trashed = { $exists: false };
-      // }
-
-      // TODO add test for basic access control - exclude non-public infos
-      // mongoQuery['visibility'] = 'public';
-
       const query = shareDBConnection.createFetchQuery(
         toCollectionName(entityName),
         mongoQuery,
@@ -368,6 +352,59 @@ export const DatabaseGateways = ({
         },
       );
     });
+
+  // Mongo query for popularity being defined:
+  // { popularity: { $exists: true } }
+  // Count of those:
+  // db.Info.count({ popularity: { $exists: true } })
+
+  const getStaleInfoIds = async (batchSize) => {
+    const entityName = 'Info';
+    const from = toCollectionName(entityName);
+    const collection = mongoDBDatabase.collection(from);
+
+    // Get info IDs where the 'popularityUpdated' field is older than 1 day
+    // or nonexistent. Limited to 500 results. Soprted by priority.
+    const oneDayAgo = dateToTimestamp(
+      new Date(Date.now() - 1000 * 60 * 60 * 24),
+    );
+
+    const results = await collection
+      .aggregate([
+        {
+          $match: {
+            $or: [
+              { popularityUpdated: { $lt: oneDayAgo } },
+              { popularityUpdated: { $exists: false } },
+            ],
+          },
+        },
+        {
+          $project: {
+            _id: 1,
+            popularityUpdated: 1,
+            // Add a field to sort documents with no popularityUpdated to the top
+            sortField: {
+              $cond: {
+                if: {
+                  $ifNull: ['$popularityUpdated', false],
+                },
+                then: 1,
+                else: 0,
+              },
+            },
+          },
+        },
+        {
+          // Sort by the new field in descending order (nulls first) and then by popularityUpdated in ascending order
+          $sort: { sortField: -1, popularityUpdated: 1 },
+        },
+        { $limit: batchSize },
+      ])
+      .toArray();
+
+    return ok(results.map((result) => result._id));
+  };
 
   const getCommitAncestors = async (
     id: string,
@@ -784,6 +821,7 @@ export const DatabaseGateways = ({
     getUpvotes,
     lock,
     getUsersForTypeahead,
+    getStaleInfoIds,
   };
 
   for (const entityName of crudEntityNames) {
