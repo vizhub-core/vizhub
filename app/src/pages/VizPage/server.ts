@@ -118,6 +118,17 @@ VizPage.getPageData = async ({
     }
     const { title, owner, forkedFrom, end } = info;
 
+    // If the viz has a slug, then redirect to the canonical URL.
+    if (info.slug && id !== info.slug) {
+      const redirect = `/${params.userName}/${info.slug}`;
+      console.log(
+        "Redirecting to viz's canonical URL:",
+        redirect,
+      );
+      // @ts-ignore
+      return { redirect };
+    }
+
     // Access control: Verify that the user has write access to the viz.
     // This is used to determine whether to show the "Settings" button.
     const canUserEditViz: boolean = vizAccess[WRITE];

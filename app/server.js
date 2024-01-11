@@ -378,6 +378,11 @@ async function createServer(
         return send404(res);
       }
 
+      // Redirect to another page if page date indicates.
+      if (pageData.redirect) {
+        return res.redirect(pageData.redirect);
+      }
+
       // Expose the relative page URL (on page load) in `pageData`.
       // This allows the client to know if a client-side navigation happened.
       pageData.url = originalUrl;
