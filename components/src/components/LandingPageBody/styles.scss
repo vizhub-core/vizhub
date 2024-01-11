@@ -67,5 +67,24 @@
         max-width: 763px;
       }
     }
+    .feature-section {
+      background: white;
+
+      width: 100%;
+      display: flex;
+      justify-content: center;
+
+      .feature-section-content {
+        height: 300px;
+        margin-top: 150px;
+        margin-bottom: 150px;
+        background: var(--vh-color-background-01);
+        width: 1500px;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        border-radius: 20px;
+      }
+    }
   }
 }

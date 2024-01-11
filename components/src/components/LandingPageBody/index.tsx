@@ -44,6 +44,12 @@ export const LandingPageBody = () => {
             </div>
           </div>
         </div>
+        <div className="feature-section">
+          <div className="feature-section-content">
+            <div>Left</div>
+            <div>Right</div>
+          </div>
+        </div>
       </div>
     </div>
   );
