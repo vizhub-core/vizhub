@@ -34,7 +34,11 @@ export interface Viz {
 //  * Lightweight metadata about the viz.
 //  * Primarily used for listings pages (Home, Profile)
 export interface Info {
+  // The unique identifier of this viz.
   id: VizId;
+
+  // The slug (custom identifier) of this viz.
+  slug?: string;
 
   // The user or organization that owns this viz.
   owner: UserId | OrgId;
