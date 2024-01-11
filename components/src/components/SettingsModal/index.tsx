@@ -13,6 +13,8 @@ import {
 import { Plan, UserId, Visibility } from 'entities';
 import './styles.css';
 
+const enableOwnerControl = false;
+
 export const SettingsModal = ({
   show,
   onClose,
@@ -25,7 +27,6 @@ export const SettingsModal = ({
   possibleOwners,
   currentPlan,
   pricingHref,
-  profileHref,
   userName,
   enableURLChange = false,
 }: {
@@ -52,7 +53,6 @@ export const SettingsModal = ({
   possibleOwners: Array<PossibleOwner>;
   currentPlan: Plan;
   pricingHref: string;
-  profileHref?: string;
   userName?: string;
   enableURLChange?: boolean;
 }) => {
@@ -133,11 +133,11 @@ export const SettingsModal = ({
         {enableURLChange && (
           <Form.Group className="mb-4" controlId="viz-url">
             <Form.Label htmlFor="viz-url-control">
-              URL
+              Slug
             </Form.Label>
             <InputGroup>
               <InputGroup.Text id="viz-url-prefix">
-                {profileHref}
+                @{userName}/
               </InputGroup.Text>
               <Form.Control
                 id="viz-url-control"
@@ -147,11 +147,9 @@ export const SettingsModal = ({
               />
             </InputGroup>
             <Form.Text className="text-muted">
-              <div className="mb-3">
-                Choose a URL for your viz.
-              </div>
-              <div>Sample import:</div>
-              <div className="sample-import">{`import { ... } from "@${userName}/${slug}"`}</div>
+              Choose a custom URL slug for this viz.
+              {/* <div>Sample import:</div>
+              <div className="sample-import">{`import { ... } from "@${userName}/${slug}"`}</div> */}
             </Form.Text>
           </Form.Group>
         )}
@@ -176,11 +174,13 @@ export const SettingsModal = ({
             </Form.Text>
           </div>
         </Form.Group>
-        {/* <OwnerControl
-          owner={owner}
-          setOwner={setOwner}
-          possibleOwners={possibleOwners}
-        /> */}
+        {enableOwnerControl && (
+          <OwnerControl
+            owner={owner}
+            setOwner={setOwner}
+            possibleOwners={possibleOwners}
+          />
+        )}
       </Modal.Body>
       <Modal.Footer>
         <Button variant="primary" onClick={handleSaveClick}>
