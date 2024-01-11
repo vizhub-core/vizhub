@@ -46,8 +46,26 @@ export const LandingPageBody = () => {
         </div>
         <div className="feature-section">
           <div className="feature-section-content">
-            <div>Left</div>
-            <div>Right</div>
+            <div className="feature-section-copy">
+              <h3>Section title</h3>
+              <p>
+                Lorem ipsum dolor sit amet, consectetur
+                adipiscing elit. Donec euismod, ipsum vitae
+                aliquam tincidunt, mi nunc ullamcorper nunc,
+                sit amet finibus augue orci eget nunc. Sed
+                ut ipsum ullamcorper, aliquet ex ut, aliquam
+                massa. Donec euismod, ipsum vitae aliquam
+                tincidunt, mi nunc ullamcorper nunc, sit
+                amet finibus augue orci eget nunc. Sed ut
+                ipsum ullamcorper, aliquet ex ut, aliquam
+                massa.
+              </p>
+            </div>
+            <div className="feature-section-image">
+              <img
+                src={image('upgrade-callout-feature')}
+              ></img>
+            </div>
           </div>
         </div>
       </div>

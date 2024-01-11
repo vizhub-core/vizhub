@@ -69,21 +69,41 @@
     }
     .feature-section {
       background: white;
+      color: var(--vh-color-neutral-01);
 
       width: 100%;
       display: flex;
       justify-content: center;
 
       .feature-section-content {
-        height: 300px;
         margin-top: 150px;
         margin-bottom: 150px;
         background: var(--vh-color-background-01);
         width: 1500px;
         display: flex;
-        justify-content: space-around;
         align-items: center;
         border-radius: 20px;
+
+        .feature-section-copy {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          padding: 100px;
+          gap: 32px;
+
+          p {
+            font-size: 20px;
+            line-height: 32px;
+          }
+        }
+
+        .feature-section-image {
+          padding: 100px;
+          img {
+            border-radius: 8px;
+            height: 360px;
+          }
+        }
       }
     }
   }
