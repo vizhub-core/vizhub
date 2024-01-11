@@ -133,7 +133,7 @@ export const SettingsModal = ({
         {enableURLChange && (
           <Form.Group className="mb-4" controlId="viz-url">
             <Form.Label htmlFor="viz-url-control">
-              Slug
+              Custom URL
             </Form.Label>
             <InputGroup>
               <InputGroup.Text id="viz-url-prefix">

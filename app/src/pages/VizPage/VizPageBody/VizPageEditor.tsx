@@ -109,8 +109,11 @@ export const VizPageEditor = ({
         aiAssistTooltipText={aiAssistTooltipText}
         aiAssistClickOverride={aiAssistClickOverride}
       />
-      <VZResizer side="left" />
-      <VZResizer side="right" />
+      {showEditor && <VZResizer side="left" />}
+      <VZResizer
+        side="right"
+        isSidebarVisible={showEditor}
+      />
     </VZCodeProvider>
   );
 };

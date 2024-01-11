@@ -22,9 +22,9 @@ export default defineConfig({
       // 'vzcode',
 
       // Put vzcode here only in dev mode:
-      // ...(process.env.NODE_ENV === 'production'
-      //   ? []
-      //   : ['vzcode']),
+      ...(process.env.NODE_ENV === 'production'
+        ? []
+        : ['vzcode']),
     ],
 
     // Fixes "React is undefined" error with VZCode imports
