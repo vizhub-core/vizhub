@@ -8,7 +8,7 @@ import {
 } from 'entities';
 import { useCallback } from 'react';
 
-const debug = false;
+const debug = true;
 
 // These values come from the settings modal "save" button.
 export type VizSettings = {
@@ -16,6 +16,7 @@ export type VizSettings = {
   title: string;
   visibility: Visibility;
   height: number;
+  slug?: string;
 };
 
 export const useSetVizTitle = (
@@ -90,12 +91,19 @@ export const useOnSettingsSave = ({
   toggleSettingsModal: () => void;
 }) =>
   useCallback(
-    ({ owner, title, visibility, height }: VizSettings) => {
+    ({
+      owner,
+      title,
+      visibility,
+      height,
+      slug,
+    }: VizSettings) => {
       if (debug) {
         console.log('Saving viz settings', {
           owner,
           title,
           visibility,
+          slug,
         });
       }
       submitInfoOperation((info) => ({
@@ -103,6 +111,7 @@ export const useOnSettingsSave = ({
         owner,
         title,
         visibility,
+        slug: slug === info.id ? undefined : slug,
       }));
       submitContentOperation((content) => ({
         ...content,
