@@ -1,3 +1,4 @@
+import { Footer } from '../Footer';
 import { Button } from '../bootstrap';
 import { image } from '../image';
 import './styles.scss';
@@ -109,6 +110,7 @@ export const LandingPageBody = () => {
             </div>
           </div>
         </div>
+        <Footer />
       </div>
     </div>
   );
