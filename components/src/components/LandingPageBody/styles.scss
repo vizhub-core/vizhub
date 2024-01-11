@@ -41,6 +41,7 @@
         text-align: center;
         line-height: 72px;
         padding-bottom: 55px;
+        padding-top: 32px;
       }
 
       img.header-foreground {
@@ -113,7 +114,8 @@
           }
 
           .feature-section-image {
-            img {
+            img,
+            video {
               border-radius: 8px;
               height: 360px;
             }

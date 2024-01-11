@@ -49,21 +49,25 @@ export const LandingPageBody = () => {
           <div className="feature-section">
             <div className="feature-section-content">
               <div className="feature-section-copy">
-                <h3>Section title</h3>
+                <h3>AI Assisted Coding</h3>
                 <p>
-                  Lorem ipsum dolor sit amet, consectetur
-                  adipiscing elit. Donec euismod, ipsum
-                  vitae aliquam tincidunt, mi nunc
-                  ullamcorper nunc, sit amet finibus augue
-                  orci eget nunc. Sed ut ipsum ullamcorper,
-                  aliquet ex ut, aliquam massa. Nulla
-                  facilisi. Nulla facilisi.
+                  Level up your coding skills with a little
+                  help from the AI. Click the "AI Assist"
+                  button to start the AI typing directly
+                  into your editor. VizHub's AI Assistant
+                  will help you code faster and more
+                  accurately than ever before.
                 </p>
               </div>
               <div className="feature-section-image">
-                <img
-                  src={image('upgrade-callout-feature')}
-                ></img>
+                <video autoPlay loop muted>
+                  <source
+                    src={image('ai-assist-demo', 'webm')}
+                    type="video/webm"
+                  />
+                  Your browser does not support the video
+                  tag.
+                </video>
               </div>
             </div>
           </div>
