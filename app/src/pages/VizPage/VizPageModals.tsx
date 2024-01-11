@@ -223,7 +223,7 @@ export const VizPageModals = ({
           currentPlan={authenticatedUser?.plan}
           pricingHref={'/pricing'}
           initialHeight={content.height}
-          enableURLChange={true}
+          enableURLChange={false}
           userName={authenticatedUser?.userName}
           initialSlug={info.slug || info.id}
         />

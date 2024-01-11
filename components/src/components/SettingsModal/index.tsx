@@ -15,6 +15,17 @@ import './styles.css';
 
 const enableOwnerControl = false;
 
+// Slugify a string
+// Inspired by https://gist.github.com/mathewbyrne/1280286
+const slugify = (str: string) =>
+  str
+    .toLowerCase() // Convert the string to lowercase
+    .replace(/\s+/g, '-') // Replace spaces with hyphens
+    .replace(/[^\w\-]+/g, '') // Remove all non-word chars
+    .replace(/\-\-+/g, '-') // Replace multiple hyphens with a single hyphen
+    .replace(/^-+/, '') // Trim hyphens from the start of the string
+    .replace(/-+$/, ''); // Trim hyphens from the end of the string
+
 export const SettingsModal = ({
   show,
   onClose,
@@ -99,11 +110,12 @@ export const SettingsModal = ({
     if (isNaN(validHeight)) {
       validHeight = initialHeight;
     }
+
     onSave({
       title,
       visibility,
       owner,
-      slug,
+      slug: slugify(slug),
       height: validHeight,
     });
   }, [title, visibility, owner, slug, height, onSave]);

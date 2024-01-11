@@ -57,6 +57,9 @@ export type PageData = {
   // This is useful mostly for debugging deployments.
   // (if the version fails to update, we know the deployment failed)
   version?: string;
+
+  // The redirect URL, if any.
+  redirect?: string;
 };
 
 // An example Auth0User object:
