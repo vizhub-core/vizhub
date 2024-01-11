@@ -31,40 +31,81 @@ export const LandingPageBody = () => {
             src={headerForegroundSrc}
           />
         </div>
-        <div className="white-background-section">
-          <div className="landing-page-content">
-            <h1 className="section-heading">
-              What is VizHub?
-            </h1>
-            <div className="vh-lede-01">
-              VizHub is an interactive data visualization
-              platform that caters to teaching and
-              showcasing data visualizations using web
-              technologies like D3.js and React.
+        <div className="features-container">
+          <div className="white-background-section">
+            <div className="landing-page-content">
+              <h1 className="section-heading">
+                What is VizHub?
+              </h1>
+              <div className="vh-lede-01">
+                VizHub is an interactive data visualization
+                platform that caters to teaching and
+                showcasing data visualizations using web
+                technologies like D3.js and React.
+              </div>
             </div>
           </div>
-        </div>
-        <div className="feature-section">
-          <div className="feature-section-content">
-            <div className="feature-section-copy">
-              <h3>Section title</h3>
-              <p>
-                Lorem ipsum dolor sit amet, consectetur
-                adipiscing elit. Donec euismod, ipsum vitae
-                aliquam tincidunt, mi nunc ullamcorper nunc,
-                sit amet finibus augue orci eget nunc. Sed
-                ut ipsum ullamcorper, aliquet ex ut, aliquam
-                massa. Donec euismod, ipsum vitae aliquam
-                tincidunt, mi nunc ullamcorper nunc, sit
-                amet finibus augue orci eget nunc. Sed ut
-                ipsum ullamcorper, aliquet ex ut, aliquam
-                massa.
-              </p>
+          <div className="feature-section">
+            <div className="feature-section-content">
+              <div className="feature-section-copy">
+                <h3>Section title</h3>
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur
+                  adipiscing elit. Donec euismod, ipsum
+                  vitae aliquam tincidunt, mi nunc
+                  ullamcorper nunc, sit amet finibus augue
+                  orci eget nunc. Sed ut ipsum ullamcorper,
+                  aliquet ex ut, aliquam massa. Nulla
+                  facilisi. Nulla facilisi.
+                </p>
+              </div>
+              <div className="feature-section-image">
+                <img
+                  src={image('upgrade-callout-feature')}
+                ></img>
+              </div>
             </div>
-            <div className="feature-section-image">
-              <img
-                src={image('upgrade-callout-feature')}
-              ></img>
+          </div>
+          <div className="feature-section">
+            <div className="feature-section-content brand-background">
+              <div className="feature-section-copy">
+                <h3>Section title</h3>
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur
+                  adipiscing elit. Donec euismod, ipsum
+                  vitae aliquam tincidunt, mi nunc
+                  ullamcorper nunc, sit amet finibus augue
+                  orci eget nunc. Sed ut ipsum ullamcorper,
+                  aliquet ex ut, aliquam massa. Nulla
+                  facilisi. Nulla facilisi.
+                </p>
+              </div>
+              <div className="feature-section-image">
+                <img
+                  src={image('upgrade-callout-feature')}
+                ></img>
+              </div>
+            </div>
+          </div>
+          <div className="feature-section">
+            <div className="feature-section-content">
+              <div className="feature-section-copy">
+                <h3>Section title</h3>
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur
+                  adipiscing elit. Donec euismod, ipsum
+                  vitae aliquam tincidunt, mi nunc
+                  ullamcorper nunc, sit amet finibus augue
+                  orci eget nunc. Sed ut ipsum ullamcorper,
+                  aliquet ex ut, aliquam massa. Nulla
+                  facilisi. Nulla facilisi.
+                </p>
+              </div>
+              <div className="feature-section-image">
+                <img
+                  src={image('upgrade-callout-feature')}
+                ></img>
+              </div>
             </div>
           </div>
         </div>

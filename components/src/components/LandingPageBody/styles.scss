@@ -51,57 +51,71 @@
         margin-bottom: 100px;
       }
     }
-    .white-background-section {
-      background: white;
+    .features-container {
+      background-color: white;
       width: 100%;
       display: flex;
       flex-direction: column;
-      align-items: center;
+      gap: 150px;
 
-      h1 {
-        margin-top: 100px;
-        margin-bottom: 28px;
-      }
-
-      .vh-lede-01 {
-        max-width: 763px;
-      }
-    }
-    .feature-section {
-      background: white;
-      color: var(--vh-color-neutral-01);
-
-      width: 100%;
-      display: flex;
-      justify-content: center;
-
-      .feature-section-content {
-        margin-top: 150px;
-        margin-bottom: 150px;
-        background: var(--vh-color-background-01);
-        width: 1500px;
+      .white-background-section {
+        width: 100%;
         display: flex;
+        flex-direction: column;
         align-items: center;
-        border-radius: 20px;
 
-        .feature-section-copy {
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          padding: 100px;
-          gap: 32px;
+        h1 {
+          margin-top: 120px;
+          margin-bottom: 28px;
+        }
 
-          p {
-            font-size: 20px;
-            line-height: 32px;
+        .vh-lede-01 {
+          max-width: 763px;
+        }
+      }
+      .feature-section {
+        color: var(--vh-color-neutral-01);
+
+        width: 100%;
+        display: flex;
+        justify-content: center;
+
+        .feature-section-content.brand-background {
+          background: var(--vh-color-background-01);
+          .feature-section-copy,
+          .feature-section-image {
+            padding: 100px;
           }
         }
 
-        .feature-section-image {
-          padding: 100px;
-          img {
-            border-radius: 8px;
-            height: 360px;
+        .feature-section-content {
+          width: 1500px;
+          display: flex;
+          align-items: center;
+          border-radius: 20px;
+
+          .feature-section-copy,
+          .feature-section-image {
+            padding: 0 100px;
+          }
+
+          .feature-section-copy {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+
+            p {
+              font-size: 20px;
+              line-height: 32px;
+            }
+          }
+
+          .feature-section-image {
+            img {
+              border-radius: 8px;
+              height: 360px;
+            }
           }
         }
       }
