@@ -809,6 +809,26 @@ export const DatabaseGateways = ({
       );
     });
 
+  const getInfoBySlug = (slug: string) =>
+    new Promise((resolve) => {
+      const entityName = 'Info';
+      const query = shareDBConnection.createFetchQuery(
+        toCollectionName(entityName),
+        { slug },
+        {},
+        (error, results) => {
+          query.destroy();
+          if (error) return resolve(err(error));
+          if (results.length === 0) {
+            return resolve(
+              err(resourceNotFoundError(slug, 'Info')),
+            );
+          }
+          resolve(ok(results[0].toSnapshot()));
+        },
+      );
+    });
+
   let databaseGateways = {
     type: 'DatabaseGateways',
     getForks,
@@ -827,6 +847,7 @@ export const DatabaseGateways = ({
     lock,
     getUsersForTypeahead,
     getStaleInfoIds,
+    getInfoBySlug,
   };
 
   for (const entityName of crudEntityNames) {

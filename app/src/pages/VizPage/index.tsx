@@ -40,6 +40,7 @@ import { useToggleState } from './useToggleState';
 import { VizPageModals } from './VizPageModals';
 import { useUpvoting } from './useUpvoting';
 import './styles.scss';
+import { useSlugAutoNavigate } from './useSlugAutoNavigate';
 
 const vizKit = VizKit({ baseUrl: '/api' });
 
@@ -253,6 +254,9 @@ export const VizPage: Page = ({
     toggleSettingsModal,
   });
 
+  // Navigates the user to the new URL when the slug is changed.
+  useSlugAutoNavigate(info);
+
   // Saves the title when the user edits it.
   const setVizTitle = useSetVizTitle(submitInfoOperation);
 
@@ -351,4 +355,4 @@ export const VizPage: Page = ({
   );
 };
 
-VizPage.path = '/:userName/:id';
+VizPage.path = '/:userName/:idOrSlug';

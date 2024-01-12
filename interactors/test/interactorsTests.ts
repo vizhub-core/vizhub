@@ -21,6 +21,7 @@ import { validateVizTest } from './validateVizTest';
 import { getImageTest } from './getImageTest';
 import { getThumbnailTest } from './getThumbnailTest';
 import { deleteVizTest } from './deleteVizTest';
+import { getInfoByIdOrSlugTest } from './getInfoByIdOrSlugTest';
 
 export const interactorsTests = () => {
   describe('Interactors', () => {
@@ -42,6 +43,7 @@ export const interactorsTests = () => {
     getThumbnailTest();
 
     deleteVizTest();
+    getInfoByIdOrSlugTest();
     // restoreVersionTest();
     // mergeTest();
 

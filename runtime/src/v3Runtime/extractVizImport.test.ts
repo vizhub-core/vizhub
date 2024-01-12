@@ -8,7 +8,7 @@ describe('v3 extractVizImport', () => {
     );
     expect(result).toEqual({
       username: 'curran',
-      vizId: '21f72bf74ef04ea0b9c9b82aaaec859a',
+      idOrSlug: '21f72bf74ef04ea0b9c9b82aaaec859a',
     });
   });
 
@@ -16,7 +16,7 @@ describe('v3 extractVizImport', () => {
     const result = extractVizImport('@curran/scatter-plot');
     expect(result).toEqual({
       username: 'curran',
-      vizId: 'scatter-plot',
+      idOrSlug: 'scatter-plot',
     });
   });
 

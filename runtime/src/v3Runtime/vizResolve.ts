@@ -8,6 +8,7 @@ import { extractVizImport } from './extractVizImport';
 import { VizId } from 'entities';
 import { ResolvedVizFileId } from './types';
 import { parseId } from './parseId';
+import { isId } from '../../../interactors/src';
 
 const debug = false;
 
@@ -65,7 +66,7 @@ export const vizResolve = ({
     // e.g. `import { foo } from '@curran/scatter-plot'`
     const vizImport = extractVizImport(id);
     if (vizImport) {
-      return vizImport.vizId + '/index.js';
+      return vizImport.idOrSlug + '/index.js';
     }
 
     // If neither condition is met, return null
