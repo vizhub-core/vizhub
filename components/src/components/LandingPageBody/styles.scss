@@ -129,16 +129,17 @@
           @keyframes rotate-back-and-forth {
             0%,
             100% {
-              transform: rotate(-20deg);
+              transform: rotate(-30deg);
             }
             50% {
-              transform: rotate(20deg);
+              transform: rotate(30deg);
             }
           }
 
           .feature-section-image.rotating-image img {
-            animation: rotate-back-and-forth 90s infinite
+            animation: rotate-back-and-forth 70s infinite
               alternate ease-in-out;
+            border-radius: 50%;
           }
 
           .feature-section-copy {
