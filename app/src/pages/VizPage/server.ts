@@ -121,13 +121,14 @@ VizPage.getPageData = async ({
     }
     const { title, owner, forkedFrom, end } = info;
 
-    // If the viz has a slug, then redirect to the canonical URL.
-    if (info.slug && id !== info.slug) {
+    // If the viz has a slug, and we are using its id in the URL,
+    // then redirect to the URL that uses the slug.
+    if (info.slug && idOrSlug !== info.slug) {
       const redirect = `/${params.userName}/${info.slug}`;
-      console.log(
-        "Redirecting to viz's canonical URL:",
-        redirect,
-      );
+      // console.log(
+      //   "Redirecting to viz's canonical URL:",
+      //   redirect,
+      // );
       // @ts-ignore
       return { redirect };
     }
