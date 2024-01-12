@@ -399,8 +399,7 @@ export const forkVizTest = () => {
       const newVizId = '101';
 
       const gateways = await initGateways();
-      const { saveCommit, getInfo, getContent, getCommit } =
-        gateways;
+      const { saveCommit, getInfo } = gateways;
       const saveViz = SaveViz(gateways);
       const forkViz = ForkViz(gateways);
 
@@ -435,6 +434,57 @@ export const forkVizTest = () => {
         forksCount: 0,
         upvotesCount: 0,
         // Verify that migratedFromV2 has been deleted.
+      };
+      assert(result.outcome === 'success');
+      expect(result.value).toEqual(expectedInfo);
+      const getInfoResult = await getInfo(newVizId);
+      assert(getInfoResult.outcome === 'success');
+      expect(getInfoResult.value.data).toEqual(
+        expectedInfo,
+      );
+    });
+
+    it('should delete slug field', async () => {
+      setPredictableGenerateId();
+      const newCommitId = '100';
+      const newVizId = '101';
+
+      const gateways = await initGateways();
+      const { saveCommit, getInfo } = gateways;
+      const saveViz = SaveViz(gateways);
+      const forkViz = ForkViz(gateways);
+
+      await saveCommit(primordialCommit);
+      await saveViz({
+        ...primordialViz,
+        info: {
+          ...primordialViz.info,
+          slug: 'super-cool-viz',
+        },
+      });
+
+      const newOwner = userJoe.id;
+      const forkedFrom = primordialViz.info.id;
+      const timestamp = ts2;
+      const result = await forkViz({
+        newOwner,
+        forkedFrom,
+        timestamp,
+      });
+      expect(result.outcome).toEqual('success');
+
+      const expectedInfo = {
+        ...primordialViz.info,
+        id: newVizId,
+        owner: newOwner,
+        forkedFrom,
+        created: timestamp,
+        updated: timestamp,
+        start: newCommitId,
+        end: newCommitId,
+        forksCount: 0,
+        upvotesCount: 0,
+        // Verify that slug has been deleted.
       };
       assert(result.outcome === 'success');
       expect(result.value).toEqual(expectedInfo);

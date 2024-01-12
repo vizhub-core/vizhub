@@ -105,6 +105,11 @@ export const ForkViz = (gateways: Gateways) => {
       delete newInfo.migratedFromV2;
     }
 
+    // If there was a slug, remove it.
+    if (newInfo.slug) {
+      delete newInfo.slug;
+    }
+
     // If the title is specified, use it.
     if (title !== undefined) {
       newInfo.title = title;
