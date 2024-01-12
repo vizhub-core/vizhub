@@ -41,6 +41,7 @@
         text-align: center;
         line-height: 72px;
         padding-bottom: 55px;
+        padding-top: 32px;
       }
 
       img.header-foreground {
@@ -51,20 +52,116 @@
         margin-bottom: 100px;
       }
     }
-    .white-background-section {
-      background: white;
+    .features-container {
+      background-color: white;
       width: 100%;
       display: flex;
       flex-direction: column;
-      align-items: center;
+      gap: 150px;
+      padding-bottom: 150px;
 
-      h1 {
-        margin-top: 100px;
-        margin-bottom: 28px;
+      .white-background-section {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        h1 {
+          margin-top: 120px;
+          margin-bottom: 28px;
+        }
+
+        .vh-lede-01 {
+          max-width: 763px;
+        }
       }
+      .feature-section {
+        color: var(--vh-color-neutral-01);
 
-      .vh-lede-01 {
-        max-width: 763px;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+
+        .feature-section-content.brand-background {
+          background: var(--vh-color-background-01);
+          position: relative; /* This is needed to position the pseudo-element */
+          overflow: hidden; /* This will clip the circle at the edges of the container */
+
+          /* The circle */
+          &::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-1%, -50%);
+            width: 1200px;
+            height: 1200px;
+            background-color: var(--vh-color-background-02);
+            border-radius: 50%;
+          }
+
+          .feature-section-image {
+            position: relative;
+          }
+
+          .feature-section-copy,
+          .feature-section-image {
+            padding: 100px;
+          }
+
+          video {
+            box-shadow: var(--vh-box-shadow);
+          }
+        }
+
+        .feature-section-content {
+          width: 1500px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          border-radius: 20px;
+
+          .feature-section-copy,
+          .feature-section-image {
+            padding: 0 100px;
+          }
+
+          @keyframes rotate-back-and-forth {
+            0%,
+            100% {
+              transform: rotate(-20deg);
+            }
+            50% {
+              transform: rotate(20deg);
+            }
+          }
+
+          .feature-section-image.rotating-image img {
+            animation: rotate-back-and-forth 90s infinite
+              alternate ease-in-out;
+          }
+
+          .feature-section-copy {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+            max-width: 760px;
+
+            p {
+              font-size: 20px;
+              line-height: 32px;
+            }
+          }
+
+          .feature-section-image {
+            img,
+            video {
+              border-radius: 8px;
+              height: 360px;
+            }
+          }
+        }
       }
     }
   }

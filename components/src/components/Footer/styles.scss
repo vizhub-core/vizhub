@@ -1,0 +1,40 @@
+.vh-footer {
+  width: 100%;
+  background-color: var(--vh-color-neutral-02);
+  color: white;
+  padding: 100px;
+  display: flex;
+  justify-content: center;
+
+  .footer-container {
+    display: flex;
+    gap: 64px;
+
+    svg {
+      margin-right: 36px;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      min-width: 200px;
+      .footer-links-title {
+        font-family: Poppins;
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 500;
+        color: var(--vh-color-neutral-04);
+      }
+      a {
+        font-family: Inter;
+        font-size: 16px;
+        line-height: 16px;
+        font-style: normal;
+        font-weight: 700;
+        text-decoration: none;
+        color: white;
+      }
+    }
+  }
+}
