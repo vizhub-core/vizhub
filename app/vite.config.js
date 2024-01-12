@@ -20,6 +20,9 @@ export default defineConfig({
       // Exclude VZCode, so that we can use `npm link` locally
       // and still have it work with Vite.
       // 'vzcode',
+      // 'react-router',
+      // 'react-router-dom',
+      // 'react-dom',
 
       // Put vzcode here only in dev mode:
       // ...(process.env.NODE_ENV === 'production'
