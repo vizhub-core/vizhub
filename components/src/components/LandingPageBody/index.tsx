@@ -121,6 +121,24 @@ export const LandingPageBody = () => {
               </div>
             </div>
           </div>
+          <div className="feature-section">
+            <div className="feature-section-content brand-background">
+              <div className="feature-section-copy">
+                <h3>Vanilla is the Best Flavor</h3>
+                <p>
+                  Export your visualizations as vanilla
+                  JavaScript for frictionless integration
+                  into existing codebases and downstream
+                  deployment workflows.
+                </p>
+              </div>
+              <div className="feature-section-image rotating-image">
+                <img
+                  src={image('vanilla-javascript-cone')}
+                ></img>
+              </div>
+            </div>
+          </div>
         </div>
         <Footer />
       </div>

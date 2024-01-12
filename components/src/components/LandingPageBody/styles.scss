@@ -98,11 +98,26 @@
           width: 1500px;
           display: flex;
           align-items: center;
+          justify-content: space-between;
           border-radius: 20px;
 
           .feature-section-copy,
           .feature-section-image {
             padding: 0 100px;
+          }
+          @keyframes rotate-back-and-forth {
+            0%,
+            100% {
+              transform: rotate(-20deg);
+            }
+            50% {
+              transform: rotate(20deg);
+            }
+          }
+
+          .feature-section-image.rotating-image img {
+            animation: rotate-back-and-forth 90s infinite
+              alternate ease-in-out;
           }
 
           .feature-section-copy {
@@ -110,6 +125,7 @@
             display: flex;
             flex-direction: column;
             gap: 32px;
+            max-width: 830px;
 
             p {
               font-size: 20px;
