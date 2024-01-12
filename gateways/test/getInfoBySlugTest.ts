@@ -19,16 +19,18 @@ export const getInfoBySlugTest = () => {
       assert(result.outcome === 'success');
       expect(result.value.data).toEqual(newInfo);
     });
-    // it('getInfoBySlugTest, failure', async () => {
-    //   const gateways = await initGateways();
-    //   const { getUsersByIds } = gateways;
+    it('getInfoBySlugTest, failure', async () => {
+      const gateways = await initGateways();
+      const { saveInfo, getInfoBySlug } = gateways;
 
-    //   const result: Result<Array<Snapshot<User>>> =
-    //     await getUsersByIds([userJoe.id]);
-    //   assert(result.outcome === 'failure');
-    //   expect(result.error.message).toEqual(
-    //     `Resource (User) not found with id: ${userJoe.id}`,
-    //   );
-    // });
+      await saveInfo(primordialViz.info);
+
+      const result: Result<Snapshot<Info>> =
+        await getInfoBySlug('primordial-viz');
+      assert(result.outcome === 'failure');
+      expect(result.error.message).toEqual(
+        `Resource (Info) not found with id: primordial-viz`,
+      );
+    });
   });
 };
