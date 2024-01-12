@@ -809,12 +809,18 @@ export const DatabaseGateways = ({
       );
     });
 
-  const getInfoBySlug = (slug: string) =>
+  const getInfoByUserAndSlug = ({
+    userId,
+    slug,
+  }: {
+    userId: UserId;
+    slug: string;
+  }) =>
     new Promise((resolve) => {
       const entityName = 'Info';
       const query = shareDBConnection.createFetchQuery(
         toCollectionName(entityName),
-        { slug },
+        { owner: userId, slug },
         {},
         (error, results) => {
           query.destroy();
@@ -847,7 +853,7 @@ export const DatabaseGateways = ({
     lock,
     getUsersForTypeahead,
     getStaleInfoIds,
-    getInfoBySlug,
+    getInfoByUserAndSlug,
   };
 
   for (const entityName of crudEntityNames) {

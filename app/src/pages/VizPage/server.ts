@@ -48,6 +48,7 @@ VizPage.getPageData = async ({
 }): Promise<VizPageData> => {
   const {
     getUser,
+    getUserByUserName,
     getInfo,
     getContent,
     getPermissions,
@@ -63,8 +64,24 @@ VizPage.getPageData = async ({
   // getVizPageData or something like that.
   try {
     const idOrSlug: VizId | string = params.idOrSlug;
+    const ownerUserName: string = params.userName;
+
+    // Get the User entity for the owner of the viz.
+    const ownerUserResult =
+      await getUserByUserName(ownerUserName);
+    if (ownerUserResult.outcome === 'failure') {
+      console.log('Error when fetching owner user:');
+      console.log(ownerUserResult.error);
+      return null;
+    }
+    const ownerUserSnapshot = ownerUserResult.value;
+    const userId = ownerUserSnapshot.data.id;
+
     // Get the Info entity of the Viz.
-    let infoResult = await getInfoByIdOrSlug(idOrSlug);
+    let infoResult = await getInfoByIdOrSlug({
+      userId,
+      idOrSlug,
+    });
     if (infoResult.outcome === 'failure') {
       // Indicates viz not found
       return null;
@@ -133,6 +150,28 @@ VizPage.getPageData = async ({
       return { redirect };
     }
 
+    // If the username from the URL does not match the owner of the viz,
+    // then redirect to the URL that uses the owner's username.
+    //  * `userId` comes from the URL (could be wrong)
+    //  * `owner` comes from the Info in the database
+    if (userId !== owner) {
+      // Figure out the owner username.
+      const getUserResult = await getUser(owner);
+      if (getUserResult.outcome === 'failure') {
+        // This should never happena
+        console.log(
+          'Unexpected error: owner user not found!',
+        );
+        return null;
+      }
+      const { userName } = getUserResult.value.data;
+      const redirect = `/${userName}/${
+        info.slug || info.id
+      }`;
+      // @ts-ignore
+      return { redirect };
+    }
+
     // Access control: Verify that the user has write access to the viz.
     // This is used to determine whether to show the "Settings" button.
     const canUserEditViz: boolean = vizAccess[WRITE];
@@ -158,15 +197,6 @@ VizPage.getPageData = async ({
     const contentSnapshot: Snapshot<Content> =
       contentResult.value;
     const content: Content = contentSnapshot.data;
-
-    // Get the User entity for the owner of the viz.
-    const ownerUserResult = await getUser(owner);
-    if (ownerUserResult.outcome === 'failure') {
-      console.log('Error when fetching owner user:');
-      console.log(ownerUserResult.error);
-      return null;
-    }
-    const ownerUserSnapshot = ownerUserResult.value;
 
     // Render Markdown server-side.
     // TODO cache it per commit.
