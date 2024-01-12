@@ -127,13 +127,16 @@ export const LandingPageBody = () => {
                 <h3>Vanilla is the Best Flavor</h3>
                 <p>
                   Export your visualizations as vanilla
-                  JavaScript for frictionless integration
-                  into existing codebases and downstream
-                  deployment workflows.
+                  JavaScript. Experience frictionless
+                  integration with existing codebases and
+                  downstream deployment workflows. VizHub{' '}
+                  <i>is</i> JavaScript. No platform-specific
+                  syntax here!
                 </p>
               </div>
               <div className="feature-section-image rotating-image">
                 <img
+                  style={{ marginRight: '80px' }}
                   src={image('vanilla-javascript-cone')}
                 ></img>
               </div>

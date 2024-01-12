@@ -84,6 +84,26 @@
 
         .feature-section-content.brand-background {
           background: var(--vh-color-background-01);
+          position: relative; /* This is needed to position the pseudo-element */
+          overflow: hidden; /* This will clip the circle at the edges of the container */
+
+          /* The circle */
+          &::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-1%, -50%);
+            width: 1200px;
+            height: 1200px;
+            background-color: var(--vh-color-background-02);
+            border-radius: 50%;
+          }
+
+          .feature-section-image {
+            position: relative;
+          }
+
           .feature-section-copy,
           .feature-section-image {
             padding: 100px;
@@ -105,6 +125,7 @@
           .feature-section-image {
             padding: 0 100px;
           }
+
           @keyframes rotate-back-and-forth {
             0%,
             100% {
@@ -125,7 +146,7 @@
             display: flex;
             flex-direction: column;
             gap: 32px;
-            max-width: 830px;
+            max-width: 760px;
 
             p {
               font-size: 20px;
