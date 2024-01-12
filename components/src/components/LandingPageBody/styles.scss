@@ -88,6 +88,10 @@
           .feature-section-image {
             padding: 100px;
           }
+
+          video {
+            box-shadow: var(--vh-box-shadow);
+          }
         }
 
         .feature-section-content {

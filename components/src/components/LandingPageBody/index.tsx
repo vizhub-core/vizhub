@@ -36,18 +36,47 @@ export const LandingPageBody = () => {
           <div className="white-background-section">
             <div className="landing-page-content">
               <h1 className="section-heading">
-                What is VizHub?
+                Why VizHub?
               </h1>
               <div className="vh-lede-01">
-                VizHub is an interactive data visualization
-                platform that caters to teaching and
-                showcasing data visualizations using web
-                technologies like D3.js and React.
+                VizHub provides a comprehensive set of tools
+                for creating and sharing data visualizations
+                with your team and the world. Accelerate
+                your development process with hot reloading,
+                interactive widgets, AI assisted coding, and
+                real-time collaboration.
               </div>
             </div>
           </div>
           <div className="feature-section">
             <div className="feature-section-content">
+              <div className="feature-section-copy">
+                <h3>Hot Reloading & Interactive Widgets</h3>
+                <p>
+                  Hot reloading is a feature that allows you
+                  to see your changes in real-time as you
+                  type, without reloading the entire
+                  program. VizHub's interactive widgets
+                  allow you to easily tweak numbers and
+                  colors and get truly instant
+                  feedback,dramatically accelerating your
+                  experience.
+                </p>
+              </div>
+              <div className="feature-section-image">
+                <video autoPlay loop muted>
+                  <source
+                    src={image('hot-reloading-demo', 'mp4')}
+                    type="video/mp4"
+                  />
+                  Your browser does not support the video
+                  tag.
+                </video>
+              </div>
+            </div>
+          </div>
+          <div className="feature-section">
+            <div className="feature-section-content brand-background">
               <div className="feature-section-copy">
                 <h3>AI Assisted Coding</h3>
                 <p>
@@ -72,43 +101,22 @@ export const LandingPageBody = () => {
             </div>
           </div>
           <div className="feature-section">
-            <div className="feature-section-content brand-background">
-              <div className="feature-section-copy">
-                <h3>Section title</h3>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur
-                  adipiscing elit. Donec euismod, ipsum
-                  vitae aliquam tincidunt, mi nunc
-                  ullamcorper nunc, sit amet finibus augue
-                  orci eget nunc. Sed ut ipsum ullamcorper,
-                  aliquet ex ut, aliquam massa. Nulla
-                  facilisi. Nulla facilisi.
-                </p>
-              </div>
-              <div className="feature-section-image">
-                <img
-                  src={image('upgrade-callout-feature')}
-                ></img>
-              </div>
-            </div>
-          </div>
-          <div className="feature-section">
             <div className="feature-section-content">
               <div className="feature-section-copy">
-                <h3>Section title</h3>
+                <h3>Real-Time Collaboration</h3>
                 <p>
-                  Lorem ipsum dolor sit amet, consectetur
-                  adipiscing elit. Donec euismod, ipsum
-                  vitae aliquam tincidunt, mi nunc
-                  ullamcorper nunc, sit amet finibus augue
-                  orci eget nunc. Sed ut ipsum ullamcorper,
-                  aliquet ex ut, aliquam massa. Nulla
-                  facilisi. Nulla facilisi.
+                  Invite your friends and colleagues to
+                  collaborate on your data visualizations
+                  any time, anywhere. With unlimited
+                  collaborators, invite your team to join
+                  you in real-time, fostering a
+                  collaborative environment that is both
+                  dynamic and productive.
                 </p>
               </div>
               <div className="feature-section-image">
                 <img
-                  src={image('upgrade-callout-feature')}
+                  src={image('real-time-collaboration')}
                 ></img>
               </div>
             </div>
