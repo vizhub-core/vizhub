@@ -13,6 +13,7 @@ import { getPermissionsTest } from './getPermissionsTest';
 import { getUpvotesTest } from './getUpvotesTest';
 import { getInfosTest } from './getInfosTest';
 import { getUsersByIdsTest } from './getUsersByIdsTest';
+import { getInfoBySlugTest } from './getInfoBySlugTest';
 // import { embeddingsTest } from './embeddingsTest';
 import { getUsersForTypeaheadTest } from './getUsersForTypeaheadTest';
 
@@ -36,6 +37,7 @@ export const gatewaysTests = () => {
   getInfosTest();
   getUsersByIdsTest();
   getUsersForTypeaheadTest();
+  getInfoBySlugTest();
 
   // embeddingsTest();
 };

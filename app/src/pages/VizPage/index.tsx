@@ -351,4 +351,4 @@ export const VizPage: Page = ({
   );
 };
 
-VizPage.path = '/:userName/:id';
+VizPage.path = '/:userName/:idOrSlug';

@@ -400,6 +400,15 @@ export const MemoryGateways = (): Gateways => {
     return ok(users);
   };
 
+  const getInfoBySlug = async (slug: string) => {
+    const info = Object.values(documents.Info).find(
+      (info: Info) => info.slug === slug,
+    );
+    return info
+      ? ok(fakeSnapshot(info))
+      : err(resourceNotFoundError(slug, 'Info'));
+  };
+
   // Populate non-CRUD methods.
   let memoryGateways: Gateways = {
     type: 'MemoryGateways',
@@ -445,6 +454,8 @@ export const MemoryGateways = (): Gateways => {
     lock,
     // @ts-ignore
     getUsersForTypeahead,
+    // @ts-ignore
+    getInfoBySlug,
   };
 
   // Packages up save, get, and delete

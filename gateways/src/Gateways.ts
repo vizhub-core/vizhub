@@ -423,6 +423,13 @@ export interface Gateways {
     visibilities?: Array<Visibility> | null;
   }): Promise<Result<Array<Snapshot<Info>>>>;
 
+  // getInfoBySlug
+  //
+  // Gets the info that matches the given slug.
+  getInfoBySlug(
+    slug: string,
+  ): Promise<Result<Snapshot<Info>>>;
+
   // getStaleInfoIds
   //
   // Gets the ids of a batch of infos whose popularity scores

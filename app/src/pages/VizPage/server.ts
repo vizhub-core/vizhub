@@ -15,6 +15,7 @@ import { rollup } from 'rollup';
 import { JSDOM } from 'jsdom';
 import {
   CommitViz,
+  GetInfoByIdOrSlug,
   ScoreStaleVizzes,
   VerifyVizAccess,
   generateUpvoteId,
@@ -45,7 +46,6 @@ VizPage.getPageData = async ({
   params,
   auth0User,
 }): Promise<VizPageData> => {
-  const id: VizId = params.id;
   const {
     getUser,
     getInfo,
@@ -57,18 +57,21 @@ VizPage.getPageData = async ({
   const verifyVizAccess = VerifyVizAccess(gateways);
   const commitViz = CommitViz(gateways);
   const scoreStaleVizzes = ScoreStaleVizzes(gateways);
+  const getInfoByIdOrSlug = GetInfoByIdOrSlug(gateways);
 
   // TODO move all this into an interactor called
   // getVizPageData or something like that.
   try {
+    const idOrSlug: VizId | string = params.idOrSlug;
     // Get the Info entity of the Viz.
-    let infoResult = await getInfo(id);
+    let infoResult = await getInfoByIdOrSlug(idOrSlug);
     if (infoResult.outcome === 'failure') {
       // Indicates viz not found
       return null;
     }
     let infoSnapshot: Snapshot<Info> = infoResult.value;
     let info: Info = infoSnapshot.data;
+    const id = info.id;
 
     const {
       authenticatedUserId,
@@ -327,7 +330,10 @@ VizPage.getPageData = async ({
       initialIsUpvoted,
     };
   } catch (e) {
-    console.log('error fetching viz with id ', id);
+    console.log(
+      'error fetching viz with idOrSlug',
+      params.idOrSlug,
+    );
     console.log(e);
     return null;
   }

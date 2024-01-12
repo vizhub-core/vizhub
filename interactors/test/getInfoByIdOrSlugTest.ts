@@ -24,7 +24,24 @@ export const getInfoByIdOrSlugTest = () => {
       );
     });
 
-    // it('success case by slug', async () => {
+    it('success case by slug', async () => {
+      const gateways = await initGateways();
+      const { saveInfo } = gateways;
+      const getInfoByIdOrSlug = GetInfoByIdOrSlug(gateways);
+      await saveInfo({
+        ...primordialViz.info,
+        slug: 'primordial-viz',
+      });
+
+      const result = await getInfoByIdOrSlug(
+        'primordial-viz',
+      );
+      expect(result.outcome).toEqual('success');
+      assert(result.outcome === 'success');
+      expect(result.value).toEqual(
+        fakeSnapshot(primordialViz.info),
+      );
+    });
 
     // it('failure case', async () => {
     //   const gateways = await initGateways();
