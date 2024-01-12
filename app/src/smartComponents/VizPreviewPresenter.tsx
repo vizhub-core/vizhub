@@ -29,6 +29,7 @@ export const VizPreviewPresenter = ({
 
   const {
     id,
+    slug,
     title,
     end,
     updated,
@@ -58,6 +59,11 @@ export const VizPreviewPresenter = ({
     [updated],
   );
 
+  const href = useMemo(
+    () => `/${userName}/${slug || id}`,
+    [userName, id, slug],
+  );
+
   return (
     <VizPreview
       title={title}
@@ -65,7 +71,7 @@ export const VizPreviewPresenter = ({
       lastUpdatedDateFormatted={lastUpdatedDateFormatted}
       ownerName={ownerName}
       ownerAvatarURL={ownerAvatarURL}
-      href={`/${userName}/${id}`}
+      href={href}
       upvotesCount={upvotesCount}
       forksCount={forksCount}
       visibility={visibility}
