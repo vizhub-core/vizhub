@@ -143,16 +143,16 @@ export const SettingsModal = ({
           </Form.Text>
         </Form.Group>
         {enableURLChange && (
-          <Form.Group className="mb-4" controlId="viz-url">
-            <Form.Label htmlFor="viz-url-control">
-              Custom URL
-            </Form.Label>
+          <Form.Group
+            controlId="viz-url-control"
+            className="mb-4"
+          >
+            <Form.Label>Custom URL</Form.Label>
             <InputGroup>
               <InputGroup.Text id="viz-url-prefix">
                 @{userName}/
               </InputGroup.Text>
               <Form.Control
-                id="viz-url-control"
                 aria-describedby="viz-url-prefix"
                 value={slug}
                 onChange={handleSlugChange}
@@ -160,8 +160,6 @@ export const SettingsModal = ({
             </InputGroup>
             <Form.Text className="text-muted">
               Choose a custom URL slug for this viz.
-              {/* <div>Sample import:</div>
-              <div className="sample-import">{`import { ... } from "@${userName}/${slug}"`}</div> */}
             </Form.Text>
           </Form.Group>
         )}

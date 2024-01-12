@@ -34,13 +34,13 @@ export const SortControl = ({
   return (
     <Form.Group
       className="mx-0"
-      controlId="sort"
       as={isVertical ? 'div' : Row}
     >
       <Form.Label
         column
         sm="auto"
         className="sort-by-label"
+        id="sort-by-label-id"
       >
         Sort by
       </Form.Label>
@@ -49,6 +49,7 @@ export const SortControl = ({
           <Dropdown.Toggle
             id="dropdown-sort"
             variant="secondary"
+            aria-labelledby="sort-by-label-id dropdown-sort"
           >
             {sortsById.get(sortId)?.label + ' '}
           </Dropdown.Toggle>
