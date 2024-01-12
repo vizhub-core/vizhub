@@ -399,10 +399,29 @@ export const MemoryGateways = (): Gateways => {
     );
     return ok(users);
   };
-
-  const getInfoBySlug = async (slug: string) => {
+  const getInfoByUserAndSlug = ({
+    userId,
+    slug,
+  }: {
+    userId: UserId;
+    slug: string;
+  }) => {
     const info = Object.values(documents.Info).find(
-      (info: Info) => info.slug === slug,
+      (info: Info) => {
+        console.log(
+          'checking info ',
+          JSON.stringify(info, null, 2),
+        );
+        console.log(
+          'info.slug === slug ',
+          info.slug === slug,
+        );
+        console.log(
+          'info.owner === userId ',
+          info.owner === userId,
+        );
+        return info.slug === slug && info.owner === userId;
+      },
     );
     return info
       ? ok(fakeSnapshot(info))
@@ -455,7 +474,7 @@ export const MemoryGateways = (): Gateways => {
     // @ts-ignore
     getUsersForTypeahead,
     // @ts-ignore
-    getInfoBySlug,
+    getInfoByUserAndSlug,
   };
 
   // Packages up save, get, and delete

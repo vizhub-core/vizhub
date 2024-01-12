@@ -19,7 +19,10 @@ export const getInfoByIdOrSlugTest = () => {
       };
       await saveInfo(newInfo);
 
-      const result = await getInfoByIdOrSlug(newInfo.id);
+      const result = await getInfoByIdOrSlug({
+        userId: newInfo.owner,
+        idOrSlug: newInfo.id,
+      });
       expect(result.outcome).toEqual('success');
       assert(result.outcome === 'success');
       expect(result.value).toEqual(fakeSnapshot(newInfo));
@@ -35,9 +38,10 @@ export const getInfoByIdOrSlugTest = () => {
       };
       await saveInfo(newInfo);
 
-      const result = await getInfoByIdOrSlug(
-        'primordial-viz',
-      );
+      const result = await getInfoByIdOrSlug({
+        userId: newInfo.owner,
+        idOrSlug: 'primordial-viz',
+      });
       expect(result.outcome).toEqual('success');
       assert(result.outcome === 'success');
       expect(result.value).toEqual(fakeSnapshot(newInfo));
@@ -52,9 +56,10 @@ export const getInfoByIdOrSlugTest = () => {
       };
       await saveInfo(newInfo);
 
-      const result = await getInfoByIdOrSlug(
-        'primordial-viz',
-      );
+      const result = await getInfoByIdOrSlug({
+        userId: newInfo.owner,
+        idOrSlug: 'primordial-viz',
+      });
       expect(result.outcome).toEqual('failure');
       assert(result.outcome === 'failure');
       expect(result.error.message).toEqual(

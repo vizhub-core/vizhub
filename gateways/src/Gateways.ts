@@ -426,9 +426,13 @@ export interface Gateways {
   // getInfoBySlug
   //
   // Gets the info that matches the given slug.
-  getInfoBySlug(
-    slug: string,
-  ): Promise<Result<Snapshot<Info>>>;
+  getInfoByUserAndSlug({
+    userId,
+    slug,
+  }: {
+    userId: UserId;
+    slug: string;
+  }): Promise<Result<Snapshot<Info>>>;
 
   // getStaleInfoIds
   //
