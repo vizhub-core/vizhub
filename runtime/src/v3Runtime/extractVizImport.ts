@@ -2,7 +2,7 @@ import { UserName, VizId } from 'entities';
 
 export type VizImport = {
   username: UserName;
-  vizId: VizId;
+  idOrSlug: VizId | string;
 };
 
 export const extractVizImport = (
@@ -18,7 +18,7 @@ export const extractVizImport = (
     // Extract the username and id
     return {
       username: match[1],
-      vizId: match[2],
+      idOrSlug: match[2],
     };
   } else {
     // Return null if the string does not match

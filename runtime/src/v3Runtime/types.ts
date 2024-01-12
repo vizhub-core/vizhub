@@ -22,7 +22,7 @@ export type V3BuildError = {
 };
 
 // A resolved viz file id is of the form
-// `{vizId}/{fileName}`
+// `{idOrSlug}/{fileName}`
 export type ResolvedVizFileId = string;
 
 // Messages sent to and from the build worker.

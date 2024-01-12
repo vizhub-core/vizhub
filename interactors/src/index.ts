@@ -22,6 +22,7 @@ export { ValidateViz } from './validateViz';
 export { GetThumbnail, GetImage } from './getThumbnail';
 export {
   generateId,
+  isId,
   setPredictableGenerateId,
 } from './generateId';
 export { generateUpvoteId } from './generateUpvoteId';
