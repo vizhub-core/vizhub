@@ -16,7 +16,7 @@ export default defineConfig({
       // because it messes up the WASM part of the build.
       '@rollup/browser',
 
-      'fsevents',
+      // 'fsevents',
 
       // Uncomment the following to use npm link with Vite.
       // Exclude VZCode, so that we can use `npm link` locally
