@@ -17,6 +17,7 @@ import { VizCache } from './vizCache';
 import { vizLoadCSS } from './vizLoadCSS';
 import { vizLoadJS } from './vizLoadJS';
 import { vizLoadDSV } from './vizLoadDSV';
+import { vizLoadDefault } from './vizLoadDefault';
 
 const debug = false;
 
@@ -85,10 +86,9 @@ export const build = async ({
         vizLoadDSV({ vizCache }),
         vizLoadJS({ vizCache }),
 
-        // cssResolve
-        // csvResolve
-        // jsonResolve
+        // vizLoadJSON({ vizCache }),
         // defaultResolve - protect against file system access
+        vizLoadDefault(),
       ],
       onwarn: (warning: RollupLog) => {
         warnings.push(JSON.parse(JSON.stringify(warning)));

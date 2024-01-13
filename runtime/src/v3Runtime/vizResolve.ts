@@ -18,10 +18,10 @@ export const vizResolve = ({
   vizId: VizId;
 }): InputPluginOption => ({
   name: 'vizResolve',
-  resolveId: (
+  resolveId: async (
     id: string,
     importer: string | undefined,
-  ): ResolvedVizFileId | undefined => {
+  ): Promise<ResolvedVizFileId | undefined> => {
     if (debug) {
       console.log('[vizIdResolve] resolveId() ' + id);
       console.log('  importer: ' + importer);
@@ -66,7 +66,16 @@ export const vizResolve = ({
     // e.g. `import { foo } from '@curran/scatter-plot'`
     const vizImport = extractVizImport(id);
     if (vizImport) {
-      return vizImport.idOrSlug + '/index.js';
+      let vizId: VizId;
+      if (isId(vizImport.idOrSlug)) {
+        vizId = vizImport.idOrSlug;
+      } else {
+        console.log('TODO: getVizIdForVizImport()');
+        console.log(vizImport);
+        vizId = 'foo'; //await getVizIdForVizImport(vizImport);
+      }
+
+      return vizId + '/index.js';
     }
 
     // If neither condition is met, return null
