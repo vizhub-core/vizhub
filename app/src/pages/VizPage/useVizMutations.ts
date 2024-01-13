@@ -8,7 +8,7 @@ import {
 } from 'entities';
 import { useCallback } from 'react';
 
-const debug = true;
+const debug = false;
 
 // These values come from the settings modal "save" button.
 export type VizSettings = {
