@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import {
   Modal,
   Form,
@@ -12,6 +12,8 @@ import {
 } from '../OwnerControl';
 import { Plan, UserId, Visibility } from 'entities';
 import './styles.css';
+import { CircleXSVG } from '../Icons/sam/CircleXSVG';
+import { CircleCheckSVG } from '../Icons/sam/CircleCheckSVG';
 
 const enableOwnerControl = false;
 
@@ -40,6 +42,7 @@ export const SettingsModal = ({
   pricingHref,
   userName,
   enableURLChange = false,
+  validateSlug,
 }: {
   show: boolean;
   onClose: () => void;
@@ -66,6 +69,9 @@ export const SettingsModal = ({
   pricingHref: string;
   userName?: string;
   enableURLChange?: boolean;
+  validateSlug: (
+    slug: string,
+  ) => Promise<'valid' | 'invalid'>;
 }) => {
   // Local state for the title
   const [title, setTitle] = useState(initialTitle);
@@ -78,9 +84,37 @@ export const SettingsModal = ({
 
   // Local state for the slug
   const [slug, setSlug] = useState(initialSlug);
+  const [slugValidationState, setSlugValidationState] =
+    useState<'validating' | 'valid' | 'invalid' | null>(
+      null,
+    );
+
+  const slugValidationTimeout = useRef<number | null>(null);
   const handleSlugChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
-      setSlug(event.target.value);
+      const newSlug = event.target.value;
+
+      // For controlled UI
+      setSlug(newSlug);
+
+      setSlugValidationState('validating');
+
+      // Debounce
+      if (slugValidationTimeout.current) {
+        clearTimeout(slugValidationTimeout.current);
+      }
+      slugValidationTimeout.current = setTimeout(
+        async () => {
+          const newSlugSlugified = slugify(newSlug);
+          setSlugValidationState(
+            await validateSlug(newSlugSlugified),
+          );
+
+          // Update the UI with the slugified version
+          setSlug(newSlugSlugified);
+        },
+        500,
+      );
     },
     [],
   );
@@ -139,7 +173,7 @@ export const SettingsModal = ({
             onChange={handleTitleChange}
           />
           <Form.Text className="text-muted">
-            Choose a title for your viz
+            Choose a title for your viz.
           </Form.Text>
         </Form.Group>
         {enableURLChange && (
@@ -158,8 +192,29 @@ export const SettingsModal = ({
                 onChange={handleSlugChange}
               />
             </InputGroup>
-            <Form.Text className="text-muted">
+            <Form.Text className="text-muted d-flex justify-content-between align-items-center">
               Choose a custom URL slug for this viz.
+              <span
+                // This height is to prevent the UI from jumping
+                // around when the validation state changes
+                style={{ height: '24px' }}
+                className="d-flex align-items-center"
+              >
+                {slugValidationState === 'validating' &&
+                  'Checking availability...'}
+                {slugValidationState === 'valid' && (
+                  <span className="vh-color-success-01 d-flex align-items-center">
+                    Available!
+                    <CircleCheckSVG className="ms-1" />
+                  </span>
+                )}
+                {slugValidationState === 'invalid' && (
+                  <span className="text-danger d-flex align-items-center">
+                    Already taken
+                    <CircleXSVG className="ms-1" />
+                  </span>
+                )}
+              </span>
             </Form.Text>
           </Form.Group>
         )}
@@ -193,7 +248,14 @@ export const SettingsModal = ({
         )}
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="primary" onClick={handleSaveClick}>
+        <Button
+          variant="primary"
+          onClick={handleSaveClick}
+          disabled={
+            slugValidationState === 'validating' ||
+            slugValidationState === 'invalid'
+          }
+        >
           Save
         </Button>
       </Modal.Footer>

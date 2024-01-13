@@ -107,6 +107,11 @@ export interface VizKitAPI {
     upvoteViz: (vizId: VizId) => Promise<Result<Success>>;
 
     unUpvoteViz: (vizId: VizId) => Promise<Result<Success>>;
+
+    isSlugAvailable: (options: {
+      owner: UserId;
+      slug: string;
+    }) => Promise<Result<boolean>>;
   };
 }
 
@@ -249,6 +254,15 @@ export const VizKit = ({
         await postJSON(`${baseUrl}/un-upvote-viz`, {
           vizId,
         }),
+
+      isSlugAvailable: async (options: {
+        owner: UserId;
+        slug: string;
+      }) =>
+        await postJSON(
+          `${baseUrl}/is-slug-available`,
+          options,
+        ),
     },
   };
 };

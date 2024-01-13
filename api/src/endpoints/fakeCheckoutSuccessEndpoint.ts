@@ -34,7 +34,6 @@ export const fakeCheckoutSuccessEndpoint = ({
           return res.send(missingParameterError('userId'));
         }
 
-
         lock([userLock(userId)], async () => {
           const userResult = await getUser(userId);
           if (userResult.outcome === 'failure') {
