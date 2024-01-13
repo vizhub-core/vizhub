@@ -19,6 +19,7 @@ import { AuthenticatedUserContext } from '../../contexts/AuthenticatedUserContex
 import { getVizPageHref } from '../../accessors';
 import { VizKitAPI } from 'api/src/VizKit';
 import { useOnTrashViz } from './useOnTrashViz';
+import { useValidateSlug } from './useValidateSlug';
 
 export const VizPageModals = ({
   info,
@@ -189,6 +190,12 @@ export const VizPageModals = ({
     [info.id],
   );
 
+  // A function to validate a slug for custom URLs.
+  const validateSlug = useValidateSlug({
+    vizKit,
+    owner: info.owner,
+  });
+
   return (
     <>
       {showForkModal && (
@@ -226,6 +233,7 @@ export const VizPageModals = ({
           enableURLChange={true}
           userName={authenticatedUser?.userName}
           initialSlug={info.slug || info.id}
+          validateSlug={validateSlug}
         />
       )}
       {showShareModal && (

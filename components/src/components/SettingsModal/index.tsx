@@ -69,7 +69,7 @@ export const SettingsModal = ({
   pricingHref: string;
   userName?: string;
   enableURLChange?: boolean;
-  validateSlug?: (
+  validateSlug: (
     slug: string,
   ) => Promise<'valid' | 'invalid'>;
 }) => {
@@ -202,7 +202,6 @@ export const SettingsModal = ({
               >
                 {slugValidationState === 'validating' &&
                   'Checking availability...'}
-
                 {slugValidationState === 'valid' && (
                   <span className="vh-color-success-01 d-flex align-items-center">
                     Available!

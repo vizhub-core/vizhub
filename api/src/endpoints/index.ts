@@ -16,6 +16,7 @@ import { addCollaboratorEndpoint } from './addCollaboratorEndpoint';
 import { removeCollaboratorEndpoint } from './removeCollaboratorEndpoint';
 import { upvoteVizEndpoint } from './upvoteVizEndpoint';
 import { unUpvoteVizEndpoint } from './unUpvoteVizEndpoint';
+import { isSlugAvailableEndpoint } from './isSlugAvailableEndpoint';
 
 export const endpoints = [
   healthCheck,
@@ -36,4 +37,5 @@ export const endpoints = [
   removeCollaboratorEndpoint,
   upvoteVizEndpoint,
   unUpvoteVizEndpoint,
+  isSlugAvailableEndpoint,
 ];
