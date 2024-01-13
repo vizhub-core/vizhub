@@ -8,6 +8,7 @@ import {
   sampleContentVizImport,
   sampleContentVizImportWithCSS,
   sampleContentWithCSV,
+  sampleContentVizImportMissing,
 } from 'entities/test/fixtures';
 
 describe('v3 build', () => {
@@ -197,5 +198,54 @@ describe('v3 build', () => {
     expect(buildResult.cssFiles[0]).toBe(
       'sample-content-with-css/styles.css',
     );
+  });
+
+  it('Import from viz: should error with unresolved import', async () => {
+    const vizCache = createVizCache({
+      initialContents: [
+        // `sampleContent` not included, so the import will not resolve
+        sampleContentVizImport,
+      ],
+      handleCacheMiss: async () => {
+        throw new Error('Import not found');
+      },
+    });
+    const buildResult = await build({
+      vizId: sampleContentVizImport.id,
+      rollup,
+      vizCache,
+    });
+
+    // console.log(JSON.stringify(buildResult, null, 2));
+    // buildResult
+    // {
+    //   "errors": [
+    //     {
+    //       "code": "PLUGIN_ERROR",
+    //       "plugin": "vizLoadJS",
+    //       "hook": "load",
+    //       "name": "Error",
+    //       "message": "Could not load foo/index.js (imported by sample-content-viz-import/index.js): Import not found"
+    //     }
+    //   ],
+    //   "warnings": [],
+    //   "cssFiles": [],
+    //   "time": 11
+    // }
+
+    expect(buildResult).toBeDefined();
+    expect(buildResult.errors).toHaveLength(1);
+    expect(buildResult.errors[0].code).toBe('PLUGIN_ERROR');
+    expect(buildResult.errors[0].plugin).toBe('vizLoadJS');
+    expect(buildResult.errors[0].hook).toBe('load');
+    expect(buildResult.errors[0].name).toBe('Error');
+    expect(buildResult.errors[0].message).toBe(
+      'Could not load foo/index.js (imported by sample-content-viz-import/index.js): Import not found',
+    );
+    expect(buildResult.warnings).toHaveLength(0);
+    expect(buildResult.cssFiles).toHaveLength(0);
+    expect(buildResult.src).toBeUndefined();
+    expect(buildResult.time).toBeDefined();
+    expect(buildResult.pkg).toBeUndefined();
   });
 });

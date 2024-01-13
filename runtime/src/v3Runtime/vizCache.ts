@@ -1,7 +1,7 @@
 import { Content, VizId } from 'entities';
 
 export type VizCache = {
-  get: (vizId: string) => Promise<Content>;
+  get: (vizId: string) => Promise<Content | null>;
   set: (content: Content) => void;
   invalidate: (vizId: string) => void;
 };

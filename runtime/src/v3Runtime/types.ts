@@ -19,6 +19,11 @@ export type V3BuildResult = {
 export type V3BuildError = {
   code: string;
   message: string;
+
+  // For Rollup errors, these are defined.
+  plugin?: string;
+  hook?: string;
+  name?: string;
 };
 
 // A resolved viz file id is of the form

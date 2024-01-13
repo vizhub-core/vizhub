@@ -4,7 +4,7 @@ import { VizCache } from './vizCache';
 import { ResolvedVizFileId } from './types';
 import { parseId } from './parseId';
 
-const debug = false;
+const debug = true;
 
 export const vizLoadJS = ({
   vizCache,
@@ -36,6 +36,13 @@ export const vizLoadJS = ({
     // For JS imports, we need to recursively resolve
     // the imports of the imported viz.
     const content: Content = await vizCache.get(vizId);
+
+    if (debug) {
+      console.log(
+        '    [vizLoadJS] content for ' + id + ':',
+      );
+      console.log(content);
+    }
     return getFileText(content, fileName);
   },
 });
