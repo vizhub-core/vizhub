@@ -1,5 +1,5 @@
-import { select } from "d3";
-import { viz } from "./viz";
+import { select } from 'd3';
+import { viz } from './viz';
 
 export const main = (container, { state, setState }) => {
   const { data, width, height } = state;
@@ -22,11 +22,11 @@ export const main = (container, { state, setState }) => {
   window.onresize = handleResize;
 
   const svg = select(container)
-    .selectAll("svg")
+    .selectAll('svg')
     .data([null])
-    .join("svg")
-    .attr("width", width)
-    .attr("height", height)
-    .style("position", "fixed")
+    .join('svg')
+    .attr('width', width)
+    .attr('height', height)
+    .style('position', 'fixed')
     .call(viz, { width, height, data, setData });
 };

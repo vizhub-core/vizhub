@@ -1,5 +1,6 @@
 *.swp
 *.svg
+*.csv
 *.sh
 *.ico
 .prettierignore

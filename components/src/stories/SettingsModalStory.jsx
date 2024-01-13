@@ -19,8 +19,7 @@ export const args = {
   initialSlug: '21f72bf74ef04ea0b9c9b82aaaec859a',
   initialHeight: 500,
   userName: 'joe',
-  // TODO make this work
-  enableURLChange: false,
+  enableURLChange: true,
 };
 
 const Story = () => {
@@ -33,6 +32,9 @@ const Story = () => {
         onClose={() => {
           setShow(false);
         }}
+        validateSlug={async (slug) =>
+          slug === 'test' ? 'valid' : 'invalid'
+        }
       />
     </div>
   );
