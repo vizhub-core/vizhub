@@ -19,7 +19,7 @@ import { vizLoadJS } from './vizLoadJS';
 import { vizLoadDSV } from './vizLoadDSV';
 import { vizLoadDefault } from './vizLoadDefault';
 
-const debug = false;
+const debug = true;
 
 const getGlobals = (pkg: V3PackageJson) => {
   const libraries = pkg?.vizhub?.libraries;
