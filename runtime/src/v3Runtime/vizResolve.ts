@@ -10,7 +10,7 @@ import { ResolvedVizFileId } from './types';
 import { parseId } from './parseId';
 import { isId } from '../../../interactors/src';
 
-const debug = false;
+const debug = true;
 
 export const vizResolve = ({
   vizId,
@@ -18,13 +18,19 @@ export const vizResolve = ({
   vizId: VizId;
 }): InputPluginOption => ({
   name: 'vizResolve',
-  resolveId: (
+  resolveId: async (
     id: string,
     importer: string | undefined,
-  ): ResolvedVizFileId | undefined => {
+  ): Promise<ResolvedVizFileId | undefined> => {
+
     if (debug) {
       console.log('[vizIdResolve] resolveId() ' + id);
       console.log('  importer: ' + importer);
+      
+      // Sanity check to ensure this is actually async
+      console.log("  Going to sleep for 10ms...")
+      await new Promise((resolve) => setTimeout(resolve, 10));
+      console.log("  Woke up!")
     }
 
     // Handle virtual file system resolution
