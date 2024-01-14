@@ -5,10 +5,9 @@
 // Combines functionalities of 'virtual' and 'importFromViz' plugins
 import { InputPluginOption } from 'rollup';
 import { extractVizImport } from './extractVizImport';
-import { VizId } from 'entities';
+import { VizId, isId } from 'entities';
 import { ResolvedVizFileId } from './types';
 import { parseId } from './parseId';
-import { isId } from '../../../interactors/src';
 
 const debug = false;
 

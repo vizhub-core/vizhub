@@ -200,3 +200,5 @@ export {
   userLock,
   analyticsEventLock,
 } from './Lock';
+
+export { isId } from './isId';
