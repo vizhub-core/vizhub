@@ -99,19 +99,19 @@ VizPage.getPageData = async ({
     });
 
     // Access control: Verify that the user has read access to the viz.
-    const verifyVizReadAccessResult: Result<VizAccess> =
+    const verifyVizAccessResult: Result<VizAccess> =
       await verifyVizAccess({
         authenticatedUserId,
         info,
         actions: [READ, WRITE, DELETE],
       });
-    if (verifyVizReadAccessResult.outcome === 'failure') {
+    if (verifyVizAccessResult.outcome === 'failure') {
       console.log('Error when verifying viz access:');
-      console.log(verifyVizReadAccessResult.error);
+      console.log(verifyVizAccessResult.error);
       return null;
     }
     const vizAccess: VizAccess =
-      verifyVizReadAccessResult.value;
+      verifyVizAccessResult.value;
 
     if (!vizAccess[READ]) {
       // console.log('User does not have read access to viz');
@@ -244,6 +244,50 @@ VizPage.getPageData = async ({
     const vizCache: VizCache = createVizCache({
       initialContents: [content],
       handleCacheMiss: async (vizId: VizId) => {
+        // Verify that the user has access to the imported viz.
+        const getImportedInfoResult = await getInfo(vizId);
+        if (getImportedInfoResult.outcome === 'failure') {
+          console.log(
+            'Error when fetching imported viz info:',
+          );
+          console.log(getImportedInfoResult.error);
+          throw new Error(
+            'Error when fetching imported viz info',
+          );
+        }
+
+        const importedInfo: Info =
+          getImportedInfoResult.value.data;
+        const verifyImportedVizReadAccessResult: Result<VizAccess> =
+          await verifyVizAccess({
+            authenticatedUserId,
+            info: importedInfo,
+            actions: [READ],
+          });
+        if (
+          verifyImportedVizReadAccessResult.outcome ===
+          'failure'
+        ) {
+          console.log('Error when verifying viz access:');
+          console.log(
+            verifyImportedVizReadAccessResult.error,
+          );
+          throw new Error(
+            'Error when verifying viz access',
+          );
+        }
+        const importedVizAccess: VizAccess =
+          verifyVizAccessResult.value;
+
+        if (!importedVizAccess[READ]) {
+          console.log(
+            'User does not have read access to viz',
+          );
+          throw new Error(
+            'User does not have read access to imported viz',
+          );
+        }
+
         if (debug) {
           console.log(
             'Handling cache miss for vizId',
@@ -271,10 +315,46 @@ VizPage.getPageData = async ({
         return contentResult.value.data;
       },
     });
+
+    // Resolves a slug import to a viz ID.
+    const resolveSlug = async ({
+      userName,
+      slug,
+    }): Promise<VizId> => {
+      const getUserResult =
+        await getUserByUserName(userName);
+      if (getUserResult.outcome === 'failure') {
+        console.log(
+          'Error when resolving slug: user not found:',
+        );
+        console.log(getUserResult.error);
+        throw new Error('User not found');
+      }
+      const user = getUserResult.value.data;
+      const getInfoResult =
+        await gateways.getInfoByUserAndSlug({
+          userId: user.id,
+          slug,
+        });
+      if (getInfoResult.outcome === 'failure') {
+        console.log(
+          'Error when resolving slug: viz not found:',
+        );
+        console.log(getInfoResult.error);
+        throw new Error('Viz not found');
+      }
+      const info = getInfoResult.value.data;
+      return info.id;
+    };
     // Compute srcdoc for iframe.
     // TODO cache it per commit.
     const { initialSrcdoc, initialSrcdocError } =
-      await computeSrcDoc({ rollup, content, vizCache });
+      await computeSrcDoc({
+        rollup,
+        content,
+        vizCache,
+        resolveSlug,
+      });
 
     if (debug) {
       console.log('initialSrcdoc');

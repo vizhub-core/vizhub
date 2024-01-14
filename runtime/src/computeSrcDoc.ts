@@ -1,5 +1,9 @@
 // import { rollup } from 'rollup';
-import { Content, getRuntimeVersion } from 'entities';
+import {
+  Content,
+  VizId,
+  getRuntimeVersion,
+} from 'entities';
 import { computeSrcDocV2 } from './v2Runtime/computeSrcDocV2';
 import { computeSrcDocV3 } from './v3Runtime/computeSrcDocV3';
 import { build } from './v3Runtime/build';
@@ -10,10 +14,13 @@ export const computeSrcDoc = async ({
   rollup,
   content,
   vizCache,
+  resolveSlug,
 }: {
   rollup: any;
   content: Content;
   vizCache: VizCache;
+  // Resolves a slug import to a viz ID.
+  resolveSlug: ({ userName, slug }) => Promise<VizId>;
 }) => {
   // `runtimeVersion` is used to determine which runtime
   // to use. It's either 2 or 3.
@@ -38,6 +45,7 @@ export const computeSrcDoc = async ({
               enableSourcemap: true,
               rollup,
               vizCache,
+              resolveSlug,
             }),
           });
   } catch (e) {
