@@ -74,9 +74,25 @@ export type V3WorkerMessage =
   // `invalidateVizCacheResponse`
   //  * Sent from the worker to the main thread.
   //  * When the worker responds to a `invalidateVizCacheRequest` message.
-  //  * This message is sent to the main thread.
   | {
       type: 'invalidateVizCacheResponse';
+    }
+
+  // `resolveSlugRequest`
+  //  * Sent from the worker to the main thread.
+  //  * When the worker requests a viz ID for a slug.
+  | {
+      type: 'resolveSlugRequest';
+      slugKey: string;
+    }
+
+  // `resolveSlugResponse`
+  //  * Sent from the main thread to the worker.
+  //  * When the main thread responds to a `resolveSlugRequest` message.
+  | {
+      type: 'resolveSlugResponse';
+      slugKey: string;
+      vizId: VizId;
     };
 
 // Messages sent to and from the IFrame window.

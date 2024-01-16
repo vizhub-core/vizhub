@@ -84,6 +84,7 @@ export type {
   Upvote,
   UpvoteId,
   V3PackageJson,
+  SlugKey,
 } from './Viz';
 export {
   defaultVizWidth,

@@ -220,6 +220,7 @@ VizPage.getPageData = async ({
       forkedFromInfoSnapshot = forkedFromInfoResult.value;
 
       // Get the User entity for the owner of the viz that this viz was forked from.
+
       const forkedFromOwnerUserResult = await getUser(
         forkedFromInfoSnapshot.data.owner,
       );
@@ -316,6 +317,10 @@ VizPage.getPageData = async ({
       },
     });
 
+    // A cache for resolving slugs to viz IDs.
+    // Keys are of the form `${userName}/${slug}`.
+    const slugResolutionCache: Record<string, VizId> = {};
+
     // Resolves a slug import to a viz ID.
     const resolveSlug = async ({
       userName,
@@ -344,8 +349,11 @@ VizPage.getPageData = async ({
         throw new Error('Viz not found');
       }
       const info = getInfoResult.value.data;
+
+      slugResolutionCache[`${userName}/${slug}`] = info.id;
       return info.id;
     };
+
     // Compute srcdoc for iframe.
     // TODO cache it per commit.
     const { initialSrcdoc, initialSrcdocError } =
@@ -439,6 +447,7 @@ VizPage.getPageData = async ({
       vizCacheContentSnapshots,
       initialCollaborators,
       initialIsUpvoted,
+      slugResolutionCache,
     };
   } catch (e) {
     console.log(

@@ -7,6 +7,7 @@ import {
 } from 'react';
 import {
   Content,
+  SlugKey,
   VizId,
   getRuntimeVersion,
 } from 'entities';
@@ -41,6 +42,7 @@ export const useRuntime = ({
   setSrcdocError,
   vizCacheContents,
   isVisual,
+  slugResolutionCache,
 }: {
   content: Content;
   iframeRef: RefObject<HTMLIFrameElement>;
@@ -49,6 +51,7 @@ export const useRuntime = ({
 
   // If this is false, there is no iframeRef.current.
   isVisual: boolean;
+  slugResolutionCache: Record<SlugKey, VizId>;
 }) => {
   // This ref is used to skip the first mount.
   const initialMount = useRef(true);
@@ -126,6 +129,33 @@ export const useRuntime = ({
     [],
   );
 
+  // Handles cache misses for slug resolution,
+  // when a viz imports from another viz.
+  const resolveSlugKey = useCallback(
+    async (slugKey: SlugKey): Promise<VizId> => {
+      // Sanity check, should never happen.
+      if (!slugResolutionCache) {
+        throw new Error('slugResolutionCache is null');
+      }
+
+      const vizId = slugResolutionCache[slugKey];
+
+      // If the viz ID for this slug is already tracked,
+      // then return it.
+      if (vizId) {
+        return vizId;
+      } else {
+        // TODO make this happen by:
+        // * Resolving the slug from the server
+        // * Using a new API endpoint that returns the viz id for a slugKey
+        throw new Error(
+          `TODO client-side resolution of newly imported vizzes. Current workaround: refresh the page`,
+        );
+      }
+    },
+    [],
+  );
+
   // Set up the v3 runtime.
   // TODO QA the following:
   //  * Adding and removing index.js
@@ -157,6 +187,7 @@ export const useRuntime = ({
             iframe,
             setSrcdocError,
             getLatestContent,
+            resolveSlugKey,
           });
         },
       );
