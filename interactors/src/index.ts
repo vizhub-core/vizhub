@@ -29,3 +29,4 @@ export { generatePermissionId } from './generatePermissionId';
 export { DeleteViz } from './deleteViz';
 export { ScoreStaleVizzes } from './scoreStaleVizzes';
 export { GetInfoByIdOrSlug } from './getInfoByIdOrSlug';
+export { ResolveSlug } from './resolveSlug';

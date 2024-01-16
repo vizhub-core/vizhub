@@ -16,6 +16,7 @@ import { JSDOM } from 'jsdom';
 import {
   CommitViz,
   GetInfoByIdOrSlug,
+  ResolveSlug,
   ScoreStaleVizzes,
   VerifyVizAccess,
   generateUpvoteId,
@@ -59,6 +60,15 @@ VizPage.getPageData = async ({
   const commitViz = CommitViz(gateways);
   const scoreStaleVizzes = ScoreStaleVizzes(gateways);
   const getInfoByIdOrSlug = GetInfoByIdOrSlug(gateways);
+
+  // A cache for resolving slugs to viz IDs.
+  // Keys are of the form `${userName}/${slug}`.
+  const slugResolutionCache: Record<string, VizId> = {};
+
+  const resolveSlug = ResolveSlug(
+    gateways,
+    slugResolutionCache,
+  );
 
   // TODO move all this into an interactor called
   // getVizPageData or something like that.
@@ -316,43 +326,6 @@ VizPage.getPageData = async ({
         return contentResult.value.data;
       },
     });
-
-    // A cache for resolving slugs to viz IDs.
-    // Keys are of the form `${userName}/${slug}`.
-    const slugResolutionCache: Record<string, VizId> = {};
-
-    // Resolves a slug import to a viz ID.
-    const resolveSlug = async ({
-      userName,
-      slug,
-    }): Promise<VizId> => {
-      const getUserResult =
-        await getUserByUserName(userName);
-      if (getUserResult.outcome === 'failure') {
-        console.log(
-          'Error when resolving slug: user not found:',
-        );
-        console.log(getUserResult.error);
-        throw new Error('User not found');
-      }
-      const user = getUserResult.value.data;
-      const getInfoResult =
-        await gateways.getInfoByUserAndSlug({
-          userId: user.id,
-          slug,
-        });
-      if (getInfoResult.outcome === 'failure') {
-        console.log(
-          'Error when resolving slug: viz not found:',
-        );
-        console.log(getInfoResult.error);
-        throw new Error('Viz not found');
-      }
-      const info = getInfoResult.value.data;
-
-      slugResolutionCache[`${userName}/${slug}`] = info.id;
-      return info.id;
-    };
 
     // Compute srcdoc for iframe.
     // TODO cache it per commit.
