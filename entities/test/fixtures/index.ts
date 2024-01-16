@@ -30,7 +30,6 @@ import {
   EDITOR,
   VizEmbedding,
   MigrationStatus,
-  MigrationBatch,
   ImageMetadata,
   Content,
 } from 'entities';
@@ -384,14 +383,14 @@ export const sampleBetaProgramSignup: BetaProgramSignup = {
 
 export const sampleMigrationStatus: MigrationStatus = {
   id: 'v2',
-  currentBatchNumber: 0,
+  numVizzesProcessed: 2,
 };
 
-export const sampleMigrationBatch: MigrationBatch = {
-  id: 'v2-0',
-  numVizzesProcessed: 2,
-  numVizzesMissed: 0,
-};
+// export const sampleMigrationBatch: MigrationBatch = {
+//   id: 'v2-0',
+//   numVizzesProcessed: 2,
+//   numVizzesMissed: 0,
+// };
 
 export const sampleImageMetadata: ImageMetadata = {
   id: 'commit1',
@@ -415,7 +414,7 @@ export const fakeSnapshot = <T>(data: T) => ({
 
 // Sample content for testing JS imports
 export const sampleContent: Content = {
-  id: 'sample-content',
+  id: '84bddfb1cc0545f299e5083c3e71e0bb',
   files: {
     '7548392': {
       name: 'index.js',
@@ -436,7 +435,7 @@ export const sampleContent: Content = {
 
 // Sample content for testing CSS imports
 export const sampleContentWithCSS: Content = {
-  id: 'sample-content-with-css',
+  id: 'cd52ba7f80834807b72e66ce4abac185',
   files: {
     '5473849': {
       name: 'index.js',
@@ -455,7 +454,7 @@ export const sampleContentWithCSS: Content = {
 };
 
 export const sampleContentWithCSV: Content = {
-  id: 'sample-content-with-csv',
+  id: '80341a00a13f4e87a67bf5d60be0d83f',
   files: {
     '5473849': {
       name: 'index.js',
@@ -477,14 +476,30 @@ export const sampleContentWithCSV: Content = {
 };
 
 // Sample content for testing JS imports
-// across vizzes
+// across vizzes by id
 export const sampleContentVizImport: Content = {
-  id: 'sample-content-viz-import',
+  id: 'a6014044e0c6425f911a7e128e1928a6',
   files: {
     '7548392': {
       name: 'index.js',
       text: `
-        import { message } from '@joe/sample-content';
+        import { message } from '@joe/${sampleContent.id}';
+        export const message2 = "Imported from viz: " + message;
+      `,
+    },
+  },
+  title: 'Sample Content for Viz Importing',
+};
+
+// Sample content for testing JS imports
+// across vizzes by slug
+export const sampleContentVizImportSlug: Content = {
+  id: '6f8aec8c3cd348d7a7d4661cc8d75c9a',
+  files: {
+    '7548392': {
+      name: 'index.js',
+      text: `
+        import { message } from '@joe/sample-content-slug';
         export const message2 = "Imported from viz: " + message;
       `,
     },
@@ -495,13 +510,13 @@ export const sampleContentVizImport: Content = {
 // Sample content for testing CSS imports
 // across vizzes
 export const sampleContentVizImportWithCSS: Content = {
-  id: 'sample-content-viz-import-with-css',
+  id: '816040d214484b41b653bd6916a11fd9',
   files: {
     '7548392': {
       name: 'index.js',
       text: `
         // Import for the CSS side effect
-        import '@joe/sample-content-with-css';
+        import '@joe/${sampleContentWithCSS.id}';
       `,
     },
   },

@@ -2,12 +2,12 @@ import { describe, it, expect } from 'vitest';
 import { extractVizImport } from './extractVizImport';
 
 describe('v3 extractVizImport', () => {
-  it('should correctly extract username and hexadecimal id', () => {
+  it('should correctly extract username and viz id', () => {
     const result = extractVizImport(
       '@curran/21f72bf74ef04ea0b9c9b82aaaec859a',
     );
     expect(result).toEqual({
-      username: 'curran',
+      userName: 'curran',
       idOrSlug: '21f72bf74ef04ea0b9c9b82aaaec859a',
     });
   });
@@ -15,7 +15,7 @@ describe('v3 extractVizImport', () => {
   it('should correctly extract username and alphanumeric id', () => {
     const result = extractVizImport('@curran/scatter-plot');
     expect(result).toEqual({
-      username: 'curran',
+      userName: 'curran',
       idOrSlug: 'scatter-plot',
     });
   });

@@ -1,7 +1,7 @@
 import { UserName, VizId } from 'entities';
 
 export type VizImport = {
-  username: UserName;
+  userName: UserName;
   idOrSlug: VizId | string;
 };
 
@@ -17,7 +17,7 @@ export const extractVizImport = (
   if (match) {
     // Extract the username and id
     return {
-      username: match[1],
+      userName: match[1],
       idOrSlug: match[2],
     };
   } else {

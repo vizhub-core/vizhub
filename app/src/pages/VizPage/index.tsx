@@ -12,6 +12,7 @@ import {
   Snapshot,
   User,
   VizId,
+  SlugKey,
 } from 'entities';
 import { VizKit } from 'api/src/VizKit';
 import {
@@ -61,6 +62,7 @@ export type VizPageData = PageData & {
   >;
   initialCollaborators: Array<User>;
   initialIsUpvoted: boolean;
+  slugResolutionCache: Record<SlugKey, VizId>;
 };
 
 // Inspired by https://github.com/vitejs/vite-plugin-react/blob/main/playground/ssr-react/src/pages/Home.jsx
@@ -83,6 +85,7 @@ export const VizPage: Page = ({
     vizCacheContentSnapshots,
     initialCollaborators,
     initialIsUpvoted,
+    slugResolutionCache,
   } = pageData;
 
   // /////////////////////////////////////////
@@ -324,6 +327,7 @@ export const VizPage: Page = ({
             initialIsUpvoted,
             isUpvoted,
             handleUpvoteClick,
+            slugResolutionCache,
           }}
         />
       </SplitPaneResizeProvider>

@@ -9,6 +9,9 @@ const debug = false;
 // Tracks pending promises for 'contentResponse' messages
 const pendingContentResponsePromises = new Map();
 
+// Tracks pending promises for 'resolveSlugResponse' messages
+const pendingResolveSlugResponsePromises = new Map();
+
 // Create a viz cache that's backed by the main thread
 const vizCache = createVizCache({
   initialContents: [],
@@ -34,6 +37,33 @@ const vizCache = createVizCache({
   },
 });
 
+// Create a slug resolver that's backed by the main thread
+const resolveSlug = ({
+  userName,
+  slug,
+}): Promise<VizId> => {
+  const slugKey = `${userName}/${slug}`;
+  const message: V3WorkerMessage = {
+    type: 'resolveSlugRequest',
+    slugKey,
+  };
+
+  if (debug) {
+    console.log(
+      '[build worker] sending resolve slug request message to main thread',
+      message,
+    );
+  }
+  postMessage(message);
+
+  return new Promise((resolve) => {
+    pendingResolveSlugResponsePromises.set(
+      slugKey,
+      resolve,
+    );
+  });
+};
+
 // Handle messages from the main thread
 addEventListener('message', async ({ data }) => {
   const message: V3WorkerMessage = data as V3WorkerMessage;
@@ -57,6 +87,7 @@ addEventListener('message', async ({ data }) => {
           enableSourcemap,
           rollup,
           vizCache,
+          resolveSlug,
         }),
       };
       postMessage(responseMessage);
@@ -97,6 +128,21 @@ addEventListener('message', async ({ data }) => {
         type: 'invalidateVizCacheResponse',
       };
       postMessage(responseMessage);
+      break;
+    }
+
+    // Resolve pending promises for slug resolution
+    case 'resolveSlugResponse': {
+      const resolver =
+        pendingResolveSlugResponsePromises.get(
+          message.slugKey,
+        );
+      if (resolver) {
+        resolver(message.vizId);
+        pendingResolveSlugResponsePromises.delete(
+          message.slugKey,
+        );
+      }
       break;
     }
   }

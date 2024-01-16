@@ -17,7 +17,12 @@ export const computeSrcDocV3 = async ({
   vizCache: VizCache;
   buildResult: V3BuildResult;
 }) => {
-  const { pkg, src, cssFiles } = buildResult;
+  const { pkg, src, cssFiles, errors } = buildResult;
+
+  if (errors.length > 0) {
+    throw new Error(errors[0].toString());
+  }
+
   let cdn = '';
   let styles = '';
 

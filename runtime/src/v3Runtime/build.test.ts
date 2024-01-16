@@ -8,7 +8,9 @@ import {
   sampleContentVizImport,
   sampleContentVizImportWithCSS,
   sampleContentWithCSV,
+  sampleContentVizImportSlug,
 } from 'entities/test/fixtures';
+import { VizId } from 'entities';
 
 describe('v3 build', () => {
   it('Should not crash when missing files', async () => {
@@ -31,6 +33,9 @@ describe('v3 build', () => {
           throw new Error('Not implemented');
         },
       }),
+      resolveSlug: () => {
+        throw new Error('Not implemented');
+      },
     });
 
     expect(buildResult).toBeDefined();
@@ -49,15 +54,18 @@ describe('v3 build', () => {
   it('Should build successfully with valid inputs', async () => {
     const vizCache = createVizCache({
       initialContents: [sampleContent],
-      handleCacheMiss: vi.fn(),
+      handleCacheMiss: async () => {
+        throw new Error('Not implemented');
+      },
     });
     const buildResult = await build({
       vizId: sampleContent.id,
       rollup,
       vizCache,
+      resolveSlug: () => {
+        throw new Error('Not implemented');
+      },
     });
-    expect(vi.fn()).toHaveBeenCalledTimes(0);
-
     expect(buildResult).toBeDefined();
     expect(buildResult.errors).toHaveLength(0);
     expect(buildResult.warnings).toHaveLength(0);
@@ -77,15 +85,18 @@ describe('v3 build', () => {
   it('Should build successfully with css imports', async () => {
     const vizCache = createVizCache({
       initialContents: [sampleContentWithCSS],
-      handleCacheMiss: vi.fn(),
+      handleCacheMiss: async () => {
+        throw new Error('Not implemented');
+      },
     });
     const buildResult = await build({
       vizId: sampleContentWithCSS.id,
       rollup,
       vizCache,
+      resolveSlug: () => {
+        throw new Error('Not implemented');
+      },
     });
-    expect(vi.fn()).toHaveBeenCalledTimes(0);
-
     // console.log(JSON.stringify(buildResult, null, 2));
 
     expect(buildResult).toBeDefined();
@@ -100,23 +111,27 @@ describe('v3 build', () => {
       'EMPTY_BUNDLE',
     );
     expect(buildResult.cssFiles[0]).toBe(
-      'sample-content-with-css/styles.css',
+      `${sampleContentWithCSS.id}/styles.css`,
     );
   });
 
   it('Should build successfully with csv imports', async () => {
     const vizCache = createVizCache({
       initialContents: [sampleContentWithCSV],
-      handleCacheMiss: vi.fn(),
+      handleCacheMiss: async () => {
+        throw new Error('Not implemented');
+      },
     });
     const buildResult = await build({
       vizId: sampleContentWithCSV.id,
       rollup,
       vizCache,
+      resolveSlug: () => {
+        throw new Error('Not implemented');
+      },
     });
-    expect(vi.fn()).toHaveBeenCalledTimes(0);
 
-    console.log(JSON.stringify(buildResult, null, 2));
+    // console.log(JSON.stringify(buildResult, null, 2));
 
     expect(buildResult).toBeDefined();
     expect(buildResult.errors).toHaveLength(0);
@@ -135,17 +150,20 @@ describe('v3 build', () => {
         sampleContent,
         sampleContentVizImport,
       ],
-      handleCacheMiss: vi.fn(),
+      handleCacheMiss: async () => {
+        throw new Error('Not implemented');
+      },
     });
     const buildResult = await build({
       vizId: sampleContentVizImport.id,
       rollup,
       vizCache,
+      resolveSlug: () => {
+        throw new Error('Not implemented');
+      },
     });
 
     // console.log(JSON.stringify(buildResult, null, 2));
-
-    expect(vi.fn()).toHaveBeenCalledTimes(0);
 
     expect(buildResult).toBeDefined();
     expect(buildResult.errors).toHaveLength(0);
@@ -172,14 +190,18 @@ describe('v3 build', () => {
         sampleContentWithCSS,
         sampleContentVizImportWithCSS,
       ],
-      handleCacheMiss: vi.fn(),
+      handleCacheMiss: async () => {
+        throw new Error('Not implemented');
+      },
     });
     const buildResult = await build({
       vizId: sampleContentVizImportWithCSS.id,
       rollup,
       vizCache,
+      resolveSlug: () => {
+        throw new Error('Not implemented');
+      },
     });
-    expect(vi.fn()).toHaveBeenCalledTimes(0);
 
     // console.log(JSON.stringify(buildResult, null, 2));
 
@@ -195,7 +217,53 @@ describe('v3 build', () => {
       'EMPTY_BUNDLE',
     );
     expect(buildResult.cssFiles[0]).toBe(
-      'sample-content-with-css/styles.css',
+      `${sampleContentWithCSS.id}/styles.css`,
+    );
+  });
+
+  it('Import from viz: should build successfully with slug-based import', async () => {
+    const vizCache = createVizCache({
+      initialContents: [
+        sampleContent,
+        sampleContentVizImportSlug,
+      ],
+      handleCacheMiss: async () => {
+        throw new Error('Not implemented');
+      },
+    });
+    const buildResult = await build({
+      vizId: sampleContentVizImportSlug.id,
+      rollup,
+      vizCache,
+      resolveSlug: async ({
+        userName,
+        slug,
+      }): Promise<VizId> => {
+        console.log(
+          `Resolving ${userName}/${slug} to ${sampleContent.id}`,
+        );
+        return sampleContent.id;
+      },
+    });
+
+    // console.log(JSON.stringify(buildResult, null, 2));
+
+    expect(buildResult).toBeDefined();
+    expect(buildResult.errors).toHaveLength(0);
+    expect(buildResult.warnings).toHaveLength(0);
+    expect(buildResult.cssFiles).toHaveLength(0);
+    expect(buildResult.src).toBeDefined();
+    expect(buildResult.time).toBeDefined();
+    expect(buildResult.pkg).toBeUndefined();
+
+    expect(buildResult.src).toContain(
+      `const innerMessage = "Inner";`,
+    );
+    expect(buildResult.src).toContain(
+      `const message = "Outer " + innerMessage;`,
+    );
+    expect(buildResult.src).toContain(
+      `const message2 = "Imported from viz: " + message;`,
     );
   });
 });

@@ -5,23 +5,30 @@
 // Combines functionalities of 'virtual' and 'importFromViz' plugins
 import { InputPluginOption } from 'rollup';
 import { extractVizImport } from './extractVizImport';
-import { VizId } from 'entities';
+import { VizId, isId } from 'entities';
 import { ResolvedVizFileId } from './types';
 import { parseId } from './parseId';
-import { isId } from '../../../interactors/src';
 
 const debug = false;
 
 export const vizResolve = ({
   vizId,
+  resolveSlug,
 }: {
   vizId: VizId;
+  resolveSlug: ({
+    userName,
+    slug,
+  }: {
+    userName: string;
+    slug: string;
+  }) => Promise<VizId>;
 }): InputPluginOption => ({
   name: 'vizResolve',
-  resolveId: (
+  resolveId: async (
     id: string,
     importer: string | undefined,
-  ): ResolvedVizFileId | undefined => {
+  ): Promise<ResolvedVizFileId | undefined> => {
     if (debug) {
       console.log('[vizIdResolve] resolveId() ' + id);
       console.log('  importer: ' + importer);
@@ -66,7 +73,16 @@ export const vizResolve = ({
     // e.g. `import { foo } from '@curran/scatter-plot'`
     const vizImport = extractVizImport(id);
     if (vizImport) {
-      return vizImport.idOrSlug + '/index.js';
+      let vizId: VizId;
+      if (isId(vizImport.idOrSlug)) {
+        vizId = vizImport.idOrSlug;
+      } else {
+        vizId = await resolveSlug({
+          userName: vizImport.userName,
+          slug: vizImport.idOrSlug,
+        });
+      }
+      return vizId + '/index.js';
     }
 
     // If neither condition is met, return null
