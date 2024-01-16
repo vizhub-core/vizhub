@@ -16,6 +16,7 @@ import { JSDOM } from 'jsdom';
 import {
   CommitViz,
   GetInfoByIdOrSlug,
+  ResolveSlug,
   ScoreStaleVizzes,
   VerifyVizAccess,
   generateUpvoteId,
@@ -60,6 +61,15 @@ VizPage.getPageData = async ({
   const scoreStaleVizzes = ScoreStaleVizzes(gateways);
   const getInfoByIdOrSlug = GetInfoByIdOrSlug(gateways);
 
+  // A cache for resolving slugs to viz IDs.
+  // Keys are of the form `${userName}/${slug}`.
+  const slugResolutionCache: Record<string, VizId> = {};
+
+  const resolveSlug = ResolveSlug(
+    gateways,
+    slugResolutionCache,
+  );
+
   // TODO move all this into an interactor called
   // getVizPageData or something like that.
   try {
@@ -99,19 +109,19 @@ VizPage.getPageData = async ({
     });
 
     // Access control: Verify that the user has read access to the viz.
-    const verifyVizReadAccessResult: Result<VizAccess> =
+    const verifyVizAccessResult: Result<VizAccess> =
       await verifyVizAccess({
         authenticatedUserId,
         info,
         actions: [READ, WRITE, DELETE],
       });
-    if (verifyVizReadAccessResult.outcome === 'failure') {
+    if (verifyVizAccessResult.outcome === 'failure') {
       console.log('Error when verifying viz access:');
-      console.log(verifyVizReadAccessResult.error);
+      console.log(verifyVizAccessResult.error);
       return null;
     }
     const vizAccess: VizAccess =
-      verifyVizReadAccessResult.value;
+      verifyVizAccessResult.value;
 
     if (!vizAccess[READ]) {
       // console.log('User does not have read access to viz');
@@ -220,6 +230,7 @@ VizPage.getPageData = async ({
       forkedFromInfoSnapshot = forkedFromInfoResult.value;
 
       // Get the User entity for the owner of the viz that this viz was forked from.
+
       const forkedFromOwnerUserResult = await getUser(
         forkedFromInfoSnapshot.data.owner,
       );
@@ -244,6 +255,50 @@ VizPage.getPageData = async ({
     const vizCache: VizCache = createVizCache({
       initialContents: [content],
       handleCacheMiss: async (vizId: VizId) => {
+        // Verify that the user has access to the imported viz.
+        const getImportedInfoResult = await getInfo(vizId);
+        if (getImportedInfoResult.outcome === 'failure') {
+          console.log(
+            'Error when fetching imported viz info:',
+          );
+          console.log(getImportedInfoResult.error);
+          throw new Error(
+            'Error when fetching imported viz info',
+          );
+        }
+
+        const importedInfo: Info =
+          getImportedInfoResult.value.data;
+        const verifyImportedVizReadAccessResult: Result<VizAccess> =
+          await verifyVizAccess({
+            authenticatedUserId,
+            info: importedInfo,
+            actions: [READ],
+          });
+        if (
+          verifyImportedVizReadAccessResult.outcome ===
+          'failure'
+        ) {
+          console.log('Error when verifying viz access:');
+          console.log(
+            verifyImportedVizReadAccessResult.error,
+          );
+          throw new Error(
+            'Error when verifying viz access',
+          );
+        }
+        const importedVizAccess: VizAccess =
+          verifyVizAccessResult.value;
+
+        if (!importedVizAccess[READ]) {
+          console.log(
+            'User does not have read access to viz',
+          );
+          throw new Error(
+            'User does not have read access to imported viz',
+          );
+        }
+
         if (debug) {
           console.log(
             'Handling cache miss for vizId',
@@ -271,10 +326,16 @@ VizPage.getPageData = async ({
         return contentResult.value.data;
       },
     });
+
     // Compute srcdoc for iframe.
     // TODO cache it per commit.
     const { initialSrcdoc, initialSrcdocError } =
-      await computeSrcDoc({ rollup, content, vizCache });
+      await computeSrcDoc({
+        rollup,
+        content,
+        vizCache,
+        resolveSlug,
+      });
 
     if (debug) {
       console.log('initialSrcdoc');
@@ -359,6 +420,7 @@ VizPage.getPageData = async ({
       vizCacheContentSnapshots,
       initialCollaborators,
       initialIsUpvoted,
+      slugResolutionCache,
     };
   } catch (e) {
     console.log(

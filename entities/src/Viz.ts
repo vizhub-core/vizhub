@@ -244,6 +244,11 @@ export type V3PackageJson = {
   license?: License;
 };
 
+// SlugKey
+//  * Unique identifier string for a userName + Slug.
+//  * Of the form `${userName}/${slug}`.
+export type SlugKey = string;
+
 // The default height of a viz in pixels.
 // Homage to bl.ocks.org.
 export const defaultVizHeight = 500;

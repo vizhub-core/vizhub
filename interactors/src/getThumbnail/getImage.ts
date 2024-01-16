@@ -27,6 +27,7 @@ import {
 } from 'runtime/src/v3Runtime/vizCache';
 import { generateImageHash } from './generateImageHash';
 import { imageMetadataLock } from 'entities/src/Lock';
+import { ResolveSlug } from '../resolveSlug';
 
 const debug = false;
 
@@ -50,6 +51,7 @@ export const GetImage = (gateways: Gateways) => {
   const fetchImageMetadata = FetchImageMetadata(gateways);
   const pollImageGenerationStatus =
     PollImageGenerationStatus(gateways);
+  const resolveSlug = ResolveSlug(gateways);
 
   return async ({
     commitId,
@@ -158,6 +160,7 @@ export const GetImage = (gateways: Gateways) => {
             rollup,
             content,
             vizCache,
+            resolveSlug,
           });
 
         if (initialSrcdocError) {

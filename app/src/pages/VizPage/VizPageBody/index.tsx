@@ -24,6 +24,8 @@ import {
   getLicense,
   getHeight,
   getUserDisplayName,
+  VizId,
+  SlugKey,
 } from 'entities';
 import { useRuntime } from 'runtime';
 import { VizPageHead, VizPageViewer } from 'components';
@@ -68,6 +70,7 @@ export const VizPageBody = ({
   setUncommitted,
   isUpvoted,
   handleUpvoteClick,
+  slugResolutionCache,
 }: {
   info: Info;
   content: Content;
@@ -96,6 +99,7 @@ export const VizPageBody = ({
   setUncommitted: (authenticatedUser: User | null) => void;
   isUpvoted: boolean;
   handleUpvoteClick: () => void;
+  slugResolutionCache: Record<SlugKey, VizId>;
 }) => {
   // The currently authenticated user, if any.
   const authenticatedUser: User | null = useContext(
@@ -179,6 +183,7 @@ export const VizPageBody = ({
     setSrcdocError,
     vizCacheContents,
     isVisual,
+    slugResolutionCache,
   });
 
   // Handle manual runs.

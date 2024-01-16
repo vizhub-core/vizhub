@@ -47,6 +47,7 @@ export const build = async ({
   enableCache = false,
   rollup,
   vizCache,
+  resolveSlug,
 }: {
   // The ID of the viz being built.
   vizId: VizId;
@@ -56,6 +57,9 @@ export const build = async ({
 
   // The viz cache, prepopulated with at least the viz being built.
   vizCache: VizCache;
+
+  // Resolves a slug import to a viz ID.
+  resolveSlug: ({ userName, slug }) => Promise<VizId>;
 }): Promise<V3BuildResult> => {
   const startTime = Date.now();
   const warnings: Array<V3BuildError> = [];
@@ -79,7 +83,7 @@ export const build = async ({
     const inputOptions: RollupOptions = {
       input: './index.js',
       plugins: [
-        vizResolve({ vizId }),
+        vizResolve({ vizId, resolveSlug }),
         // vizLoad({ vizCache, trackCSSImport }),
         vizLoadCSS({ trackCSSImport }),
         vizLoadDSV({ vizCache }),

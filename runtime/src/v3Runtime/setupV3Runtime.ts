@@ -39,11 +39,13 @@ export const setupV3Runtime = ({
   iframe,
   setSrcdocError,
   getLatestContent,
+  resolveSlugKey,
 }: {
   vizId: VizId;
   iframe: HTMLIFrameElement;
   setSrcdocError: (error: string | null) => void;
   getLatestContent: (vizId: VizId) => Promise<Content>;
+  resolveSlugKey: (slugKey: string) => Promise<VizId>;
 }): V3Runtime => {
   // The "build worker", a Web Worker that does the building.
   const worker = new Worker();
@@ -153,6 +155,22 @@ export const setupV3Runtime = ({
 
       // Send the content back to the worker.
       worker.postMessage(contentResponseMessage);
+    }
+
+    // Handle 'resolveSlugRequest' messages.
+    // These are sent by the worker when it needs
+    // to resolve a slug import to a viz ID.
+    if (message.type === 'resolveSlugRequest') {
+      const { slugKey } = message;
+
+      const resolveSlugResponseMessage: V3WorkerMessage = {
+        type: 'resolveSlugResponse',
+        slugKey,
+        vizId: await resolveSlugKey(slugKey),
+      };
+
+      // Send the viz ID back to the worker.
+      worker.postMessage(resolveSlugResponseMessage);
     }
 
     // Handle 'invalidateVizCacheResponse' messages.

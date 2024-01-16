@@ -1,6 +1,11 @@
 import { Gateways, Result } from 'gateways';
-import { VizId, Snapshot, Info, UserId } from 'entities';
-import { isId } from './generateId';
+import {
+  VizId,
+  Snapshot,
+  Info,
+  UserId,
+  isId,
+} from 'entities';
 
 // getInfoByIdOrSlug
 // * Gets a viz info and content by id or slug
