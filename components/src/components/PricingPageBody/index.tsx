@@ -83,6 +83,7 @@ export const PricingPageBody = ({
   isMonthly,
   setIsMonthly,
   currentPlan = 'free',
+  enableFreeTrial,
 }: {
   onStarterDowngradeClick: () => void;
   onPremiumUpgradeClick: () => void;
@@ -90,6 +91,7 @@ export const PricingPageBody = ({
   isMonthly: boolean;
   setIsMonthly: (isMonthly: boolean) => void;
   currentPlan: Plan;
+  enableFreeTrial: boolean;
 }) => {
   const handleMonthlyClick = useCallback(() => {
     setIsMonthly(true);
@@ -99,7 +101,7 @@ export const PricingPageBody = ({
     setIsMonthly(false);
   }, []);
 
-  const premiumPricePerMonth = isMonthly ? 20 : 12;
+  const premiumPricePerMonth = isMonthly ? 9.99 : 99.99;
 
   const starterSpiritSrc = useMemo(
     () =>
@@ -209,13 +211,15 @@ export const PricingPageBody = ({
                   <div className="plan-header-right">
                     <h3>${premiumPricePerMonth}</h3>
                     <h3 className="plan-header-right-faint">
-                      /mo
+                      /{isMonthly ? 'month' : 'year'}
                     </h3>
                   </div>
                 </div>
                 <p>
                   Ideal for freelancers and professionals.
-                  Includes 30-day free trial.
+                  {enableFreeTrial
+                    ? ' Includes 7 day free trial.'
+                    : ''}
                 </p>
                 {currentPlan === 'premium' ? (
                   <CurrentButton />
@@ -225,7 +229,9 @@ export const PricingPageBody = ({
                     className="pricing-page-plan-button"
                     onClick={onPremiumUpgradeClick}
                   >
-                    Upgrade
+                    {enableFreeTrial
+                      ? 'Start Free Trial'
+                      : 'Upgrade'}
                   </Button>
                 )}
 
@@ -252,8 +258,8 @@ export const PricingPageBody = ({
                     heavyBottomBorder={true}
                     startsExpanded={true}
                   >
-                    Request coding assistance from advanced
-                    artificial intelligence.
+                    Request in-editor coding assistance from
+                    artificial intelligence (GPT-4).
                   </Feature>
                   <StarterFeatures startsExpanded={false} />
                 </div>
