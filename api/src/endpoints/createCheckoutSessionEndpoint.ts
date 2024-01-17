@@ -37,10 +37,16 @@ export const createCheckoutSession = ({
       }
       const authenticatedUser: User = userResult.value.data;
 
+      // For debugging.
+      const alwaysAllowFreeTrial = false;
+
       // Only allow one free trial per user
       // by checking if user.stripeCustomerId is defined
       const trial_period_days =
-        authenticatedUser.stripeCustomerId ? undefined : 7;
+        authenticatedUser.stripeCustomerId &&
+        !alwaysAllowFreeTrial
+          ? undefined
+          : 7;
 
       const stripe = getStripe();
 
