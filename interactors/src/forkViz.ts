@@ -110,6 +110,11 @@ export const ForkViz = (gateways: Gateways) => {
       delete newInfo.slug;
     }
 
+    // If `anyoneCanEdit` was true, remove it in the fork.
+    if (newInfo.anyoneCanEdit) {
+      delete newInfo.anyoneCanEdit;
+    }
+
     // If the title is specified, use it.
     if (title !== undefined) {
       newInfo.title = title;
