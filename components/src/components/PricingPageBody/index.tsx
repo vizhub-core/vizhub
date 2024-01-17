@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Plan } from 'entities';
 import { GreenCheckSVG } from '../Icons/sam/GreenCheckSVG';
 import { Button, ButtonGroup } from '../bootstrap';
@@ -18,6 +18,20 @@ const headerBackgroundSrc = image('pricing-header-bkg');
 // const professionalSpiritSrc = image(
 //   'pricing-spirit-professional',
 // );
+
+const starterImages = [
+  'pricing-spirit-starter',
+  'pricing-spirit-starter-1',
+  'pricing-spirit-starter-2',
+];
+const premiumImages = [
+  // 'pricing-spirit-premium',
+  'pricing-spirit-premium-2',
+  'pricing-spirit-premium-4',
+  'pricing-spirit-premium-5',
+  'pricing-spirit-premium-6',
+  'pricing-spirit-premium-7',
+];
 
 const StarterFeatures = ({ startsExpanded = true }) => {
   return (
@@ -103,28 +117,26 @@ export const PricingPageBody = ({
 
   const premiumPricePerMonth = isMonthly ? 9.99 : 99.99;
 
-  const starterSpiritSrc = useMemo(
-    () =>
-      randomImage([
-        'pricing-spirit-starter',
-        'pricing-spirit-starter-1',
-        'pricing-spirit-starter-2',
-      ]),
-    [],
+  // Make sure there is consistency between the
+  // server-side and client-side rendering of the
+  // initial pricing page.
+  const [starterSpiritSrc, setStarterSpiritSrc] = useState(
+    image(starterImages[0]),
   );
 
-  const premiumSpiritSrc = useMemo(
-    () =>
-      randomImage([
-        // 'pricing-spirit-premium',
-        'pricing-spirit-premium-2',
-        'pricing-spirit-premium-4',
-        'pricing-spirit-premium-5',
-        'pricing-spirit-premium-6',
-        'pricing-spirit-premium-7',
-      ]),
-    [],
+  // On the client only, randomize the image.
+  useEffect(() => {
+    setStarterSpiritSrc(randomImage(starterImages));
+  }, []);
+
+  const [premiumSpiritSrc, setPremiumSpiritSrc] = useState(
+    image(premiumImages[0]),
   );
+
+  useEffect(() => {
+    setPremiumSpiritSrc(randomImage(premiumImages));
+  }, []);
+
   return (
     <div className="vh-page vh-pricing-page">
       <img

@@ -2,6 +2,7 @@ import express from 'express';
 import { UserId } from 'entities';
 import { getStripe } from './getStripe';
 import { UpdateUserStripeId } from 'interactors';
+import { Gateways, Result } from 'gateways';
 
 const debug = false;
 
@@ -17,7 +18,11 @@ const debug = false;
 export const stripeWebhookEndpoint = ({
   app,
   gateways,
+}: {
+  app: any;
+  gateways: Gateways;
 }) => {
+  const { getUserIdByStripeCustomerId } = gateways;
   const updateUserStripeId = UpdateUserStripeId(gateways);
 
   app.post(
@@ -125,13 +130,22 @@ export const stripeWebhookEndpoint = ({
         }
         const subscriptionDeleted = event.data.object;
 
-        const checkoutSessionCompleted = event.data.object;
+        const stripeCustomerId: string =
+          subscriptionDeleted.customer;
 
-        const userId: UserId =
-          subscriptionDeleted.client_reference_id;
+        const userIdResult: Result<UserId> =
+          await getUserIdByStripeCustomerId(
+            stripeCustomerId,
+          );
 
-        const stripeCustomerId =
-          checkoutSessionCompleted.customer;
+        if (userIdResult.outcome === 'failure') {
+          console.log(
+            'error getting user id',
+            userIdResult.error,
+          );
+          return;
+        }
+        const userId = userIdResult.value;
 
         const result = await updateUserStripeId({
           userId,

@@ -42,11 +42,6 @@ export const fakeCheckoutSuccessEndpoint = ({
           const user: User = userResult.value.data;
 
           user.plan = 'premium';
-          // TODO stripe
-          // user.stripeCustomerId = 'fake-stripe-customer-id';
-          // user.stripeSubscriptionId = 'fake-stripe-subscription-id';
-          // user.stripeSubscriptionItemId = 'fake-stripe-subscription-item-id';
-          // user.stripeSubscriptionStatus = 'active';
 
           const saveUserResult = await saveUser(user);
           if (saveUserResult.outcome === 'failure') {

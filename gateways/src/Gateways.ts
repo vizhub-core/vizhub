@@ -450,6 +450,13 @@ export interface Gateways {
     ids: Array<UserId>,
   ): Promise<Result<Array<Snapshot<User>>>>;
 
+  // getUserIdByStripeCustomerId
+  //
+  // Gets the user id that matches the given stripeCustomerId.
+  getUserIdByStripeCustomerId(
+    stripeCustomerId: string,
+  ): Promise<Result<UserId>>;
+
   // ***************************************************************
   // ******************** Embeddings & Supabase ********************
   // ***************************************************************
