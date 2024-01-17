@@ -172,7 +172,7 @@ export const VizPageBody = ({
     const isSingleFile =
       Object.keys(content.files).length === 1;
     const isReadme =
-      content.files[fileIds[0]].name === 'README.md';
+      content.files[fileIds[0]]?.name === 'README.md';
     return !(isSingleFile && isReadme);
   }, [content]);
 
