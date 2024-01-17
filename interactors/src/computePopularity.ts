@@ -5,7 +5,7 @@ import decay from 'decay';
 
 // Default gravity is 1.8
 // The higher the gravity, the more quickly scores decay.
-const gravity = 1;
+const gravity = 0.8;
 
 const hackerHotScore = decay.hackerHot(gravity);
 const infinityIfNaN = (number) =>
