@@ -1,16 +1,16 @@
 import express from 'express';
-import { err, ok } from 'gateways';
+import { Gateways, err, ok } from 'gateways';
 import { authenticationRequiredError } from 'gateways/src/errors';
 import { getAuthenticatedUserId } from '../parseAuth0User';
 import { getStripe } from './getStripe';
-// import { User } from 'entities';
+import { User } from 'entities';
 
 export const createCheckoutSession = ({
   app,
-  // gateways,
+  gateways,
 }: {
   app: express.Express;
-  // gateways: Gateways;
+  gateways: Gateways;
 }) => {
   app.post(
     '/api/create-checkout-session',
@@ -28,14 +28,19 @@ export const createCheckoutSession = ({
         return;
       }
 
-      // const userResult = await gateways.getUser(
-      //   authenticatedUserId,
-      // );
-      // if (userResult.outcome === 'failure') {
-      //   res.json(err(userResult.error));
-      //   return;
-      // }
-      // const authenticatedUser: User = userResult.value.data;
+      const userResult = await gateways.getUser(
+        authenticatedUserId,
+      );
+      if (userResult.outcome === 'failure') {
+        res.json(err(userResult.error));
+        return;
+      }
+      const authenticatedUser: User = userResult.value.data;
+
+      // Only allow one free trial per user
+      // by checking if user.stripeCustomerId is defined
+      const trial_period_days =
+        authenticatedUser.stripeCustomerId ? undefined : 7;
 
       const stripe = getStripe();
 
@@ -75,9 +80,7 @@ export const createCheckoutSession = ({
                 missing_payment_method: 'cancel',
               },
             },
-            // TODO only allow one free trial per user
-            // by checking if user.stripeCustomerId is null
-            trial_period_days: 30,
+            trial_period_days,
           },
 
           // Yes, we do always want to collect payment method.
