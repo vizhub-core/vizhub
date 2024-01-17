@@ -835,6 +835,26 @@ export const DatabaseGateways = ({
       );
     });
 
+  const getUserIdByStripeCustomerId = async (
+    stripeCustomerId: string,
+  ) => {
+    const entityName = 'User';
+    const from = toCollectionName(entityName);
+    const collection = mongoDBDatabase.collection(from);
+
+    const result = await collection.findOne({
+      stripeCustomerId,
+    });
+
+    if (result === null) {
+      return err(
+        resourceNotFoundError(stripeCustomerId, entityName),
+      );
+    }
+
+    return ok(result._id);
+  };
+
   let databaseGateways = {
     type: 'DatabaseGateways',
     getForks,
@@ -854,6 +874,7 @@ export const DatabaseGateways = ({
     getUsersForTypeahead,
     getStaleInfoIds,
     getInfoByUserAndSlug,
+    getUserIdByStripeCustomerId,
   };
 
   for (const entityName of crudEntityNames) {
