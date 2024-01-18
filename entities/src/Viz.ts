@@ -137,6 +137,9 @@ export interface Info {
 
   // When this viz was last migrated from V2.
   migratedTimestamp?: Timestamp;
+
+  // True for vizzes that use the v3 runtime.
+  v3?: boolean;
 }
 
 // Configuration
