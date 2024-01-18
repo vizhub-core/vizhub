@@ -217,17 +217,33 @@ VizPage.getPageData = async ({
     let forkedFromInfoSnapshot: Snapshot<Info> = null;
     let forkedFromOwnerUserSnapshot = null;
     if (forkedFrom) {
-      // Get the Info entity for the viz that this viz was forked from.
-      const forkedFromInfoResult =
-        await getInfo(forkedFrom);
-      if (forkedFromInfoResult.outcome === 'failure') {
-        console.log(
-          'Error when fetching owner user for forked from:',
-        );
-        console.log(forkedFromInfoResult.error);
-        return null;
+      let needToFetchForkedFrom = true;
+      let nextForkedFrom = forkedFrom;
+
+      while (needToFetchForkedFrom) {
+        // Get the Info entity for the viz that this viz was forked from.
+        const forkedFromInfoResult =
+          await getInfo(nextForkedFrom);
+        if (forkedFromInfoResult.outcome === 'failure') {
+          console.log(
+            'Error when fetching owner user for forked from:',
+          );
+          console.log(forkedFromInfoResult.error);
+          return null;
+        }
+        forkedFromInfoSnapshot = forkedFromInfoResult.value;
+        const isForkedFromTrashed =
+          forkedFromInfoSnapshot.data.trashed !== undefined;
+
+        // Recursively trace the forkedFrom chain while the viz is "trashed".
+        // This is to support the case where a viz is forked from a trashed viz,
+        // and that trashed viz has not yet been permanently deleted.
+        needToFetchForkedFrom = isForkedFromTrashed;
+        if (needToFetchForkedFrom) {
+          nextForkedFrom =
+            forkedFromInfoSnapshot.data.forkedFrom;
+        }
       }
-      forkedFromInfoSnapshot = forkedFromInfoResult.value;
 
       // Get the User entity for the owner of the viz that this viz was forked from.
 
