@@ -32,7 +32,7 @@
     "uuid": "^9.0.1"
   },
   "devDependencies": {
-    "prettier": "^3.2.1",
-    "vitest": "^1.2.0"
+    "prettier": "^3.2.4",
+    "vitest": "^1.2.1"
   }
 }
