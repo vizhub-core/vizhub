@@ -60,14 +60,16 @@ export const ScoreStaleVizzes = (gateways: Gateways) => {
         //   );
         // }
 
-        // for (const viz of staleInfoIds) {
-        //   await scoreViz({ viz });
-        // }
+        // Serial processing is slower than parallel,
+        // but less burden on the database.
+        for (const viz of staleInfoIds) {
+          await scoreViz({ viz });
+        }
 
         // Parallel processing is faster than serial.
-        await Promise.all(
-          staleInfoIds.map((viz) => scoreViz({ viz })),
-        );
+        // await Promise.all(
+        //   staleInfoIds.map((viz) => scoreViz({ viz })),
+        // );
 
         if (debug) {
           const end = Date.now();

@@ -27,6 +27,7 @@ export const VizPreview = ({
   upvotesCount,
   forksCount,
   visibility,
+  isHot,
 }) => {
   // Data URL for the thumbnail image, or null if not yet loaded.
   const [backgroundImage, setBackgroundImage] = useState<
@@ -50,7 +51,7 @@ export const VizPreview = ({
 
   return (
     <a
-      className="vh-viz-preview"
+      className={`vh-viz-preview${isHot ? ' hot-viz-preview' : ''}`}
       href={href}
       rel="noreferrer noopener"
     >
