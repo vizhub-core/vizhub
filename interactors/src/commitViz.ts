@@ -4,8 +4,8 @@ import {
   VizId,
   Info,
   Commit,
-  vizLocks,
   infoLock,
+  getRuntimeVersion,
 } from 'entities';
 import { generateId } from './generateId';
 import { GetViz } from './getViz';
@@ -77,6 +77,12 @@ export const CommitViz = (gateways: Gateways) => {
         committed: true,
         commitAuthors: [],
       };
+
+      // Mark V3 vizzes as such.
+      const runtimeVersion = getRuntimeVersion(content);
+      if (runtimeVersion === 3) {
+        newInfo.v3 = true;
+      }
 
       // If something goes wrong with saving the commit,
       // then don't save the Info.

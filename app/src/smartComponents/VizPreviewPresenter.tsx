@@ -4,7 +4,6 @@ import {
   Snapshot,
   User,
   getUserDisplayName,
-  timestampToDate,
 } from 'entities';
 import { VizPreview } from 'components/src/components/VizPreview';
 import { useShareDBDocData } from '../useShareDBDocData';
@@ -36,6 +35,7 @@ export const VizPreviewPresenter = ({
     upvotesCount,
     forksCount,
     visibility,
+    v3,
   } = info;
   const { userName } = ownerUser;
 
@@ -75,6 +75,7 @@ export const VizPreviewPresenter = ({
       upvotesCount={upvotesCount}
       forksCount={forksCount}
       visibility={visibility}
+      isHot={v3}
     />
   );
 };

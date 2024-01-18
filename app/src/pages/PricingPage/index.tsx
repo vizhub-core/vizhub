@@ -32,8 +32,9 @@ const Body = () => {
   const [isMonthly, setIsMonthly] = useState(true);
 
   // Only enable one free trial per user.
-  const enableFreeTrial =
-    !authenticatedUser.stripeCustomerId;
+  const enableFreeTrial = authenticatedUser
+    ? !authenticatedUser.stripeCustomerId
+    : true;
 
   // When the user clicks "Upgrade" in the Premium card.
   const handlePremiumUpgradeClick =

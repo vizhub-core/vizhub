@@ -7,6 +7,11 @@
   border-radius: 8px;
   cursor: pointer;
 
+  // Style .vh-viz-preview.hot-viz
+  &.hot-viz-preview {
+    box-shadow: var(--vh-color-caution-01) 0px 0px 4px 0px;
+  }
+
   /* Aspect ratio, original thumbnail size: 230 X 120*/
   width: 300px;
   /* 230 X 120 */

@@ -4,8 +4,16 @@ import {
   Info,
   infoLock,
   dateToTimestamp,
+  getRuntimeVersion,
 } from 'entities';
 import { computePopularity } from './computePopularity';
+
+// When true, backfills the runtimeVersion field.
+// This is a one-time operation and will be disabled
+// once all vizzes have been backfilled and CommitViz
+// has been updated to automatically write the runtimeVersion
+// field of the Info document.
+const backfillRuntimeVersion = true;
 
 // scoreViz
 //  * Computes the popularity score for this viz
@@ -35,6 +43,25 @@ export const ScoreViz = (gateways: Gateways) => {
         popularity,
         popularityUpdated: dateToTimestamp(new Date()),
       };
+
+      // console.log(
+      //   'backfillRuntimeVersion',
+      //   backfillRuntimeVersion,
+      // );
+      if (backfillRuntimeVersion) {
+        const getContentResult =
+          await gateways.getContent(viz);
+        if (getContentResult.outcome === 'failure') {
+          return err(getContentResult.error);
+        }
+        const content = getContentResult.value.data;
+        const runtimeVersion = getRuntimeVersion(content);
+        // console.log('runtimeVersion', runtimeVersion);
+        if (runtimeVersion === 3) {
+          newInfo.v3 = true;
+        }
+      }
+
       const saveInfoResult = await saveInfo(newInfo);
       if (saveInfoResult.outcome === 'failure') {
         return err(saveInfoResult.error);

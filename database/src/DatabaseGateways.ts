@@ -371,7 +371,7 @@ export const DatabaseGateways = ({
 
     // Temporarily disable to recompute all vizzes sooner
     // const oneDayAgo = dateToTimestamp(
-    //   new Date(Date.now() - 1000 * 60),
+    //   new Date(Date.now() - 1000),
     // );
 
     const results = await collection
