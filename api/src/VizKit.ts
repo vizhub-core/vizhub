@@ -75,6 +75,7 @@ export interface VizKitAPI {
     createCheckoutSession: (options: {
       userId: UserId;
       isMonthly: boolean;
+      discountCode?: string;
     }) => Promise<
       Result<{
         sessionURL: string;
@@ -202,12 +203,14 @@ export const VizKit = ({
       createCheckoutSession: async ({
         userId,
         isMonthly,
+        discountCode,
       }) =>
         await postJSON(
           `${baseUrl}/create-checkout-session`,
           {
             userId,
             isMonthly,
+            discountCode,
           },
         ),
 
