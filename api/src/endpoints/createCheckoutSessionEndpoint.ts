@@ -5,6 +5,13 @@ import { getAuthenticatedUserId } from '../parseAuth0User';
 import { getStripe } from './getStripe';
 import { User } from 'entities';
 
+const isValidDiscountCode = (discountCode: string) => {
+  return (
+    discountCode === 'WPIFREEYEAR' ||
+    discountCode === 'WPIFREEYEAR2024'
+  );
+};
+
 export const createCheckoutSession = ({
   app,
   gateways,
@@ -60,6 +67,14 @@ export const createCheckoutSession = ({
 
       const { isMonthly } = req.body;
 
+      let discountCode;
+      if (
+        req.body.discountCode &&
+        isValidDiscountCode(req.body.discountCode)
+      ) {
+        discountCode = req.body.discountCode;
+      }
+
       const price = isMonthly
         ? process.env.VIZHUB_PREMIUM_MONTHLY_STRIPE_PRICE_ID
         : process.env.VIZHUB_PREMIUM_ANNUAL_STRIPE_PRICE_ID;
@@ -78,7 +93,7 @@ export const createCheckoutSession = ({
             },
           ],
 
-          // 30 day free trial
+          // Free trial
           // See https://stripe.com/docs/payments/checkout/free-trials
           subscription_data: {
             trial_settings: {
@@ -100,15 +115,19 @@ export const createCheckoutSession = ({
           // payment_method_collection: 'always',
 
           // Enable WPI signups without payment method
-          payment_method_collection: 'if_required',
+          payment_method_collection: discountCode
+            ? 'if_required'
+            : 'always',
 
           allow_promotion_codes: true,
 
-          // discounts: [
-          //   {
-          //     coupon: process.env.VIZHUB_STRIPE_COUPON_ID,
-          //   },
-          // ],
+          discounts: discountCode
+            ? [
+                {
+                  coupon: discountCode,
+                },
+              ]
+            : undefined,
         },
       );
       res.json(ok({ sessionURL: session.url }));
