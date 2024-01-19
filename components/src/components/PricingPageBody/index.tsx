@@ -257,7 +257,7 @@ export const PricingPageBody = ({
                     by you and your collaborators.
                   </Feature>
                   <Feature
-                    title="Unlimited Collaborators"
+                    title="Unlimited Real-Time Collaborators"
                     hasBottomBorder={true}
                     startsExpanded={true}
                   >
@@ -269,9 +269,12 @@ export const PricingPageBody = ({
                     hasBottomBorder={true}
                     heavyBottomBorder={true}
                     startsExpanded={true}
+                    learnMoreHref="https://vizhub.com/forum/t/ai-assisted-coding/952"
                   >
-                    Request in-editor coding assistance from
-                    artificial intelligence (GPT-4).
+                    Request coding assistance from
+                    artificial intelligence, which types
+                    directly into your editor! Powered by
+                    GPT-4.
                   </Feature>
                   <StarterFeatures startsExpanded={false} />
                 </div>
