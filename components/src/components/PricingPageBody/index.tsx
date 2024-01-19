@@ -65,7 +65,9 @@ const StarterFeatures = ({ startsExpanded = true }) => {
         hasBottomBorder={true}
         startsExpanded={startsExpanded}
       >
-        Join our Discord and Forum to connect with our
+        Join our{' '}
+        <a href="https://discord.gg/wbtJ7SCtYr">Discord</a>{' '}
+        and <a href="">Forum</a> to connect with our
         community.
       </Feature>
       <Feature
@@ -73,8 +75,11 @@ const StarterFeatures = ({ startsExpanded = true }) => {
         hasBottomBorder={false}
         startsExpanded={startsExpanded}
       >
-        Learn to code and visualize data with our free
-        online courses.
+        Learn to code and visualize data with our{' '}
+        <a href="https://vizhub.com/forum/t/index-of-courses/289">
+          free online courses
+        </a>
+        .
       </Feature>
     </>
   );

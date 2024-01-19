@@ -8,7 +8,7 @@ export const Feature = ({
   hasBottomBorder,
   heavyBottomBorder = false,
   startsExpanded = false,
-  learnMoreHref,
+  learnMoreHref = null,
   children,
 }) => {
   const [isOpen, setIsOpen] = useState(startsExpanded);

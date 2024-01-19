@@ -52,6 +52,10 @@
         margin-top: 34px;
         justify-content: space-between;
 
+        a {
+          text-decoration: none;
+        }
+
         @media (max-width: 1200px) {
           flex-direction: column;
         }
@@ -118,12 +122,12 @@
             .feature {
               display: flex;
               flex-direction: column;
-              cursor: pointer;
               padding: 8px 0;
 
               .feature-header {
                 display: flex;
                 justify-content: space-between;
+                cursor: pointer;
 
                 .feature-title {
                   font-weight: bold;
@@ -144,7 +148,6 @@
               }
               .feature-learn-more-link {
                 font-weight: bold;
-                text-decoration: none;
                 text-align: right;
               }
               .feature-header:hover .feature-toggle {
