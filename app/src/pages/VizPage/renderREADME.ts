@@ -62,6 +62,16 @@ export const renderREADME = (readmeText) =>
               'frameborder',
               'allowfullscreen',
             ],
+            img: ['src', 'alt', 'width'],
+            video: [
+              'src',
+              'controls',
+              'autoplay',
+              'loop',
+              'muted',
+              'width',
+            ],
+            source: ['src', 'type'],
           },
         }),
       )

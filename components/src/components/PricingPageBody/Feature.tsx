@@ -8,6 +8,7 @@ export const Feature = ({
   hasBottomBorder,
   heavyBottomBorder = false,
   startsExpanded = false,
+  learnMoreHref = null,
   children,
 }) => {
   const [isOpen, setIsOpen] = useState(startsExpanded);
@@ -24,9 +25,11 @@ export const Feature = ({
             }-bottom-border`
           : ''
       }`}
-      onClick={toggleIsOpen}
     >
-      <div className="feature-header">
+      <div
+        className="feature-header"
+        onClick={toggleIsOpen}
+      >
         <div className="feature-title">
           <GreenCheckSVG />
           {title}
@@ -36,9 +39,21 @@ export const Feature = ({
         </div>
       </div>
       {isOpen && (
-        <div className="feature-description">
-          {children}
-        </div>
+        <>
+          <div className="feature-description">
+            {children}
+          </div>
+          {learnMoreHref && (
+            <a
+              className="feature-learn-more-link"
+              href={learnMoreHref}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Learn more
+            </a>
+          )}
+        </>
       )}
     </div>
   );

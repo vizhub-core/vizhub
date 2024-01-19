@@ -21,12 +21,25 @@
       width: 100%;
       max-width: 1280px;
       margin-bottom: 70px;
+      padding: 34px;
+
+      @media (max-width: 1200px) {
+        padding: 20px;
+      }
+      @media (max-width: 600px) {
+        padding: 10px;
+      }
 
       .pricing-page-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
         padding-top: 70px;
+
+        @media (max-width: 600px) {
+          flex-direction: column;
+          padding-top: 20px;
+        }
 
         h1 {
           color: white;
@@ -39,10 +52,12 @@
         margin-top: 34px;
         justify-content: space-between;
 
-        // mobile
-        @media (max-width: 768px) {
+        a {
+          text-decoration: none;
+        }
+
+        @media (max-width: 1200px) {
           flex-direction: column;
-          gap: 0;
         }
 
         .pricing-page-plan {
@@ -107,12 +122,12 @@
             .feature {
               display: flex;
               flex-direction: column;
-              cursor: pointer;
               padding: 8px 0;
 
               .feature-header {
                 display: flex;
                 justify-content: space-between;
+                cursor: pointer;
 
                 .feature-title {
                   font-weight: bold;
@@ -131,11 +146,15 @@
                 color: var(--vh-color-neutral-03);
                 margin-bottom: 6px;
               }
+              .feature-learn-more-link {
+                font-weight: bold;
+                text-align: right;
+              }
+              .feature-header:hover .feature-toggle {
+                background-color: var(--vh-color-action-03);
+              }
             }
 
-            .feature:hover .feature-toggle {
-              background-color: var(--vh-color-action-03);
-            }
             .feature.light-bottom-border {
               border-bottom: 1px solid
                 var(--vh-color-rule-01);
