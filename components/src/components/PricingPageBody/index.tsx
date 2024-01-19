@@ -65,7 +65,9 @@ const StarterFeatures = ({ startsExpanded = true }) => {
         hasBottomBorder={true}
         startsExpanded={startsExpanded}
       >
-        Join our Discord and Forum to connect with our
+        Join our{' '}
+        <a href="https://discord.gg/wbtJ7SCtYr">Discord</a>{' '}
+        and <a href="">Forum</a> to connect with our
         community.
       </Feature>
       <Feature
@@ -73,8 +75,11 @@ const StarterFeatures = ({ startsExpanded = true }) => {
         hasBottomBorder={false}
         startsExpanded={startsExpanded}
       >
-        Learn to code and visualize data with our free
-        online courses.
+        Learn to code and visualize data with our{' '}
+        <a href="https://vizhub.com/forum/t/index-of-courses/289">
+          free online courses
+        </a>
+        .
       </Feature>
     </>
   );
@@ -257,7 +262,7 @@ export const PricingPageBody = ({
                     by you and your collaborators.
                   </Feature>
                   <Feature
-                    title="Unlimited Collaborators"
+                    title="Unlimited Real-Time Collaborators"
                     hasBottomBorder={true}
                     startsExpanded={true}
                   >
@@ -269,9 +274,12 @@ export const PricingPageBody = ({
                     hasBottomBorder={true}
                     heavyBottomBorder={true}
                     startsExpanded={true}
+                    learnMoreHref="https://vizhub.com/forum/t/ai-assisted-coding/952"
                   >
-                    Request in-editor coding assistance from
-                    artificial intelligence (GPT-4).
+                    Request coding assistance from
+                    artificial intelligence, which types
+                    directly into your editor! Powered by
+                    GPT-4.
                   </Feature>
                   <StarterFeatures startsExpanded={false} />
                 </div>
