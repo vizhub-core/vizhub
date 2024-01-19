@@ -13,7 +13,7 @@ import { computePopularity } from './computePopularity';
 // once all vizzes have been backfilled and CommitViz
 // has been updated to automatically write the runtimeVersion
 // field of the Info document.
-const backfillRuntimeVersion = true;
+const backfillRuntimeVersion = false;
 
 // scoreViz
 //  * Computes the popularity score for this viz
