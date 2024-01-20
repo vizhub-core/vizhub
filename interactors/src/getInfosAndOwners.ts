@@ -49,7 +49,10 @@ export const GetInfosAndOwners = (gateways: Gateways) => {
     sectionId?: SectionId;
     sortId?: SortId;
     defaultSortId?: SortId;
-    pageNumber: number;
+
+    // Must be defined if disablePagination is false.
+    pageNumber?: number;
+
     owner?: UserId;
     forkedFrom?: VizId;
     vizIds?: Array<VizId>;

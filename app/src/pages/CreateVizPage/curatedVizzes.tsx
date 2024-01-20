@@ -134,9 +134,18 @@ export type CuratedVizCollection = {
 
 export const curatedVizzes: Array<CuratedVizCollection> = [
   {
-    title: 'Constructing Visualizations',
-    description: () =>
-      'A collection of visualizations about building visualizations.',
+    title: 'Constructing Visualizations 2024',
+    description: () => (
+      <div>
+        Vizzes that support hot reloading and use only{' '}
+        <a href="https://d3js.org/">D3.js</a>. From the free
+        course{' '}
+        <a href="https://vizhub.com/forum/t/constructing-visualizations-2024-index/950">
+          Constructing Visualizations 2024
+        </a>
+        .
+      </div>
+    ),
     vizIds: constructingVisualizations2024,
   },
   {
@@ -158,9 +167,18 @@ export const curatedVizzes: Array<CuratedVizCollection> = [
     vizIds: mostForked,
   },
   {
-    title: 'DataVis 2018',
-    description: () =>
-      'A collection of projects from DataVis 2018.',
+    title: 'Datavis 2018',
+    description: () => (
+      <div>
+        Old-style visualizations with D3 only, from the free
+        course{' '}
+        <a href="https://curran.github.io/dataviz-course-2018/">
+          Data Visualization Course 2018
+        </a>
+        .
+      </div>
+    ),
+
     vizIds: datavis2018Templates,
   },
   {
