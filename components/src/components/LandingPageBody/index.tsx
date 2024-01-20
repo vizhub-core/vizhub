@@ -3,9 +3,11 @@ import { Button } from '../bootstrap';
 import { image } from '../image';
 import './styles.scss';
 
+const enableFooter = false;
+
 const headerBackgroundSrc = image('landing-header-bkg');
 const headerForegroundSrc = image(
-  'landing-page-ui-example',
+  'landing-page-ui-example-2',
 );
 
 export const LandingPageBody = () => {
@@ -24,13 +26,19 @@ export const LandingPageBody = () => {
             Develop custom data visualizations faster and
             more collaboratively than ever.
           </h1>
-          <Button variant="secondary" size="lg">
-            Try Vizhub for free
+          <Button
+            variant="secondary"
+            size="lg"
+            href="/explore"
+          >
+            Explore VizHub
           </Button>
-          <img
-            className="header-foreground"
-            src={headerForegroundSrc}
-          />
+          <a href="https://vizhub.com/curran/da1bd8ba9ffb4e71a240fb8eda172ba7">
+            <img
+              className="header-foreground"
+              src={headerForegroundSrc}
+            />
+          </a>
         </div>
         <div className="features-container">
           <div className="white-background-section">
@@ -49,6 +57,25 @@ export const LandingPageBody = () => {
             </div>
           </div>
           <div className="feature-section">
+            <div className="feature-section-content brand-background">
+              <div className="feature-section-copy">
+                <h3>Thousands of Public Vizzes</h3>
+                <p>
+                  Explore over 70,000 open source data
+                  visualizations created by our community.
+                  Sort by most popular, most recent, or most
+                  forked.
+                </p>
+                <Button href="/explore">Explore</Button>
+              </div>
+              <div className="feature-section-image">
+                <img
+                  src={image('explore-thumbnails')}
+                ></img>
+              </div>
+            </div>
+          </div>
+          <div className="feature-section">
             <div className="feature-section-content">
               <div className="feature-section-copy">
                 <h3>Hot Reloading & Interactive Widgets</h3>
@@ -62,16 +89,32 @@ export const LandingPageBody = () => {
                   feedback,dramatically accelerating your
                   experience.
                 </p>
+                <Button
+                  href="https://vizhub.com/curran/66194bb8626c447bb13291587da28cec"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Try it out
+                </Button>
               </div>
               <div className="feature-section-image">
-                <video autoPlay loop muted>
-                  <source
-                    src={image('hot-reloading-demo', 'mp4')}
-                    type="video/mp4"
-                  />
-                  Your browser does not support the video
-                  tag.
-                </video>
+                <a
+                  href="https://vizhub.com/curran/66194bb8626c447bb13291587da28cec"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <video autoPlay loop muted>
+                    <source
+                      src={image(
+                        'hot-reloading-demo',
+                        'mp4',
+                      )}
+                      type="video/mp4"
+                    />
+                    Your browser does not support the video
+                    tag.
+                  </video>
+                </a>
               </div>
             </div>
           </div>
@@ -87,16 +130,29 @@ export const LandingPageBody = () => {
                   will help you code faster and more
                   accurately than ever before.
                 </p>
+                <Button
+                  href="https://vizhub.com/forum/t/ai-assisted-coding/952"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Learn more
+                </Button>
               </div>
               <div className="feature-section-image">
-                <video autoPlay loop muted>
-                  <source
-                    src={image('ai-assist-demo', 'webm')}
-                    type="video/webm"
-                  />
-                  Your browser does not support the video
-                  tag.
-                </video>
+                <a
+                  href="https://vizhub.com/forum/t/ai-assisted-coding/952"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <video autoPlay loop muted>
+                    <source
+                      src={image('ai-assist-demo', 'webm')}
+                      type="video/webm"
+                    />
+                    Your browser does not support the video
+                    tag.
+                  </video>
+                </a>
               </div>
             </div>
           </div>
@@ -126,12 +182,12 @@ export const LandingPageBody = () => {
               <div className="feature-section-copy">
                 <h3>Vanilla is the Best Flavor</h3>
                 <p>
-                  Export your visualizations as vanilla
-                  JavaScript. Experience frictionless
-                  integration with existing codebases and
-                  downstream deployment workflows. VizHub{' '}
-                  <i>is</i> JavaScript. No platform-specific
-                  syntax here!
+                  Export your visualizations as Vanilla
+                  JavaScript. Author your code using
+                  industry standard ES Modules. Experience
+                  frictionless integration with existing
+                  codebases and downstream deployment
+                  workflows.
                 </p>
               </div>
               <div className="feature-section-image rotating-image">
@@ -143,7 +199,7 @@ export const LandingPageBody = () => {
             </div>
           </div>
         </div>
-        <Footer />
+        {enableFooter && <Footer />}
       </div>
     </div>
   );

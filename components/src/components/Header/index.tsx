@@ -18,7 +18,7 @@ const enableResourcesLink = false;
 // Feature flag to enable/disable pricing page link
 const enablePricingLink = true;
 
-const enableExploreLink = false;
+const enableExploreLink = true;
 
 export const Header = ({
   authenticatedUserAvatarURL,
@@ -29,6 +29,7 @@ export const Header = ({
   onVizHubClick,
   pricingHref,
   resourcesHref,
+  exploreHref,
   showBillingLink,
   onBillingClick,
 }: {
@@ -40,6 +41,7 @@ export const Header = ({
   onVizHubClick: () => void;
   pricingHref: string;
   resourcesHref: string;
+  exploreHref?: string;
   showBillingLink?: boolean;
   onBillingClick: () => void;
 }) => (
@@ -58,7 +60,7 @@ export const Header = ({
         <Nav className="me-auto" />
         <Nav className="align-items-md-center">
           {enableExploreLink && (
-            <Nav.Link href="/explore">Explore</Nav.Link>
+            <Nav.Link href={exploreHref}>Explore</Nav.Link>
           )}
 
           <Nav.Link

@@ -45,6 +45,7 @@ export const SmartHeader = () => {
       pricingHref={'/pricing'}
       createVizHref={'/create-viz'}
       resourcesHref={'/resources'}
+      exploreHref={'/explore'}
       profileHref={`/${authenticatedUser?.userName}`}
       authenticatedUserAvatarURL={
         authenticatedUser?.picture
