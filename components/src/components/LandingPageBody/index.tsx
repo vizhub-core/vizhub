@@ -29,9 +29,9 @@ export const LandingPageBody = () => {
           <Button
             variant="secondary"
             size="lg"
-            href="/create-viz"
+            href="/explore"
           >
-            Try for free
+            Explore VizHub
           </Button>
           <a href="https://vizhub.com/curran/da1bd8ba9ffb4e71a240fb8eda172ba7">
             <img
