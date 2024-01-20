@@ -9,6 +9,7 @@ import {
   sampleContentVizImportWithCSS,
   sampleContentWithCSV,
   sampleContentVizImportSlug,
+  sampleContentWithCSVStrangeCharacters,
 } from 'entities/test/fixtures';
 import { VizId } from 'entities';
 
@@ -142,6 +143,37 @@ describe('v3 build', () => {
     expect(buildResult.pkg).toBeUndefined();
 
     expect(buildResult.src).toContain('sepal.width');
+  });
+
+  it('Should build successfully with csv imports, strange characters', async () => {
+    const vizCache = createVizCache({
+      initialContents: [
+        sampleContentWithCSVStrangeCharacters,
+      ],
+      handleCacheMiss: async () => {
+        throw new Error('Not implemented');
+      },
+    });
+    const buildResult = await build({
+      vizId: sampleContentWithCSVStrangeCharacters.id,
+      rollup,
+      vizCache,
+      resolveSlug: () => {
+        throw new Error('Not implemented');
+      },
+    });
+
+    // console.log(JSON.stringify(buildResult, null, 2));
+
+    expect(buildResult).toBeDefined();
+    expect(buildResult.errors).toHaveLength(0);
+    expect(buildResult.warnings).toHaveLength(0);
+    expect(buildResult.cssFiles).toHaveLength(0);
+    expect(buildResult.src).toBeDefined();
+    expect(buildResult.time).toBeDefined();
+    expect(buildResult.pkg).toBeUndefined();
+
+    expect(buildResult.src).toContain('Germany');
   });
 
   it('Import from viz: should build successfully with valid inputs', async () => {
