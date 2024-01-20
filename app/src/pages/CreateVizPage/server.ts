@@ -14,11 +14,30 @@ CreateVizPage.getPageData = async ({
 }): Promise<CreateVizPageData> => {
   const getInfosAndOwners = GetInfosAndOwners(gateways);
 
+  // Gather all the vizIds from the curatedVizzes
+  const vizIds = curatedVizzes.reduce(
+    (acc, { vizIds }) => [...acc, ...vizIds],
+    [] as Array<string>,
+  );
+
+  // Detect any duplicates
+  const duplicates = vizIds.reduce((acc, vizId) => {
+    if (acc.includes(vizId)) {
+      return [...acc, vizId];
+    }
+    return acc;
+  }, [] as Array<string>);
+  if (duplicates.length > 0) {
+    console.log('Error: duplicate vizIds detected:');
+    console.log(duplicates);
+    return null;
+  }
+
   const infosAndOwnersResult = await getInfosAndOwners({
     noNeedToFetchUsers: [],
     sortId: 'mostForked',
     pageNumber: 0,
-    vizIds: curatedVizzes,
+    vizIds,
   });
   if (infosAndOwnersResult.outcome === 'failure') {
     console.log('Error when fetching infos and owners:');
