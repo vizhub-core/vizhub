@@ -5,6 +5,7 @@ import {
   InfosAndOwnersPageData,
   InfosAndOwnersProvider,
 } from '../../contexts/InfosAndOwnersContext';
+import './styles.scss';
 
 export type CreateVizPageData = PageData &
   InfosAndOwnersPageData;
