@@ -20,6 +20,25 @@ import { vizLoadDSV } from './vizLoadDSV';
 
 const debug = false;
 
+// From https://github.com/Rich-Harris/magic-string/blob/master/src/SourceMap.js
+// Modified to support Web Workers
+function getBtoa() {
+  if (typeof btoa === 'function') {
+    return (str) => btoa(unescape(encodeURIComponent(str)));
+  } else if (typeof Buffer === 'function') {
+    return (str) =>
+      Buffer.from(str, 'utf-8').toString('base64');
+  } else {
+    return () => {
+      throw new Error(
+        'Unsupported environment: `window.btoa` or `Buffer` should be supported.',
+      );
+    };
+  }
+}
+
+const niceBTOA = getBtoa();
+
 const getGlobals = (pkg: V3PackageJson) => {
   const libraries = pkg?.vizhub?.libraries;
   if (libraries) {
@@ -161,7 +180,8 @@ export const build = async ({
         // Inspired by https://github.com/Rich-Harris/magic-string/blob/abf373f2ed53d00e184ab236828853dd35a62763/src/SourceMap.js#L31
         src +=
           '\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,' +
-          btoa(map.toString());
+          niceBTOA(map.toString());
+        // src += '\n//# sourceMappingURL=' + map.toUrl();
       }
       if (debug) {
         console.log('  Built with Rollup');
