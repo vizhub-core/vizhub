@@ -162,9 +162,12 @@ export const curatedVizzes: Array<CuratedVizCollection> = [
     title: 'Constructing Visualizations 2024',
     description: () => (
       <div>
-        Vizzes that support hot reloading and use only{' '}
-        <a href="https://d3js.org/">D3.js</a>. From the free
-        course{' '}
+        Vizzes that support{' '}
+        <span className="vh-text-hot-shadow">
+          hot reloading
+        </span>{' '}
+        and use only <a href="https://d3js.org/">D3.js</a>.
+        From the free course{' '}
         <a href="https://vizhub.com/forum/t/constructing-visualizations-2024-index/950">
           Constructing Visualizations 2024
         </a>
