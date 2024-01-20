@@ -126,6 +126,31 @@ const datavis2020Templates = [
   // TODO pick this up from https://www.youtube.com/watch?v=b8Ellt-BYjI&list=PL9yYRbwpkykuK6LSMLH3bAaPpXaDUXcLV&index=50
 ];
 
+const getItRight = [
+  'df49fdfb56bf430b81cccc33a7e3a3bb',
+  '4a4b732986a64dcaa84147aa0a39a888',
+  'abbd62f9798a491e8eb35767fecba519',
+  'af6898e5540146a9b2524b137ec6286a',
+  '6f66e64f29264d148e484d2692e07493',
+  '662ad14bc49146be824f72e404d1d529',
+  'fc150ac3df8343abbf02d561cbb28d04',
+  'e47404b697c44440a90201c607aba594',
+  '9dea26a11f5344d78b46b69ec8ca3e7b',
+  '0ffb906067df443b81da65f40579247d',
+  '9d940f25ee884015b2af529605aa3b4b',
+  '8aa0e623697a40a786448d90f78c088f',
+  '003accf7d862422b83634396dc1196de',
+  '9e556254c18b4266a8da5306fbee7f22',
+  '4a1edef971af4b6bb5492aacc103e4bf',
+  'f1b1dbcb355f4d459b86e29d4f134d7c',
+  '6ef5ed29b22c4c72aa2db11804f20d06',
+  '9c9e758543e64d00a55a01fad7bb82a6',
+  '81606d10ab2b4b2fb39b0fc740195bfd',
+  '8406495076e94ed3a82bae65cb5a05f5',
+  'f0b802339255480fb8424d3eb9749043',
+  '924d1df0f527460391a6aaa9c595a39c',
+];
+
 export type CuratedVizCollection = {
   title: string;
   description: () => React.ReactNode;
@@ -148,6 +173,7 @@ export const curatedVizzes: Array<CuratedVizCollection> = [
     ),
     vizIds: constructingVisualizations2024,
   },
+
   {
     title: 'Starters',
     description: () =>
@@ -167,6 +193,32 @@ export const curatedVizzes: Array<CuratedVizCollection> = [
     vizIds: mostForked,
   },
   {
+    title: 'Get it Right in Black & White',
+    description: () => (
+      <div>
+        A collection of projects from the free online course{' '}
+        <a href="https://vizhub.com/forum/t/get-it-right-in-black-white-index/110">
+          Get it Right in Black & White
+        </a>
+        .
+      </div>
+    ),
+    vizIds: getItRight,
+  },
+  {
+    title: 'Datavis 2020',
+    description: () => (
+      <div>
+        D3 & React Examples from the free online course
+        <a href="https://www.youtube.com/watch?v=30lR5BlcO48&list=PL9yYRbwpkykuK6LSMLH3bAaPpXaDUXcLV&index=1">
+          Datavis 2020
+        </a>
+        .
+      </div>
+    ),
+    vizIds: datavis2020Templates,
+  },
+  {
     title: 'Datavis 2018',
     description: () => (
       <div>
@@ -180,11 +232,5 @@ export const curatedVizzes: Array<CuratedVizCollection> = [
     ),
 
     vizIds: datavis2018Templates,
-  },
-  {
-    title: 'DataVis 2020',
-    description: () =>
-      'A collection of projects from DataVis 2020.',
-    vizIds: datavis2020Templates,
   },
 ];

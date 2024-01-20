@@ -38,9 +38,7 @@ export const Body = () => {
               return (
                 <div key={title}>
                   <h2>{title}</h2>
-                  <div className="vh-lede-01">
-                    {description()}
-                  </div>
+                  <p>{description()}</p>
                   <VizPreviewCollection>
                     {vizIds.map((id: VizId) => {
                       const infoSnapshot =
