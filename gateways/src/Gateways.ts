@@ -365,6 +365,7 @@ export interface Gateways {
     pageNumber,
     sortOrder,
     includeTrashed,
+    disablePagination,
   }: {
     // owner
     //
@@ -421,6 +422,9 @@ export interface Gateways {
 
     // Visibilities to include in the results.
     visibilities?: Array<Visibility> | null;
+
+    // True if we want to disable pagination and return all results.
+    disablePagination?: boolean;
   }): Promise<Result<Array<Snapshot<Info>>>>;
 
   // getInfoBySlug
