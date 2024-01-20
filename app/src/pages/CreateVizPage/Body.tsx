@@ -8,6 +8,7 @@ import {
   CuratedVizCollection,
   curatedVizzes,
 } from './curatedVizzes';
+import { VizPreviewCollection } from 'components/src/components/VizPreviewCollection';
 
 export const Body = () => {
   const { allInfoSnapshots, ownerUserSnapshotsById } =
@@ -36,23 +37,37 @@ export const Body = () => {
                 collection;
               return (
                 <div key={title}>
-                  {title}
-                  {description()}
-                  {vizIds.map((id: VizId) => {
-                    const infoSnapshot =
-                      infoSnapshotsById[id];
-                    return infoSnapshot ? (
-                      <VizPreviewPresenter
-                        key={infoSnapshot.data.id}
-                        infoSnapshot={infoSnapshot}
-                        ownerUser={
-                          ownerUserSnapshotsById[
-                            infoSnapshot.data.owner
-                          ].data
-                        }
-                      />
-                    ) : null;
-                  })}
+                  <h2>{title}</h2>
+                  <div className="vh-lede-01">
+                    {description()}
+                  </div>
+                  <VizPreviewCollection>
+                    {vizIds.map((id: VizId) => {
+                      const infoSnapshot =
+                        infoSnapshotsById[id];
+
+                      // Don't crash in local development, where
+                      // these ids are not present.
+                      if (!infoSnapshot) {
+                        console.warn(
+                          `No infoSnapshot for id ${id}`,
+                        );
+                        return null;
+                      }
+
+                      return (
+                        <VizPreviewPresenter
+                          key={infoSnapshot.data.id}
+                          infoSnapshot={infoSnapshot}
+                          ownerUser={
+                            ownerUserSnapshotsById[
+                              infoSnapshot.data.owner
+                            ].data
+                          }
+                        />
+                      );
+                    })}
+                  </VizPreviewCollection>
                 </div>
               );
             },

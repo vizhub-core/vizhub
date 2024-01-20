@@ -1,7 +1,16 @@
 import { VizId } from 'entities';
 
 const constructingVisualizations2024 = [
-  '901dfb68d9954e0a9e9164a5e36a5051',
+  // Blank Slate
+  '28307c11745740cb965ecb69a1794aec',
+  // Circles with D3
+  '3d67423b84a845019c17ca761b60b619',
+  // D3 Transitions
+  'd65d8c66d77c452f9daf341499528aa4',
+  // Solar System
+  'da1bd8ba9ffb4e71a240fb8eda172ba7',
+  // Penguins
+  '3ad8641ba6b844d3a78d3bcacf2e1caa',
 ];
 
 const starters = [

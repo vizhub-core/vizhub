@@ -1,6 +1,20 @@
 .vh-create-viz-page {
   overflow: auto;
 
+  h1,
+  h2 {
+    color: var(--vh-color-neutral-02);
+  }
+  .vh-lede-01 {
+    color: var(--vh-color-neutral-01);
+    .emphasized {
+      font-weight: 600;
+    }
+  }
+  .viz-preview-collection {
+    margin-top: 16px;
+  }
+
   .create-viz-content {
     display: flex;
     flex-direction: column;
@@ -8,15 +22,6 @@
     .create-viz-header {
       display: flex;
       flex-direction: column;
-      h1 {
-        color: var(--vh-color-neutral-02);
-      }
-      .vh-lede-01 {
-        color: var(--vh-color-neutral-01);
-        .emphasized {
-          font-weight: 600;
-        }
-      }
     }
   }
 }

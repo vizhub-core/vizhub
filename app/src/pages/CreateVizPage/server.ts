@@ -20,7 +20,7 @@ CreateVizPage.getPageData = async ({
     [] as Array<string>,
   );
 
-  // Detect any duplicates
+  // Detect and report any duplicates
   const duplicates = vizIds.reduce((acc, vizId) => {
     if (acc.includes(vizId)) {
       return [...acc, vizId];
@@ -36,7 +36,9 @@ CreateVizPage.getPageData = async ({
   const infosAndOwnersResult = await getInfosAndOwners({
     noNeedToFetchUsers: [],
     sortId: 'mostForked',
-    pageNumber: 0,
+
+    // Fetch all infos, no pagination
+    disablePagination: true,
     vizIds,
   });
   if (infosAndOwnersResult.outcome === 'failure') {
