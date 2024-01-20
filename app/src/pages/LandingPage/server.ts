@@ -12,13 +12,12 @@ LandingPage.getPageData = async ({
     });
 
   const pageData: LandingPageData = {
-    title: 'VizHub',
+    title: `VizHub`,
+    description:
+      'Collaborative data visualization platform for the Web',
     authenticatedUserSnapshot,
-    description: [
-      'VizHub is a data visualization platform',
-    ].join(''),
     image:
-      'https://vizhub.com/api/visualization/preview/77a2f42571494263931b8c4d38b7d63c.png',
+      'https://vizhub-images.s3.amazonaws.com/home-unfurl.webp',
   };
 
   return pageData;

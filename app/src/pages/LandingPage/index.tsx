@@ -37,4 +37,4 @@ export const LandingPage: Page = ({ pageData }) => {
   );
 };
 
-LandingPage.path = '/landing';
+LandingPage.path = '/';

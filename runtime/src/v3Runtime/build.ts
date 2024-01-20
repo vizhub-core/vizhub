@@ -22,6 +22,7 @@ const debug = false;
 
 // From https://github.com/Rich-Harris/magic-string/blob/master/src/SourceMap.js
 // Modified to support Web Workers
+// Upstream PR: https://github.com/Rich-Harris/magic-string/pull/269
 function getBtoa() {
   if (typeof btoa === 'function') {
     return (str) => btoa(unescape(encodeURIComponent(str)));
