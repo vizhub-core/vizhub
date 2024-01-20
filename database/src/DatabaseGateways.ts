@@ -310,6 +310,7 @@ export const DatabaseGateways = ({
     includeTrashed = false,
     visibilities = ['public'],
     vizIds,
+    disablePagination = false,
   }: {
     owner?: UserId;
     forkedFrom?: ResourceId;
@@ -319,6 +320,7 @@ export const DatabaseGateways = ({
     includeTrashed?: boolean;
     visibilities?: Array<string>;
     vizIds?: Array<VizId>;
+    disablePagination?: boolean;
   }) =>
     new Promise((resolve) => {
       const entityName = 'Info';
@@ -328,8 +330,10 @@ export const DatabaseGateways = ({
         ...(owner && { owner }),
         ...(forkedFrom && { forkedFrom }),
         trashed: { $exists: includeTrashed },
-        $limit: pageSize,
-        $skip: pageNumber * pageSize,
+        ...(!disablePagination && {
+          $limit: pageSize,
+          $skip: pageNumber * pageSize,
+        }),
         $sort: {
           [sortField]: sortOrder === 'ascending' ? 1 : -1,
         },

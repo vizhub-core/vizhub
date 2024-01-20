@@ -43,16 +43,21 @@ export const GetInfosAndOwners = (gateways: Gateways) => {
     forkedFrom,
     vizIds,
     authenticatedUserId,
+    disablePagination,
   }: {
     noNeedToFetchUsers: Array<UserId>;
     sectionId?: SectionId;
     sortId?: SortId;
     defaultSortId?: SortId;
-    pageNumber: number;
+
+    // Must be defined if disablePagination is false.
+    pageNumber?: number;
+
     owner?: UserId;
     forkedFrom?: VizId;
     vizIds?: Array<VizId>;
     authenticatedUserId?: UserId;
+    disablePagination?: boolean;
   }): Promise<Result<InfosAndOwners>> => {
     // Get the sort field from the sort query parameter.
     const sortField: SortField = getSortField(
@@ -88,6 +93,7 @@ export const GetInfosAndOwners = (gateways: Gateways) => {
       pageNumber,
       vizIds,
       visibilities,
+      disablePagination,
     };
 
     // Handle the "Shared with me" section.

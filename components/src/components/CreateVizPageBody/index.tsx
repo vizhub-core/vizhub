@@ -1,4 +1,3 @@
-import { VizPreviewCollection } from '../VizPreviewCollection';
 import './styles.scss';
 
 export const CreateVizPageBody = ({
@@ -16,9 +15,8 @@ export const CreateVizPageBody = ({
             of these starter templates.
           </div>
         </div>
-        <VizPreviewCollection>
-          {renderVizPreviews()}
-        </VizPreviewCollection>
+
+        {renderVizPreviews()}
       </div>
     </div>
   );
