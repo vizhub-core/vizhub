@@ -41,6 +41,7 @@ import { VizPageEditor } from './VizPageEditor';
 import { useMarkUncommitted } from '../useMarkUncommitted';
 import { enableManualRun } from 'runtime/src/useRuntime';
 import { formatTimestamp } from '../../../accessors/formatTimestamp';
+import { useSearchParams } from 'react-router-dom';
 
 const debug = false;
 
@@ -104,6 +105,14 @@ export const VizPageBody = ({
   // The currently authenticated user, if any.
   const authenticatedUser: User | null = useContext(
     AuthenticatedUserContext,
+  );
+
+  // Embed mode
+  // ?mode=embed
+  const [searchParams] = useSearchParams();
+  const isEmbedMode = useMemo(
+    () => searchParams.get('mode') === 'embed',
+    [searchParams],
   );
 
   // Marks the viz as uncommitted and adds the
@@ -222,18 +231,28 @@ export const VizPageBody = ({
 
   // Render the viz runner iframe.
   const renderVizRunner = useCallback(
-    (iframeScale: number) => (
+    (iframeScale?: number) => (
       <iframe
         ref={iframeRef}
-        width={defaultVizWidth}
-        height={vizHeight}
         srcDoc={initialSrcdoc}
-        style={{
-          transform: `scale(${iframeScale})`,
-        }}
+        {...(isEmbedMode
+          ? {
+              style: {
+                position: 'absolute',
+                width: '100vw',
+                height: '100vh',
+              },
+            }
+          : {
+              width: defaultVizWidth,
+              height: vizHeight,
+              style: {
+                transform: `scale(${iframeScale})`,
+              },
+            })}
       />
     ),
-    [initialSrcdoc, vizHeight],
+    [initialSrcdoc, vizHeight, isEmbedMode],
   );
 
   // Disable pointer events when split pane is being dragged.
@@ -292,7 +311,9 @@ export const VizPageBody = ({
     [ownerUser],
   );
 
-  return (
+  return isEmbedMode ? (
+    renderVizRunner()
+  ) : (
     <div className="vh-page">
       <SmartHeader />
       <VizPageHead
