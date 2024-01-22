@@ -15,12 +15,14 @@ export const computeSrcDoc = async ({
   content,
   vizCache,
   resolveSlug,
+  getSvelteCompiler,
 }: {
   rollup: any;
   content: Content;
   vizCache: VizCache;
   // Resolves a slug import to a viz ID.
   resolveSlug: ({ userName, slug }) => Promise<VizId>;
+  getSvelteCompiler: () => Promise<any>;
 }) => {
   // `runtimeVersion` is used to determine which runtime
   // to use. It's either 2 or 3.
@@ -46,6 +48,7 @@ export const computeSrcDoc = async ({
               rollup,
               vizCache,
               resolveSlug,
+              getSvelteCompiler,
             }),
           });
   } catch (e) {

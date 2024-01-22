@@ -312,7 +312,7 @@ describe('v3 build', () => {
       vizId: sampleContentSvelte.id,
       rollup,
       vizCache,
-      getSvelteCompiler: () => compile,
+      getSvelteCompiler: async () => compile,
     });
 
     // console.log(JSON.stringify(buildResult, null, 2));

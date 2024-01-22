@@ -12,6 +12,7 @@ import {
   UpvoteId,
 } from 'entities';
 import { rollup } from 'rollup';
+import { compile } from 'svelte/compiler';
 import { JSDOM } from 'jsdom';
 import {
   CommitViz,
@@ -348,6 +349,7 @@ VizPage.getPageData = async ({
     const { initialSrcdoc, initialSrcdocError } =
       await computeSrcDoc({
         rollup,
+        getSvelteCompiler: async () => compile,
         content,
         vizCache,
         resolveSlug,

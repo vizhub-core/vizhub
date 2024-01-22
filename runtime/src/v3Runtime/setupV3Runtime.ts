@@ -1,5 +1,6 @@
 // @ts-ignore
 import Worker from './worker.ts?worker';
+
 import {
   ResolvedVizFileId,
   V3BuildResult,

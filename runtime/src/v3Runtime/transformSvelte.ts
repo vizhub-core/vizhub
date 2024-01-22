@@ -13,6 +13,8 @@ let compile;
 const svelteURL =
   'https://cdn.jsdelivr.net/npm/svelte@4.2.9';
 
+export const svelteCompilerUrl = `${svelteURL}/compiler.cjs`;
+
 // // The URL from which to load the Svelte compiler.
 // const svelteCompilerUrl =
 //   // TODO use v5?
@@ -26,13 +28,11 @@ const svelteURL =
 export const transformSvelte = ({
   getSvelteCompiler,
 }: {
-  getSvelteCompiler?: () => any;
+  getSvelteCompiler?: () => Promise<any>;
 }): InputPluginOption => ({
   name: 'transformSvelte',
 
   load: async (resolved: string) => {
-    console.log('[transformSvelte] resolved');
-    console.log(resolved);
     if (!resolved.startsWith(svelteURL)) {
       return;
     }
@@ -110,7 +110,7 @@ export const transformSvelte = ({
         if (!getSvelteCompiler) {
           throw new Error('Svelte compiler not available');
         }
-        compile = getSvelteCompiler();
+        compile = await getSvelteCompiler();
       }
 
       // if (debug) {
@@ -120,6 +120,7 @@ export const transformSvelte = ({
 
       const compiled = compile(code, {
         filename: fileName,
+        hydratable: true,
       });
       // if (debug) {
       //   console.log('compiled');

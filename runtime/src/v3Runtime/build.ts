@@ -87,7 +87,7 @@ export const build = async ({
   // This is synchronous because it either gets loaded
   // from a CDN with importScripts (which is synchronous)
   // or from a local node package (imported statically).
-  getSvelteCompiler?: () => any;
+  getSvelteCompiler?: () => Promise<any>;
 }): Promise<V3BuildResult> => {
   const startTime = Date.now();
   const warnings: Array<V3BuildError> = [];
