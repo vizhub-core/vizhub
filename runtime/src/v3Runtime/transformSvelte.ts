@@ -15,11 +15,6 @@ const svelteURL =
 
 export const svelteCompilerUrl = `${svelteURL}/compiler.cjs`;
 
-// // The URL from which to load the Svelte compiler.
-// const svelteCompilerUrl =
-//   // TODO use v5?
-//   'https://cdn.jsdelivr.net/npm/svelte@4.2.9/compiler.cjs';
-
 // Responsible for transforming Svelte files.
 // Inspired by:
 //  * https://github.com/sveltejs/sites/blob/master/packages/repl/src/lib/workers/compiler/index.js#L2
@@ -88,8 +83,6 @@ export const transformSvelte = ({
     }
   },
 
-  // `id` here is of the form
-  // `{vizId}/{fileName}`
   transform: async (
     code: string,
     id: ResolvedVizFileId,
@@ -99,13 +92,6 @@ export const transformSvelte = ({
     const isSvelte = fileName.endsWith('.svelte');
 
     if (isSvelte) {
-      // if (debug) {
-      //   console.log(
-      //     '    [transformSvelte] tracking Svelte import for ' +
-      //       id,
-      //   );
-      // }
-
       if (!compile) {
         if (!getSvelteCompiler) {
           throw new Error('Svelte compiler not available');
@@ -113,19 +99,10 @@ export const transformSvelte = ({
         compile = await getSvelteCompiler();
       }
 
-      // if (debug) {
-      //   console.log('compile');
-      //   console.log(compile);
-      // }
-
       const compiled = compile(code, {
         filename: fileName,
         hydratable: true,
       });
-      // if (debug) {
-      //   console.log('compiled');
-      //   console.log(compiled);
-      // }
 
       return compiled.js;
     }
