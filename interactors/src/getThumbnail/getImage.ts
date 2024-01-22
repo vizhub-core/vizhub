@@ -1,4 +1,5 @@
 import { rollup } from 'rollup';
+import { compile } from 'svelte/compiler';
 import { Gateways, Result, ok, err } from 'gateways';
 import {
   CommitId,
@@ -161,6 +162,7 @@ export const GetImage = (gateways: Gateways) => {
             content,
             vizCache,
             resolveSlug,
+            getSvelteCompiler: async () => compile,
           });
 
         if (initialSrcdocError) {
