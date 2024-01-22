@@ -6,10 +6,20 @@ import { VerifyVizAccess } from 'interactors';
 import { CONTENT_COLLECTION } from 'database';
 import { parseAuth0Sub } from 'api';
 import { Gateways, Result } from 'gateways';
-import { Action, Info, READ, VizId, WRITE } from 'entities';
+import {
+  Action,
+  Info,
+  READ,
+  User,
+  VizId,
+  WRITE,
+} from 'entities';
 import { VizAccess } from 'interactors/src/verifyVizAccess';
 import { INFO_COLLECTION } from 'database/src/collectionNames';
-import { tooLargeError } from 'gateways/src/errors';
+import {
+  tooLargeError,
+  tooLargeForFreeError,
+} from 'gateways/src/errors';
 
 const commaFormat = format(',');
 
@@ -20,7 +30,14 @@ const debug = false;
 // existing auth middleware to populate the ShareDB agent's user ID.
 // This is later referenced by access control rules.
 export const identifyClientAgent =
-  (authMiddleware) => (request, next) => {
+  ({
+    authMiddleware,
+    gateways,
+  }: {
+    authMiddleware: any;
+    gateways: Gateways;
+  }) =>
+  async (request, next) => {
     // If the connection is coming from the browser,
     if (request.req) {
       // Create something that looks enough like the Express `req` object
@@ -33,14 +50,31 @@ export const identifyClientAgent =
         },
       };
 
-      // Invoke the authMiddleware to populate `req.oidc`.
-      authMiddleware(req, {}, () => {
-        const sub = req?.oidc?.user?.sub;
-        if (sub) {
-          // If the user is logged in, set the ShareDB agent's user ID.
-          request.agent.userId = parseAuth0Sub(sub);
-        }
+      const userId = await new Promise((resolve) => {
+        authMiddleware(req, {}, () => {
+          const sub = req?.oidc?.user?.sub;
+          if (sub) {
+            resolve(parseAuth0Sub(sub));
+          } else {
+            resolve(undefined);
+          }
+        });
       });
+
+      // If the user is logged in, set the ShareDB agent's user ID.
+      // TODO phase this out entirely, and always leverage request.agent.user
+      request.agent.userId = userId;
+
+      // Get the actual User entity at the time of connection,
+      // so we don't have to worry about it querying for it later.
+      const userResult = await gateways.getUser(
+        request.agent.userId,
+      );
+      if (userResult.outcome === 'failure') {
+        throw userResult.error;
+      }
+      const user: User = userResult.value.data;
+      request.agent.user = user;
     } else {
       // Do nothing. This case is handled by identifyServerAgent
     }
@@ -77,7 +111,7 @@ const vizVerify = (gateways: Gateways, action: Action) => {
   return async (request, next) => {
     // Unpack the ShareDB request object.
     const {
-      agent: { isServer, userId },
+      agent: { isServer, userId, user },
       // op,
       collection,
 
@@ -92,6 +126,7 @@ const vizVerify = (gateways: Gateways, action: Action) => {
       console.log('[vizVerify] ', {
         isServer,
         userId,
+        user,
         action,
       });
     }
@@ -185,46 +220,77 @@ export const query = () => (request, next) => {
 
 // Checks the size of the document against the user's plan.
 export const sizeCheck = (gateways) => (request, next) => {
+  console.log('checking size');
   // Unpack the ShareDB request object.
+  console.log(request);
   const {
-    agent: { isServer, userId },
-    // op,
+    agent: { user },
     collection,
 
     // `snapshot` here is the snapshot _after_ the op has been applied.
     // We can check the size of this snapshot to see if it's too big.
     snapshot,
-
-    // `snapshots` is populated for read ops (ShareDB "readSnapshots" middleware)
-    snapshots,
   } = request;
 
-  const opSizeKB = JSON.stringify(snapshot).length / 1024;
+  console.log('collection === CONTENT_COLLECTION');
+  console.log(collection === CONTENT_COLLECTION);
 
-  // TODO different limits for different tiers.
-  // const freeTierSizeLimitKB = 1000;
-  // const premiumTierSizeLimitKB = 5000;
-  const opSizeLimitKB = 3000;
+  if (collection === CONTENT_COLLECTION) {
+    // The size of the viz document after the op has been applied.
+    const docSizeKB =
+      JSON.stringify(snapshot).length / 1024;
 
-  if (opSizeKB > opSizeLimitKB) {
-    // return next(
-    //   `Your plan limits you to ${opSizeLimitKB}KB per write operation. This operation is ${opSizeKB}KB.`,
-    // );
+    console.log('docSizeKB');
+    console.log(docSizeKB);
 
-    // TODO replace checking startsWith('Data too large.') in VizPageToasts with
-    // error code checking.
-    return next(
-      tooLargeError(
-        `The data size limit is ${commaFormat(
-          opSizeLimitKB,
-        )}KB. This document is ${commaFormat(
-          Math.ceil(opSizeKB),
-        )}KB.`,
-      ),
-    );
-  } else {
-    return next();
+    // TODO different limits for different tiers.
+    // const freeTierSizeLimitKB = 1000;
+    const freeTierSizeLimitKB = 1;
+
+    const premiumTierSizeLimitKB = 5000;
+    // const opSizeLimitKB = 3000;
+
+    // If the data is too large for VizHub in general,
+    // report an error.
+    if (docSizeKB > premiumTierSizeLimitKB) {
+      return next(
+        tooLargeError(
+          `The data size limit for VizHub is ${commaFormat(
+            premiumTierSizeLimitKB,
+          )}KB. This document is ${commaFormat(
+            Math.ceil(docSizeKB),
+          )}KB. Please reduce the size of your data or consider hosting it externally.`,
+        ),
+      );
+    }
+
+    // If the data is too large for the free tier,
+    // but not for the premium tier,
+    // check if the user is on the free tier.
+    if (docSizeKB > freeTierSizeLimitKB) {
+      console.log('docSizeKB > freeTierSizeLimitKB');
+      console.log(docSizeKB > freeTierSizeLimitKB);
+      console.log('user.plan === free');
+      console.log(user.plan === 'free');
+      console.log(user.plan);
+
+      if (user.plan === 'free') {
+        return next(
+          tooLargeForFreeError(
+            `The data size limit is ${commaFormat(
+              freeTierSizeLimitKB,
+            )}KB for the VizHub Starter plan. This document is ${commaFormat(
+              Math.ceil(docSizeKB),
+            )}KB. Upgrade to VizHub Premium to increase the limit to ${commaFormat(
+              premiumTierSizeLimitKB,
+            )}KB, which would allow you to upload this data.`,
+          ),
+        );
+      }
+    }
   }
 
-  // console.log('opSizeKB', opSizeKB);
+  // In this case we are under the limits, or
+  // the collection is not CONTENT_COLLECTION.
+  return next();
 };
