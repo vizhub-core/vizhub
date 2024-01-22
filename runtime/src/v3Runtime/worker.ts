@@ -3,6 +3,7 @@ import { build } from './build';
 import { createVizCache } from './vizCache';
 import { Content, VizId } from 'entities';
 import { V3WorkerMessage } from './types';
+import { svelteCompilerUrl } from './transformSvelte';
 
 const debug = false;
 
@@ -88,6 +89,19 @@ addEventListener('message', async ({ data }) => {
           rollup,
           vizCache,
           resolveSlug,
+          getSvelteCompiler: async () => {
+            // Inspired by
+            // https://github.com/sveltejs/sites/blob/master/packages/repl/src/lib/workers/bundler/index.js#L44
+            // unpkg doesn't set the correct MIME type for .cjs files
+            // https://github.com/mjackson/unpkg/issues/355
+            const compiler = await fetch(
+              svelteCompilerUrl,
+            ).then((r) => r.text());
+            (0, eval)(compiler);
+
+            console.log(self.svelte);
+            return self.svelte.compile;
+          },
         }),
       };
       postMessage(responseMessage);

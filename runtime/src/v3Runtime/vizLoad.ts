@@ -1,16 +1,22 @@
 import { InputPluginOption } from 'rollup';
 import { ResolvedVizFileId } from './types';
 import { parseId } from './parseId';
+import { Content, getFileText } from 'entities';
+import { VizCache } from './vizCache';
 
 const debug = false;
 
-// Responsible for tracking which CSS files are imported.
-export const vizLoadCSS = ({
+// Responsible for loading all imports and
+// tracking which CSS files are imported.
+// Throws an error if a file is imported but not found.
+export const vizLoad = ({
+  vizCache,
   trackCSSImport,
 }: {
+  vizCache: VizCache;
   trackCSSImport: (cssFile: ResolvedVizFileId) => void;
 }): InputPluginOption => ({
-  name: 'vizLoadCSS',
+  name: 'vizLoad',
 
   // `id` here is of the form
   // `{vizId}/{fileName}`
@@ -35,9 +41,25 @@ export const vizLoadCSS = ({
           '    [vizResolve] tracking CSS import for ' + id,
         );
       }
+      // The import is tracked here so that it can be
+      // injected into the IFrame later, external to the
+      // Rollup build.
       trackCSSImport(id);
+      // TODO consider using Rollup's `emitFile` to emit a CSS file.
       return '';
     }
-    return undefined;
+
+    const content: Content = await vizCache.get(vizId);
+    const fileText = getFileText(content, fileName);
+
+    // If a file is imported but not found, throw an error.
+    if (fileText === null) {
+      throw new Error(
+        // TODO ideally show username/slug instead of vizId
+        `Imported file "${fileName}" not found in viz ${vizId}`,
+      );
+    }
+
+    return fileText;
   },
 });
