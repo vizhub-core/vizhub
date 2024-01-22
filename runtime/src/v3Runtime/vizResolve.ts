@@ -37,7 +37,10 @@ export const vizResolve = ({
     // Handle virtual file system resolution
     // .e.g. `import { foo } from './foo.js'`
     // .e.g. `import { foo } from './foo'`
-    if (id.startsWith('./')) {
+    if (
+      id.startsWith('./') &&
+      !importer?.startsWith('https://')
+    ) {
       // const fileName = js(id.substring(2));
 
       let fileName = id.substring(2);

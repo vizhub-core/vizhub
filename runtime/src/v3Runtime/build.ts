@@ -17,6 +17,7 @@ import { VizCache } from './vizCache';
 import { vizLoad } from './vizLoad';
 import { transformDSV } from './transformDSV';
 import { transformSvelte } from './transformSvelte';
+import { urlLoad } from './urlLoad';
 
 const debug = false;
 
@@ -111,9 +112,10 @@ export const build = async ({
       input: './index.js',
       plugins: [
         vizResolve({ vizId, resolveSlug }),
-        vizLoad({ vizCache, trackCSSImport }),
+        // urlLoad(),
         transformDSV(),
         transformSvelte({ getSvelteCompiler }),
+        vizLoad({ vizCache, trackCSSImport }),
         // vizLoadJS({ vizCache }),
         // cssResolve
         // csvResolve
