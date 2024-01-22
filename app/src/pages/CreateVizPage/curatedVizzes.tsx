@@ -1,5 +1,31 @@
 import { VizId } from 'entities';
 
+const starters = [
+  // Circles with D3 (v3)
+  '3d67423b84a845019c17ca761b60b619',
+
+  // Svelte Starter (v3)
+  '39fa26cfa7854e34934e559efbf7855b',
+
+  // Observable Plot Starter (v3)
+  'f74abcce08d24c5c80c0b7262bb98185',
+
+  // React Starter
+  'c3b14112dae34ef395999cef5783324f',
+
+  // HTML Starter
+  '469e558ba77941aa9e1b416ea521b0aa',
+
+  // // Hello VizHub (v2)
+  // '86a75dc8bdbe4965ba353a79d4bd44c8',
+
+  // // D3 Starter (v2)
+  // '37268d9ccc02426e8f83fb8ef04d6e5c',
+
+  // // React & D3 Starter
+  // '96c12ef980e541f8abc9b2e7e140bf33',
+];
+
 const constructingVisualizations2024 = [
   // Blank Slate
   '28307c11745740cb965ecb69a1794aec',
@@ -11,14 +37,6 @@ const constructingVisualizations2024 = [
   'da1bd8ba9ffb4e71a240fb8eda172ba7',
   // Penguins
   '3ad8641ba6b844d3a78d3bcacf2e1caa',
-];
-
-const starters = [
-  '469e558ba77941aa9e1b416ea521b0aa',
-  '86a75dc8bdbe4965ba353a79d4bd44c8',
-  'c3b14112dae34ef395999cef5783324f',
-  '37268d9ccc02426e8f83fb8ef04d6e5c',
-  '96c12ef980e541f8abc9b2e7e140bf33',
 ];
 
 const communityTemplates = [
@@ -124,6 +142,22 @@ const datavis2020Templates = [
   'ed32a7ae82e14e35aa38c9416740b38a',
   '88bb1e7d70af4587991386a19acc2be9',
   // TODO pick this up from https://www.youtube.com/watch?v=b8Ellt-BYjI&list=PL9yYRbwpkykuK6LSMLH3bAaPpXaDUXcLV&index=50
+  // Global Coronavirus Deaths
+  '25aa65a6fe514b889f8365b0f7f26014',
+  // Coronavirus Linear Y Axis
+  'c242c9233e774b73aab074ac8de72a16',
+
+  // Coronavirus Log Y Axis
+  'd0c625f02e804aac8d006a3ff4051974',
+
+  // Coronavirus Deaths Over Time by Country
+  '781faf7ef899474e96624a5a9c66d8bd',
+
+  // Coronavirus Deaths Over Time by Country With Voronoi Overlay
+  '04000b54a3714a13bd400e67899ad97d',
+
+  // Organization Graph Diagram
+  'f192e44054aa4731b5ceba1b833028d6',
 ];
 
 const getItRight = [
@@ -167,7 +201,8 @@ export const curatedVizzes: Array<CuratedVizCollection> = [
           hot reloading
         </span>{' '}
         and use only <a href="https://d3js.org/">D3.js</a>.
-        From the free course{' '}
+        <br />
+        From the free online course{' '}
         <a href="https://vizhub.com/forum/t/constructing-visualizations-2024-index/950">
           Constructing Visualizations 2024
         </a>
@@ -178,9 +213,15 @@ export const curatedVizzes: Array<CuratedVizCollection> = [
   },
 
   {
-    title: 'Starters',
-    description: () =>
-      'A collection of starter projects to remix.',
+    title: 'Technology Starters',
+    description: () => (
+      <div>
+        A collection of starter projects that unlock various
+        technologies.
+        <br />
+        Fork and remix!
+      </div>
+    ),
     vizIds: starters,
   },
   {
@@ -212,7 +253,7 @@ export const curatedVizzes: Array<CuratedVizCollection> = [
     title: 'Datavis 2020',
     description: () => (
       <div>
-        D3 & React Examples from the free online course
+        D3 & React Examples from{' '}
         <a href="https://www.youtube.com/watch?v=30lR5BlcO48&list=PL9yYRbwpkykuK6LSMLH3bAaPpXaDUXcLV&index=1">
           Datavis 2020
         </a>
@@ -225,8 +266,7 @@ export const curatedVizzes: Array<CuratedVizCollection> = [
     title: 'Datavis 2018',
     description: () => (
       <div>
-        Old-style visualizations with D3 only, from the free
-        course{' '}
+        Old-style visualizations with D3 from{' '}
         <a href="https://curran.github.io/dataviz-course-2018/">
           Data Visualization Course 2018
         </a>
