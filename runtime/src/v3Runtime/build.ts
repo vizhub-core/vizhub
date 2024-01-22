@@ -14,12 +14,9 @@ import {
 } from 'entities';
 import { vizResolve } from './vizResolve';
 import { VizCache } from './vizCache';
-import { vizLoadCSS } from './vizLoadCSS';
-import { vizLoadJS } from './vizLoadJS';
-import { vizLoadDSV } from './vizLoadDSV';
-import { vizLoadSvelte } from './vizLoadSvelte';
 import { vizLoad } from './vizLoad';
 import { transformDSV } from './transformDSV';
+import { transformSvelte } from './transformSvelte';
 
 const debug = false;
 
@@ -71,6 +68,7 @@ export const build = async ({
   rollup,
   vizCache,
   resolveSlug,
+  getSvelteCompiler,
 }: {
   // The ID of the viz being built.
   vizId: VizId;
@@ -82,7 +80,13 @@ export const build = async ({
   vizCache: VizCache;
 
   // Resolves a slug import to a viz ID.
-  resolveSlug: ({ userName, slug }) => Promise<VizId>;
+  resolveSlug?: ({ userName, slug }) => Promise<VizId>;
+
+  // Gets the Svelte compiler.
+  // This is synchronous because it either gets loaded
+  // from a CDN with importScripts (which is synchronous)
+  // or from a local node package (imported statically).
+  getSvelteCompiler?: () => any;
 }): Promise<V3BuildResult> => {
   const startTime = Date.now();
   const warnings: Array<V3BuildError> = [];
@@ -108,9 +112,8 @@ export const build = async ({
       plugins: [
         vizResolve({ vizId, resolveSlug }),
         vizLoad({ vizCache, trackCSSImport }),
-        // vizLoadCSS({ trackCSSImport }),
-        transformDSV({ vizCache }),
-        // vizLoadSvelte({ vizCache }),
+        transformDSV(),
+        transformSvelte({ getSvelteCompiler }),
         // vizLoadJS({ vizCache }),
         // cssResolve
         // csvResolve

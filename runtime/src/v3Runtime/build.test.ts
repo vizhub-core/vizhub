@@ -1,4 +1,5 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
+import { compile } from 'svelte/compiler';
 import { rollup } from 'rollup';
 import { build } from './build';
 import { createVizCache } from './vizCache';
@@ -10,6 +11,7 @@ import {
   sampleContentWithCSV,
   sampleContentVizImportSlug,
   sampleContentWithCSVStrangeCharacters,
+  sampleContentSvelte,
 } from 'entities/test/fixtures';
 import { VizId } from 'entities';
 
@@ -297,5 +299,46 @@ describe('v3 build', () => {
     expect(buildResult.src).toContain(
       `const message2 = "Imported from viz: " + message;`,
     );
+  });
+
+  it('Svelte: should build successfully with Svelte', async () => {
+    const vizCache = createVizCache({
+      initialContents: [sampleContentSvelte],
+      handleCacheMiss: async () => {
+        throw new Error('Not implemented');
+      },
+    });
+    const buildResult = await build({
+      vizId: sampleContentSvelte.id,
+      rollup,
+      vizCache,
+      getSvelteCompiler: () => compile,
+    });
+
+    // console.log(JSON.stringify(buildResult, null, 2));
+    console.log('buildResult.errors');
+    console.log(buildResult.errors);
+    console.log('buildResult.warnings');
+    console.log(buildResult.warnings);
+    console.log('buildResult.src');
+    console.log(buildResult.src);
+
+    expect(buildResult).toBeDefined();
+    expect(buildResult.errors).toHaveLength(0);
+    expect(buildResult.warnings).toHaveLength(0);
+    expect(buildResult.cssFiles).toHaveLength(0);
+    expect(buildResult.src).toBeDefined();
+    expect(buildResult.time).toBeDefined();
+    expect(buildResult.pkg).toBeUndefined();
+
+    // expect(buildResult.src).toContain(
+    //   `const innerMessage = "Inner";`,
+    // );
+    // expect(buildResult.src).toContain(
+    //   `const message = "Outer " + innerMessage;`,
+    // );
+    // expect(buildResult.src).toContain(
+    //   `const message2 = "Imported from viz: " + message;`,
+    // );
   });
 });

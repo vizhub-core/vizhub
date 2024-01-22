@@ -16,7 +16,7 @@ export const vizResolve = ({
   resolveSlug,
 }: {
   vizId: VizId;
-  resolveSlug: ({
+  resolveSlug?: ({
     userName,
     slug,
   }: {
@@ -50,7 +50,8 @@ export const vizResolve = ({
       if (
         !fileName.endsWith('.js') &&
         !fileName.endsWith('.css') &&
-        !fileName.endsWith('.csv')
+        !fileName.endsWith('.csv') &&
+        !fileName.endsWith('.svelte')
       ) {
         fileName += '.js';
       }
@@ -77,6 +78,11 @@ export const vizResolve = ({
       if (isId(vizImport.idOrSlug)) {
         vizId = vizImport.idOrSlug;
       } else {
+        if (!resolveSlug) {
+          throw new Error(
+            'resolveSlug is required to import by slug',
+          );
+        }
         vizId = await resolveSlug({
           userName: vizImport.userName,
           slug: vizImport.idOrSlug,
@@ -85,7 +91,7 @@ export const vizResolve = ({
       return vizId + '/index.js';
     }
 
-    // If neither condition is met, return null
+    // If neither condition is met, return undefined.
     return undefined;
   },
 });

@@ -21,6 +21,9 @@ export const vizLoad = ({
   // `id` here is of the form
   // `{vizId}/{fileName}`
   load: async (id: ResolvedVizFileId) => {
+    if (id.startsWith('https://')) {
+      return '';
+    }
     if (debug) {
       console.log('[vizLoadCSS]: load() ' + id);
     }

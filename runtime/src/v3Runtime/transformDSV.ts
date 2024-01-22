@@ -1,7 +1,5 @@
 import { InputPluginOption } from 'rollup';
 import { csvParse, tsvParse } from 'd3-dsv';
-import { Content, getFileText } from 'entities';
-import { VizCache } from './vizCache';
 import { ResolvedVizFileId } from './types';
 import { parseId } from './parseId';
 
@@ -9,11 +7,7 @@ const debug = false;
 
 // Responsible for loading CSV and TSV files, which are
 // in general called Delimiter-Separated Values (DSV).
-export const transformDSV = ({
-  vizCache,
-}: {
-  vizCache: VizCache;
-}): InputPluginOption => ({
+export const transformDSV = (): InputPluginOption => ({
   name: 'transformDSV',
 
   // `id` here is of the form
