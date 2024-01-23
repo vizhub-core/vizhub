@@ -62,19 +62,18 @@ export const identifyClientAgent =
       });
 
       // If the user is logged in, set the ShareDB agent's user ID.
-      // TODO phase this out entirely, and always leverage request.agent.user
       request.agent.userId = userId;
 
-      // Get the actual User entity at the time of connection,
-      // so we don't have to worry about it querying for it later.
-      const userResult = await gateways.getUser(
-        request.agent.userId,
-      );
-      if (userResult.outcome === 'failure') {
-        throw userResult.error;
-      }
-      const user: User = userResult.value.data;
-      request.agent.user = user;
+      // // Get the actual User entity at the time of connection,
+      // // so we don't have to worry about it querying for it later.
+      // const userResult = await gateways.getUser(
+      //   request.agent.userId,
+      // );
+      // if (userResult.outcome === 'failure') {
+      //   throw userResult.error;
+      // }
+      // const user: User = userResult.value.data;
+      // request.agent.user = user;
     } else {
       // Do nothing. This case is handled by identifyServerAgent
     }
@@ -222,9 +221,8 @@ export const query = () => (request, next) => {
 export const sizeCheck = (gateways) => (request, next) => {
   console.log('checking size');
   // Unpack the ShareDB request object.
-  console.log(request);
+  // console.log(request);
   const {
-    agent: { user },
     collection,
 
     // `snapshot` here is the snapshot _after_ the op has been applied.
@@ -232,8 +230,8 @@ export const sizeCheck = (gateways) => (request, next) => {
     snapshot,
   } = request;
 
-  console.log('collection === CONTENT_COLLECTION');
-  console.log(collection === CONTENT_COLLECTION);
+  // console.log('collection === CONTENT_COLLECTION');
+  // console.log(collection === CONTENT_COLLECTION);
 
   if (collection === CONTENT_COLLECTION) {
     // The size of the viz document after the op has been applied.
@@ -266,8 +264,10 @@ export const sizeCheck = (gateways) => (request, next) => {
 
     // If the data is too large for the free tier,
     // but not for the premium tier,
-    // check if the user is on the free tier.
+    // check if the owner of the viz being edited is on the free tier.
     if (docSizeKB > freeTierSizeLimitKB) {
+      // co
+
       console.log('docSizeKB > freeTierSizeLimitKB');
       console.log(docSizeKB > freeTierSizeLimitKB);
       console.log('user.plan === free');
