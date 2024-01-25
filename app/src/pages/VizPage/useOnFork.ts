@@ -8,12 +8,7 @@ const debug = false;
 
 // This module defines what happens when a user
 // clicks the "fork" button.
-export const useOnFork = ({
-  vizKit,
-  id,
-  content,
-  hasUnforkedEdits,
-}) =>
+export const useOnFork = ({ vizKit, id, content }) =>
   useCallback(
     ({
       owner,
@@ -30,7 +25,6 @@ export const useOnFork = ({
         owner,
         title,
         visibility,
-        content: hasUnforkedEdits ? content : undefined,
       };
       if (debug) {
         console.log(
@@ -61,5 +55,5 @@ export const useOnFork = ({
         },
       );
     },
-    [id, content, hasUnforkedEdits],
+    [id, content],
   );

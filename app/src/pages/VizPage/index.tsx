@@ -48,6 +48,7 @@ import { useUpvoting } from './useUpvoting';
 import './styles.scss';
 import { useSlugAutoNavigate } from './useSlugAutoNavigate';
 import { useSearchParams } from 'react-router-dom';
+import { useShareDBError } from './useShareDBError';
 
 const vizKit = VizKit({ baseUrl: '/api' });
 
@@ -214,43 +215,22 @@ export const VizPage: Page = ({
     [toggleForkModal],
   );
 
-  // Show ShareDB errors as toast
-  const [hasUnforkedEdits, setHasUnforkedEdits] =
-    useState<boolean>(false);
+  // Get ShareDB errors from middleware.
+  // This checks for things like:
+  // - Access Denied
+  // - Viz Too Large
+  const { shareDBError, dismissShareDBError } =
+    useShareDBError();
+
+  // const [hasUnforkedEdits, setHasUnforkedEdits] =
+  //   useState<boolean>(false);
 
   // When the user clicks "Fork" from within the fork modal.
   const onFork = useOnFork({
     vizKit,
     id,
     content,
-    hasUnforkedEdits,
   });
-
-  // Handle permissions errors re: forking
-  useEffect(() => {
-    const connection = getConnection();
-    const handleError = (error) => {
-      // TODO check that the error is related to access permissions
-      // This has no information - console.log('error.code', error.code);
-      // Don't want to test against exact message? Or we could if it's a variable?
-      // Best solution is to add a custom error code to the server
-      console.log('error.message', error.message);
-
-      setHasUnforkedEdits(true);
-
-      // TODO consider if this is even feasible.
-      // Just closing the connection ends up breaking things.
-      // Also allow the user to make edits without forking.
-      // Their edits are not synched to the server, but are kept in memory.
-      // The edited version will be saved if the user does fork.
-      // connection.close();
-    };
-
-    connection.on('error', handleError);
-    return () => {
-      connection.off('error', handleError);
-    };
-  }, []);
 
   ////////////////////////////////////////////
   /////////////// Settings ///////////////////
@@ -338,7 +318,8 @@ export const VizPage: Page = ({
         />
       </SplitPaneResizeProvider>
       <VizPageToasts
-        hasUnforkedEdits={hasUnforkedEdits}
+        shareDBError={shareDBError}
+        dismissShareDBError={dismissShareDBError}
         handleForkLinkClick={handleForkLinkClick}
       />
       <VizPageModals

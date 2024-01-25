@@ -8,12 +8,20 @@ import {
 import { deleteCookie, getCookie } from '../cookies';
 import { AuthenticatedUserContext } from '../../contexts/AuthenticatedUserContext';
 import { User } from 'entities';
+import {
+  VizHubError,
+  VizHubErrorCode,
+  errorCodeLabels,
+} from 'gateways';
+import { Button } from 'vzcode/src/client/bootstrap';
 
 export const VizPageToasts = ({
-  hasUnforkedEdits,
+  shareDBError,
+  dismissShareDBError,
   handleForkLinkClick,
 }: {
-  hasUnforkedEdits: boolean;
+  shareDBError: VizHubError | null;
+  dismissShareDBError: () => void;
   handleForkLinkClick: (
     event: React.MouseEvent<HTMLAnchorElement>,
   ) => void;
@@ -27,7 +35,7 @@ export const VizPageToasts = ({
 
   const handleForkToastClose = useCallback(() => {
     setShowForkToast(false);
-  }, []);
+  }, [setShowForkToast]);
 
   // Show the toast after redirecting to the forked viz
   useEffect(() => {
@@ -41,20 +49,16 @@ export const VizPageToasts = ({
 
   return (
     <>
-      {hasUnforkedEdits ? (
+      {shareDBError && (
         <VizToast
-          title="Permission Denied"
-          isWarning={true}
+          title={errorCodeLabels[shareDBError.code]}
+          onClose={dismissShareDBError}
+          closeButton={true}
         >
-          <ul className="mb-0">
-            <li>
-              You do not have permissions to edit this viz
-            </li>
-            {/* <li>
-              Local edits are possible but won't be saved
-            </li>
-            <li>Disconnected from remote updates</li> */}
-            <li>
+          {shareDBError.code ===
+          VizHubErrorCode.accessDenied ? (
+            <>
+              You do not have permissions to edit this viz.
               You can{' '}
               {authenticatedUser ? (
                 <a href="" onClick={handleForkLinkClick}>
@@ -66,10 +70,22 @@ export const VizPageToasts = ({
                 </a>
               )}{' '}
               to modify it.
-            </li>
-          </ul>
+            </>
+          ) : (
+            shareDBError.message
+          )}
+          {shareDBError.code ===
+            VizHubErrorCode.tooLargeForFree && (
+            <Button
+              href="/pricing"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Upgrade
+            </Button>
+          )}
         </VizToast>
-      ) : null}
+      )}
       {showForkToast ? (
         <VizToast
           title="Forked Successfully"

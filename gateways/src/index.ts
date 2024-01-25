@@ -9,6 +9,7 @@ export {
   invalidCommitOp,
   invalidDecrementError,
   missingParameterError,
+  errorCodeLabels,
 } from './errors';
 export {
   crudEntityNames,

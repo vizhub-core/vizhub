@@ -90,3 +90,7 @@ export interface BetaProgramSignup {
   id: Id;
   email: EmailAddress;
 }
+
+// Size limits for data uploads per plan.
+export const freeTierSizeLimitMB = 1;
+export const premiumTierSizeLimitMB = 5;

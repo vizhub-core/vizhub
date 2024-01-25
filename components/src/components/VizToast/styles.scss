@@ -1,7 +1,34 @@
-.toast-header.header-only {
-  border-radius: calc(
-    var(--bs-toast-border-radius) - var(
-        --bs-toast-border-width
-      )
-  );
+.viz-toast-container {
+  .toast-header.header-only {
+    border-radius: calc(
+      var(--bs-toast-border-radius) - var(
+          --bs-toast-border-width
+        )
+    );
+  }
+
+  .toast-header {
+    padding: 20px;
+    color: var(--bs-heading-color);
+  }
+
+  .toast-header strong {
+    font-family: 'Poppins';
+    font-size: 20px;
+  }
+
+  .toast-body {
+    padding: 20px;
+    color: var(--bs-body-color);
+    font-size: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 20px;
+  }
+
+  .toast-header,
+  .toast-body {
+    backdrop-filter: blur(8px);
+  }
 }

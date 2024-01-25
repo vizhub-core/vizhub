@@ -262,7 +262,10 @@ async function createServer(
   // Access control at ShareDB level.
   shareDBBackend.use(
     'connect',
-    accessControl.identifyClientAgent(authMiddleware),
+    accessControl.identifyClientAgent({
+      authMiddleware,
+      gateways,
+    }),
   );
   shareDBBackend.use(
     'apply',

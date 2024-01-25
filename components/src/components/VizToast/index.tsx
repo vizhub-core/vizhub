@@ -11,6 +11,15 @@ export const VizToast = ({
   isWarning = false,
   children,
   headerOnly = false,
+}: {
+  title: string;
+  delay?: number;
+  autohide?: boolean;
+  onClose?: () => void;
+  closeButton?: boolean;
+  isWarning?: boolean;
+  children?: React.ReactNode;
+  headerOnly?: boolean;
 }) => {
   const [count, setCount] = useState(
     delay ? delay / 1000 : null,
@@ -30,7 +39,7 @@ export const VizToast = ({
 
   return (
     <ToastContainer
-      className="p-3"
+      className="p-3 viz-toast-container"
       position="top-center"
       style={{ zIndex: 1 }}
     >
