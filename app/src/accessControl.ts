@@ -11,6 +11,7 @@ import {
   Info,
   READ,
   User,
+  UserId,
   VizId,
   WRITE,
 } from 'entities';
@@ -218,79 +219,95 @@ export const query = () => (request, next) => {
 };
 
 // Checks the size of the document against the user's plan.
-export const sizeCheck = (gateways) => (request, next) => {
-  console.log('checking size');
-  // Unpack the ShareDB request object.
-  // console.log(request);
-  const {
-    collection,
+export const sizeCheck =
+  (gateways) => async (request, next) => {
+    console.log('checking size');
+    // Unpack the ShareDB request object.
+    // console.log(request);
+    const {
+      collection,
 
-    // `snapshot` here is the snapshot _after_ the op has been applied.
-    // We can check the size of this snapshot to see if it's too big.
-    snapshot,
-  } = request;
+      // `snapshot` here is the snapshot _after_ the op has been applied.
+      // We can check the size of this snapshot to see if it's too big.
+      snapshot,
+    } = request;
 
-  // console.log('collection === CONTENT_COLLECTION');
-  // console.log(collection === CONTENT_COLLECTION);
+    // console.log('collection === CONTENT_COLLECTION');
+    // console.log(collection === CONTENT_COLLECTION);
 
-  if (collection === CONTENT_COLLECTION) {
-    // The size of the viz document after the op has been applied.
-    const docSizeKB =
-      JSON.stringify(snapshot).length / 1024;
+    if (collection === CONTENT_COLLECTION) {
+      // The size of the viz document after the op has been applied.
+      const docSizeKB =
+        JSON.stringify(snapshot).length / 1024;
 
-    console.log('docSizeKB');
-    console.log(docSizeKB);
+      console.log('docSizeKB');
+      console.log(docSizeKB);
 
-    // TODO different limits for different tiers.
-    // const freeTierSizeLimitKB = 1000;
-    const freeTierSizeLimitKB = 1;
+      // TODO different limits for different tiers.
+      // const freeTierSizeLimitKB = 1000;
+      const freeTierSizeLimitKB = 1;
 
-    const premiumTierSizeLimitKB = 5000;
-    // const opSizeLimitKB = 3000;
+      const premiumTierSizeLimitKB = 5000;
+      // const opSizeLimitKB = 3000;
 
-    // If the data is too large for VizHub in general,
-    // report an error.
-    if (docSizeKB > premiumTierSizeLimitKB) {
-      return next(
-        tooLargeError(
-          `The data size limit for VizHub is ${commaFormat(
-            premiumTierSizeLimitKB,
-          )}KB. This document is ${commaFormat(
-            Math.ceil(docSizeKB),
-          )}KB. Please reduce the size of your data or consider hosting it externally.`,
-        ),
-      );
-    }
-
-    // If the data is too large for the free tier,
-    // but not for the premium tier,
-    // check if the owner of the viz being edited is on the free tier.
-    if (docSizeKB > freeTierSizeLimitKB) {
-      // co
-
-      console.log('docSizeKB > freeTierSizeLimitKB');
-      console.log(docSizeKB > freeTierSizeLimitKB);
-      console.log('user.plan === free');
-      console.log(user.plan === 'free');
-      console.log(user.plan);
-
-      if (user.plan === 'free') {
+      // If the data is too large for VizHub in general,
+      // report an error.
+      if (docSizeKB > premiumTierSizeLimitKB) {
         return next(
-          tooLargeForFreeError(
-            `The data size limit is ${commaFormat(
-              freeTierSizeLimitKB,
-            )}KB for the VizHub Starter plan. This document is ${commaFormat(
-              Math.ceil(docSizeKB),
-            )}KB. Upgrade to VizHub Premium to increase the limit to ${commaFormat(
+          tooLargeError(
+            `The data size limit for VizHub is ${commaFormat(
               premiumTierSizeLimitKB,
-            )}KB, which would allow you to upload this data.`,
+            )}KB. This document is ${commaFormat(
+              Math.ceil(docSizeKB),
+            )}KB. Please reduce the size of your data or consider hosting it externally.`,
           ),
         );
       }
-    }
-  }
 
-  // In this case we are under the limits, or
-  // the collection is not CONTENT_COLLECTION.
-  return next();
-};
+      // If the data is too large for the free tier,
+      // but not for the premium tier,
+      // check if the owner of the viz being edited is on the free tier.
+      if (docSizeKB > freeTierSizeLimitKB) {
+        // co
+
+        console.log('docSizeKB > freeTierSizeLimitKB');
+        console.log(docSizeKB > freeTierSizeLimitKB);
+
+        // Get the Info
+        const vizId: VizId = snapshot.id;
+        const getInfoResult = await gateways.getInfo(vizId);
+        if (getInfoResult.outcome === 'failure') {
+          return next(getInfoResult.error);
+        }
+
+        // Get the owner user for that info
+        const info: Info = getInfoResult.value.data;
+        const owner: UserId = info.owner;
+        const getUserResult = await gateways.getUser(owner);
+        if (getUserResult.outcome === 'failure') {
+          return next(getUserResult.error);
+        }
+
+        // Check the plan of the owner user
+        const user: User = getUserResult.value.data;
+
+        if (user.plan === 'free') {
+          return next(
+            tooLargeForFreeError(
+              `The data size limit is ${commaFormat(
+                freeTierSizeLimitKB,
+              )}KB for the VizHub Starter plan. This document is ${commaFormat(
+                Math.ceil(docSizeKB),
+              )}KB. Upgrade to VizHub Premium to increase the limit to ${commaFormat(
+                premiumTierSizeLimitKB,
+              )}KB, which would allow you to upload this data.`,
+            ),
+          );
+        }
+      }
+    }
+
+    // In this case we are under the limits, or
+    // the collection is not CONTENT_COLLECTION.
+    return next();
+  };
