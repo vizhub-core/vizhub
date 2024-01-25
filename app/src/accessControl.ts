@@ -14,6 +14,8 @@ import {
   UserId,
   VizId,
   WRITE,
+  freeTierSizeLimitMB,
+  premiumTierSizeLimitMB,
 } from 'entities';
 import { VizAccess } from 'interactors/src/verifyVizAccess';
 import { INFO_COLLECTION } from 'database/src/collectionNames';
@@ -35,13 +37,7 @@ const debug = false;
 // existing auth middleware to populate the ShareDB agent's user ID.
 // This is later referenced by access control rules.
 export const identifyClientAgent =
-  ({
-    authMiddleware,
-    gateways,
-  }: {
-    authMiddleware: any;
-    gateways: Gateways;
-  }) =>
+  ({ authMiddleware }: { authMiddleware: any }) =>
   async (request, next) => {
     // If the connection is coming from the browser,
     if (request.req) {
@@ -258,9 +254,7 @@ export const sizeCheck =
 
       // TODO different limits for different tiers.
       // const freeTierSizeLimitKB = 1000;
-      const freeTierSizeLimitMB = 1;
 
-      const premiumTierSizeLimitMB = 5;
       // const opSizeLimitKB = 3000;
 
       // If the data is too large for VizHub in general,

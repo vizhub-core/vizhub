@@ -39,7 +39,7 @@ export const VizToast = ({
 
   return (
     <ToastContainer
-      className="p-3"
+      className="p-3 viz-toast-container"
       position="top-center"
       style={{ zIndex: 1 }}
     >

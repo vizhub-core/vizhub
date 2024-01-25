@@ -53,6 +53,7 @@ export const VizPageToasts = ({
         <VizToast
           title={errorCodeLabels[shareDBError.code]}
           onClose={dismissShareDBError}
+          closeButton={true}
         >
           {shareDBError.code ===
           VizHubErrorCode.accessDenied ? (
@@ -75,8 +76,12 @@ export const VizPageToasts = ({
           )}
           {shareDBError.code ===
             VizHubErrorCode.tooLargeForFree && (
-            <Button href="/pricing">
-              Start free trial
+            <Button
+              href="/pricing"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Upgrade
             </Button>
           )}
         </VizToast>
