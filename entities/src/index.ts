@@ -69,6 +69,11 @@ export type {
   BetaProgramSignup,
 } from './Users';
 
+export {
+  freeTierSizeLimitMB,
+  premiumTierSizeLimitMB,
+} from './Users';
+
 export type {
   Viz,
   VizId,

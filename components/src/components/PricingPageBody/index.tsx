@@ -1,5 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Plan } from 'entities';
+import {
+  Plan,
+  freeTierSizeLimitMB,
+  premiumTierSizeLimitMB,
+} from 'entities';
 import { GreenCheckSVG } from '../Icons/sam/GreenCheckSVG';
 import { Button, ButtonGroup } from '../bootstrap';
 import { Feature } from './Feature';
@@ -72,7 +76,7 @@ const StarterFeatures = ({ startsExpanded = true }) => {
       </Feature>
       <Feature
         title="Free Courses"
-        hasBottomBorder={false}
+        hasBottomBorder={true}
         startsExpanded={startsExpanded}
       >
         Learn to code and visualize data with our{' '}
@@ -80,6 +84,14 @@ const StarterFeatures = ({ startsExpanded = true }) => {
           free online courses
         </a>
         .
+      </Feature>
+      <Feature
+        title="Limited Data Size"
+        hasBottomBorder={false}
+        startsExpanded={startsExpanded}
+      >
+        Data uploads are limited to {freeTierSizeLimitMB}
+        MB.
       </Feature>
     </>
   );
@@ -254,6 +266,17 @@ export const PricingPageBody = ({
 
                 <div className="pricing-page-plan-features">
                   <Feature
+                    title="AI-Assisted Coding"
+                    hasBottomBorder={true}
+                    startsExpanded={true}
+                    learnMoreHref="https://vizhub.com/forum/t/ai-assisted-coding/952"
+                  >
+                    Request coding assistance from
+                    artificial intelligence, which types
+                    directly into your editor! Powered by
+                    GPT-4.
+                  </Feature>
+                  <Feature
                     title="Private Vizzes"
                     hasBottomBorder={true}
                     startsExpanded={true}
@@ -269,17 +292,16 @@ export const PricingPageBody = ({
                     Invite colleagues to collaborate in
                     real-time on your vizzes.
                   </Feature>
+
                   <Feature
-                    title="AI-Assisted Coding"
+                    title="Upload Larger Datasets"
                     hasBottomBorder={true}
-                    heavyBottomBorder={true}
                     startsExpanded={true}
-                    learnMoreHref="https://vizhub.com/forum/t/ai-assisted-coding/952"
+                    heavyBottomBorder={true}
                   >
-                    Request coding assistance from
-                    artificial intelligence, which types
-                    directly into your editor! Powered by
-                    GPT-4.
+                    Data uploads are limited to{' '}
+                    {premiumTierSizeLimitMB}
+                    MB.
                   </Feature>
                   <StarterFeatures startsExpanded={false} />
                 </div>

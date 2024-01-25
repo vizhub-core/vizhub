@@ -6,12 +6,29 @@ import { VerifyVizAccess } from 'interactors';
 import { CONTENT_COLLECTION } from 'database';
 import { parseAuth0Sub } from 'api';
 import { Gateways, Result } from 'gateways';
-import { Action, Info, READ, VizId, WRITE } from 'entities';
+import {
+  Action,
+  Info,
+  READ,
+  User,
+  UserId,
+  VizId,
+  WRITE,
+  freeTierSizeLimitMB,
+  premiumTierSizeLimitMB,
+} from 'entities';
 import { VizAccess } from 'interactors/src/verifyVizAccess';
 import { INFO_COLLECTION } from 'database/src/collectionNames';
-import { tooLargeError } from 'gateways/src/errors';
+import {
+  accessDeniedError,
+  authenticationRequiredError,
+  tooLargeError,
+  tooLargeForFreeError,
+} from 'gateways/src/errors';
 
-const commaFormat = format(',');
+// For formatting a number of megabytes.
+// Shows one decimal place, but only if that decimal place is not zero.
+const mbFormat = format('.1~f');
 
 // Useful for debugging agent identification.
 const debug = false;
@@ -20,7 +37,8 @@ const debug = false;
 // existing auth middleware to populate the ShareDB agent's user ID.
 // This is later referenced by access control rules.
 export const identifyClientAgent =
-  (authMiddleware) => (request, next) => {
+  ({ authMiddleware }: { authMiddleware: any }) =>
+  async (request, next) => {
     // If the connection is coming from the browser,
     if (request.req) {
       // Create something that looks enough like the Express `req` object
@@ -33,14 +51,30 @@ export const identifyClientAgent =
         },
       };
 
-      // Invoke the authMiddleware to populate `req.oidc`.
-      authMiddleware(req, {}, () => {
-        const sub = req?.oidc?.user?.sub;
-        if (sub) {
-          // If the user is logged in, set the ShareDB agent's user ID.
-          request.agent.userId = parseAuth0Sub(sub);
-        }
+      const userId = await new Promise((resolve) => {
+        authMiddleware(req, {}, () => {
+          const sub = req?.oidc?.user?.sub;
+          if (sub) {
+            resolve(parseAuth0Sub(sub));
+          } else {
+            resolve(undefined);
+          }
+        });
       });
+
+      // If the user is logged in, set the ShareDB agent's user ID.
+      request.agent.userId = userId;
+
+      // // Get the actual User entity at the time of connection,
+      // // so we don't have to worry about it querying for it later.
+      // const userResult = await gateways.getUser(
+      //   request.agent.userId,
+      // );
+      // if (userResult.outcome === 'failure') {
+      //   throw userResult.error;
+      // }
+      // const user: User = userResult.value.data;
+      // request.agent.user = user;
     } else {
       // Do nothing. This case is handled by identifyServerAgent
     }
@@ -77,7 +111,7 @@ const vizVerify = (gateways: Gateways, action: Action) => {
   return async (request, next) => {
     // Unpack the ShareDB request object.
     const {
-      agent: { isServer, userId },
+      agent: { isServer, userId, user },
       // op,
       collection,
 
@@ -92,6 +126,7 @@ const vizVerify = (gateways: Gateways, action: Action) => {
       console.log('[vizVerify] ', {
         isServer,
         userId,
+        user,
         action,
       });
     }
@@ -152,8 +187,16 @@ const vizVerify = (gateways: Gateways, action: Action) => {
     }
     const hasPermission = verifyResult.value[action];
     if (!hasPermission) {
+      if (userId) {
+      }
       return next(
-        'You do not have permissions to edit this viz.',
+        userId
+          ? accessDeniedError(
+              'You do not have access to edit this viz. You can request access from the owner, who can add you as a collaborator to grant edit access.',
+            )
+          : authenticationRequiredError(
+              'You must be logged in to edit this viz.',
+            ),
       );
     } else {
       // If we get here, the user has permission to perform the op.
@@ -184,47 +227,94 @@ export const query = () => (request, next) => {
 };
 
 // Checks the size of the document against the user's plan.
-export const sizeCheck = (gateways) => (request, next) => {
-  // Unpack the ShareDB request object.
-  const {
-    agent: { isServer, userId },
-    // op,
-    collection,
+export const sizeCheck =
+  (gateways) => async (request, next) => {
+    // console.log('checking size');
+    // Unpack the ShareDB request object.
+    // console.log(request);
+    const {
+      collection,
 
-    // `snapshot` here is the snapshot _after_ the op has been applied.
-    // We can check the size of this snapshot to see if it's too big.
-    snapshot,
+      // `snapshot` here is the snapshot _after_ the op has been applied.
+      // We can check the size of this snapshot to see if it's too big.
+      snapshot,
+    } = request;
 
-    // `snapshots` is populated for read ops (ShareDB "readSnapshots" middleware)
-    snapshots,
-  } = request;
+    // console.log('collection === CONTENT_COLLECTION');
+    // console.log(collection === CONTENT_COLLECTION);
 
-  const opSizeKB = JSON.stringify(snapshot).length / 1024;
+    if (collection === CONTENT_COLLECTION) {
+      // The size of the viz document after the op has been applied.
 
-  // TODO different limits for different tiers.
-  // const freeTierSizeLimitKB = 1000;
-  // const premiumTierSizeLimitKB = 5000;
-  const opSizeLimitKB = 3000;
+      const docSizeMB =
+        JSON.stringify(snapshot).length / 1024 / 1024;
 
-  if (opSizeKB > opSizeLimitKB) {
-    // return next(
-    //   `Your plan limits you to ${opSizeLimitKB}KB per write operation. This operation is ${opSizeKB}KB.`,
-    // );
+      // console.log('docSizeMB');
+      // console.log(docSizeMB);
 
-    // TODO replace checking startsWith('Data too large.') in VizPageToasts with
-    // error code checking.
-    return next(
-      tooLargeError(
-        `The data size limit is ${commaFormat(
-          opSizeLimitKB,
-        )}KB. This document is ${commaFormat(
-          Math.ceil(opSizeKB),
-        )}KB.`,
-      ),
-    );
-  } else {
+      // TODO different limits for different tiers.
+      // const freeTierSizeLimitKB = 1000;
+
+      // const opSizeLimitKB = 3000;
+
+      // If the data is too large for VizHub in general,
+      // report an error.
+      if (docSizeMB > premiumTierSizeLimitMB) {
+        return next(
+          tooLargeError(
+            `The data size limit for VizHub is ${mbFormat(
+              premiumTierSizeLimitMB,
+            )} MB. This data is ${mbFormat(
+              docSizeMB,
+            )} MB. Please reduce the size of your data or consider hosting it externally.`,
+          ),
+        );
+      }
+
+      // If the data is too large for the free tier,
+      // but not for the premium tier,
+      // check if the owner of the viz being edited is on the free tier.
+      if (docSizeMB > freeTierSizeLimitMB) {
+        // co
+
+        // console.log('docSizeKB > freeTierSizeLimitKB');
+        // console.log(docSizeKB > freeTierSizeLimitKB);
+
+        // Get the Info
+        const vizId: VizId = snapshot.id;
+        const getInfoResult = await gateways.getInfo(vizId);
+        if (getInfoResult.outcome === 'failure') {
+          return next(getInfoResult.error);
+        }
+
+        // Get the owner user for that info
+        const info: Info = getInfoResult.value.data;
+        const owner: UserId = info.owner;
+        const getUserResult = await gateways.getUser(owner);
+        if (getUserResult.outcome === 'failure') {
+          return next(getUserResult.error);
+        }
+
+        // Check the plan of the owner user
+        const user: User = getUserResult.value.data;
+
+        if (user.plan === 'free') {
+          return next(
+            tooLargeForFreeError(
+              `The data size limit for VizHub Starter is ${mbFormat(
+                premiumTierSizeLimitMB,
+              )} MB. This data is ${mbFormat(
+                docSizeMB,
+              )} MB. Please consider upgrading to VizHub Premium to increase the limit to ${mbFormat(
+                premiumTierSizeLimitMB,
+              )} MB, which would allow you to upload this data.`,
+            ),
+          );
+        }
+      }
+    }
+
+    // In this case we are under the limits, or
+    // the collection is not CONTENT_COLLECTION.
     return next();
-  }
-
-  // console.log('opSizeKB', opSizeKB);
-};
+  };
