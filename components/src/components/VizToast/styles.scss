@@ -5,3 +5,26 @@
       )
   );
 }
+
+.toast-header {
+  color: var(--bs-heading-color);
+}
+
+.toast-header strong {
+  font-family: 'Poppins';
+  font-size: 20px;
+}
+
+.toast-body {
+  color: var(--bs-body-color);
+  font-size: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.toast-header,
+.toast-body {
+  backdrop-filter: blur(8px);
+}

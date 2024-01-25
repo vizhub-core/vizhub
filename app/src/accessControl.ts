@@ -18,11 +18,15 @@ import {
 import { VizAccess } from 'interactors/src/verifyVizAccess';
 import { INFO_COLLECTION } from 'database/src/collectionNames';
 import {
+  accessDeniedError,
+  authenticationRequiredError,
   tooLargeError,
   tooLargeForFreeError,
 } from 'gateways/src/errors';
 
-const commaFormat = format(',');
+// For formatting a number of megabytes.
+// Shows one decimal place, but only if that decimal place is not zero.
+const mbFormat = format('.1~f');
 
 // Useful for debugging agent identification.
 const debug = false;
@@ -187,8 +191,16 @@ const vizVerify = (gateways: Gateways, action: Action) => {
     }
     const hasPermission = verifyResult.value[action];
     if (!hasPermission) {
+      if (userId) {
+      }
       return next(
-        'You do not have permissions to edit this viz.',
+        userId
+          ? accessDeniedError(
+              'You do not have access to edit this viz. You can request access from the owner, who can add you as a collaborator to grant edit access.',
+            )
+          : authenticationRequiredError(
+              'You must be logged in to edit this viz.',
+            ),
       );
     } else {
       // If we get here, the user has permission to perform the op.
@@ -221,7 +233,7 @@ export const query = () => (request, next) => {
 // Checks the size of the document against the user's plan.
 export const sizeCheck =
   (gateways) => async (request, next) => {
-    console.log('checking size');
+    // console.log('checking size');
     // Unpack the ShareDB request object.
     // console.log(request);
     const {
@@ -237,29 +249,30 @@ export const sizeCheck =
 
     if (collection === CONTENT_COLLECTION) {
       // The size of the viz document after the op has been applied.
-      const docSizeKB =
-        JSON.stringify(snapshot).length / 1024;
 
-      console.log('docSizeKB');
-      console.log(docSizeKB);
+      const docSizeMB =
+        JSON.stringify(snapshot).length / 1024 / 1024;
+
+      // console.log('docSizeMB');
+      // console.log(docSizeMB);
 
       // TODO different limits for different tiers.
       // const freeTierSizeLimitKB = 1000;
-      const freeTierSizeLimitKB = 1;
+      const freeTierSizeLimitMB = 1;
 
-      const premiumTierSizeLimitKB = 5000;
+      const premiumTierSizeLimitMB = 5;
       // const opSizeLimitKB = 3000;
 
       // If the data is too large for VizHub in general,
       // report an error.
-      if (docSizeKB > premiumTierSizeLimitKB) {
+      if (docSizeMB > premiumTierSizeLimitMB) {
         return next(
           tooLargeError(
-            `The data size limit for VizHub is ${commaFormat(
-              premiumTierSizeLimitKB,
-            )}KB. This document is ${commaFormat(
-              Math.ceil(docSizeKB),
-            )}KB. Please reduce the size of your data or consider hosting it externally.`,
+            `The data size limit for VizHub is ${mbFormat(
+              premiumTierSizeLimitMB,
+            )} MB. This data is ${mbFormat(
+              docSizeMB,
+            )} MB. Please reduce the size of your data or consider hosting it externally.`,
           ),
         );
       }
@@ -267,11 +280,11 @@ export const sizeCheck =
       // If the data is too large for the free tier,
       // but not for the premium tier,
       // check if the owner of the viz being edited is on the free tier.
-      if (docSizeKB > freeTierSizeLimitKB) {
+      if (docSizeMB > freeTierSizeLimitMB) {
         // co
 
-        console.log('docSizeKB > freeTierSizeLimitKB');
-        console.log(docSizeKB > freeTierSizeLimitKB);
+        // console.log('docSizeKB > freeTierSizeLimitKB');
+        // console.log(docSizeKB > freeTierSizeLimitKB);
 
         // Get the Info
         const vizId: VizId = snapshot.id;
@@ -294,13 +307,13 @@ export const sizeCheck =
         if (user.plan === 'free') {
           return next(
             tooLargeForFreeError(
-              `The data size limit is ${commaFormat(
-                freeTierSizeLimitKB,
-              )}KB for the VizHub Starter plan. This document is ${commaFormat(
-                Math.ceil(docSizeKB),
-              )}KB. Upgrade to VizHub Premium to increase the limit to ${commaFormat(
-                premiumTierSizeLimitKB,
-              )}KB, which would allow you to upload this data.`,
+              `The data size limit for VizHub Starter is ${mbFormat(
+                premiumTierSizeLimitMB,
+              )} MB. This data is ${mbFormat(
+                docSizeMB,
+              )} MB. Please consider upgrading to VizHub Premium to increase the limit to ${mbFormat(
+                premiumTierSizeLimitMB,
+              )} MB, which would allow you to upload this data.`,
             ),
           );
         }
