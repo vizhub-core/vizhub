@@ -58,7 +58,7 @@ export const LandingPageBody = () => {
           </div>
 
           <div className="feature-section">
-            <div className="feature-section-content">
+            <div className="feature-section-content brand-background">
               <div className="feature-section-copy">
                 <h3>Iterate Faster</h3>
                 <p>
@@ -138,7 +138,7 @@ export const LandingPageBody = () => {
             </div>
           </div>
           <div className="feature-section">
-            <div className="feature-section-content">
+            <div className="feature-section-content brand-background">
               <div className="feature-section-copy">
                 <h3>Open Source Examples</h3>
                 <p>
@@ -227,6 +227,13 @@ export const LandingPageBody = () => {
                 ></img>
               </div>
             </div>
+          </div>
+          <div className="feature-section">
+            <div className="feature-section-copy">
+              <a href="https://calendly.com/curran-kelleher/casual">
+                Book a meeting with VizHub's founder
+              </a>
+            </div>{' '}
           </div>
         </div>
         {enableFooter && <Footer />}
