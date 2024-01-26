@@ -2,6 +2,11 @@
   overflow: auto;
   position: relative;
 
+  a {
+    text-decoration: none;
+    font-weight: 600;
+  }
+
   img.header-background {
     position: absolute;
     width: 100%;
@@ -82,38 +87,6 @@
         display: flex;
         justify-content: center;
 
-        .feature-section-content.brand-background {
-          background: var(--vh-color-background-01);
-          position: relative; /* This is needed to position the pseudo-element */
-          overflow: hidden; /* This will clip the circle at the edges of the container */
-
-          /* The circle */
-          &::before {
-            content: '';
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-1%, -50%);
-            width: 1200px;
-            height: 1200px;
-            background-color: var(--vh-color-background-02);
-            border-radius: 50%;
-          }
-
-          .feature-section-image {
-            position: relative;
-          }
-
-          .feature-section-copy,
-          .feature-section-image {
-            padding: 100px;
-          }
-
-          video {
-            box-shadow: var(--vh-box-shadow);
-          }
-        }
-
         .feature-section-content {
           width: 1500px;
           display: flex;
@@ -121,9 +94,35 @@
           justify-content: space-between;
           border-radius: 20px;
 
+          /* Flex direction column media query */
+          @media (max-width: 1200px) {
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+          }
+
           .feature-section-copy,
           .feature-section-image {
             padding: 0 100px;
+            position: relative;
+
+            .collaboration-demo-video-overlay {
+              position: absolute;
+              top: 0;
+              right: 0;
+              bottom: 0;
+              left: 0;
+              display: flex;
+              align-items: flex-start;
+              justify-content: center;
+
+              video {
+                position: absolute;
+                width: 564px;
+                top: -72px;
+                border-radius: 20px;
+              }
+            }
           }
 
           @keyframes rotate-back-and-forth {
@@ -162,6 +161,37 @@
               border-radius: 8px;
               height: 360px;
             }
+          }
+        }
+        .feature-section-content.brand-background {
+          background: var(--vh-color-background-01);
+          position: relative; /* This is needed to position the pseudo-element */
+          overflow: hidden; /* This will clip the circle at the edges of the container */
+
+          /* The circle */
+          &::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-1%, -50%);
+            width: 1200px;
+            height: 1200px;
+            background-color: var(--vh-color-background-02);
+            border-radius: 50%;
+          }
+
+          .feature-section-image {
+            position: relative;
+          }
+
+          .feature-section-copy,
+          .feature-section-image {
+            padding: 100px;
+          }
+
+          video {
+            box-shadow: var(--vh-box-shadow);
           }
         }
       }
