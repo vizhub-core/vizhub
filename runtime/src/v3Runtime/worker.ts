@@ -99,7 +99,7 @@ addEventListener('message', async ({ data }) => {
             ).then((r) => r.text());
             (0, eval)(compiler);
 
-            console.log(self.svelte);
+            // console.log(self.svelte);
             return self.svelte.compile;
           },
         }),
