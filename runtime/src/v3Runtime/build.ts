@@ -18,6 +18,7 @@ import { vizLoad } from './vizLoad';
 import { transformDSV } from './transformDSV';
 import { transformSvelte } from './transformSvelte';
 import { urlLoad } from './urlLoad';
+import { escapeProperly } from '../../../app/src/escapeProperly';
 
 const debug = false;
 
@@ -181,7 +182,10 @@ export const build = async ({
       // TODO benchmark performance and build size with vs. without sourcemaps
       // Idea: no sourcemaps when interacting, sourcemaps after interact is done.
       // Idea: cache builds on the server, don't store builds in ShareDB at all
-      src = code;
+
+      // Escape script ending tags that may appear within strings,
+      // so that they don't break the server-rendered HTML.
+      src = code.replace('</script>', '<\\/script>');
 
       // If sourcemaps are enabled, tack them onto the end inline.
       if (enableSourcemap && map !== null && !debug) {
