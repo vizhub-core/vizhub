@@ -37,7 +37,7 @@ const premiumImages = [
   'pricing-spirit-premium-7',
 ];
 
-const StarterFeatures = ({ startsExpanded = true }) => {
+const StarterFeatures = ({ startsExpanded = false }) => {
   return (
     <>
       <Feature
@@ -106,6 +106,8 @@ const CurrentButton = () => (
     <GreenCheckSVG />
   </Button>
 );
+
+const enableImages = false;
 
 export const PricingPageBody = ({
   onStarterDowngradeClick,
@@ -190,11 +192,14 @@ export const PricingPageBody = ({
           </div>
           <div className="pricing-page-plans">
             <div className="pricing-page-plan">
-              <img
-                className="plan-spirit"
-                src={starterSpiritSrc}
-                alt="A student in his dorm room studying dataviz"
-              />
+              {enableImages && (
+                <img
+                  className="plan-spirit"
+                  src={starterSpiritSrc}
+                  alt="A student in his dorm room studying dataviz"
+                />
+              )}
+
               <div className="pricing-page-plan-body">
                 <div className="plan-header">
                   <h3 className="plan-header-left">
@@ -205,10 +210,7 @@ export const PricingPageBody = ({
                   </div>
                 </div>
 
-                <p>
-                  Free forever. Ideal for students and
-                  hobbyists.
-                </p>
+                <p>Ideal for students.</p>
                 {currentPlan === 'free' ? (
                   <CurrentButton />
                 ) : (
@@ -227,11 +229,14 @@ export const PricingPageBody = ({
               </div>
             </div>
             <div className="pricing-page-plan">
-              <img
-                className="plan-spirit"
-                src={premiumSpiritSrc}
-                alt="A digital nomad freelancer working on a client project"
-              />
+              {' '}
+              {enableImages && (
+                <img
+                  className="plan-spirit"
+                  src={premiumSpiritSrc}
+                  alt="A digital nomad freelancer working on a client project"
+                />
+              )}
               <div className="pricing-page-plan-body">
                 <div className="plan-header">
                   <h3 className="plan-header-left">
@@ -245,7 +250,7 @@ export const PricingPageBody = ({
                   </div>
                 </div>
                 <p>
-                  Ideal for freelancers and professionals.
+                  Ideal for professionals.
                   {enableFreeTrial
                     ? ' Includes 7 day free trial.'
                     : ''}
@@ -265,11 +270,18 @@ export const PricingPageBody = ({
                 )}
 
                 <div className="pricing-page-plan-features">
+                  <div className="vh-lede-01 mb-3 vh-color-neutral-02">
+                    Everything in{' '}
+                    <span style={{ fontWeight: 600 }}>
+                      Starter
+                    </span>
+                    , plus:
+                  </div>
                   <Feature
                     title="AI-Assisted Coding"
                     hasBottomBorder={true}
-                    startsExpanded={true}
                     learnMoreHref="https://vizhub.com/forum/t/ai-assisted-coding/952"
+                    startsExpanded={true}
                   >
                     Request coding assistance from
                     artificial intelligence, which types
@@ -279,7 +291,6 @@ export const PricingPageBody = ({
                   <Feature
                     title="Private Vizzes"
                     hasBottomBorder={true}
-                    startsExpanded={true}
                   >
                     Develop visualizations accessible only
                     by you and your collaborators.
@@ -287,23 +298,16 @@ export const PricingPageBody = ({
                   <Feature
                     title="Unlimited Real-Time Collaborators"
                     hasBottomBorder={true}
-                    startsExpanded={true}
                   >
                     Invite colleagues to collaborate in
                     real-time on your vizzes.
                   </Feature>
-
-                  <Feature
-                    title="Upload Larger Datasets"
-                    hasBottomBorder={true}
-                    startsExpanded={true}
-                    heavyBottomBorder={true}
-                  >
+                  <Feature title="Upload Larger Datasets">
                     Data uploads are limited to{' '}
                     {premiumTierSizeLimitMB}
                     MB.
                   </Feature>
-                  <StarterFeatures startsExpanded={false} />
+                  {/* <StarterFeatures startsExpanded={false} /> */}
                 </div>
               </div>
             </div>

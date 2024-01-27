@@ -29,9 +29,9 @@ export const LandingPageBody = () => {
           <Button
             variant="secondary"
             size="lg"
-            href="/explore"
+            href="/login"
           >
-            Explore VizHub
+            Get started
           </Button>
           <a href="https://vizhub.com/curran/da1bd8ba9ffb4e71a240fb8eda172ba7">
             <img
@@ -47,12 +47,14 @@ export const LandingPageBody = () => {
                 Why VizHub?
               </h1>
               <div className="vh-lede-01">
-                VizHub provides a comprehensive set of tools
-                for creating and sharing data visualizations
-                with your team and the world. Accelerate
-                your development process with hot reloading,
-                interactive widgets, AI assisted coding, and
-                real-time collaboration.
+                VizHub is cool. It's a platform for
+                developing and sharing data visualizations.
+                It's also a community of data visualization
+                enthusiasts. VizHub is a place to learn,
+                create, and collaborate. It also has some
+                sweet unique features that accelerate
+                dataviz production like instant feedback and
+                in-editor AI assistance.
               </div>
             </div>
           </div>
@@ -228,13 +230,13 @@ export const LandingPageBody = () => {
               </div>
             </div>
           </div>
-          <div className="feature-section">
+          {/* <div className="feature-section">
             <div className="feature-section-copy">
               <a href="https://calendly.com/curran-kelleher/casual">
                 Book a meeting with VizHub's founder
               </a>
-            </div>{' '}
-          </div>
+            </div>
+          </div> */}
         </div>
         {enableFooter && <Footer />}
       </div>
