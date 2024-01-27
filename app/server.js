@@ -37,27 +37,6 @@ const send404 = (res) => {
     .end('Not found');
 };
 
-// Safely transporting page data to the client via JSON in a <script> tag.
-// We need to escape script ending tags, so we can transport HTML within JSON.
-
-// Inspired by:
-// https://github.com/ember-fastboot/fastboot/pull/85/commits/08d6e0ad653723be2096a0fab326164bd8f63ebf
-// https://www.man42.net/blog/2016/12/safely-escape-user-data-in-a-script-tag/
-// https://github.com/yahoo/serialize-javascript/blob/7f3ac252d86b802454cb43782820aea2e0f6dc25/index.js#L25
-// https://pragmaticwebsecurity.com/articles/spasecurity/json-stringify-xss.html
-// https://redux.js.org/usage/server-rendering/#security-considerations
-const escaped = {
-  '&': '\\u0026',
-  '>': '\\u003e',
-  '<': '\\u003c',
-  '\u2028': '\\u2028',
-  '\u2029': '\\u2029',
-};
-const regex = /[\u2028\u2029&><]/g;
-const replacer = (match) => escaped[match];
-const escapeProperly = (str) =>
-  str.replace(regex, replacer);
-
 async function createServer(
   root = process.cwd(),
 
@@ -205,7 +184,7 @@ async function createServer(
     // transactions/spans/breadcrumbs are isolated across requests
     app.use(Sentry.Handlers.requestHandler());
     // TracingHandler creates a trace for every incoming request
-    app.use(Sentry.Handlers.tracingHandler());
+    // app.use(Sentry.Handlers.tracingHandler());
   }
 
   // Handle the API requests.
@@ -335,7 +314,7 @@ async function createServer(
         template = indexProd;
         entry = prodServerEntry;
       }
-      const { render, pages } = entry;
+      const { render, pages, escapeProperly } = entry;
 
       // Match the route and fetch its data.
       // https://stackoverflow.com/questions/66265608/react-router-v6-get-path-pattern-for-current-route

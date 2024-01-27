@@ -56,6 +56,8 @@ export const computeSrcDoc = async ({
   }
 
   return {
+    // Escape ending tags in strings like "</script>",
+    // so that they don't break the HTML.
     initialSrcdoc,
     initialSrcdocError,
   };
