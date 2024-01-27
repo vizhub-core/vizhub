@@ -5,7 +5,7 @@ import { ChevronDownSVG } from '../Icons/sam/ChevronDownSVG';
 
 export const Feature = ({
   title,
-  hasBottomBorder,
+  hasBottomBorder = false,
   heavyBottomBorder = false,
   startsExpanded = false,
   learnMoreHref = null,
