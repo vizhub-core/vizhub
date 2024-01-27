@@ -121,13 +121,13 @@ export const createCheckoutSession = ({
 
           allow_promotion_codes: true,
 
-          discounts: discountCode
-            ? [
-                {
-                  coupon: discountCode,
-                },
-              ]
-            : undefined,
+          // discounts: discountCode
+          //   ? [
+          //       {
+          //         coupon: discountCode,
+          //       },
+          //     ]
+          //   : undefined,
         },
       );
       res.json(ok({ sessionURL: session.url }));
