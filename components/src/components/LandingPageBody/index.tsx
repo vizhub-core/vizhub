@@ -3,7 +3,7 @@ import { Button } from '../bootstrap';
 import { image } from '../image';
 import './styles.scss';
 
-const enableFooter = false;
+const enableFooter = true;
 
 const headerBackgroundSrc = image('landing-header-bkg');
 const headerForegroundSrc = image(

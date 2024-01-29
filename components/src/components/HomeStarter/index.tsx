@@ -1,4 +1,5 @@
 import { Button } from '../bootstrap';
+import { discordLink } from '../discordLink';
 import './styles.scss';
 
 const enableCreateVizButton = false;
@@ -18,10 +19,7 @@ export const HomeStarter = () => {
             Create Visualization
           </Button>
         )}
-        <Button
-          variant="primary"
-          href="https://discord.gg/wbtJ7SCtYr"
-        >
+        <Button variant="primary" href={discordLink}>
           Join Discord
         </Button>
         <Button

@@ -10,8 +10,14 @@
     display: flex;
     gap: 64px;
 
+    /* Mobile */
+    @media (max-width: 1200px) {
+      flex-direction: column;
+      gap: 32px;
+    }
+
     svg {
-      margin-right: 36px;
+      margin-right: 100px;
     }
 
     .footer-links {
