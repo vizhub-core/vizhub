@@ -1,0 +1,17 @@
+What will information governance think?
+Ideal response: that's a solved problem
+Need: create realistic dummy data
+Develop in VizHub on dummy data
+Export code automatically
+Build for production with real data
+HTML in PowerPoint
+Embed into PowerBI
+Embed into Excel
+GitLab over GitHub
+That was the deciding factor between the two
+On-site deployment
+Intranet site, only available within firewall
+Active Directory authentication
+Microsoft SQL server
+Verification check mark - this has been approved
+Literally a ribbon in the corner of the page
