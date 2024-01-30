@@ -1,20 +1,25 @@
 .viz-toast-container {
+  .toast {
+    background-color: white;
+  }
   .toast-header.header-only {
     border-radius: calc(
       var(--bs-toast-border-radius) - var(
           --bs-toast-border-width
         )
     );
+    border-bottom: none;
   }
 
   .toast-header {
-    padding: 20px;
+    padding: 12px 20px;
     color: var(--bs-heading-color);
   }
 
   .toast-header strong {
     font-family: 'Poppins';
     font-size: 20px;
+    font-weight: 600;
   }
 
   .toast-body {
@@ -25,10 +30,5 @@
     flex-direction: column;
     align-items: flex-end;
     gap: 20px;
-  }
-
-  .toast-header,
-  .toast-body {
-    backdrop-filter: blur(8px);
   }
 }

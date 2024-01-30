@@ -11,6 +11,7 @@ import { VizPreviewPresenter } from '../../smartComponents/VizPreviewPresenter';
 import { InfosAndOwnersContext } from '../../contexts/InfosAndOwnersContext';
 import { AuthenticatedUserContext } from '../../contexts/AuthenticatedUserContext';
 import { SectionSortContext } from '../../contexts/SectionSortContext';
+import { image } from 'components/src/components/image';
 
 export const Body = ({
   profileUser,
@@ -33,26 +34,6 @@ export const Body = ({
     hasMore,
   } = useContext(InfosAndOwnersContext);
 
-  const renderVizPreviews = useCallback(
-    () =>
-      allInfoSnapshots.map((infoSnapshot) => (
-        <VizPreviewPresenter
-          key={infoSnapshot.data.id}
-          infoSnapshot={infoSnapshot}
-          ownerUser={
-            // Usually it's the profile user, but not in the
-            // "Shared with me" section
-            infoSnapshot.data.owner === profileUser.id
-              ? profileUser
-              : ownerUserSnapshotsById[
-                  infoSnapshot.data.owner
-                ].data
-          }
-        />
-      )),
-    [allInfoSnapshots, profileUser],
-  );
-
   const displayName = useMemo(
     () => getUserDisplayName(profileUser),
     [profileUser],
@@ -65,6 +46,47 @@ export const Body = ({
 
   const isViewingOwnProfile =
     authenticatedUser?.id === profileUser.id;
+
+  const showUpgradeCallout =
+    isViewingOwnProfile &&
+    authenticatedUser?.plan === 'free' &&
+    sectionId === 'private';
+
+  const renderVizPreviews = useCallback(
+    () => (
+      <>
+        {allInfoSnapshots.map((infoSnapshot) => (
+          <VizPreviewPresenter
+            key={infoSnapshot.data.id}
+            infoSnapshot={infoSnapshot}
+            ownerUser={
+              // Usually it's the profile user, but not in the
+              // "Shared with me" section
+              infoSnapshot.data.owner === profileUser.id
+                ? profileUser
+                : ownerUserSnapshotsById[
+                    infoSnapshot.data.owner
+                  ].data
+            }
+          />
+        ))}
+        {showUpgradeCallout &&
+          allInfoSnapshots.length === 0 && (
+            <>
+              <img
+                style={{ width: '100%' }}
+                src={image('empty-private-vizzes', 'svg')}
+              />
+              <img
+                style={{ width: '100%' }}
+                src={image('empty-private-vizzes', 'svg')}
+              />
+            </>
+          )}
+      </>
+    ),
+    [allInfoSnapshots, profileUser, showUpgradeCallout],
+  );
 
   return (
     <div className="vh-page overflow-auto">
@@ -84,7 +106,7 @@ export const Body = ({
         isViewingOwnProfile={isViewingOwnProfile}
         sectionId={sectionId}
         setSectionId={setSectionId}
-        currentPlan={authenticatedUser?.plan}
+        showUpgradeCallout={showUpgradeCallout}
       />
     </div>
   );

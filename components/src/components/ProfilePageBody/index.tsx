@@ -39,7 +39,7 @@ export const ProfilePageBody = ({
   sectionId,
   setSectionId,
 
-  currentPlan,
+  showUpgradeCallout,
 }: {
   // Viz preview list props.
   renderVizPreviews: () => React.ReactNode;
@@ -63,8 +63,9 @@ export const ProfilePageBody = ({
   sectionId: SectionId;
   setSectionId: (sectionId: SectionId) => void;
 
-  // The current plan of the authenticated user.
-  currentPlan?: Plan;
+  // True when the user is on the free plan and viewing
+  // their private vizzes
+  showUpgradeCallout?: boolean;
 }) => {
   const copy: { [K in SectionId]: string } = useMemo(
     () => ({
@@ -82,11 +83,6 @@ export const ProfilePageBody = ({
     }),
     [isViewingOwnProfile],
   );
-
-  const showUpgradeCallout =
-    isViewingOwnProfile &&
-    currentPlan === 'free' &&
-    sectionId === 'private';
 
   return (
     <div className="vh-page vh-profile-page">
@@ -166,7 +162,15 @@ export const ProfilePageBody = ({
                 isViewingOwnProfile && <CreateNewButton />}
             </div>
           </div>
-          {showUpgradeCallout && <UpgradeCallout />}
+          {showUpgradeCallout && (
+            <UpgradeCallout>
+              To create private visualizations, consider
+              upgrading to VizHub Premium. You'll also get
+              access to other premium features including
+              AI-assisted coding, unlimited real-time
+              collaborators, and larger data.
+            </UpgradeCallout>
+          )}
           <VizPreviewCollection
             opacity={showUpgradeCallout ? 0.5 : 1}
           >
