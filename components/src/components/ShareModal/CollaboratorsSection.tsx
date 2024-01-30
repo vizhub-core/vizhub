@@ -3,6 +3,8 @@ import { Form } from '../bootstrap';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { Plan, User, UserId } from 'entities';
 import { CollaboratorEntry } from './CollaboratorEntry';
+import { UpgradeCallout } from '../UpgradeCallout';
+import { image } from '../image';
 
 // Inspired by
 // https://ericgio.github.io/react-bootstrap-typeahead/#asynchronous-searching
@@ -120,10 +122,31 @@ export const CollaboratorsSection = ({
   return (
     <>
       {currentPlan === 'free' && (
-        <p className="mt-3 upgrade-callout-text">
-          Please <a href="/pricing">upgrade your plan</a> to
-          add collaborators.
-        </p>
+        <UpgradeCallout
+          imageSrc={image('real-time-collaboration')}
+          isVertical={true}
+          topMargin={true}
+        >
+          {/* Add collaborators to invite others to edit your
+            viz with you in real-time. This feature is only
+            available on VizHub Premium. */}
+          With VizHub Premium, you can add unlimited
+          real-time collaborators to your viz.
+        </UpgradeCallout>
+
+        // <div className="mt-3 d-flex flex-column align-items-end">
+        //   Add collaborators to invite others to edit your
+        //   viz with you in real-time. This feature is only
+        //   available on VizHub Premium.
+        //   <Button
+        //     href="/pricing"
+        //     className="mt-3"
+        //     target="_blank"
+        //     rel="noopener noreferrer"
+        //   >
+        //     Upgrade
+        //   </Button>
+        // </div>
       )}
       <Form.Group
         className={

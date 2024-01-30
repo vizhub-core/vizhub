@@ -302,7 +302,7 @@ export const sizeCheck =
           return next(
             tooLargeForFreeError(
               `The data size limit for VizHub Starter is ${mbFormat(
-                premiumTierSizeLimitMB,
+                freeTierSizeLimitMB,
               )} MB. This data is ${mbFormat(
                 docSizeMB,
               )} MB. Please consider upgrading to VizHub Premium to increase the limit to ${mbFormat(

@@ -63,10 +63,13 @@ const getGlobals = (pkg: V3PackageJson) => {
 // With cache: avg = 5.2 ms
 let cache: RollupCache | undefined;
 
+const isWebWorker =
+  typeof self !== 'undefined' && self.window === self;
+
 export const build = async ({
   vizId,
   enableSourcemap = false,
-  enableCache = false,
+  enableCache = isWebWorker,
   rollup,
   vizCache,
   resolveSlug,

@@ -176,6 +176,12 @@ export const SettingsModal = ({
             Choose a title for your viz.
           </Form.Text>
         </Form.Group>
+
+        <VisibilityControl
+          visibility={visibility}
+          setVisibility={setVisibility}
+          currentPlan={currentPlan}
+        />
         {enableURLChange && (
           <Form.Group
             controlId="viz-url-control"
@@ -218,12 +224,6 @@ export const SettingsModal = ({
             </Form.Text>
           </Form.Group>
         )}
-        <VisibilityControl
-          visibility={visibility}
-          setVisibility={setVisibility}
-          currentPlan={currentPlan}
-          pricingHref={pricingHref}
-        />
         <Form.Group controlId="viz-height">
           <Form.Label>Height</Form.Label>
           <div className="d-flex align-items-center">
