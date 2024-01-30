@@ -1,3 +1,4 @@
+import { useContext } from 'react';
 import { Footer } from '../Footer';
 import { Button } from '../bootstrap';
 import { image } from '../image';
@@ -10,7 +11,11 @@ const headerForegroundSrc = image(
   'landing-page-ui-example-2',
 );
 
-export const LandingPageBody = () => {
+export const LandingPageBody = ({
+  isUserAuthenticated,
+}: {
+  isUserAuthenticated: boolean;
+}) => {
   return (
     <div className="vh-page vh-landing-page">
       <img
@@ -29,7 +34,9 @@ export const LandingPageBody = () => {
           <Button
             variant="secondary"
             size="lg"
-            href="/login"
+            href={
+              isUserAuthenticated ? '/create-viz' : '/login'
+            }
           >
             Get started
           </Button>
