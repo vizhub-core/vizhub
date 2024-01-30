@@ -37,6 +37,18 @@ const constructingVisualizations2024 = [
   'da1bd8ba9ffb4e71a240fb8eda172ba7',
   // Penguins
   '3ad8641ba6b844d3a78d3bcacf2e1caa',
+  // Margins
+  '0a038559611e4800800f4e683c3cca38',
+  // Viz Function Concept
+  '554cf32480f54869925e8291c2e8ee88',
+  // Scales and Axes
+  '62cd7e49825448cda908ef84e492df7e',
+  // Axis Labels
+  '0e8d8b91c3b84350a7b0a0a5c266d0e9',
+  // Simple Scatter Plot
+  '86b1410c5758465bb8b85835ee4f7c76',
+  // Scatter Plot with Missing Data
+  '15ae0a7e176247ddb80cb3d1166f51b4',
 ];
 
 const communityTemplates = [
@@ -193,6 +205,18 @@ export type CuratedVizCollection = {
 
 export const curatedVizzes: Array<CuratedVizCollection> = [
   {
+    title: 'Technology Starters',
+    description: () => (
+      <div>
+        A collection of starter projects that unlock various
+        technologies.
+        <br />
+        Fork and remix!
+      </div>
+    ),
+    vizIds: starters,
+  },
+  {
     title: 'Constructing Visualizations 2024',
     description: () => (
       <div>
@@ -210,19 +234,6 @@ export const curatedVizzes: Array<CuratedVizCollection> = [
       </div>
     ),
     vizIds: constructingVisualizations2024,
-  },
-
-  {
-    title: 'Technology Starters',
-    description: () => (
-      <div>
-        A collection of starter projects that unlock various
-        technologies.
-        <br />
-        Fork and remix!
-      </div>
-    ),
-    vizIds: starters,
   },
   {
     title: 'Community Templates',
