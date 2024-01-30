@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { Toast, ToastContainer } from '../bootstrap';
 import './styles.scss';
 
+const enableCountdown = false;
+
 export const VizToast = ({
   title,
   delay,
@@ -27,7 +29,7 @@ export const VizToast = ({
 
   // Tell the user how long until the toast hides
   useEffect(() => {
-    if (!delay) return;
+    if (!delay && !enableCountdown) return;
     const timer = setInterval(() => {
       setCount((prevCount) => prevCount - 1);
     }, 1000);
@@ -46,7 +48,7 @@ export const VizToast = ({
       <Toast
         className={isWarning ? 'bg-warning' : ''}
         delay={delay}
-        autohide={autohide}
+        autohide={false}
         onClose={onClose}
       >
         <Toast.Header
@@ -54,7 +56,10 @@ export const VizToast = ({
           className={headerOnly ? 'header-only' : ''}
         >
           <strong className="me-auto">{title}</strong>
-          {delay ? <small>hiding in {count}</small> : null}
+
+          {enableCountdown && delay ? (
+            <small>hiding in {count}</small>
+          ) : null}
         </Toast.Header>
         {headerOnly ? null : (
           <Toast.Body>{children}</Toast.Body>

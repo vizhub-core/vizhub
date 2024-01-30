@@ -57,7 +57,7 @@ export const VizPageToasts = ({
         >
           {shareDBError.code ===
           VizHubErrorCode.accessDenied ? (
-            <>
+            <div>
               You do not have permissions to edit this viz.
               You can{' '}
               {authenticatedUser ? (
@@ -70,7 +70,7 @@ export const VizPageToasts = ({
                 </a>
               )}{' '}
               to modify it.
-            </>
+            </div>
           ) : (
             shareDBError.message
           )}
