@@ -40,12 +40,25 @@ export const LandingPageBody = ({
           >
             Get started
           </Button>
-          <a href="https://vizhub.com/curran/da1bd8ba9ffb4e71a240fb8eda172ba7">
+          {/* <a href="https://vizhub.com/curran/da1bd8ba9ffb4e71a240fb8eda172ba7">
             <img
               className="header-foreground"
               src={headerForegroundSrc}
             />
-          </a>
+          </a> */}
+          <iframe
+            style={{
+              marginTop: '70px',
+              borderRadius: ' 24px',
+            }}
+            width={560 * 2}
+            height={315 * 2}
+            src="https://www.youtube-nocookie.com/embed/47mjSVQEoAg?si=Slw1ew0dWaNaQfCi"
+            title="YouTube video player"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+          ></iframe>
         </div>
         <div className="features-container">
           <div className="white-background-section">
@@ -54,14 +67,51 @@ export const LandingPageBody = ({
                 Why VizHub?
               </h1>
               <div className="vh-lede-01">
-                VizHub is cool. It's a platform for
-                developing and sharing data visualizations.
-                It's also a community of data visualization
-                enthusiasts. VizHub is a place to learn,
-                create, and collaborate. It also has some
-                sweet unique features that accelerate
-                dataviz production like instant feedback and
-                in-editor AI assistance.
+                <p>
+                  Data visualization practitioners are often{' '}
+                  <strong>frustrated</strong> because the
+                  tools they use introduce friction into
+                  their data visualization production
+                  process. VizHub aims to solve these
+                  frustrations and accelerate dataviz
+                  delivery by speeding up feedback loops at
+                  multiple levels:
+                </p>
+                <ul className="mt-2">
+                  <li>
+                    <strong>Accelerate development</strong>{' '}
+                    with AI-Assisted coding
+                  </li>
+                  <li>
+                    <strong>
+                      Accelerate design iteration
+                    </strong>{' '}
+                    with hot reloading and interactive
+                    widgets
+                  </li>
+                  <li>
+                    <strong>
+                      Accelerate collaboration
+                    </strong>{' '}
+                    with real-time synchronization
+                  </li>
+                  <li>
+                    <strong>
+                      Accelerate real projects
+                    </strong>{' '}
+                    with private vizzes
+                  </li>
+                </ul>
+                <p>
+                  Moving faster allows you to spend more of
+                  your limited time on the joyous and
+                  creative aspects of your work, and less
+                  time on repetitive tasks, ultimately
+                  saving you time and money.
+                </p>
+                <Button href="/pricing" className="mt-5">
+                  Start free trial
+                </Button>
               </div>
             </div>
           </div>
@@ -145,28 +195,9 @@ export const LandingPageBody = ({
               </div>
             </div>
           </div>
+
           <div className="feature-section">
             <div className="feature-section-content brand-background">
-              <div className="feature-section-copy">
-                <h3>Open Source Examples</h3>
-                <p>
-                  Explore over 70,000 open source data
-                  visualizations created by our community.
-                  Sort by most popular, most recent, or most
-                  forked. Most are MIT Licensed, so you can
-                  use them in your own projects.
-                </p>
-                <Button href="/explore">Explore</Button>
-              </div>
-              <div className="feature-section-image">
-                <img
-                  src={image('explore-thumbnails')}
-                ></img>
-              </div>
-            </div>
-          </div>
-          <div className="feature-section">
-            <div className="feature-section-content">
               <div className="feature-section-copy">
                 <h3>AI Assisted Coding</h3>
                 <p>
@@ -203,7 +234,26 @@ export const LandingPageBody = ({
               </div>
             </div>
           </div>
-
+          <div className="feature-section">
+            <div className="feature-section-content">
+              <div className="feature-section-copy">
+                <h3>Open Source Examples</h3>
+                <p>
+                  Explore over 70,000 open source data
+                  visualizations created by our community.
+                  Sort by most popular, most recent, or most
+                  forked. Most are MIT Licensed, so you can
+                  use them in your own projects.
+                </p>
+                <Button href="/explore">Explore</Button>
+              </div>
+              <div className="feature-section-image">
+                <img
+                  src={image('explore-thumbnails')}
+                ></img>
+              </div>
+            </div>
+          </div>
           <div className="feature-section">
             <div className="feature-section-content brand-background">
               <div className="feature-section-copy">
