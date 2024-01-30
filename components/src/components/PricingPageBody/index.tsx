@@ -210,7 +210,7 @@ export const PricingPageBody = ({
                   </div>
                 </div>
 
-                <p>Ideal for students.</p>
+                <p>Ideal for beginners.</p>
                 {currentPlan === 'free' ? (
                   <CurrentButton />
                 ) : (
@@ -229,7 +229,6 @@ export const PricingPageBody = ({
               </div>
             </div>
             <div className="pricing-page-plan">
-              {' '}
               {enableImages && (
                 <img
                   className="plan-spirit"

@@ -5,11 +5,10 @@ SandboxPage.getPageData = async ({ gateways }) => {
 
   const titles = {
     event: 'Overall Activity',
-    'event.pageview.home': 'Home Page Views',
+    'event.pageview.landing': 'Landing Page Views',
     'event.pageview.viz': 'Viz Page Views',
+    'event.pageview.pricing': 'Viz Page Views',
     'event.login': 'Logins',
-    'event.private-beta-email-submit':
-      'Private Beta Signups',
     'event.aiAssist': 'AI Assist Invocations',
   };
 

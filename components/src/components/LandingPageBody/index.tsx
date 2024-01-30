@@ -1,3 +1,4 @@
+import { useContext } from 'react';
 import { Footer } from '../Footer';
 import { Button } from '../bootstrap';
 import { image } from '../image';
@@ -10,7 +11,11 @@ const headerForegroundSrc = image(
   'landing-page-ui-example-2',
 );
 
-export const LandingPageBody = () => {
+export const LandingPageBody = ({
+  isUserAuthenticated,
+}: {
+  isUserAuthenticated: boolean;
+}) => {
   return (
     <div className="vh-page vh-landing-page">
       <img
@@ -29,7 +34,9 @@ export const LandingPageBody = () => {
           <Button
             variant="secondary"
             size="lg"
-            href="/login"
+            href={
+              isUserAuthenticated ? '/create-viz' : '/login'
+            }
           >
             Get started
           </Button>
@@ -64,16 +71,15 @@ export const LandingPageBody = () => {
               <div className="feature-section-copy">
                 <h3>Iterate Faster</h3>
                 <p>
-                  Tweak numbers and colors in real-time
-                  using VizHub's Hot Reloading & Interactive
-                  Widgets. These features let you to see
-                  your changes immediately, without
-                  reloading the entire program. This makes
-                  it easy to iterate on your visualizations
-                  and get them just right, saving you time
-                  and effort. No more tweaking colors in
-                  design tools and manually typing number
-                  changes!
+                  Iterate faster and save time with instant
+                  feedback. Tweak numbers and colors with
+                  Hot Reloading & Interactive Widgets. See
+                  your changes immediately without reloading
+                  the entire program. This makes it easy to
+                  get your visualizations just right, saving
+                  you time and effort. No more tweaking
+                  colors in design tools and manually typing
+                  number changes!
                 </p>
                 <Button
                   href="https://vizhub.com/curran/66194bb8626c447bb13291587da28cec"

@@ -1,8 +1,11 @@
-import { useEffect } from 'react';
+import { useEffect, useContext } from 'react';
 import { LandingPageBody } from 'components';
 import { VizKit } from 'api/src/VizKit';
 import { SmartHeader } from '../../smartComponents/SmartHeader';
-import { AuthenticatedUserProvider } from '../../contexts/AuthenticatedUserContext';
+import {
+  AuthenticatedUserContext,
+  AuthenticatedUserProvider,
+} from '../../contexts/AuthenticatedUserContext';
 import { Page, PageData } from '../Page';
 
 const vizKit = VizKit({ baseUrl: './api' });
@@ -10,6 +13,17 @@ const vizKit = VizKit({ baseUrl: './api' });
 export type LandingPageData = PageData & {
   description: string;
   image: string;
+};
+
+const Body = () => {
+  const authenticatedUser = useContext(
+    AuthenticatedUserContext,
+  );
+  return (
+    <LandingPageBody
+      isUserAuthenticated={authenticatedUser ? true : false}
+    />
+  );
 };
 
 // Decoupled navigation from interaction, to support
@@ -31,7 +45,7 @@ export const LandingPage: Page = ({ pageData }) => {
     >
       <div className="vh-page overflow-auto">
         <SmartHeader />
-        <LandingPageBody></LandingPageBody>
+        <Body />
       </div>
     </AuthenticatedUserProvider>
   );
