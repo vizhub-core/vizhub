@@ -11,6 +11,8 @@ const headerForegroundSrc = image(
   'landing-page-ui-example-2',
 );
 
+const isPastFeb15 = new Date() > new Date('2024-02-15');
+
 export const LandingPageBody = ({
   isUserAuthenticated,
 }: {
@@ -25,7 +27,9 @@ export const LandingPageBody = ({
       <div className="landing-page-body">
         <div className="landing-page-content">
           <div className="landing-page-tagline">
-            Accelerate Dataviz Delivery
+            {isPastFeb15
+              ? 'Accelerate Dataviz Delivery'
+              : '50% off for 3 months! Use code EARLYADOPTER (ends Feb 15)'}
           </div>
           <h1 className="landing-page-headline">
             Develop custom data visualizations faster and

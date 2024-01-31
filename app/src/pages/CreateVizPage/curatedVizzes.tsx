@@ -10,6 +10,9 @@ const starters = [
   // Observable Plot Starter (v3)
   'f74abcce08d24c5c80c0b7262bb98185',
 
+  // P5.js Starter (v3)
+  '1d2b9e55dcc54d9cbd3032b7488338a5',
+
   // React Starter
   'c3b14112dae34ef395999cef5783324f',
 
@@ -49,6 +52,8 @@ const constructingVisualizations2024 = [
   '86b1410c5758465bb8b85835ee4f7c76',
   // Scatter Plot with Missing Data
   '15ae0a7e176247ddb80cb3d1166f51b4',
+  // UN Population Data
+  '397562716a3e49d6a9216eeef2d927b8',
 ];
 
 const communityTemplates = [

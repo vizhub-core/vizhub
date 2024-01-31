@@ -13,13 +13,11 @@ SandboxPage.getPageData = async ({ gateways }) => {
   };
 
   const analyticsEventSnapshots = (
-    await Promise.all([
-      getAnalyticsEvent('event.pageview.home'),
-      getAnalyticsEvent('event.pageview.viz'),
-      getAnalyticsEvent('event.login'),
-      getAnalyticsEvent('event.private-beta-email-submit'),
-      getAnalyticsEvent('event.aiAssist'),
-    ])
+    await Promise.all(
+      Object.keys(titles).map((key) =>
+        getAnalyticsEvent(key),
+      ),
+    )
   )
     .filter((result) => result.outcome === 'success')
     .map((result) => result.value);

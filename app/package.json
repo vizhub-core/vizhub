@@ -28,10 +28,10 @@
   "homepage": "https://github.com/vizhub-core/vizhub3#readme",
   "dependencies": {
     "@rollup/browser": "^4.9.6",
-    "@sentry/node": "^7.98.0",
+    "@sentry/node": "^7.99.0",
     "@teamwork/websocket-json-stream": "^2.0.0",
     "@types/react-router-dom": "^5.3.3",
-    "@types/sharedb": "^3.3.9",
+    "@types/sharedb": "^3.3.10",
     "buble": "^0.20.0",
     "buble-jsx-only": "^0.21.0",
     "cookie": "^0.6.0",
