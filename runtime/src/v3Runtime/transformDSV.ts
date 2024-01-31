@@ -40,7 +40,7 @@ export const transformDSV = (): InputPluginOption => ({
 
       // Convert rows to a string representation using JSON.stringify
       return {
-        code: `export default ${JSON.stringify(rows)};`,
+        code: `export default JSON.parse(\`${JSON.stringify(rows)}\`);`,
         map: { mappings: '' },
       };
     }
