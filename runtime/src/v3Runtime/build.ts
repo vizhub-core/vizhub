@@ -140,7 +140,10 @@ export const build = async ({
     const outputOptions: OutputOptions = {
       format: 'umd',
       name: 'Viz',
+      // TODO disable sourcemaps during hot reloading
       sourcemap: enableSourcemap ? true : false,
+      // sourcemap: false,
+      compact: true,
     };
 
     const packageJSONContent = getFileText(
