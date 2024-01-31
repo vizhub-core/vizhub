@@ -105,6 +105,11 @@ export const ForkViz = (gateways: Gateways) => {
       delete newInfo.migratedFromV2;
     }
 
+    // Don't carry over migratedTimestamp
+    if (newInfo.migratedTimestamp) {
+      delete newInfo.migratedTimestamp;
+    }
+
     // If there was a slug, remove it.
     if (newInfo.slug) {
       delete newInfo.slug;
