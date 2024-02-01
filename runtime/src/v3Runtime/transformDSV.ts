@@ -5,6 +5,8 @@ import { parseId } from './parseId';
 
 const debug = false;
 
+// TODO optimize but don't break.
+const optimize = false;
 // function escapeBackticksAndQuotes(str) {
 //   const escapedChars: Array<string> = [];
 //   for (let i = 0; i < str.length; i++) {
@@ -82,10 +84,18 @@ export const transformDSV = (): InputPluginOption => ({
       // This approach worked well, but failed in certain cases where
       // the data contained characters that were not properly escaped,
       // namely the backtick character ` and double quotes ".
-      return {
-        code: `export default JSON.parse(\`${JSON.stringify(rows)}\`);`,
-        map: { mappings: '' },
-      };
+
+      if (optimize) {
+        return {
+          code: `export default JSON.parse(\`${JSON.stringify(rows)}\`);`,
+          map: { mappings: '' },
+        };
+      } else {
+        return {
+          code: `export default ${JSON.stringify(rows)};`,
+          map: { mappings: '' },
+        };
+      }
       // const base64Encoded = base64Encode(
       //   JSON.stringify(rows),
       // );
