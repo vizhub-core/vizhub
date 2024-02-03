@@ -47,12 +47,29 @@
     .title-bar {
       display: flex;
       justify-content: space-between;
+      align-items: center;
       padding: var(--vh-padding-lots) 0px;
       border-bottom: 1px solid var(--vh-rule-color);
 
-      h2 {
-        margin-bottom: 0;
-        color: var(--vh-color-neutral-01);
+      &-left {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+
+        i {
+          padding: 4px;
+          border-radius: 4px;
+          cursor: pointer;
+          color: var(--vh-color-neutral-04);
+        }
+        i:hover {
+          background-color: rgba(0, 0, 0, 0.15);
+          color: var(--vh-color-neutral-01);
+        }
+        h2 {
+          margin-bottom: 0;
+          color: var(--vh-color-neutral-01);
+        }
       }
 
       &-right {

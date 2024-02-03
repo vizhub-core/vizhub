@@ -1,16 +1,16 @@
 import {
   useCallback,
   useEffect,
-  useMemo,
   useRef,
   useState,
 } from 'react';
 import { UpvoteWidget } from 'components';
 import { VisibilityUnlistedSVG } from '../Icons/VisibilityUnlistedSVG';
-import { commaFormat } from '../commaFormat';
 import { PrivateSVG } from '../Icons/sam/PrivateSVG';
+import { EditSVG } from '../Icons/EditSVG';
 import { ForksWidget } from '../ForksWidget';
 import './styles.scss';
+import { OverlayTrigger, Tooltip } from '../bootstrap';
 
 export const VizPageViewer = ({
   vizTitle,
@@ -97,10 +97,10 @@ export const VizPageViewer = ({
     return () => resizeObserver.disconnect();
   }, []);
 
-  const forksCountFormatted = useMemo(
-    () => commaFormat(forksCount),
-    [forksCount],
-  );
+  // const forksCountFormatted = useMemo(
+  //   () => commaFormat(forksCount),
+  //   [forksCount],
+  // );
 
   return (
     <div className="vh-viz-page-viewer">
@@ -124,20 +124,25 @@ export const VizPageViewer = ({
               autoFocus
             />
           ) : (
-            <h2>{vizTitle}</h2>
+            <div className="title-bar-left">
+              <h2>{vizTitle}</h2>
+              {enableEditingTitle ? (
+                <OverlayTrigger
+                  placement="top"
+                  overlay={
+                    <Tooltip id="ai-assist-widget-tooltip">
+                      Edit viz title
+                    </Tooltip>
+                  }
+                >
+                  <i onClick={handleRenameIconClick}>
+                    <EditSVG />
+                  </i>
+                </OverlayTrigger>
+              ) : null}
+            </div>
           )}
           <div className="title-bar-right">
-            {enableEditingTitle ? (
-              <i
-                className="bx bxs-edit utilities"
-                style={{
-                  color: 'rgba(0,0,0,0.5)',
-                  cursor: 'pointer',
-                }}
-                onClick={handleRenameIconClick}
-                title="Edit viz title"
-              ></i>
-            ) : null}
             <a href={forksPageHref} className="forks-link">
               {/* {forksCountFormatted} fork
               {forksCount === 1 ? '' : 's'} */}
