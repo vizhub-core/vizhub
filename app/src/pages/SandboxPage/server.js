@@ -7,7 +7,7 @@ SandboxPage.getPageData = async ({ gateways }) => {
     event: 'Overall Activity',
     'event.pageview.landing': 'Landing Page Views',
     'event.pageview.viz': 'Viz Page Views',
-    'event.pageview.pricing': 'Viz Page Views',
+    'event.pageview.pricing': 'Pricing Page Views',
     'event.login': 'Logins',
     'event.aiAssist': 'AI Assist Invocations',
   };
