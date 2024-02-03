@@ -5,8 +5,11 @@ import { ShareSVG } from '../Icons/ShareSVG';
 import { ChevronSVG } from '../Icons/ChevronSVG';
 import { DownloadSVG } from '../Icons/DownloadSVG';
 import { SettingsSVG } from '../Icons/SettingsSVG';
-import './styles.scss';
+import { ImageSVG } from '../Icons/ImageSVG';
 import { TrashSVG } from '../Icons/TrashSVG';
+import './styles.scss';
+
+const enableDownloadImage = true;
 
 export const VizPageHead = ({
   showEditor,
@@ -19,6 +22,7 @@ export const VizPageHead = ({
   showSettingsButton,
   onSettingsClick,
   onTrashClick,
+  downloadImageHref,
 }) => {
   const toggleShowEditor = useCallback(
     () => setShowEditor(!showEditor),
@@ -38,13 +42,25 @@ export const VizPageHead = ({
         </Button>
       </div>
       <div className="side">
+        {enableDownloadImage && (
+          <Button
+            as="a"
+            variant="light"
+            size="sm"
+            href={downloadImageHref}
+            download
+          >
+            <ImageSVG />
+            Download Image
+          </Button>
+        )}
         <Button
           variant="light"
           size="sm"
           onClick={onExportClick}
         >
           <DownloadSVG />
-          Export
+          Export Code
         </Button>
         <Button
           variant="light"

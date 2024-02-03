@@ -1,9 +1,4 @@
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
   Files,
   ShareDBDoc,
@@ -21,7 +16,6 @@ import {
 } from 'entities';
 import { VizKit } from 'api/src/VizKit';
 import {
-  getConnection,
   useData,
   useDataRecord,
   useShareDBDoc,
@@ -45,10 +39,9 @@ import {
 import { useToggleState } from './useToggleState';
 import { VizPageModals } from './VizPageModals';
 import { useUpvoting } from './useUpvoting';
-import './styles.scss';
 import { useSlugAutoNavigate } from './useSlugAutoNavigate';
-import { useSearchParams } from 'react-router-dom';
 import { useShareDBError } from './useShareDBError';
+import './styles.scss';
 
 const vizKit = VizKit({ baseUrl: '/api' });
 
