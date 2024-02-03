@@ -20,6 +20,7 @@ import Alert from 'react-bootstrap/cjs/Alert.js';
 import Card from 'react-bootstrap/cjs/Card.js';
 import Tooltip from 'react-bootstrap/cjs/Tooltip.js';
 import Overlay from 'react-bootstrap/cjs/Overlay.js';
+import OverlayTrigger from 'react-bootstrap/cjs/OverlayTrigger.js';
 
 export {
   Alert,
@@ -41,4 +42,5 @@ export {
   Card,
   Tooltip,
   Overlay,
+  OverlayTrigger,
 };

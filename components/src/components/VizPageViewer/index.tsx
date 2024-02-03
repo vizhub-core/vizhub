@@ -10,6 +10,7 @@ import { PrivateSVG } from '../Icons/sam/PrivateSVG';
 import { EditSVG } from '../Icons/EditSVG';
 import { ForksWidget } from '../ForksWidget';
 import './styles.scss';
+import { OverlayTrigger, Tooltip } from '../bootstrap';
 
 export const VizPageViewer = ({
   vizTitle,
@@ -126,12 +127,18 @@ export const VizPageViewer = ({
             <div className="title-bar-left">
               <h2>{vizTitle}</h2>
               {enableEditingTitle ? (
-                <i
-                  onClick={handleRenameIconClick}
-                  title="Edit viz title"
+                <OverlayTrigger
+                  placement="top"
+                  overlay={
+                    <Tooltip id="ai-assist-widget-tooltip">
+                      Edit viz title
+                    </Tooltip>
+                  }
                 >
-                  <EditSVG />
-                </i>
+                  <i onClick={handleRenameIconClick}>
+                    <EditSVG />
+                  </i>
+                </OverlayTrigger>
               ) : null}
             </div>
           )}
