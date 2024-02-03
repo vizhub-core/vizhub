@@ -35,6 +35,7 @@ import {
   getForksPageHref,
   getProfilePageHref,
   getVizPageHref,
+  getVizThumbnailURL,
 } from '../../../accessors';
 import { useRenderMarkdownHTML } from './useRenderMarkdownHTML';
 import { VizPageEditor } from './VizPageEditor';
@@ -42,6 +43,7 @@ import { useMarkUncommitted } from '../useMarkUncommitted';
 import { enableManualRun } from 'runtime/src/useRuntime';
 import { formatTimestamp } from '../../../accessors/formatTimestamp';
 import { useSearchParams } from 'react-router-dom';
+import { absoluteURL } from '../../../seoMetaTags';
 
 const debug = false;
 
@@ -311,6 +313,11 @@ export const VizPageBody = ({
     [ownerUser],
   );
 
+  const downloadImageHref = useMemo(
+    () => getVizThumbnailURL(info.end, defaultVizWidth),
+    [info.end, defaultVizWidth],
+  );
+
   return isEmbedMode ? (
     renderVizRunner()
   ) : (
@@ -327,6 +334,7 @@ export const VizPageBody = ({
         onSettingsClick={toggleSettingsModal}
         showTrashButton={canUserDeleteViz}
         onTrashClick={toggleDeleteVizConfirmationModal}
+        downloadImageHref={downloadImageHref}
       />
       <div className="vh-viz-page-body">
         <VizPageEditor
