@@ -101,7 +101,12 @@ export const VizPageModals = ({
   );
 
   const linkToCopy = useMemo(
-    () => getVizPageHref(ownerUser, info, true),
+    () =>
+      getVizPageHref({
+        ownerUser,
+        info,
+        absolute: true,
+      }),
     [ownerUser, info],
   );
 
@@ -254,6 +259,9 @@ export const VizPageModals = ({
           }
           initialCollaborators={initialCollaborators}
           currentPlan={authenticatedUser?.plan || 'free'}
+          showCollaboratorsSection={
+            info.owner === authenticatedUser?.id
+          }
         />
       )}
       {showDeleteVizConfirmationModal && (

@@ -1,12 +1,12 @@
+import { GearSVG, TrashSVG } from 'vzcode';
 import { useCallback } from 'react';
 import { Button } from '../bootstrap';
-import { ForkSVG } from '../Icons/ForkSVG';
-import { ShareSVG } from '../Icons/ShareSVG';
-import { ChevronSVG } from '../Icons/ChevronSVG';
-import { DownloadSVG } from '../Icons/DownloadSVG';
-import { SettingsSVG } from '../Icons/SettingsSVG';
+import { ForkSVG } from '../Icons/sam/ForkSVG';
+import { SharedSVG } from '../Icons/sam/SharedSVG';
 import { ImageSVG } from '../Icons/ImageSVG';
-import { TrashSVG } from '../Icons/TrashSVG';
+import { ExportSVG } from '../Icons/sam/ExportSVG';
+import { ArrowLeftSVG } from '../Icons/sam/ArrowLeftSVG';
+import { ArrowRightSVG } from '../Icons/sam/ArrowRightSVG';
 import './styles.scss';
 
 const enableDownloadImage = true;
@@ -33,11 +33,15 @@ export const VizPageHead = ({
     <div className="vh-viz-page-head">
       <div className="side">
         <Button
-          variant="light"
+          variant="dark"
           size="sm"
           onClick={toggleShowEditor}
         >
-          <ChevronSVG left={showEditor} />
+          {showEditor ? (
+            <ArrowLeftSVG />
+          ) : (
+            <ArrowRightSVG />
+          )}
           {showEditor ? 'Close' : 'Open'} Editor
         </Button>
       </div>
@@ -45,7 +49,7 @@ export const VizPageHead = ({
         {enableDownloadImage && (
           <Button
             as="a"
-            variant="light"
+            variant="dark"
             size="sm"
             href={downloadImageHref}
             download
@@ -55,43 +59,47 @@ export const VizPageHead = ({
           </Button>
         )}
         <Button
-          variant="light"
+          variant="dark"
           size="sm"
           onClick={onExportClick}
         >
-          <DownloadSVG />
+          <ExportSVG />
           Export Code
         </Button>
         <Button
-          variant="light"
+          variant="dark"
           size="sm"
           onClick={onShareClick}
         >
-          <ShareSVG />
+          <SharedSVG />
           Share
         </Button>
         {showSettingsButton ? (
           <Button
-            variant="light"
+            variant="dark"
             size="sm"
             onClick={onSettingsClick}
           >
-            <SettingsSVG />
+            <GearSVG />
             Settings
           </Button>
         ) : null}
         {showTrashButton ? (
           <Button
-            variant="light"
+            variant="dark"
             size="sm"
             onClick={onTrashClick}
           >
-            <TrashSVG fill="#FF006B" />
+            <TrashSVG />
             Delete
           </Button>
         ) : null}
         {showForkButton ? (
-          <Button size="sm" onClick={onForkClick}>
+          <Button
+            variant="dark"
+            size="sm"
+            onClick={onForkClick}
+          >
             <ForkSVG />
             Fork
           </Button>

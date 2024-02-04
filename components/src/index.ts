@@ -14,6 +14,7 @@ export { SettingsModal } from './components/SettingsModal';
 export { ShareModal } from './components/ShareModal';
 export { DeleteVizConfirmationModal } from './components/DeleteVizConfirmationModal';
 export { CreateVizPageBody } from './components/CreateVizPageBody';
+export { VizPageUpgradeBanner } from './components/VizPageUpgradeBanner';
 export { KitchenSinkApp } from './KitchenSinkApp';
 
 import './components/index.scss';

@@ -28,7 +28,11 @@ import {
   SlugKey,
 } from 'entities';
 import { useRuntime } from 'runtime';
-import { VizPageHead, VizPageViewer } from 'components';
+import {
+  VizPageHead,
+  VizPageUpgradeBanner,
+  VizPageViewer,
+} from 'components';
 import { AuthenticatedUserContext } from '../../../contexts/AuthenticatedUserContext';
 import { SmartHeader } from '../../../smartComponents/SmartHeader';
 import {
@@ -293,10 +297,10 @@ export const VizPageBody = ({
   const forkedFromVizHref = useMemo(
     () =>
       forkedFromInfo
-        ? getVizPageHref(
-            forkedFromOwnerUser,
-            forkedFromInfo,
-          )
+        ? getVizPageHref({
+            ownerUser: forkedFromOwnerUser,
+            info: forkedFromInfo,
+          })
         : null,
     [forkedFromInfo, forkedFromOwnerUser],
   );
@@ -318,6 +322,34 @@ export const VizPageBody = ({
     [info.end, defaultVizWidth],
   );
 
+  const fullscreenHref = useMemo(
+    () =>
+      getVizPageHref({
+        ownerUser,
+        info,
+        embedMode: true,
+      }),
+    [ownerUser, info],
+  );
+
+  const [
+    isUpgradeBannerVisible,
+    setIsUpgradeBannerVisible,
+  ] = useState(
+    // Only shoe the banner if:
+    // - the user is authenticated
+    // - the user is on the free plan
+    // - the viz is public
+    // - the viz is their own
+    authenticatedUser?.plan === 'free' &&
+      info.visibility === 'public' &&
+      info.owner === authenticatedUser?.id,
+  );
+
+  const handleUpgradeBannerClose = useCallback(() => {
+    setIsUpgradeBannerVisible(false);
+  }, []);
+
   return isEmbedMode ? (
     renderVizRunner()
   ) : (
@@ -336,6 +368,11 @@ export const VizPageBody = ({
         onTrashClick={toggleDeleteVizConfirmationModal}
         downloadImageHref={downloadImageHref}
       />
+      {isUpgradeBannerVisible && (
+        <VizPageUpgradeBanner
+          onClose={handleUpgradeBannerClose}
+        />
+      )}
       <div className="vh-viz-page-body">
         <VizPageEditor
           showEditor={showEditor}
@@ -380,6 +417,7 @@ export const VizPageBody = ({
             isVisual={isVisual}
             isUpvoted={isUpvoted}
             handleUpvoteClick={handleUpvoteClick}
+            fullscreenHref={fullscreenHref}
           />
         </div>
       </div>
