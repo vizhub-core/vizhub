@@ -327,14 +327,28 @@ export const VizPageBody = ({
       getVizPageHref({
         ownerUser,
         info,
-        absolute: true,
         embedMode: true,
       }),
     [ownerUser, info],
   );
 
-  const handleUpgradeBannerClose =
-    useCallback(() => {}, []);
+  const [
+    isUpgradeBannerVisible,
+    setIsUpgradeBannerVisible,
+  ] = useState(
+    // Only shoe the banner if:
+    // - the user is authenticated
+    // - the user is on the free plan
+    // - the viz is public
+    // - the viz is their own
+    authenticatedUser?.plan === 'free' &&
+      info.visibility === 'public' &&
+      info.owner === authenticatedUser?.id,
+  );
+
+  const handleUpgradeBannerClose = useCallback(() => {
+    setIsUpgradeBannerVisible(false);
+  }, []);
 
   return isEmbedMode ? (
     renderVizRunner()
@@ -354,9 +368,11 @@ export const VizPageBody = ({
         onTrashClick={toggleDeleteVizConfirmationModal}
         downloadImageHref={downloadImageHref}
       />
-      <VizPageUpgradeBanner
-        onClose={handleUpgradeBannerClose}
-      />
+      {isUpgradeBannerVisible && (
+        <VizPageUpgradeBanner
+          onClose={handleUpgradeBannerClose}
+        />
+      )}
       <div className="vh-viz-page-body">
         <VizPageEditor
           showEditor={showEditor}

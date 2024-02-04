@@ -1,6 +1,6 @@
+import { CloseSVG } from 'vzcode';
 import { ExclamationTriangle } from '../Icons/sam/ExclamationTriangle';
 import { PlanBrandPremiumSVG } from '../Icons/sam/PlanBrandPremiumSVG';
-import { XSVG } from '../Icons/sam/XSVG';
 import { Button } from '../bootstrap';
 import './styles.scss';
 
@@ -25,8 +25,12 @@ export const VizPageUpgradeBanner = ({ onClose }) => {
         >
           Try it for free
         </Button>
-        <i className="icon-button" onClick={onClose}>
-          <XSVG />
+        <i
+          className="icon-button icon-button-light"
+          onClick={onClose}
+          style={{ color: '#D42A68' }}
+        >
+          <CloseSVG />
         </i>
       </div>
     </div>
