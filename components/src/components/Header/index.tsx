@@ -88,6 +88,7 @@ export const Header = ({
               Pricing
             </Nav.Link>
           )}
+          <Nav.Link href={createVizHref}>Create</Nav.Link>
           {enableHelpSVG && (
             <Nav.Link
               href="https://vizhub.com/forum/c/help/6"
@@ -114,10 +115,10 @@ export const Header = ({
                 ></img>
               </Dropdown.Toggle>
               <Dropdown.Menu>
-                <Dropdown.Item href={createVizHref}>
+                {/* <Dropdown.Item href={createVizHref}>
                   Create Viz
-                </Dropdown.Item>
-                <Dropdown.Divider />
+                </Dropdown.Item> */}
+                {/* <Dropdown.Divider /> */}
                 <Dropdown.Item href={profileHref}>
                   Profile
                 </Dropdown.Item>
