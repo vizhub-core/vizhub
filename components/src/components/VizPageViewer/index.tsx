@@ -10,8 +10,8 @@ import { PrivateSVG } from '../Icons/sam/PrivateSVG';
 import { EditSVG } from '../Icons/EditSVG';
 import { ForksWidget } from '../ForksWidget';
 import { OverlayTrigger, Tooltip } from '../bootstrap';
-import './styles.scss';
 import { FullScreenSVG } from '../Icons/sam/FullScreenSVG';
+import './styles.scss';
 
 export const VizPageViewer = ({
   vizTitle,
@@ -117,15 +117,24 @@ export const VizPageViewer = ({
               {renderVizRunner(iframeScale)}
             </div>
             <div className="viz-frame-bottom">
-              <a
-                href={fullscreenHref}
-                target="_blank"
-                rel="noopener noreferrer"
+              <OverlayTrigger
+                placement="top"
+                overlay={
+                  <Tooltip id="full-screen-icon-tooltip">
+                    Open in full screen
+                  </Tooltip>
+                }
               >
-                <i className="icon-button">
-                  <FullScreenSVG />
-                </i>
-              </a>
+                <a
+                  href={fullscreenHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <i className="icon-button icon-button-light">
+                    <FullScreenSVG />
+                  </i>
+                </a>
+              </OverlayTrigger>
             </div>
           </div>
         )}
