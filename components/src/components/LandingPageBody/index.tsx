@@ -142,6 +142,7 @@ export const LandingPageBody = ({
                   environment and executed in the running
                   visualization instantaneously.
                 </p>
+                <Button href="/prifing">See pricing</Button>
               </div>
               <div className="feature-section-image">
                 <img
@@ -208,13 +209,17 @@ export const LandingPageBody = ({
               <div className="feature-section-copy">
                 <h3>Open Source Examples</h3>
                 <p>
-                  Explore over 70,000 open source data
-                  visualizations created by our community.
-                  Sort by most popular, most recent, or most
-                  forked. Most are MIT Licensed, so you can
-                  use them in your own projects.
+                  Need some reference implementations?
+                  VizHub provides a growing collection of
+                  open source examples to help you get
+                  started. These examples are designed to be
+                  forked and modified to suit your needs.
+                  They are MIT licensed, so you can use them
+                  in your own projects.
                 </p>
-                <Button href="/explore">Explore</Button>
+                <Button href="/create-viz">
+                  Explore Templates
+                </Button>
               </div>
               <div className="feature-section-image">
                 <img
@@ -244,6 +249,9 @@ export const LandingPageBody = ({
                   can drop it into and existing codebase and
                   it should work out of the box!
                 </p>
+                <Button href="https://calendly.com/curran-kelleher/casual">
+                  Book a Demo
+                </Button>
               </div>
               <div className="feature-section-image rotating-image">
                 <img
