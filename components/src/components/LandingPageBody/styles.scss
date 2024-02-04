@@ -2,6 +2,10 @@
   overflow: auto;
   position: relative;
 
+  h3 {
+    line-height: 1.5;
+  }
+
   a {
     text-decoration: none;
     font-weight: 600;
@@ -30,6 +34,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      padding: 10px;
 
       .landing-page-tagline {
         color: white;
@@ -37,6 +42,7 @@
         font-size: 26px;
         font-weight: 600;
         padding-top: 128px;
+        text-align: center;
       }
 
       .landing-page-headline {
@@ -106,21 +112,33 @@
             padding: 0 100px;
             position: relative;
 
+            @media (max-width: 1200px) {
+              display: flex;
+              flex-direction: column;
+              gap: 30px;
+            }
+
             .collaboration-demo-video-overlay {
-              position: absolute;
-              top: 0;
-              right: 0;
-              bottom: 0;
-              left: 0;
+              @media (min-width: 1200px) {
+                position: absolute;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                left: 0;
+              }
+
               display: flex;
               align-items: flex-start;
               justify-content: center;
 
               video {
-                position: absolute;
-                width: 564px;
-                top: -72px;
                 border-radius: 20px;
+
+                @media (min-width: 1200px) {
+                  position: absolute;
+                  max-width: 650px;
+                  top: -10px;
+                }
               }
             }
           }
@@ -149,17 +167,38 @@
             max-width: 760px;
             align-items: flex-start;
 
+            @media (max-width: 768px) {
+              gap: 12px;
+            }
+
             p {
               font-size: 20px;
               line-height: 32px;
             }
           }
 
+          .feature-section-copy,
+          .feature-section-image {
+            flex: 1;
+            padding: 100px;
+
+            /* Less padding on tablet */
+            @media (max-width: 1200px) {
+              padding: 50px;
+            }
+            /* Even less padding on mobile */
+            @media (max-width: 768px) {
+              padding: 30px;
+            }
+          }
+
           .feature-section-image {
             img,
             video {
-              border-radius: 8px;
-              height: 360px;
+              border-radius: 20px;
+
+              /* Scale it down based on available width */
+              width: 100%;
             }
           }
         }
@@ -183,11 +222,6 @@
 
           .feature-section-image {
             position: relative;
-          }
-
-          .feature-section-copy,
-          .feature-section-image {
-            padding: 100px;
           }
 
           video {

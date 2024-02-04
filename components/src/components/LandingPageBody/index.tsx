@@ -32,8 +32,8 @@ export const LandingPageBody = ({
               : '50% off for 3 months! Use code EARLYADOPTER (ends Feb 15)'}
           </div>
           <h1 className="landing-page-headline">
-            Develop custom data visualizations faster and
-            more collaboratively than ever.
+            Escape the limits of BI tools with D3.js and Web
+            Standards
           </h1>
           <Button
             variant="secondary"
@@ -53,7 +53,8 @@ export const LandingPageBody = ({
           <iframe
             style={{
               marginTop: '70px',
-              borderRadius: ' 24px',
+              borderRadius: '24px',
+              maxWidth: '100%',
             }}
             width={560 * 2}
             height={315 * 2}
@@ -68,54 +69,22 @@ export const LandingPageBody = ({
           <div className="white-background-section">
             <div className="landing-page-content">
               <h1 className="section-heading">
-                Why VizHub?
+                What is VizHub
               </h1>
               <div className="vh-lede-01">
                 <p>
-                  Data visualization practitioners are often{' '}
-                  <strong>frustrated</strong> because the
-                  tools they use introduce friction into
-                  their data visualization production
-                  process. VizHub aims to solve these
-                  frustrations and accelerate dataviz
-                  delivery by speeding up feedback loops at
-                  multiple levels:
+                  VizHub is a streamlined, web-based
+                  platform tailored for data visualization
+                  professionals. It combines a collaborative
+                  D3.js coding environment with essential
+                  tools for advanced customization and
+                  interactive design. Ideal for those
+                  transitioning from non-coding data
+                  visualization tools, VizHub simplifies
+                  complex visualizations and fosters
+                  learning and collaboration in a
+                  user-friendly interface.
                 </p>
-                <ul className="mt-2">
-                  <li>
-                    <strong>Accelerate development</strong>{' '}
-                    with AI-Assisted coding
-                  </li>
-                  <li>
-                    <strong>
-                      Accelerate design iteration
-                    </strong>{' '}
-                    with hot reloading and interactive
-                    widgets
-                  </li>
-                  <li>
-                    <strong>
-                      Accelerate collaboration
-                    </strong>{' '}
-                    with real-time synchronization
-                  </li>
-                  <li>
-                    <strong>
-                      Accelerate real projects
-                    </strong>{' '}
-                    with private vizzes
-                  </li>
-                </ul>
-                <p>
-                  Moving faster allows you to spend more of
-                  your limited time on the joyous and
-                  creative aspects of your work, and less
-                  time on repetitive tasks, ultimately
-                  saving you time and money.
-                </p>
-                <Button href="/pricing" className="mt-5">
-                  Start free trial
-                </Button>
               </div>
             </div>
           </div>
@@ -125,15 +94,12 @@ export const LandingPageBody = ({
               <div className="feature-section-copy">
                 <h3>Iterate Faster</h3>
                 <p>
+                  Sick of the slow feedback loop in your
+                  current data visualization workflow?
                   Iterate faster and save time with instant
-                  feedback. Tweak numbers and colors with
-                  Hot Reloading & Interactive Widgets. See
-                  your changes immediately without reloading
-                  the entire program. This makes it easy to
-                  get your visualizations just right, saving
-                  you time and effort. No more tweaking
-                  colors in design tools and manually typing
-                  number changes!
+                  feedback. This makes it easy to get your
+                  visualizations just right, saving you time
+                  and effort.
                 </p>
                 <Button
                   href="https://vizhub.com/curran/66194bb8626c447bb13291587da28cec"
@@ -169,14 +135,12 @@ export const LandingPageBody = ({
               <div className="feature-section-copy">
                 <h3>Collaborate in Real-Time</h3>
                 <p>
-                  With all changes synchronized in
-                  real-time, you can leverage pair
-                  programming and mob programming to
-                  accelerate your time to delivery. Share
-                  your work securely with clients. Action
-                  client feedback during meetings, and your
-                  changes will appear on their screen
-                  instantly!
+                  Frustrated by how long it takes to make
+                  and deploy changes to your data
+                  visualizations? In VizHub, all changes are
+                  synchronized in real-time in a multiplayer
+                  environment and executed in the running
+                  visualization instantaneously.
                 </p>
               </div>
               <div className="feature-section-image">
@@ -205,12 +169,13 @@ export const LandingPageBody = ({
               <div className="feature-section-copy">
                 <h3>AI Assisted Coding</h3>
                 <p>
-                  Level up your coding skills with a little
-                  help from the AI. Click the "AI Assist"
-                  button to start the AI typing directly
-                  into your editor. VizHub's AI Assistant
-                  will help you code faster and more
-                  accurately than ever before.
+                  Feeling stuck with the steep learning
+                  curve of JavaScript and D3? Leverage
+                  VizHub's in-editor artificial intelligence
+                  to request on-demand coding suggestions.
+                  Just write a comment saying what you want
+                  to code, and the AI will implement it for
+                  you.
                 </p>
                 <Button
                   href="https://vizhub.com/forum/t/ai-assisted-coding/952"
@@ -263,13 +228,11 @@ export const LandingPageBody = ({
               <div className="feature-section-copy">
                 <h3>Frictionless Productionization</h3>
                 <p>
-                  Frustrated with platform-specific syntax
-                  that introduces friction into your
-                  process? VizHub uses{' '}
+                  Frustrated with the platform-specific
+                  syntax and runtime logic of other online
+                  coding environments? VizHub uses{' '}
                   <strong>vanilla JavaScript</strong> and
-                  industry-standard{' '}
-                  <strong>ES Modules</strong>. It also
-                  supports popular frameworks like{' '}
+                  also supports popular frameworks like{' '}
                   <a href="https://vizhub.com/higsch/39fa26cfa7854e34934e559efbf7855b">
                     Svelte
                   </a>{' '}
@@ -277,9 +240,9 @@ export const LandingPageBody = ({
                   <a href="https://vizhub.com/curran/a95f227912474d4a9bbe88a3c6c33ab9">
                     React
                   </a>
-                  . You can export code from VizHub and drop
-                  it straight into your existing codebase,
-                  and it should work out of the box!
+                  . When you export code from VizHub, you
+                  can drop it into and existing codebase and
+                  it should work out of the box!
                 </p>
               </div>
               <div className="feature-section-image rotating-image">
