@@ -1,5 +1,5 @@
 .vh-viz-page-head {
-  min-height: 40px;
+  padding: 8px;
   background-color: var(--vh-color-neutral-02);
   display: flex;
   justify-content: space-between;
@@ -8,14 +8,21 @@
   .side {
     display: flex;
     padding: 0 5px;
-    gap: 5px;
+    gap: 16px;
     .btn {
-      font-weight: 600;
+      font-weight: 500;
       display: flex;
       align-items: center;
+      background-color: var(--vh-color-neutral-02);
+      border: none;
+      font-size: 16px;
       svg {
-        margin-right: 6px;
+        margin-right: 8px;
+        color: var(--vh-color-neutral-04);
       }
+    }
+    .btn:hover {
+      background-color: rgba(255, 255, 255, 0.2);
     }
   }
 }

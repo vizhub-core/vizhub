@@ -33,7 +33,7 @@
     "@types/deep-equal": "^1.0.4",
     "@types/node": "^20.11.16",
     "concurrently": "^8.2.2",
-    "prettier": "^3.2.4",
+    "prettier": "^3.2.5",
     "typescript": "^5.3.3",
     "vitest": "^1.2.2"
   }
