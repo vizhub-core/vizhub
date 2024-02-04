@@ -259,6 +259,9 @@ export const VizPageModals = ({
           }
           initialCollaborators={initialCollaborators}
           currentPlan={authenticatedUser?.plan || 'free'}
+          showCollaboratorsSection={
+            info.owner === authenticatedUser?.id
+          }
         />
       )}
       {showDeleteVizConfirmationModal && (
