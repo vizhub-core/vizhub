@@ -9,8 +9,9 @@ import { VisibilityUnlistedSVG } from '../Icons/VisibilityUnlistedSVG';
 import { PrivateSVG } from '../Icons/sam/PrivateSVG';
 import { EditSVG } from '../Icons/EditSVG';
 import { ForksWidget } from '../ForksWidget';
-import './styles.scss';
 import { OverlayTrigger, Tooltip } from '../bootstrap';
+import './styles.scss';
+import { FullScreenSVG } from '../Icons/sam/FullScreenSVG';
 
 export const VizPageViewer = ({
   vizTitle,
@@ -36,6 +37,7 @@ export const VizPageViewer = ({
   isVisual,
   isUpvoted,
   handleUpvoteClick,
+  fullscreenHref,
 }) => {
   // This SVG element is used only for its dynamic resizing behavior.
   // It's invisible, nothing is rendered into it.
@@ -107,11 +109,24 @@ export const VizPageViewer = ({
       <div className="viewer-content">
         {isVisual && (
           <div className="viz-frame">
-            <svg
-              ref={svgRef}
-              viewBox={`0 0 ${defaultVizWidth} ${vizHeight}`}
-            />
-            {renderVizRunner(iframeScale)}
+            <div className="viz-frame-top">
+              <svg
+                ref={svgRef}
+                viewBox={`0 0 ${defaultVizWidth} ${vizHeight}`}
+              />
+              {renderVizRunner(iframeScale)}
+            </div>
+            <div className="viz-frame-bottom">
+              <a
+                href={fullscreenHref}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <i className="icon-button">
+                  <FullScreenSVG />
+                </i>
+              </a>
+            </div>
           </div>
         )}
         <div className="title-bar">
