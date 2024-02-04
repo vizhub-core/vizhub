@@ -19,10 +19,10 @@
   },
   "homepage": "https://github.com/vizhub-core/vizhub3#readme",
   "dependencies": {
-    "vzcode": "^0.58.0"
+    "vzcode": "^0.61.0"
   },
   "devDependencies": {
-    "prettier": "^3.2.4",
+    "prettier": "^3.2.5",
     "typescript": "^5.3.3",
     "vitest": "^1.2.2"
   }

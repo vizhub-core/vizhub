@@ -45,7 +45,7 @@ export const Header = ({
   showBillingLink?: boolean;
   onBillingClick: () => void;
 }) => (
-  <Navbar bg="dark" variant="dark" expand="md">
+  <Navbar className="vh-navbar" variant="dark" expand="md">
     <Container fluid>
       <Navbar.Brand
         className="vh-brand-logo"
@@ -104,7 +104,7 @@ export const Header = ({
             <Dropdown align="end">
               <Dropdown.Toggle
                 className="navbar__avatar-toggle"
-                variant="secondary"
+                variant="dark"
                 id="authenticated-user-actions-dropdown"
               >
                 <img

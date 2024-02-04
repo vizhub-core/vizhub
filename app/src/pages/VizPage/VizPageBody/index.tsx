@@ -28,7 +28,11 @@ import {
   SlugKey,
 } from 'entities';
 import { useRuntime } from 'runtime';
-import { VizPageHead, VizPageViewer } from 'components';
+import {
+  VizPageHead,
+  VizPageUpgradeBanner,
+  VizPageViewer,
+} from 'components';
 import { AuthenticatedUserContext } from '../../../contexts/AuthenticatedUserContext';
 import { SmartHeader } from '../../../smartComponents/SmartHeader';
 import {
@@ -323,11 +327,28 @@ export const VizPageBody = ({
       getVizPageHref({
         ownerUser,
         info,
-        absolute: true,
         embedMode: true,
       }),
     [ownerUser, info],
   );
+
+  const [
+    isUpgradeBannerVisible,
+    setIsUpgradeBannerVisible,
+  ] = useState(
+    // Only shoe the banner if:
+    // - the user is authenticated
+    // - the user is on the free plan
+    // - the viz is public
+    // - the viz is their own
+    authenticatedUser?.plan === 'free' &&
+      info.visibility === 'public' &&
+      info.owner === authenticatedUser?.id,
+  );
+
+  const handleUpgradeBannerClose = useCallback(() => {
+    setIsUpgradeBannerVisible(false);
+  }, []);
 
   return isEmbedMode ? (
     renderVizRunner()
@@ -347,6 +368,11 @@ export const VizPageBody = ({
         onTrashClick={toggleDeleteVizConfirmationModal}
         downloadImageHref={downloadImageHref}
       />
+      {isUpgradeBannerVisible && (
+        <VizPageUpgradeBanner
+          onClose={handleUpgradeBannerClose}
+        />
+      )}
       <div className="vh-viz-page-body">
         <VizPageEditor
           showEditor={showEditor}

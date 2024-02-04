@@ -43,16 +43,3 @@
   justify-content: space-between;
   align-items: flex-end;
 }
-
-/* TODO move this into vizhub-ui, unify with VZCode */
-.icon-button {
-  padding: 4px;
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
-.icon-button:hover {
-  background-color: rgba(0, 0, 0, 0.1);
-}

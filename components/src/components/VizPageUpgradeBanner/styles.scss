@@ -1,0 +1,14 @@
+.vh-viz-page-upgrade-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+  background-color: white;
+
+  .side {
+    display: flex;
+    align-items: center;
+    padding-left: 8px;
+    gap: 12px;
+  }
+}
