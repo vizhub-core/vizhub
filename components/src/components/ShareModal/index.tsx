@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { Modal, Button } from '../bootstrap';
 import { LinkSection } from './LinkSection';
 import { CollaboratorsSection } from './CollaboratorsSection';
@@ -31,6 +31,7 @@ export const ShareModal = ({
   showAnyoneCanEdit,
   initialCollaborators,
   currentPlan,
+  showCollaboratorsSection,
 }: {
   show: boolean;
   linkToCopy: string;
@@ -52,6 +53,7 @@ export const ShareModal = ({
   showAnyoneCanEdit: boolean;
   initialCollaborators: Array<User>;
   currentPlan: Plan;
+  showCollaboratorsSection: boolean;
 }) => {
   const [section, setSection] = useState('link');
 
@@ -87,6 +89,16 @@ export const ShareModal = ({
     ],
   );
 
+  const navItemsToShow = useMemo(
+    () =>
+      showCollaboratorsSection
+        ? navItems
+        : navItems.filter(
+            (item) => item.key !== 'collaborators',
+          ),
+    [showCollaboratorsSection],
+  );
+
   return show ? (
     <Modal
       show={show}
@@ -101,11 +113,13 @@ export const ShareModal = ({
         {/* <div className="vh-form-note contextual">
           SHARE WITH
         </div> */}
-        <ShareSectionsNav
-          section={section}
-          handleSectionSelect={handleSectionSelect}
-          navItems={navItems}
-        />
+        {navItemsToShow.length > 1 && (
+          <ShareSectionsNav
+            section={section}
+            handleSectionSelect={handleSectionSelect}
+            navItems={navItemsToShow}
+          />
+        )}
         {section === 'collaborators' && (
           <CollaboratorsSection
             anyoneCanEdit={anyoneCanEdit}
