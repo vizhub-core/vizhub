@@ -33,6 +33,7 @@ export const args = {
   ownerUserHref: '/user',
   upvotesCount: 25,
   license: 'MIT',
+  enableEditingTitle: true,
 };
 
 const Story = () => {
