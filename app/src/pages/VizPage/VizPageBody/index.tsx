@@ -28,7 +28,11 @@ import {
   SlugKey,
 } from 'entities';
 import { useRuntime } from 'runtime';
-import { VizPageHead, VizPageViewer } from 'components';
+import {
+  VizPageHead,
+  VizPageUpgradeBanner,
+  VizPageViewer,
+} from 'components';
 import { AuthenticatedUserContext } from '../../../contexts/AuthenticatedUserContext';
 import { SmartHeader } from '../../../smartComponents/SmartHeader';
 import {
@@ -329,6 +333,9 @@ export const VizPageBody = ({
     [ownerUser, info],
   );
 
+  const handleUpgradeBannerClose =
+    useCallback(() => {}, []);
+
   return isEmbedMode ? (
     renderVizRunner()
   ) : (
@@ -346,6 +353,9 @@ export const VizPageBody = ({
         showTrashButton={canUserDeleteViz}
         onTrashClick={toggleDeleteVizConfirmationModal}
         downloadImageHref={downloadImageHref}
+      />
+      <VizPageUpgradeBanner
+        onClose={handleUpgradeBannerClose}
       />
       <div className="vh-viz-page-body">
         <VizPageEditor
