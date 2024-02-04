@@ -8,11 +8,17 @@ if (typeof window !== 'undefined') {
 }
 
 // Gets the href for a viz page.
-export const getVizPageHref = (
-  ownerUser: User,
-  info: Info,
+export const getVizPageHref = ({
+  ownerUser,
+  info,
   absolute = false,
-) =>
+  embedMode = false,
+}: {
+  ownerUser: User;
+  info: Info;
+  absolute?: boolean;
+  embedMode?: boolean;
+}) =>
   `${absolute ? domain : ''}/${ownerUser.userName}/${
     info.id
-  }`;
+  }${embedMode ? '?mode=embed' : ''}`;

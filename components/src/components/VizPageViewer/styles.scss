@@ -24,24 +24,38 @@
     padding: var(--vh-padding-little);
 
     .viz-frame {
-      position: relative;
-      svg {
-        background-color: white;
-        border-radius: var(--vh-border-radius);
-        box-shadow: var(--vh-box-shadow);
+      border-radius: var(--vh-border-radius);
+      box-shadow: var(--vh-box-shadow);
+      background: white;
+      .viz-frame-top {
+        position: relative;
+        svg {
+          background-color: white;
 
-        /* This in conjunction with viewBox causes */
-        /* the rectangle to fill the appropriate width */
-        /* _and_ preserve aspect ratio.*/
-        width: 100%;
+          /* This in conjunction with viewBox causes */
+          /* the rectangle to fill the appropriate width */
+          /* _and_ preserve aspect ratio.*/
+          width: 100%;
+        }
+
+        iframe {
+          // TODO rounded corners
+          // border-top-right-radius: var(--vh-border-radius);
+          // border-top-left-radius: var(--vh-border-radius);
+          position: absolute;
+          left: 0;
+          top: 0;
+          border: 0;
+          transform-origin: 0 0;
+        }
       }
-
-      iframe {
-        position: absolute;
-        left: 0;
-        top: 0;
-        border: 0;
-        transform-origin: 0 0;
+      .viz-frame-bottom {
+        border-top: 1px solid var(--vh-color-rule-01);
+        height: 40px;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        padding: 0 4px;
       }
     }
     .title-bar {

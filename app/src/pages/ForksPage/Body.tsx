@@ -57,10 +57,10 @@ export const Body = ({
         onMoreClick={fetchNextPage}
         isLoadingNextPage={isLoadingNextPage}
         forkedFromTitle={forkedFromInfo.title}
-        forkedFromHref={getVizPageHref(
-          forkedFromOwnerUser,
-          forkedFromInfo,
-        )}
+        forkedFromHref={getVizPageHref({
+          ownerUser: forkedFromOwnerUser,
+          info: forkedFromInfo,
+        })}
       />
     </div>
   );

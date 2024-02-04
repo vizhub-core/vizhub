@@ -101,7 +101,12 @@ export const VizPageModals = ({
   );
 
   const linkToCopy = useMemo(
-    () => getVizPageHref(ownerUser, info, true),
+    () =>
+      getVizPageHref({
+        ownerUser,
+        info,
+        absolute: true,
+      }),
     [ownerUser, info],
   );
 

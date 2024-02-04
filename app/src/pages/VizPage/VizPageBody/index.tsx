@@ -293,10 +293,10 @@ export const VizPageBody = ({
   const forkedFromVizHref = useMemo(
     () =>
       forkedFromInfo
-        ? getVizPageHref(
-            forkedFromOwnerUser,
-            forkedFromInfo,
-          )
+        ? getVizPageHref({
+            ownerUser: forkedFromOwnerUser,
+            info: forkedFromInfo,
+          })
         : null,
     [forkedFromInfo, forkedFromOwnerUser],
   );
@@ -316,6 +316,17 @@ export const VizPageBody = ({
   const downloadImageHref = useMemo(
     () => getVizThumbnailURL(info.end, defaultVizWidth),
     [info.end, defaultVizWidth],
+  );
+
+  const fullscreenHref = useMemo(
+    () =>
+      getVizPageHref({
+        ownerUser,
+        info,
+        absolute: true,
+        embedMode: true,
+      }),
+    [ownerUser, info],
   );
 
   return isEmbedMode ? (
@@ -380,6 +391,7 @@ export const VizPageBody = ({
             isVisual={isVisual}
             isUpvoted={isUpvoted}
             handleUpvoteClick={handleUpvoteClick}
+            fullscreenHref={fullscreenHref}
           />
         </div>
       </div>
