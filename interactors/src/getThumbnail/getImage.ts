@@ -30,7 +30,7 @@ import { generateImageHash } from './generateImageHash';
 import { imageMetadataLock } from 'entities/src/Lock';
 import { ResolveSlug } from '../resolveSlug';
 
-const debug = true;
+const debug = false;
 
 // getImage
 //  * Gets an image for a commit

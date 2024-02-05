@@ -427,5 +427,78 @@ describe('v3 build', () => {
       ),
     );
   });
+
+  it('Should throw a syntax error properly', async () => {
+    // Expect build to throw an error
+    expect(async () => {
+      await build({
+        vizId: '7f0b69fcb754479699172d1887817027',
+        rollup,
+        vizCache: createVizCache({
+          initialContents: [
+            {
+              id: '7f0b69fcb754479699172d1887817027',
+              files: {
+                '4325432': {
+                  name: 'index.js',
+                  text: `
+                  import { select } from 'd3';
+                  // import { viz } from './viz';
+                  // import { asif } from '@ssmadha/asif';
+                
+                  export const main = (container) => {
+                    const width = container.clientWidth;
+                    const height = container.clientHeight;
+                
+                    const svg = select(container)
+                      .selectAll('svg')
+                      .data([null])
+                      .join('svg')
+                      .attr('width', width)
+                      .attr('height', height);
+                
+                    viz(svg, {
+                      data: asif,
+                      // data = asif,
+                      
+                      xValue: (d) => d['colon'],
+                      xAxisLabelText: 'Colon',
+                      xAxisLabelOffset: 38,
+                      yValue: (d) => d['small intestine'],
+                      yAxisLabelText: 'Small Intestine',
+                      yAxisLabelOffset: 17,
+                      innerRectFill: '#E8E8E8',
+                      pointLabel: (d) => d['Gene Name'],
+                      pointLabelOffset: -5,
+                      circleRadius: 65 / 20,
+                      circleOpacity: 629 / 1000,
+                      marginTop: 20,
+                      marginBottom: 50,
+                      marginLeft: 51,
+                      marginRight: 32,
+                      width,
+                      height,
+                    });
+                  };`,
+                },
+              },
+              title: 'Test Viz',
+            },
+          ],
+          handleCacheMiss: async () => {
+            throw new Error('Not implemented');
+          },
+        }),
+        resolveSlug: () => {
+          throw new Error('Not implemented');
+        },
+      });
+    }).rejects.toThrow(
+      missingImportError(
+        `Could not load missing.js (imported by index.js): Imported file "missing.js" not found.`,
+      ),
+    );
+  });
+
   // TODO test that covers invalidPackageJSONError
 });
