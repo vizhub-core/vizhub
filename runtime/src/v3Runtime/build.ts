@@ -24,7 +24,7 @@ import {
   rollupError,
 } from 'gateways/src/errors';
 
-const debug = false;
+const debug = true;
 
 // From https://github.com/Rich-Harris/magic-string/blob/master/src/SourceMap.js
 // Modified to support Web Workers
@@ -97,6 +97,10 @@ export const build = async ({
   // or from a local node package (imported statically).
   getSvelteCompiler?: () => Promise<any>;
 }): Promise<V3BuildResult> => {
+  if (debug) {
+    console.log('  build.ts: build()');
+    console.log('  vizId:', vizId);
+  }
   const startTime = Date.now();
   const warnings: Array<V3BuildError> = [];
   let src: string | undefined;
