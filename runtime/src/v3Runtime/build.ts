@@ -24,7 +24,7 @@ import {
   rollupError,
 } from 'gateways/src/errors';
 
-const debug = true;
+const debug = false;
 
 // From https://github.com/Rich-Harris/magic-string/blob/master/src/SourceMap.js
 // Modified to support Web Workers
