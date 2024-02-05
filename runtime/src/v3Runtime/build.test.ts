@@ -175,7 +175,7 @@ describe('v3 build', () => {
     expect(buildResult.time).toBeDefined();
     expect(buildResult.pkg).toBeUndefined();
 
-    expect(buildResult.src).toContain('Germany');
+    expect(buildResult.src).toContain('Türkiye');
   });
 
   it('Import from viz: should build successfully with valid inputs', async () => {
