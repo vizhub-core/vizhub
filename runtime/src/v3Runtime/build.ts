@@ -223,17 +223,6 @@ export const build = async ({
       }
 
       throw rollupError(error.message);
-
-      // if (debug) {
-      //   console.log('  Caught error in build.ts:');
-      //   console.log(error);
-      // }
-      // const serializableError = JSON.parse(
-      //   JSON.stringify(error),
-      // );
-      // serializableError.name = error.name;
-      // serializableError.message = error.message;
-      // errors.push(serializableError);
     }
   }
 
