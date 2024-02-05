@@ -24,7 +24,7 @@ import {
   rollupError,
 } from 'gateways/src/errors';
 
-const debug = true;
+const debug = false;
 
 // From https://github.com/Rich-Harris/magic-string/blob/master/src/SourceMap.js
 // Modified to support Web Workers
@@ -222,7 +222,32 @@ export const build = async ({
   for (const warning of warnings) {
     // In VizHub, we want to treat certain warnings as errors.
     if (warning.code === 'UNRESOLVED_IMPORT') {
-      throw missingImportError(warning.message);
+      // console.log(
+      //   'warning.message in build',
+      //   warning.message,
+      // );
+      // const cleanMessage = warning.message
+      //   // .replace(/[0-9a-f]{32}\//g, '')
+      //   .replace('7f0b69fcb754479699172d1887817027', '')
+      //   .replace(
+      //     ' – treating it as an external dependency',
+      //     '',
+      //   );
+      // throw missingImportError(cleanMessage);
+      // warning.message.replace(
+      //   ' – treating it as an external dependency',
+      //   '',
+      // ),
+      // warning.message
+      //   // Remove unwieldy vizId from warning message
+      //   .replace(
+      //     /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\//g,
+      //     '',
+      //   )
+      //   .replace(
+      //     ' – treating it as an external dependency',
+      //     '',
+      //   ),
       // // Throw an error for specific warning types
       // throw new Error(
       //   `Fatal error: ${warning.message}`,

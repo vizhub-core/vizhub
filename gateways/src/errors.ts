@@ -133,10 +133,7 @@ export const invalidPackageJSONError = (
   );
 
 export const rollupError = (message: string): VizHubError =>
-  new VizHubError(
-    'Rollup error: ' + message,
-    VizHubErrorCode.buildError,
-  );
+  new VizHubError(message, VizHubErrorCode.buildError);
 
 export const missingImportError = (
   message: string,

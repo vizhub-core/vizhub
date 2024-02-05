@@ -327,7 +327,7 @@ describe('v3 build', () => {
     // );
   });
 
-  it.only('Should throw an error when an import is missing', async () => {
+  it('Should throw an error when an import is missing', async () => {
     // Expect build to throw an error
     expect(async () => {
       await build({
@@ -356,7 +356,7 @@ describe('v3 build', () => {
       });
     }).rejects.toThrow(
       missingImportError(
-        `"missing-viz" is imported by "test-viz/index.js", but could not be resolved – treating it as an external dependency.`,
+        `"missing-viz" is imported by "test-viz/index.js", but could not be resolved.`,
       ),
     );
   });

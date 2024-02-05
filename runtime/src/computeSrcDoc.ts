@@ -51,8 +51,9 @@ export const computeSrcDoc = async ({
               getSvelteCompiler,
             }),
           });
-  } catch (e) {
-    initialSrcdocError = e.toString();
+  } catch (error) {
+    // initialSrcdocError = e.toString();
+    initialSrcdocError = error.message;
   }
 
   return {

@@ -56,7 +56,8 @@ export const vizLoad = ({
     if (fileText === null) {
       throw new Error(
         // TODO ideally show username/slug instead of vizId
-        `Imported file "${fileName}" not found in viz ${vizId}`,
+        // `Imported file "${fileName}" not found in viz ${vizId}`,
+        `Imported file "${fileName}" not found.`,
       );
     }
 
