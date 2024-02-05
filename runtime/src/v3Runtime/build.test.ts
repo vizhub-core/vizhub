@@ -327,7 +327,7 @@ describe('v3 build', () => {
     // );
   });
 
-  it('Should throw an error when an import is missing', async () => {
+  it('Should throw an error when a package name import is missing', async () => {
     // Expect build to throw an error
     expect(async () => {
       await build({
@@ -357,6 +357,73 @@ describe('v3 build', () => {
     }).rejects.toThrow(
       missingImportError(
         `"missing-viz" is imported by "test-viz/index.js", but could not be resolved.`,
+      ),
+    );
+  });
+
+  it('Should throw an error when a local import is missing', async () => {
+    // Expect build to throw an error
+    expect(async () => {
+      await build({
+        vizId: 'test-viz',
+        rollup,
+        vizCache: createVizCache({
+          initialContents: [
+            {
+              id: 'test-viz',
+              files: {
+                '4325432': {
+                  name: 'index.js',
+                  text: 'import { message } from "./missing";\nconsole.log(message);',
+                },
+              },
+              title: 'Test Viz',
+            },
+          ],
+          handleCacheMiss: async () => {
+            throw new Error('Not implemented');
+          },
+        }),
+        resolveSlug: () => {
+          throw new Error('Not implemented');
+        },
+      });
+    }).rejects.toThrow(
+      missingImportError(
+        `Could not load test-viz/missing.js (imported by test-viz/index.js): Imported file "missing.js" not found.`,
+      ),
+    );
+  });
+  it('Should throw an error when a local import is missing', async () => {
+    // Expect build to throw an error
+    expect(async () => {
+      await build({
+        vizId: '7f0b69fcb754479699172d1887817027',
+        rollup,
+        vizCache: createVizCache({
+          initialContents: [
+            {
+              id: '7f0b69fcb754479699172d1887817027',
+              files: {
+                '4325432': {
+                  name: 'index.js',
+                  text: 'import { message } from "./missing";\nconsole.log(message);',
+                },
+              },
+              title: 'Test Viz',
+            },
+          ],
+          handleCacheMiss: async () => {
+            throw new Error('Not implemented');
+          },
+        }),
+        resolveSlug: () => {
+          throw new Error('Not implemented');
+        },
+      });
+    }).rejects.toThrow(
+      missingImportError(
+        `Could not load missing.js (imported by index.js): Imported file "missing.js" not found.`,
       ),
     );
   });
