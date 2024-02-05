@@ -13,6 +13,7 @@ export enum VizHubErrorCode {
   accessDenied = 'accessDenied',
   tooLarge = 'tooLarge',
   tooLargeForFree = 'tooLargeForFree',
+  buildError = 'buildError',
 }
 
 export const errorCodeLabels = {
@@ -115,3 +116,10 @@ export const tooLargeForFreeError = (
   message: string,
 ): VizHubError =>
   new VizHubError(message, VizHubErrorCode.tooLargeForFree);
+
+// Build errors
+export const missingIndexJSError = (): VizHubError =>
+  new VizHubError(
+    'Missing index.js',
+    VizHubErrorCode.buildError,
+  );

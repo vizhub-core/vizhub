@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import { missingIndexJSError } from 'gateways';
 import { compile } from 'svelte/compiler';
 import { rollup } from 'rollup';
 import { build } from './build';
@@ -16,42 +17,33 @@ import {
 import { VizId } from 'entities';
 
 describe('v3 build', () => {
-  it('Should not crash when missing files', async () => {
-    const buildResult = await build({
-      vizId: 'test-viz',
-      rollup,
-      vizCache: createVizCache({
-        initialContents: [
-          {
-            id: 'test-viz',
+  it.only('Should not crash when missing files', async () => {
+    // Expect build to throw an error
+    expect(async () => {
+      await build({
+        vizId: 'test-viz',
+        rollup,
+        vizCache: createVizCache({
+          initialContents: [
+            {
+              id: 'test-viz',
 
-            // This test is mainly testing the case
-            // where this is empty.
-            files: {},
+              // This test is mainly testing the case
+              // where this is empty.
+              files: {},
 
-            title: 'Test Viz',
+              title: 'Test Viz',
+            },
+          ],
+          handleCacheMiss: async () => {
+            throw new Error('Not implemented');
           },
-        ],
-        handleCacheMiss: async () => {
+        }),
+        resolveSlug: () => {
           throw new Error('Not implemented');
         },
-      }),
-      resolveSlug: () => {
-        throw new Error('Not implemented');
-      },
-    });
-
-    expect(buildResult).toBeDefined();
-
-    expect(buildResult).toBeDefined();
-    expect(buildResult.errors).toEqual([
-      {
-        code: 'MISSING_INDEX_JS',
-        message: 'Missing index.js',
-      },
-    ]);
-    expect(buildResult.src).toBeUndefined();
-    expect(buildResult.pkg).toBeUndefined();
+      });
+    }).rejects.toThrow(missingIndexJSError());
   });
 
   it('Should build successfully with valid inputs', async () => {

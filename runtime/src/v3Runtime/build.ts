@@ -17,8 +17,7 @@ import { VizCache } from './vizCache';
 import { vizLoad } from './vizLoad';
 import { transformDSV } from './transformDSV';
 import { transformSvelte } from './transformSvelte';
-import { urlLoad } from './urlLoad';
-import { escapeProperly } from '../../../app/src/escapeProperly';
+import { missingIndexJSError } from 'gateways';
 
 const debug = false;
 
@@ -104,10 +103,7 @@ export const build = async ({
   const indexJSContent = getFileText(content, 'index.js');
   const cssFilesSet = new Set<string>();
   if (!indexJSContent) {
-    errors.push({
-      code: 'MISSING_INDEX_JS',
-      message: 'Missing index.js',
-    });
+    throw missingIndexJSError();
   } else {
     const trackCSSImport = (cssFile: string) => {
       cssFilesSet.add(cssFile);
