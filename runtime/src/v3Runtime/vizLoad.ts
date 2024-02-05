@@ -3,6 +3,10 @@ import { ResolvedVizFileId } from './types';
 import { parseId } from './parseId';
 import { Content, getFileText } from 'entities';
 import { VizCache } from './vizCache';
+import {
+  missingImportError,
+  rollupError,
+} from 'gateways/src/errors';
 
 const debug = false;
 
@@ -55,9 +59,12 @@ export const vizLoad = ({
     // If a file is imported but not found, throw an error.
     if (fileText === null) {
       throw new Error(
-        // TODO ideally show username/slug instead of vizId
-        `Imported file "${fileName}" not found in viz ${vizId}`,
+        `Imported file "${fileName}" not found.`,
       );
+      // TODO ideally show username/slug instead of vizId
+      // `Imported file "${fileName}" not found in viz ${vizId}`,
+      // `Imported file "${fileName}" not found.`,
+      // );
     }
 
     return fileText;

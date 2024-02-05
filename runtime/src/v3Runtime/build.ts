@@ -17,8 +17,12 @@ import { VizCache } from './vizCache';
 import { vizLoad } from './vizLoad';
 import { transformDSV } from './transformDSV';
 import { transformSvelte } from './transformSvelte';
-import { urlLoad } from './urlLoad';
-import { escapeProperly } from '../../../app/src/escapeProperly';
+import { missingIndexJSError } from 'gateways';
+import {
+  invalidPackageJSONError,
+  missingImportError,
+  rollupError,
+} from 'gateways/src/errors';
 
 const debug = false;
 
@@ -95,7 +99,6 @@ export const build = async ({
 }): Promise<V3BuildResult> => {
   const startTime = Date.now();
   const warnings: Array<V3BuildError> = [];
-  const errors: Array<V3BuildError> = [];
   let src: string | undefined;
   let pkg: V3PackageJson | undefined;
 
@@ -104,10 +107,7 @@ export const build = async ({
   const indexJSContent = getFileText(content, 'index.js');
   const cssFilesSet = new Set<string>();
   if (!indexJSContent) {
-    errors.push({
-      code: 'MISSING_INDEX_JS',
-      message: 'Missing index.js',
-    });
+    throw missingIndexJSError();
   } else {
     const trackCSSImport = (cssFile: string) => {
       cssFilesSet.add(cssFile);
@@ -155,10 +155,7 @@ export const build = async ({
       try {
         pkg = JSON.parse(packageJSONContent);
       } catch (error) {
-        errors.push({
-          code: 'INVALID_PACKAGE_JSON',
-          message: error.message,
-        });
+        throw invalidPackageJSONError(error.message);
       }
     }
 
@@ -207,16 +204,38 @@ export const build = async ({
         console.log(src?.slice(0, 200));
       }
     } catch (error) {
-      if (debug) {
-        console.log('  Caught error in build.ts:');
-        console.log(error);
+      // Detect missing import error from vizLoad plugin.
+      if (
+        error.code === 'PLUGIN_ERROR' &&
+        error.plugin === 'vizLoad' &&
+        error.hook === 'load'
+      ) {
+        // Remove unwieldy vizId from warning message,
+        // but keep slugs.
+        // Example:
+        // Missing import: Could not load 7f0b69fcb754479699172d1887817027/missing.js (imported by 7f0b69fcb754479699172d1887817027/index.js): Imported file "missing.js" not found.
+
+        const cleanMessage = error.message.replace(
+          /[0-9a-f]{32}\//g,
+          '',
+        );
+        throw missingImportError(cleanMessage);
       }
-      const serializableError = JSON.parse(
-        JSON.stringify(error),
+
+      throw rollupError(error.message);
+    }
+  }
+
+  for (const warning of warnings) {
+    // In VizHub, we want to treat certain warnings as errors.
+    if (warning.code === 'UNRESOLVED_IMPORT') {
+      // We don't treat it as an external dependency,
+      // so remove that message text as it may be confusing.
+      const cleanMessage = warning.message.replace(
+        ' – treating it as an external dependency',
+        '',
       );
-      serializableError.name = error.name;
-      serializableError.message = error.message;
-      errors.push(serializableError);
+      throw missingImportError(cleanMessage);
     }
   }
 
@@ -226,8 +245,12 @@ export const build = async ({
     console.log(src?.slice(0, 200));
   }
 
+  if (debug) {
+    console.log('  warnings:');
+    console.log(JSON.stringify(warnings, null, 2));
+  }
+
   return {
-    errors,
     warnings,
     src,
     pkg,

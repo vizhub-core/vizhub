@@ -13,6 +13,7 @@ export enum VizHubErrorCode {
   accessDenied = 'accessDenied',
   tooLarge = 'tooLarge',
   tooLargeForFree = 'tooLargeForFree',
+  buildError = 'buildError',
 }
 
 export const errorCodeLabels = {
@@ -115,3 +116,29 @@ export const tooLargeForFreeError = (
   message: string,
 ): VizHubError =>
   new VizHubError(message, VizHubErrorCode.tooLargeForFree);
+
+// Build errors
+export const missingIndexJSError = (): VizHubError =>
+  new VizHubError(
+    'Missing index.js',
+    VizHubErrorCode.buildError,
+  );
+
+export const invalidPackageJSONError = (
+  message: string,
+): VizHubError =>
+  new VizHubError(
+    'Invalid package.json: ' + message,
+    VizHubErrorCode.buildError,
+  );
+
+export const rollupError = (message: string): VizHubError =>
+  new VizHubError(message, VizHubErrorCode.buildError);
+
+export const missingImportError = (
+  message: string,
+): VizHubError =>
+  new VizHubError(
+    'Missing import: ' + message,
+    VizHubErrorCode.buildError,
+  );
