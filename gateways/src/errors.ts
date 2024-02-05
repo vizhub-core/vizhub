@@ -123,3 +123,25 @@ export const missingIndexJSError = (): VizHubError =>
     'Missing index.js',
     VizHubErrorCode.buildError,
   );
+
+export const invalidPackageJSONError = (
+  message: string,
+): VizHubError =>
+  new VizHubError(
+    'Invalid package.json: ' + message,
+    VizHubErrorCode.buildError,
+  );
+
+export const rollupError = (message: string): VizHubError =>
+  new VizHubError(
+    'Rollup error: ' + message,
+    VizHubErrorCode.buildError,
+  );
+
+export const missingImportError = (
+  message: string,
+): VizHubError =>
+  new VizHubError(
+    'Missing import: ' + message,
+    VizHubErrorCode.buildError,
+  );

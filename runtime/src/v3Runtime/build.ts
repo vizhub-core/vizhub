@@ -18,8 +18,13 @@ import { vizLoad } from './vizLoad';
 import { transformDSV } from './transformDSV';
 import { transformSvelte } from './transformSvelte';
 import { missingIndexJSError } from 'gateways';
+import {
+  invalidPackageJSONError,
+  missingImportError,
+  rollupError,
+} from 'gateways/src/errors';
 
-const debug = false;
+const debug = true;
 
 // From https://github.com/Rich-Harris/magic-string/blob/master/src/SourceMap.js
 // Modified to support Web Workers
@@ -94,7 +99,6 @@ export const build = async ({
 }): Promise<V3BuildResult> => {
   const startTime = Date.now();
   const warnings: Array<V3BuildError> = [];
-  const errors: Array<V3BuildError> = [];
   let src: string | undefined;
   let pkg: V3PackageJson | undefined;
 
@@ -151,10 +155,7 @@ export const build = async ({
       try {
         pkg = JSON.parse(packageJSONContent);
       } catch (error) {
-        errors.push({
-          code: 'INVALID_PACKAGE_JSON',
-          message: error.message,
-        });
+        throw invalidPackageJSONError(error.message);
       }
     }
 
@@ -203,16 +204,29 @@ export const build = async ({
         console.log(src?.slice(0, 200));
       }
     } catch (error) {
-      if (debug) {
-        console.log('  Caught error in build.ts:');
-        console.log(error);
-      }
-      const serializableError = JSON.parse(
-        JSON.stringify(error),
-      );
-      serializableError.name = error.name;
-      serializableError.message = error.message;
-      errors.push(serializableError);
+      throw rollupError(error.message);
+
+      // if (debug) {
+      //   console.log('  Caught error in build.ts:');
+      //   console.log(error);
+      // }
+      // const serializableError = JSON.parse(
+      //   JSON.stringify(error),
+      // );
+      // serializableError.name = error.name;
+      // serializableError.message = error.message;
+      // errors.push(serializableError);
+    }
+  }
+
+  for (const warning of warnings) {
+    // In VizHub, we want to treat certain warnings as errors.
+    if (warning.code === 'UNRESOLVED_IMPORT') {
+      throw missingImportError(warning.message);
+      // // Throw an error for specific warning types
+      // throw new Error(
+      //   `Fatal error: ${warning.message}`,
+      // );
     }
   }
 
@@ -222,8 +236,12 @@ export const build = async ({
     console.log(src?.slice(0, 200));
   }
 
+  if (debug) {
+    console.log('  warnings:');
+    console.log(JSON.stringify(warnings, null, 2));
+  }
+
   return {
-    errors,
     warnings,
     src,
     pkg,
