@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import { missingIndexJSError } from 'gateways';
 import { compile } from 'svelte/compiler';
 import { rollup } from 'rollup';
 import { build } from './build';
@@ -14,44 +15,36 @@ import {
   sampleContentSvelte,
 } from 'entities/test/fixtures';
 import { VizId } from 'entities';
+import { missingImportError } from 'gateways/src/errors';
 
 describe('v3 build', () => {
-  it('Should not crash when missing files', async () => {
-    const buildResult = await build({
-      vizId: 'test-viz',
-      rollup,
-      vizCache: createVizCache({
-        initialContents: [
-          {
-            id: 'test-viz',
+  it('Should throw an error when missing files', async () => {
+    // Expect build to throw an error
+    expect(async () => {
+      await build({
+        vizId: 'test-viz',
+        rollup,
+        vizCache: createVizCache({
+          initialContents: [
+            {
+              id: 'test-viz',
 
-            // This test is mainly testing the case
-            // where this is empty.
-            files: {},
+              // This test is mainly testing the case
+              // where this is empty.
+              files: {},
 
-            title: 'Test Viz',
+              title: 'Test Viz',
+            },
+          ],
+          handleCacheMiss: async () => {
+            throw new Error('Not implemented');
           },
-        ],
-        handleCacheMiss: async () => {
+        }),
+        resolveSlug: () => {
           throw new Error('Not implemented');
         },
-      }),
-      resolveSlug: () => {
-        throw new Error('Not implemented');
-      },
-    });
-
-    expect(buildResult).toBeDefined();
-
-    expect(buildResult).toBeDefined();
-    expect(buildResult.errors).toEqual([
-      {
-        code: 'MISSING_INDEX_JS',
-        message: 'Missing index.js',
-      },
-    ]);
-    expect(buildResult.src).toBeUndefined();
-    expect(buildResult.pkg).toBeUndefined();
+      });
+    }).rejects.toThrow(missingIndexJSError());
   });
 
   it('Should build successfully with valid inputs', async () => {
@@ -70,7 +63,6 @@ describe('v3 build', () => {
       },
     });
     expect(buildResult).toBeDefined();
-    expect(buildResult.errors).toHaveLength(0);
     expect(buildResult.warnings).toHaveLength(0);
     expect(buildResult.cssFiles).toHaveLength(0);
     expect(buildResult.src).toBeDefined();
@@ -103,7 +95,6 @@ describe('v3 build', () => {
     // console.log(JSON.stringify(buildResult, null, 2));
 
     expect(buildResult).toBeDefined();
-    expect(buildResult.errors).toHaveLength(0);
     expect(buildResult.warnings).toHaveLength(1);
     expect(buildResult.cssFiles).toHaveLength(1);
     expect(buildResult.src).toBeDefined();
@@ -137,7 +128,6 @@ describe('v3 build', () => {
     // console.log(JSON.stringify(buildResult, null, 2));
 
     expect(buildResult).toBeDefined();
-    expect(buildResult.errors).toHaveLength(0);
     expect(buildResult.warnings).toHaveLength(0);
     expect(buildResult.cssFiles).toHaveLength(0);
     expect(buildResult.src).toBeDefined();
@@ -168,14 +158,13 @@ describe('v3 build', () => {
     // console.log(JSON.stringify(buildResult, null, 2));
 
     expect(buildResult).toBeDefined();
-    expect(buildResult.errors).toHaveLength(0);
     expect(buildResult.warnings).toHaveLength(0);
     expect(buildResult.cssFiles).toHaveLength(0);
     expect(buildResult.src).toBeDefined();
     expect(buildResult.time).toBeDefined();
     expect(buildResult.pkg).toBeUndefined();
 
-    expect(buildResult.src).toContain('Germany');
+    expect(buildResult.src).toContain('Türkiye');
   });
 
   it('Import from viz: should build successfully with valid inputs', async () => {
@@ -200,7 +189,6 @@ describe('v3 build', () => {
     // console.log(JSON.stringify(buildResult, null, 2));
 
     expect(buildResult).toBeDefined();
-    expect(buildResult.errors).toHaveLength(0);
     expect(buildResult.warnings).toHaveLength(0);
     expect(buildResult.cssFiles).toHaveLength(0);
     expect(buildResult.src).toBeDefined();
@@ -240,7 +228,6 @@ describe('v3 build', () => {
     // console.log(JSON.stringify(buildResult, null, 2));
 
     expect(buildResult).toBeDefined();
-    expect(buildResult.errors).toHaveLength(0);
     expect(buildResult.warnings).toHaveLength(1);
     expect(buildResult.cssFiles).toHaveLength(1);
     expect(buildResult.src).toBeDefined();
@@ -283,7 +270,6 @@ describe('v3 build', () => {
     // console.log(JSON.stringify(buildResult, null, 2));
 
     expect(buildResult).toBeDefined();
-    expect(buildResult.errors).toHaveLength(0);
     expect(buildResult.warnings).toHaveLength(0);
     expect(buildResult.cssFiles).toHaveLength(0);
     expect(buildResult.src).toBeDefined();
@@ -316,15 +302,14 @@ describe('v3 build', () => {
     });
 
     // console.log(JSON.stringify(buildResult, null, 2));
-    console.log('buildResult.errors');
-    console.log(buildResult.errors);
-    console.log('buildResult.warnings');
-    console.log(buildResult.warnings);
-    console.log('buildResult.src');
-    console.log(buildResult.src);
+    // console.log('buildResult.errors');
+    // console.log(buildResult.errors);
+    // console.log('buildResult.warnings');
+    // console.log(buildResult.warnings);
+    // console.log('buildResult.src');
+    // console.log(buildResult.src);
 
     expect(buildResult).toBeDefined();
-    expect(buildResult.errors).toHaveLength(0);
     expect(buildResult.warnings).toHaveLength(0);
     expect(buildResult.cssFiles).toHaveLength(0);
     expect(buildResult.src).toBeDefined();
@@ -341,4 +326,106 @@ describe('v3 build', () => {
     //   `const message2 = "Imported from viz: " + message;`,
     // );
   });
+
+  it('Should throw an error when a package name import is missing', async () => {
+    // Expect build to throw an error
+    expect(async () => {
+      await build({
+        vizId: 'test-viz',
+        rollup,
+        vizCache: createVizCache({
+          initialContents: [
+            {
+              id: 'test-viz',
+              files: {
+                '4325432': {
+                  name: 'index.js',
+                  text: 'import { message } from "missing-viz";\nconsole.log(message);',
+                },
+              },
+              title: 'Test Viz',
+            },
+          ],
+          handleCacheMiss: async () => {
+            throw new Error('Not implemented');
+          },
+        }),
+        resolveSlug: () => {
+          throw new Error('Not implemented');
+        },
+      });
+    }).rejects.toThrow(
+      missingImportError(
+        `"missing-viz" is imported by "test-viz/index.js", but could not be resolved.`,
+      ),
+    );
+  });
+
+  it('Should throw an error when a local import is missing', async () => {
+    // Expect build to throw an error
+    expect(async () => {
+      await build({
+        vizId: 'test-viz',
+        rollup,
+        vizCache: createVizCache({
+          initialContents: [
+            {
+              id: 'test-viz',
+              files: {
+                '4325432': {
+                  name: 'index.js',
+                  text: 'import { message } from "./missing";\nconsole.log(message);',
+                },
+              },
+              title: 'Test Viz',
+            },
+          ],
+          handleCacheMiss: async () => {
+            throw new Error('Not implemented');
+          },
+        }),
+        resolveSlug: () => {
+          throw new Error('Not implemented');
+        },
+      });
+    }).rejects.toThrow(
+      missingImportError(
+        `Could not load test-viz/missing.js (imported by test-viz/index.js): Imported file "missing.js" not found.`,
+      ),
+    );
+  });
+  it('Should throw an error when a local import is missing', async () => {
+    // Expect build to throw an error
+    expect(async () => {
+      await build({
+        vizId: '7f0b69fcb754479699172d1887817027',
+        rollup,
+        vizCache: createVizCache({
+          initialContents: [
+            {
+              id: '7f0b69fcb754479699172d1887817027',
+              files: {
+                '4325432': {
+                  name: 'index.js',
+                  text: 'import { message } from "./missing";\nconsole.log(message);',
+                },
+              },
+              title: 'Test Viz',
+            },
+          ],
+          handleCacheMiss: async () => {
+            throw new Error('Not implemented');
+          },
+        }),
+        resolveSlug: () => {
+          throw new Error('Not implemented');
+        },
+      });
+    }).rejects.toThrow(
+      missingImportError(
+        `Could not load missing.js (imported by index.js): Imported file "missing.js" not found.`,
+      ),
+    );
+  });
+  // TODO test that covers invalidPackageJSONError
 });

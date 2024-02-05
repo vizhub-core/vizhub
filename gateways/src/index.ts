@@ -10,6 +10,7 @@ export {
   invalidDecrementError,
   missingParameterError,
   errorCodeLabels,
+  missingIndexJSError,
 } from './errors';
 export {
   crudEntityNames,
