@@ -287,19 +287,7 @@ export const setupV3Runtime = ({
   let previousCSSFiles: Array<ResolvedVizFileId> = [];
   const run = (buildResult: V3BuildResult) => {
     return new Promise<void>((resolve) => {
-      const { src, warnings, errors, cssFiles } =
-        buildResult;
-
-      // Handle build errors
-      if (errors.length > 0) {
-        setSrcdocError(
-          errors
-            .map(generateRollupErrorMessage)
-            .join('\n\n'),
-        );
-        resolve();
-        return;
-      }
+      const { src, warnings, cssFiles } = buildResult;
 
       // Sanity check.
       // At this point, since there were no errors,

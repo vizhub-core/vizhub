@@ -428,7 +428,7 @@ describe('v3 build', () => {
     );
   });
 
-  it('Should throw a syntax error properly', async () => {
+  it.only('Should throw a syntax error properly', async () => {
     // Expect build to throw an error
     expect(async () => {
       await build({
@@ -442,44 +442,11 @@ describe('v3 build', () => {
                 '4325432': {
                   name: 'index.js',
                   text: `
-                  import { select } from 'd3';
-                  // import { viz } from './viz';
-                  // import { asif } from '@ssmadha/asif';
-                
-                  export const main = (container) => {
-                    const width = container.clientWidth;
-                    const height = container.clientHeight;
-                
-                    const svg = select(container)
-                      .selectAll('svg')
-                      .data([null])
-                      .join('svg')
-                      .attr('width', width)
-                      .attr('height', height);
-                
-                    viz(svg, {
-                      data: asif,
-                      // data = asif,
-                      
-                      xValue: (d) => d['colon'],
-                      xAxisLabelText: 'Colon',
-                      xAxisLabelOffset: 38,
-                      yValue: (d) => d['small intestine'],
-                      yAxisLabelText: 'Small Intestine',
-                      yAxisLabelOffset: 17,
-                      innerRectFill: '#E8E8E8',
-                      pointLabel: (d) => d['Gene Name'],
-                      pointLabelOffset: -5,
-                      circleRadius: 65 / 20,
-                      circleOpacity: 629 / 1000,
-                      marginTop: 20,
-                      marginBottom: 50,
-                      marginLeft: 51,
-                      marginRight: 32,
-                      width,
-                      height,
-                    });
-                  };`,
+                    const foo = {
+                      bar = baz,
+                    };
+                    console.log(foo);
+                 `,
                 },
               },
               title: 'Test Viz',
