@@ -55,10 +55,10 @@
     "rollup-pluginutils": "^2.8.2",
     "sharedb": "^4.1.2",
     "sharedb-mongo": "^4.1.0",
-    "stripe": "^14.14.0",
+    "stripe": "^14.15.0",
     "vizhub-libraries": "^1.8.0",
     "vizhub-ui": "^3.19.0",
-    "vzcode": "^0.62.0",
+    "vzcode": "^0.63.0",
     "ws": "^8.16.0",
     "xss": "^1.0.14"
   },
