@@ -8,6 +8,11 @@
     color: var(--vh-color-neutral-04);
     cursor: pointer;
   }
+  .widget-label {
+    @media (max-width: 1200px) {
+      display: none;
+    }
+  }
 }
 .vh-upvote-widget.upvoted {
   svg path {

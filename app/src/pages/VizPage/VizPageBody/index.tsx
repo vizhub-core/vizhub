@@ -47,7 +47,6 @@ import { useMarkUncommitted } from '../useMarkUncommitted';
 import { enableManualRun } from 'runtime/src/useRuntime';
 import { formatTimestamp } from '../../../accessors/formatTimestamp';
 import { useSearchParams } from 'react-router-dom';
-import { absoluteURL } from '../../../seoMetaTags';
 
 const debug = false;
 
@@ -113,11 +112,18 @@ export const VizPageBody = ({
     AuthenticatedUserContext,
   );
 
-  // Embed mode
+  // Embed mode - to make the viz full screen
   // ?mode=embed
   const [searchParams] = useSearchParams();
   const isEmbedMode = useMemo(
     () => searchParams.get('mode') === 'embed',
+    [searchParams],
+  );
+
+  // Hide mode - to hide the viewer and only show the editor
+  // ?mode=hide
+  const isHideMode = useMemo(
+    () => searchParams.get('mode') === 'hide',
     [searchParams],
   );
 
@@ -237,28 +243,29 @@ export const VizPageBody = ({
 
   // Render the viz runner iframe.
   const renderVizRunner = useCallback(
-    (iframeScale?: number) => (
-      <iframe
-        ref={iframeRef}
-        srcDoc={initialSrcdoc}
-        {...(isEmbedMode
-          ? {
-              style: {
-                position: 'absolute',
-                width: '100vw',
-                height: '100vh',
-              },
-            }
-          : {
-              width: defaultVizWidth,
-              height: vizHeight,
-              style: {
-                transform: `scale(${iframeScale})`,
-              },
-            })}
-      />
-    ),
-    [initialSrcdoc, vizHeight, isEmbedMode],
+    (iframeScale?: number) =>
+      isHideMode ? null : (
+        <iframe
+          ref={iframeRef}
+          srcDoc={initialSrcdoc}
+          {...(isEmbedMode
+            ? {
+                style: {
+                  position: 'absolute',
+                  width: '100vw',
+                  height: '100vh',
+                },
+              }
+            : {
+                width: defaultVizWidth,
+                height: vizHeight,
+                style: {
+                  transform: `scale(${iframeScale})`,
+                },
+              })}
+        />
+      ),
+    [initialSrcdoc, vizHeight, isEmbedMode, isHideMode],
   );
 
   // Disable pointer events when split pane is being dragged.
@@ -385,41 +392,42 @@ export const VizPageBody = ({
           authenticatedUser={authenticatedUser}
           submitContentOperation={submitContentOperation}
         />
-
-        <div
-          className={`right${
-            showEditor ? ' editor-open' : ''
-          }`}
-        >
-          <VizPageViewer
-            vizTitle={info.title}
-            enableEditingTitle={canUserEditViz}
-            setVizTitle={setVizTitle}
-            vizHeight={vizHeight}
-            defaultVizWidth={defaultVizWidth}
-            renderVizRunner={renderVizRunner}
-            renderMarkdownHTML={renderMarkdownHTML}
-            authorDisplayName={authorDisplayName}
-            authorAvatarURL={ownerUser.picture}
-            createdDateFormatted={createdDateFormatted}
-            updatedDateFormatted={updatedDateFormatted}
-            forkedFromVizTitle={
-              forkedFromInfo ? forkedFromInfo.title : null
-            }
-            forkedFromVizHref={forkedFromVizHref}
-            forksCount={info.forksCount}
-            forksPageHref={forksPageHref}
-            ownerUserHref={ownerUserHref}
-            upvotesCount={info.upvotesCount}
-            license={license}
-            isPrivate={info.visibility === 'private'}
-            isUnlisted={info.visibility === 'unlisted'}
-            isVisual={isVisual}
-            isUpvoted={isUpvoted}
-            handleUpvoteClick={handleUpvoteClick}
-            fullscreenHref={fullscreenHref}
-          />
-        </div>
+        {isHideMode ? null : (
+          <div
+            className={`right${
+              showEditor ? ' editor-open' : ''
+            }`}
+          >
+            <VizPageViewer
+              vizTitle={info.title}
+              enableEditingTitle={canUserEditViz}
+              setVizTitle={setVizTitle}
+              vizHeight={vizHeight}
+              defaultVizWidth={defaultVizWidth}
+              renderVizRunner={renderVizRunner}
+              renderMarkdownHTML={renderMarkdownHTML}
+              authorDisplayName={authorDisplayName}
+              authorAvatarURL={ownerUser.picture}
+              createdDateFormatted={createdDateFormatted}
+              updatedDateFormatted={updatedDateFormatted}
+              forkedFromVizTitle={
+                forkedFromInfo ? forkedFromInfo.title : null
+              }
+              forkedFromVizHref={forkedFromVizHref}
+              forksCount={info.forksCount}
+              forksPageHref={forksPageHref}
+              ownerUserHref={ownerUserHref}
+              upvotesCount={info.upvotesCount}
+              license={license}
+              isPrivate={info.visibility === 'private'}
+              isUnlisted={info.visibility === 'unlisted'}
+              isVisual={isVisual}
+              isUpvoted={isUpvoted}
+              handleUpvoteClick={handleUpvoteClick}
+              fullscreenHref={fullscreenHref}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

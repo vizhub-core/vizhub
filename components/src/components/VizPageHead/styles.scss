@@ -1,5 +1,8 @@
 .vh-viz-page-head {
-  padding: 8px;
+  padding: 4px 8px;
+  @media (max-width: 1200px) {
+    padding: 0;
+  }
   background-color: var(--vh-color-neutral-02);
   display: flex;
   justify-content: space-between;
@@ -8,7 +11,10 @@
   .side {
     display: flex;
     padding: 0 16px 0 2px;
-    gap: 16px;
+    @media (min-width: 1201px) {
+      gap: 16px;
+    }
+
     .btn {
       font-weight: 500;
       display: flex;
@@ -16,9 +22,22 @@
       background-color: var(--vh-color-neutral-02);
       border: none;
       font-size: 16px;
+
+      @media (max-width: 1200px) {
+        padding: var(--bs-btn-padding-y);
+      }
+
       svg {
-        margin-right: 8px;
+        @media (min-width: 1201px) {
+          margin-right: 8px;
+        }
         color: var(--vh-color-neutral-04);
+      }
+      .btn-text {
+        /* Hide on mobile */
+        @media (max-width: 1200px) {
+          display: none;
+        }
       }
     }
     .btn:hover {

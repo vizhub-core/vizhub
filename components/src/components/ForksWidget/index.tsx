@@ -18,7 +18,9 @@ export const ForksWidget = ({
     <div className="vh-forks-widget">
       <ForkSVG onClick={onClick} />
       <strong>{forksCountFormatted}</strong>
-      Fork{forksCount === 1 ? '' : 's'}
+      <div className="widget-label">
+        Fork{forksCount === 1 ? '' : 's'}
+      </div>
     </div>
   ) : null;
 };
