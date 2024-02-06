@@ -2,7 +2,7 @@ import { rollup } from '@rollup/browser';
 import { build } from './build';
 import { createVizCache } from './vizCache';
 import { Content, VizId } from 'entities';
-import { V3WorkerMessage } from './types';
+import { V3BuildResult, V3WorkerMessage } from './types';
 import { svelteCompilerUrl } from './transformSvelte';
 
 const debug = false;
@@ -80,10 +80,21 @@ addEventListener('message', async ({ data }) => {
         );
       }
 
-      // Post the result of the build process
-      const responseMessage: V3WorkerMessage = {
-        type: 'buildResponse',
-        buildResult: await build({
+      // try{    }
+      // // Handle build errors
+      // if (errors.length > 0) {
+      //   setSrcdocError(
+      //     errors
+      //       .map(generateRollupErrorMessage)
+      //       .join('\n\n'),
+      //   );
+      //   resolve();
+      //   return;
+      // }
+      let error: Error | undefined;
+      let buildResult: V3BuildResult | undefined;
+      try {
+        buildResult = await build({
           vizId,
           enableSourcemap,
           rollup,
@@ -100,9 +111,19 @@ addEventListener('message', async ({ data }) => {
             (0, eval)(compiler);
 
             // console.log(self.svelte);
+            // @ts-ignore
             return self.svelte.compile;
           },
-        }),
+        });
+      } catch (e) {
+        error = e;
+      }
+
+      // Post the result of the build process
+      const responseMessage: V3WorkerMessage = {
+        type: 'buildResponse',
+        buildResult,
+        error,
       };
       postMessage(responseMessage);
       break;
