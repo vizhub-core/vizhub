@@ -208,6 +208,10 @@ export const build = async ({
         console.log(src?.slice(0, 200));
       }
     } catch (error) {
+      if (debug) {
+        console.log('  Caught error in build.ts:');
+        console.log(error);
+      }
       // Detect missing import error from vizLoad plugin.
       if (
         error.code === 'PLUGIN_ERROR' &&

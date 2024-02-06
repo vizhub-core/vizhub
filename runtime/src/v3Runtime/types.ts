@@ -58,7 +58,8 @@ export type V3WorkerMessage =
   //  * This message is sent to the main thread.
   | {
       type: 'buildResponse';
-      buildResult: V3BuildResult;
+      buildResult: V3BuildResult | undefined;
+      error: Error | undefined;
     }
 
   // `invalidateVizCache`
