@@ -87,9 +87,11 @@ export const computeSrcDocV3 = async ({
     <script id="injected-script">${src}</script>
     <script>
       (() => {
+        let cleanup;
         const render = () => {
           const container = document.getElementById('${vizContainerId}');
-          Viz.main(container, { state: window.state, setState });
+          typeof cleanup === 'function' && cleanup();
+          cleanup = Viz.main(container, { state: window.state, setState });
         };
         const setState = (next) => {
           window.state = next(window.state);
