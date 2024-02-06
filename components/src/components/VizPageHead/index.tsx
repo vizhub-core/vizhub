@@ -32,17 +32,15 @@ export const VizPageHead = ({
   return (
     <div className="vh-viz-page-head">
       <div className="side">
-        <Button
-          variant="dark"
-          size="sm"
-          onClick={toggleShowEditor}
-        >
+        <Button variant="dark" onClick={toggleShowEditor}>
           {showEditor ? (
             <ArrowLeftSVG />
           ) : (
             <ArrowRightSVG />
           )}
-          {showEditor ? 'Close' : 'Open'} Editor
+          <div className="btn-text">
+            {showEditor ? 'Close' : 'Open'} Editor
+          </div>
         </Button>
       </div>
       <div className="side">
@@ -50,58 +48,37 @@ export const VizPageHead = ({
           <Button
             as="a"
             variant="dark"
-            size="sm"
             href={downloadImageHref}
             download
           >
             <ImageSVG />
-            Download Image
+            <div className="btn-text">Download Image</div>
           </Button>
         )}
-        <Button
-          variant="dark"
-          size="sm"
-          onClick={onExportClick}
-        >
+        <Button variant="dark" onClick={onExportClick}>
           <ExportSVG />
-          Export Code
+          <div className="btn-text">Export Code</div>
         </Button>
-        <Button
-          variant="dark"
-          size="sm"
-          onClick={onShareClick}
-        >
+        <Button variant="dark" onClick={onShareClick}>
           <SharedSVG />
-          Share
+          <div className="btn-text">Share</div>
         </Button>
         {showSettingsButton ? (
-          <Button
-            variant="dark"
-            size="sm"
-            onClick={onSettingsClick}
-          >
+          <Button variant="dark" onClick={onSettingsClick}>
             <GearSVG />
-            Settings
+            <div className="btn-text">Settings</div>
           </Button>
         ) : null}
         {showTrashButton ? (
-          <Button
-            variant="dark"
-            size="sm"
-            onClick={onTrashClick}
-          >
+          <Button variant="dark" onClick={onTrashClick}>
             <TrashSVG />
-            Delete
+            <div className="btn-text">Delete</div>
           </Button>
         ) : null}
         {showForkButton ? (
-          <Button
-            variant="dark"
-            size="sm"
-            onClick={onForkClick}
-          >
+          <Button variant="dark" onClick={onForkClick}>
             <ForkSVG />
-            Fork
+            <div className="btn-text">Fork</div>
           </Button>
         ) : null}
       </div>

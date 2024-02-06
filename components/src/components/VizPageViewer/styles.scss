@@ -12,6 +12,9 @@
   overflow: auto;
 
   .viewer-content {
+    /* Leverage container queries instead of media queries. */
+    container-type: inline-size;
+
     /* Scale horizontally when width < max-width. */
     width: 100%;
 
@@ -64,6 +67,12 @@
       align-items: center;
       padding: var(--vh-padding-lots) 0px;
       border-bottom: 1px solid var(--vh-rule-color);
+
+      @container (max-width: 600px) {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
 
       &-left {
         display: flex;
@@ -120,6 +129,13 @@
       justify-content: space-between;
       padding: var(--vh-padding-lots) 0px;
       font-size: var(--vh-font-size-small);
+
+      @container (max-width: 500px) {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+
       &-left {
         display: flex;
         align-items: center;
@@ -142,8 +158,12 @@
         display: flex;
         flex-direction: column;
         font-size: 14px;
-        align-items: end;
+        align-items: flex-end;
         color: var(--vh-color-neutral-03);
+
+        @container (max-width: 500px) {
+          align-items: flex-start;
+        }
       }
     }
     .license {

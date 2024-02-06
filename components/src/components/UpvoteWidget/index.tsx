@@ -13,6 +13,8 @@ export const UpvoteWidget = ({
   >
     <StarSVG onClick={onClick} />
     <strong>{upvotesCount}</strong>
-    Star{upvotesCount === 1 ? '' : 's'}
+    <div className="widget-label">
+      Star{upvotesCount === 1 ? '' : 's'}
+    </div>
   </div>
 );

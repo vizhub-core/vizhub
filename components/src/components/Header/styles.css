@@ -2,8 +2,16 @@
   background-color: var(--vh-color-neutral-01);
   padding: 20px 8px;
 
+  @media (max-width: 1200px) {
+    padding: 8px 0px;
+  }
+
   .navbar-nav {
     gap: 4px;
+
+    @media (max-width: 1200px) {
+      gap: 0px;
+    }
   }
 
   .nav-link {
