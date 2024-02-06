@@ -13,7 +13,8 @@
     "build:client": "vite build --outDir dist/client",
     "//build:client": "NODE_ENV=development vite build --mode development --outDir dist/client",
     "build:server": "vite build --ssr src/entry-server.tsx --outDir dist/server",
-    "serve": "NODE_ENV=production node server",
+    "serve": "NODE_ENV=production pm2 start server.js --name 'app-server' --no-daemon",
+    "///serve": "NODE_ENV=production node server",
     "//serve": "node server.js"
   },
   "repository": {
@@ -28,7 +29,7 @@
   "homepage": "https://github.com/vizhub-core/vizhub3#readme",
   "dependencies": {
     "@rollup/browser": "^4.9.6",
-    "@sentry/node": "^7.99.0",
+    "@sentry/node": "^7.100.0",
     "@teamwork/websocket-json-stream": "^2.0.0",
     "@types/react-router-dom": "^5.3.3",
     "@types/sharedb": "^3.3.10",
@@ -70,6 +71,7 @@
     "@vitejs/plugin-react": "^4.2.1",
     "compression": "^1.7.4",
     "express": "^4.18.2",
+    "pm2": "^5.3.1",
     "prettier": "^3.2.5",
     "rollup-plugin-visualizer": "^5.12.0",
     "sass": "^1.70.0",
