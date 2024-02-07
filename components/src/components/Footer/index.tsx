@@ -18,7 +18,6 @@ export const Footer = () => {
         </div>
         <div className="footer-links">
           <div className="footer-links-title">Contact</div>
-          <a href={discordLink}>Discord</a>
 
           <a href="mailto:contact@vizhub.com">Email</a>
           <a href="https://calendly.com/curran-kelleher/data-visualization-consultation">
@@ -28,9 +27,16 @@ export const Footer = () => {
 
         <div className="footer-links">
           <div className="footer-links-title">
-            Resources
+            <span>Community</span>
           </div>
+          <a href={discordLink}>Discord</a>
           <a href="/forum">Forum</a>
+        </div>
+
+        <div className="footer-links">
+          <div className="footer-links-title">
+            <span>Follow us</span>
+          </div>
           <a href="https://twitter.com/viz_hub">Twitter</a>
           <a href="https://www.youtube.com/@currankelleher">
             YouTube
