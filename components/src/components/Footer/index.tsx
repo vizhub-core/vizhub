@@ -1,4 +1,6 @@
 import { LogoSVG } from '../Icons/LogoSVG';
+import { FacebookSVG } from '../Icons/FacebookSVG';
+
 import { discordLink } from '../discordLink';
 import './styles.scss';
 export const Footer = () => {
@@ -32,6 +34,13 @@ export const Footer = () => {
           <a href="https://twitter.com/viz_hub">Twitter</a>
           <a href="https://www.youtube.com/@currankelleher">
             YouTube
+          </a>
+          <a
+            href="/https://www.facebook.com/profile.php?id=100071381815409"
+            target="_blank"
+          >
+            <FacebookSVG />
+            <span>Facebook</span>
           </a>
         </div>
       </div>
