@@ -344,13 +344,16 @@ export const DatabaseGateways = ({
         }),
         ...(vizIds && { id: { $in: vizIds } }),
         ...(query && {
+          // Index required for this to work:
+          // db.info.createIndex( { title: "text"})
           $text: { $search: query },
         }),
       };
 
-      // if (query) {
-      //   mongoQuery['$text'] = { $search: query };
-      // }
+      // console.log(
+      //   'mongoQuery',
+      //   JSON.stringify(mongoQuery, null, 2),
+      // );
 
       const fetchQuery = shareDBConnection.createFetchQuery(
         toCollectionName(entityName),

@@ -12,7 +12,11 @@ const handleVizHubClick = () => {
   window.location.href = '/';
 };
 
-export const SmartHeader = () => {
+export const SmartHeader = ({
+  initialSearchQuery,
+}: {
+  initialSearchQuery?: string;
+}) => {
   const authenticatedUser = useContext(
     AuthenticatedUserContext,
   );
@@ -44,8 +48,6 @@ export const SmartHeader = () => {
       logoutHref={'/logout'}
       pricingHref={'/pricing'}
       createVizHref={'/create-viz'}
-      resourcesHref={'/resources'}
-      exploreHref={'/explore'}
       profileHref={`/${authenticatedUser?.userName}`}
       authenticatedUserAvatarURL={
         authenticatedUser?.picture
@@ -53,6 +55,7 @@ export const SmartHeader = () => {
       onVizHubClick={handleVizHubClick}
       showBillingLink={showBillingLink}
       onBillingClick={handleBillingClick}
+      initialSearchQuery={initialSearchQuery}
     />
   );
 };

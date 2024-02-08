@@ -218,6 +218,7 @@ export const InfosAndOwnersProvider = ({
   owner,
   children,
   hasMoreInitially,
+  searchQuery,
 }: {
   infoSnapshots: Array<Snapshot<Info>>;
   ownerUserSnapshots: Array<Snapshot<User>>;
@@ -225,6 +226,7 @@ export const InfosAndOwnersProvider = ({
   owner?: UserId;
   children: React.ReactNode;
   hasMoreInitially: boolean;
+  searchQuery?: string;
 }) => {
   const { sectionId, sortId } = useContext(
     SectionSortContext,
@@ -264,6 +266,7 @@ export const InfosAndOwnersProvider = ({
         pageNumber:
           paginationState.sectionsAndSorts[currentKey]
             ?.pages?.length || 0,
+        searchQuery,
       });
       if (result.outcome === 'success') {
         const {
@@ -289,13 +292,33 @@ export const InfosAndOwnersProvider = ({
     fetchNextPageAsync();
   }, [paginationState, currentKey]);
 
-  const allInfoSnapshots = useMemo(
-    () =>
+  const allInfoSnapshots = useMemo(() => {
+    const flatArray: Array<Snapshot<Info>> =
       paginationState.sectionsAndSorts[
         currentKey
-      ]?.pages?.flat() || [],
-    [paginationState, currentKey],
-  );
+      ]?.pages?.flat() || [];
+
+    // Deduplicate info snapshots but preserve order
+    // This is necessary because we may have fetched the same info
+    // on multiple pages, especially on the search results page
+    // due to the way the backend search is implemented.
+    const deduplicatedArray: Array<Snapshot<Info>> =
+      flatArray.reduce(
+        (
+          acc: Array<Snapshot<Info>>,
+          current: Snapshot<Info>,
+        ) => {
+          const ids = acc.map((item) => item.data.id);
+          if (!ids.includes(current.data.id)) {
+            acc.push(current);
+          }
+          return acc;
+        },
+        [],
+      );
+
+    return deduplicatedArray;
+  }, [paginationState, currentKey]);
 
   // If the user switches to a currentKey that we haven't
   // fetched the first page of yet, fetch the first page.

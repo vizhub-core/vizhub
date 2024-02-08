@@ -7,6 +7,7 @@ import {
 } from '../bootstrap';
 import { HelpSVG } from '../Icons/HelpSVG';
 import { LogoSVG } from '../Icons/LogoSVG';
+import { SearchBox } from '../SearchBox';
 import './styles.css';
 
 // Feature flag to enable/disable help icon
@@ -23,10 +24,9 @@ export const Header = ({
   createVizHref,
   onVizHubClick,
   pricingHref,
-  resourcesHref,
-  exploreHref,
   showBillingLink,
   onBillingClick,
+  initialSearchQuery,
 }: {
   authenticatedUserAvatarURL: string;
   loginHref: string;
@@ -35,10 +35,9 @@ export const Header = ({
   createVizHref: string;
   onVizHubClick: () => void;
   pricingHref: string;
-  resourcesHref: string;
-  exploreHref?: string;
   showBillingLink?: boolean;
   onBillingClick: () => void;
+  initialSearchQuery?: string;
 }) => (
   <Navbar className="vh-navbar" variant="dark" expand="md">
     <Container fluid>
@@ -52,19 +51,14 @@ export const Header = ({
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
 
       <Navbar.Collapse id="basic-navbar-nav">
-        <Nav className="me-auto" />
+        <Nav className="me-auto d-flex align-items-md-center justify-content-md-center flex-md-grow-1">
+          <SearchBox
+            initialSearchQuery={initialSearchQuery}
+          />
+        </Nav>
         <Nav className="align-items-md-center">
-          {/* <Nav.Link href={exploreHref}>Explore</Nav.Link> */}
-
           <Nav.Link href="/features">Features</Nav.Link>
 
-          {/* <Nav.Link
-            href="https://vizhub.com/forum/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Forum
-          </Nav.Link> */}
           {enableResources && (
             <Dropdown align="end">
               <Dropdown.Toggle
