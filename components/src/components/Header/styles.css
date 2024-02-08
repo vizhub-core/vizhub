@@ -48,4 +48,15 @@
     vertical-align: 0.1em;
     scale: 1.5;
   }
+
+  .vh-search-box {
+    background-color: var(--vh-color-neutral-02);
+    color: white;
+
+    border-color: transparent;
+
+    &:focus {
+      border-color: white;
+    }
+  }
 }

@@ -4,9 +4,12 @@ import {
   Container,
   Dropdown,
   Button,
+  Form,
+  FormControl,
 } from '../bootstrap';
 import { HelpSVG } from '../Icons/HelpSVG';
 import { LogoSVG } from '../Icons/LogoSVG';
+import { SearchBox } from '../SearchBox';
 import './styles.css';
 
 // Feature flag to enable/disable help icon
@@ -52,19 +55,12 @@ export const Header = ({
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
 
       <Navbar.Collapse id="basic-navbar-nav">
-        <Nav className="me-auto" />
+        <Nav className="me-auto d-flex align-items-md-center justify-content-md-center flex-md-grow-1">
+          <SearchBox />
+        </Nav>
         <Nav className="align-items-md-center">
-          {/* <Nav.Link href={exploreHref}>Explore</Nav.Link> */}
-
           <Nav.Link href="/features">Features</Nav.Link>
 
-          {/* <Nav.Link
-            href="https://vizhub.com/forum/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Forum
-          </Nav.Link> */}
           {enableResources && (
             <Dropdown align="end">
               <Dropdown.Toggle
