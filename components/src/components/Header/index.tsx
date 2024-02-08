@@ -4,8 +4,6 @@ import {
   Container,
   Dropdown,
   Button,
-  Form,
-  FormControl,
 } from '../bootstrap';
 import { HelpSVG } from '../Icons/HelpSVG';
 import { LogoSVG } from '../Icons/LogoSVG';
@@ -26,10 +24,9 @@ export const Header = ({
   createVizHref,
   onVizHubClick,
   pricingHref,
-  resourcesHref,
-  exploreHref,
   showBillingLink,
   onBillingClick,
+  initialSearchQuery,
 }: {
   authenticatedUserAvatarURL: string;
   loginHref: string;
@@ -38,10 +35,9 @@ export const Header = ({
   createVizHref: string;
   onVizHubClick: () => void;
   pricingHref: string;
-  resourcesHref: string;
-  exploreHref?: string;
   showBillingLink?: boolean;
   onBillingClick: () => void;
+  initialSearchQuery?: string;
 }) => (
   <Navbar className="vh-navbar" variant="dark" expand="md">
     <Container fluid>
@@ -56,7 +52,9 @@ export const Header = ({
 
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="me-auto d-flex align-items-md-center justify-content-md-center flex-md-grow-1">
-          <SearchBox />
+          <SearchBox
+            initialSearchQuery={initialSearchQuery}
+          />
         </Nav>
         <Nav className="align-items-md-center">
           <Nav.Link href="/features">Features</Nav.Link>

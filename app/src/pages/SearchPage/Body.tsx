@@ -6,7 +6,11 @@ import { VizPreviewPresenter } from '../../smartComponents/VizPreviewPresenter';
 import { InfosAndOwnersContext } from '../../contexts/InfosAndOwnersContext';
 import { SectionSortContext } from '../../contexts/SectionSortContext';
 
-export const Body = () => {
+export const Body = ({
+  initialSearchQuery,
+}: {
+  initialSearchQuery: string;
+}) => {
   const { sortId, setSortId } = useContext(
     SectionSortContext,
   );
@@ -31,7 +35,9 @@ export const Body = () => {
 
   return (
     <div className="vh-page overflow-auto">
-      <SmartHeader />
+      <SmartHeader
+        initialSearchQuery={initialSearchQuery}
+      />
       <SearchPageBody
         renderVizPreviews={() =>
           allInfoSnapshots.map(

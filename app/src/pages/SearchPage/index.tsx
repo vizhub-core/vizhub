@@ -15,7 +15,7 @@ export type SearchPageData = PageData &
     // before the user has changed it client-side
     sortId: SortId;
     // The query string input by the user
-    query: string;
+    initialSearchQuery: string;
   };
 
 export const SearchPage: Page = ({
@@ -37,7 +37,9 @@ export const SearchPage: Page = ({
         ownerUserSnapshots={pageData.ownerUserSnapshots}
         hasMoreInitially={pageData.hasMore}
       >
-        <Body />
+        <Body
+          initialSearchQuery={pageData.initialSearchQuery}
+        />
       </InfosAndOwnersProvider>
     </SectionSortProvider>
   </AuthenticatedUserProvider>

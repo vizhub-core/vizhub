@@ -1,9 +1,15 @@
 import { useCallback, useState } from 'react';
 import { Button, Form, FormControl } from '../bootstrap';
 
-export const SearchBox = () => {
+export const SearchBox = ({
+  initialSearchQuery,
+}: {
+  initialSearchQuery?: string;
+}) => {
   // State to track the input value
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState(
+    initialSearchQuery || '',
+  );
 
   // Handler to update state with input changes
   const handleInputChange = (
