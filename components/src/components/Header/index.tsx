@@ -13,7 +13,7 @@ import './styles.css';
 const enableHelpSVG = false;
 
 // Feature flag to enable/disable resources link
-const enableResourcesLink = false;
+const enableResources = false;
 
 export const Header = ({
   authenticatedUserAvatarURL,
@@ -65,14 +65,27 @@ export const Header = ({
           >
             Forum
           </Nav.Link> */}
-          {enableResourcesLink && (
-            <Nav.Link
-              href={resourcesHref}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Resources
-            </Nav.Link>
+          {enableResources && (
+            <Dropdown align="end">
+              <Dropdown.Toggle
+                variant="dark"
+                id="dropdown-resources"
+              >
+                Resources
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                <Dropdown.Item href="#resource1">
+                  Resource 1
+                </Dropdown.Item>
+                <Dropdown.Item href="#resource2">
+                  Resource 2
+                </Dropdown.Item>
+                <Dropdown.Item href="#resource3">
+                  Resource 3
+                </Dropdown.Item>
+                {/* Add more resources as needed */}
+              </Dropdown.Menu>
+            </Dropdown>
           )}
           <Nav.Link href={pricingHref}>Pricing</Nav.Link>
           <Nav.Link href={createVizHref}>Create</Nav.Link>
