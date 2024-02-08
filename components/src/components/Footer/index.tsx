@@ -90,7 +90,7 @@ export const Footer = () => {
             rel="noreferrer"
           >
             {enableSocialIcons && <FacebookSVG />}
-            <span>Facebook</span>
+            Facebook
           </a>
         </div>
       </div>
