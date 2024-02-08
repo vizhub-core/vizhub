@@ -7,10 +7,10 @@ const enableCreateVizButton = true;
 export const HomeStarter = () => {
   return (
     <div className="home-starter">
-      <h2>Join our community</h2>
+      <h2>Create Custom Interactive Data Visualizations</h2>
       <div className="vh-lede-01">
-        Creating data visualizations is easier than you
-        think. Your journey starts here!
+        Creating data visualizations with Web Technologies
+        is easier than you think. Your journey starts here!
       </div>
       <div className="home-starter-buttons">
         {enableCreateVizButton && (
