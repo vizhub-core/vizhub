@@ -68,7 +68,7 @@ export const Footer = () => {
 
         <div className="footer-links">
           <div className="footer-links-title">
-            <span>Follow us</span>
+            Follow us
           </div>
           <a
             href="https://twitter.com/viz_hub"
