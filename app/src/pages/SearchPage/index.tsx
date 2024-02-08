@@ -1,11 +1,22 @@
+import { SortId } from 'entities';
 import { AuthenticatedUserProvider } from '../../contexts/AuthenticatedUserContext';
+import {
+  InfosAndOwnersPageData,
+  InfosAndOwnersProvider,
+} from '../../contexts/InfosAndOwnersContext';
 import { Page, PageData } from '../Page';
 import { Body } from './Body';
+import { SectionSortProvider } from '../../contexts/SectionSortContext';
+import { searchPageDefaultSortId } from '../ExplorePage';
 
-export type SearchPageData = PageData & {
-  // The query string input by the user
-  query: string;
-};
+export type SearchPageData = PageData &
+  InfosAndOwnersPageData & {
+    // The initial sort order for the results,
+    // before the user has changed it client-side
+    sortId: SortId;
+    // The query string input by the user
+    query: string;
+  };
 
 export const SearchPage: Page = ({
   pageData,
@@ -17,7 +28,18 @@ export const SearchPage: Page = ({
       pageData.authenticatedUserSnapshot
     }
   >
-    <Body query={pageData.query} />
+    <SectionSortProvider
+      publicOnly
+      defaultSortId={searchPageDefaultSortId}
+    >
+      <InfosAndOwnersProvider
+        infoSnapshots={pageData.infoSnapshots}
+        ownerUserSnapshots={pageData.ownerUserSnapshots}
+        hasMoreInitially={pageData.hasMore}
+      >
+        <Body />
+      </InfosAndOwnersProvider>
+    </SectionSortProvider>
   </AuthenticatedUserProvider>
 );
 

@@ -44,6 +44,7 @@ export const GetInfosAndOwners = (gateways: Gateways) => {
     vizIds,
     authenticatedUserId,
     disablePagination,
+    query,
   }: {
     noNeedToFetchUsers: Array<UserId>;
     sectionId?: SectionId;
@@ -58,6 +59,10 @@ export const GetInfosAndOwners = (gateways: Gateways) => {
     vizIds?: Array<VizId>;
     authenticatedUserId?: UserId;
     disablePagination?: boolean;
+
+    // This is the search query entered by the user
+    // in the search box.
+    query?: string;
   }): Promise<Result<InfosAndOwners>> => {
     // Get the sort field from the sort query parameter.
     const sortField: SortField = getSortField(
@@ -94,6 +99,7 @@ export const GetInfosAndOwners = (gateways: Gateways) => {
       vizIds,
       visibilities,
       disablePagination,
+      query,
     };
 
     // Handle the "Shared with me" section.
