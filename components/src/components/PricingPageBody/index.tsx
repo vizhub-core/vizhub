@@ -4,6 +4,7 @@ import {
   freeTierSizeLimitMB,
   premiumTierSizeLimitMB,
 } from 'entities';
+import { Footer } from '../Footer';
 import { GreenCheckSVG } from '../Icons/sam/GreenCheckSVG';
 import { Button, ButtonGroup } from '../bootstrap';
 import { Feature } from './Feature';
@@ -312,6 +313,7 @@ export const PricingPageBody = ({
             </div>
           </div>
         </div>
+        <Footer />
       </div>
     </div>
   );

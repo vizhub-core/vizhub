@@ -13,12 +13,7 @@ import './styles.css';
 const enableHelpSVG = false;
 
 // Feature flag to enable/disable resources link
-const enableResourcesLink = false;
-
-// Feature flag to enable/disable pricing page link
-const enablePricingLink = true;
-
-const enableExploreLink = true;
+const enableResources = false;
 
 export const Header = ({
   authenticatedUserAvatarURL,
@@ -59,35 +54,40 @@ export const Header = ({
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="me-auto" />
         <Nav className="align-items-md-center">
-          {enableExploreLink && (
-            <Nav.Link href={exploreHref}>Explore</Nav.Link>
-          )}
+          {/* <Nav.Link href={exploreHref}>Explore</Nav.Link> */}
 
-          <Nav.Link
+          <Nav.Link href="/features">Features</Nav.Link>
+
+          {/* <Nav.Link
             href="https://vizhub.com/forum/"
             target="_blank"
             rel="noopener noreferrer"
           >
             Forum
-          </Nav.Link>
-          {enableResourcesLink && (
-            <Nav.Link
-              href={resourcesHref}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Resources
-            </Nav.Link>
+          </Nav.Link> */}
+          {enableResources && (
+            <Dropdown align="end">
+              <Dropdown.Toggle
+                variant="dark"
+                id="dropdown-resources"
+              >
+                Resources
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                <Dropdown.Item href="#resource1">
+                  Resource 1
+                </Dropdown.Item>
+                <Dropdown.Item href="#resource2">
+                  Resource 2
+                </Dropdown.Item>
+                <Dropdown.Item href="#resource3">
+                  Resource 3
+                </Dropdown.Item>
+                {/* Add more resources as needed */}
+              </Dropdown.Menu>
+            </Dropdown>
           )}
-          {enablePricingLink && (
-            <Nav.Link
-              href={pricingHref}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Pricing
-            </Nav.Link>
-          )}
+          <Nav.Link href={pricingHref}>Pricing</Nav.Link>
           <Nav.Link href={createVizHref}>Create</Nav.Link>
           {enableHelpSVG && (
             <Nav.Link
