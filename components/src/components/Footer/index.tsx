@@ -52,7 +52,7 @@ export const Footer = () => {
 
         <div className="footer-links">
           <div className="footer-links-title">
-            <span>Community</span>
+            Community
           </div>
           <a
             href={discordLink}
