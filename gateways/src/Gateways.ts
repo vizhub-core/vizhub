@@ -64,6 +64,7 @@ import { ImageHash } from 'entities/src/Images';
 // which defaults to 4 vizzes per row, we don't have
 // a partially filled row at the end.
 export const pageSize = 4 * 20;
+// export const pageSize = 5;
 
 export interface Gateways {
   type: 'DatabaseGateways' | 'MemoryGateways';

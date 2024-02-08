@@ -35,6 +35,9 @@ export interface VizKitAPI {
 
       // The page number that we want to use for pagination
       pageNumber: number;
+
+      // The search query from the search box
+      searchQuery?: string;
     }) => Promise<Result<InfosAndOwners>>;
 
     forkViz: (options: {
@@ -170,6 +173,7 @@ export const VizKit = ({
         sectionId?: SectionId;
         sortId: SortId;
         pageNumber: number;
+        searchQuery?: string;
       }) =>
         await postJSON(
           `${baseUrl}/get-infos-and-owners`,

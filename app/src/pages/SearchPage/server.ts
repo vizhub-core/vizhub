@@ -38,7 +38,7 @@ SearchPage.getPageData = async ({
   return {
     title: `VizHub Search Results`,
     authenticatedUserSnapshot,
-    query: query.query,
+    initialSearchQuery: query.query,
     infoSnapshots,
     ownerUserSnapshots,
     sortId,
