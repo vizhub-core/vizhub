@@ -1,5 +1,4 @@
 import { AboutPage } from './AboutPage';
-import { HomePage } from './HomePage/server';
 import { LandingPage } from './LandingPage/server';
 import { ProfilePage } from './ProfilePage/server';
 import { VizPage } from './VizPage/server';
@@ -13,11 +12,11 @@ import { AccountPage } from './AccountPage/server';
 import { ResourcesPage } from './ResourcesPage/server';
 import { KitchenSinkPage } from './KitchenSinkPage/server';
 import { CreateVizPage } from './CreateVizPage/server';
+// import { ExploreRedirect } from './ExploreRedirect';
 
 // Note: order matters (profile page should come last)
 // Need to update `client.js` as well
 export const pages = [
-  HomePage,
   LandingPage,
   AboutPage,
   VizPage,
@@ -25,6 +24,7 @@ export const pages = [
   BetaConfirmPage,
   SandboxPage,
   ExplorePage,
+  // ExploreRedirect,
   PricingPage,
   AccountPage,
   SearchPage,

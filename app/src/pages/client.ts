@@ -1,5 +1,4 @@
 import { AboutPage } from './AboutPage';
-import { HomePage } from './HomePage';
 import { LandingPage } from './LandingPage';
 import { ProfilePage } from './ProfilePage';
 import { VizPage } from './VizPage';
@@ -17,7 +16,6 @@ import { CreateVizPage } from './CreateVizPage';
 // Note: order matters (profile page should come last)
 // Need to update `server.js` as well
 export const pages = [
-  HomePage,
   LandingPage,
   AboutPage,
   VizPage,

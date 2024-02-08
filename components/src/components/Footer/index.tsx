@@ -14,18 +14,18 @@ export const Footer = () => {
         <div className="footer-links">
           <div className="footer-links-title">Platform</div>
           <a
+            href="/features"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Features
+          </a>
+          <a
             href="/pricing"
             target="_blank"
             rel="noreferrer"
           >
             Pricing
-          </a>
-          <a
-            href="/explore"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Explore
           </a>
           <a
             href="/create-Viz"

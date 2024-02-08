@@ -1,4 +1,3 @@
-import { useContext } from 'react';
 import { Footer } from '../Footer';
 import { Button } from '../bootstrap';
 import { image } from '../image';
@@ -7,9 +6,6 @@ import './styles.scss';
 const enableFooter = true;
 
 const headerBackgroundSrc = image('landing-header-bkg');
-const headerForegroundSrc = image(
-  'landing-page-ui-example-2',
-);
 
 const isPastFeb15 = new Date() > new Date('2024-02-15');
 
