@@ -158,7 +158,7 @@ export type {
   ImageMetadata,
   StoredImage,
 } from './Images';
-export { imageFromBase64 } from './Images';
+export { imageFromBase64, thumbnailWidth } from './Images';
 
 export type EntityName =
   | 'Info'
@@ -197,6 +197,9 @@ export {
   getUserDisplayName,
   getBio,
   getAnyoneCanEdit,
+  getVizThumbnailURL,
+  absoluteURL,
+  iframeSnippet,
 } from './accessors';
 
 export type { ResourceLockId } from './Lock';

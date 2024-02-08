@@ -1,11 +1,9 @@
 // Generates HTML for server-rendered meta tags.
 // From https://github.com/vizhub-core/vizhub/blob/main/vizhub-v2/packages/controllers/src/servePage.js
-// TODO update to remove beta. when we go live.
-// const absoluteURL = (relativeUrl) => 'https://vizhub.com' + relativeUrl;
-export const absoluteURL = (relativeUrl) =>
-  'https://vizhub.com' + relativeUrl;
 
-const oEmbedURL = absoluteURL('/oembed');
+import { absoluteURL } from 'entities';
+
+const oEmbedURL = absoluteURL('/api/oembed');
 
 // Generates HTML for server-rendered SEO meta tags.
 export const seoMetaTags = ({

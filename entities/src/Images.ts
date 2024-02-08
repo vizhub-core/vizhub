@@ -71,3 +71,6 @@ export interface StoredImage {
   // The image data as a base64 encoded string
   base64: string;
 }
+
+// The width in pixels of the thumbnail image
+export const thumbnailWidth = 300;
