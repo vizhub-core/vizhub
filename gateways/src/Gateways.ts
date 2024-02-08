@@ -366,6 +366,7 @@ export interface Gateways {
     sortOrder,
     includeTrashed,
     disablePagination,
+    query,
   }: {
     // owner
     //
@@ -425,6 +426,10 @@ export interface Gateways {
 
     // True if we want to disable pagination and return all results.
     disablePagination?: boolean;
+
+    // This is the search query entered by the user
+    // in the search box.
+    query?: string;
   }): Promise<Result<Array<Snapshot<Info>>>>;
 
   // getInfoBySlug

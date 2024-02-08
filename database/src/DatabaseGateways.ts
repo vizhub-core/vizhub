@@ -311,6 +311,7 @@ export const DatabaseGateways = ({
     visibilities = ['public'],
     vizIds,
     disablePagination = false,
+    query,
   }: {
     owner?: UserId;
     forkedFrom?: ResourceId;
@@ -321,6 +322,7 @@ export const DatabaseGateways = ({
     visibilities?: Array<string>;
     vizIds?: Array<VizId>;
     disablePagination?: boolean;
+    query?: string;
   }) =>
     new Promise((resolve) => {
       const entityName = 'Info';
@@ -341,14 +343,21 @@ export const DatabaseGateways = ({
           visibility: { $in: visibilities },
         }),
         ...(vizIds && { id: { $in: vizIds } }),
+        ...(query && {
+          $text: { $search: query },
+        }),
       };
 
-      const query = shareDBConnection.createFetchQuery(
+      // if (query) {
+      //   mongoQuery['$text'] = { $search: query };
+      // }
+
+      const fetchQuery = shareDBConnection.createFetchQuery(
         toCollectionName(entityName),
         mongoQuery,
         {},
         (error, results) => {
-          query.destroy();
+          fetchQuery.destroy();
           if (error) return resolve(err(error));
           resolve(
             ok(results.map((doc) => doc.toSnapshot())),
