@@ -36,6 +36,7 @@ export const SearchPage: Page = ({
         infoSnapshots={pageData.infoSnapshots}
         ownerUserSnapshots={pageData.ownerUserSnapshots}
         hasMoreInitially={pageData.hasMore}
+        searchQuery={pageData.initialSearchQuery}
       >
         <Body
           initialSearchQuery={pageData.initialSearchQuery}

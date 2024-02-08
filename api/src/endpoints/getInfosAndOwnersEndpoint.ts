@@ -22,6 +22,7 @@ export const getInfosAndOwnersEndpoint = ({
           sectionId,
           sortId,
           pageNumber,
+          searchQuery,
         } = req.body;
 
         if (noNeedToFetchUsers === undefined) {
@@ -54,6 +55,7 @@ export const getInfosAndOwnersEndpoint = ({
             sortId,
             pageNumber,
             authenticatedUserId,
+            query: searchQuery,
           }),
         );
       }
