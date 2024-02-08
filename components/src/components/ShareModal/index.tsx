@@ -40,7 +40,7 @@ export const ShareModal = ({
   linkToCopy: string;
   onLinkCopy: () => void;
   embedSnippetToCopy: string;
-  onEmbedSnippetCopy: () => void;
+  onEmbedSnippetCopy?: () => void;
   onClose: () => void;
   anyoneCanEdit: boolean;
   setAnyoneCanEdit: (anyoneCanEdit: boolean) => void;
