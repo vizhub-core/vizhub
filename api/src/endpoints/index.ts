@@ -18,6 +18,7 @@ import { upvoteVizEndpoint } from './upvoteVizEndpoint';
 import { unUpvoteVizEndpoint } from './unUpvoteVizEndpoint';
 import { isSlugAvailableEndpoint } from './isSlugAvailableEndpoint';
 import { getVizJSONEndpoint } from './getVizJSONEndpoint';
+import { oembedEndpoint } from './oembedEndpoint';
 
 export const endpoints = [
   healthCheck,
@@ -40,4 +41,5 @@ export const endpoints = [
   unUpvoteVizEndpoint,
   isSlugAvailableEndpoint,
   getVizJSONEndpoint,
+  oembedEndpoint,
 ];

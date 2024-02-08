@@ -26,6 +26,7 @@ import {
   getUserDisplayName,
   VizId,
   SlugKey,
+  getVizThumbnailURL,
 } from 'entities';
 import { useRuntime } from 'runtime';
 import {
@@ -39,7 +40,6 @@ import {
   getForksPageHref,
   getProfilePageHref,
   getVizPageHref,
-  getVizThumbnailURL,
 } from '../../../accessors';
 import { useRenderMarkdownHTML } from './useRenderMarkdownHTML';
 import { VizPageEditor } from './VizPageEditor';

@@ -10,6 +10,8 @@ import {
   User,
   defaultVizWidth,
   UpvoteId,
+  getVizThumbnailURL,
+  absoluteURL,
 } from 'entities';
 import { rollup } from 'rollup';
 import { compile } from 'svelte/compiler';
@@ -33,8 +35,6 @@ import {
   VizCache,
   createVizCache,
 } from 'runtime/src/v3Runtime/vizCache';
-import { getVizThumbnailURL } from '../../accessors';
-import { absoluteURL } from '../../seoMetaTags';
 
 setJSDOM(JSDOM);
 
@@ -89,7 +89,7 @@ VizPage.getPageData = async ({
     const userId = ownerUserSnapshot.data.id;
 
     // Get the Info entity of the Viz.
-    let infoResult = await getInfoByIdOrSlug({
+    const infoResult = await getInfoByIdOrSlug({
       userId,
       idOrSlug,
     });
@@ -97,7 +97,7 @@ VizPage.getPageData = async ({
       // Indicates viz not found
       return null;
     }
-    let infoSnapshot: Snapshot<Info> = infoResult.value;
+    const infoSnapshot: Snapshot<Info> = infoResult.value;
     let info: Info = infoSnapshot.data;
     const id = info.id;
 

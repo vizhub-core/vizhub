@@ -160,7 +160,7 @@ export const CollaboratorsSection = ({
           controlId="collaboratorsControl"
         >
           <Form.Label>Manage Collaborators</Form.Label>
-          {collaborators.length > 0 && (
+          {collaborators?.length > 0 && (
             <Form.Group className="mb-3">
               {collaborators.map((collaborator) => (
                 <CollaboratorEntry

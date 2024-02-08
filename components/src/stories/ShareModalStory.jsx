@@ -14,8 +14,12 @@ export const args = {
   onLinkSectionNavigate: () => {
     console.log('onLinkSectionNavigate');
   },
+  embedSnippetToCopy: `<iframe src="https://vizhub.com/curran/2ee9f785faee42e6b697c527cd196025?mode=embed" width="600" height="400" frameborder="0"></iframe>`,
   onEmbedSectionNavigate: () => {
     console.log('onEmbedSectionNavigate');
+  },
+  onEmbedSnippetCopy: () => {
+    console.log('onEmbedSnippetCopy');
   },
   onSnippetSectionNavigate: () => {
     console.log('onSnippetSectionNavigate');
@@ -38,6 +42,7 @@ export const args = {
     return [userJoe, userJane];
   },
   showAnyoneCanEdit: true,
+  showCollaboratorsSection: true,
 };
 
 const Story = () => {

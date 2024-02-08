@@ -3,4 +3,3 @@
 export { getForksPageHref } from './getForksPageHref';
 export { getProfilePageHref } from './getProfilePageHref';
 export { getVizPageHref } from './getVizPageHref';
-export { getVizThumbnailURL } from './getVizThumbnailURL';

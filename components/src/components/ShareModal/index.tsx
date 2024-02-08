@@ -4,21 +4,24 @@ import { LinkSection } from './LinkSection';
 import { CollaboratorsSection } from './CollaboratorsSection';
 import { ShareSectionsNav } from './ShareSectionsNav';
 import { Plan, User } from 'entities';
+import { EmbedSection } from './EmbedSection';
 import './styles.scss';
 
 const navItems = [
   { key: 'link', title: 'Link' },
+  { key: 'embed', title: 'Embed' },
   { key: 'collaborators', title: 'Collaborators' },
-  // { key: 'embed', title: 'Embed' },
   // { key: 'deploy', title: 'Deploy' },
   // { key: 'snippet', title: 'Snippet' },
 ];
 
 export const ShareModal = ({
   show,
-  linkToCopy,
   onClose,
+  linkToCopy,
   onLinkCopy,
+  embedSnippetToCopy,
+  onEmbedSnippetCopy,
   anyoneCanEdit,
   setAnyoneCanEdit,
   onLinkSectionNavigate,
@@ -35,8 +38,10 @@ export const ShareModal = ({
 }: {
   show: boolean;
   linkToCopy: string;
-  onClose: () => void;
   onLinkCopy: () => void;
+  embedSnippetToCopy: string;
+  onEmbedSnippetCopy?: () => void;
+  onClose: () => void;
   anyoneCanEdit: boolean;
   setAnyoneCanEdit: (anyoneCanEdit: boolean) => void;
   onLinkSectionNavigate?: () => void;
@@ -142,6 +147,18 @@ export const ShareModal = ({
             onLinkCopy={onLinkCopy}
           />
         )}
+        {section === 'embed' && (
+          <EmbedSection
+            embedSnippetToCopy={embedSnippetToCopy}
+            onEmbedSnippetCopy={onEmbedSnippetCopy}
+          />
+        )}
+        {/* {section === 'snippet' && (
+          <SnippetSection
+            snippetToCopy={embedSnippetToCopy}
+            onSnippetCopy={onEmbedSnippetCopy}
+          />
+        )} */}
       </Modal.Body>
       <Modal.Footer>
         <Button variant="primary" onClick={onClose}>

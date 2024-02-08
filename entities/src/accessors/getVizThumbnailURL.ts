@@ -1,4 +1,4 @@
-import { CommitId } from 'entities';
+import { CommitId } from '..';
 
 // Gets the URL for a viz thumbnail.
 export const getVizThumbnailURL = (
