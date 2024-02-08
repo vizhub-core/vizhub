@@ -4,8 +4,8 @@ import { LinkSection } from './LinkSection';
 import { CollaboratorsSection } from './CollaboratorsSection';
 import { ShareSectionsNav } from './ShareSectionsNav';
 import { Plan, User } from 'entities';
-import './styles.scss';
 import { EmbedSection } from './EmbedSection';
+import './styles.scss';
 
 const navItems = [
   { key: 'link', title: 'Link' },
