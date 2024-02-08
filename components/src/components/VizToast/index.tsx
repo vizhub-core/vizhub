@@ -48,7 +48,7 @@ export const VizToast = ({
       <Toast
         className={isWarning ? 'bg-warning' : ''}
         delay={delay}
-        autohide={false}
+        autohide={autohide}
         onClose={onClose}
       >
         <Toast.Header
