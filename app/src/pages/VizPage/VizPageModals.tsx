@@ -12,6 +12,7 @@ import {
   Visibility,
   getAnyoneCanEdit,
   getUserDisplayName,
+  iframeSnippet,
 } from 'entities';
 import { VizSettings } from './useVizMutations';
 import { useCallback, useContext, useMemo } from 'react';
@@ -20,6 +21,7 @@ import { getVizPageHref } from '../../accessors';
 import { VizKitAPI } from 'api/src/VizKit';
 import { useOnTrashViz } from './useOnTrashViz';
 import { useValidateSlug } from './useValidateSlug';
+import { copyToClipboard } from './copyToClipboard';
 
 export const VizPageModals = ({
   info,
@@ -110,6 +112,16 @@ export const VizPageModals = ({
     [ownerUser, info],
   );
 
+  const embedSnippetToCopy = useMemo(
+    () =>
+      iframeSnippet({
+        ownerUserName: ownerUser.userName,
+        idOrSlug: info.slug || info.id,
+        height: content.height,
+      }),
+    [ownerUser, info, content],
+  );
+
   // Handle when the user confirms that they
   // want to delete the viz (put it in the trash).
   const onTrashViz = useOnTrashViz({
@@ -119,26 +131,12 @@ export const VizPageModals = ({
   });
 
   const handleLinkCopy = useCallback(() => {
-    // Check if the Clipboard API is available
-    if (navigator.clipboard && linkToCopy) {
-      // Copy the link to the clipboard
-      navigator.clipboard
-        .writeText(linkToCopy)
-        // .then(() => {
-        //   // TODO: show a toast or tooltip
-        //   console.log(
-        //     'Link copied to clipboard successfully!',
-        //   );
-        // })
-        .catch((err) => {
-          console.error('Failed to copy link: ', err);
-        });
-    } else {
-      console.error(
-        'Clipboard API not available or link is empty.',
-      );
-    }
+    copyToClipboard(linkToCopy);
   }, [linkToCopy]);
+
+  const handleEmbedSnippetCopy = useCallback(() => {
+    copyToClipboard(embedSnippetToCopy);
+  }, [embedSnippetToCopy]);
 
   // Support typeahead for adding collaborators
   const handleCollaboratorSearch = useCallback(
@@ -247,6 +245,8 @@ export const VizPageModals = ({
           onClose={toggleShareModal}
           linkToCopy={linkToCopy}
           onLinkCopy={handleLinkCopy}
+          embedSnippetToCopy={embedSnippetToCopy}
+          onEmbedSnippetCopy={handleEmbedSnippetCopy}
           anyoneCanEdit={anyoneCanEdit}
           setAnyoneCanEdit={setAnyoneCanEdit}
           showAnyoneCanEdit={showAnyoneCanEdit}

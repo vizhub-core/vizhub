@@ -26,7 +26,7 @@ export const EmbedSection = ({
   const tooltipTarget = useRef(null);
 
   const handleClick = useCallback(() => {
-    onEmbedSnippetCopy();
+    onEmbedSnippetCopy?.();
     setShowTooltip(true);
     setTimeout(() => setShowTooltip(false), 4000);
   }, [onEmbedSnippetCopy]);
