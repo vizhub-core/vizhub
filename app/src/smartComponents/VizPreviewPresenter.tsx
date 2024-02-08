@@ -4,15 +4,13 @@ import {
   Snapshot,
   User,
   getUserDisplayName,
+  thumbnailWidth,
+  getVizThumbnailURL,
 } from 'entities';
 import { VizPreview } from 'components/src/components/VizPreview';
 import { useShareDBDocData } from '../useShareDBDocData';
-import { getVizThumbnailURL } from '../accessors';
 import { formatTimestamp } from '../accessors/formatTimestamp';
 import { getAvatarURL } from '../accessors/getAvatarURL';
-
-// The width in pixels of the thumbnail image
-const thumbnailWidth = 300;
 
 export const VizPreviewPresenter = ({
   infoSnapshot,

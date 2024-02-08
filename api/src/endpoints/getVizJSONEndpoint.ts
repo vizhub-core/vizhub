@@ -6,7 +6,7 @@ import {
   missingParameterError,
 } from 'gateways';
 import { accessDeniedError } from 'gateways/src/errors';
-
+// https://github.com/vizhub-core/vizhub-legacy/blob/2a41920a083e08aa5e3729dd437c629678e71093/vizhub-v2/packages/controllers/src/oembedController.js#L5
 export const getVizJSONEndpoint = ({
   app,
   gateways,
@@ -17,7 +17,6 @@ export const getVizJSONEndpoint = ({
   const { getInfo, getContent } = gateways;
   app.get(
     '/api/get-viz/:userName/:vizIdOrSlug.json',
-
     express.json(),
     async (req, res) => {
       // Get vizId param
