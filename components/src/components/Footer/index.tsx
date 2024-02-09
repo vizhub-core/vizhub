@@ -5,36 +5,43 @@ import { discordLink } from '../discordLink';
 import './styles.scss';
 export const Footer = () => {
   return (
-    <div className="vh-footer">
-      <div className="footer-container">
-        <LogoSVG height={50} />
-        <div className="footer-links">
-          <div className="footer-links-title">Platform</div>
-          <a href="/pricing">Pricing</a>
-          <a href="/explore">Explore</a>
-          <a href="/create-Viz">Create</a>
+    <>
+      <div className="vh-footer">
+        <div className="footer-container">
+          <LogoSVG height={50} />
+          <div className="footer-links">
+            <div className="footer-links-title">
+              Platform
+            </div>
+            <a href="/pricing">Pricing</a>
+            <a href="/explore">Explore</a>
+            <a href="/create-Viz">Create</a>
 
-          {/* <a href="/terms">Terms</a> */}
-        </div>
-        <div className="footer-links">
-          <div className="footer-links-title">Contact</div>
-
-          <a href="mailto:contact@vizhub.com">Email</a>
-          <a href="https://calendly.com/curran-kelleher/data-visualization-consultation">
-            Consulting
-          </a>
-        </div>
-
-        <div className="footer-links">
-          <div className="footer-links-title">
-            <span>Community</span>
+            {/* <a href="/terms">Terms</a> */}
           </div>
-          <a href={discordLink}>Discord</a>
-          <a href="/forum">Forum</a>
-        </div>
+          <div className="footer-links">
+            <div className="footer-links-title">
+              Contact
+            </div>
 
-        <div className="footer-links">
-          <div className="footer-links-title">
+            <a href="mailto:contact@vizhub.com">Email</a>
+            <a href="https://calendly.com/curran-kelleher/data-visualization-consultation">
+              Consulting
+            </a>
+          </div>
+
+          <div className="footer-links">
+            <div className="footer-links-title">
+              <span>Community</span>
+            </div>
+            <a href={discordLink}>Discord</a>
+            <a href="/forum">Forum</a>
+          </div>
+        </div>
+      </div>
+      <div className="footer-links-2">
+        <div className="footer-links-title-2">
+          <div>
             <span>Follow us</span>
           </div>
           <a href="https://twitter.com/viz_hub">Twitter</a>
@@ -50,6 +57,6 @@ export const Footer = () => {
           </a>
         </div>
       </div>
-    </div>
+    </>
   );
 };
