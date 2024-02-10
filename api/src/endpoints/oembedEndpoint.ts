@@ -15,9 +15,14 @@ import {
   err,
   missingParameterError,
 } from 'gateways';
-import { accessDeniedError } from 'gateways/src/errors';
+import {
+  accessDeniedError,
+  invariantViolationError,
+} from 'gateways/src/errors';
 import { GetInfoByIdOrSlug } from 'interactors';
 
+// V2:
+// https://github.com/vizhub-core/vizhub-legacy/blob/2a41920a083e08aa5e3729dd437c629678e71093/vizhub-v2/packages/controllers/src/oembedController.js#L5
 export const oembedEndpoint = ({
   app,
   gateways,
@@ -28,11 +33,29 @@ export const oembedEndpoint = ({
   const { getUserByUserName, getContent } = gateways;
   const getInfoByIdOrSlug = GetInfoByIdOrSlug(gateways);
   app.get(
-    '/api/oembed/:userName/:idOrSlug',
+    '/api/oembed',
     express.json(),
     async (req, res) => {
-      const idOrSlug: VizId | string = req.params?.idOrSlug;
-      const ownerUserName: string = req.params?.userName;
+      // e.g. "https://vizhub.com/xujames0214/81f86931ad864c4db73efba71e508cda"
+      const url: string = req.query.url as string;
+      console.log('url:', url);
+      if (url === undefined) {
+        return res.send(err(missingParameterError('url')));
+      }
+      const match = url.match(
+        /https:\/\/vizhub.com\/([^/]+)\/([^/]+)/,
+      );
+      if (match === null) {
+        return res.send(
+          err(
+            invariantViolationError(
+              'Invalid URL. Expected format: https://vizhub.com/:userName/:vizId',
+            ),
+          ),
+        );
+      }
+      const ownerUserName = match[1];
+      const idOrSlug = match[2];
 
       // Validate parameters
       if (idOrSlug === undefined) {
