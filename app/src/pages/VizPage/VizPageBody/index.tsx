@@ -47,6 +47,7 @@ import { useMarkUncommitted } from '../useMarkUncommitted';
 import { enableManualRun } from 'runtime/src/useRuntime';
 import { formatTimestamp } from '../../../accessors/formatTimestamp';
 import { useSearchParams } from 'react-router-dom';
+import { LogoSVG } from 'components/src/components/Icons/LogoSVG';
 
 const debug = false;
 
@@ -117,6 +118,12 @@ export const VizPageBody = ({
   const [searchParams] = useSearchParams();
   const isEmbedMode = useMemo(
     () => searchParams.get('mode') === 'embed',
+    [searchParams],
+  );
+
+  // ?embed=branded
+  const isEmbedBranded = useMemo(
+    () => searchParams.get('embed') === 'branded',
     [searchParams],
   );
 
@@ -358,7 +365,25 @@ export const VizPageBody = ({
   }, []);
 
   return isEmbedMode ? (
-    renderVizRunner()
+    <>
+      {renderVizRunner()}
+      {isEmbedBranded && (
+        <a
+          href={getVizPageHref({
+            ownerUser,
+            info,
+            absolute: true,
+          })}
+          style={{
+            position: 'fixed',
+            bottom: '10px',
+            right: '10px',
+          }}
+        >
+          <LogoSVG />
+        </a>
+      )}
+    </>
   ) : (
     <div className="vh-page">
       <SmartHeader />
