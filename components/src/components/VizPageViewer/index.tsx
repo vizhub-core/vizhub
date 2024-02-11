@@ -51,19 +51,6 @@ export const VizPageViewer = ({
   const [editableTitle, setEditableTitle] =
     useState(vizTitle);
 
-  // const handleRenameIconClick = () => {
-  //   setIsEditingTitle(true);
-  // };
-
-  // const handleTitleChange = (e) => {
-  //   setEditableTitle(e.target.value);
-  // };
-
-  // const handleTitleSubmit = () => {
-  //   setVizTitle(editableTitle);
-  //   setIsEditingTitle(false);
-  // };
-
   const handleRenameIconClick = useCallback(() => {
     setIsEditingTitle(true);
   }, []);
@@ -98,11 +85,6 @@ export const VizPageViewer = ({
     resizeObserver.observe(svgRef.current);
     return () => resizeObserver.disconnect();
   }, []);
-
-  // const forksCountFormatted = useMemo(
-  //   () => commaFormat(forksCount),
-  //   [forksCount],
-  // );
 
   return (
     <div className="vh-viz-page-viewer">
@@ -168,8 +150,6 @@ export const VizPageViewer = ({
           )}
           <div className="title-bar-right">
             <a href={forksPageHref} className="forks-link">
-              {/* {forksCountFormatted} fork
-              {forksCount === 1 ? '' : 's'} */}
               <ForksWidget forksCount={forksCount} />
             </a>
             <UpvoteWidget

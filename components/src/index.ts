@@ -16,6 +16,8 @@ export { ShareModal } from './components/ShareModal';
 export { DeleteVizConfirmationModal } from './components/DeleteVizConfirmationModal';
 export { CreateVizPageBody } from './components/CreateVizPageBody';
 export { VizPageUpgradeBanner } from './components/VizPageUpgradeBanner';
+export { StargazersPageBody } from './components/StargazersPageBody';
+export { Stargazer } from './components/Stargazer';
 export { KitchenSinkApp } from './KitchenSinkApp';
 
 import './components/index.scss';
