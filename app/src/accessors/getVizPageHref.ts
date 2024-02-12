@@ -20,5 +20,5 @@ export const getVizPageHref = ({
   embedMode?: boolean;
 }) =>
   `${absolute ? domain : ''}/${ownerUser.userName}/${
-    info.id
+    info.slug || info.id
   }${embedMode ? '?mode=embed' : ''}`;
