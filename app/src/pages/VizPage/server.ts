@@ -46,6 +46,7 @@ const debug = false;
 VizPage.getPageData = async ({
   gateways,
   params,
+  query,
   auth0User,
 }): Promise<VizPageData> => {
   const {
@@ -159,10 +160,23 @@ VizPage.getPageData = async ({
     }
     const { title, owner, forkedFrom, end } = info;
 
+    const isEmbedMode = query.mode === 'embed';
+
     // If the viz has a slug, and we are using its id in the URL,
+    // AND we are not in embed mode,
     // then redirect to the URL that uses the slug.
-    if (info.slug && idOrSlug !== info.slug) {
-      const redirect = `/${params.userName}/${info.slug}`;
+    if (
+      !isEmbedMode &&
+      info.slug &&
+      idOrSlug !== info.slug
+    ) {
+      let redirect = `/${params.userName}/${info.slug}`;
+
+      // Include any existing parameters in the redirect URL.
+      // e.g. `?mode=embed`
+      if (query) {
+        redirect += `?${new URLSearchParams(query).toString()}`;
+      }
 
       // @ts-ignore
       return { redirect };

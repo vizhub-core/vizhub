@@ -1,4 +1,9 @@
-import { useCallback, useEffect, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import {
   Files,
   ShareDBDoc,
@@ -42,6 +47,7 @@ import { useUpvoting } from './useUpvoting';
 import { useSlugAutoNavigate } from './useSlugAutoNavigate';
 import { useShareDBError } from './useShareDBError';
 import './styles.scss';
+import { useSearchParams } from 'react-router-dom';
 
 const vizKit = VizKit({ baseUrl: '/api' });
 
@@ -236,8 +242,29 @@ export const VizPage: Page = ({
     toggleSettingsModal,
   });
 
+  // Embed mode - to make the viz full screen
+  // ?mode=embed
+  const [searchParams] = useSearchParams();
+  const isEmbedMode = useMemo(
+    () => searchParams.get('mode') === 'embed',
+    [searchParams],
+  );
+
+  // ?embed=branded
+  const isEmbedBranded = useMemo(
+    () => searchParams.get('embed') === 'branded',
+    [searchParams],
+  );
+
+  // Hide mode - to hide the viewer and only show the editor
+  // ?mode=hide
+  const isHideMode = useMemo(
+    () => searchParams.get('mode') === 'hide',
+    [searchParams],
+  );
+
   // Navigates the user to the new URL when the slug is changed.
-  useSlugAutoNavigate(info);
+  useSlugAutoNavigate({ info, isEmbedMode });
 
   // Saves the title when the user edits it.
   const setVizTitle = useSetVizTitle(submitInfoOperation);
@@ -307,6 +334,9 @@ export const VizPage: Page = ({
             isUpvoted,
             handleUpvoteClick,
             slugResolutionCache,
+            isEmbedMode,
+            isEmbedBranded,
+            isHideMode,
           }}
         />
       </SplitPaneResizeProvider>

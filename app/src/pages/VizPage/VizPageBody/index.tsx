@@ -78,6 +78,9 @@ export const VizPageBody = ({
   isUpvoted,
   handleUpvoteClick,
   slugResolutionCache,
+  isEmbedMode,
+  isEmbedBranded,
+  isHideMode,
 }: {
   info: Info;
   content: Content;
@@ -107,31 +110,13 @@ export const VizPageBody = ({
   isUpvoted: boolean;
   handleUpvoteClick: () => void;
   slugResolutionCache: Record<SlugKey, VizId>;
+  isEmbedMode: boolean;
+  isEmbedBranded: boolean;
+  isHideMode: boolean;
 }) => {
   // The currently authenticated user, if any.
   const authenticatedUser: User | null = useContext(
     AuthenticatedUserContext,
-  );
-
-  // Embed mode - to make the viz full screen
-  // ?mode=embed
-  const [searchParams] = useSearchParams();
-  const isEmbedMode = useMemo(
-    () => searchParams.get('mode') === 'embed',
-    [searchParams],
-  );
-
-  // ?embed=branded
-  const isEmbedBranded = useMemo(
-    () => searchParams.get('embed') === 'branded',
-    [searchParams],
-  );
-
-  // Hide mode - to hide the viewer and only show the editor
-  // ?mode=hide
-  const isHideMode = useMemo(
-    () => searchParams.get('mode') === 'hide',
-    [searchParams],
   );
 
   // Marks the viz as uncommitted and adds the
