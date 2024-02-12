@@ -124,10 +124,20 @@ VizPage.getPageData = async ({
     const vizAccess: VizAccess =
       verifyVizAccessResult.value;
 
+    // Access control: Verify that the user has read access to the viz.
+    // If not, block access to the viz.
     if (!vizAccess[READ]) {
       // console.log('User does not have read access to viz');
       return null;
     }
+
+    // Access control: Verify that the user has write access to the viz.
+    // This is used to determine whether to show the "Settings" button.
+    const canUserEditViz: boolean = vizAccess[WRITE];
+
+    // Access control: Verify that the user has delete access to the viz.
+    // This is used to determine whether to show the "Delete" button.
+    const canUserDeleteViz: boolean = vizAccess[DELETE];
 
     // If the viz is not committed, then commit it.
     if (!info.committed) {
@@ -153,10 +163,7 @@ VizPage.getPageData = async ({
     // then redirect to the URL that uses the slug.
     if (info.slug && idOrSlug !== info.slug) {
       const redirect = `/${params.userName}/${info.slug}`;
-      // console.log(
-      //   "Redirecting to viz's canonical URL:",
-      //   redirect,
-      // );
+
       // @ts-ignore
       return { redirect };
     }
@@ -182,14 +189,6 @@ VizPage.getPageData = async ({
       // @ts-ignore
       return { redirect };
     }
-
-    // Access control: Verify that the user has write access to the viz.
-    // This is used to determine whether to show the "Settings" button.
-    const canUserEditViz: boolean = vizAccess[WRITE];
-
-    // Access control: Verify that the user has delete access to the viz.
-    // This is used to determine whether to show the "Delete" button.
-    const canUserDeleteViz: boolean = vizAccess[DELETE];
 
     // If we're here, then the user has read access to the viz,
     // so it's worth fetching the content.
