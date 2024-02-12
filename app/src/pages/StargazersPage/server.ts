@@ -2,9 +2,11 @@ import xss from 'xss';
 import {
   Info,
   Snapshot,
+  Timestamp,
+  Upvote,
   User,
   UserId,
-  VizId,
+  getUserDisplayName,
 } from 'entities';
 import { Gateways, Result } from 'gateways';
 import { Auth0User } from '../Page';
@@ -13,32 +15,61 @@ import {
   StargazersPage,
   StargazersPageData,
 } from './index';
+import { GetInfoByIdOrSlug } from 'interactors';
+import { getProfilePageHref } from '../../accessors';
+import { getAvatarURL } from '../../accessors/getAvatarURL';
 
 StargazersPage.getPageData = async ({
   gateways,
-  params,
+  params: { userName, idOrSlug },
   auth0User,
-}: {
-  gateways: Gateways;
-  auth0User: Auth0User | null;
-  params: { id: string };
 }): Promise<StargazersPageData> => {
-  const starredVizId: VizId = params.id;
-  const { getUsersByIds, getInfo, getUpvotes } = gateways;
+  const getInfoByIdOrSlug = GetInfoByIdOrSlug(gateways);
+  const {
+    getUsersByIds,
+    getInfo,
+    getUpvotes,
+    getUser,
+    getUserByUserName,
+  } = gateways;
 
+  // Get the User entity for the owner of the viz.
+  const ownerUserResult = await getUserByUserName(userName);
+  if (ownerUserResult.outcome === 'failure') {
+    console.log('Error when fetching owner user:');
+    console.log(ownerUserResult.error);
+    return null;
+  }
+  const ownerUserSnapshot = ownerUserResult.value;
+  const starredVizOwnerUser: User = ownerUserSnapshot.data;
+
+  // Get the Info entity of the Viz.
+  const infoResult = await getInfoByIdOrSlug({
+    userId: starredVizOwnerUser.id,
+    idOrSlug,
+  });
+  if (infoResult.outcome === 'failure') {
+    return null;
+  }
+  const infoSnapshot: Snapshot<Info> = infoResult.value;
+  const starredVizInfo: Info = infoSnapshot.data;
+
+  // Get the upvotes for the viz.
   const getUpvotesResult = await getUpvotes(null, [
-    starredVizId,
+    starredVizInfo.id,
   ]);
   if (getUpvotesResult.outcome === 'failure') {
     console.log('Error when fetching upvotes:');
     console.log(getUpvotesResult.error);
     return null;
   }
+  const upvotes: Array<Upvote> = getUpvotesResult.value.map(
+    (snapshot) => snapshot.data,
+  );
 
-  const upvotes = getUpvotesResult.value;
-
+  // Get all the users who upvoted the viz.
   const userIds: Array<UserId> = upvotes.map(
-    (upvote) => upvote.data.user,
+    (upvote) => upvote.user,
   );
   const userSnapshotsResult: Result<Array<Snapshot<User>>> =
     await getUsersByIds(userIds);
@@ -47,42 +78,43 @@ StargazersPage.getPageData = async ({
     console.log(userSnapshotsResult.error);
     return null;
   }
-  // userProfileHref={getProfilePageHref(user)}
-  // userAvatarURL={getAvatarURL(user)}
-  // userDisplayName={getUserDisplayName(user)}
+  const usersMap: Record<UserId, User> =
+    userSnapshotsResult.value.reduce((acc, snapshot) => {
+      acc[snapshot.data.id] = snapshot.data;
+      return acc;
+    }, {});
 
+  // Compute the stargazers.
+  const stargazers: Array<{
+    userProfileHref: string;
+    userAvatarURL: string;
+    userDisplayName: string;
+    upvotedTimestamp: Timestamp;
+  }> = upvotes.map((upvote) => {
+    const user = usersMap[upvote.user];
+    return {
+      userProfileHref: getProfilePageHref(user),
+      userAvatarURL: getAvatarURL(user),
+      userDisplayName: getUserDisplayName(user),
+      upvotedTimestamp: upvote.timestamp,
+    };
+  });
+
+  // Get the authenticated user.
   const { authenticatedUserSnapshot } =
     await getAuthenticatedUser({
       gateways,
       auth0User,
     });
 
-  // Get the Info snapshot for the forked-from viz
-  const forkedFromInfoResult = await getInfo(forkedFrom);
-  if (forkedFromInfoResult.outcome === 'failure') {
-    console.log('Error when fetching forked-from info:');
-    console.log(forkedFromInfoResult.error);
-    return null;
-  }
-  const forkedFromInfoSnapshot = forkedFromInfoResult.value;
-  const forkedFromInfo: Info = forkedFromInfoSnapshot.data;
-
-  // Get the owner of the forked-from viz
-  const forkedFromOwnerResult = await getUser(
-    forkedFromInfo.owner,
-  );
-  if (forkedFromOwnerResult.outcome === 'failure') {
-    console.log('Error when fetching forked-from owner:');
-    console.log(forkedFromOwnerResult.error);
-    return null;
-  }
-  const forkedFromOwnerUserSnapshot =
-    forkedFromOwnerResult.value;
-
-  return {
-    title: `Forks of ${xss(forkedFromInfo.title)}`,
+  const pageDate: StargazersPageData = {
+    title: `Stargazers of ${xss(starredVizInfo.title)}`,
     authenticatedUserSnapshot,
+    starredVizInfo,
+    starredVizOwnerUser,
+    stargazers,
   };
+  return pageDate;
 };
 
 export { StargazersPage };

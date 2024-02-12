@@ -1,0 +1,27 @@
+.stargazer {
+  &-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    text-decoration: none;
+    img {
+      box-shadow: var(--vh-box-shadow);
+    }
+    h4 {
+      color: var(--vh-color-neutral-01);
+      margin-bottom: 0px;
+    }
+  }
+  &-left:hover {
+    color: var(--bs-link-color);
+    text-decoration: underline;
+  }
+  &-right {
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+    align-items: flex-end;
+    color: var(--vh-color-neutral-03);
+  }
+}

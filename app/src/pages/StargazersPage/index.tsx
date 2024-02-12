@@ -1,16 +1,8 @@
-import {
-  Timestamp,
-  User,
-  getUserDisplayName,
-} from 'entities';
+import { Info, Timestamp, User } from 'entities';
 import { AuthenticatedUserProvider } from '../../contexts/AuthenticatedUserContext';
 import { Page, PageData } from '../Page';
 import { Body } from './Body';
-import {
-  getProfilePageHref,
-  getVizPageHref,
-} from '../../accessors';
-import { getAvatarURL } from '../../accessors/getAvatarURL';
+import { getVizPageHref } from '../../accessors';
 import { formatTimestamp } from '../../accessors/formatTimestamp';
 import { Stargazer } from 'components';
 
@@ -21,9 +13,8 @@ export type StargazersPageData = PageData & {
     userDisplayName: string;
     upvotedTimestamp: Timestamp;
   }>;
-  authenticatedUserSnapshot;
-  starredVizInfo;
-  starredVizOwnerUser;
+  starredVizInfo: Info;
+  starredVizOwnerUser: User;
 };
 
 // Inspired by https://github.com/vitejs/vite-plugin-react/blob/main/playground/ssr-react/src/pages/Home.jsx
@@ -56,9 +47,10 @@ export const StargazersPage: Page = ({
               upvotedTimestamp,
             }) => (
               <Stargazer
-                userProfileHref={getProfilePageHref(user)}
-                userAvatarURL={getAvatarURL(user)}
-                userDisplayName={getUserDisplayName(user)}
+                key={userProfileHref}
+                userProfileHref={userProfileHref}
+                userAvatarURL={userAvatarURL}
+                userDisplayName={userDisplayName}
                 starredDateFormatted={formatTimestamp(
                   upvotedTimestamp,
                 )}
@@ -71,4 +63,4 @@ export const StargazersPage: Page = ({
   </AuthenticatedUserProvider>
 );
 
-StargazersPage.path = '/:userName/:id/stargazers';
+StargazersPage.path = '/:userName/:idOrSlug/stargazers';

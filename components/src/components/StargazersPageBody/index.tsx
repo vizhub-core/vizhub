@@ -19,7 +19,9 @@ export const StargazersPageBody = ({
             <a href={starredVizHref}>{starredVizTitle}</a>
           </h1>
         </div>
-        {renderStargazers()}
+        <div className="stargazers-container">
+          {renderStargazers()}
+        </div>
       </div>
     </div>
   );

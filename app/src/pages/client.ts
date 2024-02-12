@@ -12,6 +12,7 @@ import { AccountPage } from './AccountPage';
 import { ResourcesPage } from './ResourcesPage';
 import { KitchenSinkPage } from './KitchenSinkPage';
 import { CreateVizPage } from './CreateVizPage';
+import { StargazersPage } from './StargazersPage';
 
 // Note: order matters (profile page should come last)
 // Need to update `server.js` as well
@@ -20,6 +21,7 @@ export const pages = [
   AboutPage,
   VizPage,
   ForksPage,
+  StargazersPage,
   BetaConfirmPage,
   SandboxPage,
   ExplorePage,

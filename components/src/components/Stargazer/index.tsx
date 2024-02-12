@@ -1,3 +1,4 @@
+import './styles.scss';
 export const Stargazer = ({
   userProfileHref,
   userAvatarURL,
