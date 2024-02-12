@@ -64,4 +64,4 @@ export const ForksPage: Page = ({
   </AuthenticatedUserProvider>
 );
 
-ForksPage.path = '/:userName/:id/forks';
+ForksPage.path = '/:userName/:idOrSlug/forks';

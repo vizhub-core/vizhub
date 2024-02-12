@@ -1,4 +1,5 @@
 import { StarSVG } from '../Icons/sam/StarSVG';
+import { OverlayTrigger, Tooltip } from '../bootstrap';
 import './styles.scss';
 
 export const UpvoteWidget = ({
@@ -12,16 +13,36 @@ export const UpvoteWidget = ({
       isUpvoted ? ' upvoted' : ''
     }`}
   >
-    <StarSVG onClick={onClick} />
-    <a
-      href={stargazersHref}
-      target="_blank"
-      rel="noopener noreferrer"
+    <OverlayTrigger
+      placement="top"
+      overlay={
+        <Tooltip id="full-screen-icon-tooltip">
+          Star this viz
+        </Tooltip>
+      }
     >
-      <strong>{upvotesCount}</strong>
-      <div className="widget-label">
-        Star{upvotesCount === 1 ? '' : 's'}
-      </div>
-    </a>
+      <i className="icon-button icon-button-light">
+        <StarSVG onClick={onClick} />
+      </i>
+    </OverlayTrigger>
+    <OverlayTrigger
+      placement="top"
+      overlay={
+        <Tooltip id="full-screen-icon-tooltip">
+          View Stargazers
+        </Tooltip>
+      }
+    >
+      <a
+        href={stargazersHref}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <strong>{upvotesCount}</strong>
+        <div className="widget-label">
+          Star{upvotesCount === 1 ? '' : 's'}
+        </div>
+      </a>
+    </OverlayTrigger>
   </div>
 );

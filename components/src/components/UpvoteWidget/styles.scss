@@ -3,7 +3,7 @@
   align-items: center;
   color: var(--vh-color-neutral-03);
   font-weight: 500;
-  gap: 4px;
+  gap: 2px;
   a {
     display: flex;
     align-items: center;
@@ -11,10 +11,14 @@
     text-decoration: none;
     gap: 4px;
   }
-  svg {
-    color: var(--vh-color-neutral-04);
-    cursor: pointer;
-  }
+  // .star-icon {
+  //   // background-color: red;
+  //   // padding: 4px;
+  //   display: flex;
+  //   color: var(--vh-color-neutral-04);
+  //   cursor: pointer;
+  // }
+
   .widget-label {
     @media (max-width: 1200px) {
       display: none;
