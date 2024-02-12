@@ -1,9 +1,16 @@
 .vh-upvote-widget {
   display: flex;
   align-items: center;
-  gap: 4px;
   color: var(--vh-color-neutral-03);
   font-weight: 500;
+  gap: 4px;
+  a {
+    display: flex;
+    align-items: center;
+    color: var(--vh-color-neutral-03);
+    text-decoration: none;
+    gap: 4px;
+  }
   svg {
     color: var(--vh-color-neutral-04);
     cursor: pointer;
