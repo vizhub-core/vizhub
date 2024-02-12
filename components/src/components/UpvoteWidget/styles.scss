@@ -1,13 +1,24 @@
 .vh-upvote-widget {
   display: flex;
   align-items: center;
-  gap: 4px;
   color: var(--vh-color-neutral-03);
   font-weight: 500;
-  svg {
-    color: var(--vh-color-neutral-04);
-    cursor: pointer;
+  gap: 2px;
+  a {
+    display: flex;
+    align-items: center;
+    color: var(--vh-color-neutral-03);
+    text-decoration: none;
+    gap: 4px;
   }
+  // .star-icon {
+  //   // background-color: red;
+  //   // padding: 4px;
+  //   display: flex;
+  //   color: var(--vh-color-neutral-04);
+  //   cursor: pointer;
+  // }
+
   .widget-label {
     @media (max-width: 1200px) {
       display: none;
