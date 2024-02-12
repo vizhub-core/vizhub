@@ -12,6 +12,8 @@ import { AccountPage } from './AccountPage/server';
 import { ResourcesPage } from './ResourcesPage/server';
 import { KitchenSinkPage } from './KitchenSinkPage/server';
 import { CreateVizPage } from './CreateVizPage/server';
+import { StargazersPage } from './StargazersPage/server';
+
 // import { ExploreRedirect } from './ExploreRedirect';
 
 // Note: order matters (profile page should come last)
@@ -21,6 +23,7 @@ export const pages = [
   AboutPage,
   VizPage,
   ForksPage,
+  StargazersPage,
   BetaConfirmPage,
   SandboxPage,
   ExplorePage,
