@@ -1,27 +1,39 @@
 .stargazer {
-  &-left {
-    display: flex;
-    align-items: center;
-    gap: 12px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  text-decoration: none;
+  img {
+    box-shadow: var(--vh-box-shadow);
+  }
 
-    text-decoration: none;
-    img {
-      box-shadow: var(--vh-box-shadow);
-    }
-    h4 {
-      color: var(--vh-color-neutral-01);
-      margin-bottom: 0px;
-    }
-  }
-  &-left:hover {
-    color: var(--bs-link-color);
-    text-decoration: underline;
-  }
-  &-right {
+  .stargazer-meta {
     display: flex;
     flex-direction: column;
-    font-size: 14px;
-    align-items: flex-end;
-    color: var(--vh-color-neutral-03);
+    h4 {
+      color: var(--vh-color-neutral-02);
+      margin-bottom: 0px;
+    }
+    .starred-date {
+      color: var(--vh-color-neutral-03);
+      // font-size: 14px;
+    }
   }
+
+  //   h4 {
+  //     color: var(--vh-color-neutral-01);
+  //     margin-bottom: 0px;
+  //   }
+  // }
+  // &-left:hover {
+  //   color: var(--bs-link-color);
+  //   text-decoration: underline;
+  // }
+  // &-right {
+  //   display: flex;
+  //   flex-direction: column;
+  //   font-size: 14px;
+  //   align-items: flex-end;
+  //   color: var(--vh-color-neutral-03);
+  // }
 }

@@ -38,6 +38,7 @@ export const VizPageViewer = ({
   isUpvoted,
   handleUpvoteClick,
   fullscreenHref,
+  stargazersHref,
 }) => {
   // This SVG element is used only for its dynamic resizing behavior.
   // It's invisible, nothing is rendered into it.
@@ -156,6 +157,7 @@ export const VizPageViewer = ({
               upvotesCount={upvotesCount}
               onClick={handleUpvoteClick}
               isUpvoted={isUpvoted}
+              stargazersHref={stargazersHref}
             />
             {isPrivate ? (
               <div className="visibility-label private">

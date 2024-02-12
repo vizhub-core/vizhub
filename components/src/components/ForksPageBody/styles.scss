@@ -1,8 +1,17 @@
-.vh-explore-page {
+.vh-forks-page {
   overflow: auto;
 
   h1 {
     font-family: Poppins;
     // font-size: 2.5em;
+  }
+
+  .vh-page-header {
+    margin-bottom: 70px;
+
+    /* column on mobile */
+    @media (max-width: 768px) {
+      flex-direction: column;
+    }
   }
 }

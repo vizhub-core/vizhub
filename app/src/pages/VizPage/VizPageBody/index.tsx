@@ -48,6 +48,7 @@ import { enableManualRun } from 'runtime/src/useRuntime';
 import { formatTimestamp } from '../../../accessors/formatTimestamp';
 import { useSearchParams } from 'react-router-dom';
 import { LogoSVG } from 'components/src/components/Icons/LogoSVG';
+import { getStargazersPageHref } from '../../../accessors/getStargazersPageHref';
 
 const debug = false;
 
@@ -331,6 +332,11 @@ export const VizPageBody = ({
     [ownerUser, info],
   );
 
+  const stargazersHref = useMemo(
+    () => getStargazersPageHref(ownerUser, info),
+    [fullscreenHref],
+  );
+
   const [
     isUpgradeBannerVisible,
     setIsUpgradeBannerVisible,
@@ -435,6 +441,7 @@ export const VizPageBody = ({
               isUpvoted={isUpvoted}
               handleUpvoteClick={handleUpvoteClick}
               fullscreenHref={fullscreenHref}
+              stargazersHref={stargazersHref}
             />
           </div>
         )}

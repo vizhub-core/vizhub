@@ -25,13 +25,8 @@ StargazersPage.getPageData = async ({
   auth0User,
 }): Promise<StargazersPageData> => {
   const getInfoByIdOrSlug = GetInfoByIdOrSlug(gateways);
-  const {
-    getUsersByIds,
-    getInfo,
-    getUpvotes,
-    getUser,
-    getUserByUserName,
-  } = gateways;
+  const { getUsersByIds, getUpvotes, getUserByUserName } =
+    gateways;
 
   // Get the User entity for the owner of the viz.
   const ownerUserResult = await getUserByUserName(userName);

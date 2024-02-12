@@ -3,10 +3,12 @@
 
   h1 {
     font-family: Poppins;
-    // font-size: 2.5em;
   }
 
   .stargazers-container {
+    margin-top: 70px;
     display: flex;
+    flex-wrap: wrap;
+    gap: 32px;
   }
 }
