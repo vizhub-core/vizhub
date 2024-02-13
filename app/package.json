@@ -41,7 +41,7 @@
     "d3-transition": "^3.0.1",
     "express-openid-connect": "^2.17.1",
     "http-proxy-middleware": "^2.0.6",
-    "jose": "^5.2.1",
+    "jose": "^5.2.2",
     "jsdom": "^24.0.0",
     "jszip": "^3.10.1",
     "marked": "^12.0.0",
@@ -59,7 +59,7 @@
     "stripe": "^14.16.0",
     "vizhub-libraries": "^1.8.0",
     "vizhub-ui": "^3.19.0",
-    "vzcode": "^0.65.0",
+    "vzcode": "^0.66.0",
     "ws": "^8.16.0",
     "xss": "^1.0.14"
   },
