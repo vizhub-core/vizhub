@@ -31,7 +31,7 @@
     "ot-json0": "^1.1.0",
     "redis": "^4.6.13",
     "redis-parser": "^3.0.0",
-    "sharedb-mongo": "^4.1.0",
+    "sharedb-mongo": "^4.1.1",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
