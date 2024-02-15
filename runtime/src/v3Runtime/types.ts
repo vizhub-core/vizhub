@@ -84,6 +84,7 @@ export type V3WorkerMessage =
   | {
       type: 'resolveSlugRequest';
       slugKey: string;
+      requestId: string;
     }
 
   // `resolveSlugResponse`
@@ -93,6 +94,7 @@ export type V3WorkerMessage =
       type: 'resolveSlugResponse';
       slugKey: string;
       vizId: VizId;
+      requestId: string;
     };
 
 // Messages sent to and from the IFrame window.

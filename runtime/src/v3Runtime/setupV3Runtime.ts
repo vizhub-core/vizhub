@@ -9,7 +9,6 @@ import {
 } from './types';
 import { Content, VizId, getFileText } from 'entities';
 import { parseId } from './parseId';
-import { generateRollupErrorMessage } from './generateRollupErrorMessage';
 
 // Flag for debugging.
 const debug = false;
@@ -111,10 +110,11 @@ export const setupV3Runtime = ({
     // These are sent by the build worker in response
     // to a 'buildRequest' message.
     if (message.type === 'buildResponse') {
-      const buildResult: V3BuildResult =
+      const buildResult: V3BuildResult | undefined =
         message.buildResult;
+      const error: Error | undefined = message.error;
 
-      if (profileBuildTimes) {
+      if (profileBuildTimes && buildResult) {
         buildTimes.push(buildResult.time);
         // Every n times, log the rolling average.
         if (buildTimes.length % n === 0) {
@@ -127,9 +127,11 @@ export const setupV3Runtime = ({
         }
       }
 
-      if (pendingBuildPromise) {
+      if (pendingBuildPromise && buildResult) {
         pendingBuildPromise(buildResult);
         pendingBuildPromise = null;
+      } else if (error) {
+        console.log('build error', error);
       } else {
         // Sanity check.
         // Should never happen.
@@ -154,6 +156,13 @@ export const setupV3Runtime = ({
         content,
       };
 
+      if (debug) {
+        console.log(
+          '[v3 runtime] received contentRequest, sending contentResponse',
+          contentResponseMessage,
+        );
+      }
+
       // Send the content back to the worker.
       worker.postMessage(contentResponseMessage);
     }
@@ -167,9 +176,16 @@ export const setupV3Runtime = ({
       const resolveSlugResponseMessage: V3WorkerMessage = {
         type: 'resolveSlugResponse',
         slugKey,
+        requestId: message.requestId,
         vizId: await resolveSlugKey(slugKey),
       };
 
+      if (debug) {
+        console.log(
+          '[v3 runtime] received resolveSlugRequest, sending resolveSlugResponse',
+          resolveSlugResponseMessage,
+        );
+      }
       // Send the viz ID back to the worker.
       worker.postMessage(resolveSlugResponseMessage);
     }
