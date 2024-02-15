@@ -13,15 +13,14 @@ export const Stargazer = ({
   <a href={userProfileHref} className="stargazer">
     <img
       src={userAvatarURL}
-      width="40"
-      height="40"
+      width="48"
+      height="48"
       className="rounded-circle"
     ></img>
     <div className="stargazer-meta">
       <h4>{userDisplayName}</h4>
-
       <div className="starred-date">
-        {starredDateFormatted}
+        Starred on {starredDateFormatted}
       </div>
     </div>
   </a>

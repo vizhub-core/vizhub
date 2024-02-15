@@ -1,8 +1,14 @@
 .stargazer {
   display: flex;
-  gap: 10px;
+  gap: 20px;
   align-items: center;
   text-decoration: none;
+
+  background-color: white;
+  padding: 32px;
+  box-shadow: var(--vh-box-shadow);
+  border-radius: 4px;
+
   img {
     box-shadow: var(--vh-box-shadow);
   }
@@ -12,7 +18,7 @@
     flex-direction: column;
     h4 {
       color: var(--vh-color-neutral-02);
-      margin-bottom: 0px;
+      margin-bottom: 2px;
     }
     .starred-date {
       color: var(--vh-color-neutral-03);
@@ -36,4 +42,12 @@
   //   align-items: flex-end;
   //   color: var(--vh-color-neutral-03);
   // }
+
+  &:hover {
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
 }
