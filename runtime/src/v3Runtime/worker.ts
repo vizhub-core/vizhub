@@ -7,6 +7,10 @@ import { svelteCompilerUrl } from './transformSvelte';
 
 const debug = false;
 
+// Generate a unique request ID
+const generateRequestId = (): string =>
+  (Math.random() + '').slice(2);
+
 // Tracks pending promises for 'contentResponse' messages
 const pendingContentResponsePromises = new Map();
 
@@ -44,9 +48,16 @@ const resolveSlug = ({
   slug,
 }): Promise<VizId> => {
   const slugKey = `${userName}/${slug}`;
+
+  // Since the same slug could be requested multiple times
+  // in quick succession, we need to support multiple
+  // pending requests for the same slug.
+  // We do this by generating a unique ID for each request.
+  const requestId = generateRequestId();
   const message: V3WorkerMessage = {
     type: 'resolveSlugRequest',
     slugKey,
+    requestId,
   };
 
   if (debug) {
@@ -59,7 +70,7 @@ const resolveSlug = ({
 
   return new Promise((resolve) => {
     pendingResolveSlugResponsePromises.set(
-      slugKey,
+      requestId,
       resolve,
     );
   });
@@ -116,6 +127,7 @@ addEventListener('message', async ({ data }) => {
           },
         });
       } catch (e) {
+        if (debug) console.error(e);
         error = e;
       }
 
@@ -170,12 +182,12 @@ addEventListener('message', async ({ data }) => {
     case 'resolveSlugResponse': {
       const resolver =
         pendingResolveSlugResponsePromises.get(
-          message.slugKey,
+          message.requestId,
         );
       if (resolver) {
         resolver(message.vizId);
         pendingResolveSlugResponsePromises.delete(
-          message.slugKey,
+          message.requestId,
         );
       }
       break;
