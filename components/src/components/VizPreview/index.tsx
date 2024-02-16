@@ -70,10 +70,14 @@ export const VizPreview = ({
         <h4 className="title">{title}</h4>
       </div>
       <div className="analytics-container">
-        <ForksWidget forksCount={forksCount} />
+        <ForksWidget
+          forksCount={forksCount}
+          notClickable={true}
+        />
         <UpvoteWidget
           upvotesCount={upvotesCount}
           isUpvoted={false}
+          notClickable={true}
         />
       </div>
 

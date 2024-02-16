@@ -39,6 +39,8 @@ export const VizPageViewer = ({
   handleUpvoteClick,
   fullscreenHref,
   stargazersHref,
+  onForkClick,
+  isUserAuthenticated,
 }) => {
   // This SVG element is used only for its dynamic resizing behavior.
   // It's invisible, nothing is rendered into it.
@@ -150,10 +152,14 @@ export const VizPageViewer = ({
             </div>
           )}
           <div className="title-bar-right">
-            <a href={forksPageHref} className="forks-link">
-              <ForksWidget forksCount={forksCount} />
-            </a>
+            <ForksWidget
+              isUserAuthenticated={isUserAuthenticated}
+              onClick={onForkClick}
+              forksCount={forksCount}
+              forksPageHref={forksPageHref}
+            />
             <UpvoteWidget
+              isUserAuthenticated={isUserAuthenticated}
               upvotesCount={upvotesCount}
               onClick={handleUpvoteClick}
               isUpvoted={isUpvoted}

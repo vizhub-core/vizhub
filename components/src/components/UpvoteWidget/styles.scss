@@ -3,7 +3,10 @@
   align-items: center;
   color: var(--vh-color-neutral-03);
   font-weight: 500;
-  gap: 2px;
+
+  &.not-clickable {
+    pointer-events: none;
+  }
   a {
     display: flex;
     align-items: center;
@@ -11,14 +14,17 @@
     text-decoration: none;
     gap: 4px;
   }
-  // .star-icon {
-  //   // background-color: red;
-  //   // padding: 4px;
-  //   display: flex;
-  //   color: var(--vh-color-neutral-04);
-  //   cursor: pointer;
-  // }
 
+  i {
+    color: var(--vh-color-neutral-04);
+  }
+  i:hover {
+    color: var(--vh-color-neutral-03);
+  }
+  a {
+    margin-left: -4px;
+    margin-right: -4px;
+  }
   .widget-label {
     @media (max-width: 1200px) {
       display: none;

@@ -5,23 +5,35 @@ import './styles.scss';
 export const UpvoteWidget = ({
   upvotesCount,
   isUpvoted,
-  stargazersHref,
+  stargazersHref = '',
   onClick = null,
+  notClickable = false,
+  isUserAuthenticated = false,
 }) => (
   <div
     className={`vh-upvote-widget${
       isUpvoted ? ' upvoted' : ''
-    }`}
+    }${notClickable ? ' not-clickable' : ''}`}
   >
     <OverlayTrigger
       placement="top"
       overlay={
         <Tooltip id="full-screen-icon-tooltip">
-          Star this viz
+          {isUserAuthenticated
+            ? `${isUpvoted ? 'Un-star' : 'Star'} this viz`
+            : 'Log in to star this viz'}
         </Tooltip>
       }
     >
-      <i className="icon-button icon-button-light">
+      <i
+        className="icon-button icon-button-light"
+        onClick={isUserAuthenticated ? onClick : null}
+        style={{
+          cursor: isUserAuthenticated
+            ? 'pointer'
+            : 'not-allowed',
+        }}
+      >
         <StarSVG onClick={onClick} />
       </i>
     </OverlayTrigger>
@@ -34,6 +46,7 @@ export const UpvoteWidget = ({
       }
     >
       <a
+        className="icon-button icon-button-light"
         href={stargazersHref}
         target="_blank"
         rel="noopener noreferrer"
