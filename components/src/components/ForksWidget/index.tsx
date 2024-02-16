@@ -4,9 +4,10 @@ import './styles.scss';
 
 export const ForksWidget = ({
   forksCount,
-  forksHref = '',
+  forksPageHref = '',
   onClick = null,
   notClickable = false,
+  isUserAuthenticated = false,
 }) => (
   <div
     className={`vh-forks-widget${notClickable ? ' not-clickable' : ''}`}
@@ -15,13 +16,20 @@ export const ForksWidget = ({
       placement="top"
       overlay={
         <Tooltip id="full-screen-icon-tooltip">
-          Fork this viz
+          {isUserAuthenticated
+            ? 'Fork this viz'
+            : 'Log in to fork this viz'}
         </Tooltip>
       }
     >
       <i
         className="icon-button icon-button-light"
-        onClick={onClick}
+        onClick={isUserAuthenticated ? onClick : null}
+        style={{
+          cursor: isUserAuthenticated
+            ? 'pointer'
+            : 'not-allowed',
+        }}
       >
         <ForkSVG />
       </i>
@@ -36,7 +44,7 @@ export const ForksWidget = ({
     >
       <a
         className="icon-button icon-button-light"
-        href={forksHref}
+        href={forksPageHref}
         target="_blank"
         rel="noopener noreferrer"
       >

@@ -8,6 +8,7 @@ export const UpvoteWidget = ({
   stargazersHref = '',
   onClick = null,
   notClickable = false,
+  isUserAuthenticated = false,
 }) => (
   <div
     className={`vh-upvote-widget${
@@ -18,13 +19,20 @@ export const UpvoteWidget = ({
       placement="top"
       overlay={
         <Tooltip id="full-screen-icon-tooltip">
-          {isUpvoted ? 'Un-star' : 'Star'} this viz
+          {isUserAuthenticated
+            ? `${isUpvoted ? 'Un-star' : 'Star'} this viz`
+            : 'Log in to star this viz'}
         </Tooltip>
       }
     >
       <i
         className="icon-button icon-button-light"
-        onClick={onClick}
+        onClick={isUserAuthenticated ? onClick : null}
+        style={{
+          cursor: isUserAuthenticated
+            ? 'pointer'
+            : 'not-allowed',
+        }}
       >
         <StarSVG onClick={onClick} />
       </i>
