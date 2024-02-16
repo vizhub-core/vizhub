@@ -94,6 +94,11 @@ export const Footer = () => {
           </a>
         </div>
       </div>
+      <div className="footer-copyright">
+        Copyright © 2024 Datavis Tech INC. All rights
+        reserved. VizHub is a registered trademark of
+        Datavis Tech INC.
+      </div>
     </div>
   );
 };

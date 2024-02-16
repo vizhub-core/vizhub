@@ -29,7 +29,7 @@ export const LandingPageBody = ({
           </div>
           <h1 className="landing-page-headline">
             Develop Custom Interactive Visualizations{' '}
-            <i>Faster</i>
+            <i>Faster</i> with <i>More Fun</i>
           </h1>
           <Button
             variant="secondary"
@@ -69,17 +69,16 @@ export const LandingPageBody = ({
               </h1>
               <div className="vh-lede-01">
                 <p>
-                  VizHub is a streamlined, web-based
-                  platform tailored for data visualization
-                  professionals. It combines a collaborative
-                  D3.js coding environment with essential
-                  tools for advanced customization and
-                  interactive design. Ideal for those
-                  transitioning from non-coding data
-                  visualization tools, VizHub simplifies
-                  complex visualizations and fosters
-                  learning and collaboration in a
-                  user-friendly interface.
+                  VizHub is a platform for collaborative
+                  data visualization. It lets you start
+                  coding and creating data visualizations{' '}
+                  <i>right away</i>, without the need to set
+                  up a complex local development
+                  environment. It primarily targets
+                  <a href="https://d3js.org/">D3.js</a>, but
+                  is a general-purpose platform supporting
+                  rapid prototyping and collaborative
+                  iteration of interactive graphics.
                 </p>
               </div>
             </div>
@@ -93,16 +92,18 @@ export const LandingPageBody = ({
                   Sick of the slow feedback loop in your
                   current data visualization workflow?
                   Iterate faster and save time with instant
-                  feedback. This makes it easy to get your
-                  visualizations just right, saving you time
-                  and effort.
+                  feedback using{' '}
+                  <strong>hot reloading</strong> and{' '}
+                  <strong>interactive widgets</strong>. Get
+                  your visualizations <i>just right</i> in
+                  no time flat!
                 </p>
                 <Button
-                  href="https://vizhub.com/curran/66194bb8626c447bb13291587da28cec"
+                  href="https://vizhub.com/forum/t/hot-reloading-and-interactive-widgets/968"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Try it out
+                  Learn more
                 </Button>
               </div>
               <div className="feature-section-image">
