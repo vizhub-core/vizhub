@@ -5,19 +5,20 @@ import './styles.scss';
 export const UpvoteWidget = ({
   upvotesCount,
   isUpvoted,
-  stargazersHref,
+  stargazersHref = '',
   onClick = null,
+  notClickable = false,
 }) => (
   <div
     className={`vh-upvote-widget${
       isUpvoted ? ' upvoted' : ''
-    }`}
+    }${notClickable ? ' not-clickable' : ''}`}
   >
     <OverlayTrigger
       placement="top"
       overlay={
         <Tooltip id="full-screen-icon-tooltip">
-          Star this viz
+          {isUpvoted ? 'Un-star' : 'Star'} this viz
         </Tooltip>
       }
     >
@@ -34,6 +35,7 @@ export const UpvoteWidget = ({
       }
     >
       <a
+        className="icon-button icon-button-light"
         href={stargazersHref}
         target="_blank"
         rel="noopener noreferrer"
