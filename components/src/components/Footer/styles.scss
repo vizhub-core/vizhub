@@ -2,9 +2,10 @@
   width: 100%;
   background-color: var(--vh-color-neutral-02);
   color: white;
-  padding: 100px;
+  padding: 100px 10px 30px 10px;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
 
   .footer-container {
     display: flex;
@@ -26,8 +27,8 @@
       gap: 24px;
       min-width: 200px;
       .footer-links-title {
-        font-family: Poppins;
-        font-size: 12px;
+        // font-family: Poppins;
+        font-size: 14px;
         font-style: normal;
         font-weight: 500;
         color: var(--vh-color-neutral-04);
@@ -42,5 +43,12 @@
         color: white;
       }
     }
+  }
+  .footer-copyright {
+    padding-top: 50px;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    color: var(--vh-color-neutral-04);
   }
 }
