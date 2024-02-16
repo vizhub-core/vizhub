@@ -74,7 +74,7 @@ export const LandingPageBody = ({
                   coding and creating data visualizations{' '}
                   <i>right away</i>, without the need to set
                   up a complex local development
-                  environment. It primarily targets
+                  environment. It primarily targets{' '}
                   <a href="https://d3js.org/">D3.js</a>, but
                   is a general-purpose platform supporting
                   rapid prototyping and collaborative
