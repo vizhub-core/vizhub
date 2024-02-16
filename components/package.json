@@ -15,11 +15,11 @@
   "dependencies": {
     "d3-format": "^3.1.0",
     "react": "^18.2.0",
-    "react-aria": "^3.32.0",
+    "react-aria": "^3.32.1",
     "react-bootstrap": "^2.10.1",
     "react-bootstrap-typeahead": "^6.3.2",
     "react-dom": "^18.2.0",
-    "react-stately": "^3.30.0",
+    "react-stately": "^3.30.1",
     "vizhub-ui": "^3.19.0"
   },
   "devDependencies": {
@@ -27,7 +27,7 @@
     "@types/react-dom": "^18.2.19",
     "@vitejs/plugin-react": "^4.2.1",
     "prettier": "^3.2.5",
-    "sass": "^1.70.0",
+    "sass": "^1.71.0",
     "vite": "^5.1.3"
   }
 }
