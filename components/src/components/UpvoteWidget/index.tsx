@@ -22,7 +22,10 @@ export const UpvoteWidget = ({
         </Tooltip>
       }
     >
-      <i className="icon-button icon-button-light">
+      <i
+        className="icon-button icon-button-light"
+        onClick={onClick}
+      >
         <StarSVG onClick={onClick} />
       </i>
     </OverlayTrigger>
