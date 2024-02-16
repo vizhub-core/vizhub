@@ -74,6 +74,7 @@ export const VizPreview = ({
         <UpvoteWidget
           upvotesCount={upvotesCount}
           isUpvoted={false}
+          notClickable={true}
         />
       </div>
 
