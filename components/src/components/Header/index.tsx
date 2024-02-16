@@ -132,11 +132,7 @@ export const Header = ({
               </Dropdown.Menu>
             </Dropdown>
           ) : (
-            <Button
-              as="a"
-              href={loginHref}
-              className="vh-header-button"
-            >
+            <Button as="a" href={loginHref}>
               Log in
             </Button>
           )}
