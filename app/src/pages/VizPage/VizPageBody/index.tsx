@@ -355,6 +355,8 @@ export const VizPageBody = ({
     setIsUpgradeBannerVisible(false);
   }, []);
 
+  const isUserAuthenticated = !!authenticatedUser;
+
   return isEmbedMode ? (
     <>
       {renderVizRunner()}
@@ -383,7 +385,7 @@ export const VizPageBody = ({
         setShowEditor={setShowEditor}
         onExportClick={onExportClick}
         onShareClick={toggleShareModal}
-        showForkButton={!!authenticatedUser}
+        showForkButton={isUserAuthenticated}
         onForkClick={toggleForkModal}
         showSettingsButton={canUserEditViz}
         onSettingsClick={toggleSettingsModal}
@@ -442,6 +444,8 @@ export const VizPageBody = ({
               handleUpvoteClick={handleUpvoteClick}
               fullscreenHref={fullscreenHref}
               stargazersHref={stargazersHref}
+              onForkClick={toggleForkModal}
+              isUserAuthenticated={isUserAuthenticated}
             />
           </div>
         )}

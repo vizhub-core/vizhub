@@ -28,8 +28,8 @@ export const LandingPageBody = ({
               : '50% off for 3 months! Use code EARLYADOPTER (ends Feb 15)'}
           </div>
           <h1 className="landing-page-headline">
-            Escape the limits of BI tools with D3.js and Web
-            Standards
+            Develop Custom Interactive Visualizations{' '}
+            <i>Faster</i>
           </h1>
           <Button
             variant="secondary"
@@ -227,7 +227,7 @@ export const LandingPageBody = ({
           <div className="feature-section">
             <div className="feature-section-content brand-background">
               <div className="feature-section-copy">
-                <h3>Frictionless Productionization</h3>
+                <h3>Vanilla is the Best Flavor</h3>
                 <p>
                   Frustrated with the platform-specific
                   syntax and runtime logic of other online
