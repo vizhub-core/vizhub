@@ -31,9 +31,10 @@
     }
   }
 }
+
 .vh-upvote-widget.upvoted {
-  svg use path {
+  .star-icon-use {
     color: transparent;
-    fill: var(--vh-color-caution-01);
+    --star-fill-color: var(--vh-color-caution-01);
   }
 }
