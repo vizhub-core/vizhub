@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { ForkSVG } from '../Icons/sam/ForkSVG';
 import { OverlayTrigger, Tooltip } from '../bootstrap';
-import { commaFormat } from '../commaFormat';
+import { countFormat } from '../countFormat';
 import './styles.scss';
 
 export const ForksWidget = ({
@@ -12,7 +12,7 @@ export const ForksWidget = ({
   isUserAuthenticated = false,
 }) => {
   const forksCountFormatted = useMemo(
-    () => commaFormat(forksCount),
+    () => countFormat(forksCount),
     [forksCount],
   );
   return (
