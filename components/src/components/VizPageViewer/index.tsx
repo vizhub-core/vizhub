@@ -8,11 +8,13 @@ import { UpvoteWidget } from 'components';
 import { VisibilityUnlistedSVG } from '../Icons/VisibilityUnlistedSVG';
 import { PrivateSVG } from '../Icons/sam/PrivateSVG';
 import { ForkSVGSymbol } from '../Icons/sam/ForkSVG';
+
 import { EditSVG } from '../Icons/EditSVG';
 import { ForksWidget } from '../ForksWidget';
 import { OverlayTrigger, Tooltip } from '../bootstrap';
 import { FullScreenSVG } from '../Icons/sam/FullScreenSVG';
 import './styles.scss';
+import { StarSVGSymbol } from '../Icons/sam/StarSVG';
 
 export const VizPageViewer = ({
   vizTitle,
@@ -93,6 +95,7 @@ export const VizPageViewer = ({
   return (
     <div className="vh-viz-page-viewer">
       <ForkSVGSymbol />
+      <StarSVGSymbol />
       <div className="viewer-content">
         {isVisual && (
           <div className="viz-frame">

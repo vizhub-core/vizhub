@@ -20,7 +20,6 @@ export const ForkSVGSymbol = () => (
         <path d="M12 17C12 10.5714 6.5 14.4286 6.5 8" />
       </g>
     </symbol>
-    <use xlinkHref="#fork-icon" />
   </svg>
 );
 
