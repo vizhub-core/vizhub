@@ -32,7 +32,7 @@
   }
 }
 .vh-upvote-widget.upvoted {
-  svg path {
+  svg use path {
     color: transparent;
     fill: var(--vh-color-caution-01);
   }
