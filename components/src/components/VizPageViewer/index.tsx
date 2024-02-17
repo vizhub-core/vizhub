@@ -7,6 +7,7 @@ import {
 import { UpvoteWidget } from 'components';
 import { VisibilityUnlistedSVG } from '../Icons/VisibilityUnlistedSVG';
 import { PrivateSVG } from '../Icons/sam/PrivateSVG';
+import { ForkSVGSymbol } from '../Icons/sam/ForkSVG';
 import { EditSVG } from '../Icons/EditSVG';
 import { ForksWidget } from '../ForksWidget';
 import { OverlayTrigger, Tooltip } from '../bootstrap';
@@ -91,6 +92,7 @@ export const VizPageViewer = ({
 
   return (
     <div className="vh-viz-page-viewer">
+      <ForkSVGSymbol />
       <div className="viewer-content">
         {isVisual && (
           <div className="viz-frame">
