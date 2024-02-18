@@ -5,22 +5,32 @@ import './styles.scss';
 export const UpgradeCallout = ({
   showImage = true,
   imageSrc = image('upgrade-callout-feature'),
+  isVideo = false,
   isVertical = false,
+  isInline = false,
   children = null,
   topMargin = false,
+  bottomMargin = false,
+  includeHeader = true,
 }) => {
   return (
     <div
-      className={`upgrade-callout mb-3 ${
+      className={`upgrade-callout ${
         isVertical ? 'upgrade-callout-vertical' : ''
-      }${topMargin ? ' mt-3' : ''}`}
+      }${topMargin ? ' mt-3' : ''}${bottomMargin ? ' mb-3' : ''}${
+        isInline ? ' upgrade-callout-inline' : ''
+      }`}
     >
-      {showImage && (
+      {showImage && isVideo ? (
+        <video autoPlay loop muted playsInline>
+          <source src={imageSrc} type="video/mp4" />
+        </video>
+      ) : (
         <img src={imageSrc} alt="Upgrade Callout Feature" />
       )}
 
       <div className="upgrade-callout-content">
-        <h4>Upgrade to Premium</h4>
+        {includeHeader && <h4>Upgrade to Premium</h4>}
         <div className="vh-block-01">{children}</div>
         <div className="upgrade-callout-buttons">
           {/* <Button variant="secondary">

@@ -1,5 +1,5 @@
 import express from 'express';
-import { User, userLock } from 'entities';
+import { FREE, User, userLock } from 'entities';
 import {
   Gateways,
   err,
@@ -35,7 +35,7 @@ export const fakeUnsubscribeSuccessEndpoint = ({
         }
         const user: User = userResult.value.data;
 
-        user.plan = 'free';
+        user.plan = FREE;
         // TODO stripe
         // user.stripeCustomerId = 'fake-stripe-customer-id';
         // user.stripeSubscriptionId = 'fake-stripe-subscription-id';

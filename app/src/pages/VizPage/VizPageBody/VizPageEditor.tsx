@@ -1,4 +1,10 @@
-import { Content, User } from 'entities';
+import {
+  Content,
+  FREE,
+  PREMIUM,
+  PRO,
+  User,
+} from 'entities';
 import { useMemo } from 'react';
 import { enableManualRun } from 'runtime/src/useRuntime';
 import type { ShareDBDoc } from 'vzcode';
@@ -31,6 +37,7 @@ export const VizPageEditor = ({
   srcdocErrorMessage,
   authenticatedUser,
   submitContentOperation,
+  toggleAIAssistUpgradeNudgeModal,
 }: {
   showEditor: boolean;
   content: Content | null;
@@ -41,6 +48,7 @@ export const VizPageEditor = ({
   submitContentOperation: (
     next: (content: Content) => Content,
   ) => void;
+  toggleAIAssistUpgradeNudgeModal: () => void;
 }) => {
   // These are undefined during SSR, defined in the browser.
   const localPresence =
@@ -63,10 +71,26 @@ export const VizPageEditor = ({
       ? authenticatedUser.userName
       : 'Anonymous';
 
+  // Is this user allowed to trigger AI Assist?
   const canUserUseAIAssist = useMemo(() => {
+    // If not authenticated, definitely not.
     if (!authenticatedUser) return false;
-    if (authenticatedUser.plan === 'free') return false;
-    return true;
+
+    // If the authenticated user is on the,
+    // premium or pro plan, definitely yes.
+    if (
+      authenticatedUser.plan === PREMIUM ||
+      authenticatedUser.plan === PRO
+    ) {
+      return true;
+    }
+
+    // TODO If the owner of the viz is on the
+    // premium or pro plan, definitely yes.
+
+    // If none of the above conditions are met,
+    // then the user cannot use AI Assist.
+    return false;
   }, [authenticatedUser]);
 
   // If the user is on the free plan,
@@ -75,14 +99,17 @@ export const VizPageEditor = ({
   const { aiAssistTooltipText, aiAssistClickOverride } =
     useMemo(() => {
       if (canUserUseAIAssist) {
-        // Both being undefined results in default behavior.
+        // Both being undefined results in default behavior,
+        // which is to allow the user to invoke AI Assist.
         return {};
       } else {
         return {
-          aiAssistTooltipText: 'Upgrade to use AI Assist',
-          aiAssistClickOverride: () => {
-            window.location.href = '/pricing';
-          },
+          // Still show the regular tooltip text
+          // aiAssistTooltipText: 'Upgrade to use AI Assist',
+          aiAssistTooltipText: undefined,
+
+          aiAssistClickOverride:
+            toggleAIAssistUpgradeNudgeModal,
         };
       }
     }, [canUserUseAIAssist]);

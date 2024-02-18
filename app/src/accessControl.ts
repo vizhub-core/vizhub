@@ -8,6 +8,7 @@ import { parseAuth0Sub } from 'api';
 import { Gateways, Result } from 'gateways';
 import {
   Action,
+  FREE,
   Info,
   READ,
   User,
@@ -298,7 +299,7 @@ export const sizeCheck =
         // Check the plan of the owner user
         const user: User = getUserResult.value.data;
 
-        if (user.plan === 'free') {
+        if (user.plan === FREE) {
           return next(
             tooLargeForFreeError(
               `The data size limit for VizHub Starter is ${mbFormat(

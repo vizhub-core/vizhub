@@ -65,9 +65,12 @@ export type {
   UserId,
   UserName,
   EmailAddress,
-  Plan,
   BetaProgramSignup,
 } from './Users';
+
+export type { Plan } from './Pricing';
+
+export { FREE, PREMIUM, PRO } from './Pricing';
 
 export {
   freeTierSizeLimitMB,

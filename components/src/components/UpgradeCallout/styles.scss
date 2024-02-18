@@ -4,16 +4,6 @@
   display: flex;
   background-color: white;
 
-  img {
-    width: 300px;
-    // TODO get this to fill the height of the container
-    // and scale the image to cover
-    height: 100%;
-    object-fit: cover;
-    border-top-left-radius: inherit;
-    border-bottom-left-radius: inherit;
-  }
-
   &.upgrade-callout-vertical {
     flex-direction: column;
     img {
@@ -22,6 +12,21 @@
       border-top-right-radius: inherit;
       border-bottom-left-radius: 0;
     }
+  }
+
+  &.upgrade-callout-inline {
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  img {
+    width: 300px;
+    // TODO get this to fill the height of the container
+    // and scale the image to cover
+    height: 100%;
+    object-fit: cover;
+    border-top-left-radius: inherit;
+    border-bottom-left-radius: inherit;
   }
 
   .upgrade-callout-content {

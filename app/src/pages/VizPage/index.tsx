@@ -167,6 +167,11 @@ export const VizPage: Page = ({
     toggleDeleteVizConfirmationModal,
   ] = useToggleState();
 
+  const [
+    showAIAssistUpgradeNudgeModal,
+    toggleAIAssistUpgradeNudgeModal,
+  ] = useToggleState();
+
   // /////////////////////////////////////////
   /////////////// Callbacks //////////////////
   // /////////////////////////////////////////
@@ -337,6 +342,7 @@ export const VizPage: Page = ({
             isEmbedMode,
             isEmbedBranded,
             isHideMode,
+            toggleAIAssistUpgradeNudgeModal,
           }}
         />
       </SplitPaneResizeProvider>
@@ -363,6 +369,8 @@ export const VizPage: Page = ({
           toggleDeleteVizConfirmationModal,
           vizKit,
           initialCollaborators,
+          showAIAssistUpgradeNudgeModal,
+          toggleAIAssistUpgradeNudgeModal,
         }}
       />
     </AuthenticatedUserProvider>
