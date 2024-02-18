@@ -7,23 +7,21 @@
   &.not-clickable {
     pointer-events: none;
   }
-  a {
+  .widget-label-container {
     display: flex;
     align-items: center;
     color: var(--vh-color-neutral-03);
     text-decoration: none;
     gap: 4px;
+    margin-left: -3px;
+    margin-right: -3px;
   }
 
   i {
     color: var(--vh-color-neutral-04);
   }
-  i:hover {
+  i.icon-button-light:hover {
     color: var(--vh-color-neutral-03);
-  }
-  a {
-    margin-left: -3px;
-    margin-right: -3px;
   }
   .widget-label {
     @media (max-width: 1200px) {
