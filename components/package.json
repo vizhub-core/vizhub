@@ -20,10 +20,10 @@
     "react-bootstrap-typeahead": "^6.3.2",
     "react-dom": "^18.2.0",
     "react-stately": "^3.30.1",
-    "vizhub-ui": "^3.19.0"
+    "vizhub-ui": "^3.20.0"
   },
   "devDependencies": {
-    "@types/react": "^18.2.55",
+    "@types/react": "^18.2.56",
     "@types/react-dom": "^18.2.19",
     "@vitejs/plugin-react": "^4.2.1",
     "prettier": "^3.2.5",
