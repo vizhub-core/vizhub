@@ -6,7 +6,6 @@ import {
   User,
 } from 'entities';
 import { useMemo } from 'react';
-import { enableManualRun } from 'runtime/src/useRuntime';
 import type { ShareDBDoc } from 'vzcode';
 import {
   VZCodeProvider,
@@ -125,7 +124,6 @@ export const VizPageEditor = ({
       initialUsername={initialUsername}
       codeError={srcdocErrorMessage}
       submitOperation={submitContentOperation}
-      enableManualPretter={enableManualRun}
     >
       {showEditor ? (
         <VZLeft enableUsernameField={false} />

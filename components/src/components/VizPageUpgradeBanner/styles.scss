@@ -11,4 +11,15 @@
     padding-left: 8px;
     gap: 12px;
   }
+
+  @media (max-width: 640px) {
+    .public-vizzes-note {
+      display: none;
+    }
+  }
+}
+@media (max-width: 425px) {
+  .vh-viz-page-upgrade-banner {
+    display: none;
+  }
 }
