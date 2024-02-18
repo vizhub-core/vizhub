@@ -13,21 +13,6 @@ import {
 } from 'entities';
 import { V3Runtime } from './v3Runtime/setupV3Runtime';
 
-// When `true`, the user can manually trigger a run of the viz
-// using various keyboard shortcuts such as CTRL+S.
-// TODO enable the following keyboard shortcuts:
-// F5: Widely used in many IDEs like Visual Studio, PyCharm, and SQL Server Management Studio to start debugging or run the code.
-// Ctrl + Enter: Common in notebook interfaces like Jupyter Notebooks and some SQL editors to execute the current cell or code block.
-// Shift + Enter: Also used in Jupyter Notebooks and similar interfaces to run the current cell and move to the next cell.
-// Ctrl + F5: In some environments like Visual Studio, it runs the code without starting the debugger.
-// F9: Used in some Python IDEs and editors like IDLE to run the selected code.
-// Cmd (or Ctrl) + R: Often used in macOS-based IDEs or text editors to run scripts.
-// Alt + Enter: Used in some contexts like IntelliJ IDEA to execute code and sometimes for context-specific actions like importing libraries.
-// Ctrl + Shift + B: Commonly used in Visual Studio Code to build the project.
-// Ctrl + Shift + F10: In IntelliJ IDEA and PyCharm, it's used to run a script or an application.
-// F8: In PowerShell ISE and other script editors, it runs the selected portion of the script.
-export const enableManualRun = true;
-
 const debug = false;
 
 // Debounce the v3 runtime updates when not interacting
@@ -194,9 +179,6 @@ export const useRuntime = ({
     }
   }, [runtimeVersion, isVisual]);
 
-  // Used to debounce updates to the v3 runtime.
-  const v3Timeout = useRef<number | undefined>(undefined);
-
   // Send updates of imported vizzes to the V3 runtime.
   const previousVizCacheContents = useRef(vizCacheContents);
   useEffect(() => {
@@ -261,18 +243,6 @@ export const useRuntime = ({
       }
       if (isInteracting) {
         v3Runtime.invalidateVizCache(changedVizIds);
-      } else {
-        if (!enableManualRun) {
-          // Otherwise, debounce the updates.
-          clearTimeout(v3Timeout.current);
-          v3Timeout.current = window.setTimeout(() => {
-            // Sanity check, should never happen.
-            if (v3Runtime === null) {
-              throw new Error('v3Runtime.current is null');
-            }
-            v3Runtime.invalidateVizCache(changedVizIds);
-          }, v3RunDebounceMs);
-        }
       }
     };
     update();
@@ -291,7 +261,7 @@ export const useRuntime = ({
     // has edited the code and the files have changed.
     if (runtimeVersion === 2) {
       // // Debounce the updates.
-      const timeout = setTimeout(async () => {
+      const v2Run = async () => {
         // v2RuntimeWorker.current.postMessage({ content });
 
         // Set process on global scope so computeSrcDoc doesn't break.
@@ -314,13 +284,16 @@ export const useRuntime = ({
 
           setSrcdocError(error.message);
         }
-      }, 800);
-
-      return () => {
-        clearTimeout(timeout);
       };
+      if (content.isInteracting) {
+        v2Run();
+      }
     }
-  }, [content.files, runtimeVersion]);
+  }, [
+    content.files,
+    content.isInteracting,
+    runtimeVersion,
+  ]);
 
   // Track the initial mount.
   useEffect(() => {
