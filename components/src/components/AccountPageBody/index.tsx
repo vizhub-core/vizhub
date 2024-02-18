@@ -1,3 +1,4 @@
+import { FREE, PREMIUM } from 'entities';
 import { Button } from '../bootstrap';
 import './styles.scss';
 
@@ -21,7 +22,7 @@ export const AccountPageBody = ({
               </Button>
             </div>
           ) : null}
-          {currentPlan === 'free' ? (
+          {currentPlan === FREE ? (
             <div>
               <p>You are currently on the free plan.</p>
               <Button as="a" href={pricingHref}>
@@ -29,7 +30,7 @@ export const AccountPageBody = ({
               </Button>
             </div>
           ) : null}
-          {currentPlan === 'premium' ? (
+          {currentPlan === PREMIUM ? (
             <div>
               <p>You are currently on the premium plan.</p>
               <Button onClick={onUnsubscribeClick}>

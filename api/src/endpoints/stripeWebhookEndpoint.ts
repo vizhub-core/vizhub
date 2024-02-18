@@ -1,5 +1,5 @@
 import express from 'express';
-import { UserId } from 'entities';
+import { FREE, UserId } from 'entities';
 import { getStripe } from './getStripe';
 import { UpdateUserStripeId } from 'interactors';
 import { Gateways, Result } from 'gateways';
@@ -150,7 +150,7 @@ export const stripeWebhookEndpoint = ({
         const result = await updateUserStripeId({
           userId,
           stripeCustomerId,
-          plan: 'free',
+          plan: FREE,
         });
 
         if (result.outcome === 'failure') {
