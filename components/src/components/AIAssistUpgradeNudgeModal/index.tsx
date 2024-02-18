@@ -116,6 +116,15 @@ export const AIAssistUpgradeNudgeModal = ({
           Premium. Consider starting a free trial to test
           out this feature!
         </p>
+        <p>
+          <a
+            href="https://vizhub.com/forum/t/ai-assisted-coding/952"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Learn more about AI Assist
+          </a>
+        </p>
       </UpgradeCallout>
       {/* </Modal.Body> */}
 
