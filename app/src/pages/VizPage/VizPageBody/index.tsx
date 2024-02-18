@@ -203,39 +203,45 @@ export const VizPageBody = ({
     slugResolutionCache,
   });
 
-  // Handle manual runs.
-  // TODO reduce duplication between here and VZCode/usePrettier
-  // by introducing a new field in the content object called
-  // `numRuns`
-  useEffect(() => {
-    if (!enableManualRun) return;
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (shouldTriggerRun(event)) {
-        event.preventDefault();
-        // Add your custom code here
-        // alert('Ctrl+S has been pressed');
-        // Set `isInteracting = true` for a split second
-        // to trigger a manual run.
-        submitContentOperation((content) => ({
-          ...content,
-          isInteracting: true,
-        }));
-        setTimeout(() => {
-          submitContentOperation((content) => ({
-            ...content,
-            isInteracting: false,
-          }));
-        }, 0);
-      }
-    };
-    document.addEventListener('keydown', handleKeyDown);
-    return () => {
-      document.removeEventListener(
-        'keydown',
-        handleKeyDown,
-      );
-    };
-  }, []);
+  // // Handle manual runs.
+  // // TODO reduce duplication between here and VZCode/usePrettier
+  // // by introducing a new field in the content object called
+  // // `numRuns`
+  // useEffect(() => {
+  //   if (!enableManualRun) return;
+  //   const handleKeyDown = (event: KeyboardEvent) => {
+  //     if (shouldTriggerRun(event)) {
+  //       // TODO leverage runCode from VZCode, delete this logic.
+  //       event.preventDefault();
+  //       // Add your custom code here
+  //       // alert('Ctrl+S has been pressed');
+  //       // Set `isInteracting = true` for a split second
+  //       // to trigger a manual run.
+  //       submitContentOperation((content) => ({
+  //         ...content,
+  //         isInteracting: true,
+  //       }));
+  //       setTimeout(() => {
+  //         // submitContentOperation((content) => ({
+  //         //   ...content,
+  //         //   isInteracting: false,
+  //         // }));
+  //         // This logic deletes the `isInteracting` property from the document.
+  //         submitContentOperation(
+  //           ({ isInteracting, ...newDocument }) =>
+  //             newDocument,
+  //         );
+  //       }, 0);
+  //     }
+  //   };
+  //   document.addEventListener('keydown', handleKeyDown);
+  //   return () => {
+  //     document.removeEventListener(
+  //       'keydown',
+  //       handleKeyDown,
+  //     );
+  //   };
+  // }, []);
 
   // Render the viz runner iframe.
   const renderVizRunner = useCallback(

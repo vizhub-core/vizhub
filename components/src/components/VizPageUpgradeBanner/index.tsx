@@ -7,14 +7,24 @@ import './styles.scss';
 export const VizPageUpgradeBanner = ({ onClose }) => {
   return (
     <div className="vh-viz-page-upgrade-banner">
-      <div className="side vh-base-01 vh-color-neutral-03">
+      <div className="side vh-base-01 vh-color-neutral-03 public-vizzes-note">
         <ExclamationTriangle />
-        Your visualizations are currently visible to
-        everyone in the VizHub Community
+        <span className="d-none d-lg-inline">
+          Your visualizations are currently visible to
+          everyone
+        </span>
+        <span className="d-inline d-lg-none">
+          Your vizzes are public
+        </span>
       </div>
       <div className="side vh-base-01 vh-color-neutral-03">
         <PlanBrandPremiumSVG />
-        Upgrade now to create Private Vizzes
+        <span className="d-none d-lg-inline">
+          Upgrade to create private vizzes
+        </span>
+        <span className="d-inline d-lg-none">
+          Upgrade for privacy
+        </span>
         <Button
           as="a"
           variant="secondary"
