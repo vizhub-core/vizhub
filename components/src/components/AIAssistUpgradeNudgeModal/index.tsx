@@ -1,5 +1,7 @@
+import { UpgradeCallout } from '../UpgradeCallout';
 import { Button, Modal } from '../bootstrap';
 import { useCallback, useEffect } from 'react';
+import { image } from '../image';
 
 // This modal pops up when the user attempt to invoke AI Assist,
 // but is on the free plan. Its purpose is to
@@ -42,8 +44,8 @@ export const AIAssistUpgradeNudgeModal = ({
         <Modal.Title>Try AI Assist</Modal.Title>
       </Modal.Header>
 
-      <Modal.Body>
-        <p>
+      {/* <Modal.Body> */}
+      {/* <p>
           This feature lets you leverage generative
           artificial intelligence in your coding practice.
           Here's how it works:
@@ -70,10 +72,54 @@ export const AIAssistUpgradeNudgeModal = ({
           Premium. Consider starting a free trial to test
           out this feature!
           <a href="/pricing">Start free trial</a>
+        </p> */}
+      <UpgradeCallout
+        imageSrc={image('ai-assist-demo-5', 'mp4')}
+        isVideo={true}
+        isVertical={true}
+        topMargin={false}
+        bottomMargin={false}
+        isInline={true}
+        includeHeader={false}
+      >
+        {/* Add collaborators to invite others to edit your
+            viz with you in real-time. This feature is only
+            available on VizHub Premium. */}
+        {/* With VizHub Premium, you can add unlimited
+          real-time collaborators to your viz. */}
+        <p>
+          The AI Assist feature lets you leverage generative
+          artificial intelligence in your coding practice.
+          Here's how it works:
         </p>
-      </Modal.Body>
+        <ul>
+          <li>
+            Place your cursor in a location in the editor
+            where you want code to be written
+          </li>
+          <li>
+            (optionally) Add a comment before your cursor to
+            prompt the AI with instructions
+          </li>
+          <li>
+            Press the AI Assist button to trigger code
+            generation!
+          </li>
+          <li>
+            The generated code is streamed directly into the
+            editor, as though a remote collaborator is
+            typing.
+          </li>
+        </ul>
+        <p>
+          This feature is only available with VizHub
+          Premium. Consider starting a free trial to test
+          out this feature!
+        </p>
+      </UpgradeCallout>
+      {/* </Modal.Body> */}
 
-      <Modal.Footer>
+      {/* <Modal.Footer>
         <Button
           variant="secondary"
           type="button"
@@ -84,7 +130,7 @@ export const AIAssistUpgradeNudgeModal = ({
         <Button variant="primary" onClick={onConfirm}>
           Try AI Assist
         </Button>
-      </Modal.Footer>
+      </Modal.Footer> */}
     </Modal>
   );
 };
