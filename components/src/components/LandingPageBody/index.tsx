@@ -1,4 +1,5 @@
 import { Footer } from '../Footer';
+import { HomeStarter } from '../HomeStarter';
 import { Button } from '../bootstrap';
 import { image } from '../image';
 import './styles.scss';
@@ -6,8 +7,6 @@ import './styles.scss';
 const enableFooter = true;
 
 const headerBackgroundSrc = image('landing-header-bkg');
-
-const isPastFeb15 = new Date() > new Date('2024-02-15');
 
 export const LandingPageBody = ({
   isUserAuthenticated,
@@ -22,7 +21,8 @@ export const LandingPageBody = ({
       />
       <div className="landing-page-body">
         <div className="landing-page-content">
-          <div className="landing-page-tagline">
+          <HomeStarter />
+          {/* <div className="landing-page-tagline">
             {isPastFeb15
               ? 'Accelerate Dataviz Delivery'
               : '50% off for 3 months! Use code EARLYADOPTER (ends Feb 15)'}
@@ -39,13 +39,8 @@ export const LandingPageBody = ({
             }
           >
             Get started
-          </Button>
-          {/* <a href="https://vizhub.com/curran/da1bd8ba9ffb4e71a240fb8eda172ba7">
-            <img
-              className="header-foreground"
-              src={headerForegroundSrc}
-            />
-          </a> */}
+          </Button> */}
+
           <iframe
             style={{
               marginTop: '70px',
@@ -54,7 +49,7 @@ export const LandingPageBody = ({
             }}
             width={560 * 2}
             height={315 * 2}
-            src="https://www.youtube-nocookie.com/embed/47mjSVQEoAg?si=Slw1ew0dWaNaQfCi"
+            src="https://www.youtube-nocookie.com/embed/KMq4FSSKff0?si=QmR1ZKBWYHWQbs88"
             title="YouTube video player"
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
