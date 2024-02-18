@@ -21,7 +21,6 @@ export const ExplorePageBody = ({
   return (
     <div className="vh-page vh-explore-page">
       <div className="vh-page-container">
-        <HomeStarter />
         <div className="vh-page-header">
           <h2 className="mb-0">Explore</h2>
           <div className="explore-header-controls">
