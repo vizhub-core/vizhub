@@ -27,6 +27,7 @@ import {
   VizId,
   SlugKey,
   getVizThumbnailURL,
+  FREE,
 } from 'entities';
 import { useRuntime } from 'runtime';
 import {
@@ -82,6 +83,7 @@ export const VizPageBody = ({
   isEmbedMode,
   isEmbedBranded,
   isHideMode,
+  toggleAIAssistUpgradeNudgeModal,
 }: {
   info: Info;
   content: Content;
@@ -114,6 +116,7 @@ export const VizPageBody = ({
   isEmbedMode: boolean;
   isEmbedBranded: boolean;
   isHideMode: boolean;
+  toggleAIAssistUpgradeNudgeModal: () => void;
 }) => {
   // The currently authenticated user, if any.
   const authenticatedUser: User | null = useContext(
@@ -346,7 +349,7 @@ export const VizPageBody = ({
     // - the user is on the free plan
     // - the viz is public
     // - the viz is their own
-    authenticatedUser?.plan === 'free' &&
+    authenticatedUser?.plan === FREE &&
       info.visibility === 'public' &&
       info.owner === authenticatedUser?.id,
   );
@@ -409,6 +412,9 @@ export const VizPageBody = ({
           srcdocErrorMessage={srcdocErrorMessage}
           authenticatedUser={authenticatedUser}
           submitContentOperation={submitContentOperation}
+          toggleAIAssistUpgradeNudgeModal={
+            toggleAIAssistUpgradeNudgeModal
+          }
         />
         {isHideMode ? null : (
           <div

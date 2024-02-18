@@ -235,7 +235,7 @@ export const LandingPageBody = ({
                   coding environments? VizHub uses{' '}
                   <strong>vanilla JavaScript</strong> and
                   also supports popular frameworks like{' '}
-                  <a href="https://vizhub.com/higsch/39fa26cfa7854e34934e559efbf7855b">
+                  <a href="https://vizhub.com/forum/t/svelte-support-in-vizhub-3/967">
                     Svelte
                   </a>{' '}
                   and{' '}

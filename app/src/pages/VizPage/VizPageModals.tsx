@@ -1,4 +1,5 @@
 import {
+  AIAssistUpgradeNudgeModal,
   DeleteVizConfirmationModal,
   ForkModal,
   SettingsModal,
@@ -6,6 +7,7 @@ import {
 } from 'components';
 import {
   Content,
+  FREE,
   Info,
   User,
   UserId,
@@ -40,6 +42,8 @@ export const VizPageModals = ({
   toggleDeleteVizConfirmationModal,
   vizKit,
   initialCollaborators,
+  showAIAssistUpgradeNudgeModal,
+  toggleAIAssistUpgradeNudgeModal,
 }: {
   info: Info;
   content: Content;
@@ -65,6 +69,8 @@ export const VizPageModals = ({
   toggleDeleteVizConfirmationModal: () => void;
   vizKit: VizKitAPI;
   initialCollaborators: Array<User>;
+  showAIAssistUpgradeNudgeModal: boolean;
+  toggleAIAssistUpgradeNudgeModal: () => void;
 }) => {
   // The currently authenticated user, if any.
   const authenticatedUser: User | null = useContext(
@@ -208,7 +214,7 @@ export const VizPageModals = ({
             // If the authenticated user is on the free plan,
             // and trying to fork a private viz, then make the
             // forked viz public.
-            authenticatedUser?.plan === 'free'
+            authenticatedUser?.plan === FREE
               ? 'public'
               : info.visibility
           }
@@ -258,7 +264,7 @@ export const VizPageModals = ({
             handleCollaboratorRemove
           }
           initialCollaborators={initialCollaborators}
-          currentPlan={authenticatedUser?.plan || 'free'}
+          currentPlan={authenticatedUser?.plan || FREE}
           showCollaboratorsSection={
             info.owner === authenticatedUser?.id
           }
@@ -269,6 +275,13 @@ export const VizPageModals = ({
           show={showDeleteVizConfirmationModal}
           onClose={toggleDeleteVizConfirmationModal}
           onConfirm={onTrashViz}
+        />
+      )}
+      {showAIAssistUpgradeNudgeModal && (
+        <AIAssistUpgradeNudgeModal
+          show={showAIAssistUpgradeNudgeModal}
+          onClose={toggleAIAssistUpgradeNudgeModal}
+          // onConfirm={onUseFreeGeneration}
         />
       )}
     </>

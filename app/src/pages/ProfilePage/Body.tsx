@@ -4,6 +4,7 @@ import {
   sortOptions,
   getBio,
   getUserDisplayName,
+  FREE,
 } from 'entities';
 import { ProfilePageBody } from 'components';
 import { SmartHeader } from '../../smartComponents/SmartHeader';
@@ -49,7 +50,7 @@ export const Body = ({
 
   const showUpgradeCallout =
     isViewingOwnProfile &&
-    authenticatedUser?.plan === 'free' &&
+    authenticatedUser?.plan === FREE &&
     sectionId === 'private';
 
   const renderVizPreviews = useCallback(
