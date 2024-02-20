@@ -82,5 +82,5 @@ export interface BetaProgramSignup {
 }
 
 // Size limits for data uploads per plan.
-export const freeTierSizeLimitMB = 0.5;
+export const freeTierSizeLimitMB = 0.25;
 export const premiumTierSizeLimitMB = 6;
