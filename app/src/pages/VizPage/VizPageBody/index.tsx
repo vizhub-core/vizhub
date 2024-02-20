@@ -338,6 +338,7 @@ export const VizPageBody = ({
   );
 
   useBrandedEmbedNotice({
+    isEmbedMode,
     isEmbedBrandedURLParam,
     isEmbedBranded,
   });
