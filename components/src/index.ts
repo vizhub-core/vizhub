@@ -20,5 +20,6 @@ export { VizPageUpgradeBanner } from './components/VizPageUpgradeBanner';
 export { StargazersPageBody } from './components/StargazersPageBody';
 export { Stargazer } from './components/Stargazer';
 export { KitchenSinkApp } from './KitchenSinkApp';
+export { BrandedEmbedControl } from './components/BrandedEmbedControl';
 
 import './components/index.scss';

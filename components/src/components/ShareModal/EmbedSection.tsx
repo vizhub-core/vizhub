@@ -7,10 +7,14 @@ import {
   Tooltip,
   Overlay,
 } from '../bootstrap';
+import { BrandedEmbedControl } from '../BrandedEmbedControl';
 
 export const EmbedSection = ({
   embedSnippetToCopy,
   onEmbedSnippetCopy,
+  currentPlan,
+  brandedOption,
+  setBrandedOption,
 }) => {
   // Tracks when to show the "Copied" tooltip.
   const [showTooltip, setShowTooltip] = useState(false);
@@ -33,11 +37,16 @@ export const EmbedSection = ({
 
   return (
     <Form.Group className="mt-4" controlId="formShareLink">
+      <BrandedEmbedControl
+        currentPlan={currentPlan}
+        brandedOption={brandedOption}
+        setBrandedOption={setBrandedOption}
+      />
       <InputGroup className="mb-1">
         <FormControl
           aria-label="Embed Snippet"
           aria-describedby="button-copy"
-          defaultValue={embedSnippetToCopy}
+          value={embedSnippetToCopy}
           readOnly
           onFocus={handleFocus}
         />

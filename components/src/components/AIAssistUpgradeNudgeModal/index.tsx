@@ -12,31 +12,31 @@ import { image } from '../image';
 export const AIAssistUpgradeNudgeModal = ({
   show,
   onClose,
-  onConfirm,
+  // onConfirm,
 }: {
   show: boolean;
   onClose: () => void;
-  onConfirm: () => void;
+  // onConfirm?: () => void;
 }) => {
-  const handleEnterKey = useCallback(
-    (event: KeyboardEvent) => {
-      if (event.key === 'Enter') {
-        onConfirm();
-      }
-    },
-    [onConfirm],
-  );
+  // const handleEnterKey = useCallback(
+  //   (event: KeyboardEvent) => {
+  //     if (event.key === 'Enter') {
+  //       onConfirm();
+  //     }
+  //   },
+  //   [onConfirm],
+  // );
 
-  useEffect(() => {
-    if (show) {
-      window.addEventListener('keydown', handleEnterKey);
-    } else {
-      window.removeEventListener('keydown', handleEnterKey);
-    }
-    return () => {
-      window.removeEventListener('keydown', handleEnterKey);
-    };
-  }, [show, handleEnterKey]);
+  // useEffect(() => {
+  //   if (show) {
+  //     window.addEventListener('keydown', handleEnterKey);
+  //   } else {
+  //     window.removeEventListener('keydown', handleEnterKey);
+  //   }
+  //   return () => {
+  //     window.removeEventListener('keydown', handleEnterKey);
+  //   };
+  // }, [show, handleEnterKey]);
 
   return (
     <Modal show={show} onHide={onClose} centered>

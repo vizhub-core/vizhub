@@ -1,0 +1,6 @@
+.vh-branded-embed-control {
+  .upgrade-nudge-alert {
+    border-radius: 12px;
+    background: var(--vh-color-action-03);
+  }
+}
