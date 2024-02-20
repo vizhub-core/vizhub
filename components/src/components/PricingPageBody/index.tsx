@@ -1,15 +1,26 @@
 import { useCallback, useEffect, useState } from 'react';
-import {
-  Plan,
-  freeTierSizeLimitMB,
-  premiumTierSizeLimitMB,
-} from 'entities';
+import { Plan } from 'entities';
 import { Footer } from '../Footer';
 import { GreenCheckSVG } from '../Icons/sam/GreenCheckSVG';
-import { Button, ButtonGroup } from '../bootstrap';
-import { Feature } from './Feature';
+import {
+  Button,
+  ButtonGroup,
+  OverlayTrigger,
+  Tooltip,
+} from '../bootstrap';
 import { image } from '../image';
+import { StarterFeatures } from './StarterFeatures';
+import { PremiumFeatures } from './PremiumFeatures';
 import './styles.scss';
+
+const premiumPriceMonthly = 9.99;
+const premiumPriceAnnually = 99.99;
+
+// The percent saved by paying annually.
+const percentSavings = Math.round(
+  (1 - premiumPriceAnnually / 12 / premiumPriceMonthly) *
+    100,
+);
 
 const randomImage = (options) =>
   image(
@@ -38,66 +49,6 @@ const premiumImages = [
   'pricing-spirit-premium-7',
 ];
 
-const StarterFeatures = ({ startsExpanded = false }) => {
-  return (
-    <>
-      <Feature
-        title="Public Vizzes"
-        hasBottomBorder={true}
-        startsExpanded={startsExpanded}
-      >
-        View, fork and modify visualizations viewable by
-        everyone.
-      </Feature>
-      <Feature
-        title="Hot Reloading & Interactive Widgets"
-        hasBottomBorder={true}
-        startsExpanded={startsExpanded}
-      >
-        Develop with instant feedback, tweak numbers and
-        colors with ease.
-      </Feature>
-      <Feature
-        title="Export Code"
-        hasBottomBorder={true}
-        startsExpanded={startsExpanded}
-      >
-        Export Vanilla JavaScript for integration into
-        existing codebases.
-      </Feature>
-      <Feature
-        title="Community Access"
-        hasBottomBorder={true}
-        startsExpanded={startsExpanded}
-      >
-        Join our{' '}
-        <a href="https://discord.gg/wbtJ7SCtYr">Discord</a>{' '}
-        and <a href="">Forum</a> to connect with our
-        community.
-      </Feature>
-      <Feature
-        title="Free Courses"
-        hasBottomBorder={true}
-        startsExpanded={startsExpanded}
-      >
-        Learn to code and visualize data with our{' '}
-        <a href="https://vizhub.com/forum/t/index-of-courses/289">
-          free online courses
-        </a>
-        .
-      </Feature>
-      <Feature
-        title="Limited Data Size"
-        hasBottomBorder={false}
-        startsExpanded={startsExpanded}
-      >
-        Data uploads are limited to {freeTierSizeLimitMB}
-        MB.
-      </Feature>
-    </>
-  );
-};
-
 const CurrentButton = () => (
   <Button
     variant="success"
@@ -108,7 +59,7 @@ const CurrentButton = () => (
   </Button>
 );
 
-const enableImages = false;
+const enableImages = true;
 
 export const PricingPageBody = ({
   onStarterDowngradeClick,
@@ -135,23 +86,22 @@ export const PricingPageBody = ({
     setIsMonthly(false);
   }, []);
 
-  const premiumPricePerMonth = isMonthly ? 9.99 : 99.99;
-
+  const premiumPrice = isMonthly
+    ? premiumPriceMonthly
+    : premiumPriceAnnually;
   // Make sure there is consistency between the
   // server-side and client-side rendering of the
   // initial pricing page.
-  const [starterSpiritSrc, setStarterSpiritSrc] = useState(
-    image(starterImages[0]),
-  );
+  const [starterSpiritSrc, setStarterSpiritSrc] =
+    useState(null);
 
   // On the client only, randomize the image.
   useEffect(() => {
     setStarterSpiritSrc(randomImage(starterImages));
   }, []);
 
-  const [premiumSpiritSrc, setPremiumSpiritSrc] = useState(
-    image(premiumImages[0]),
-  );
+  const [premiumSpiritSrc, setPremiumSpiritSrc] =
+    useState(null);
 
   useEffect(() => {
     setPremiumSpiritSrc(randomImage(premiumImages));
@@ -179,21 +129,30 @@ export const PricingPageBody = ({
               >
                 Billed Monthly
               </Button>
-              <Button
-                variant={
-                  isMonthly
-                    ? 'outline-secondary'
-                    : 'secondary'
+              <OverlayTrigger
+                placement="top"
+                overlay={
+                  <Tooltip id="annual-billing-tooltip">
+                    Save {percentSavings}%!
+                  </Tooltip>
                 }
-                onClick={handleAnnuallyClick}
               >
-                Billed Annually
-              </Button>
+                <Button
+                  variant={
+                    isMonthly
+                      ? 'outline-secondary'
+                      : 'secondary'
+                  }
+                  onClick={handleAnnuallyClick}
+                >
+                  Billed Annually
+                </Button>
+              </OverlayTrigger>
             </ButtonGroup>
           </div>
           <div className="pricing-page-plans">
             <div className="pricing-page-plan">
-              {enableImages && (
+              {enableImages && starterSpiritSrc && (
                 <img
                   className="plan-spirit"
                   src={starterSpiritSrc}
@@ -211,7 +170,10 @@ export const PricingPageBody = ({
                   </div>
                 </div>
 
-                <p>Ideal for beginners.</p>
+                <p>
+                  Ideal for beginners, students, and
+                  hobbyist.
+                </p>
                 {currentPlan === 'free' ? (
                   <CurrentButton />
                 ) : (
@@ -230,11 +192,11 @@ export const PricingPageBody = ({
               </div>
             </div>
             <div className="pricing-page-plan">
-              {enableImages && (
+              {enableImages && premiumSpiritSrc && (
                 <img
                   className="plan-spirit"
                   src={premiumSpiritSrc}
-                  alt="A digital nomad freelancer working on a client project"
+                  alt="A freelancer working on a client project"
                 />
               )}
               <div className="pricing-page-plan-body">
@@ -243,7 +205,7 @@ export const PricingPageBody = ({
                     Premium
                   </h3>
                   <div className="plan-header-right">
-                    <h3>${premiumPricePerMonth}</h3>
+                    <h3>${premiumPrice}</h3>
                     <h3 className="plan-header-right-faint">
                       /{isMonthly ? 'month' : 'year'}
                     </h3>
@@ -277,37 +239,7 @@ export const PricingPageBody = ({
                     </span>
                     , plus:
                   </div>
-                  <Feature
-                    title="AI-Assisted Coding"
-                    hasBottomBorder={true}
-                    learnMoreHref="https://vizhub.com/forum/t/ai-assisted-coding/952"
-                    startsExpanded={true}
-                  >
-                    Request coding assistance from
-                    artificial intelligence, which types
-                    directly into your editor! Powered by
-                    GPT-4.
-                  </Feature>
-                  <Feature
-                    title="Private Vizzes"
-                    hasBottomBorder={true}
-                  >
-                    Develop visualizations accessible only
-                    by you and your collaborators.
-                  </Feature>
-                  <Feature
-                    title="Unlimited Real-Time Collaborators"
-                    hasBottomBorder={true}
-                  >
-                    Invite colleagues to collaborate in
-                    real-time on your vizzes.
-                  </Feature>
-                  <Feature title="Upload Larger Datasets">
-                    Data uploads are limited to{' '}
-                    {premiumTierSizeLimitMB}
-                    MB.
-                  </Feature>
-                  {/* <StarterFeatures startsExpanded={false} /> */}
+                  <PremiumFeatures />
                 </div>
               </div>
             </div>

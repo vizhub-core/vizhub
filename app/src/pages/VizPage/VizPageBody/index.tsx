@@ -10,7 +10,6 @@ import {
 import {
   ShareDBDoc,
   SplitPaneResizeContext,
-  shouldTriggerRun,
   FileId,
 } from 'vzcode';
 import {
@@ -48,6 +47,7 @@ import { useMarkUncommitted } from '../useMarkUncommitted';
 import { formatTimestamp } from '../../../accessors/formatTimestamp';
 import { LogoSVG } from 'components/src/components/Icons/LogoSVG';
 import { getStargazersPageHref } from '../../../accessors/getStargazersPageHref';
+import { useBrandedEmbedNotice } from './useBrandedEmbedNotice';
 
 const debug = false;
 
@@ -79,7 +79,7 @@ export const VizPageBody = ({
   handleUpvoteClick,
   slugResolutionCache,
   isEmbedMode,
-  isEmbedBranded,
+  isEmbedBrandedURLParam,
   isHideMode,
   toggleAIAssistUpgradeNudgeModal,
 }: {
@@ -112,7 +112,7 @@ export const VizPageBody = ({
   handleUpvoteClick: () => void;
   slugResolutionCache: Record<SlugKey, VizId>;
   isEmbedMode: boolean;
-  isEmbedBranded: boolean;
+  isEmbedBrandedURLParam: boolean;
   isHideMode: boolean;
   toggleAIAssistUpgradeNudgeModal: () => void;
 }) => {
@@ -323,6 +323,24 @@ export const VizPageBody = ({
   }, []);
 
   const isUserAuthenticated = !!authenticatedUser;
+
+  // Should we show the viz embed branded?
+  // If the URL param is set, definitely show it.
+  // Otherwise, show it if:
+  // - The owner is on the free plan AND
+  // - The owner is not the authenticated user
+  const isEmbedBranded = useMemo(
+    () =>
+      isEmbedBrandedURLParam ||
+      (ownerUser.plan === FREE &&
+        ownerUser.id !== authenticatedUser?.id),
+    [isEmbedBrandedURLParam, ownerUser, authenticatedUser],
+  );
+
+  useBrandedEmbedNotice({
+    isEmbedBrandedURLParam,
+    isEmbedBranded,
+  });
 
   return isEmbedMode ? (
     <>

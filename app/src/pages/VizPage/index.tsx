@@ -255,8 +255,9 @@ export const VizPage: Page = ({
     [searchParams],
   );
 
+  // Is the viz embed branded parameter set?
   // ?embed=branded
-  const isEmbedBranded = useMemo(
+  const isEmbedBrandedURLParam = useMemo(
     () => searchParams.get('embed') === 'branded',
     [searchParams],
   );
@@ -340,7 +341,7 @@ export const VizPage: Page = ({
             handleUpvoteClick,
             slugResolutionCache,
             isEmbedMode,
-            isEmbedBranded,
+            isEmbedBrandedURLParam,
             isHideMode,
             toggleAIAssistUpgradeNudgeModal,
           }}
