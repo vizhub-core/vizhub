@@ -46,7 +46,7 @@ export const EmbedSection = ({
         <FormControl
           aria-label="Embed Snippet"
           aria-describedby="button-copy"
-          defaultValue={embedSnippetToCopy}
+          value={embedSnippetToCopy}
           readOnly
           onFocus={handleFocus}
         />
