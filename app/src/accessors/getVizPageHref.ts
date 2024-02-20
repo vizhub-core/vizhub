@@ -1,11 +1,4 @@
-import { Info, User } from 'entities';
-
-let domain = '';
-
-// If we're running in the browser, use the current domain.
-if (typeof window !== 'undefined') {
-  domain = window.location.origin;
-}
+import { Info, User, absoluteURL } from 'entities';
 
 // Gets the href for a viz page.
 export const getVizPageHref = ({
@@ -19,6 +12,6 @@ export const getVizPageHref = ({
   absolute?: boolean;
   embedMode?: boolean;
 }) =>
-  `${absolute ? domain : ''}/${ownerUser.userName}/${
+  `${absolute ? absoluteURL('') : ''}/${ownerUser.userName}/${
     info.slug || info.id
   }${embedMode ? '?mode=embed' : ''}`;
