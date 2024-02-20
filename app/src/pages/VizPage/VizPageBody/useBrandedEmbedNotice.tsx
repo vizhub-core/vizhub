@@ -8,11 +8,16 @@ import { useEffect } from 'react';
 // - Someone is viewing a Web page that embeds a viz
 // This is an opportunity to inform the user about VizHub Premium.
 export const useBrandedEmbedNotice = ({
+  isEmbedMode,
   isEmbedBrandedURLParam,
   isEmbedBranded,
 }) => {
   useEffect(() => {
-    if (!isEmbedBrandedURLParam && isEmbedBranded) {
+    if (
+      isEmbedMode &&
+      !isEmbedBrandedURLParam &&
+      isEmbedBranded
+    ) {
       console.log(
         [
           `  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@        
