@@ -35,6 +35,8 @@ export const ShareModal = ({
   initialCollaborators,
   currentPlan,
   showCollaboratorsSection,
+  brandedOption,
+  setBrandedOption,
 }: {
   show: boolean;
   linkToCopy: string;
@@ -59,6 +61,8 @@ export const ShareModal = ({
   initialCollaborators: Array<User>;
   currentPlan: Plan;
   showCollaboratorsSection: boolean;
+  brandedOption: string;
+  setBrandedOption: (brandedOption: string) => void;
 }) => {
   const [section, setSection] = useState('link');
 
@@ -151,6 +155,9 @@ export const ShareModal = ({
           <EmbedSection
             embedSnippetToCopy={embedSnippetToCopy}
             onEmbedSnippetCopy={onEmbedSnippetCopy}
+            brandedOption={brandedOption}
+            setBrandedOption={setBrandedOption}
+            currentPlan={currentPlan}
           />
         )}
         {/* {section === 'snippet' && (

@@ -17,7 +17,12 @@ import {
   iframeSnippet,
 } from 'entities';
 import { VizSettings } from './useVizMutations';
-import { useCallback, useContext, useMemo } from 'react';
+import {
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+} from 'react';
 import { AuthenticatedUserContext } from '../../contexts/AuthenticatedUserContext';
 import { getVizPageHref } from '../../accessors';
 import { VizKitAPI } from 'api/src/VizKit';
@@ -118,14 +123,19 @@ export const VizPageModals = ({
     [ownerUser, info],
   );
 
+  // The current branded option for the embed snippet.
+  const [brandedOption, setBrandedOption] =
+    useState('branded');
+
   const embedSnippetToCopy = useMemo(
     () =>
       iframeSnippet({
         ownerUserName: ownerUser.userName,
         idOrSlug: info.slug || info.id,
         height: content.height,
+        brandedOption,
       }),
-    [ownerUser, info, content],
+    [ownerUser, info, content, brandedOption],
   );
 
   // Handle when the user confirms that they
@@ -268,6 +278,8 @@ export const VizPageModals = ({
           showCollaboratorsSection={
             info.owner === authenticatedUser?.id
           }
+          brandedOption={brandedOption}
+          setBrandedOption={setBrandedOption}
         />
       )}
       {showDeleteVizConfirmationModal && (
