@@ -6,7 +6,12 @@ import { dsvParseSrc } from './d3-dsv-custom-build/bundle-modified-src';
 
 const debug = false;
 
-const optimize = false;
+const optimize = true;
+
+// Escape backticks in a string so that it can be
+// used in a template literal.
+const escapeBackticks = (str: string) =>
+  str.replace(/`/g, '\\`');
 
 // Responsible for loading CSV and TSV files, which are
 // in general called Delimiter-Separated Values (DSV).
@@ -16,7 +21,7 @@ export const transformDSV = (): InputPluginOption => ({
   // `id` here is of the form
   // `{vizId}/{fileName}`
   transform: async (
-    code: string,
+    text: string,
     id: ResolvedVizFileId,
   ) => {
     if (debug) {
@@ -39,18 +44,21 @@ export const transformDSV = (): InputPluginOption => ({
         );
       }
 
-      const rows = isCSV ? csvParse(code) : tsvParse(code);
       const parseFunction = isCSV ? 'csvParse' : 'tsvParse';
 
       if (optimize) {
         return {
           code: `
             ${dsvParseSrc}
-            export default ${parseFunction}(\`${code}\`);
+            const data = ${parseFunction}(\`${escapeBackticks(text)}\`);
+            export default data;
           `,
           map: { mappings: '' },
         };
       } else {
+        const rows = isCSV
+          ? csvParse(text)
+          : tsvParse(text);
         return {
           code: `export default ${JSON.stringify(rows)};`,
           map: { mappings: '' },
