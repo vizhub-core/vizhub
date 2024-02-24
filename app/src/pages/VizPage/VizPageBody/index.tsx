@@ -365,7 +365,7 @@ export const VizPageBody = ({
     </>
   ) : (
     <div className="vh-page">
-      <SmartHeader />
+      {!showEditor && <SmartHeader />}
       <VizPageHead
         showEditor={showEditor}
         setShowEditor={setShowEditor}

@@ -245,8 +245,8 @@ export const VizPage: Page = ({
 
   // Embed mode - to make the viz full screen
   // ?mode=embed
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const isEmbedMode = useMemo(
     () => searchParams.get('mode') === 'embed',
     [searchParams],
@@ -268,43 +268,29 @@ export const VizPage: Page = ({
 
   // `showEditor`
   // True if the sidebar should be shown.
-  // ?edit
-  // const [showEditor, setShowEditor] = useState(false);
-
-  // Edit mode - to show or hide the editor
-
+  // ?edit=files
   const showEditor = useMemo(
     () => searchParams.has('edit'),
     [searchParams],
   );
-  // const setShowEditor = useCallback(
-  //   (next: boolean) => {
-  //     console.log('Setting show editor to ' + next);
-  //     if (next) {
-  //       searchParams.set('edit', '');
-  //     } else {
-  //       searchParams.delete('edit');
-  //     }
-  //   },
-  //   [searchParams],
-  // );
 
   const setShowEditor = useCallback(
     (next: boolean) => {
-      console.log('Setting show editor to ' + next);
-      const newSearchParams = new URLSearchParams(
-        searchParams,
+      setSearchParams(
+        (oldSearchParams: URLSearchParams) => {
+          const updatedSearchParams = new URLSearchParams(
+            oldSearchParams,
+          );
+          if (next) {
+            updatedSearchParams.set('edit', 'files');
+          } else {
+            updatedSearchParams.delete('edit');
+          }
+          return updatedSearchParams;
+        },
       );
-      if (next) {
-        newSearchParams.set('edit', 'files');
-      } else {
-        newSearchParams.delete('edit');
-      }
-      navigate(`?${newSearchParams.toString()}`, {
-        replace: true,
-      });
     },
-    [navigate, searchParams],
+    [setSearchParams],
   );
 
   // Navigates the user to the new URL when the slug is changed.
