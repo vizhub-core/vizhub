@@ -47,7 +47,10 @@ import { useUpvoting } from './useUpvoting';
 import { useSlugAutoNavigate } from './useSlugAutoNavigate';
 import { useShareDBError } from './useShareDBError';
 import './styles.scss';
-import { useSearchParams } from 'react-router-dom';
+import {
+  useNavigate,
+  useSearchParams,
+} from 'react-router-dom';
 
 const vizKit = VizKit({ baseUrl: '/api' });
 
@@ -143,17 +146,6 @@ export const VizPage: Page = ({
   );
 
   // /////////////////////////////////////////
-  ////////////// URL State ///////////////////
-  // /////////////////////////////////////////
-
-  // `showEditor`
-  // True if the sidebar should be shown.
-  // TODO put this in URL state
-  // False: https://vizhub.com/curran/86a75dc8bdbe4965ba353a79d4bd44c8
-  // True: https://vizhub.com/curran/86a75dc8bdbe4965ba353a79d4bd44c8?edit=files
-  const [showEditor, setShowEditor] = useState(false);
-
-  // /////////////////////////////////////////
   /////////////// Modals /////////////////////
   // /////////////////////////////////////////
 
@@ -247,9 +239,14 @@ export const VizPage: Page = ({
     toggleSettingsModal,
   });
 
+  // /////////////////////////////////////////
+  ////////////// URL State ///////////////////
+  // /////////////////////////////////////////
+
   // Embed mode - to make the viz full screen
   // ?mode=embed
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const isEmbedMode = useMemo(
     () => searchParams.get('mode') === 'embed',
     [searchParams],
@@ -267,6 +264,47 @@ export const VizPage: Page = ({
   const isHideMode = useMemo(
     () => searchParams.get('mode') === 'hide',
     [searchParams],
+  );
+
+  // `showEditor`
+  // True if the sidebar should be shown.
+  // ?edit
+  // const [showEditor, setShowEditor] = useState(false);
+
+  // Edit mode - to show or hide the editor
+
+  const showEditor = useMemo(
+    () => searchParams.has('edit'),
+    [searchParams],
+  );
+  // const setShowEditor = useCallback(
+  //   (next: boolean) => {
+  //     console.log('Setting show editor to ' + next);
+  //     if (next) {
+  //       searchParams.set('edit', '');
+  //     } else {
+  //       searchParams.delete('edit');
+  //     }
+  //   },
+  //   [searchParams],
+  // );
+
+  const setShowEditor = useCallback(
+    (next: boolean) => {
+      console.log('Setting show editor to ' + next);
+      const newSearchParams = new URLSearchParams(
+        searchParams,
+      );
+      if (next) {
+        newSearchParams.set('edit', 'files');
+      } else {
+        newSearchParams.delete('edit');
+      }
+      navigate(`?${newSearchParams.toString()}`, {
+        replace: true,
+      });
+    },
+    [navigate, searchParams],
   );
 
   // Navigates the user to the new URL when the slug is changed.
