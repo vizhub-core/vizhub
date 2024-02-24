@@ -5,8 +5,9 @@ import { SmartHeader } from '../../smartComponents/SmartHeader';
 import { VizPreviewPresenter } from '../../smartComponents/VizPreviewPresenter';
 import { InfosAndOwnersContext } from '../../contexts/InfosAndOwnersContext';
 import { SectionSortContext } from '../../contexts/SectionSortContext';
+import { FeaturedLiveViz } from './FeaturedLiveViz';
 
-export const Body = () => {
+export const Body = ({ featuredLiveViz }) => {
   const { sortId, setSortId } = useContext(
     SectionSortContext,
   );
@@ -32,6 +33,7 @@ export const Body = () => {
   return (
     <div className="vh-page overflow-auto">
       <SmartHeader />
+
       <ExplorePageBody
         renderVizPreviews={() =>
           allInfoSnapshots.map(
@@ -54,7 +56,12 @@ export const Body = () => {
         hasMore={hasMore}
         onMoreClick={fetchNextPage}
         isLoadingNextPage={isLoadingNextPage}
-      />
+      >
+        <FeaturedLiveViz
+          userName={featuredLiveViz.userName}
+          vizIdOrSlug={featuredLiveViz.vizIdOrSlug}
+        />
+      </ExplorePageBody>
     </div>
   );
 };
