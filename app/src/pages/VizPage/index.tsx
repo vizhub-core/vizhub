@@ -274,6 +274,14 @@ export const VizPage: Page = ({
     [searchParams],
   );
 
+  // `isFileOpen`
+  // True if a file is open.
+  // ?file=filename
+  const isFileOpen = useMemo(
+    () => searchParams.has('file'),
+    [searchParams],
+  );
+
   const setShowEditor = useCallback(
     (next: boolean) => {
       setSearchParams(
@@ -368,6 +376,7 @@ export const VizPage: Page = ({
             isEmbedBrandedURLParam,
             isHideMode,
             toggleAIAssistUpgradeNudgeModal,
+            isFileOpen,
           }}
         />
       </SplitPaneResizeProvider>
