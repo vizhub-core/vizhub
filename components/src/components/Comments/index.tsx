@@ -1,5 +1,11 @@
 import { useCallback, useState } from 'react';
-import { Button, Form } from '../bootstrap';
+import { TrashSVG } from 'vzcode';
+import {
+  Button,
+  Form,
+  OverlayTrigger,
+  Tooltip,
+} from '../bootstrap';
 import './styles.scss';
 
 export type CommentFormatted = {
@@ -74,19 +80,42 @@ export const Comments = ({
           }) => (
             <div key={id} className="vh-comment">
               <div className="comment-top">
-                <a
-                  className="comment-author"
-                  href={authorHref}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <CommentAvatar src={authorAvatarURL} />
-                  <div>{authorDisplayName}</div>
-                </a>
-                Commented on
-                <div className="comment-date">
-                  {createdDateFormatted}
+                <div className="comment-top-side">
+                  <a
+                    className="comment-author"
+                    href={authorHref}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <CommentAvatar src={authorAvatarURL} />
+                    <div>{authorDisplayName}</div>
+                  </a>
+                  commented on
+                  <div className="comment-date">
+                    {createdDateFormatted}
+                  </div>
                 </div>
+                {
+                  /* You can only delete your own comments
+                   */ isUserAuthenticated &&
+                    authorAvatarURL ===
+                      authenticatedUserAvatarURL && (
+                      <div className="comment-top-side">
+                        <OverlayTrigger
+                          placement="top"
+                          overlay={
+                            <Tooltip id="delete-comment-icon-tooltip">
+                              Delete comment
+                            </Tooltip>
+                          }
+                        >
+                          <i className="icon-button icon-button-light">
+                            <TrashSVG />
+                          </i>
+                        </OverlayTrigger>
+                      </div>
+                    )
+                }
               </div>
               <div className="comment-bottom">
                 <div className="vh-markdown-body">

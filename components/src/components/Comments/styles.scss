@@ -6,34 +6,55 @@
     margin-bottom: 20px;
   }
 
-  .comment-top {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
+  .vh-comment {
+    .comment-top {
+      display: flex;
+      justify-content: space-between;
 
-  .comment-date {
-    color: var(--vh-color-neutral-03);
-  }
+      .comment-top-side {
+        display: flex;
+        align-items: center;
+        gap: 12px;
 
-  .comment-author {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    font-weight: 600;
-    color: var(--vh-color-neutral-01);
-    text-decoration: none;
-  }
+        i {
+          color: var(--vh-color-neutral-04);
+          display: none;
+        }
+        i.icon-button-light:hover {
+          color: var(--vh-color-neutral-03);
+        }
+      }
+    }
 
-  .comment-bottom {
-    margin-left: 48px;
+    .comment-date {
+      color: var(--vh-color-neutral-03);
+    }
 
-    .vh-markdown-body {
-      padding-top: 8px;
-      padding-bottom: 32px;
+    .comment-author {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-weight: 600;
       color: var(--vh-color-neutral-01);
+      text-decoration: none;
+    }
+
+    .comment-bottom {
+      margin-left: 48px;
+
+      .vh-markdown-body {
+        padding-top: 8px;
+        padding-bottom: 32px;
+        color: var(--vh-color-neutral-01);
+      }
+    }
+
+    /* Show the trash icon on hover */
+    &:hover .comment-top i {
+      display: flex;
     }
   }
+
   .comment-avatar {
     box-shadow: var(--vh-box-shadow);
     border-radius: 50%;
