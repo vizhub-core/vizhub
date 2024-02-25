@@ -2,10 +2,8 @@ import { SortControl } from '../SortControl';
 import { VizPreviewCollection } from '../VizPreviewCollection';
 import { More } from '../More';
 import { Footer } from '../Footer';
-import { HomeStarter } from '../HomeStarter';
 import { CreateNewButton } from '../CreateNewButton';
 import './styles.scss';
-import { Children } from 'react';
 
 export const ExplorePageBody = ({
   // Viz preview list props.
