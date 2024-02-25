@@ -47,7 +47,10 @@ import { useUpvoting } from './useUpvoting';
 import { useSlugAutoNavigate } from './useSlugAutoNavigate';
 import { useShareDBError } from './useShareDBError';
 import './styles.scss';
-import { useSearchParams } from 'react-router-dom';
+import {
+  useNavigate,
+  useSearchParams,
+} from 'react-router-dom';
 
 const vizKit = VizKit({ baseUrl: '/api' });
 
@@ -143,17 +146,6 @@ export const VizPage: Page = ({
   );
 
   // /////////////////////////////////////////
-  ////////////// URL State ///////////////////
-  // /////////////////////////////////////////
-
-  // `showEditor`
-  // True if the sidebar should be shown.
-  // TODO put this in URL state
-  // False: https://vizhub.com/curran/86a75dc8bdbe4965ba353a79d4bd44c8
-  // True: https://vizhub.com/curran/86a75dc8bdbe4965ba353a79d4bd44c8?edit=files
-  const [showEditor, setShowEditor] = useState(false);
-
-  // /////////////////////////////////////////
   /////////////// Modals /////////////////////
   // /////////////////////////////////////////
 
@@ -247,9 +239,14 @@ export const VizPage: Page = ({
     toggleSettingsModal,
   });
 
+  // /////////////////////////////////////////
+  ////////////// URL State ///////////////////
+  // /////////////////////////////////////////
+
   // Embed mode - to make the viz full screen
   // ?mode=embed
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const isEmbedMode = useMemo(
     () => searchParams.get('mode') === 'embed',
     [searchParams],
@@ -267,6 +264,63 @@ export const VizPage: Page = ({
   const isHideMode = useMemo(
     () => searchParams.get('mode') === 'hide',
     [searchParams],
+  );
+
+  // `showEditor`
+  // True if the sidebar should be shown.
+  // ?edit=files
+  const showEditor = useMemo(
+    () => searchParams.has('edit'),
+    [searchParams],
+  );
+
+  // `isFileOpen`
+  // True if a file is open.
+  // ?file=filename
+  const isFileOpen = useMemo(
+    () => searchParams.has('file'),
+    [searchParams],
+  );
+
+  // useEffect(() => {
+  //   console.log(
+  //     'current search params: ',
+  //     searchParams.toString(),
+  //   );
+  // }, [searchParams]);
+
+  // const setShowEditor = useCallback(
+  //   (next: boolean) => {
+  //     const updatedSearchParams = new URLSearchParams(
+  //       searchParams,
+  //     );
+  //     if (next) {
+  //       updatedSearchParams.set('edit', 'files');
+  //     } else {
+  //       updatedSearchParams.delete('edit');
+  //     }
+  //     setSearchParams(updatedSearchParams);
+  //   },
+  //   [searchParams, setSearchParams],
+  // );
+
+  const setShowEditor = useCallback(
+    (next: boolean) => {
+      setSearchParams(
+        (oldSearchParams: URLSearchParams) => {
+          const updatedSearchParams = new URLSearchParams(
+            oldSearchParams,
+          );
+          if (next) {
+            updatedSearchParams.set('edit', 'files');
+          } else {
+            updatedSearchParams.delete('edit');
+          }
+          return updatedSearchParams;
+        },
+      );
+    },
+    [setSearchParams],
   );
 
   // Navigates the user to the new URL when the slug is changed.
@@ -344,6 +398,7 @@ export const VizPage: Page = ({
             isEmbedBrandedURLParam,
             isHideMode,
             toggleAIAssistUpgradeNudgeModal,
+            isFileOpen,
           }}
         />
       </SplitPaneResizeProvider>

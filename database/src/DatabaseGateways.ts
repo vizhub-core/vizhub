@@ -32,7 +32,7 @@ import {
 } from 'gateways';
 import { otType, diff } from 'ot';
 import { toCollectionName } from './toCollectionName';
-import { pageSize } from 'gateways/src/Gateways';
+import { pageSize as defaultPageSize } from 'gateways/src/Gateways';
 import { ShareDBDoc } from 'vzcode';
 // import { embeddingMethods } from './embeddingMethods';
 
@@ -312,6 +312,7 @@ export const DatabaseGateways = ({
     vizIds,
     disablePagination = false,
     query,
+    pageSize = defaultPageSize,
   }: {
     owner?: UserId;
     forkedFrom?: ResourceId;
@@ -323,6 +324,7 @@ export const DatabaseGateways = ({
     vizIds?: Array<VizId>;
     disablePagination?: boolean;
     query?: string;
+    pageSize?: number;
   }) =>
     new Promise((resolve) => {
       const entityName = 'Info';

@@ -26,7 +26,7 @@ export const VizPageHead = ({
 }) => {
   const toggleShowEditor = useCallback(
     () => setShowEditor(!showEditor),
-    [showEditor],
+    [showEditor, setShowEditor],
   );
 
   return (
