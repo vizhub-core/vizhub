@@ -107,17 +107,17 @@ export const useComments = ({
   // Submits to the server
   const deleteCommentRemotely = useCallback(
     async (id: CommentId) => {
-      // const result = await vizKit.rest.deleteComment({
-      //   id,
-      // });
-      // if (result.outcome === 'failure') {
-      //   console.error(
-      //     'Failed to add comment: ',
-      //     result.error,
-      //   );
-      //   return;
-      // }
-      // return result.value;
+      const result = await vizKit.rest.deleteComment({
+        id,
+      });
+      if (result.outcome === 'failure') {
+        console.error(
+          'Failed to add comment: ',
+          result.error,
+        );
+        return;
+      }
+      return result.value;
     },
     [vizId],
   );

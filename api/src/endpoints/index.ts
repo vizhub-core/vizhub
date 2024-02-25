@@ -14,6 +14,7 @@ import { billingPortalSessionEndpoint } from './billingPortalSessionEndpoint';
 import { getUsersForTypeaheadEndpoint } from './getUsersForTypeaheadEndpoint';
 import { addCollaboratorEndpoint } from './addCollaboratorEndpoint';
 import { addCommentEndpoint } from './addCommentEndpoint';
+import { deleteCommentEndpoint } from './deleteCommentEndpoint';
 import { removeCollaboratorEndpoint } from './removeCollaboratorEndpoint';
 import { upvoteVizEndpoint } from './upvoteVizEndpoint';
 import { unUpvoteVizEndpoint } from './unUpvoteVizEndpoint';
@@ -39,6 +40,7 @@ export const endpoints = [
   addCollaboratorEndpoint,
   removeCollaboratorEndpoint,
   addCommentEndpoint,
+  deleteCommentEndpoint,
   upvoteVizEndpoint,
   unUpvoteVizEndpoint,
   isSlugAvailableEndpoint,
