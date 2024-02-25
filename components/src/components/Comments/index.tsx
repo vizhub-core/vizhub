@@ -86,6 +86,7 @@ export const Comments = ({
                 placeholder="Leave a comment"
                 value={comment}
                 onChange={handleChange}
+                rows={6}
               />
             </Form.Group>
             <div className="d-flex justify-content-end mt-3">

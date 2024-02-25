@@ -62,5 +62,15 @@
   .comment-box {
     display: flex;
     gap: 12px;
+
+    textarea {
+      border: 1px solid var(--vh-rule-color);
+      border-radius: 4px;
+
+      /* Change the placeholder text color */
+      &::placeholder {
+        color: var(--vh-color-neutral-03);
+      }
+    }
   }
 }
