@@ -134,14 +134,17 @@ export const VizPageBody = ({
     AuthenticatedUserContext,
   );
 
-  const { commentsFormatted, handleCommentSubmit } =
-    useComments({
-      vizId: info.id,
-      initialComments,
-      initialCommentAuthors,
-      authenticatedUser,
-      vizKit,
-    });
+  const {
+    commentsFormatted,
+    handleCommentSubmit,
+    handleCommentDelete,
+  } = useComments({
+    vizId: info.id,
+    initialComments,
+    initialCommentAuthors,
+    authenticatedUser,
+    vizKit,
+  });
 
   // Marks the viz as uncommitted and adds the
   // authenticated user to the list of commit authors.
@@ -468,6 +471,7 @@ export const VizPageBody = ({
               authenticatedUserAvatarURL={
                 authenticatedUserAvatarURL
               }
+              handleCommentDelete={handleCommentDelete}
             />
           </div>
         )}

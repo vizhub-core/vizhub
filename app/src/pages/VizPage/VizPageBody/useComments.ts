@@ -2,6 +2,7 @@ import { VizKitAPI } from 'api/src/VizKit';
 import { CommentFormatted } from 'components/src/components/Comments';
 import {
   Comment,
+  CommentId,
   Snapshot,
   User,
   VizId,
@@ -93,19 +94,51 @@ export const useComments = ({
     [addCommentLocally, addCommentRemotely],
   );
 
+  // Changes local state
+  const deleteCommentLocally = useCallback(
+    (id: string) => {
+      setComments((comments) =>
+        comments.filter((comment) => comment.id !== id),
+      );
+    },
+    [setComments],
+  );
+
+  // Submits to the server
+  const deleteCommentRemotely = useCallback(
+    async (id: CommentId) => {
+      // const result = await vizKit.rest.deleteComment({
+      //   id,
+      // });
+      // if (result.outcome === 'failure') {
+      //   console.error(
+      //     'Failed to add comment: ',
+      //     result.error,
+      //   );
+      //   return;
+      // }
+      // return result.value;
+    },
+    [vizId],
+  );
+
+  // Gets called when the user submits a comment
+  const handleCommentDelete = useCallback(
+    (id: string) => {
+      if (!authenticatedUser) {
+        return;
+      }
+
+      deleteCommentLocally(id);
+      deleteCommentRemotely(id);
+    },
+    [deleteCommentLocally, deleteCommentLocally],
+  );
+
   const commentsFormatted: Array<CommentFormatted> =
     useMemo(
       () =>
         comments.map((comment: Comment) => {
-          // CommentFormatted:
-          // id: string;
-          // authorDisplayName: string;
-          // authorHref: string;
-          // authorAvatarURL: string;
-          // createdDateFormatted: string;
-          // editedDateFormatted: string;
-          // commentText: string;
-
           const authorUser =
             commentAuthorsById[comment.author];
 
@@ -128,5 +161,9 @@ export const useComments = ({
       [comments],
     );
 
-  return { commentsFormatted, handleCommentSubmit };
+  return {
+    commentsFormatted,
+    handleCommentSubmit,
+    handleCommentDelete,
+  };
 };

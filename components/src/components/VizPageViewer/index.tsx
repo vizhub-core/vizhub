@@ -47,6 +47,7 @@ export const VizPageViewer = ({
   commentsFormatted,
   handleCommentSubmit,
   authenticatedUserAvatarURL,
+  handleCommentDelete,
 }) => {
   // This SVG element is used only for its dynamic resizing behavior.
   // It's invisible, nothing is rendered into it.
@@ -226,6 +227,7 @@ export const VizPageViewer = ({
           authenticatedUserAvatarURL={
             authenticatedUserAvatarURL
           }
+          handleCommentDelete={handleCommentDelete}
         />
       </div>
     </div>
