@@ -27,6 +27,8 @@ import {
   SlugKey,
   getVizThumbnailURL,
   FREE,
+  Comment,
+  Snapshot,
 } from 'entities';
 import { useRuntime } from 'runtime';
 import {
@@ -48,6 +50,9 @@ import { formatTimestamp } from '../../../accessors/formatTimestamp';
 import { LogoSVG } from 'components/src/components/Icons/LogoSVG';
 import { getStargazersPageHref } from '../../../accessors/getStargazersPageHref';
 import { useBrandedEmbedNotice } from './useBrandedEmbedNotice';
+import { useComments } from './useComments';
+import { VizKitAPI } from 'api/src/VizKit';
+import { getAvatarURL } from '../../../accessors/getAvatarURL';
 
 const debug = false;
 
@@ -83,6 +88,9 @@ export const VizPageBody = ({
   isHideMode,
   toggleAIAssistUpgradeNudgeModal,
   isFileOpen,
+  initialComments,
+  initialCommentAuthors,
+  vizKit,
 }: {
   info: Info;
   content: Content;
@@ -117,11 +125,26 @@ export const VizPageBody = ({
   isHideMode: boolean;
   toggleAIAssistUpgradeNudgeModal: () => void;
   isFileOpen: boolean;
+  initialComments: Array<Snapshot<Comment>>;
+  initialCommentAuthors: Array<Snapshot<User>>;
+  vizKit: VizKitAPI;
 }) => {
   // The currently authenticated user, if any.
   const authenticatedUser: User | null = useContext(
     AuthenticatedUserContext,
   );
+
+  const {
+    commentsFormatted,
+    handleCommentSubmit,
+    handleCommentDelete,
+  } = useComments({
+    vizId: info.id,
+    initialComments,
+    initialCommentAuthors,
+    authenticatedUser,
+    vizKit,
+  });
 
   // Marks the viz as uncommitted and adds the
   // authenticated user to the list of commit authors.
@@ -345,6 +368,12 @@ export const VizPageBody = ({
     isEmbedBranded,
   });
 
+  const authenticatedUserAvatarURL = useMemo(
+    () =>
+      authenticatedUser && getAvatarURL(authenticatedUser),
+    [authenticatedUser],
+  );
+
   return isEmbedMode ? (
     <>
       {renderVizRunner()}
@@ -437,6 +466,12 @@ export const VizPageBody = ({
               stargazersHref={stargazersHref}
               onForkClick={toggleForkModal}
               isUserAuthenticated={isUserAuthenticated}
+              commentsFormatted={commentsFormatted}
+              handleCommentSubmit={handleCommentSubmit}
+              authenticatedUserAvatarURL={
+                authenticatedUserAvatarURL
+              }
+              handleCommentDelete={handleCommentDelete}
             />
           </div>
         )}

@@ -1,9 +1,4 @@
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import {
   Files,
   ShareDBDoc,
@@ -18,6 +13,7 @@ import {
   User,
   VizId,
   SlugKey,
+  Comment,
 } from 'entities';
 import { VizKit } from 'api/src/VizKit';
 import {
@@ -28,6 +24,7 @@ import {
   useShareDBDocPresence,
   useShareDBDocs,
 } from '../../useShareDBDocData';
+import { useSearchParams } from 'react-router-dom';
 import { AuthenticatedUserProvider } from '../../contexts/AuthenticatedUserContext';
 import { Page, PageData } from '../Page';
 import { VizPageBody } from './VizPageBody';
@@ -47,10 +44,6 @@ import { useUpvoting } from './useUpvoting';
 import { useSlugAutoNavigate } from './useSlugAutoNavigate';
 import { useShareDBError } from './useShareDBError';
 import './styles.scss';
-import {
-  useNavigate,
-  useSearchParams,
-} from 'react-router-dom';
 
 const vizKit = VizKit({ baseUrl: '/api' });
 
@@ -72,6 +65,8 @@ export type VizPageData = PageData & {
   initialCollaborators: Array<User>;
   initialIsUpvoted: boolean;
   slugResolutionCache: Record<SlugKey, VizId>;
+  initialComments: Array<Snapshot<Comment>>;
+  initialCommentAuthors: Array<Snapshot<User>>;
 };
 
 // Inspired by https://github.com/vitejs/vite-plugin-react/blob/main/playground/ssr-react/src/pages/Home.jsx
@@ -95,6 +90,8 @@ export const VizPage: Page = ({
     initialCollaborators,
     initialIsUpvoted,
     slugResolutionCache,
+    initialComments,
+    initialCommentAuthors,
   } = pageData;
 
   // /////////////////////////////////////////
@@ -282,28 +279,6 @@ export const VizPage: Page = ({
     [searchParams],
   );
 
-  // useEffect(() => {
-  //   console.log(
-  //     'current search params: ',
-  //     searchParams.toString(),
-  //   );
-  // }, [searchParams]);
-
-  // const setShowEditor = useCallback(
-  //   (next: boolean) => {
-  //     const updatedSearchParams = new URLSearchParams(
-  //       searchParams,
-  //     );
-  //     if (next) {
-  //       updatedSearchParams.set('edit', 'files');
-  //     } else {
-  //       updatedSearchParams.delete('edit');
-  //     }
-  //     setSearchParams(updatedSearchParams);
-  //   },
-  //   [searchParams, setSearchParams],
-  // );
-
   const setShowEditor = useCallback(
     (next: boolean) => {
       setSearchParams(
@@ -365,6 +340,7 @@ export const VizPage: Page = ({
       }
     >
       <SplitPaneResizeProvider>
+        {/* TODO <VizPageProvider></VizPageProvider> */}
         <VizPageBody
           {...{
             info,
@@ -399,6 +375,9 @@ export const VizPage: Page = ({
             isHideMode,
             toggleAIAssistUpgradeNudgeModal,
             isFileOpen,
+            initialComments,
+            initialCommentAuthors,
+            vizKit,
           }}
         />
       </SplitPaneResizeProvider>

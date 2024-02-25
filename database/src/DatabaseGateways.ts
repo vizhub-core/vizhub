@@ -873,6 +873,23 @@ export const DatabaseGateways = ({
     return ok(result._id);
   };
 
+  const getCommentsForResource = async (resource: VizId) =>
+    new Promise((resolve) => {
+      const entityName = 'Comment';
+      const query = shareDBConnection.createFetchQuery(
+        toCollectionName(entityName),
+        { resource },
+        {},
+        (error, results) => {
+          query.destroy();
+          if (error) return resolve(err(error));
+          resolve(
+            ok(results.map((doc) => doc.toSnapshot())),
+          );
+        },
+      );
+    });
+
   let databaseGateways = {
     type: 'DatabaseGateways',
     getForks,
@@ -893,6 +910,7 @@ export const DatabaseGateways = ({
     getStaleInfoIds,
     getInfoByUserAndSlug,
     getUserIdByStripeCustomerId,
+    getCommentsForResource,
   };
 
   for (const entityName of crudEntityNames) {

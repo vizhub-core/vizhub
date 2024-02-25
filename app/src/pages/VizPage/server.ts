@@ -12,6 +12,7 @@ import {
   UpvoteId,
   getVizThumbnailURL,
   absoluteURL,
+  Comment,
 } from 'entities';
 import { rollup } from 'rollup';
 import { compile } from 'svelte/compiler';
@@ -100,7 +101,7 @@ VizPage.getPageData = async ({
     }
     const infoSnapshot: Snapshot<Info> = infoResult.value;
     let info: Info = infoSnapshot.data;
-    const id = info.id;
+    const id: VizId = info.id;
 
     const {
       authenticatedUserId,
@@ -433,6 +434,35 @@ VizPage.getPageData = async ({
       }
     }
 
+    // Get the comments on this viz.
+    const initialCommentsResult =
+      await gateways.getCommentsForResource(id);
+    if (initialCommentsResult.outcome === 'failure') {
+      console.log('Error when fetching comments for viz:');
+      console.log(initialCommentsResult.error);
+      return null;
+    }
+    const initialComments: Array<Snapshot<Comment>> =
+      initialCommentsResult.value;
+    const initialCommentAuthorsResult = await getUsersByIds(
+      Array.from(
+        new Set(
+          initialComments.map(
+            (comment) => comment.data.author,
+          ),
+        ),
+      ),
+    );
+    if (initialCommentAuthorsResult.outcome === 'failure') {
+      console.log(
+        'Error when fetching comment authors for viz:',
+      );
+      console.log(initialCommentAuthorsResult.error);
+      return null;
+    }
+    const initialCommentAuthors: Array<Snapshot<User>> =
+      initialCommentAuthorsResult.value;
+
     scoreStaleVizzes();
 
     return {
@@ -452,6 +482,8 @@ VizPage.getPageData = async ({
       initialCollaborators,
       initialIsUpvoted,
       slugResolutionCache,
+      initialComments,
+      initialCommentAuthors,
     };
   } catch (e) {
     console.log(
