@@ -282,6 +282,28 @@ export const VizPage: Page = ({
     [searchParams],
   );
 
+  // useEffect(() => {
+  //   console.log(
+  //     'current search params: ',
+  //     searchParams.toString(),
+  //   );
+  // }, [searchParams]);
+
+  // const setShowEditor = useCallback(
+  //   (next: boolean) => {
+  //     const updatedSearchParams = new URLSearchParams(
+  //       searchParams,
+  //     );
+  //     if (next) {
+  //       updatedSearchParams.set('edit', 'files');
+  //     } else {
+  //       updatedSearchParams.delete('edit');
+  //     }
+  //     setSearchParams(updatedSearchParams);
+  //   },
+  //   [searchParams, setSearchParams],
+  // );
+
   const setShowEditor = useCallback(
     (next: boolean) => {
       setSearchParams(
