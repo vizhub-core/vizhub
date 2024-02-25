@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react';
 import { Button, Form } from '../bootstrap';
+import './styles.scss';
 
 export type CommentFormatted = {
   id: string;
@@ -62,18 +63,27 @@ export const Comments = ({
             commentText,
           }) => (
             <div key={id} className="vh-comment">
-              <a href={authorHref}>
-                <img
-                  src={authorAvatarURL}
-                  width="40"
-                  height="40"
-                  className="rounded-circle"
-                ></img>
-                <h4>{authorDisplayName}</h4>
-              </a>
-              <div className="vh-comment-right">
-                <div>{createdDateFormatted}</div>
-                <div>{editedDateFormatted}</div>
+              <div className="comment-top">
+                <a
+                  className="comment-author"
+                  href={authorHref}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <img
+                    src={authorAvatarURL}
+                    width="32"
+                    height="32"
+                    className="rounded-circle"
+                  ></img>
+                  <div>{authorDisplayName}</div>
+                </a>
+                Commented on
+                <div className="comment-date">
+                  {createdDateFormatted}
+                </div>
+              </div>
+              <div className="comment-bottom">
                 <div className="vh-markdown-body">
                   {commentText}
                 </div>

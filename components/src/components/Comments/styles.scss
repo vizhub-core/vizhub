@@ -1,4 +1,34 @@
 .vh-comments {
   display: flex;
   flex-direction: column;
+
+  .comment-top,
+  .comment-author {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .comment-date {
+    color: var(--vh-color-neutral-03);
+  }
+
+  .comment-author {
+    font-weight: 500;
+    color: var(--vh-color-neutral-01);
+    text-decoration: none;
+
+    img {
+      box-shadow: var(--vh-box-shadow);
+    }
+  }
+
+  .comment-bottom {
+    margin-left: 44px;
+
+    .vh-markdown-body {
+      padding-top: 12px;
+      padding-bottom: 24px;
+    }
+  }
 }
