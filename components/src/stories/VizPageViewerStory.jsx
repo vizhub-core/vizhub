@@ -34,6 +34,22 @@ export const args = {
   upvotesCount: 25,
   license: 'MIT',
   enableEditingTitle: true,
+  comments: Array(5)
+    .fill({
+      authorDisplayName: 'Author Name',
+      authorAvatarURL:
+        'https://avatars.githubusercontent.com/u/1234567?v=4',
+      createdDateFormatted: 'January 20, 1985',
+      editedDateFormatted: 'February 20, 1985',
+      commentText: 'Comment text',
+    })
+    .map((comment, index) => ({
+      id: '' + index,
+      ...comment,
+    })),
+  onCommentSubmit: (commentText) => {
+    console.log('commentText', commentText);
+  },
 };
 
 const Story = () => {

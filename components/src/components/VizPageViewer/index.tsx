@@ -15,6 +15,7 @@ import { OverlayTrigger, Tooltip } from '../bootstrap';
 import { FullScreenSVG } from '../Icons/sam/FullScreenSVG';
 import './styles.scss';
 import { StarSVGSymbol } from '../Icons/sam/StarSVG';
+import { Comments } from '../Comments';
 
 export const VizPageViewer = ({
   vizTitle,
@@ -44,6 +45,8 @@ export const VizPageViewer = ({
   stargazersHref,
   onForkClick,
   isUserAuthenticated,
+  comments,
+  onCommentSubmit,
 }) => {
   // This SVG element is used only for its dynamic resizing behavior.
   // It's invisible, nothing is rendered into it.
@@ -216,6 +219,10 @@ export const VizPageViewer = ({
           {renderMarkdownHTML()}
         </div>
         <div className="license">{license} Licensed</div>
+        <Comments
+          comments={comments}
+          onCommentSubmit={onCommentSubmit}
+        />
       </div>
     </div>
   );
