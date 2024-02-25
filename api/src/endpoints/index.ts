@@ -13,6 +13,7 @@ import { vizThumbnailEndpoint } from './vizThumbnailEndpoint';
 import { billingPortalSessionEndpoint } from './billingPortalSessionEndpoint';
 import { getUsersForTypeaheadEndpoint } from './getUsersForTypeaheadEndpoint';
 import { addCollaboratorEndpoint } from './addCollaboratorEndpoint';
+import { addCommentEndpoint } from './addCommentEndpoint';
 import { removeCollaboratorEndpoint } from './removeCollaboratorEndpoint';
 import { upvoteVizEndpoint } from './upvoteVizEndpoint';
 import { unUpvoteVizEndpoint } from './unUpvoteVizEndpoint';
@@ -37,6 +38,7 @@ export const endpoints = [
   getUsersForTypeaheadEndpoint,
   addCollaboratorEndpoint,
   removeCollaboratorEndpoint,
+  addCommentEndpoint,
   upvoteVizEndpoint,
   unUpvoteVizEndpoint,
   isSlugAvailableEndpoint,

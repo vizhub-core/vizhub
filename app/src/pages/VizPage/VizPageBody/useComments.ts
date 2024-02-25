@@ -46,7 +46,7 @@ export const useComments = ({
   // Changes local state
   const addCommentLocally = useCallback(
     (comment: Comment) => {
-      setComments((comments) => [comment, ...comments]);
+      setComments((comments) => [...comments, comment]);
     },
     [setComments],
   );
@@ -54,19 +54,17 @@ export const useComments = ({
   // Submits to the server
   const addCommentRemotely = useCallback(
     async (comment: Comment) => {
-      console.log('TODO addCommentRemotely', comment);
-      // const result = await vizKit.rest.addComment({
-      //   vizId,
-      //   markdown: comment.markdown,
-      // });
-      // if (result.outcome === 'failure') {
-      //   console.error(
-      //     'Failed to add comment: ',
-      //     result.error,
-      //   );
-      //   return;
-      // }
-      // return result.value;
+      const result = await vizKit.rest.addComment({
+        comment,
+      });
+      if (result.outcome === 'failure') {
+        console.error(
+          'Failed to add comment: ',
+          result.error,
+        );
+        return;
+      }
+      return result.value;
     },
     [vizId],
   );
@@ -77,9 +75,7 @@ export const useComments = ({
       if (!authenticatedUser) {
         return;
       }
-      console.log(markdown);
       const id = generateIdClientSide();
-      console.log('generated id client side ', id);
 
       const newComment: Comment = {
         id,
@@ -91,8 +87,8 @@ export const useComments = ({
       // Add the comment in the client-side list
       addCommentLocally(newComment);
 
-      // // Add the comment in the database
-      // await postComment(newComment);
+      // Add the comment in the database
+      addCommentRemotely(newComment);
     },
     [addCommentLocally, addCommentRemotely],
   );

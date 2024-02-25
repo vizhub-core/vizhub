@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { Button, Form } from '../bootstrap';
 
 export type CommentFormatted = {
@@ -24,14 +24,27 @@ export const Comments = ({
   handleCommentSubmit: (markdown: string) => void;
   isUserAuthenticated: boolean;
 }) => {
+  // The comment that the user has entered
+  const [comment, setComment] = useState('');
+
+  // When the comment form is submitted
   const handleSubmit = useCallback(
     (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
       handleCommentSubmit(
         event.currentTarget.commentBox.value,
       );
+      // Clear the comment box after submission
+      setComment('');
     },
     [handleCommentSubmit],
+  );
+
+  // When the user types a character into the comment box
+  const handleChange = useCallback(
+    (event: React.ChangeEvent<HTMLTextAreaElement>) =>
+      setComment(event.target.value),
+    [],
   );
 
   return (
@@ -75,6 +88,8 @@ export const Comments = ({
               <Form.Control
                 as="textarea"
                 placeholder="Leave a comment"
+                value={comment}
+                onChange={handleChange}
               />
             </Form.Group>
             <div className="d-flex justify-content-end mt-3">
