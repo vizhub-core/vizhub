@@ -2,8 +2,11 @@
   display: flex;
   flex-direction: column;
 
-  .comment-top,
-  .comment-author {
+  h4 {
+    margin-bottom: 20px;
+  }
+
+  .comment-top {
     display: flex;
     align-items: center;
     gap: 12px;
@@ -14,21 +17,29 @@
   }
 
   .comment-author {
-    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-weight: 600;
     color: var(--vh-color-neutral-01);
     text-decoration: none;
-
-    img {
-      box-shadow: var(--vh-box-shadow);
-    }
   }
 
   .comment-bottom {
-    margin-left: 44px;
+    margin-left: 48px;
 
     .vh-markdown-body {
-      padding-top: 12px;
-      padding-bottom: 24px;
+      padding-top: 8px;
+      padding-bottom: 32px;
+      color: var(--vh-color-neutral-01);
     }
+  }
+  .comment-avatar {
+    box-shadow: var(--vh-box-shadow);
+    border-radius: 50%;
+  }
+  .comment-box {
+    display: flex;
+    gap: 12px;
   }
 }

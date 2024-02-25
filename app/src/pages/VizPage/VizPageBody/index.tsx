@@ -52,6 +52,7 @@ import { getStargazersPageHref } from '../../../accessors/getStargazersPageHref'
 import { useBrandedEmbedNotice } from './useBrandedEmbedNotice';
 import { useComments } from './useComments';
 import { VizKitAPI } from 'api/src/VizKit';
+import { getAvatarURL } from '../../../accessors/getAvatarURL';
 
 const debug = false;
 
@@ -364,6 +365,12 @@ export const VizPageBody = ({
     isEmbedBranded,
   });
 
+  const authenticatedUserAvatarURL = useMemo(
+    () =>
+      authenticatedUser && getAvatarURL(authenticatedUser),
+    [authenticatedUser],
+  );
+
   return isEmbedMode ? (
     <>
       {renderVizRunner()}
@@ -458,6 +465,9 @@ export const VizPageBody = ({
               isUserAuthenticated={isUserAuthenticated}
               commentsFormatted={commentsFormatted}
               handleCommentSubmit={handleCommentSubmit}
+              authenticatedUserAvatarURL={
+                authenticatedUserAvatarURL
+              }
             />
           </div>
         )}

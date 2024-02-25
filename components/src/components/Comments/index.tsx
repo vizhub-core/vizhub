@@ -16,14 +16,25 @@ export type CommentFormatted = {
   commentText: string;
 };
 
+const CommentAvatar = ({ src }) => (
+  <img
+    className="comment-avatar"
+    src={src}
+    width="32"
+    height="32"
+  ></img>
+);
+
 export const Comments = ({
   commentsFormatted,
   handleCommentSubmit,
   isUserAuthenticated,
+  authenticatedUserAvatarURL,
 }: {
   commentsFormatted: Array<CommentFormatted>;
   handleCommentSubmit: (markdown: string) => void;
   isUserAuthenticated: boolean;
+  authenticatedUserAvatarURL: string;
 }) => {
   // The comment that the user has entered
   const [comment, setComment] = useState('');
@@ -59,7 +70,6 @@ export const Comments = ({
             authorHref,
             authorAvatarURL,
             createdDateFormatted,
-            editedDateFormatted,
             commentText,
           }) => (
             <div key={id} className="vh-comment">
@@ -70,12 +80,7 @@ export const Comments = ({
                   target="_blank"
                   rel="noreferrer"
                 >
-                  <img
-                    src={authorAvatarURL}
-                    width="32"
-                    height="32"
-                    className="rounded-circle"
-                  ></img>
+                  <CommentAvatar src={authorAvatarURL} />
                   <div>{authorDisplayName}</div>
                 </a>
                 Commented on
@@ -94,7 +99,13 @@ export const Comments = ({
 
         {isUserAuthenticated && (
           <Form onSubmit={handleSubmit}>
-            <Form.Group controlId="commentBox">
+            <Form.Group
+              controlId="commentBox"
+              className="comment-box"
+            >
+              <CommentAvatar
+                src={authenticatedUserAvatarURL}
+              />
               <Form.Control
                 as="textarea"
                 placeholder="Leave a comment"
