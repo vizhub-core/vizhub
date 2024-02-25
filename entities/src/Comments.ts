@@ -21,6 +21,9 @@ export interface Comment {
   // When this comment was created
   created: Timestamp;
 
+  // When this comment was last edited
+  edited?: Timestamp;
+
   // The body content of this comment
   markdown: Markdown;
 }

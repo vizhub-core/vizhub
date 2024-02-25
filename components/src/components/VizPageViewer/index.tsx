@@ -45,8 +45,8 @@ export const VizPageViewer = ({
   stargazersHref,
   onForkClick,
   isUserAuthenticated,
-  comments,
-  onCommentSubmit,
+  commentsFormatted,
+  handleCommentSubmit,
 }) => {
   // This SVG element is used only for its dynamic resizing behavior.
   // It's invisible, nothing is rendered into it.
@@ -220,8 +220,9 @@ export const VizPageViewer = ({
         </div>
         <div className="license">{license} Licensed</div>
         <Comments
-          comments={comments}
-          onCommentSubmit={onCommentSubmit}
+          commentsFormatted={commentsFormatted}
+          handleCommentSubmit={handleCommentSubmit}
+          isUserAuthenticated={isUserAuthenticated}
         />
       </div>
     </div>

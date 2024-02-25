@@ -12,6 +12,7 @@ import {
   UpvoteId,
   getVizThumbnailURL,
   absoluteURL,
+  Comment,
 } from 'entities';
 import { rollup } from 'rollup';
 import { compile } from 'svelte/compiler';
@@ -433,6 +434,10 @@ VizPage.getPageData = async ({
       }
     }
 
+    // TODO fetch these comments from the database
+    const initialComments: Array<Snapshot<Comment>> = [];
+    const initialCommentAuthors: Array<Snapshot<User>> = [];
+
     scoreStaleVizzes();
 
     return {
@@ -452,6 +457,8 @@ VizPage.getPageData = async ({
       initialCollaborators,
       initialIsUpvoted,
       slugResolutionCache,
+      initialComments,
+      initialCommentAuthors,
     };
   } catch (e) {
     console.log(

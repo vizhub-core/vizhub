@@ -7,66 +7,83 @@ export type CommentFormatted = {
   authorHref: string;
   authorAvatarURL: string;
   createdDateFormatted: string;
-  editedDateFormatted: string;
+
+  // Undefined if the user has not edited the comment
+  editedDateFormatted?: string;
+
+  // TODO render this markdown with marked or react-markdown
   commentText: string;
 };
 
 export const Comments = ({
-  comments,
-  onCommentSubmit,
+  commentsFormatted,
+  handleCommentSubmit,
+  isUserAuthenticated,
 }: {
-  comments: Array<CommentFormatted>;
-  onCommentSubmit: (commentText: string) => void;
+  commentsFormatted: Array<CommentFormatted>;
+  handleCommentSubmit: (markdown: string) => void;
+  isUserAuthenticated: boolean;
 }) => {
   const handleSubmit = useCallback(
     (event: React.FormEvent<HTMLFormElement>) => {
-      // Prevent the default form submit action
       event.preventDefault();
-
-      const form = event.currentTarget;
-      const commentText = form.commentBox.value;
-      onCommentSubmit(commentText);
+      handleCommentSubmit(
+        event.currentTarget.commentBox.value,
+      );
     },
-    [],
+    [handleCommentSubmit],
   );
 
   return (
     <div className="vh-comments">
-      <h4>Comments</h4>
+      {commentsFormatted.length > 0 && <h4>Comments</h4>}
       <div>
-        <Form onSubmit={handleSubmit}>
-          <Form.Group controlId="commentBox">
-            <Form.Control
-              as="textarea"
-              placeholder="Leave a comment"
-            />
-          </Form.Group>
-          <div className="d-flex justify-content-end mt-3">
-            <Button variant="primary" type="submit">
-              Post Comment
-            </Button>
-          </div>
-        </Form>
-        {comments.map((comment) => (
-          <div key={comment.id} className="vh-comment">
-            <a href={comment.authorHref}>
-              <img
-                src={comment.authorAvatarURL}
-                width="40"
-                height="40"
-                className="rounded-circle"
-              ></img>
-              <h4>{comment.authorDisplayName}</h4>
-            </a>
-            <div className="vh-comment-right">
-              <div>{comment.createdDateFormatted}</div>
-              <div>{comment.editedDateFormatted}</div>
-              <div className="vh-markdown-body">
-                {comment.commentText}
+        {commentsFormatted.map(
+          ({
+            id,
+            authorDisplayName,
+            authorHref,
+            authorAvatarURL,
+            createdDateFormatted,
+            editedDateFormatted,
+            commentText,
+          }) => (
+            <div key={id} className="vh-comment">
+              <a href={authorHref}>
+                <img
+                  src={authorAvatarURL}
+                  width="40"
+                  height="40"
+                  className="rounded-circle"
+                ></img>
+                <h4>{authorDisplayName}</h4>
+              </a>
+              <div className="vh-comment-right">
+                <div>{createdDateFormatted}</div>
+                <div>{editedDateFormatted}</div>
+                <div className="vh-markdown-body">
+                  {commentText}
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ),
+        )}
+
+        {isUserAuthenticated && (
+          <Form onSubmit={handleSubmit}>
+            <Form.Group controlId="commentBox">
+              <Form.Control
+                as="textarea"
+                placeholder="Leave a comment"
+              />
+            </Form.Group>
+            <div className="d-flex justify-content-end mt-3">
+              <Button variant="primary" type="submit">
+                Post Comment
+              </Button>
+            </div>
+          </Form>
+        )}
       </div>
     </div>
   );

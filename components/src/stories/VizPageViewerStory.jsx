@@ -34,7 +34,7 @@ export const args = {
   upvotesCount: 25,
   license: 'MIT',
   enableEditingTitle: true,
-  comments: Array(5)
+  commentsFormatted: Array(5)
     .fill({
       authorDisplayName: 'Author Name',
       authorAvatarURL:
@@ -47,8 +47,8 @@ export const args = {
       id: '' + index,
       ...comment,
     })),
-  onCommentSubmit: (commentText) => {
-    console.log('commentText', commentText);
+  handleCommentSubmit: (markdown) => {
+    console.log('markdown ', markdown);
   },
 };
 
