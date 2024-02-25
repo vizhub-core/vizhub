@@ -3,7 +3,7 @@ import {
   Result,
   err,
   ok,
-  pageSize,
+  pageSize as defaultPageSize,
 } from 'gateways';
 import {
   Info,
@@ -45,6 +45,7 @@ export const GetInfosAndOwners = (gateways: Gateways) => {
     authenticatedUserId,
     disablePagination,
     query,
+    pageSize = defaultPageSize,
   }: {
     noNeedToFetchUsers: Array<UserId>;
     sectionId?: SectionId;
@@ -63,6 +64,7 @@ export const GetInfosAndOwners = (gateways: Gateways) => {
     // This is the search query entered by the user
     // in the search box.
     query?: string;
+    pageSize?: number;
   }): Promise<Result<InfosAndOwners>> => {
     // Get the sort field from the sort query parameter.
     const sortField: SortField = getSortField(
@@ -100,6 +102,7 @@ export const GetInfosAndOwners = (gateways: Gateways) => {
       visibilities,
       disablePagination,
       query,
+      pageSize,
     };
 
     // Handle the "Shared with me" section.

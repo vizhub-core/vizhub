@@ -13,6 +13,12 @@ export type ExplorePageData = PageData &
     // The initial sort order for the results,
     // before the user has changed it client-side
     sortId: SortId;
+
+    // This is the featured live viz that we want to show.
+    featuredLiveViz: {
+      userName: string;
+      vizIdOrSlug: string;
+    };
   };
 
 // The type for the query parameters for this page
@@ -45,7 +51,7 @@ export const ExplorePage: Page = ({
         ownerUserSnapshots={pageData.ownerUserSnapshots}
         hasMoreInitially={pageData.hasMore}
       >
-        <Body />
+        <Body featuredLiveViz={pageData.featuredLiveViz} />
       </InfosAndOwnersProvider>
     </SectionSortProvider>
   </AuthenticatedUserProvider>

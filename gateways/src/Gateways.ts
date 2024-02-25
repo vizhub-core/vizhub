@@ -368,6 +368,7 @@ export interface Gateways {
     includeTrashed,
     disablePagination,
     query,
+    pageSize,
   }: {
     // owner
     //
@@ -431,6 +432,9 @@ export interface Gateways {
     // This is the search query entered by the user
     // in the search box.
     query?: string;
+
+    // An optional override for the page size.
+    pageSize?: number;
   }): Promise<Result<Array<Snapshot<Info>>>>;
 
   // getInfoBySlug

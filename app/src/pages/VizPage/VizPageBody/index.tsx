@@ -82,6 +82,7 @@ export const VizPageBody = ({
   isEmbedBrandedURLParam,
   isHideMode,
   toggleAIAssistUpgradeNudgeModal,
+  isFileOpen,
 }: {
   info: Info;
   content: Content;
@@ -115,6 +116,7 @@ export const VizPageBody = ({
   isEmbedBrandedURLParam: boolean;
   isHideMode: boolean;
   toggleAIAssistUpgradeNudgeModal: () => void;
+  isFileOpen: boolean;
 }) => {
   // The currently authenticated user, if any.
   const authenticatedUser: User | null = useContext(
@@ -365,7 +367,7 @@ export const VizPageBody = ({
     </>
   ) : (
     <div className="vh-page">
-      <SmartHeader />
+      {!showEditor && !isFileOpen && <SmartHeader />}
       <VizPageHead
         showEditor={showEditor}
         setShowEditor={setShowEditor}
