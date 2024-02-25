@@ -1,0 +1,76 @@
+.vh-comments {
+  display: flex;
+  flex-direction: column;
+
+  h4 {
+    margin-bottom: 20px;
+  }
+
+  .vh-comment {
+    .comment-top {
+      display: flex;
+      justify-content: space-between;
+
+      .comment-top-side {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        i {
+          color: var(--vh-color-neutral-04);
+          display: none;
+        }
+        i.icon-button-light:hover {
+          color: var(--vh-color-neutral-03);
+        }
+      }
+    }
+
+    .comment-date {
+      color: var(--vh-color-neutral-03);
+    }
+
+    .comment-author {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-weight: 600;
+      color: var(--vh-color-neutral-01);
+      text-decoration: none;
+    }
+
+    .comment-bottom {
+      margin-left: 48px;
+
+      .vh-markdown-body {
+        padding-top: 8px;
+        padding-bottom: 32px;
+        color: var(--vh-color-neutral-01);
+      }
+    }
+
+    /* Show the trash icon on hover */
+    &:hover .comment-top i {
+      display: flex;
+    }
+  }
+
+  .comment-avatar {
+    box-shadow: var(--vh-box-shadow);
+    border-radius: 50%;
+  }
+  .comment-box {
+    display: flex;
+    gap: 12px;
+
+    textarea {
+      border: 1px solid var(--vh-rule-color);
+      border-radius: 4px;
+
+      /* Change the placeholder text color */
+      &::placeholder {
+        color: var(--vh-color-neutral-03);
+      }
+    }
+  }
+}

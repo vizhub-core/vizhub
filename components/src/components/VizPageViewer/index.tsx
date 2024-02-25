@@ -8,13 +8,13 @@ import { UpvoteWidget } from 'components';
 import { VisibilityUnlistedSVG } from '../Icons/VisibilityUnlistedSVG';
 import { PrivateSVG } from '../Icons/sam/PrivateSVG';
 import { ForkSVGSymbol } from '../Icons/sam/ForkSVG';
-
 import { EditSVG } from '../Icons/EditSVG';
 import { ForksWidget } from '../ForksWidget';
 import { OverlayTrigger, Tooltip } from '../bootstrap';
 import { FullScreenSVG } from '../Icons/sam/FullScreenSVG';
-import './styles.scss';
 import { StarSVGSymbol } from '../Icons/sam/StarSVG';
+import { Comments } from '../Comments';
+import './styles.scss';
 
 export const VizPageViewer = ({
   vizTitle,
@@ -44,6 +44,10 @@ export const VizPageViewer = ({
   stargazersHref,
   onForkClick,
   isUserAuthenticated,
+  commentsFormatted,
+  handleCommentSubmit,
+  authenticatedUserAvatarURL,
+  handleCommentDelete,
 }) => {
   // This SVG element is used only for its dynamic resizing behavior.
   // It's invisible, nothing is rendered into it.
@@ -216,6 +220,15 @@ export const VizPageViewer = ({
           {renderMarkdownHTML()}
         </div>
         <div className="license">{license} Licensed</div>
+        <Comments
+          commentsFormatted={commentsFormatted}
+          handleCommentSubmit={handleCommentSubmit}
+          isUserAuthenticated={isUserAuthenticated}
+          authenticatedUserAvatarURL={
+            authenticatedUserAvatarURL
+          }
+          handleCommentDelete={handleCommentDelete}
+        />
       </div>
     </div>
   );

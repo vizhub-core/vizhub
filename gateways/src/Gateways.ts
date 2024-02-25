@@ -525,4 +525,9 @@ export interface Gateways {
   getUsersForTypeahead(
     query: string,
   ): Promise<Result<Array<User>>>;
+
+  // Gets the comments for the given resource.
+  getCommentsForResource(
+    resource: VizId | MergeRequestId,
+  ): Promise<Result<Array<Snapshot<Comment>>>>;
 }

@@ -6,6 +6,7 @@ import {
   Visibility,
   SectionId,
   User,
+  Comment,
 } from 'entities';
 import { Result, Success } from 'gateways';
 import { InfosAndOwners } from 'interactors/src/getInfosAndOwners';
@@ -106,6 +107,14 @@ export interface VizKitAPI {
     removeCollaborator: (options: {
       vizId: VizId;
       userId: UserId;
+    }) => Promise<Result<Success>>;
+
+    addComment: (options: {
+      comment: Comment;
+    }) => Promise<Result<Success>>;
+
+    deleteComment: (options: {
+      id: string;
     }) => Promise<Result<Success>>;
 
     upvoteViz: (vizId: VizId) => Promise<Result<Success>>;
@@ -249,6 +258,15 @@ export const VizKit = ({
       }) =>
         await postJSON(
           `${baseUrl}/remove-collaborator`,
+          options,
+        ),
+
+      addComment: async (options: { comment: Comment }) =>
+        await postJSON(`${baseUrl}/add-comment`, options),
+
+      deleteComment: async (options: { id: string }) =>
+        await postJSON(
+          `${baseUrl}/delete-comment`,
           options,
         ),
 
