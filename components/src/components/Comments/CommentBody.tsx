@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 import { TrashSVG } from 'vzcode';
+import Markdown from 'react-markdown';
 import { CommentAvatar } from './CommentAvatar';
 import { OverlayTrigger, Tooltip } from '../bootstrap';
 
@@ -9,7 +10,7 @@ export const CommentBody = ({
   authorAvatarURL,
   authorDisplayName,
   createdDateFormatted,
-  commentText,
+  markdown,
   isUserAuthenticated,
   authenticatedUserAvatarURL,
   handleCommentDelete,
@@ -19,7 +20,7 @@ export const CommentBody = ({
   authorAvatarURL: string;
   authorDisplayName: string;
   createdDateFormatted: string;
-  commentText: string;
+  markdown: string;
   isUserAuthenticated: boolean;
   authenticatedUserAvatarURL: string;
   handleCommentDelete: (commentId: string) => void;
@@ -73,7 +74,7 @@ export const CommentBody = ({
       </div>
       <div className="comment-bottom">
         <div className="vh-markdown-body">
-          {commentText}
+          <Markdown>{markdown}</Markdown>
         </div>
       </div>
     </div>
