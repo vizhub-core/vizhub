@@ -14,8 +14,7 @@ export type CommentFormatted = {
   // Undefined if the user has not edited the comment
   editedDateFormatted?: string;
 
-  // TODO render this markdown with marked or react-markdown
-  commentText: string;
+  markdown: string;
 };
 
 export const Comments = ({

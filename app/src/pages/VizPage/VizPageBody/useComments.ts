@@ -154,7 +154,7 @@ export const useComments = ({
             editedDateFormatted: comment.edited
               ? formatTimestamp(comment.edited)
               : undefined,
-            commentText: comment.markdown,
+            markdown: comment.markdown,
           };
           return commentFormatted;
         }),
