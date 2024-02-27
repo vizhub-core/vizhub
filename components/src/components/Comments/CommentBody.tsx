@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import { TrashSVG } from 'vzcode';
 import Markdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { CommentAvatar } from './CommentAvatar';
 import { OverlayTrigger, Tooltip } from '../bootstrap';
 
@@ -48,8 +49,10 @@ export const CommentBody = ({
           </div>
         </div>
         {
-          /* You can only delete your own comments
-           */ isUserAuthenticated &&
+          // You can only delete:
+          // - Comments that you are the author of
+          // - TODO Comments on your own visualizations
+          isUserAuthenticated &&
             authorAvatarURL ===
               authenticatedUserAvatarURL && (
               <div className="comment-top-side">
@@ -74,7 +77,9 @@ export const CommentBody = ({
       </div>
       <div className="comment-bottom">
         <div className="vh-markdown-body">
-          <Markdown>{markdown}</Markdown>
+          <Markdown remarkPlugins={[remarkGfm]}>
+            {markdown}
+          </Markdown>
         </div>
       </div>
     </div>

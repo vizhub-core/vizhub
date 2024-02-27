@@ -66,7 +66,7 @@ export const VizPageBody = ({
   forkedFromOwnerUser,
   showEditor,
   setShowEditor,
-  onExportClick,
+  exportHref,
   toggleForkModal,
   initialReadmeHTML,
   toggleSettingsModal,
@@ -91,6 +91,7 @@ export const VizPageBody = ({
   initialComments,
   initialCommentAuthors,
   vizKit,
+  connected,
 }: {
   info: Info;
   content: Content;
@@ -101,7 +102,7 @@ export const VizPageBody = ({
   forkedFromOwnerUser: User | null;
   showEditor: boolean;
   setShowEditor: (showEditor: boolean) => void;
-  onExportClick: () => void;
+  exportHref: string;
   toggleForkModal: () => void;
   initialReadmeHTML: string;
   toggleSettingsModal: () => void;
@@ -128,6 +129,7 @@ export const VizPageBody = ({
   initialComments: Array<Snapshot<Comment>>;
   initialCommentAuthors: Array<Snapshot<User>>;
   vizKit: VizKitAPI;
+  connected: boolean;
 }) => {
   // The currently authenticated user, if any.
   const authenticatedUser: User | null = useContext(
@@ -400,7 +402,7 @@ export const VizPageBody = ({
       <VizPageHead
         showEditor={showEditor}
         setShowEditor={setShowEditor}
-        onExportClick={onExportClick}
+        exportHref={exportHref}
         onShareClick={toggleShareModal}
         showForkButton={isUserAuthenticated}
         onForkClick={toggleForkModal}
@@ -429,6 +431,7 @@ export const VizPageBody = ({
           toggleAIAssistUpgradeNudgeModal={
             toggleAIAssistUpgradeNudgeModal
           }
+          connected={connected}
         />
         {isHideMode ? null : (
           <div

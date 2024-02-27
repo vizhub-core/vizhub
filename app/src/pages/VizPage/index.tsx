@@ -30,8 +30,8 @@ import { Page, PageData } from '../Page';
 import { VizPageBody } from './VizPageBody';
 import { VizPageToasts } from './VizPageToasts';
 import { useOnFork } from './useOnFork';
-import { generateExportZipV2 } from './export/generateExportZipV2';
-import { generateExportZipV3 } from './export/generateExportZipV3';
+// import { generateExportZipV2 } from './export/generateExportZipV2';
+// import { generateExportZipV3 } from './export/generateExportZipV3';
 import {
   useOnSettingsSave,
   useSetAnyoneCanEdit,
@@ -44,6 +44,8 @@ import { useUpvoting } from './useUpvoting';
 import { useSlugAutoNavigate } from './useSlugAutoNavigate';
 import { useShareDBError } from './useShareDBError';
 import './styles.scss';
+import { getVizExportHref } from '../../accessors/getVizExportHref';
+import { useShareDBConnectionStatus } from '../../useShareDBConnectionStatus';
 
 const vizKit = VizKit({ baseUrl: '/api' });
 
@@ -97,6 +99,7 @@ export const VizPage: Page = ({
   // /////////////////////////////////////////
   /////////////// ShareDB ////////////////////
   // /////////////////////////////////////////
+  const { connected } = useShareDBConnectionStatus();
   const infoShareDBDoc: ShareDBDoc<Info> =
     useShareDBDoc<Info>(infoSnapshot, 'Info');
   const info: Info = useData(infoSnapshot, infoShareDBDoc);
@@ -165,27 +168,31 @@ export const VizPage: Page = ({
   /////////////// Callbacks //////////////////
   // /////////////////////////////////////////
 
-  // Handle when the user clicks the "Export" button.
-  const onExportClick = useCallback(() => {
-    const currentFiles: Files = content.files;
+  // // Handle when the user clicks the "Export" button.
+  // const onExportClick = useCallback(() => {
+  //   // const currentFiles: Files = content.files;
+  //   // // Figure out which version we are in.
+  //   // const runtimeVersion: number =
+  //   //   getRuntimeVersion(content);
+  //   // // Compute the file name based on the viz title.
+  //   // const fileName = `${info.title}.zip`;
+  //   // if (runtimeVersion === 2) {
+  //   //   generateExportZipV2(currentFiles, fileName);
+  //   // } else if (runtimeVersion === 3) {
+  //   //   generateExportZipV3(currentFiles, fileName);
+  //   // } else {
+  //   //   throw new Error(
+  //   //     `Unknown runtime version: ${runtimeVersion}`,
+  //   //   );
+  //   // }
 
-    // Figure out which version we are in.
-    const runtimeVersion: number =
-      getRuntimeVersion(content);
-
-    // Compute the file name based on the viz title.
-    const fileName = `${info.title}.zip`;
-
-    if (runtimeVersion === 2) {
-      generateExportZipV2(currentFiles, fileName);
-    } else if (runtimeVersion === 3) {
-      generateExportZipV3(currentFiles, fileName);
-    } else {
-      throw new Error(
-        `Unknown runtime version: ${runtimeVersion}`,
-      );
-    }
-  }, []);
+  //   const url = `/api/get-viz/${info.id}/export`;
+  //   const link = document.createElement('a');
+  //   link.href = url;
+  //   link.download = `${info.title}.zip`;
+  //   link.click();
+  //   URL.revokeObjectURL(url);
+  // }, [info.id]);
 
   ///////////////////////////////////////////
   /////////////// Forking ///////////////////
@@ -333,6 +340,11 @@ export const VizPage: Page = ({
     id,
   });
 
+  const exportHref = useMemo(
+    () => getVizExportHref({ ownerUser, info }),
+    [ownerUser, info],
+  );
+
   return (
     <AuthenticatedUserProvider
       authenticatedUserSnapshot={
@@ -352,7 +364,7 @@ export const VizPage: Page = ({
             forkedFromOwnerUser,
             showEditor,
             setShowEditor,
-            onExportClick,
+            exportHref,
             toggleForkModal,
             initialReadmeHTML,
             toggleSettingsModal,
@@ -378,6 +390,7 @@ export const VizPage: Page = ({
             initialComments,
             initialCommentAuthors,
             vizKit,
+            connected,
           }}
         />
       </SplitPaneResizeProvider>
