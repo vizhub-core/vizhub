@@ -14,7 +14,7 @@ const enableDownloadImage = true;
 export const VizPageHead = ({
   showEditor,
   setShowEditor,
-  onExportClick,
+  exportHref,
   onShareClick,
   onForkClick,
   showForkButton,
@@ -55,7 +55,7 @@ export const VizPageHead = ({
             <div className="btn-text">Download Image</div>
           </Button>
         )}
-        <Button variant="dark" onClick={onExportClick}>
+        <Button as="a" variant="dark" href={exportHref}>
           <ExportSVG />
           <div className="btn-text">Export Code</div>
         </Button>

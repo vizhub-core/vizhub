@@ -66,7 +66,7 @@ export const VizPageBody = ({
   forkedFromOwnerUser,
   showEditor,
   setShowEditor,
-  onExportClick,
+  exportHref,
   toggleForkModal,
   initialReadmeHTML,
   toggleSettingsModal,
@@ -101,7 +101,7 @@ export const VizPageBody = ({
   forkedFromOwnerUser: User | null;
   showEditor: boolean;
   setShowEditor: (showEditor: boolean) => void;
-  onExportClick: () => void;
+  exportHref: string;
   toggleForkModal: () => void;
   initialReadmeHTML: string;
   toggleSettingsModal: () => void;
@@ -400,7 +400,7 @@ export const VizPageBody = ({
       <VizPageHead
         showEditor={showEditor}
         setShowEditor={setShowEditor}
-        onExportClick={onExportClick}
+        exportHref={exportHref}
         onShareClick={toggleShareModal}
         showForkButton={isUserAuthenticated}
         onForkClick={toggleForkModal}

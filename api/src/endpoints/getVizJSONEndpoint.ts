@@ -1,4 +1,4 @@
-import { Content, Info, VizId } from 'entities';
+import { Content, Info, Snapshot, VizId } from 'entities';
 import express from 'express';
 import {
   Gateways,
@@ -6,6 +6,7 @@ import {
   missingParameterError,
 } from 'gateways';
 import { accessDeniedError } from 'gateways/src/errors';
+import { GetInfoByIdOrSlug } from 'interactors';
 // https://github.com/vizhub-core/vizhub-legacy/blob/2a41920a083e08aa5e3729dd437c629678e71093/vizhub-v2/packages/controllers/src/oembedController.js#L5
 export const getVizJSONEndpoint = ({
   app,
@@ -14,30 +15,45 @@ export const getVizJSONEndpoint = ({
   app: express.Express;
   gateways: Gateways;
 }) => {
-  const { getInfo, getContent } = gateways;
+  const { getUserByUserName, getContent } = gateways;
+  const getInfoByIdOrSlug = GetInfoByIdOrSlug(gateways);
   app.get(
     '/api/get-viz/:userName/:vizIdOrSlug.json',
     express.json(),
     async (req, res) => {
-      // Get vizId param
-
-      // TODO support slugs
-      const vizId: VizId | undefined =
+      const idOrSlug: VizId | undefined =
         req.params?.vizIdOrSlug;
+      const ownerUserName: string = req.params?.userName;
 
-      if (vizId === undefined) {
+      if (idOrSlug === undefined) {
         return res.send(
-          err(missingParameterError('vizId')),
+          err(missingParameterError('vizIdOrSlug')),
         );
       }
 
-      const getInfoResult = await getInfo(vizId);
-      if (getInfoResult.outcome === 'failure') {
-        return res.send(getInfoResult);
+      // Get the User entity for the owner of the viz.
+      const ownerUserResult =
+        await getUserByUserName(ownerUserName);
+      if (ownerUserResult.outcome === 'failure') {
+        console.log('Error when fetching owner user:');
+        console.log(ownerUserResult.error);
+        return null;
       }
+      const ownerUserSnapshot = ownerUserResult.value;
+      const userId = ownerUserSnapshot.data.id;
 
-      // Only works on public vizzes, for now
-      const info: Info = getInfoResult.value.data;
+      // Get the Info entity of the Viz.
+      const infoResult = await getInfoByIdOrSlug({
+        userId,
+        idOrSlug,
+      });
+      if (infoResult.outcome === 'failure') {
+        // Indicates viz not found
+        return null;
+      }
+      const infoSnapshot: Snapshot<Info> = infoResult.value;
+      const info: Info = infoSnapshot.data;
+      const id = info.id;
 
       if (info.visibility !== 'public') {
         return res.send(
@@ -49,7 +65,7 @@ export const getVizJSONEndpoint = ({
         );
       }
 
-      const getContentResult = await getContent(vizId);
+      const getContentResult = await getContent(id);
       if (getContentResult.outcome === 'failure') {
         return res.send(getContentResult);
       }
