@@ -37,6 +37,7 @@ export const VizPageEditor = ({
   authenticatedUser,
   submitContentOperation,
   toggleAIAssistUpgradeNudgeModal,
+  connected,
 }: {
   showEditor: boolean;
   content: Content | null;
@@ -48,6 +49,7 @@ export const VizPageEditor = ({
     next: (content: Content) => Content,
   ) => void;
   toggleAIAssistUpgradeNudgeModal: () => void;
+  connected: boolean;
 }) => {
   // These are undefined during SSR, defined in the browser.
   const localPresence =
@@ -124,6 +126,7 @@ export const VizPageEditor = ({
       initialUsername={initialUsername}
       codeError={srcdocErrorMessage}
       submitOperation={submitContentOperation}
+      connected={connected}
     >
       {showEditor ? (
         <VZLeft enableUsernameField={false} />

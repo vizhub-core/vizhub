@@ -1,1 +1,1 @@
-export { csvParse, tsvParse } from 'd3-dsv'
+export { csvParse, tsvParse } from 'd3-dsv';
