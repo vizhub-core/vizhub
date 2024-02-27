@@ -45,6 +45,7 @@ import { useSlugAutoNavigate } from './useSlugAutoNavigate';
 import { useShareDBError } from './useShareDBError';
 import './styles.scss';
 import { getVizExportHref } from '../../accessors/getVizExportHref';
+import { useShareDBConnectionStatus } from '../../useShareDBConnectionStatus';
 
 const vizKit = VizKit({ baseUrl: '/api' });
 
@@ -98,6 +99,7 @@ export const VizPage: Page = ({
   // /////////////////////////////////////////
   /////////////// ShareDB ////////////////////
   // /////////////////////////////////////////
+  const { connected } = useShareDBConnectionStatus();
   const infoShareDBDoc: ShareDBDoc<Info> =
     useShareDBDoc<Info>(infoSnapshot, 'Info');
   const info: Info = useData(infoSnapshot, infoShareDBDoc);
@@ -388,6 +390,7 @@ export const VizPage: Page = ({
             initialComments,
             initialCommentAuthors,
             vizKit,
+            connected,
           }}
         />
       </SplitPaneResizeProvider>

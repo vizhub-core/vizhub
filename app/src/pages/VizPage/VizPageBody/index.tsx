@@ -91,6 +91,7 @@ export const VizPageBody = ({
   initialComments,
   initialCommentAuthors,
   vizKit,
+  connected,
 }: {
   info: Info;
   content: Content;
@@ -128,6 +129,7 @@ export const VizPageBody = ({
   initialComments: Array<Snapshot<Comment>>;
   initialCommentAuthors: Array<Snapshot<User>>;
   vizKit: VizKitAPI;
+  connected: boolean;
 }) => {
   // The currently authenticated user, if any.
   const authenticatedUser: User | null = useContext(
@@ -429,6 +431,7 @@ export const VizPageBody = ({
           toggleAIAssistUpgradeNudgeModal={
             toggleAIAssistUpgradeNudgeModal
           }
+          connected={connected}
         />
         {isHideMode ? null : (
           <div
