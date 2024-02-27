@@ -30,8 +30,8 @@ import { Page, PageData } from '../Page';
 import { VizPageBody } from './VizPageBody';
 import { VizPageToasts } from './VizPageToasts';
 import { useOnFork } from './useOnFork';
-import { generateExportZipV2 } from './export/generateExportZipV2';
-import { generateExportZipV3 } from './export/generateExportZipV3';
+// import { generateExportZipV2 } from './export/generateExportZipV2';
+// import { generateExportZipV3 } from './export/generateExportZipV3';
 import {
   useOnSettingsSave,
   useSetAnyoneCanEdit,
@@ -167,25 +167,29 @@ export const VizPage: Page = ({
 
   // Handle when the user clicks the "Export" button.
   const onExportClick = useCallback(() => {
-    const currentFiles: Files = content.files;
+    // const currentFiles: Files = content.files;
+    // // Figure out which version we are in.
+    // const runtimeVersion: number =
+    //   getRuntimeVersion(content);
+    // // Compute the file name based on the viz title.
+    // const fileName = `${info.title}.zip`;
+    // if (runtimeVersion === 2) {
+    //   generateExportZipV2(currentFiles, fileName);
+    // } else if (runtimeVersion === 3) {
+    //   generateExportZipV3(currentFiles, fileName);
+    // } else {
+    //   throw new Error(
+    //     `Unknown runtime version: ${runtimeVersion}`,
+    //   );
+    // }
 
-    // Figure out which version we are in.
-    const runtimeVersion: number =
-      getRuntimeVersion(content);
-
-    // Compute the file name based on the viz title.
-    const fileName = `${info.title}.zip`;
-
-    if (runtimeVersion === 2) {
-      generateExportZipV2(currentFiles, fileName);
-    } else if (runtimeVersion === 3) {
-      generateExportZipV3(currentFiles, fileName);
-    } else {
-      throw new Error(
-        `Unknown runtime version: ${runtimeVersion}`,
-      );
-    }
-  }, []);
+    const url = `/api/viz/${info.id}/export`;
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${info.title}.zip`;
+    link.click();
+    URL.revokeObjectURL(url);
+  }, [info.id]);
 
   ///////////////////////////////////////////
   /////////////// Forking ///////////////////
