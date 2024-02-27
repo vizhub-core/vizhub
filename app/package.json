@@ -43,7 +43,6 @@
     "http-proxy-middleware": "^2.0.6",
     "jose": "^5.2.2",
     "jsdom": "^24.0.0",
-    "jszip": "^3.10.1",
     "marked": "^12.0.0",
     "mongodb-legacy": "^6.0.1",
     "partysocket": "^0.0.25",

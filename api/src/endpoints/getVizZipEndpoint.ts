@@ -1,14 +1,37 @@
-import { Content, Info, Snapshot, VizId } from 'entities';
+import {
+  Content,
+  FileId,
+  Files,
+  Info,
+  Snapshot,
+  VizId,
+} from 'entities';
 import express from 'express';
+import AdmZip from 'adm-zip';
+
 import {
   Gateways,
   err,
   missingParameterError,
 } from 'gateways';
 import { accessDeniedError } from 'gateways/src/errors';
-import { GetInfoByIdOrSlug } from 'interactors';
-// https://github.com/vizhub-core/vizhub-legacy/blob/2a41920a083e08aa5e3729dd437c629678e71093/vizhub-v2/packages/controllers/src/oembedController.js#L5
-export const getVizJSONEndpoint = ({
+import {
+  GetInfoByIdOrSlug,
+  ResolveSlug,
+} from 'interactors';
+
+// Creates the Zip file from the given files.
+export const zipFiles = (files: Files): Buffer => {
+  const zip = new AdmZip();
+  Object.keys(files).forEach((fileId: FileId) => {
+    const { text, name } = files[fileId];
+    zip.addFile(name, Buffer.alloc(text.length, text));
+  });
+  return zip.toBuffer();
+};
+
+// https://github.com/vizhub-core/vizhub-legacy/blob/2a41920a083e08aa5e3729dd437c629678e71093/vizhub-v2/packages/controllers/src/apiController/visualizationAPIController/exportVisualizationController.js
+export const getVizZipEndpoint = ({
   app,
   gateways,
 }: {
@@ -18,7 +41,7 @@ export const getVizJSONEndpoint = ({
   const { getUserByUserName, getContent } = gateways;
   const getInfoByIdOrSlug = GetInfoByIdOrSlug(gateways);
   app.get(
-    '/api/get-viz/:userName/:vizIdOrSlug.json',
+    '/api/get-viz/:userName/:vizIdOrSlug.zip',
     express.json(),
     async (req, res) => {
       const idOrSlug: VizId | undefined =
@@ -55,6 +78,7 @@ export const getVizJSONEndpoint = ({
       const info: Info = infoSnapshot.data;
       const id = info.id;
 
+      // Only works on public vizzes, for now
       if (info.visibility !== 'public') {
         return res.send(
           err(
@@ -71,19 +95,28 @@ export const getVizJSONEndpoint = ({
       }
       const content: Content = getContentResult.value.data;
 
-      // Set JSON type
-      res.setHeader('Content-Type', 'application/json');
+      const zipBuffer: Buffer = zipFiles(content.files);
 
-      res.send(
-        JSON.stringify(
-          {
-            info,
-            content,
-          },
-          null,
-          2,
-        ),
+      // Set JSON type
+      // res.setHeader('Content-Type', 'application/json');
+
+      // res.send(
+      //   JSON.stringify(
+      //     {
+      //       info,
+      //       content,
+      //     },
+      //     null,
+      //     2,
+      //   ),
+      // );
+
+      res.setHeader('Content-Type', 'application/zip');
+      res.setHeader(
+        'Content-Disposition',
+        `attachment; filename="${info.title}.zip"`,
       );
+      res.send(zipBuffer);
     },
   );
 };
