@@ -19,8 +19,7 @@ import { removeCollaboratorEndpoint } from './removeCollaboratorEndpoint';
 import { upvoteVizEndpoint } from './upvoteVizEndpoint';
 import { unUpvoteVizEndpoint } from './unUpvoteVizEndpoint';
 import { isSlugAvailableEndpoint } from './isSlugAvailableEndpoint';
-import { getVizJSONEndpoint } from './getVizJSONEndpoint';
-import { getVizZipEndpoint } from './getVizZipEndpoint';
+import { getVizEndpoint } from './getVizEndpoint';
 import { oembedEndpoint } from './oembedEndpoint';
 
 export const endpoints = [
@@ -45,7 +44,6 @@ export const endpoints = [
   upvoteVizEndpoint,
   unUpvoteVizEndpoint,
   isSlugAvailableEndpoint,
-  getVizJSONEndpoint,
-  getVizZipEndpoint,
+  getVizEndpoint,
   oembedEndpoint,
 ];
