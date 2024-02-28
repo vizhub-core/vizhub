@@ -20,7 +20,11 @@ import { upvoteVizEndpoint } from './upvoteVizEndpoint';
 import { unUpvoteVizEndpoint } from './unUpvoteVizEndpoint';
 import { isSlugAvailableEndpoint } from './isSlugAvailableEndpoint';
 import { getVizEndpoint } from './getVizEndpoint';
+import { setVizEndpoint } from './setVizEndpoint';
 import { oembedEndpoint } from './oembedEndpoint';
+
+// TODO get this working in a secure way using API keys
+const enableSetVizEndpoint = false;
 
 export const endpoints = [
   healthCheck,
@@ -47,3 +51,7 @@ export const endpoints = [
   getVizEndpoint,
   oembedEndpoint,
 ];
+
+if (enableSetVizEndpoint) {
+  endpoints.push(setVizEndpoint);
+}
