@@ -213,4 +213,4 @@ export {
   analyticsEventLock,
 } from './Lock';
 
-export { isId } from './isId';
+export { isId, generateId, generateFileId } from './Id';
