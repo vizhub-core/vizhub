@@ -2,12 +2,12 @@ import { freeTierSizeLimitMB } from 'entities';
 import { Feature } from './Feature';
 
 export const StarterFeatures = ({
-  startsExpanded = false,
+  startsExpanded = true,
 }) => {
   return (
     <>
       <Feature
-        title="Public Vizzes"
+        title="Public Vizzes Only"
         hasBottomBorder={true}
         startsExpanded={startsExpanded}
       >

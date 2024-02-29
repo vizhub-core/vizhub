@@ -7,13 +7,13 @@ import {
   User,
   VizId,
   dateToTimestamp,
+  generateId,
   getUserDisplayName,
 } from 'entities';
 import { useCallback, useMemo, useState } from 'react';
 import { getProfilePageHref } from '../../../accessors';
 import { getAvatarURL } from '../../../accessors/getAvatarURL';
 import { formatTimestamp } from '../../../accessors/formatTimestamp';
-import { generateIdClientSide } from '../../../generateIdClientSide';
 
 export const useComments = ({
   vizId,
@@ -76,7 +76,7 @@ export const useComments = ({
       if (!authenticatedUser) {
         return;
       }
-      const id = generateIdClientSide();
+      const id = generateId();
 
       const newComment: Comment = {
         id,
