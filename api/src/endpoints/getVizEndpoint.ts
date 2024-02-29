@@ -5,6 +5,7 @@ import {
   Info,
   Snapshot,
   VizId,
+  slugify,
 } from 'entities';
 import express from 'express';
 import AdmZip from 'adm-zip';
@@ -119,7 +120,12 @@ export const getVizEndpoint = ({
         res.setHeader('Content-Type', 'application/zip');
         res.setHeader(
           'Content-Disposition',
-          `attachment; filename="${info.title}.zip"`,
+          // This simple version crashes the server if there are emojis in the title
+          // `attachment; filename="${info.title}.zip"`,
+          // This new version:
+          // - uses the slug if it exists
+          // - otherwise slugifies the title (which removes emojis)
+          `attachment; filename="${info.slug || slugify(info.title)}.zip"`,
         );
         res.send(zipBuffer);
       }
