@@ -98,6 +98,7 @@ export {
   defaultVizWidth,
   defaultVizHeight,
   defaultLicense,
+  slugify,
 } from './Viz';
 
 // V2 types - useful for migration and for V2 runtime
