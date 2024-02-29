@@ -59,7 +59,7 @@ const CurrentButton = () => (
   </Button>
 );
 
-const enableImages = true;
+const enableImages = false;
 
 export const PricingPageBody = ({
   onStarterDowngradeClick,
