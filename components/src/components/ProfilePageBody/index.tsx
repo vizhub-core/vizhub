@@ -24,9 +24,9 @@ const enabledSections: Set<SectionId> = new Set([
   SectionId.Private,
   SectionId.Shared,
   SectionId.Starred,
-  SectionId.ApiKeys,
-  SectionId.Notifications,
-  SectionId.Orgs,
+  // SectionId.ApiKeys,
+  // SectionId.Notifications,
+  // SectionId.Orgs,
 ]);
 
 type ProfileSection = {
