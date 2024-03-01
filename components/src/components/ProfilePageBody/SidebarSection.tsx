@@ -1,15 +1,6 @@
 import { SectionId } from 'entities';
 import { useCallback } from 'react';
 
-// Feature flags for which sections to show.
-const enabledSections = {
-  public: true,
-  private: true,
-  shared: true,
-  starred: true,
-  // orgs: true,
-};
-
 // One section of the sidebar
 export const SidebarSection = ({
   sectionId,
@@ -24,8 +15,6 @@ export const SidebarSection = ({
   isActive: boolean;
   setSectionId: (sectionId: SectionId) => void;
 }) => {
-  if (!enabledSections[sectionId]) return null;
-
   const handleClick = useCallback(() => {
     setSectionId(sectionId);
   }, [setSectionId, sectionId]);
