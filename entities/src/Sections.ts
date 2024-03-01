@@ -1,23 +1,20 @@
 // Various sections of the profile page.
 
-export type SectionId =
-  | 'public'
-  | 'private'
-  | 'orgs'
-  | 'starred'
-  | 'shared'
-  | 'apiKeys'
-  | 'notifications';
+export enum SectionId {
+  Public = 'public',
+  Private = 'private',
+  Orgs = 'orgs',
+  Starred = 'starred',
+  Shared = 'shared',
+  ApiKeys = 'apiKeys',
+  Notifications = 'notifications',
+}
 
-export const defaultSectionId: SectionId = 'public';
+export const defaultSectionId: SectionId = SectionId.Public;
 
-const sectionIdsSet = new Set<SectionId>([
-  'public',
-  'private',
-  'orgs',
-  'starred',
-  'shared',
-]);
+const sectionIdsSet = new Set<SectionId>(
+  Object.values(SectionId),
+);
 
 // Convenience function for validating section id.
 export const asSectionId = (

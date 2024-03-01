@@ -18,6 +18,17 @@ import './styles.scss';
 const enableEditBio = false;
 const enableCreateVizButton = true;
 
+// Feature flags for which sections to show.
+const enabledSections: Set<SectionId> = new Set([
+  SectionId.Public,
+  SectionId.Private,
+  SectionId.Shared,
+  SectionId.Starred,
+  SectionId.ApiKeys,
+  SectionId.Notifications,
+  SectionId.Orgs,
+]);
+
 type ProfileSection = {
   id: SectionId;
   SVGComponent: React.FunctionComponent;
@@ -77,53 +88,56 @@ export const ProfilePageBody = ({
   showUpgradeCallout?: boolean;
 }) => {
   const sections: Array<ProfileSection> = useMemo(
-    () => [
-      {
-        id: 'public',
-        SVGComponent: PublicSVG,
-        label: isViewingOwnProfile
-          ? 'My public vizzes'
-          : 'Public vizzes',
-      },
-      {
-        id: 'private',
-        SVGComponent: PrivateSVG,
-        label: 'My private vizzes',
-        show: isViewingOwnProfile,
-      },
-      {
-        id: 'shared',
-        SVGComponent: SharedSVG,
-        label: 'Shared with me',
-        show: isViewingOwnProfile,
-      },
-      {
-        id: 'notifications',
-        SVGComponent: BellSVG,
-        label: 'Notifications',
-        show: isViewingOwnProfile,
-      },
-      {
-        id: 'apiKeys',
-        SVGComponent: ServerSVG,
-        label: 'API keys',
-        show: isViewingOwnProfile,
-      },
-      {
-        id: 'orgs',
-        SVGComponent: OrganizationsSVG,
-        label: isViewingOwnProfile
-          ? 'My organizations'
-          : 'Organizations',
-      },
-      {
-        id: 'starred',
-        SVGComponent: StarSVG,
-        label: isViewingOwnProfile
-          ? 'My starred vizzes'
-          : 'Starred vizzes',
-      },
-    ],
+    () =>
+      [
+        {
+          id: SectionId.Public,
+          SVGComponent: PublicSVG,
+          label: isViewingOwnProfile
+            ? 'My public vizzes'
+            : 'Public vizzes',
+        },
+        {
+          id: SectionId.Private,
+          SVGComponent: PrivateSVG,
+          label: 'My private vizzes',
+          show: isViewingOwnProfile,
+        },
+        {
+          id: SectionId.Starred,
+          SVGComponent: StarSVG,
+          label: isViewingOwnProfile
+            ? 'My starred vizzes'
+            : 'Starred vizzes',
+        },
+        {
+          id: SectionId.Shared,
+          SVGComponent: SharedSVG,
+          label: 'Shared with me',
+          show: isViewingOwnProfile,
+        },
+        {
+          id: SectionId.Notifications,
+          SVGComponent: BellSVG,
+          label: 'Notifications',
+          show: isViewingOwnProfile,
+        },
+        {
+          id: SectionId.ApiKeys,
+          SVGComponent: ServerSVG,
+          label: 'API keys',
+          show: isViewingOwnProfile,
+        },
+        {
+          id: SectionId.Orgs,
+          SVGComponent: OrganizationsSVG,
+          label: isViewingOwnProfile
+            ? 'My organizations'
+            : 'Organizations',
+        },
+      ].filter((section: ProfileSection) =>
+        enabledSections.has(section.id),
+      ),
     [isViewingOwnProfile],
   );
 

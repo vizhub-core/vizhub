@@ -14,6 +14,7 @@
       flex-direction: column;
       gap: 32px;
       flex: 0 0 300px;
+
       .profile-avatar {
         width: 164px;
         height: 164px;
@@ -39,6 +40,7 @@
         display: flex;
         flex-direction: column;
         gap: 4px;
+
         .profile-sidebar-section {
           padding: 8px;
           display: flex;
@@ -50,6 +52,14 @@
           svg {
             color: var(--vh-color-neutral-04);
           }
+
+          &:hover {
+            background-color: var(--vh-color-hover-light);
+
+            svg {
+              color: var(--vh-color-neutral-03);
+            }
+          }
         }
         .profile-sidebar-section.active {
           background-color: var(--vh-color-action-03);
@@ -58,6 +68,8 @@
           svg {
             color: var(--vh-color-action-01);
           }
+
+          pointer-events: none;
         }
       }
     }
