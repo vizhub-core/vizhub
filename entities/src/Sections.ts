@@ -5,7 +5,9 @@ export type SectionId =
   | 'private'
   | 'orgs'
   | 'starred'
-  | 'shared';
+  | 'shared'
+  | 'apiKeys'
+  | 'notifications';
 
 export const defaultSectionId: SectionId = 'public';
 

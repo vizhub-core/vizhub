@@ -7,6 +7,8 @@ const enabledSections = {
   private: true,
   shared: true,
   starred: true,
+  // apiKeys: true,
+  // notifications: true,
   // orgs: true,
 };
 

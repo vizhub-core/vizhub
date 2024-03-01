@@ -6,11 +6,13 @@ import { PrivateSVG } from '../Icons/sam/PrivateSVG';
 import { OrganizationsSVG } from '../Icons/sam/OrganizationsSVG';
 import { SharedSVG } from '../Icons/sam/SharedSVG';
 import { StarSVG } from '../Icons/sam/StarSVG';
-import { Plan, SectionId, SortId } from 'entities';
+import { SectionId, SortId } from 'entities';
 import { useMemo } from 'react';
 import { SidebarSection } from './SidebarSection';
 import { UpgradeCallout } from '../UpgradeCallout';
 import { CreateNewButton } from '../CreateNewButton';
+import { ServerSVG } from '../Icons/sam/ServerSVG';
+import { BellSVG } from '../Icons/sam/BellSVG';
 import './styles.scss';
 
 const enableEditBio = false;
@@ -80,6 +82,8 @@ export const ProfilePageBody = ({
       starred: isViewingOwnProfile
         ? 'My starred vizzes'
         : 'Starred vizzes',
+      apiKeys: 'API keys',
+      notifications: 'Notifications',
     }),
     [isViewingOwnProfile],
   );
@@ -123,6 +127,20 @@ export const ProfilePageBody = ({
                   SVGComponent={SharedSVG}
                   label={copy.shared}
                   isActive={sectionId === 'shared'}
+                  setSectionId={setSectionId}
+                />
+                <SidebarSection
+                  sectionId="notifications"
+                  SVGComponent={BellSVG}
+                  label={copy.notifications}
+                  isActive={sectionId === 'notifications'}
+                  setSectionId={setSectionId}
+                />
+                <SidebarSection
+                  sectionId="apiKeys"
+                  SVGComponent={ServerSVG}
+                  label={copy.apiKeys}
+                  isActive={sectionId === 'apiKeys'}
                   setSectionId={setSectionId}
                 />
               </>
