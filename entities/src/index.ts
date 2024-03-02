@@ -218,3 +218,15 @@ export {
 } from './Lock';
 
 export { isId, generateId, generateFileId } from './Id';
+
+export type {
+  APIKeyId,
+  APIKeyPermission,
+  APIKey,
+} from './APIKeys';
+
+export type {
+  NotificationId,
+  NotificationType,
+  Notification,
+} from './Notifications';
