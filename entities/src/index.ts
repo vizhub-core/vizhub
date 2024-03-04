@@ -98,6 +98,7 @@ export {
   defaultVizWidth,
   defaultVizHeight,
   defaultLicense,
+  slugify,
 } from './Viz';
 
 // V2 types - useful for migration and for V2 runtime
@@ -150,8 +151,11 @@ export type {
   SortId,
 } from './Sorting';
 
-export { defaultSectionId, asSectionId } from './Sections';
-export type { SectionId } from './Sections';
+export {
+  SectionId,
+  defaultSectionId,
+  asSectionId,
+} from './Sections';
 
 export type { MigrationStatus } from './Migration';
 
@@ -214,3 +218,15 @@ export {
 } from './Lock';
 
 export { isId, generateId, generateFileId } from './Id';
+
+export type {
+  APIKeyId,
+  APIKeyPermission,
+  APIKey,
+} from './APIKeys';
+
+export type {
+  NotificationId,
+  NotificationType,
+  Notification,
+} from './Notifications';

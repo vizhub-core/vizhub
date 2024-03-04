@@ -261,3 +261,22 @@ export const defaultVizWidth = 960;
 
 // The default license for a viz.
 export const defaultLicense = 'MIT';
+
+// Slugify a string
+// Inspired by https://gist.github.com/mathewbyrne/1280286
+export const slugify = (str: string) =>
+  str
+    // Convert the string to lowercase
+    .toLowerCase()
+    // Replace spaces with hyphens
+    .replace(/\s+/g, '-')
+    // Remove all non-word chars
+    .replace(/[^\w\-]+/g, '')
+    // Replace multiple hyphens with a single hyphen
+    .replace(/\-\-+/g, '-')
+    // Trim hyphens from the start of the string
+    .replace(/^-+/, '')
+    // Trim hyphens from the end of the string
+    .replace(/-+$/, '')
+    // Remove all emoji
+    .replace(/[\u{1F600}-\u{1F64F}]/gu, '');
