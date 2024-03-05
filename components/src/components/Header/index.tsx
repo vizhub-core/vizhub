@@ -57,7 +57,8 @@ export const Header = ({
           />
         </Nav>
         <Nav className="align-items-md-center">
-          <Nav.Link href="/features">Features</Nav.Link>
+          <Nav.Link href="/explore">Explore</Nav.Link>
+          {/* <Nav.Link href="/features">Features</Nav.Link> */}
 
           {enableResources && (
             <Dropdown align="end">
