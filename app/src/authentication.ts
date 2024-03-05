@@ -14,50 +14,55 @@ export const authentication = ({ env, gateways, app }) => {
 
   // See https://github.com/auth0/express-openid-connect/blob/master/EXAMPLES.md#9-validate-claims-from-an-id-token-before-logging-a-user-in
   const afterCallback = async (req, res, session) => {
-    const claims = decodeJwt(session.id_token);
+    try {
+      const claims = decodeJwt(session.id_token);
 
-    // Example claims from GitHub social login:
-    // {
-    //     nickname: 'curran',
-    //     name: 'Curran Kelleher',
-    //     picture: 'https://avatars.githubusercontent.com/u/68416?v=4',
-    //     updated_at: '2023-04-11T11:30:03.680Z',
-    //     email: 'curran.kelleher@gmail.com',
-    //     email_verified: true,
-    //     iss: 'https://dev-5yxv3gr1hiwuvv46.us.auth0.com/',
-    //     aud: 'faBeeyfQBSm11XbTLZ25AMTDmp3noHnJ',
-    //     iat: 1681212844,
-    //     exp: 1681248844,
-    //     sub: 'github|68416',
-    //     sid: 'HIUOoaC_USzcL3hni_1skATDZO4ABVRs',
-    //     nonce: '_2chroq4hfghgsxa8RJHDhJqNIjYB7VjPa5U9B3Jins'
-    //   }
+      // Example claims from GitHub social login:
+      // {
+      //     nickname: 'curran',
+      //     name: 'Curran Kelleher',
+      //     picture: 'https://avatars.githubusercontent.com/u/68416?v=4',
+      //     updated_at: '2023-04-11T11:30:03.680Z',
+      //     email: 'curran.kelleher@gmail.com',
+      //     email_verified: true,
+      //     iss: 'https://dev-5yxv3gr1hiwuvv46.us.auth0.com/',
+      //     aud: 'faBeeyfQBSm11XbTLZ25AMTDmp3noHnJ',
+      //     iat: 1681212844,
+      //     exp: 1681248844,
+      //     sub: 'github|68416',
+      //     sid: 'HIUOoaC_USzcL3hni_1skATDZO4ABVRs',
+      //     nonce: '_2chroq4hfghgsxa8RJHDhJqNIjYB7VjPa5U9B3Jins'
+      //   }
 
-    // VizHub 2 used the GitHub id as the user id,
-    // so let's use that here as well so that users of
-    // VizHub 2 can log into VizHub 3 and access their accounts.
-    const id = parseAuth0Sub(claims.sub);
+      // VizHub 2 used the GitHub id as the user id,
+      // so let's use that here as well so that users of
+      // VizHub 2 can log into VizHub 3 and access their accounts.
+      const id = parseAuth0Sub(claims.sub);
 
-    const options = {
-      id,
-      userName: claims.nickname,
-      displayName: claims.name,
-      primaryEmail: claims.email,
-      picture: claims.picture,
-    };
+      const options = {
+        id,
+        userName: claims.nickname,
+        displayName: claims.name,
+        primaryEmail: claims.email,
+        picture: claims.picture,
+      };
 
-    const result = await updateOrCreateUser(options);
+      const result = await updateOrCreateUser(options);
 
-    if (result.outcome !== 'success') {
-      console.log('Error when updating user');
-      console.log(result.error);
+      if (result.outcome !== 'success') {
+        console.log('Error when updating user');
+        console.log(result.error);
+      }
+
+      await recordAnalyticsEvents({
+        eventId: `event.login.${id}`,
+      });
+
+      return session;
+    } catch (error) {
+      console.log('Error in authentication.ts');
+      console.log(error);
     }
-
-    await recordAnalyticsEvents({
-      eventId: `event.login.${id}`,
-    });
-
-    return session;
   };
 
   const authMiddleware = auth({

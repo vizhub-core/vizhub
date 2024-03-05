@@ -57,4 +57,4 @@ export const ExplorePage: Page = ({
   </AuthenticatedUserProvider>
 );
 
-ExplorePage.path = '/';
+ExplorePage.path = '/explore';
