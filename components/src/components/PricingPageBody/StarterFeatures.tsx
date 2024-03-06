@@ -2,7 +2,7 @@ import { freeTierSizeLimitMB } from 'entities';
 import { Feature } from './Feature';
 
 export const StarterFeatures = ({
-  startsExpanded = true,
+  startsExpanded = false,
 }) => {
   return (
     <>
