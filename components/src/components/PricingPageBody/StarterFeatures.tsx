@@ -11,8 +11,9 @@ export const StarterFeatures = ({
         hasBottomBorder={true}
         startsExpanded={startsExpanded}
       >
-        View, fork and modify visualizations viewable by
-        everyone.
+        Share your work with the world. Open-source your
+        learning and collaboration, fostering a community of
+        shared knowledge and innovation.
       </Feature>
       <Feature
         title="Limited Data Size"
@@ -20,7 +21,8 @@ export const StarterFeatures = ({
         startsExpanded={startsExpanded}
       >
         Data uploads are limited to{' '}
-        {freeTierSizeLimitMB * 1024} kB.
+        {freeTierSizeLimitMB * 1024} kB. If you need more,
+        consider upgrading to Premium.
       </Feature>
       <Feature
         title="Hot Reloading & Interactive Widgets"
@@ -28,35 +30,42 @@ export const StarterFeatures = ({
         startsExpanded={startsExpanded}
         learnMoreHref="https://vizhub.com/forum/t/hot-reloading-and-interactive-widgets/968"
       >
-        Iterate faster and with truly instant feedback
+        Save time with real-time updates. Our code editor
+        and runtime environment lets you iterate faster with
+        truly instant feedback.
       </Feature>
       <Feature
         title="Export Code"
         hasBottomBorder={true}
         startsExpanded={startsExpanded}
       >
-        Export industry-standard source code files
+        Take your work anywhere. With industry-standard code
+        exports, your projects are portable and
+        professional.
       </Feature>
       <Feature
         title="Community Access"
         hasBottomBorder={true}
         startsExpanded={startsExpanded}
       >
-        Join our{' '}
+        Join a vibrant community. Connect, share, and grow
+        with peers and experts committed to the art and
+        science of visualization. Join our{' '}
         <a href="https://discord.gg/wbtJ7SCtYr">Discord</a>{' '}
         and <a href="">Forum</a> to connect with our
-        community
+        community.
       </Feature>
       <Feature
         title="Free Courses"
         hasBottomBorder={false}
         startsExpanded={startsExpanded}
       >
-        Learn to code and visualize data with our{' '}
+        Never stop learning. Our{' '}
         <a href="https://vizhub.com/forum/t/index-of-courses/289">
           free online courses
-        </a>
-        .
+        </a>{' '}
+        offer the knowledge you need to start or advance
+        your journey in data visualization.
       </Feature>
     </>
   );
