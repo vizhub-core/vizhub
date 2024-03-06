@@ -11,14 +11,14 @@ LandingPage.getPageData = async ({
       auth0User,
     });
 
-  // // For logged in users, redirect them to their profile page.
-  // // If the viz has a slug, and we are using its id in the URL,
-  // // then redirect to the URL that uses the slug.
-  // if (authenticatedUserSnapshot) {
-  //   const redirect = `/${authenticatedUserSnapshot.data.userName}`;
-  //   // @ts-ignore
-  //   return { redirect };
-  // }
+  // For logged in users, redirect them to their profile page.
+  // If the viz has a slug, and we are using its id in the URL,
+  // then redirect to the URL that uses the slug.
+  if (authenticatedUserSnapshot) {
+    const redirect = `/${authenticatedUserSnapshot.data.userName}`;
+    // @ts-ignore
+    return { redirect };
+  }
 
   const pageData: LandingPageData = {
     title: `VizHub`,
