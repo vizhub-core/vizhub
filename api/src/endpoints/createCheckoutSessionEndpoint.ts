@@ -115,9 +115,12 @@ export const createCheckoutSession = ({
           // payment_method_collection: 'always',
 
           // Enable WPI signups without payment method
-          payment_method_collection: discountCode
-            ? 'if_required'
-            : 'always',
+          // payment_method_collection: discountCode
+          //   ? 'if_required'
+          //   : 'always',
+
+          // Don't collect payment method, to lower the barrier to entry
+          payment_method_collection: 'if_required',
 
           allow_promotion_codes: true,
 
