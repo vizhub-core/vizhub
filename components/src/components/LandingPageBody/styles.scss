@@ -141,6 +141,9 @@
                 }
               }
             }
+            .explore-thumbnails {
+              box-shadow: var(--vh-box-shadow);
+            }
           }
 
           @keyframes rotate-back-and-forth {
