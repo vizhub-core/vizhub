@@ -7,7 +7,7 @@ export const Feature = ({
   title,
   hasBottomBorder = false,
   heavyBottomBorder = false,
-  startsExpanded = true,
+  startsExpanded = false,
   learnMoreHref = null,
   children,
 }) => {

@@ -15,8 +15,8 @@
   box-shadow: var(--vh-box-shadow);
 
   background-image: url(https://vizhub-images.s3.amazonaws.com/home-starter-background.webp);
-  // background-size: cover;
-  background-size: 120% auto;
+  background-size: cover;
+  // background-size: 110% auto;
   background-position: center;
   animation: backgroundScroll 90s ease-in-out infinite;
 

@@ -21,25 +21,23 @@ export const LandingPageBody = ({
       />
       <div className="landing-page-body">
         <div className="landing-page-content">
-          <HomeStarter />
-          {/* <div className="landing-page-tagline">
+          {/* <HomeStarter /> */}
+          <div className="landing-page-tagline">
             {true
               ? 'Accelerate Dataviz Delivery'
               : '50% off for 3 months! Use code EARLYADOPTER (ends Feb 15)'}
           </div>
           <h1 className="landing-page-headline">
-            Develop Custom Interactive Visualizations{' '}
-            <i>Faster</i> with <i>More Fun</i>
+            Develop interactive data visualizations faster
+            and more collaboratively than ever
           </h1>
           <Button
             variant="secondary"
             size="lg"
-            href={
-              isUserAuthenticated ? '/create-viz' : '/login'
-            }
+            href="/pricing"
           >
-            Get started
-          </Button> */}
+            Try VizHub Premium for free
+          </Button>
 
           <iframe
             style={{
@@ -60,21 +58,21 @@ export const LandingPageBody = ({
           <div className="white-background-section">
             <div className="landing-page-content">
               <h1 className="section-heading">
-                Discover VizHub: Your Collaborative
-                Visualization Workspace
+                Why VizHub?
               </h1>
-              <div className="vh-lede-01">
+              <div className="vh-lede-01 mb-3">
                 <p>
-                  VizHub isn't just a platform; it's your
-                  springboard into the world of data
-                  visualization. Embark on your coding
-                  adventure instantly, no complex setup
-                  needed. While it's a haven for D3.js
-                  enthusiasts, VizHub is versatile enough
-                  for any rapid prototyping and shared
-                  creativity you imagine.
+                  VizHub is a platform for creating,
+                  sharing, and collaborating on interactive
+                  data visualizations. It's designed for
+                  data scientists, developers, and designers
+                  who want to create interactive
+                  visualizations with ease. It's free for
+                  open source, with a premium plan that
+                  supports professional work.
                 </p>
               </div>
+              <Button href="/pricing">See Plans</Button>
             </div>
           </div>
 
@@ -84,12 +82,12 @@ export const LandingPageBody = ({
                 <h3>Speed Through Iteration</h3>
                 <p>
                   Tired of the lag in your visualization
-                  edits? VizHub’s instant feedback loop,
-                  powered by hot reloading and dynamic
+                  edits? VizHub's instant feedback loop,
+                  powered by hot reloading and interactive
                   widgets, makes tweaking your visuals a
-                  breeze. Achieve perfection swiftly and see
-                  your data dance to your tune, quickly and
-                  efficiently.
+                  breeze. Achieve perfection swiftly, saving
+                  time and money, and delighting your
+                  audience.
                 </p>
                 <Button
                   href="https://vizhub.com/forum/t/hot-reloading-and-interactive-widgets/968"
@@ -123,7 +121,7 @@ export const LandingPageBody = ({
           <div className="feature-section">
             <div className="feature-section-content">
               <div className="feature-section-copy">
-                <h3>Collaborate in Real-Time</h3>
+                <h3>Unite Efforts Instantly</h3>
                 <p>
                   Bid farewell to tedious update and
                   deployment cycles. With VizHub, your
@@ -133,7 +131,9 @@ export const LandingPageBody = ({
                   visualizations evolve with each keystroke,
                   together, in real time.
                 </p>
-                <Button href="/prifing">See pricing</Button>
+                <Button href="https://vizhub.com/forum/t/real-time-collaborators/976">
+                  Learn more
+                </Button>
               </div>
               <div className="feature-section-image">
                 <img
@@ -164,26 +164,28 @@ export const LandingPageBody = ({
                   Conquer the coding learning curve with the
                   aid of our AI companion. Stuck on a
                   JavaScript or D3.js problem? Just type
-                  your intent, and watch as the AI breathes
+                  your intent as a comment or partial
+                  solution, and watch as the AI breathes
                   code to life, transforming thoughts into
-                  function—like having a coding mentor at
+                  functions—like having a coding mentor at
                   your side. It's like magic, but it's real.
                 </p>
-                <p>
-                  P. S. If you want a real coding mentor,
-                  that's available too! Just{' '}
-                  <a href="https://calendly.com/curran-kelleher/data-visualization-consultation?month=2024-03">
-                    book a session now
-                  </a>
-                  .
-                </p>
+
                 <Button
                   href="https://vizhub.com/forum/t/ai-assisted-coding/952"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Learn more about AI Assist
+                  Learn more
                 </Button>
+                <p className="text-muted small mt-3">
+                  P. S. If you want a real coding mentor,
+                  that's available too!{' '}
+                  <a href="https://calendly.com/curran-kelleher/data-visualization-consultation?month=2024-03">
+                    Book a session now
+                  </a>{' '}
+                  to get expert help.
+                </p>
               </div>
               <div className="feature-section-image">
                 <a
@@ -206,22 +208,24 @@ export const LandingPageBody = ({
           <div className="feature-section">
             <div className="feature-section-content">
               <div className="feature-section-copy">
-                <h3>Open Source Examples</h3>
+                <h3>Be Inspired by Open Source</h3>
                 <p>
-                  Need some reference implementations?
-                  VizHub provides a growing collection of
-                  open source examples to help you get
-                  started. These examples are designed to be
-                  forked and modified to suit your needs.
-                  They are MIT licensed, so you can use them
-                  in your own projects.
+                  Looking for a jumping-off point? VizHub's
+                  curated library of open-source examples
+                  awaits your exploration. Tailor them,
+                  twist them, make them your own by forking
+                  and modifying. They're not just
+                  samples—they are the beginning of
+                  something greater. And with an MIT
+                  license, the sky's your limit.
                 </p>
                 <Button href="/create-viz">
-                  Explore Templates
+                  Create Viz
                 </Button>
               </div>
               <div className="feature-section-image">
                 <img
+                  className="explore-thumbnails"
                   src={image('explore-thumbnails')}
                 ></img>
               </div>
@@ -232,11 +236,10 @@ export const LandingPageBody = ({
               <div className="feature-section-copy">
                 <h3>Vanilla is the Best Flavor</h3>
                 <p>
-                  Frustrated with the platform-specific
-                  syntax and runtime logic of other online
-                  coding environments? VizHub uses{' '}
-                  <strong>vanilla JavaScript</strong> and
-                  also supports popular frameworks like{' '}
+                  Overwhelmed by quirky quirks of other
+                  online coding platforms? VizHub champions
+                  vanilla JavaScript and embraces beloved
+                  frameworks like{' '}
                   <a href="https://vizhub.com/forum/t/svelte-support-in-vizhub-3/967">
                     Svelte
                   </a>{' '}
@@ -244,11 +247,14 @@ export const LandingPageBody = ({
                   <a href="https://vizhub.com/curran/a95f227912474d4a9bbe88a3c6c33ab9">
                     React
                   </a>
-                  . When you export code from VizHub, you
-                  can drop it into and existing codebase and
-                  it should work out of the box!
+                  . Our promise: code that plays well with
+                  others. Export from VizHub, integrate with
+                  ease, and keep your story flowing without
+                  friction.
                 </p>
-                <Button href="/pricing">See Plans</Button>
+                <Button href="https://github.com/curran/vite-d3-template/tree/main">
+                  See Vite Template
+                </Button>
               </div>
               <div className="feature-section-image rotating-image">
                 <img
@@ -258,13 +264,37 @@ export const LandingPageBody = ({
               </div>
             </div>
           </div>
-          {/* <div className="feature-section">
-            <div className="feature-section-copy">
-              <a href="https://calendly.com/curran-kelleher/casual">
-                Book a meeting with VizHub's founder
-              </a>
+          <div className="feature-section">
+            <div className="feature-section-content">
+              <div className="feature-section-copy">
+                <h3>
+                  Elevate Your Brand with Seamless
+                  Integration
+                </h3>
+                <p>
+                  White-label embedding from VizHub offers
+                  the ultimate flexibility for your brand's
+                  storytelling. Embed stunning, interactive
+                  data visualizations directly into your
+                  digital platforms, free from external
+                  branding. Present your insights with
+                  confidence and maintain brand consistency
+                  across every touchpoint.
+                </p>
+                <Button href="https://vizhub.com/forum/t/embedding-vizzes/975">
+                  Learn more
+                </Button>
+              </div>
+              <div className="feature-section-image">
+                <img
+                  src={image('white-label-embedding')}
+                ></img>
+              </div>
             </div>
-          </div> */}
+          </div>
+        </div>
+        <div className="landing-page-content mb-5">
+          <HomeStarter />
         </div>
         {enableFooter && <Footer />}
       </div>

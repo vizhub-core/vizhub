@@ -54,6 +54,50 @@ const constructingVisualizations2024 = [
   '15ae0a7e176247ddb80cb3d1166f51b4',
   // UN Population Data
   '397562716a3e49d6a9216eeef2d927b8',
+  // Simple Bar Chart
+  'd84fb5ceb99b4ed79940de3afef9224b',
+  // Keeling Curve Data
+  '1c1f0aeedf9040bd97981b03b5d9cbcb',
+  // Simple Line Chart
+  '38a06cf4ae364f3dbc92fcd679a67502',
+  // Mouse Follower
+  '8a349c77f9eb496585faf3c7f61bb0fb',
+  // Responsive Viz Container
+  'c44e3eabbea44fa9ad9658e2af2d764d',
+  // Responsive Axes
+  '8a596d3b83374cceaa320d0e00127d98',
+  // Axes with Hover
+  '2d9651a57dd5443783b0c3c8c47cdfcf',
+  // Responsive Scatter Plot
+  '0169b225047849b38073ab1909443f8c',
+  // Responsive Bar Chart
+  'a79db1c446a4432ba2596faaa8d151e3',
+  // Responsive Line Chart
+  '750aaaae7b7046f0a072df137a7f5c76',
+  // Bar Chart with Basic Hover
+  '668bdd63bc2f4e03aa624e4aa65c095f',
+  // Scatter Plot with Color and Color Legend
+  '8e11aebe22944116a4d89ac02e74fce6',
+  // Interactive Color Legend
+  'a446f43c024a49608f7ae418cde946a2',
+  // World Map Simple
+  'e3f19e09164d4a8184f85e0298672248',
+  // World Cities
+  '8fa016be1b024afeaf55aec9a44cef47',
+  // Spinning Globe
+  '91707a1378be449a9eaf68611ee3cf91',
+  // Daily Surface Air Temperature
+  '4c5212f9d77d4f61bb9d7025ba946797',
+  // Line Chart with Multiple Lines
+  '8a17f8c0102e4b4c996be64fdb0bd30d',
+  // Brushing Circles with D3-Brush
+  '95965c4c960c4237ae4a2157e1d3bb34',
+  // Zoomable Circles with D3-Zoom
+  'd6f1170765c84a498caa6ea11403e3be',
+  // Draggable Circles with D3-Drag
+  'a6c068082da148f3b637e7c5b4bfabcb',
+  // Draggable Circles with Voronoi Overlay
+  '1b28ff39707f4bc2bd6f4216a7fe051b',
 ];
 
 const communityTemplates = [

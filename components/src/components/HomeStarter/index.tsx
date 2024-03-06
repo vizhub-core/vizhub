@@ -7,17 +7,20 @@ const enableCreateVizButton = true;
 export const HomeStarter = () => {
   return (
     <div className="home-starter">
-      <h2>
-        Develop Custom Interactive Data Visualizations
-        <br />
-        <i>Faster</i> with <i>More Fun</i> than ever before!
-      </h2>
+      <h2>Join our community</h2>
       <div className="vh-lede-01">
-        Creating data visualizations is easier than you
-        think. Your journey starts here!
+        Connect with like minded data visualization
+        enthusiasts. Share your projects, get feedback, and
+        learn from others. Help shape the future of VizHub
+        by providing feedback and contributing to its open
+        source editor{' '}
+        <a href="https://github.com/vizhub-core/vzcode">
+          VZCode
+        </a>
+        .
       </div>
       <div className="home-starter-buttons">
-        {enableCreateVizButton && (
+        {/* {enableCreateVizButton && (
           <Button
             variant="primary"
             href="/create-viz"
@@ -27,15 +30,15 @@ export const HomeStarter = () => {
           >
             Create Viz
           </Button>
-        )}
+        )} */}
         <Button
-          variant="secondary"
+          variant="primary"
           href={discordLink}
           as="a"
           target="_blank"
           rel="noopener noreferrer"
         >
-          Discord
+          Join Discord
         </Button>
         <Button
           variant="secondary"
@@ -44,7 +47,7 @@ export const HomeStarter = () => {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Forum
+          Browse Forum
         </Button>
         <Button
           variant="secondary"
@@ -53,7 +56,7 @@ export const HomeStarter = () => {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Learn
+          Free Courses
         </Button>
         <Button
           variant="secondary"
@@ -62,16 +65,7 @@ export const HomeStarter = () => {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Feedback
-        </Button>
-        <Button
-          variant="secondary"
-          href="pricing"
-          as="a"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Pricing
+          Product Feedback
         </Button>
       </div>
     </div>
