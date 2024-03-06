@@ -248,6 +248,7 @@ const getItRight = [
 
 export type CuratedVizCollection = {
   title: string;
+  id: string;
   description: () => React.ReactNode;
   vizIds: Array<VizId>;
 };
@@ -255,6 +256,7 @@ export type CuratedVizCollection = {
 export const curatedVizzes: Array<CuratedVizCollection> = [
   {
     title: 'Technology Starters',
+    id: 'technology-starters',
     description: () => (
       <div>
         A collection of starter projects that unlock various
@@ -267,6 +269,7 @@ export const curatedVizzes: Array<CuratedVizCollection> = [
   },
   {
     title: 'Constructing Visualizations 2024',
+    id: 'constructing-visualizations-2024',
     description: () => (
       <div>
         Vizzes that support{' '}
@@ -286,18 +289,21 @@ export const curatedVizzes: Array<CuratedVizCollection> = [
   },
   {
     title: 'Community Templates',
+    id: 'community-templates',
     description: () =>
       'A collection of templates from the community.',
     vizIds: communityTemplates,
   },
   {
     title: 'Most Forked',
+    id: 'most-forked',
     description: () =>
       'A collection of the most forked projects.',
     vizIds: mostForked,
   },
   {
     title: 'Get it Right in Black & White',
+    id: 'get-it-right-in-black-and-white',
     description: () => (
       <div>
         A collection of projects from the free online course{' '}
@@ -311,6 +317,7 @@ export const curatedVizzes: Array<CuratedVizCollection> = [
   },
   {
     title: 'Datavis 2020',
+    id: 'datavis-2020',
     description: () => (
       <div>
         D3 & React Examples from{' '}
@@ -324,6 +331,7 @@ export const curatedVizzes: Array<CuratedVizCollection> = [
   },
   {
     title: 'Datavis 2018',
+    id: 'datavis-2018',
     description: () => (
       <div>
         Old-style visualizations with D3 from{' '}
