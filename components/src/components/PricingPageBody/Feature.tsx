@@ -1,17 +1,32 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useContext, useState } from 'react';
 import { GreenCheckSVG } from '../Icons/sam/GreenCheckSVG';
 import { ChevronUpSVG } from '../Icons/sam/ChevronUpSVG';
 import { ChevronDownSVG } from '../Icons/sam/ChevronDownSVG';
+import { FeatureId } from 'entities';
+import { HighlightedFeatureContext } from './HighlightedFeatureContext';
 
 export const Feature = ({
   title,
+  id,
   hasBottomBorder = false,
   heavyBottomBorder = false,
-  startsExpanded = false,
   learnMoreHref = null,
   children,
+}: {
+  title: string;
+  id: FeatureId;
+  hasBottomBorder?: boolean;
+  heavyBottomBorder?: boolean;
+  learnMoreHref?: string | null;
+  children: React.ReactNode;
 }) => {
-  const [isOpen, setIsOpen] = useState(startsExpanded);
+  const { highlightedFeature } = useContext(
+    HighlightedFeatureContext,
+  );
+
+  const [isOpen, setIsOpen] = useState(
+    highlightedFeature === id,
+  );
 
   const toggleIsOpen = useCallback(() => {
     setIsOpen((isOpen) => !isOpen);
@@ -25,6 +40,7 @@ export const Feature = ({
             }-bottom-border`
           : ''
       }`}
+      id={id}
     >
       <div
         className="feature-header"

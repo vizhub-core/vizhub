@@ -1,22 +1,19 @@
 import {
   AIAssistUpgradeNudgeModal,
   DeleteVizConfirmationModal,
+  ExportCodeUpgradeNudgeModal,
   ForkModal,
   SettingsModal,
   ShareModal,
 } from 'components';
 import {
-  Content,
   FREE,
-  Info,
   User,
   UserId,
-  Visibility,
   getAnyoneCanEdit,
   getUserDisplayName,
   iframeSnippet,
 } from 'entities';
-import { VizSettings } from './useVizMutations';
 import {
   useCallback,
   useContext,
@@ -25,58 +22,35 @@ import {
 } from 'react';
 import { AuthenticatedUserContext } from '../../contexts/AuthenticatedUserContext';
 import { getVizPageHref } from '../../accessors';
-import { VizKitAPI } from 'api/src/VizKit';
 import { useOnTrashViz } from './useOnTrashViz';
 import { useValidateSlug } from './useValidateSlug';
 import { copyToClipboard } from './copyToClipboard';
+import { VizPageContext } from './VizPageContext';
+import { isFreeTrialEligible } from '../../accessors/isFreeTrialEligible';
 
-export const VizPageModals = ({
-  info,
-  content,
-  ownerUser,
-  showForkModal,
-  toggleForkModal,
-  onFork,
-  showSettingsModal,
-  toggleSettingsModal,
-  showShareModal,
-  toggleShareModal,
-  onSettingsSave,
-  setAnyoneCanEdit,
-  showDeleteVizConfirmationModal,
-  toggleDeleteVizConfirmationModal,
-  vizKit,
-  initialCollaborators,
-  showAIAssistUpgradeNudgeModal,
-  toggleAIAssistUpgradeNudgeModal,
-}: {
-  info: Info;
-  content: Content;
-  ownerUser: User;
-  showForkModal: boolean;
-  toggleForkModal: () => void;
-  onFork: ({
-    owner,
-    title,
-    visibility,
-  }: {
-    owner: UserId;
-    title: string;
-    visibility: Visibility;
-  }) => void;
-  showSettingsModal: boolean;
-  toggleSettingsModal: () => void;
-  showShareModal: boolean;
-  toggleShareModal: () => void;
-  onSettingsSave: (vizSettings: VizSettings) => void;
-  setAnyoneCanEdit: (anyoneCanEdit: boolean) => void;
-  showDeleteVizConfirmationModal: boolean;
-  toggleDeleteVizConfirmationModal: () => void;
-  vizKit: VizKitAPI;
-  initialCollaborators: Array<User>;
-  showAIAssistUpgradeNudgeModal: boolean;
-  toggleAIAssistUpgradeNudgeModal: () => void;
-}) => {
+export const VizPageModals = () => {
+  const {
+    info,
+    content,
+    ownerUser,
+    showForkModal,
+    toggleForkModal,
+    onFork,
+    showSettingsModal,
+    toggleSettingsModal,
+    showShareModal,
+    toggleShareModal,
+    onSettingsSave,
+    setAnyoneCanEdit,
+    showDeleteVizConfirmationModal,
+    toggleDeleteVizConfirmationModal,
+    vizKit,
+    initialCollaborators,
+    showAIAssistUpgradeNudgeModal,
+    toggleAIAssistUpgradeNudgeModal,
+    showExportCodeUpgradeNudgeModal,
+    toggleExportCodeUpgradeNudgeModal,
+  } = useContext(VizPageContext);
   // The currently authenticated user, if any.
   const authenticatedUser: User | null = useContext(
     AuthenticatedUserContext,
@@ -215,6 +189,11 @@ export const VizPageModals = ({
     owner: info.owner,
   });
 
+  const enableFreeTrial = useMemo(
+    () => isFreeTrialEligible(authenticatedUser),
+    [authenticatedUser],
+  );
+
   return (
     <>
       {showForkModal && (
@@ -234,7 +213,7 @@ export const VizPageModals = ({
           onClose={toggleForkModal}
           onFork={onFork}
           currentPlan={authenticatedUser?.plan}
-          pricingHref={'/pricing'}
+          enableFreeTrial={enableFreeTrial}
         />
       )}
       {showSettingsModal && (
@@ -247,12 +226,12 @@ export const VizPageModals = ({
           onClose={toggleSettingsModal}
           onSave={onSettingsSave}
           currentPlan={authenticatedUser?.plan}
-          pricingHref={'/pricing'}
           initialHeight={content.height}
           enableURLChange={true}
           userName={authenticatedUser?.userName}
           initialSlug={info.slug || info.id}
           validateSlug={validateSlug}
+          enableFreeTrial={enableFreeTrial}
         />
       )}
       {showShareModal && (
@@ -280,6 +259,7 @@ export const VizPageModals = ({
           }
           brandedOption={brandedOption}
           setBrandedOption={setBrandedOption}
+          enableFreeTrial={enableFreeTrial}
         />
       )}
       {showDeleteVizConfirmationModal && (
@@ -293,7 +273,14 @@ export const VizPageModals = ({
         <AIAssistUpgradeNudgeModal
           show={showAIAssistUpgradeNudgeModal}
           onClose={toggleAIAssistUpgradeNudgeModal}
-          // onConfirm={onUseFreeGeneration}
+          enableFreeTrial={enableFreeTrial}
+        />
+      )}
+      {showExportCodeUpgradeNudgeModal && (
+        <ExportCodeUpgradeNudgeModal
+          show={showExportCodeUpgradeNudgeModal}
+          onClose={toggleExportCodeUpgradeNudgeModal}
+          enableFreeTrial={enableFreeTrial}
         />
       )}
     </>

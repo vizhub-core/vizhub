@@ -5,6 +5,7 @@ export const PremiumFeatures = ({}) => (
   <>
     <Feature
       title="Private Vizzes"
+      id="private-vizzes"
       hasBottomBorder={true}
       learnMoreHref={
         'https://vizhub.com/forum/t/making-vizzes-private/977'
@@ -17,6 +18,7 @@ export const PremiumFeatures = ({}) => (
     </Feature>
     <Feature
       title="AI-Assisted Coding"
+      id="ai-assisted-coding"
       hasBottomBorder={true}
       learnMoreHref="https://vizhub.com/forum/t/ai-assisted-coding/952"
     >
@@ -26,6 +28,7 @@ export const PremiumFeatures = ({}) => (
     </Feature>
     <Feature
       title="Unlimited Real-Time Collaborators"
+      id="real-time-collaborators"
       hasBottomBorder={true}
       learnMoreHref={
         'https://vizhub.com/forum/t/real-time-collaborators/976'
@@ -38,6 +41,7 @@ export const PremiumFeatures = ({}) => (
     </Feature>
     <Feature
       title="White Label Embedding"
+      id="white-label-embedding"
       hasBottomBorder={true}
       learnMoreHref={
         'https://vizhub.com/forum/t/embedding-vizzes/975'
@@ -50,6 +54,8 @@ export const PremiumFeatures = ({}) => (
     </Feature>
     <Feature
       title="Upload Larger Datasets"
+      id="larger-datasets"
+      hasBottomBorder={true}
       learnMoreHref={
         'https://vizhub.com/forum/t/importing-data-and-code-across-vizzes/973'
       }
@@ -59,6 +65,16 @@ export const PremiumFeatures = ({}) => (
       more detailed analysis and richer storytelling, a
       crucial feature for SMBs, non-profits, and researchers
       needing to convey impactful narratives from rich data.
+    </Feature>
+    <Feature
+      title="Export Code via API"
+      id="api-access-for-vizzes"
+      learnMoreHref="https://vizhub.com/forum/t/api-access-for-vizzes/971"
+    >
+      Export public vizzes as code. Use our API to automate
+      the export of your visualizations, perfect for
+      integration with your existing workflows and
+      applications.
     </Feature>
   </>
 );

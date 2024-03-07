@@ -15,6 +15,7 @@ export const EmbedSection = ({
   currentPlan,
   brandedOption,
   setBrandedOption,
+  enableFreeTrial,
 }) => {
   // Tracks when to show the "Copied" tooltip.
   const [showTooltip, setShowTooltip] = useState(false);
@@ -38,6 +39,7 @@ export const EmbedSection = ({
   return (
     <Form.Group className="mt-4" controlId="formShareLink">
       <BrandedEmbedControl
+        enableFreeTrial={enableFreeTrial}
         currentPlan={currentPlan}
         brandedOption={brandedOption}
         setBrandedOption={setBrandedOption}

@@ -68,7 +68,7 @@ export type {
   BetaProgramSignup,
 } from './Users';
 
-export type { Plan } from './Pricing';
+export type { Plan, FeatureId } from './Pricing';
 
 export { FREE, PREMIUM, PRO } from './Pricing';
 

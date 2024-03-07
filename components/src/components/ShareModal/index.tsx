@@ -37,6 +37,7 @@ export const ShareModal = ({
   showCollaboratorsSection,
   brandedOption,
   setBrandedOption,
+  enableFreeTrial,
 }: {
   show: boolean;
   linkToCopy: string;
@@ -63,6 +64,7 @@ export const ShareModal = ({
   showCollaboratorsSection: boolean;
   brandedOption: string;
   setBrandedOption: (brandedOption: string) => void;
+  enableFreeTrial: boolean;
 }) => {
   const [section, setSection] = useState('link');
 
@@ -143,6 +145,7 @@ export const ShareModal = ({
             showAnyoneCanEdit={showAnyoneCanEdit}
             initialCollaborators={initialCollaborators}
             currentPlan={currentPlan}
+            enableFreeTrial={enableFreeTrial}
           />
         )}
         {section === 'link' && (
@@ -153,6 +156,7 @@ export const ShareModal = ({
         )}
         {section === 'embed' && (
           <EmbedSection
+            enableFreeTrial={enableFreeTrial}
             embedSnippetToCopy={embedSnippetToCopy}
             onEmbedSnippetCopy={onEmbedSnippetCopy}
             brandedOption={brandedOption}
