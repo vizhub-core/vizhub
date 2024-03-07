@@ -21,5 +21,5 @@ export { StargazersPageBody } from './components/StargazersPageBody';
 export { Stargazer } from './components/Stargazer';
 export { KitchenSinkApp } from './KitchenSinkApp';
 export { BrandedEmbedControl } from './components/BrandedEmbedControl';
-
+export { ExportCodeUpgradeNudgeModal } from './components/ExportCodeUpgradeNudgeModal';
 import './components/index.scss';

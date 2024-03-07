@@ -7,15 +7,16 @@ import { ImageSVG } from '../Icons/ImageSVG';
 import { ExportSVG } from '../Icons/sam/ExportSVG';
 import { ArrowLeftSVG } from '../Icons/sam/ArrowLeftSVG';
 import { ArrowRightSVG } from '../Icons/sam/ArrowRightSVG';
-import './styles.scss';
 import { ServerSVG } from '../Icons/sam/ServerSVG';
+import './styles.scss';
 
 const enableDownloadImage = true;
+const enableAPIButton = false;
 
 export const VizPageHead = ({
   showEditor,
   setShowEditor,
-  exportHref,
+  handleExportCodeClick,
   onShareClick,
   onForkClick,
   showForkButton,
@@ -56,20 +57,25 @@ export const VizPageHead = ({
             <div className="btn-text">Download Image</div>
           </Button>
         )}
-        <Button as="a" variant="dark" href={exportHref}>
+        <Button
+          variant="dark"
+          onClick={handleExportCodeClick}
+        >
           <ExportSVG />
           <div className="btn-text">Export Code</div>
         </Button>
-        <Button
-          as="a"
-          variant="dark"
-          href="https://vizhub.com/forum/t/api-access-for-vizzes/971"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <ServerSVG />
-          <div className="btn-text">API</div>
-        </Button>
+        {enableAPIButton && (
+          <Button
+            as="a"
+            variant="dark"
+            href="https://vizhub.com/forum/t/api-access-for-vizzes/971"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <ServerSVG />
+            <div className="btn-text">API</div>
+          </Button>
+        )}
 
         <Button variant="dark" onClick={onShareClick}>
           <SharedSVG />

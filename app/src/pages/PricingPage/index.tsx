@@ -2,6 +2,7 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from 'react';
 import { PricingPageBody } from 'components/src/components/PricingPageBody';
@@ -12,9 +13,11 @@ import {
   AuthenticatedUserProvider,
 } from '../../contexts/AuthenticatedUserContext';
 import { Page, PageData } from '../Page';
-import { User } from 'entities';
+import { FeatureId, User } from 'entities';
 import { useOpenBillingPortal } from '../useOpenBillingPortal';
 import './styles.scss';
+import { useSearchParams } from 'react-router-dom';
+import { isFreeTrialEligible } from '../../accessors/isFreeTrialEligible';
 
 const vizKit = VizKit({ baseUrl: './api' });
 
@@ -28,13 +31,24 @@ const Body = () => {
     AuthenticatedUserContext,
   );
 
+  // Get the highlighted feature from the URL query string
+  // using react-router's useSearchParams hook.
+  // e.g. ?feature=ai-assist
+  const [searchParams] = useSearchParams();
+  const highlightedFeature = useMemo(
+    () =>
+      searchParams.get('feature') as FeatureId | undefined,
+    [searchParams],
+  );
+
   // Default to monthly billing.
   const [isMonthly, setIsMonthly] = useState(true);
 
   // Only enable one free trial per user.
-  const enableFreeTrial = authenticatedUser
-    ? !authenticatedUser.stripeCustomerId
-    : true;
+  const enableFreeTrial = useMemo(
+    () => isFreeTrialEligible(authenticatedUser),
+    [authenticatedUser],
+  );
 
   // When the user clicks "Upgrade" in the Premium card.
   const handlePremiumUpgradeClick =
@@ -116,6 +130,7 @@ const Body = () => {
       setIsMonthly={setIsMonthly}
       currentPlan={authenticatedUser?.plan}
       enableFreeTrial={enableFreeTrial}
+      highlightedFeature={highlightedFeature}
     />
   );
 };

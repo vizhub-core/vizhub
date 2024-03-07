@@ -33,10 +33,10 @@ export const SettingsModal = ({
   initialOwner,
   possibleOwners,
   currentPlan,
-  pricingHref,
   userName,
   enableURLChange = false,
   validateSlug,
+  enableFreeTrial,
 }: {
   show: boolean;
   onClose: () => void;
@@ -60,12 +60,12 @@ export const SettingsModal = ({
   initialOwner: UserId;
   possibleOwners: Array<PossibleOwner>;
   currentPlan: Plan;
-  pricingHref: string;
   userName?: string;
   enableURLChange?: boolean;
   validateSlug: (
     slug: string,
   ) => Promise<'valid' | 'invalid'>;
+  enableFreeTrial: boolean;
 }) => {
   // Local state for the title
   const [title, setTitle] = useState(initialTitle);
@@ -175,6 +175,7 @@ export const SettingsModal = ({
           visibility={visibility}
           setVisibility={setVisibility}
           currentPlan={currentPlan}
+          enableFreeTrial={enableFreeTrial}
         />
         {enableURLChange && (
           <Form.Group

@@ -14,24 +14,21 @@ import {
   errorCodeLabels,
 } from 'gateways';
 import { Button } from 'vzcode/src/client/bootstrap';
+import { VizPageContext } from './VizPageContext';
 
-export const VizPageToasts = ({
-  shareDBError,
-  dismissShareDBError,
-  handleForkLinkClick,
-}: {
-  shareDBError: VizHubError | null;
-  dismissShareDBError: () => void;
-  handleForkLinkClick: (
-    event: React.MouseEvent<HTMLAnchorElement>,
-  ) => void;
-}) => {
-  // State for showing a toast after successful fork
-  const [showForkToast, setShowForkToast] = useState(false);
+export const VizPageToasts = () => {
+  const {
+    shareDBError,
+    dismissShareDBError,
+    handleForkLinkClick,
+  } = useContext(VizPageContext);
 
   const authenticatedUser: User | null = useContext(
     AuthenticatedUserContext,
   );
+
+  // State for showing a toast after successful fork
+  const [showForkToast, setShowForkToast] = useState(false);
 
   const handleForkToastClose = useCallback(() => {
     setShowForkToast(false);

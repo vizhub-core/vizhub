@@ -1,8 +1,11 @@
+import { FeatureId } from 'entities';
 import { Button } from '../bootstrap';
 import { image } from '../image';
 import './styles.scss';
 
 export const UpgradeCallout = ({
+  featureId,
+  enableFreeTrial,
   showImage = true,
   imageSrc = image('upgrade-callout-feature'),
   isVideo = false,
@@ -12,6 +15,18 @@ export const UpgradeCallout = ({
   topMargin = false,
   bottomMargin = false,
   includeHeader = true,
+}: {
+  featureId: FeatureId;
+  enableFreeTrial: boolean;
+  showImage?: boolean;
+  imageSrc?: string;
+  isVideo?: boolean;
+  isVertical?: boolean;
+  isInline?: boolean;
+  children?: React.ReactNode;
+  topMargin?: boolean;
+  bottomMargin?: boolean;
+  includeHeader?: boolean;
 }) => {
   return (
     <div
@@ -36,8 +51,15 @@ export const UpgradeCallout = ({
           {/* <Button variant="secondary">
             Remind me Later
           </Button> */}
-          <Button variant="primary" href="/pricing">
-            Start Free Trial
+          <Button
+            variant="primary"
+            href={`/pricing?feature=${featureId}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            {enableFreeTrial
+              ? 'Start Free Trial'
+              : 'Upgrade Now'}
           </Button>
         </div>
       </div>

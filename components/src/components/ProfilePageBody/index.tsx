@@ -7,13 +7,14 @@ import { OrganizationsSVG } from '../Icons/sam/OrganizationsSVG';
 import { SharedSVG } from '../Icons/sam/SharedSVG';
 import { StarSVG } from '../Icons/sam/StarSVG';
 import { SectionId, SortId } from 'entities';
-import { useMemo } from 'react';
+import { useContext, useMemo } from 'react';
 import { SidebarSection } from './SidebarSection';
 import { UpgradeCallout } from '../UpgradeCallout';
 import { CreateNewButton } from '../CreateNewButton';
 import { ServerSVG } from '../Icons/sam/ServerSVG';
 import { BellSVG } from '../Icons/sam/BellSVG';
 import './styles.scss';
+import { PrivateVizzesUpgradeCallout } from '../PrivateVizzesUpgradeCallout';
 
 const enableEditBio = false;
 const enableCreateVizButton = true;
@@ -60,6 +61,7 @@ export const ProfilePageBody = ({
   setSectionId,
 
   showUpgradeCallout,
+  enableFreeTrial,
 }: {
   // Viz preview list props.
   renderVizPreviews: () => React.ReactNode;
@@ -85,7 +87,8 @@ export const ProfilePageBody = ({
 
   // True when the user is on the free plan and viewing
   // their private vizzes
-  showUpgradeCallout?: boolean;
+  showUpgradeCallout: boolean;
+  enableFreeTrial: boolean;
 }) => {
   const sections: Array<ProfileSection> = useMemo(
     () =>
@@ -203,12 +206,11 @@ export const ProfilePageBody = ({
             </div>
           </div>
           {showUpgradeCallout && (
-            <UpgradeCallout>
-              To create private visualizations, consider
-              upgrading to VizHub Premium. You'll also get
-              access to other premium features including
-              AI-assisted coding, unlimited real-time
-              collaborators, and larger data.
+            <UpgradeCallout
+              featureId="private-vizzes"
+              enableFreeTrial={enableFreeTrial}
+            >
+              <PrivateVizzesUpgradeCallout />
             </UpgradeCallout>
           )}
           <VizPreviewCollection

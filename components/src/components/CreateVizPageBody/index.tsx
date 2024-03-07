@@ -1,3 +1,4 @@
+import { Footer } from '../Footer';
 import './styles.scss';
 
 export const CreateVizPageBody = ({
@@ -18,6 +19,7 @@ export const CreateVizPageBody = ({
 
         {renderVizPreviews()}
       </div>
+      <Footer />
     </div>
   );
 };
