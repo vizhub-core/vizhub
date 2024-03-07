@@ -17,6 +17,7 @@ import { FeatureId, User } from 'entities';
 import { useOpenBillingPortal } from '../useOpenBillingPortal';
 import './styles.scss';
 import { useSearchParams } from 'react-router-dom';
+import { isFreeTrialEligible } from '../../accessors/isFreeTrialEligible';
 
 const vizKit = VizKit({ baseUrl: './api' });
 
@@ -44,9 +45,10 @@ const Body = () => {
   const [isMonthly, setIsMonthly] = useState(true);
 
   // Only enable one free trial per user.
-  const enableFreeTrial = authenticatedUser
-    ? !authenticatedUser.stripeCustomerId
-    : true;
+  const enableFreeTrial = useMemo(
+    () => isFreeTrialEligible(authenticatedUser),
+    [authenticatedUser],
+  );
 
   // When the user clicks "Upgrade" in the Premium card.
   const handlePremiumUpgradeClick =

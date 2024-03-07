@@ -22,6 +22,7 @@ export const CollaboratorsSection = ({
   showAnyoneCanEdit,
   initialCollaborators,
   currentPlan,
+  enableFreeTrial,
 }: {
   anyoneCanEdit: boolean;
   setAnyoneCanEdit: (anyoneCanEdit: boolean) => void;
@@ -35,6 +36,7 @@ export const CollaboratorsSection = ({
   showAnyoneCanEdit: boolean;
   initialCollaborators: Array<User>;
   currentPlan: Plan;
+  enableFreeTrial: boolean;
 }) => {
   // True when the async handleCollaboratorSearch is in progress
   const [isLoading, setIsLoading] = useState(false);
@@ -123,15 +125,27 @@ export const CollaboratorsSection = ({
     <>
       {currentPlan === 'free' && (
         <UpgradeCallout
+          enableFreeTrial={enableFreeTrial}
+          featureId="real-time-collaborators"
           imageSrc={image('real-time-collaboration')}
           isVertical={true}
           topMargin={true}
         >
-          {/* Add collaborators to invite others to edit your
-            viz with you in real-time. This feature is only
-            available on VizHub Premium. */}
-          With VizHub Premium, you can add unlimited
-          real-time collaborators to your viz.
+          Break down barriers to collaboration. Share your
+          projects with an unlimited number of real-time
+          collaborators for a truly integrated team
+          experience. Edit code together in an integrated
+          multiplayer experience. This feature is only
+          available with VizHub Premium.
+          <p>
+            <a
+              href="https://vizhub.com/forum/t/real-time-collaborators/976"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Learn more about real-time collaboration
+            </a>
+          </p>
         </UpgradeCallout>
 
         // <div className="mt-3 d-flex flex-column align-items-end">

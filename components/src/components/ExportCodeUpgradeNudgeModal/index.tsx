@@ -1,46 +1,25 @@
-import { useCallback, useEffect } from 'react';
 import { UpgradeCallout } from '../UpgradeCallout';
 import { Modal } from '../bootstrap';
 import { image } from '../image';
 
-export const AIAssistUpgradeNudgeModal = ({
+export const ExportCodeUpgradeNudgeModal = ({
   show,
   onClose,
-  // onConfirm,
+  enableFreeTrial,
 }: {
   show: boolean;
   onClose: () => void;
-  // onConfirm?: () => void;
+  enableFreeTrial: boolean;
 }) => {
-  const handleEnterKey = useCallback(
-    (event: KeyboardEvent) => {
-      if (event.key === 'Enter') {
-      }
-    },
-    [],
-  );
-
-  useEffect(() => {
-    if (show) {
-      window.addEventListener('keydown', handleEnterKey);
-    } else {
-      window.removeEventListener('keydown', handleEnterKey);
-    }
-    return () => {
-      window.removeEventListener('keydown', handleEnterKey);
-    };
-  }, [show, handleEnterKey]);
-
   return (
     <Modal show={show} onHide={onClose} centered>
       <Modal.Header closeButton>
-        <Modal.Title>
-          Export Code with API Access
-        </Modal.Title>
+        <Modal.Title>Upgrade to Premium</Modal.Title>
       </Modal.Header>
 
       <UpgradeCallout
         featureId="api-access-for-vizzes"
+        enableFreeTrial={enableFreeTrial}
         imageSrc={image('export-code', 'mp4')}
         isVideo={true}
         isVertical={true}

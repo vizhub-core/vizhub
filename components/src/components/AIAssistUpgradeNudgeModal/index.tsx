@@ -11,66 +11,21 @@ import { image } from '../image';
 export const AIAssistUpgradeNudgeModal = ({
   show,
   onClose,
+  enableFreeTrial,
 }: {
   show: boolean;
   onClose: () => void;
+  enableFreeTrial: boolean;
 }) => {
-  // const handleEnterKey = useCallback(
-  //   (event: KeyboardEvent) => {
-  //     if (event.key === 'Enter') {
-  //       onConfirm();
-  //     }
-  //   },
-  //   [onConfirm],
-  // );
-
-  // useEffect(() => {
-  //   if (show) {
-  //     window.addEventListener('keydown', handleEnterKey);
-  //   } else {
-  //     window.removeEventListener('keydown', handleEnterKey);
-  //   }
-  //   return () => {
-  //     window.removeEventListener('keydown', handleEnterKey);
-  //   };
-  // }, [show, handleEnterKey]);
-
   return (
     <Modal show={show} onHide={onClose} centered>
       <Modal.Header closeButton>
-        <Modal.Title>Try AI Assist</Modal.Title>
+        <Modal.Title>Upgrade to Premium</Modal.Title>
       </Modal.Header>
 
-      {/* <Modal.Body> */}
-      {/* <p>
-          This feature lets you leverage generative
-          artificial intelligence in your coding practice.
-          Here's how it works:
-          <ul>
-            <li>
-              Place your cursor in a location in the editor
-              where you want code to be written
-            </li>
-            <li>
-              (optionally) Add a comment before your cursor
-              to prompt the AI with instructions
-            </li>
-            <li>
-              Press the AI Assist button to trigger code
-              generation!
-            </li>
-            <li>
-              The generated code is streamed directly into
-              the editor, as though a remote collaborator is
-              typing.
-            </li>
-          </ul>
-          This feature is only available with VizHub
-          Premium. Consider starting a free trial to test
-          out this feature!
-          <a href="/pricing">Start free trial</a>
-        </p> */}
       <UpgradeCallout
+        enableFreeTrial={enableFreeTrial}
+        featureId="ai-assisted-coding"
         imageSrc={image('ai-assist-demo-5', 'mp4')}
         isVideo={true}
         isVertical={true}
@@ -79,15 +34,11 @@ export const AIAssistUpgradeNudgeModal = ({
         isInline={true}
         includeHeader={false}
       >
-        {/* Add collaborators to invite others to edit your
-            viz with you in real-time. This feature is only
-            available on VizHub Premium. */}
-        {/* With VizHub Premium, you can add unlimited
-          real-time collaborators to your viz. */}
         <p>
-          The AI Assist feature lets you leverage generative
-          artificial intelligence in your coding practice.
-          Here's how it works:
+          Enhance your coding with AI. Speed up your
+          workflow, reduce errors, and innovate faster,
+          freeing up time for research, analysis, and
+          creativity. How it works:
         </p>
         <ul>
           <li>
@@ -96,22 +47,18 @@ export const AIAssistUpgradeNudgeModal = ({
           </li>
           <li>
             (optionally) Add a comment before your cursor to
-            prompt the AI with instructions
+            prompt the AI with instructions or type a
+            partial solution
           </li>
+          <li>Press the AI Assist button</li>
           <li>
-            Press the AI Assist button to trigger code
-            generation!
-          </li>
-          <li>
-            The generated code is streamed directly into the
-            editor, as though a remote collaborator is
-            typing.
+            Watch the generated code streamed directly into
+            your editor
           </li>
         </ul>
         <p>
           This feature is only available with VizHub
-          Premium. Consider starting a free trial to test
-          out this feature!
+          Premium.
         </p>
         <p>
           <a
@@ -123,20 +70,6 @@ export const AIAssistUpgradeNudgeModal = ({
           </a>
         </p>
       </UpgradeCallout>
-      {/* </Modal.Body> */}
-
-      {/* <Modal.Footer>
-        <Button
-          variant="secondary"
-          type="button"
-          onClick={onClose}
-        >
-          Cancel
-        </Button>
-        <Button variant="primary" onClick={onConfirm}>
-          Try AI Assist
-        </Button>
-      </Modal.Footer> */}
     </Modal>
   );
 };

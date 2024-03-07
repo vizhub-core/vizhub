@@ -13,6 +13,7 @@ import { InfosAndOwnersContext } from '../../contexts/InfosAndOwnersContext';
 import { AuthenticatedUserContext } from '../../contexts/AuthenticatedUserContext';
 import { SectionSortContext } from '../../contexts/SectionSortContext';
 import { image } from 'components/src/components/image';
+import { isFreeTrialEligible } from '../../accessors/isFreeTrialEligible';
 
 export const Body = ({
   profileUser,
@@ -89,6 +90,11 @@ export const Body = ({
     [allInfoSnapshots, profileUser, showUpgradeCallout],
   );
 
+  const enableFreeTrial = useMemo(
+    () => isFreeTrialEligible(authenticatedUser),
+    [authenticatedUser],
+  );
+
   return (
     <div className="vh-page overflow-auto">
       <SmartHeader />
@@ -108,6 +114,7 @@ export const Body = ({
         sectionId={sectionId}
         setSectionId={setSectionId}
         showUpgradeCallout={showUpgradeCallout}
+        enableFreeTrial={enableFreeTrial}
       />
     </div>
   );

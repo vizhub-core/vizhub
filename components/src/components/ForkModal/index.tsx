@@ -18,7 +18,7 @@ export const ForkModal = ({
   initialOwner,
   possibleOwners,
   currentPlan,
-  pricingHref,
+  enableFreeTrial,
 }: {
   show: boolean;
   onClose: () => void;
@@ -39,7 +39,7 @@ export const ForkModal = ({
     label: string;
   }>;
   currentPlan: Plan;
-  pricingHref: string;
+  enableFreeTrial: boolean;
 }) => {
   const [title, setTitle] = useState<string>(initialTitle);
   const [visibility, setVisibility] = useState<Visibility>(
@@ -109,7 +109,7 @@ export const ForkModal = ({
           visibility={visibility}
           setVisibility={setVisibility}
           currentPlan={currentPlan}
-          pricingHref={pricingHref}
+          enableFreeTrial={enableFreeTrial}
         />
         <OwnerControl
           owner={owner}

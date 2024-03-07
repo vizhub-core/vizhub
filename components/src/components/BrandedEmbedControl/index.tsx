@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { Plan, Visibility } from 'entities';
+import { Plan } from 'entities';
 import { Form } from '../bootstrap';
 import { UpgradeCallout } from '../UpgradeCallout';
 import { image } from '../image';
@@ -21,10 +21,12 @@ export const BrandedEmbedControl = ({
   brandedOption,
   setBrandedOption,
   currentPlan,
+  enableFreeTrial,
 }: {
   brandedOption: string;
   setBrandedOption: (option: string) => void;
   currentPlan: Plan;
+  enableFreeTrial: boolean;
 }) => {
   const [showUpgradeCallout, setShowUpgradeCallout] =
     useState(false);
@@ -72,6 +74,8 @@ export const BrandedEmbedControl = ({
       </Form.Text>
       {showUpgradeCallout && (
         <UpgradeCallout
+          featureId="white-label-embedding"
+          enableFreeTrial={enableFreeTrial}
           imageSrc={image('whitelabel-embedding-2')}
           isVertical={true}
           topMargin={true}

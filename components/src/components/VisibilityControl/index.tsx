@@ -4,6 +4,7 @@ import { Form } from '../bootstrap';
 import './styles.css';
 import { UpgradeCallout } from '../UpgradeCallout';
 import { image } from '../image';
+import { PrivateVizzesUpgradeCallout } from '../PrivateVizzesUpgradeCallout';
 
 const enableUnlisted = false;
 
@@ -19,10 +20,12 @@ export const VisibilityControl = ({
   visibility,
   setVisibility,
   currentPlan,
+  enableFreeTrial,
 }: {
   visibility: Visibility;
   setVisibility: (visibility: Visibility) => void;
   currentPlan: Plan;
+  enableFreeTrial: boolean;
 }) => {
   const [showUpgradeCallout, setShowUpgradeCallout] =
     useState(false);
@@ -75,15 +78,13 @@ export const VisibilityControl = ({
       </Form.Text>
       {showUpgradeCallout && (
         <UpgradeCallout
+          enableFreeTrial={enableFreeTrial}
+          featureId="private-vizzes"
           imageSrc={image('empty-private-vizzes', 'svg')}
           isVertical={true}
           topMargin={true}
         >
-          Private vizzes are only available with VizHub
-          Premium. Please consider upgrading your plan to
-          make this viz private and also gain access to
-          other great features like AI-Assisted Coding and
-          unlimited real-time collaborators.
+          <PrivateVizzesUpgradeCallout />
         </UpgradeCallout>
       )}
     </Form.Group>

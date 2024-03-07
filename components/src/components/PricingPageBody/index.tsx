@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { FeatureId, Plan } from 'entities';
+import { FREE, FeatureId, Plan } from 'entities';
 import { Footer } from '../Footer';
 import { GreenCheckSVG } from '../Icons/sam/GreenCheckSVG';
 import {
@@ -54,6 +54,7 @@ const CurrentButton = () => (
   <Button
     variant="success"
     className="pricing-page-plan-button"
+    size="lg"
   >
     Current
     <GreenCheckSVG />
@@ -187,8 +188,9 @@ export const PricingPageBody = ({
                       variant="primary"
                       className="pricing-page-plan-button"
                       onClick={onStarterDowngradeClick}
+                      size="lg"
                     >
-                      Downgrade
+                      Downgrade now
                     </Button>
                   )}
 
@@ -219,9 +221,10 @@ export const PricingPageBody = ({
                   </div>
                   <p>
                     Ideal for professionals.
-                    {enableFreeTrial
-                      ? ' Includes 7 day free trial.'
-                      : ''}
+                    {currentPlan === FREE &&
+                      (enableFreeTrial
+                        ? ' Includes 7 day free trial.'
+                        : ' Your 7 day free trial has expired.')}
                   </p>
                   {currentPlan === 'premium' ? (
                     <CurrentButton />
@@ -230,10 +233,11 @@ export const PricingPageBody = ({
                       variant="primary"
                       className="pricing-page-plan-button"
                       onClick={onPremiumUpgradeClick}
+                      size="lg"
                     >
                       {enableFreeTrial
-                        ? 'Start Free Trial'
-                        : 'Upgrade'}
+                        ? 'Start tree trial'
+                        : 'Upgrade now'}
                     </Button>
                   )}
 

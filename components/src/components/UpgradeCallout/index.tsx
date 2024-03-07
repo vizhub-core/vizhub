@@ -1,9 +1,11 @@
+import { FeatureId } from 'entities';
 import { Button } from '../bootstrap';
 import { image } from '../image';
 import './styles.scss';
 
 export const UpgradeCallout = ({
   featureId,
+  enableFreeTrial,
   showImage = true,
   imageSrc = image('upgrade-callout-feature'),
   isVideo = false,
@@ -15,6 +17,7 @@ export const UpgradeCallout = ({
   includeHeader = true,
 }: {
   featureId: FeatureId;
+  enableFreeTrial: boolean;
   showImage?: boolean;
   imageSrc?: string;
   isVideo?: boolean;
@@ -54,7 +57,9 @@ export const UpgradeCallout = ({
             target="_blank"
             rel="noreferrer"
           >
-            Start Free Trial
+            {enableFreeTrial
+              ? 'Start Free Trial'
+              : 'Upgrade Now'}
           </Button>
         </div>
       </div>
