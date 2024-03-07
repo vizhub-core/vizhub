@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Plan } from 'entities';
+import { FeatureId, Plan } from 'entities';
 import { Footer } from '../Footer';
 import { GreenCheckSVG } from '../Icons/sam/GreenCheckSVG';
 import {
@@ -12,6 +12,7 @@ import { image } from '../image';
 import { StarterFeatures } from './StarterFeatures';
 import { PremiumFeatures } from './PremiumFeatures';
 import './styles.scss';
+import { HighlightedFeatureProvider } from './HighlightedFeatureContext';
 
 const premiumPriceMonthly = 9.99;
 const premiumPriceAnnually = 99.99;
@@ -69,6 +70,7 @@ export const PricingPageBody = ({
   setIsMonthly,
   currentPlan = 'free',
   enableFreeTrial,
+  highlightedFeature,
 }: {
   onStarterDowngradeClick: () => void;
   onPremiumUpgradeClick: () => void;
@@ -77,6 +79,7 @@ export const PricingPageBody = ({
   setIsMonthly: (isMonthly: boolean) => void;
   currentPlan: Plan;
   enableFreeTrial: boolean;
+  highlightedFeature?: FeatureId;
 }) => {
   const handleMonthlyClick = useCallback(() => {
     setIsMonthly(true);
@@ -108,145 +111,149 @@ export const PricingPageBody = ({
   }, []);
 
   return (
-    <div className="vh-page vh-pricing-page">
-      <img
-        className="header-background"
-        src={headerBackgroundSrc}
-        alt="header"
-      />
-      <div className="pricing-page-body">
-        <div className="pricing-page-content">
-          <div className="pricing-page-header">
-            <h1>VizHub Plans</h1>
-            <ButtonGroup aria-label="Billing Cadences">
-              <Button
-                variant={
-                  isMonthly
-                    ? 'secondary'
-                    : 'outline-secondary'
-                }
-                onClick={handleMonthlyClick}
-              >
-                Billed Monthly
-              </Button>
-              <OverlayTrigger
-                placement="top"
-                overlay={
-                  <Tooltip id="annual-billing-tooltip">
-                    Save {percentSavings}%!
-                  </Tooltip>
-                }
-              >
+    <HighlightedFeatureProvider
+      highlightedFeature={highlightedFeature}
+    >
+      <div className="vh-page vh-pricing-page">
+        <img
+          className="header-background"
+          src={headerBackgroundSrc}
+          alt="header"
+        />
+        <div className="pricing-page-body">
+          <div className="pricing-page-content">
+            <div className="pricing-page-header">
+              <h1>VizHub Plans</h1>
+              <ButtonGroup aria-label="Billing Cadences">
                 <Button
                   variant={
                     isMonthly
-                      ? 'outline-secondary'
-                      : 'secondary'
+                      ? 'secondary'
+                      : 'outline-secondary'
                   }
-                  onClick={handleAnnuallyClick}
+                  onClick={handleMonthlyClick}
                 >
-                  Billed Annually
+                  Billed Monthly
                 </Button>
-              </OverlayTrigger>
-            </ButtonGroup>
-          </div>
-          <div className="pricing-page-plans">
-            <div className="pricing-page-plan">
-              {enableImages && starterSpiritSrc && (
-                <img
-                  className="plan-spirit"
-                  src={starterSpiritSrc}
-                  alt="A student in his dorm room studying dataviz"
-                />
-              )}
-
-              <div className="pricing-page-plan-body">
-                <div className="plan-header">
-                  <h3 className="plan-header-left">
-                    Starter
-                  </h3>
-                  <div className="plan-header-right">
-                    <h3>Free</h3>
-                  </div>
-                </div>
-
-                <p>
-                  Ideal for beginners, students, and
-                  hobbyist.
-                </p>
-                {currentPlan === 'free' ? (
-                  <CurrentButton />
-                ) : (
+                <OverlayTrigger
+                  placement="top"
+                  overlay={
+                    <Tooltip id="annual-billing-tooltip">
+                      Save {percentSavings}%!
+                    </Tooltip>
+                  }
+                >
                   <Button
-                    variant="primary"
-                    className="pricing-page-plan-button"
-                    onClick={onStarterDowngradeClick}
+                    variant={
+                      isMonthly
+                        ? 'outline-secondary'
+                        : 'secondary'
+                    }
+                    onClick={handleAnnuallyClick}
                   >
-                    Downgrade
+                    Billed Annually
                   </Button>
-                )}
-
-                <div className="pricing-page-plan-features">
-                  <StarterFeatures />
-                </div>
-              </div>
+                </OverlayTrigger>
+              </ButtonGroup>
             </div>
-            <div className="pricing-page-plan">
-              {enableImages && premiumSpiritSrc && (
-                <img
-                  className="plan-spirit"
-                  src={premiumSpiritSrc}
-                  alt="A freelancer working on a client project"
-                />
-              )}
-              <div className="pricing-page-plan-body">
-                <div className="plan-header">
-                  <h3 className="plan-header-left">
-                    Premium
-                  </h3>
-                  <div className="plan-header-right">
-                    <h3>${premiumPrice}</h3>
-                    <h3 className="plan-header-right-faint">
-                      /{isMonthly ? 'month' : 'year'}
-                    </h3>
-                  </div>
-                </div>
-                <p>
-                  Ideal for professionals.
-                  {enableFreeTrial
-                    ? ' Includes 7 day free trial.'
-                    : ''}
-                </p>
-                {currentPlan === 'premium' ? (
-                  <CurrentButton />
-                ) : (
-                  <Button
-                    variant="primary"
-                    className="pricing-page-plan-button"
-                    onClick={onPremiumUpgradeClick}
-                  >
-                    {enableFreeTrial
-                      ? 'Start Free Trial'
-                      : 'Upgrade'}
-                  </Button>
+            <div className="pricing-page-plans">
+              <div className="pricing-page-plan">
+                {enableImages && starterSpiritSrc && (
+                  <img
+                    className="plan-spirit"
+                    src={starterSpiritSrc}
+                    alt="A student in his dorm room studying dataviz"
+                  />
                 )}
 
-                <div className="pricing-page-plan-features">
-                  <div className="vh-lede-01 mb-3 vh-color-neutral-02">
-                    Everything in{' '}
-                    <span style={{ fontWeight: 600 }}>
+                <div className="pricing-page-plan-body">
+                  <div className="plan-header">
+                    <h3 className="plan-header-left">
                       Starter
-                    </span>
-                    , plus:
+                    </h3>
+                    <div className="plan-header-right">
+                      <h3>Free</h3>
+                    </div>
                   </div>
-                  <PremiumFeatures />
+
+                  <p>
+                    Ideal for beginners, students, and
+                    hobbyist.
+                  </p>
+                  {currentPlan === 'free' ? (
+                    <CurrentButton />
+                  ) : (
+                    <Button
+                      variant="primary"
+                      className="pricing-page-plan-button"
+                      onClick={onStarterDowngradeClick}
+                    >
+                      Downgrade
+                    </Button>
+                  )}
+
+                  <div className="pricing-page-plan-features">
+                    <StarterFeatures />
+                  </div>
+                </div>
+              </div>
+              <div className="pricing-page-plan">
+                {enableImages && premiumSpiritSrc && (
+                  <img
+                    className="plan-spirit"
+                    src={premiumSpiritSrc}
+                    alt="A freelancer working on a client project"
+                  />
+                )}
+                <div className="pricing-page-plan-body">
+                  <div className="plan-header">
+                    <h3 className="plan-header-left">
+                      Premium
+                    </h3>
+                    <div className="plan-header-right">
+                      <h3>${premiumPrice}</h3>
+                      <h3 className="plan-header-right-faint">
+                        /{isMonthly ? 'month' : 'year'}
+                      </h3>
+                    </div>
+                  </div>
+                  <p>
+                    Ideal for professionals.
+                    {enableFreeTrial
+                      ? ' Includes 7 day free trial.'
+                      : ''}
+                  </p>
+                  {currentPlan === 'premium' ? (
+                    <CurrentButton />
+                  ) : (
+                    <Button
+                      variant="primary"
+                      className="pricing-page-plan-button"
+                      onClick={onPremiumUpgradeClick}
+                    >
+                      {enableFreeTrial
+                        ? 'Start Free Trial'
+                        : 'Upgrade'}
+                    </Button>
+                  )}
+
+                  <div className="pricing-page-plan-features">
+                    <div className="vh-lede-01 mb-3 vh-color-neutral-02">
+                      Everything in{' '}
+                      <span style={{ fontWeight: 600 }}>
+                        Starter
+                      </span>
+                      , plus:
+                    </div>
+                    <PremiumFeatures />
+                  </div>
                 </div>
               </div>
             </div>
           </div>
+          <Footer />
         </div>
-        <Footer />
       </div>
-    </div>
+    </HighlightedFeatureProvider>
   );
 };

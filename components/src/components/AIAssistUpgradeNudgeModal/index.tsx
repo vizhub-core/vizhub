@@ -1,6 +1,5 @@
 import { UpgradeCallout } from '../UpgradeCallout';
-import { Button, Modal } from '../bootstrap';
-import { useCallback, useEffect } from 'react';
+import { Modal } from '../bootstrap';
 import { image } from '../image';
 
 // This modal pops up when the user attempt to invoke AI Assist,
@@ -12,11 +11,9 @@ import { image } from '../image';
 export const AIAssistUpgradeNudgeModal = ({
   show,
   onClose,
-  // onConfirm,
 }: {
   show: boolean;
   onClose: () => void;
-  // onConfirm?: () => void;
 }) => {
   // const handleEnterKey = useCallback(
   //   (event: KeyboardEvent) => {

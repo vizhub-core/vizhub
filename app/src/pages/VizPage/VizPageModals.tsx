@@ -29,54 +29,31 @@ import { VizKitAPI } from 'api/src/VizKit';
 import { useOnTrashViz } from './useOnTrashViz';
 import { useValidateSlug } from './useValidateSlug';
 import { copyToClipboard } from './copyToClipboard';
+import { VizPageContext } from './VizPageContext';
 
-export const VizPageModals = ({
-  info,
-  content,
-  ownerUser,
-  showForkModal,
-  toggleForkModal,
-  onFork,
-  showSettingsModal,
-  toggleSettingsModal,
-  showShareModal,
-  toggleShareModal,
-  onSettingsSave,
-  setAnyoneCanEdit,
-  showDeleteVizConfirmationModal,
-  toggleDeleteVizConfirmationModal,
-  vizKit,
-  initialCollaborators,
-  showAIAssistUpgradeNudgeModal,
-  toggleAIAssistUpgradeNudgeModal,
-}: {
-  info: Info;
-  content: Content;
-  ownerUser: User;
-  showForkModal: boolean;
-  toggleForkModal: () => void;
-  onFork: ({
-    owner,
-    title,
-    visibility,
-  }: {
-    owner: UserId;
-    title: string;
-    visibility: Visibility;
-  }) => void;
-  showSettingsModal: boolean;
-  toggleSettingsModal: () => void;
-  showShareModal: boolean;
-  toggleShareModal: () => void;
-  onSettingsSave: (vizSettings: VizSettings) => void;
-  setAnyoneCanEdit: (anyoneCanEdit: boolean) => void;
-  showDeleteVizConfirmationModal: boolean;
-  toggleDeleteVizConfirmationModal: () => void;
-  vizKit: VizKitAPI;
-  initialCollaborators: Array<User>;
-  showAIAssistUpgradeNudgeModal: boolean;
-  toggleAIAssistUpgradeNudgeModal: () => void;
-}) => {
+export const VizPageModals = () => {
+  const {
+    info,
+    content,
+    ownerUser,
+    showForkModal,
+    toggleForkModal,
+    onFork,
+    showSettingsModal,
+    toggleSettingsModal,
+    showShareModal,
+    toggleShareModal,
+    onSettingsSave,
+    setAnyoneCanEdit,
+    showDeleteVizConfirmationModal,
+    toggleDeleteVizConfirmationModal,
+    vizKit,
+    initialCollaborators,
+    showAIAssistUpgradeNudgeModal,
+    toggleAIAssistUpgradeNudgeModal,
+    showExportCodeUpgradeNudgeModal,
+    toggleExportCodeUpgradeNudgeModal,
+  } = useContext(VizPageContext);
   // The currently authenticated user, if any.
   const authenticatedUser: User | null = useContext(
     AuthenticatedUserContext,
@@ -294,6 +271,12 @@ export const VizPageModals = ({
           show={showAIAssistUpgradeNudgeModal}
           onClose={toggleAIAssistUpgradeNudgeModal}
           // onConfirm={onUseFreeGeneration}
+        />
+      )}
+      {showExportCodeUpgradeNudgeModal && (
+        <ExportCodeUpgradeNudgeModal
+          show={showExportCodeUpgradeNudgeModal}
+          onClose={toggleExportCodeUpgradeNudgeModal}
         />
       )}
     </>

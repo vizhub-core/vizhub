@@ -7,15 +7,9 @@ import {
   useRef,
   useState,
 } from 'react';
-import {
-  ShareDBDoc,
-  SplitPaneResizeContext,
-  FileId,
-} from 'vzcode';
+import { SplitPaneResizeContext, FileId } from 'vzcode';
 import {
   defaultVizWidth,
-  Content,
-  Info,
   User,
   getPackageJsonText,
   V3PackageJson,
@@ -23,12 +17,8 @@ import {
   getLicense,
   getHeight,
   getUserDisplayName,
-  VizId,
-  SlugKey,
   getVizThumbnailURL,
   FREE,
-  Comment,
-  Snapshot,
 } from 'entities';
 import { useRuntime } from 'runtime';
 import {
@@ -51,90 +41,55 @@ import { LogoSVG } from 'components/src/components/Icons/LogoSVG';
 import { getStargazersPageHref } from '../../../accessors/getStargazersPageHref';
 import { useBrandedEmbedNotice } from './useBrandedEmbedNotice';
 import { useComments } from './useComments';
-import { VizKitAPI } from 'api/src/VizKit';
 import { getAvatarURL } from '../../../accessors/getAvatarURL';
+import { VizPageContext } from '../VizPageContext';
 
 const debug = false;
 
-export const VizPageBody = ({
-  info,
-  content,
-  contentShareDBDoc,
-  contentShareDBDocPresence,
-  ownerUser,
-  forkedFromInfo,
-  forkedFromOwnerUser,
-  showEditor,
-  setShowEditor,
-  exportHref,
-  toggleForkModal,
-  initialReadmeHTML,
-  toggleSettingsModal,
-  toggleShareModal,
-  initialSrcdoc,
-  initialSrcdocError,
-  canUserEditViz,
-  canUserDeleteViz,
-  setVizTitle,
-  submitContentOperation,
-  toggleDeleteVizConfirmationModal,
-  vizCacheContents,
-  setUncommitted,
-  isUpvoted,
-  handleUpvoteClick,
-  slugResolutionCache,
-  isEmbedMode,
-  isEmbedBrandedURLParam,
-  isHideMode,
-  toggleAIAssistUpgradeNudgeModal,
-  isFileOpen,
-  initialComments,
-  initialCommentAuthors,
-  vizKit,
-  connected,
-}: {
-  info: Info;
-  content: Content;
-  contentShareDBDoc: ShareDBDoc<Content>;
-  contentShareDBDocPresence: any;
-  ownerUser: User;
-  forkedFromInfo: Info | null;
-  forkedFromOwnerUser: User | null;
-  showEditor: boolean;
-  setShowEditor: (showEditor: boolean) => void;
-  exportHref: string;
-  toggleForkModal: () => void;
-  initialReadmeHTML: string;
-  toggleSettingsModal: () => void;
-  toggleShareModal: () => void;
-  initialSrcdoc: string;
-  initialSrcdocError: string | null;
-  canUserEditViz: boolean;
-  canUserDeleteViz: boolean;
-  setVizTitle: (title: string) => void;
-  submitContentOperation: (
-    next: (content: Content) => Content,
-  ) => void;
-  toggleDeleteVizConfirmationModal: () => void;
-  vizCacheContents: Record<string, Content>;
-  setUncommitted: (authenticatedUser: User | null) => void;
-  isUpvoted: boolean;
-  handleUpvoteClick: () => void;
-  slugResolutionCache: Record<SlugKey, VizId>;
-  isEmbedMode: boolean;
-  isEmbedBrandedURLParam: boolean;
-  isHideMode: boolean;
-  toggleAIAssistUpgradeNudgeModal: () => void;
-  isFileOpen: boolean;
-  initialComments: Array<Snapshot<Comment>>;
-  initialCommentAuthors: Array<Snapshot<User>>;
-  vizKit: VizKitAPI;
-  connected: boolean;
-}) => {
+export const VizPageBody = () => {
   // The currently authenticated user, if any.
   const authenticatedUser: User | null = useContext(
     AuthenticatedUserContext,
   );
+
+  const {
+    info,
+    content,
+    contentShareDBDoc,
+    contentShareDBDocPresence,
+    ownerUser,
+    forkedFromInfo,
+    forkedFromOwnerUser,
+    showEditor,
+    setShowEditor,
+    exportHref,
+    toggleForkModal,
+    initialReadmeHTML,
+    toggleSettingsModal,
+    toggleShareModal,
+    initialSrcdoc,
+    initialSrcdocError,
+    canUserEditViz,
+    canUserDeleteViz,
+    setVizTitle,
+    submitContentOperation,
+    toggleDeleteVizConfirmationModal,
+    vizCacheContents,
+    setUncommitted,
+    isUpvoted,
+    handleUpvoteClick,
+    slugResolutionCache,
+    isEmbedMode,
+    isEmbedBrandedURLParam,
+    isHideMode,
+    toggleAIAssistUpgradeNudgeModal,
+    isFileOpen,
+    initialComments,
+    initialCommentAuthors,
+    vizKit,
+    connected,
+    handleExportCodeClick,
+  } = useContext(VizPageContext);
 
   const {
     commentsFormatted,
@@ -402,7 +357,7 @@ export const VizPageBody = ({
       <VizPageHead
         showEditor={showEditor}
         setShowEditor={setShowEditor}
-        exportHref={exportHref}
+        handleExportCodeClick={handleExportCodeClick}
         onShareClick={toggleShareModal}
         showForkButton={isUserAuthenticated}
         onForkClick={toggleForkModal}

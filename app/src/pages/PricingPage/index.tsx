@@ -2,6 +2,7 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from 'react';
 import { PricingPageBody } from 'components/src/components/PricingPageBody';
@@ -12,9 +13,10 @@ import {
   AuthenticatedUserProvider,
 } from '../../contexts/AuthenticatedUserContext';
 import { Page, PageData } from '../Page';
-import { User } from 'entities';
+import { FeatureId, User } from 'entities';
 import { useOpenBillingPortal } from '../useOpenBillingPortal';
 import './styles.scss';
+import { useSearchParams } from 'react-router-dom';
 
 const vizKit = VizKit({ baseUrl: './api' });
 
@@ -26,6 +28,16 @@ export type PricingPageData = PageData & {
 const Body = () => {
   const authenticatedUser: User | null = useContext(
     AuthenticatedUserContext,
+  );
+
+  // Get the highlighted feature from the URL query string
+  // using react-router's useSearchParams hook.
+  // e.g. ?feature=ai-assist
+  const [searchParams] = useSearchParams();
+  const highlightedFeature = useMemo(
+    () =>
+      searchParams.get('feature') as FeatureId | undefined,
+    [searchParams],
   );
 
   // Default to monthly billing.
@@ -116,6 +128,7 @@ const Body = () => {
       setIsMonthly={setIsMonthly}
       currentPlan={authenticatedUser?.plan}
       enableFreeTrial={enableFreeTrial}
+      highlightedFeature={highlightedFeature}
     />
   );
 };
