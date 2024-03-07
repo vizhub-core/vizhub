@@ -84,6 +84,7 @@ export type VizPageContextValue = {
   connected: boolean;
   handleExportCodeClick: () => void;
   shareDBError: VizHubError | null;
+  setShareDBError: (error: VizHubError) => void;
   dismissShareDBError: () => void;
   handleForkLinkClick: (
     event: React.MouseEvent<HTMLAnchorElement>,
@@ -234,14 +235,18 @@ export const VizPageProvider = ({
   // This checks for things like:
   // - Access Denied
   // - Viz Too Large
-  const { shareDBError, dismissShareDBError } =
-    useShareDBError();
+  const {
+    shareDBError,
+    dismissShareDBError,
+    setShareDBError,
+  } = useShareDBError();
 
   // When the user clicks "Fork" from within the fork modal.
   const onFork = useOnFork({
     vizKit,
     id: info.id,
     content,
+    setShareDBError,
   });
 
   ////////////////////////////////////////////
@@ -375,6 +380,7 @@ export const VizPageProvider = ({
     handleExportCodeClick,
     handleForkLinkClick,
     shareDBError,
+    setShareDBError,
     dismissShareDBError,
     isUpvoted,
     handleUpvoteClick,
