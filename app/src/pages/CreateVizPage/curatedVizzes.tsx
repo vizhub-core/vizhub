@@ -1,8 +1,34 @@
 import { VizId } from 'entities';
 
-const starters = [
-  // Circles with D3 (v3)
+const templates = [
+  // Circles with D3
   '3d67423b84a845019c17ca761b60b619',
+
+  // CSV Dataset Template - Penguins
+  '3ad8641ba6b844d3a78d3bcacf2e1caa',
+
+  // Responsive Scatter Plot
+  '0169b225047849b38073ab1909443f8c',
+
+  // Responsive Bar Chart
+  'a79db1c446a4432ba2596faaa8d151e3',
+
+  // Responsive Line Chart
+  '750aaaae7b7046f0a072df137a7f5c76',
+
+  // Line Chart with Multiple Lines
+  '8a17f8c0102e4b4c996be64fdb0bd30d',
+
+  // Simple World Map
+  'e3f19e09164d4a8184f85e0298672248',
+
+  // World Cities
+  '8fa016be1b024afeaf55aec9a44cef47',
+];
+
+const starters = [
+  // // Circles with D3 (v3)
+  // '3d67423b84a845019c17ca761b60b619',
 
   // Svelte Starter (v3)
   '39fa26cfa7854e34934e559efbf7855b',
@@ -255,14 +281,24 @@ export type CuratedVizCollection = {
 
 export const curatedVizzes: Array<CuratedVizCollection> = [
   {
+    title: 'Templates',
+    id: 'templates',
+    description: () => (
+      <div>
+        Curated templates for common tasks such as uploading
+        data, setting up D3, and visualizations ready to
+        fork and modify with your own data.
+      </div>
+    ),
+    vizIds: templates,
+  },
+  {
     title: 'Technology Starters',
     id: 'technology-starters',
     description: () => (
       <div>
         A collection of starter projects that unlock various
         technologies.
-        <br />
-        Fork and remix!
       </div>
     ),
     vizIds: starters,
