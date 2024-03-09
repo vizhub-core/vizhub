@@ -292,6 +292,7 @@ VizPage.getPageData = async ({
       slugResolutionCache,
     } = await buildViz({
       id,
+      infoSnapshot,
       contentSnapshot,
       authenticatedUserId,
     });
