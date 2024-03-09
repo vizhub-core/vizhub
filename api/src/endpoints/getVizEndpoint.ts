@@ -105,7 +105,9 @@ export const getVizEndpoint = ({
           ),
         );
       } else if (format === 'zip') {
-        const zipBuffer: Buffer = zipFiles(content.files);
+        const zipBuffer: Buffer = zipFiles(
+          Object.values(content.files),
+        );
         res.setHeader('Content-Type', 'application/zip');
         res.setHeader(
           'Content-Disposition',

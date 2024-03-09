@@ -103,7 +103,26 @@ export const exportVizEndpoint = ({
       }
 
       if (format === 'vite') {
-        const zipBuffer: Buffer = zipFiles(content.files);
+        // TODO
+        // - Pull in transitive dependencies similar to VizPage server
+        // - Pull in the code from VizHub Rosetta Stone
+        // - Generate the export top level package.json defining workspaces
+        // - Generate the exported files under the `vizhub-exports` directory
+        // - The file tree will look like this:
+        //   - sligified-title/
+        //     - package.json - defines workspaces
+        //     - app/ - contains the Vite app
+        //       - imports from vizhub-exports/curran/id-or-slug-for-exported-viz-entry-point/
+        //     - vizhub-exports/
+        //       - curran/
+        //         - id-or-slug-for-exported-viz-entry-point/
+        //         - slug-for-imported-viz-1/
+        //         - slug-for-imported-viz-2/
+        //         - slug-for-imported-viz-3/
+
+        const zipBuffer: Buffer = zipFiles(
+          Object.values(content.files),
+        );
         res.setHeader('Content-Type', 'application/zip');
         res.setHeader(
           'Content-Disposition',

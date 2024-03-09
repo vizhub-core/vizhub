@@ -1,12 +1,12 @@
-import { FileId, Files } from 'entities';
+import { File } from 'entities';
 import AdmZip from 'adm-zip';
 
 // Creates the Zip file from the given files.
-export const zipFiles = (files: Files): Buffer => {
+export const zipFiles = (files: Array<File>): Buffer => {
   const zip = new AdmZip();
-  Object.keys(files).forEach((fileId: FileId) => {
-    const { text, name } = files[fileId];
+  for (const file of files) {
+    const { text, name } = file;
     zip.addFile(name, Buffer.alloc(text.length, text));
-  });
+  }
   return zip.toBuffer();
 };

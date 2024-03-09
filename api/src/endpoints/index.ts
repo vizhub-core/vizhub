@@ -27,6 +27,9 @@ import { exportVizEndpoint } from './exportVizEndpoint';
 // TODO get this working in a secure way using API keys
 const enableSetVizEndpoint = false;
 
+// TODO get this working
+const enableExportVizEndpoint = false;
+
 export const endpoints = [
   healthCheck,
   privateBetaEmailSubmit,
@@ -50,10 +53,12 @@ export const endpoints = [
   unUpvoteVizEndpoint,
   isSlugAvailableEndpoint,
   getVizEndpoint,
-  exportVizEndpoint,
   oembedEndpoint,
 ];
 
 if (enableSetVizEndpoint) {
   endpoints.push(setVizEndpoint);
+}
+if (enableExportVizEndpoint) {
+  endpoints.push(exportVizEndpoint);
 }
