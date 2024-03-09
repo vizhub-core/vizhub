@@ -24,5 +24,9 @@ export const useShareDBError = () => {
     };
   }, []);
 
-  return { shareDBError, dismissShareDBError };
+  return {
+    shareDBError,
+    dismissShareDBError,
+    setShareDBError,
+  };
 };

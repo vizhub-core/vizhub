@@ -9,9 +9,10 @@ const debug = false;
 const optimize = true;
 
 // Escape backticks in a string so that it can be
-// used in a template literal.
+// used in a template literal. Also need to escape backslashes.
 const escapeBackticks = (str: string) =>
-  str.replace(/`/g, '\\`');
+  // str.replace(/`/g, '\\`');
+  str.replace(/\\/g, '\\\\').replace(/`/g, '\\`');
 
 // Responsible for loading CSV and TSV files, which are
 // in general called Delimiter-Separated Values (DSV).
