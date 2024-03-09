@@ -29,10 +29,12 @@ export const BuildViz = (gateways: Gateways) => {
   return async ({
     id,
     contentSnapshot,
+    infoSnapshot,
     authenticatedUserId,
   }: {
     id: VizId;
     contentSnapshot: Snapshot<Content>;
+    infoSnapshot: Snapshot<Info>;
     authenticatedUserId: UserId | undefined;
   }) => {
     // A cache for resolving slugs to viz IDs.
@@ -51,6 +53,13 @@ export const BuildViz = (gateways: Gateways) => {
       Snapshot<Content>
     > = { [id]: contentSnapshot };
 
+    // Content snapshots for client-side hydration
+    // using ShareDB's ingestSnapshot API.
+    const vizCacheInfoSnapshots: Record<
+      VizId,
+      Snapshot<Info>
+    > = { [id]: infoSnapshot };
+
     const content: Content = contentSnapshot.data;
 
     const vizCache: VizCache = createVizCache({
@@ -68,8 +77,10 @@ export const BuildViz = (gateways: Gateways) => {
           );
         }
 
+        const importedInfoSnapshot: Snapshot<Info> =
+          getImportedInfoResult.value;
         const importedInfo: Info =
-          getImportedInfoResult.value.data;
+          importedInfoSnapshot.data;
         const verifyImportedVizReadAccessResult: Result<VizAccess> =
           await verifyVizAccess({
             authenticatedUserId,
@@ -114,11 +125,14 @@ export const BuildViz = (gateways: Gateways) => {
           console.log(contentResult.error);
           return null;
         }
+        const importedContentSnapshot: Snapshot<Content> =
+          contentResult.value;
 
         // Store the content snapshot to support
         // client-side hydration using ShareDB's ingestSnapshot API.
         vizCacheContentSnapshots[vizId] =
-          contentResult.value;
+          importedContentSnapshot;
+        vizCacheInfoSnapshots[vizId] = importedInfoSnapshot;
 
         if (debug) {
           console.log('Fetched content for viz cache');
@@ -146,6 +160,7 @@ export const BuildViz = (gateways: Gateways) => {
     return {
       initialSrcdoc,
       initialSrcdocError,
+      vizCacheInfoSnapshots,
       vizCacheContentSnapshots,
       slugResolutionCache,
     };

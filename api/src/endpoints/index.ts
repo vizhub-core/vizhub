@@ -28,7 +28,7 @@ import { exportVizEndpoint } from './exportVizEndpoint';
 const enableSetVizEndpoint = false;
 
 // TODO get this working
-const enableExportVizEndpoint = false;
+const enableExportVizEndpoint = true;
 
 export const endpoints = [
   healthCheck,
