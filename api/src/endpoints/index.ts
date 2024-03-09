@@ -22,9 +22,13 @@ import { isSlugAvailableEndpoint } from './isSlugAvailableEndpoint';
 import { getVizEndpoint } from './getVizEndpoint';
 import { setVizEndpoint } from './setVizEndpoint';
 import { oembedEndpoint } from './oembedEndpoint';
+import { exportVizEndpoint } from './exportVizEndpoint';
 
 // TODO get this working in a secure way using API keys
 const enableSetVizEndpoint = false;
+
+// TODO get this working
+const enableExportVizEndpoint = false;
 
 export const endpoints = [
   healthCheck,
@@ -54,4 +58,7 @@ export const endpoints = [
 
 if (enableSetVizEndpoint) {
   endpoints.push(setVizEndpoint);
+}
+if (enableExportVizEndpoint) {
+  endpoints.push(exportVizEndpoint);
 }
