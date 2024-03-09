@@ -11,7 +11,7 @@ export const StargazersPageBody = ({
   starredVizHref,
 }) => {
   return (
-    <div className="vh-page vh-explore-page">
+    <div className="vh-page vh-stargazers-page">
       <div className="vh-page-container">
         <div className="vh-page-header">
           <h1 className="mb-0">
