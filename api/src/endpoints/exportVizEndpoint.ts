@@ -117,6 +117,7 @@ export const exportVizEndpoint = ({
       const {
         vizCacheInfoSnapshots,
         vizCacheContentSnapshots,
+        slugResolutionCache,
       }: {
         vizCacheInfoSnapshots: Record<
           VizId,
@@ -126,12 +127,40 @@ export const exportVizEndpoint = ({
           VizId,
           Snapshot<Content>
         >;
+        slugResolutionCache: Record<string, VizId>;
       } = await buildViz({
         id,
         infoSnapshot,
         contentSnapshot,
         authenticatedUserId,
       });
+
+      // Lets us look up the slug (${userName}/${slug}) for a given viz ID.
+      // Example value of this map:
+      // {
+      //   "19e8cbd752a540eba9cbcb9200889119": "curran/blue-background"
+      // }
+      // NOTE: This does not include the top level viz, only imported ones.
+      const idToSlugMap: Record<VizId, string> =
+        Object.entries(slugResolutionCache).reduce(
+          (acc, [slug, vizId]) => {
+            acc[vizId] = slug;
+            return acc;
+          },
+          {},
+        );
+
+      const getSlug = (info) =>
+        info.slug || slugify(info.title);
+
+      const getFullSlug = (vizId: VizId) => {
+        let fullSlug = idToSlugMap[vizId];
+        if (!fullSlug) {
+          // In this case, it's the top level viz.
+          fullSlug = `${ownerUserName}/${getSlug(vizCacheInfoSnapshots[vizId].data)}`;
+        }
+        return fullSlug;
+      };
 
       if (format === 'vite') {
         // TODO migrate this part into an Interactor and
@@ -153,18 +182,6 @@ export const exportVizEndpoint = ({
         //         - slug-for-imported-viz-2/
         //         - slug-for-imported-viz-3/
 
-        // // File
-        // //  * A file with `name` and `text`.
-        // export interface File {
-        //   // The file name.
-        //   // e.g. "index.html".
-        //   name: string;
-
-        //   // The text content of the file.
-        //   // e.g. "<body>Hello</body>"
-        //   text: string;
-        // }
-
         let allFiles: Array<File> = [];
 
         // For each vizCacheInfoSnapshots
@@ -176,9 +193,13 @@ export const exportVizEndpoint = ({
             vizCacheContentSnapshots[vizId];
           const content: Content = contentSnapshot.data;
 
-          const directoryName =
-            info.slug || slugify(info.title);
-          const directory = `vizhub-exports/${ownerUserName}/${directoryName}`;
+          const directoryName = getSlug(info);
+          // const fullSlug = `${userName}/${directoryName}`;
+          // const directory = `vizhub-exports/${userName}/${directoryName}`;
+
+          // Look up the full slug for the viz ID.
+          const fullSlug = getFullSlug(vizId);
+          const directory = `vizhub-exports/${fullSlug}`;
 
           // Place the files in the directory.
           const vizFiles: Array<File> = Object.values(
@@ -198,11 +219,12 @@ export const exportVizEndpoint = ({
           );
 
           // If there is a package.json file, update the name field
+          const nameField = `@${ownerUserName}/${directoryName}`;
           if (packageJsonFile) {
             const packageJson = JSON.parse(
               packageJsonFile.text,
             );
-            packageJson.name = `${ownerUserName}/${directoryName}`;
+            packageJson.name = nameField;
             packageJsonFile.text = JSON.stringify(
               packageJson,
               null,
@@ -211,7 +233,7 @@ export const exportVizEndpoint = ({
           } else {
             // If there is no package.json file, create one
             const newPackageJson = {
-              name: `${ownerUserName}/${directoryName}`,
+              name: nameField,
             };
             vizFiles.push({
               name: `${directory}/package.json`,
@@ -221,6 +243,25 @@ export const exportVizEndpoint = ({
 
           allFiles = [...allFiles, ...vizFiles];
         }
+
+        // Add the top level package.json that defines the
+        // NPM workspaces for the exported vizzes.
+        const topLevelPackageJson: File = {
+          name: 'package.json',
+          text: JSON.stringify(
+            {
+              name: '@vizhub/exports',
+              workspaces: Object.values(
+                vizCacheInfoSnapshots,
+              ).map(
+                (vizId) =>
+                  `vizhub-exports/${ownerUserName}/${vizId}`,
+              ),
+            },
+            null,
+            2,
+          ),
+        };
 
         const zipBuffer: Buffer = zipFiles(
           Object.values(allFiles),
