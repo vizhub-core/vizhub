@@ -38,21 +38,6 @@ export const computeSrcDoc = async ({
   }
 
   try {
-    // initialSrcdoc =
-    //   runtimeVersion === 2
-    //     ? await computeSrcDocV2(content)
-    //     : await computeSrcDocV3({
-    //         vizCache,
-    //         buildResult: await build({
-    //           vizId: content.id,
-    //           enableSourcemap: true,
-    //           rollup,
-    //           vizCache,
-    //           resolveSlug,
-    //           getSvelteCompiler,
-    //         }),
-    //       });
-
     if (runtimeVersion === 2) {
       initialSrcdoc = await computeSrcDocV2(content);
     } else if (runtimeVersion === 3) {

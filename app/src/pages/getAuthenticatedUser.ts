@@ -5,7 +5,7 @@ export const getAuthenticatedUser = async ({
   gateways,
   auth0User,
 }): Promise<{
-  authenticatedUserId: string | undefined;
+  authenticatedUserId: UserId | undefined;
   authenticatedUserSnapshot: Snapshot<User> | undefined;
 }> => {
   // If the user is currently authenticated...
