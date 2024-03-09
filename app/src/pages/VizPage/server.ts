@@ -14,13 +14,11 @@ import {
   absoluteURL,
   Comment,
 } from 'entities';
-import { rollup } from 'rollup';
-import { compile } from 'svelte/compiler';
 import { JSDOM } from 'jsdom';
 import {
+  BuildViz,
   CommitViz,
   GetInfoByIdOrSlug,
-  ResolveSlug,
   ScoreStaleVizzes,
   VerifyVizAccess,
   generateUpvoteId,
@@ -31,13 +29,8 @@ import { renderREADME } from './renderREADME';
 import { getAuthenticatedUser } from '../getAuthenticatedUser';
 import { VizAccess } from 'interactors/src/verifyVizAccess';
 import { Result } from 'gateways';
-import { computeSrcDoc, setJSDOM } from 'runtime';
-import {
-  VizCache,
-  createVizCache,
-} from 'runtime/src/v3Runtime/vizCache';
+import { setJSDOM } from 'runtime';
 import { VizPageData } from './VizPageData';
-import e from 'express';
 
 setJSDOM(JSDOM);
 
@@ -66,15 +59,7 @@ VizPage.getPageData = async ({
   const commitViz = CommitViz(gateways);
   const scoreStaleVizzes = ScoreStaleVizzes(gateways);
   const getInfoByIdOrSlug = GetInfoByIdOrSlug(gateways);
-
-  // A cache for resolving slugs to viz IDs.
-  // Keys are of the form `${userName}/${slug}`.
-  const slugResolutionCache: Record<string, VizId> = {};
-
-  const resolveSlug = ResolveSlug(
-    gateways,
-    slugResolutionCache,
-  );
+  const buildViz = BuildViz(gateways);
 
   // TODO move all this into an interactor called
   // getVizPageData or something like that.
@@ -299,103 +284,18 @@ VizPage.getPageData = async ({
         forkedFromOwnerUserResult.value;
     }
 
-    // Content snapshots for client-side hydration
-    // using ShareDB's ingestSnapshot API.
-    const vizCacheContentSnapshots: Record<
-      VizId,
-      Snapshot<Content>
-    > = { [id]: contentSnapshot };
-
-    const vizCache: VizCache = createVizCache({
-      initialContents: [content],
-      handleCacheMiss: async (vizId: VizId) => {
-        // Verify that the user has access to the imported viz.
-        const getImportedInfoResult = await getInfo(vizId);
-        if (getImportedInfoResult.outcome === 'failure') {
-          console.log(
-            'Error when fetching imported viz info:',
-          );
-          console.log(getImportedInfoResult.error);
-          throw new Error(
-            'Error when fetching imported viz info',
-          );
-        }
-
-        const importedInfo: Info =
-          getImportedInfoResult.value.data;
-        const verifyImportedVizReadAccessResult: Result<VizAccess> =
-          await verifyVizAccess({
-            authenticatedUserId,
-            info: importedInfo,
-            actions: [READ],
-          });
-        if (
-          verifyImportedVizReadAccessResult.outcome ===
-          'failure'
-        ) {
-          console.log('Error when verifying viz access:');
-          console.log(
-            verifyImportedVizReadAccessResult.error,
-          );
-          throw new Error(
-            'Error when verifying viz access',
-          );
-        }
-        const importedVizAccess: VizAccess =
-          verifyVizAccessResult.value;
-
-        if (!importedVizAccess[READ]) {
-          console.log(
-            'User does not have read access to viz',
-          );
-          throw new Error(
-            'User does not have read access to imported viz',
-          );
-        }
-
-        if (debug) {
-          console.log(
-            'Handling cache miss for vizId',
-            vizId,
-          );
-        }
-        const contentResult = await getContent(vizId);
-        if (contentResult.outcome === 'failure') {
-          console.log(
-            'Error when fetching content for viz cache:',
-          );
-          console.log(contentResult.error);
-          return null;
-        }
-
-        // Store the content snapshot to support
-        // client-side hydration using ShareDB's ingestSnapshot API.
-        vizCacheContentSnapshots[vizId] =
-          contentResult.value;
-
-        if (debug) {
-          console.log('Fetched content for viz cache');
-          console.log(contentResult.value.data);
-        }
-        return contentResult.value.data;
-      },
+    // Build the viz!
+    const {
+      initialSrcdoc,
+      initialSrcdocError,
+      vizCacheContentSnapshots,
+      slugResolutionCache,
+    } = await buildViz({
+      id,
+      infoSnapshot,
+      contentSnapshot,
+      authenticatedUserId,
     });
-
-    // Compute srcdoc for iframe.
-    // TODO cache it per commit.
-    const { initialSrcdoc, initialSrcdocError } =
-      await computeSrcDoc({
-        rollup,
-        getSvelteCompiler: async () => compile,
-        content,
-        vizCache,
-        resolveSlug,
-      });
-
-    if (debug) {
-      console.log('initialSrcdoc');
-      console.log(initialSrcdoc.substring(0, 200));
-    }
 
     // Get the collaborators on the viz.
     // TODO use a ShareDB query instead of fetching
@@ -497,14 +397,14 @@ VizPage.getPageData = async ({
       image,
       authenticatedUserSnapshot,
       initialReadmeHTML,
-      initialSrcdoc,
-      initialSrcdocError,
       canUserEditViz,
       canUserDeleteViz,
+      initialSrcdoc,
+      initialSrcdocError,
       vizCacheContentSnapshots,
+      slugResolutionCache,
       initialCollaborators,
       initialIsUpvoted,
-      slugResolutionCache,
       initialComments,
       initialCommentAuthors,
     };

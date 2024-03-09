@@ -1,5 +1,6 @@
 import {
   Content,
+  File,
   Info,
   Snapshot,
   VizId,
@@ -13,7 +14,7 @@ import {
   missingParameterError,
 } from 'gateways';
 import { accessDeniedError } from 'gateways/src/errors';
-import { GetInfoByIdOrSlug } from 'interactors';
+import { BuildViz, GetInfoByIdOrSlug } from 'interactors';
 import { zipFiles } from './zipFiles';
 
 export const exportVizEndpoint = ({
@@ -25,6 +26,8 @@ export const exportVizEndpoint = ({
 }) => {
   const { getUserByUserName, getContent } = gateways;
   const getInfoByIdOrSlug = GetInfoByIdOrSlug(gateways);
+  const buildViz = BuildViz(gateways);
+
   app.get(
     '/api/export-viz/:userName/:vizIdOrSlug/:format',
     express.json(),
@@ -89,7 +92,9 @@ export const exportVizEndpoint = ({
       if (getContentResult.outcome === 'failure') {
         return res.send(getContentResult);
       }
-      const content: Content = getContentResult.value.data;
+      const contentSnapshot: Snapshot<Content> =
+        getContentResult.value;
+      const content: Content = contentSnapshot.data;
       const runtimeVersion = getRuntimeVersion(content);
 
       if (runtimeVersion !== 3) {
@@ -101,6 +106,32 @@ export const exportVizEndpoint = ({
           ),
         );
       }
+
+      // TODO: Get the authenticated user ID from the request
+      // based on the API key being used.
+      // Setting this to undefined for now, which should
+      // support public vizzes.
+      const authenticatedUserId = undefined;
+
+      // Build the viz!
+      const {
+        vizCacheInfoSnapshots,
+        vizCacheContentSnapshots,
+      }: {
+        vizCacheInfoSnapshots: Record<
+          VizId,
+          Snapshot<Info>
+        >;
+        vizCacheContentSnapshots: Record<
+          VizId,
+          Snapshot<Content>
+        >;
+      } = await buildViz({
+        id,
+        infoSnapshot,
+        contentSnapshot,
+        authenticatedUserId,
+      });
 
       if (format === 'vite') {
         // TODO
@@ -120,8 +151,45 @@ export const exportVizEndpoint = ({
         //         - slug-for-imported-viz-2/
         //         - slug-for-imported-viz-3/
 
+        let allFiles: Array<File> = [];
+
+        // For each vizCacheInfoSnapshots
+        for (const [vizId, infoSnapshot] of Object.entries(
+          vizCacheInfoSnapshots,
+        )) {
+          const info: Info = infoSnapshot.data;
+          const contentSnapshot =
+            vizCacheContentSnapshots[vizId];
+          const content: Content = contentSnapshot.data;
+
+          const directoryName =
+            info.slug || slugify(info.title);
+          const directory = `vizhub-exports/${ownerUserName}/${directoryName}`;
+
+          // // File
+          // //  * A file with `name` and `text`.
+          // export interface File {
+          //   // The file name.
+          //   // e.g. "index.html".
+          //   name: string;
+
+          //   // The text content of the file.
+          //   // e.g. "<body>Hello</body>"
+          //   text: string;
+          // }
+
+          const vizFiles: Array<File> = Object.values(
+            content.files,
+          ).map((file: File) => ({
+            name: `${directory}/${file.name}`,
+            text: file.text,
+          }));
+
+          allFiles = [...allFiles, ...vizFiles];
+        }
+
         const zipBuffer: Buffer = zipFiles(
-          Object.values(content.files),
+          Object.values(allFiles),
         );
         res.setHeader('Content-Type', 'application/zip');
         res.setHeader(
