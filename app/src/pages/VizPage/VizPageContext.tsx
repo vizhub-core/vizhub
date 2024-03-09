@@ -20,6 +20,7 @@ import {
   UserId,
   Visibility,
   VizId,
+  getRuntimeVersion,
 } from 'entities';
 import {
   useData,
@@ -309,11 +310,14 @@ export const VizPageProvider = ({
     id: info.id,
   });
 
+  const runtimeVersion = getRuntimeVersion(content);
+
   const exportHref = useMemo(
     () =>
       getVizExportHref({
         ownerUser,
         info,
+        runtimeVersion,
       }),
     [ownerUser, info],
   );
