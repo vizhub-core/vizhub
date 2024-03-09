@@ -1,6 +1,6 @@
 import { UserId, Visibility, VizId } from 'entities';
 import { useCallback } from 'react';
-import { Result } from 'gateways';
+import { Result, VizHubErrorCode } from 'gateways';
 import { setCookie } from '../cookies';
 
 // Useful for debugging fork flow.
@@ -8,7 +8,12 @@ const debug = false;
 
 // This module defines what happens when a user
 // clicks the "fork" button.
-export const useOnFork = ({ vizKit, id, content }) =>
+export const useOnFork = ({
+  vizKit,
+  id,
+  content,
+  setShareDBError,
+}) =>
   useCallback(
     ({
       owner,
@@ -40,8 +45,17 @@ export const useOnFork = ({ vizKit, id, content }) =>
           }>,
         ) => {
           if (result.outcome === 'failure') {
-            console.log('TODO handle failure to fork');
-            console.log(result.error);
+            if (
+              result.error.code ===
+              VizHubErrorCode.tooLargeForFree
+            ) {
+              console.log(result.error);
+              setShareDBError(result.error);
+            } else {
+              console.log('TODO handle failure to fork');
+              console.log(result.error);
+            }
+
             return;
           }
           const { vizId, ownerUserName } = result.value;

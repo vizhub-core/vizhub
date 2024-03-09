@@ -14,6 +14,26 @@ export const StarterFeatures = () => {
         community of shared knowledge and innovation.
       </Feature>
       <Feature
+        title="Hot Reloading & Interactive Widgets"
+        id="hot-reloading"
+        hasBottomBorder={true}
+        learnMoreHref="https://vizhub.com/forum/t/hot-reloading-and-interactive-widgets/968"
+      >
+        Save time with real-time updates. Our code editor
+        and runtime environment lets you iterate faster with
+        truly instant feedback.
+      </Feature>
+      <Feature
+        title="Export Code"
+        id="api-access-for-vizzes"
+        learnMoreHref="https://vizhub.com/forum/t/api-access-for-vizzes/971"
+      >
+        Export public vizzes as code. Use our API to
+        automate the export of your visualizations, perfect
+        for integration with your existing workflows and
+        applications.
+      </Feature>
+      <Feature
         title="Search Public Vizzes"
         id="search"
         hasBottomBorder={true}
@@ -30,16 +50,6 @@ export const StarterFeatures = () => {
         Data uploads are limited to{' '}
         {freeTierSizeLimitMB * 1024} kB. If you need more,
         consider upgrading to Premium.
-      </Feature>
-      <Feature
-        title="Hot Reloading & Interactive Widgets"
-        id="hot-reloading"
-        hasBottomBorder={true}
-        learnMoreHref="https://vizhub.com/forum/t/hot-reloading-and-interactive-widgets/968"
-      >
-        Save time with real-time updates. Our code editor
-        and runtime environment lets you iterate faster with
-        truly instant feedback.
       </Feature>
       <Feature
         title="Community Access"
