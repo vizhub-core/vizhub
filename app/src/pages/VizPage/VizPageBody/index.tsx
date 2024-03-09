@@ -88,7 +88,6 @@ export const VizPageBody = () => {
     initialCommentAuthors,
     vizKit,
     connected,
-    handleExportCodeClick,
   } = useContext(VizPageContext);
 
   const {
@@ -357,7 +356,7 @@ export const VizPageBody = () => {
       <VizPageHead
         showEditor={showEditor}
         setShowEditor={setShowEditor}
-        handleExportCodeClick={handleExportCodeClick}
+        exportHref={exportHref}
         onShareClick={toggleShareModal}
         showForkButton={isUserAuthenticated}
         onForkClick={toggleForkModal}

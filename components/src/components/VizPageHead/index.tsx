@@ -16,7 +16,7 @@ const enableAPIButton = false;
 export const VizPageHead = ({
   showEditor,
   setShowEditor,
-  handleExportCodeClick,
+  exportHref,
   onShareClick,
   onForkClick,
   showForkButton,
@@ -57,10 +57,7 @@ export const VizPageHead = ({
             <div className="btn-text">Download Image</div>
           </Button>
         )}
-        <Button
-          variant="dark"
-          onClick={handleExportCodeClick}
-        >
+        <Button variant="dark" as="a" href={exportHref}>
           <ExportSVG />
           <div className="btn-text">Export Code</div>
         </Button>
