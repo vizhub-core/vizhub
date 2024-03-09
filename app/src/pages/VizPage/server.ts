@@ -26,7 +26,7 @@ import {
   generateUpvoteId,
 } from 'interactors';
 import { getFileText } from 'entities/src/accessors/getFileText';
-import { VizPage, VizPageData } from './index';
+import { VizPage } from './index';
 import { renderREADME } from './renderREADME';
 import { getAuthenticatedUser } from '../getAuthenticatedUser';
 import { VizAccess } from 'interactors/src/verifyVizAccess';
@@ -36,6 +36,8 @@ import {
   VizCache,
   createVizCache,
 } from 'runtime/src/v3Runtime/vizCache';
+import { VizPageData } from './VizPageData';
+import e from 'express';
 
 setJSDOM(JSDOM);
 
@@ -58,6 +60,7 @@ VizPage.getPageData = async ({
     getPermissions,
     getUsersByIds,
     getUpvote,
+    deleteInfo,
   } = gateways;
   const verifyVizAccess = VerifyVizAccess(gateways);
   const commitViz = CommitViz(gateways);
@@ -211,11 +214,31 @@ VizPage.getPageData = async ({
 
     if (contentResult.outcome === 'failure') {
       // This shouold never happen - if the info is there
-      // then the content should be there too,
-      // unless it's frozen.
+      // then the content should be there too.
+      // TODO Handle vizzes that are "frozen" (not implemented yet).
+
       console.log(
         "Error when fetching viz's content (info is defined but not content):",
       );
+      // Update 2024_03_08 this DOES happen sometimes due to a bug in the
+      // forking interactor when the viz was attempted to be forked, but could
+      // not be forked due to a size limit error. This happens when a user on
+      // the free plan attempts to fork a large viz.
+      // If we're here, what we really want to do is delete the info,
+      // because it leads to no content and should not be there in the first place.
+      console.log(
+        "Deleting info because it has no content (it's a bug that it's there in the first place)",
+      );
+      const deleteResult = await deleteInfo(id);
+      if (deleteResult.outcome === 'failure') {
+        console.log(
+          'Error when deleting info: ',
+          deleteResult.error,
+        );
+      } else {
+        console.log('Deleted info: ', deleteResult.value);
+      }
+
       console.log(contentResult.error);
       return null;
     }

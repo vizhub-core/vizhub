@@ -66,15 +66,5 @@ export const PremiumFeatures = ({}) => (
       crucial feature for SMBs, non-profits, and researchers
       needing to convey impactful narratives from rich data.
     </Feature>
-    <Feature
-      title="Export Code via API"
-      id="api-access-for-vizzes"
-      learnMoreHref="https://vizhub.com/forum/t/api-access-for-vizzes/971"
-    >
-      Export public vizzes as code. Use our API to automate
-      the export of your visualizations, perfect for
-      integration with your existing workflows and
-      applications.
-    </Feature>
   </>
 );
