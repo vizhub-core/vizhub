@@ -134,11 +134,13 @@ export const exportVizEndpoint = ({
       });
 
       if (format === 'vite') {
-        // TODO
-        // - Pull in transitive dependencies similar to VizPage server
-        // - Pull in the code from VizHub Rosetta Stone
-        // - Generate the export top level package.json defining workspaces
-        // - Generate the exported files under the `vizhub-exports` directory
+        // TODO migrate this part into an Interactor and
+        // add proper tests for it
+        // - [X] Pull in transitive dependencies similar to VizPage server
+        // - [X] Generate the exported files under the `vizhub-exports` directory
+        // - [ ] Modify (or create) `package.json` files that define `name`
+        // - [ ] Pull in the code from VizHub Rosetta Stone
+        // - [ ] Generate the export top level package.json defining workspaces
         // - The file tree will look like this:
         //   - sligified-title/
         //     - package.json - defines workspaces
@@ -150,6 +152,18 @@ export const exportVizEndpoint = ({
         //         - slug-for-imported-viz-1/
         //         - slug-for-imported-viz-2/
         //         - slug-for-imported-viz-3/
+
+        // // File
+        // //  * A file with `name` and `text`.
+        // export interface File {
+        //   // The file name.
+        //   // e.g. "index.html".
+        //   name: string;
+
+        //   // The text content of the file.
+        //   // e.g. "<body>Hello</body>"
+        //   text: string;
+        // }
 
         let allFiles: Array<File> = [];
 
@@ -166,24 +180,44 @@ export const exportVizEndpoint = ({
             info.slug || slugify(info.title);
           const directory = `vizhub-exports/${ownerUserName}/${directoryName}`;
 
-          // // File
-          // //  * A file with `name` and `text`.
-          // export interface File {
-          //   // The file name.
-          //   // e.g. "index.html".
-          //   name: string;
-
-          //   // The text content of the file.
-          //   // e.g. "<body>Hello</body>"
-          //   text: string;
-          // }
-
+          // Place the files in the directory.
           const vizFiles: Array<File> = Object.values(
             content.files,
           ).map((file: File) => ({
             name: `${directory}/${file.name}`,
             text: file.text,
           }));
+
+          //////////////////////////////////////
+          // Add `name` field to package.json //
+          //////////////////////////////////////
+
+          // Check if there is a package.json file in the directory
+          const packageJsonFile = vizFiles.find((file) =>
+            file.name.endsWith('package.json'),
+          );
+
+          // If there is a package.json file, update the name field
+          if (packageJsonFile) {
+            const packageJson = JSON.parse(
+              packageJsonFile.text,
+            );
+            packageJson.name = `${ownerUserName}/${directoryName}`;
+            packageJsonFile.text = JSON.stringify(
+              packageJson,
+              null,
+              2,
+            );
+          } else {
+            // If there is no package.json file, create one
+            const newPackageJson = {
+              name: `${ownerUserName}/${directoryName}`,
+            };
+            vizFiles.push({
+              name: `${directory}/package.json`,
+              text: JSON.stringify(newPackageJson, null, 2),
+            });
+          }
 
           allFiles = [...allFiles, ...vizFiles];
         }
