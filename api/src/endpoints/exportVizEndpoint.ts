@@ -117,6 +117,7 @@ export const exportVizEndpoint = ({
       const {
         vizCacheInfoSnapshots,
         vizCacheContentSnapshots,
+        slugResolutionCache,
       }: {
         vizCacheInfoSnapshots: Record<
           VizId,
@@ -126,6 +127,7 @@ export const exportVizEndpoint = ({
           VizId,
           Snapshot<Content>
         >;
+        slugResolutionCache: Record<string, VizId>;
       } = await buildViz({
         id,
         infoSnapshot,
@@ -133,12 +135,41 @@ export const exportVizEndpoint = ({
         authenticatedUserId,
       });
 
+      // Lets us look up the slug (${userName}/${slug}) for a given viz ID.
+      // Example value of this map:
+      // {
+      //   "19e8cbd752a540eba9cbcb9200889119": "curran/blue-background"
+      // }
+      // NOTE: This does not include the top level viz, only imported ones.
+      const idToSlugMap: Record<VizId, string> =
+        Object.entries(slugResolutionCache).reduce(
+          (acc, [slug, vizId]) => {
+            acc[vizId] = slug;
+            return acc;
+          },
+          {},
+        );
+
+      const getSlug = (info) =>
+        info.slug || slugify(info.title);
+
+      const getFullSlug = (vizId: VizId) => {
+        let fullSlug = idToSlugMap[vizId];
+        if (!fullSlug) {
+          // In this case, it's the top level viz.
+          fullSlug = `${ownerUserName}/${getSlug(vizCacheInfoSnapshots[vizId].data)}`;
+        }
+        return fullSlug;
+      };
+
       if (format === 'vite') {
-        // TODO
-        // - Pull in transitive dependencies similar to VizPage server
-        // - Pull in the code from VizHub Rosetta Stone
-        // - Generate the export top level package.json defining workspaces
-        // - Generate the exported files under the `vizhub-exports` directory
+        // TODO migrate this part into an Interactor and
+        // add proper tests for it
+        // - [X] Pull in transitive dependencies similar to VizPage server
+        // - [X] Generate the exported files under the `vizhub-exports` directory
+        // - [ ] Modify (or create) `package.json` files that define `name`
+        // - [ ] Pull in the code from VizHub Rosetta Stone
+        // - [ ] Generate the export top level package.json defining workspaces
         // - The file tree will look like this:
         //   - sligified-title/
         //     - package.json - defines workspaces
@@ -162,22 +193,15 @@ export const exportVizEndpoint = ({
             vizCacheContentSnapshots[vizId];
           const content: Content = contentSnapshot.data;
 
-          const directoryName =
-            info.slug || slugify(info.title);
-          const directory = `vizhub-exports/${ownerUserName}/${directoryName}`;
+          const directoryName = getSlug(info);
+          // const fullSlug = `${userName}/${directoryName}`;
+          // const directory = `vizhub-exports/${userName}/${directoryName}`;
 
-          // // File
-          // //  * A file with `name` and `text`.
-          // export interface File {
-          //   // The file name.
-          //   // e.g. "index.html".
-          //   name: string;
+          // Look up the full slug for the viz ID.
+          const fullSlug = getFullSlug(vizId);
+          const directory = `vizhub-exports/${fullSlug}`;
 
-          //   // The text content of the file.
-          //   // e.g. "<body>Hello</body>"
-          //   text: string;
-          // }
-
+          // Place the files in the directory.
           const vizFiles: Array<File> = Object.values(
             content.files,
           ).map((file: File) => ({
@@ -185,8 +209,59 @@ export const exportVizEndpoint = ({
             text: file.text,
           }));
 
+          //////////////////////////////////////
+          // Add `name` field to package.json //
+          //////////////////////////////////////
+
+          // Check if there is a package.json file in the directory
+          const packageJsonFile = vizFiles.find((file) =>
+            file.name.endsWith('package.json'),
+          );
+
+          // If there is a package.json file, update the name field
+          const nameField = `@${ownerUserName}/${directoryName}`;
+          if (packageJsonFile) {
+            const packageJson = JSON.parse(
+              packageJsonFile.text,
+            );
+            packageJson.name = nameField;
+            packageJsonFile.text = JSON.stringify(
+              packageJson,
+              null,
+              2,
+            );
+          } else {
+            // If there is no package.json file, create one
+            const newPackageJson = {
+              name: nameField,
+            };
+            vizFiles.push({
+              name: `${directory}/package.json`,
+              text: JSON.stringify(newPackageJson, null, 2),
+            });
+          }
+
           allFiles = [...allFiles, ...vizFiles];
         }
+
+        // Add the top level package.json that defines the
+        // NPM workspaces for the exported vizzes.
+        const topLevelPackageJson: File = {
+          name: 'package.json',
+          text: JSON.stringify(
+            {
+              name: '@vizhub/exports',
+              workspaces: Object.values(
+                vizCacheInfoSnapshots,
+              ).map(
+                (vizId) =>
+                  `vizhub-exports/${ownerUserName}/${vizId}`,
+              ),
+            },
+            null,
+            2,
+          ),
+        };
 
         const zipBuffer: Buffer = zipFiles(
           Object.values(allFiles),
