@@ -3,10 +3,10 @@ import {
   Info,
   Snapshot,
   VizId,
+  getRuntimeVersion,
   slugify,
 } from 'entities';
 import express from 'express';
-
 import {
   Gateways,
   err,
@@ -16,8 +16,7 @@ import { accessDeniedError } from 'gateways/src/errors';
 import { GetInfoByIdOrSlug } from 'interactors';
 import { zipFiles } from './zipFiles';
 
-// https://github.com/vizhub-core/vizhub-legacy/blob/2a41920a083e08aa5e3729dd437c629678e71093/vizhub-v2/packages/controllers/src/apiController/visualizationAPIController/exportVisualizationController.js
-export const getVizEndpoint = ({
+export const exportVizEndpoint = ({
   app,
   gateways,
 }: {
@@ -27,7 +26,7 @@ export const getVizEndpoint = ({
   const { getUserByUserName, getContent } = gateways;
   const getInfoByIdOrSlug = GetInfoByIdOrSlug(gateways);
   app.get(
-    '/api/get-viz/:userName/:vizIdOrSlug.:format',
+    '/api/export-viz/:userName/:vizIdOrSlug/:format',
     express.json(),
     async (req, res) => {
       const idOrSlug: VizId | undefined =
@@ -35,11 +34,11 @@ export const getVizEndpoint = ({
       const ownerUserName: string = req.params?.userName;
       const format: string = req.params?.format;
 
-      if (format !== 'zip' && format !== 'json') {
+      if (format !== 'vite') {
         return res.send(
           err(
             accessDeniedError(
-              'This API only supports .zip and .json formats',
+              'This API only supports Vite exports',
             ),
           ),
         );
@@ -91,20 +90,19 @@ export const getVizEndpoint = ({
         return res.send(getContentResult);
       }
       const content: Content = getContentResult.value.data;
+      const runtimeVersion = getRuntimeVersion(content);
 
-      if (format === 'json') {
-        res.setHeader('Content-Type', 'application/json');
-        res.send(
-          JSON.stringify(
-            {
-              info,
-              content,
-            },
-            null,
-            2,
+      if (runtimeVersion !== 3) {
+        return res.send(
+          err(
+            accessDeniedError(
+              'This API only supports Vite exports for runtime version 3 vizzes (no index.html present).',
+            ),
           ),
         );
-      } else if (format === 'zip') {
+      }
+
+      if (format === 'vite') {
         const zipBuffer: Buffer = zipFiles(content.files);
         res.setHeader('Content-Type', 'application/zip');
         res.setHeader(

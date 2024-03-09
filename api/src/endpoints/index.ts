@@ -22,6 +22,7 @@ import { isSlugAvailableEndpoint } from './isSlugAvailableEndpoint';
 import { getVizEndpoint } from './getVizEndpoint';
 import { setVizEndpoint } from './setVizEndpoint';
 import { oembedEndpoint } from './oembedEndpoint';
+import { exportVizEndpoint } from './exportVizEndpoint';
 
 // TODO get this working in a secure way using API keys
 const enableSetVizEndpoint = false;
@@ -49,6 +50,7 @@ export const endpoints = [
   unUpvoteVizEndpoint,
   isSlugAvailableEndpoint,
   getVizEndpoint,
+  exportVizEndpoint,
   oembedEndpoint,
 ];
 
