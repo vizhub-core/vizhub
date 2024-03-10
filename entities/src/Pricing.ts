@@ -25,4 +25,13 @@ export type FeatureId =
   | 'limited-data-size'
   | 'search'
   | 'public-vizzes'
-  | 'free-courses';
+  | 'free-courses'
+  // Consultation features
+  | 'visualize-your-data'
+  | 'work-through-hard-problems'
+  | 'design-interactive-visualizations'
+  | 'optimize-performance'
+  | 'create-custom-visualizations'
+  | 'integrate-visualizations-with-your-platform'
+  | 'learn-data-visualization-best-practices'
+  | 'money-back-guarantee';

@@ -12,8 +12,8 @@ export const PremiumFeatures = ({}) => (
       }
     >
       Protect your exclusive insights. With private
-      visualizations, your confidential data remains secure,
-      perfect for sensitive projects in professional
+      visualizations, your confidential data remains secure.
+      Perfect for sensitive projects in professional
       settings.
     </Feature>
     <Feature
@@ -23,8 +23,9 @@ export const PremiumFeatures = ({}) => (
       learnMoreHref="https://vizhub.com/forum/t/ai-assisted-coding/952"
     >
       Enhance your coding with AI. Speed up your workflow,
-      reduce errors, and innovate faster, freeing up time
-      for research, analysis, and creativity.
+      reduce errors, and innovate faster. Break through
+      technical challenges faster, freeing up time for
+      research, analysis, and creativity.
     </Feature>
     <Feature
       title="Unlimited Real-Time Collaborators"
@@ -36,8 +37,9 @@ export const PremiumFeatures = ({}) => (
     >
       Break down barriers to collaboration. Share your
       projects with an unlimited number of collaborators for
-      a truly integrated team experience, essential for
-      SMBs, research teams, and educators.
+      a truly integrated team experience. Perfect for remote
+      pair programming, live coding interviews, and
+      actioning client feedback with the client on the call.
     </Feature>
     <Feature
       title="White Label Embedding"
@@ -47,24 +49,22 @@ export const PremiumFeatures = ({}) => (
         'https://vizhub.com/forum/t/embedding-vizzes/975'
       }
     >
-      Present with <em>your</em> branding. Embed
+      Present your visualizations with your branding. Embed
       visualizations seamlessly into your Web pages or
-      application. Let VizHub host your interactives so you
-      don't have to.
+      application, without the VizHub logo and linkback. Let
+      VizHub host your interactives so you don't have to.
     </Feature>
     <Feature
       title="Upload Larger Datasets"
       id="larger-datasets"
-      hasBottomBorder={true}
+      hasBottomBorder={false}
       learnMoreHref={
         'https://vizhub.com/forum/t/importing-data-and-code-across-vizzes/973'
       }
     >
-      Handle more complex data with ease. Our increased data
-      limit of {premiumTierSizeLimitMB} MB per viz enables
-      more detailed analysis and richer storytelling, a
-      crucial feature for SMBs, non-profits, and researchers
-      needing to convey impactful narratives from rich data.
+      Handle larger data with ease. Our increased data limit
+      of {premiumTierSizeLimitMB} MB per viz enables more
+      detailed analysis and richer storytelling.
     </Feature>
   </>
 );

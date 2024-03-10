@@ -11,6 +11,7 @@ export const Feature = ({
   hasBottomBorder = false,
   heavyBottomBorder = false,
   learnMoreHref = null,
+  startsExpanded = false,
   children,
 }: {
   title: string;
@@ -18,6 +19,7 @@ export const Feature = ({
   hasBottomBorder?: boolean;
   heavyBottomBorder?: boolean;
   learnMoreHref?: string | null;
+  startsExpanded?: boolean;
   children: React.ReactNode;
 }) => {
   const { highlightedFeature } = useContext(
@@ -25,12 +27,13 @@ export const Feature = ({
   );
 
   const [isOpen, setIsOpen] = useState(
-    highlightedFeature === id,
+    highlightedFeature === id || startsExpanded,
   );
 
   const toggleIsOpen = useCallback(() => {
     setIsOpen((isOpen) => !isOpen);
   }, []);
+
   return (
     <div
       className={`feature${
