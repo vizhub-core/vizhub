@@ -11,8 +11,9 @@ import {
 import { image } from '../image';
 import { StarterFeatures } from './StarterFeatures';
 import { PremiumFeatures } from './PremiumFeatures';
-import './styles.scss';
 import { HighlightedFeatureProvider } from './HighlightedFeatureContext';
+import './styles.scss';
+import { ConsultationFeatures } from './ConsultationFeatures';
 
 const premiumPriceMonthly = 9.99;
 const premiumPriceAnnually = 99.99;
@@ -61,7 +62,11 @@ const CurrentButton = () => (
   </Button>
 );
 
-const enableImages = false;
+const enableImages = true;
+
+const consultationSpiritSrc = image(
+  'pricing-spirit-premium-5',
+);
 
 export const PricingPageBody = ({
   onStarterDowngradeClick,
@@ -96,20 +101,21 @@ export const PricingPageBody = ({
   // Make sure there is consistency between the
   // server-side and client-side rendering of the
   // initial pricing page.
-  const [starterSpiritSrc, setStarterSpiritSrc] =
-    useState(null);
+  const [starterSpiritSrc, setStarterSpiritSrc] = useState(
+    image('pricing-spirit-starter-1'),
+  );
 
-  // On the client only, randomize the image.
-  useEffect(() => {
-    setStarterSpiritSrc(randomImage(starterImages));
-  }, []);
+  const [premiumSpiritSrc, setPremiumSpiritSrc] = useState(
+    image('pricing-spirit-premium-4'),
+  );
 
-  const [premiumSpiritSrc, setPremiumSpiritSrc] =
-    useState(null);
-
-  useEffect(() => {
-    setPremiumSpiritSrc(randomImage(premiumImages));
-  }, []);
+  //   // On the client only, randomize the image.
+  //   useEffect(() => {
+  //     setStarterSpiritSrc(randomImage(starterImages));
+  //   }, []);
+  // useEffect(() => {
+  //   setPremiumSpiritSrc(randomImage(premiumImages));
+  // }, []);
 
   return (
     <HighlightedFeatureProvider
@@ -170,7 +176,7 @@ export const PricingPageBody = ({
                 <div className="pricing-page-plan-body">
                   <div className="plan-header">
                     <h3 className="plan-header-left">
-                      Starter
+                      VizHub Starter
                     </h3>
                     <div className="plan-header-right">
                       <h3>Free</h3>
@@ -210,7 +216,7 @@ export const PricingPageBody = ({
                 <div className="pricing-page-plan-body">
                   <div className="plan-header">
                     <h3 className="plan-header-left">
-                      Premium
+                      VizHub Premium
                     </h3>
                     <div className="plan-header-right">
                       <h3>${premiumPrice}</h3>
@@ -250,6 +256,50 @@ export const PricingPageBody = ({
                       , plus:
                     </div>
                     <PremiumFeatures />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="pricing-page-plans">
+              <div className="pricing-page-plan">
+                {enableImages && premiumSpiritSrc && (
+                  <img
+                    className="plan-spirit"
+                    src={consultationSpiritSrc}
+                    alt="Breakthrough in a data visualization consultation"
+                  />
+                )}
+                <div className="pricing-page-plan-body">
+                  <div className="plan-header">
+                    <h3 className="plan-header-left">
+                      Consultations
+                    </h3>
+                    <div className="plan-header-right">
+                      <h3>$99.99</h3>
+                      <h3 className="plan-header-right-faint">
+                        /session
+                      </h3>
+                    </div>
+                  </div>
+                  <p>
+                    Need expert help? Schedule a 1 hour
+                    consultation with a VizHub expert.
+                    Visualize your data within 1 hour or
+                    your money back.
+                  </p>
+
+                  <Button
+                    variant="primary"
+                    className="pricing-page-plan-button"
+                    as="a"
+                    href="https://calendly.com/curran-kelleher/data-visualization-consultation"
+                    size="lg"
+                  >
+                    Book now
+                  </Button>
+
+                  <div className="pricing-page-plan-features">
+                    <ConsultationFeatures />
                   </div>
                 </div>
               </div>
