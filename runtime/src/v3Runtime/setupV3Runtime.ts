@@ -226,6 +226,9 @@ export const setupV3Runtime = ({
         );
       }
     }
+    if (data.type === 'runError') {
+      setSrcdocError(data.error.message);
+    }
   });
 
   const handleCodeChange = () => {

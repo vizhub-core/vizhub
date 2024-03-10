@@ -125,9 +125,11 @@ export const computeSrcDocV3 = async ({
             case 'runJS':
               try {
                 runJS(message.data.src);
-                parent.postMessage({ type: 'runDone' }, "*");
               } catch (error) {
+                console.error(error);
                 parent.postMessage({ type: 'runError', error }, "*");
+              } finally {
+                parent.postMessage({ type: 'runDone' }, "*");
               }
               break;
             case 'runCSS':
