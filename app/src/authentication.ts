@@ -43,7 +43,7 @@ export const authentication = ({ env, gateways, app }) => {
         id,
         userName: claims.nickname,
         displayName: claims.name,
-        primaryEmail: claims.email,
+        email: claims.email,
         picture: claims.picture,
       };
 
