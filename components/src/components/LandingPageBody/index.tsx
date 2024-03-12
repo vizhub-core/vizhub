@@ -28,15 +28,14 @@ export const LandingPageBody = ({
               : '50% off for 3 months! Use code EARLYADOPTER (ends Feb 15)'}
           </div>
           <h1 className="landing-page-headline">
-            Develop interactive data visualizations faster
-            and more collaboratively than ever
+            Interactive Data Visualizations Fast
           </h1>
           <Button
             variant="secondary"
             size="lg"
-            href="/pricing"
+            href="/login"
           >
-            Try VizHub Premium for free
+            Get Started
           </Button>
 
           <iframe

@@ -4,7 +4,6 @@ import {
   err,
   missingParameterError,
 } from 'gateways';
-import { GetInfosAndOwners } from 'interactors';
 import { getAuthenticatedUserId } from '../parseAuth0User';
 import { UserId } from 'entities';
 import { accessDeniedError } from 'gateways/src/errors';
