@@ -15,7 +15,9 @@ LandingPage.getPageData = async ({
   // If the viz has a slug, and we are using its id in the URL,
   // then redirect to the URL that uses the slug.
   if (authenticatedUserSnapshot) {
-    const redirect = `/${authenticatedUserSnapshot.data.userName}`;
+    // const redirect = `/${authenticatedUserSnapshot.data.userName}`;
+    const redirect = `/explore`;
+
     // @ts-ignore
     return { redirect };
   }

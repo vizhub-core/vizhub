@@ -22,10 +22,10 @@
   "homepage": "https://github.com/vizhub-core/vizhub3#readme",
   "dependencies": {
     "@sesamecare-oss/redlock": "^1.2.1",
-    "@supabase/supabase-js": "^2.39.7",
+    "@supabase/supabase-js": "^2.39.8",
     "d3-array": "^3.2.4",
     "ioredis": "^5.3.2",
-    "mongodb": "^6.4.0",
+    "mongodb": "^6.5.0",
     "mongodb-legacy": "^6.0.1",
     "redis": "^4.6.13",
     "sharedb-mongo": "^4.1.1",
