@@ -12,8 +12,10 @@ import { image } from '../image';
 import { StarterFeatures } from './StarterFeatures';
 import { PremiumFeatures } from './PremiumFeatures';
 import { HighlightedFeatureProvider } from './HighlightedFeatureContext';
-import './styles.scss';
 import { ConsultationFeatures } from './ConsultationFeatures';
+import './styles.scss';
+
+const enableImages = false;
 
 const premiumPriceMonthly = 9.99;
 const premiumPriceAnnually = 99.99;
@@ -61,8 +63,6 @@ const CurrentButton = () => (
     <GreenCheckSVG />
   </Button>
 );
-
-const enableImages = true;
 
 const consultationSpiritSrc = image(
   'pricing-spirit-premium-5',
@@ -131,6 +131,7 @@ export const PricingPageBody = ({
           <div className="pricing-page-content">
             <div className="pricing-page-header">
               <h1>VizHub Plans</h1>
+
               <ButtonGroup aria-label="Billing Cadences">
                 <Button
                   variant={
@@ -163,6 +164,13 @@ export const PricingPageBody = ({
                 </OverlayTrigger>
               </ButtonGroup>
             </div>
+            <p
+              className="vh-lede-01"
+              style={{ color: 'white' }}
+            >
+              Our prices will increase by 20% on April 1st,
+              2024. Sign up today to lock in the low rate!
+            </p>
             <div className="pricing-page-plans">
               <div className="pricing-page-plan">
                 {enableImages && starterSpiritSrc && (
@@ -272,7 +280,7 @@ export const PricingPageBody = ({
                 <div className="pricing-page-plan-body">
                   <div className="plan-header">
                     <h3 className="plan-header-left">
-                      Consultations
+                      Export Consultations
                     </h3>
                     <div className="plan-header-right">
                       <h3>$99.99</h3>
