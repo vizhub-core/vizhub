@@ -7,7 +7,7 @@ const enableCreateVizButton = true;
 export const HomeStarter = () => {
   return (
     <div className="home-starter mb-5">
-      <h2>Join our Discord Community</h2>
+      <h2>Join Our Community</h2>
       <div className="vh-lede-01">
         <ul>
           <li>

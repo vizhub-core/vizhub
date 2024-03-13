@@ -21,8 +21,8 @@ export const CollaboratorsSection = ({
   handleCollaboratorRemove,
   showAnyoneCanEdit,
   initialCollaborators,
-  currentPlan,
-  enableFreeTrial,
+  // currentPlan,
+  // enableFreeTrial,
 }: {
   anyoneCanEdit: boolean;
   setAnyoneCanEdit: (anyoneCanEdit: boolean) => void;
@@ -35,8 +35,8 @@ export const CollaboratorsSection = ({
   ) => Promise<'success'>;
   showAnyoneCanEdit: boolean;
   initialCollaborators: Array<User>;
-  currentPlan: Plan;
-  enableFreeTrial: boolean;
+  // currentPlan: Plan;
+  // enableFreeTrial: boolean;
 }) => {
   // True when the async handleCollaboratorSearch is in progress
   const [isLoading, setIsLoading] = useState(false);
@@ -123,7 +123,7 @@ export const CollaboratorsSection = ({
 
   return (
     <>
-      {currentPlan === 'free' && (
+      {/* {currentPlan === 'free' && (
         <UpgradeCallout
           enableFreeTrial={enableFreeTrial}
           featureId="real-time-collaborators"
@@ -161,13 +161,13 @@ export const CollaboratorsSection = ({
         //     Upgrade
         //   </Button>
         // </div>
-      )}
+      )} */}
       <Form.Group
-        className={
-          currentPlan === 'free'
-            ? 'disabled-form-group'
-            : ''
-        }
+      // className={
+      //   currentPlan === 'free'
+      //     ? 'disabled-form-group'
+      //     : ''
+      // }
       >
         <Form.Group
           className="mb-3 mt-3"

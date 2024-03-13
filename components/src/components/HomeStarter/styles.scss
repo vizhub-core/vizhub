@@ -38,8 +38,18 @@
     display: flex;
     gap: 12px;
     margin-top: 40px;
+
+    // mobile
+    @media (max-width: 768px) {
+      flex-direction: column;
+      // gap: 20px;
+    }
   }
   ul {
     margin-bottom: 0;
+    // Hide on mobile
+    @media (max-width: 768px) {
+      display: none;
+    }
   }
 }
