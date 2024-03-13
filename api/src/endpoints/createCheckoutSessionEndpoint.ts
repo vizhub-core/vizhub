@@ -120,7 +120,9 @@ export const createCheckoutSession = ({
           //   : 'always',
 
           // Don't collect payment method, to lower the barrier to entry
-          payment_method_collection: 'if_required',
+          // payment_method_collection: 'if_required',
+          // Fuck it, let's collect the card details!
+          payment_method_collection: 'always',
 
           allow_promotion_codes: true,
 
