@@ -22,4 +22,5 @@ export { Stargazer } from './components/Stargazer';
 export { KitchenSinkApp } from './KitchenSinkApp';
 export { BrandedEmbedControl } from './components/BrandedEmbedControl';
 export { ExportCodeUpgradeNudgeModal } from './components/ExportCodeUpgradeNudgeModal';
+export { HomeStarter } from './components/HomeStarter';
 import './components/index.scss';

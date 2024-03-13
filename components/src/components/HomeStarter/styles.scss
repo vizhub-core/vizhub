@@ -15,13 +15,13 @@
   box-shadow: var(--vh-box-shadow);
 
   background-image: url(https://vizhub-images.s3.amazonaws.com/home-starter-background.webp);
-  background-size: cover;
-  // background-size: 110% auto;
+  // background-size: cover;
+  background-size: 110% auto;
   background-position: center;
   animation: backgroundScroll 90s ease-in-out infinite;
 
   padding: 70px;
-  margin-top: 70px;
+  margin-top: 40px;
   // margin-bottom: 20px;
 
   display: flex;
@@ -38,5 +38,18 @@
     display: flex;
     gap: 12px;
     margin-top: 40px;
+
+    // mobile
+    @media (max-width: 768px) {
+      flex-direction: column;
+      // gap: 20px;
+    }
+  }
+  ul {
+    margin-bottom: 0;
+    // Hide on mobile
+    @media (max-width: 768px) {
+      display: none;
+    }
   }
 }

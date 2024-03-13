@@ -144,8 +144,8 @@ export const ShareModal = ({
             }
             showAnyoneCanEdit={showAnyoneCanEdit}
             initialCollaborators={initialCollaborators}
-            currentPlan={currentPlan}
-            enableFreeTrial={enableFreeTrial}
+            // currentPlan={currentPlan}
+            // enableFreeTrial={enableFreeTrial}
           />
         )}
         {section === 'link' && (

@@ -41,6 +41,21 @@ export const StarterFeatures = () => {
         {freeTierSizeLimitMB * 1024} kB.
       </Feature>
       <Feature
+        title="Real-Time Collaborators"
+        id="real-time-collaborators"
+        hasBottomBorder={true}
+        learnMoreHref={
+          'https://vizhub.com/forum/t/real-time-collaborators/976'
+        }
+      >
+        Break down barriers to collaboration. Share your
+        projects with an unlimited number of collaborators
+        for a truly integrated team experience. Perfect for
+        remote pair programming, live coding interviews, and
+        actioning client feedback with the client on the
+        call.
+      </Feature>
+      <Feature
         title="Join our Community"
         id="community-access"
         hasBottomBorder={true}

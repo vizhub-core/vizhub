@@ -6,18 +6,26 @@ const enableCreateVizButton = true;
 
 export const HomeStarter = () => {
   return (
-    <div className="home-starter">
-      <h2>Join our community</h2>
+    <div className="home-starter mb-5">
+      <h2>Join Our Community</h2>
       <div className="vh-lede-01">
-        Connect with like minded data visualization
-        enthusiasts. Share your projects, get feedback, and
-        learn from others. Help shape the future of VizHub
-        by providing feedback and contributing to its open
-        source editor{' '}
-        <a href="https://github.com/vizhub-core/vzcode">
-          VZCode
-        </a>
-        .
+        <ul>
+          <li>
+            Connect with like minded data visualization
+            enthusiasts
+          </li>
+          <li>
+            Share your work, get feedback, and learn from
+            others
+          </li>
+          <li>
+            Be informed of the latest updates to VizHub
+          </li>
+          <li>
+            Join our community on Discord today and say
+            hello!
+          </li>
+        </ul>
       </div>
       <div className="home-starter-buttons">
         {/* {enableCreateVizButton && (
