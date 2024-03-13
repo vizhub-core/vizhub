@@ -1,5 +1,4 @@
 import { Footer } from '../Footer';
-import { HomeStarter } from '../HomeStarter';
 import { Button } from '../bootstrap';
 import { image } from '../image';
 import './styles.scss';
@@ -291,9 +290,6 @@ export const LandingPageBody = ({
               </div>
             </div>
           </div>
-        </div>
-        <div className="landing-page-content mb-5">
-          <HomeStarter />
         </div>
         {enableFooter && <Footer />}
       </div>
