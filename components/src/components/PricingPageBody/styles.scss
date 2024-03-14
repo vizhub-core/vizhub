@@ -35,7 +35,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding-top: 70px;
+        padding-top: 40px;
 
         @media (max-width: 600px) {
           flex-direction: column;
@@ -77,7 +77,7 @@
           }
 
           .pricing-page-plan-body {
-            padding: 32px;
+            padding: 30px;
             display: flex;
             flex-direction: column;
 
@@ -103,7 +103,7 @@
             }
 
             .pricing-page-plan-button {
-              margin: 40px 0;
+              margin: 30px 0;
               font-weight: 500;
             }
 

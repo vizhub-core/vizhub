@@ -1,6 +1,6 @@
 .vh-navbar.navbar {
   background-color: var(--vh-color-neutral-01);
-  padding: 20px 8px;
+  padding: 20px 16px;
 
   @media (max-width: 1200px) {
     padding: 8px 0px;
