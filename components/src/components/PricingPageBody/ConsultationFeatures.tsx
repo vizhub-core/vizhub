@@ -1,8 +1,17 @@
-import { premiumTierSizeLimitMB } from 'entities';
 import { Feature } from './Feature';
 
 export const ConsultationFeatures = ({}) => (
   <>
+    <Feature
+      title="Satisfaction Guarantee"
+      id="money-back-guarantee"
+      hasBottomBorder={true}
+      startsExpanded={true}
+    >
+      If you're not satisfied with the consultation for any
+      reason, just let us know and we'll refund your
+      payment.
+    </Feature>
     <Feature
       title="Visualize Your Data"
       id="visualize-your-data"
@@ -14,17 +23,7 @@ export const ConsultationFeatures = ({}) => (
       to create a visualization that tells the story of your
       data.
     </Feature>
-    <Feature
-      title="Money Back Guarantee"
-      id="money-back-guarantee"
-      hasBottomBorder={true}
-      startsExpanded={true}
-    >
-      Engage with us risk-free. If we can't get a working
-      visualization within 1 hour, you get your money back.
-      Moreover if you're not satisfied with the consultation
-      for any reason, we'll refund your payment.
-    </Feature>
+
     <Feature
       title="Work Through Hard Problems"
       id="work-through-hard-problems"

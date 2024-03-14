@@ -6,7 +6,7 @@ const enableCreateVizButton = true;
 
 export const HomeStarter = () => {
   return (
-    <div className="home-starter mb-5">
+    <div className="home-starter">
       <h2>Join Our Community</h2>
       <div className="vh-lede-01">
         <ul>
@@ -17,9 +17,6 @@ export const HomeStarter = () => {
           <li>
             Share your work, get feedback, and learn from
             others
-          </li>
-          <li>
-            Be informed of the latest updates to VizHub
           </li>
           <li>
             Join our community on Discord today and say
@@ -73,7 +70,7 @@ export const HomeStarter = () => {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Product Feedback
+          Give Feedback
         </Button>
       </div>
     </div>
