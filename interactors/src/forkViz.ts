@@ -120,6 +120,12 @@ export const ForkViz = (gateways: Gateways) => {
       delete newInfo.anyoneCanEdit;
     }
 
+    // If `popularity` was defined, remove it and `popularityUpdated`.
+    if (newInfo.popularity) {
+      delete newInfo.popularity;
+      delete newInfo.popularityUpdated;
+    }
+
     // If the title is specified, use it.
     if (title !== undefined) {
       newInfo.title = title;

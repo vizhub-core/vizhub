@@ -280,7 +280,7 @@ export const PricingPageBody = ({
                 <div className="pricing-page-plan-body">
                   <div className="plan-header">
                     <h3 className="plan-header-left">
-                      Export Consultations
+                      Expert Consultations
                     </h3>
                     <div className="plan-header-right">
                       <h3>$99.99</h3>
@@ -291,9 +291,12 @@ export const PricingPageBody = ({
                   </div>
                   <p>
                     Need expert help? Schedule a 1 hour
-                    consultation with a VizHub expert.
-                    Visualize your data within 1 hour or
-                    your money back.
+                    consultation with data visualization
+                    VizHub expert and VizHub creator{' '}
+                    <a href="https://vizhub.com/curran">
+                      Curran Kelleher
+                    </a>
+                    .
                   </p>
 
                   <Button
