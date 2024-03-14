@@ -255,7 +255,8 @@ export const VizPageModals = () => {
           initialCollaborators={initialCollaborators}
           currentPlan={authenticatedUser?.plan || FREE}
           showCollaboratorsSection={
-            info.owner === authenticatedUser?.id
+            // info.owner === authenticatedUser?.id
+            true
           }
           brandedOption={brandedOption}
           setBrandedOption={setBrandedOption}
