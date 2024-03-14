@@ -396,10 +396,21 @@ export const DatabaseGateways = ({
       .aggregate([
         {
           $match: {
+            // $and: [
+            //   {
+            //     // Only score vizzes older than 1 day
+            //     created: { $lt: oneDayAgo },
+            //   },
+            //   {
             $or: [
+              // Score vizzes whose popularity score
+              // has not been updated in the last 1 day
               { popularityUpdated: { $lt: oneDayAgo } },
+              // Score vizzes that have never been scored
               { popularityUpdated: { $exists: false } },
             ],
+            //   },
+            // ],
           },
         },
         {
@@ -419,12 +430,19 @@ export const DatabaseGateways = ({
           },
         },
         {
-          // Sort by the new field in descending order (nulls first) and then by popularityUpdated in ascending order
+          // Sort by the new field in descending order (nulls first)
+          // and then by popularityUpdated in ascending order
+          // In other words:
+          // * Priority 1: Documents with no popularityUpdated
+          // * Priority 2: Documents with popularityUpdated,
+          //               updating the oldest scores first.
           $sort: { sortField: -1, popularityUpdated: 1 },
         },
         { $limit: batchSize },
       ])
       .toArray();
+
+    // console.log(results);
 
     return ok(results.map((result) => result._id));
   };
