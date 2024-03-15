@@ -16,8 +16,19 @@
   border-radius: 8px;
   box-shadow: var(--vh-box-shadow);
   background-color: white;
+  max-width: 760px;
 
-  max-width: 600px;
+  .quote {
+    font-size: 18px;
+  }
+
+  .headshot {
+    width: 164px;
+    height: 164px;
+    border-radius: 50%;
+    margin-bottom: 12px;
+    box-shadow: var(--vh-box-shadow);
+  }
 
   .author {
     display: flex;

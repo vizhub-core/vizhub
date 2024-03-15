@@ -54,7 +54,7 @@ export const LandingPageBody = ({
           ></iframe>
         </div>
         <div className="features-container">
-          <div className="white-background-section">
+          <div className="white-background-section blurb-and-testimonial">
             <div className="landing-page-content">
               <h1 className="section-heading">
                 Why VizHub?
@@ -71,11 +71,60 @@ export const LandingPageBody = ({
                   supports professional work.
                 </p>
               </div>
-              <Button href="/pricing">See Plans</Button>
+              <Button href="/create-viz" size="lg">
+                Create Viz
+              </Button>
             </div>
+            <Testimonial
+              headshotImgSrc={image('headshot-alark')}
+              link="https://www.linkedin.com/in/alarkjoshi/"
+              quote={
+                <>
+                  <p>
+                    For the past two years, I've relied on
+                    VizHub for both my undergraduate and
+                    graduate Data Visualization courses.
+                    VizHub offers a seamless platform for
+                    hosting P5 and D3 code online, providing
+                    students with the invaluable ability to
+                    make instant changes to their code and
+                    observe the results in real-time. This
+                    has been a huge hit for my students and
+                    me.
+                  </p>
+                  <p>
+                    In my course, students are required to
+                    maintain a portfolio of their
+                    assignments, and VizHub simplifies this
+                    process significantly by allowing them
+                    to effortlessly embed their projects
+                    onto their personal websites. One of the
+                    standout features of VizHub is its
+                    ongoing improvement under the diligent
+                    guidance of Curran Kelleher, the
+                    platform's creator. For example, when I
+                    reached out to him about my students
+                    running into problems with using P5 on
+                    Vizhub, he found a solution and promptly
+                    made change to Vizhub to allow my
+                    students to use P5. His proactive
+                    approach ensures that VizHub remains at
+                    the forefront of online solutions for
+                    educators and students alike who are
+                    keen on exploring and showcasing their
+                    visualization projects.
+                  </p>
+                </>
+              }
+              name="Alark Joshi"
+              title="Associate Professor of Computer Science"
+              association="University of San Francisco"
+            />
           </div>
 
           {/* <Testimonial
+             headshotImgSrc={image('louis-alark')}
+          link="https://www.linkedin.com/in/louis-parizeau-6b0510156/"
             quote={
               <>
                 Curran quickly understood my complex
@@ -92,49 +141,9 @@ export const LandingPageBody = ({
               </>
             }
             name="Louis Parizeau"
-            title="Co-Founder, Highgate Analytics"
+            title="Co-Founder"
+             association="Highgate Analytics"
           /> */}
-          <Testimonial
-            quote={
-              <>
-                <p>
-                  For the past two years, I've relied on
-                  VizHub for both my undergraduate and
-                  graduate Data Visualization courses.
-                  VizHub offers a seamless platform for
-                  hosting P5 and D3 code online, providing
-                  students with the invaluable ability to
-                  make instant changes to their code and
-                  observe the results in real-time. This has
-                  been a huge hit for my students and me.
-                </p>
-                <p>
-                  {' '}
-                  In my course, students are required to
-                  maintain a portfolio of their assignments,
-                  and VizHub simplifies this process
-                  significantly by allowing them to
-                  effortlessly embed their projects onto
-                  their personal websites. One of the
-                  standout features of VizHub is its ongoing
-                  improvement under the diligent guidance of
-                  Curran Kelleher, the platform's creator.
-                  For example, when I reached out to him
-                  about my students running into problems
-                  with using P5 on Vizhub, he found a
-                  solution and promptly made change to
-                  Vizhub to allow my students to use P5. His
-                  proactive approach ensures that VizHub
-                  remains at the forefront of online
-                  solutions for educators and students alike
-                  who are keen on exploring and showcasing
-                  their visualization projects.
-                </p>
-              </>
-            }
-            name="Alark Joshi"
-            title="Associate Professor of Computer Science, University of San Francisco"
-          />
 
           <div className="feature-section">
             <div className="feature-section-content brand-background">
@@ -153,6 +162,7 @@ export const LandingPageBody = ({
                   href="https://vizhub.com/forum/t/hot-reloading-and-interactive-widgets/968"
                   target="_blank"
                   rel="noopener noreferrer"
+                  size="lg"
                 >
                   Learn more
                 </Button>
@@ -191,7 +201,10 @@ export const LandingPageBody = ({
                   visualizations evolve with each keystroke,
                   together, in real time.
                 </p>
-                <Button href="https://vizhub.com/forum/t/real-time-collaborators/976">
+                <Button
+                  href="https://vizhub.com/forum/t/real-time-collaborators/976"
+                  size="lg"
+                >
                   Learn more
                 </Button>
               </div>
@@ -235,6 +248,7 @@ export const LandingPageBody = ({
                   href="https://vizhub.com/forum/t/ai-assisted-coding/952"
                   target="_blank"
                   rel="noopener noreferrer"
+                  size="lg"
                 >
                   Learn more
                 </Button>
@@ -279,8 +293,8 @@ export const LandingPageBody = ({
                   something greater. And with an MIT
                   license, the sky's your limit.
                 </p>
-                <Button href="/create-viz">
-                  Create Viz
+                <Button href="/explore" size="lg">
+                  Explore VizHub
                 </Button>
               </div>
               <div className="feature-section-image">
@@ -312,8 +326,11 @@ export const LandingPageBody = ({
                   ease, and keep your story flowing without
                   friction.
                 </p>
-                <Button href="https://github.com/curran/vite-d3-template/tree/main">
-                  See Vite Template
+                <Button
+                  href="https://github.com/vizhub-core/vite-export-template"
+                  size="lg"
+                >
+                  Vite Template
                 </Button>
               </div>
               <div className="feature-section-image rotating-image">
@@ -341,7 +358,10 @@ export const LandingPageBody = ({
                   confidence and maintain brand consistency
                   across every touchpoint.
                 </p>
-                <Button href="https://vizhub.com/forum/t/embedding-vizzes/975">
+                <Button
+                  href="https://vizhub.com/forum/t/embedding-vizzes/975"
+                  size="lg"
+                >
                   Learn more
                 </Button>
               </div>
