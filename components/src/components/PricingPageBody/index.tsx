@@ -279,7 +279,10 @@ export const PricingPageBody = ({
                 )}
                 <div className="pricing-page-plan-body">
                   <div className="plan-header">
-                    <h3 className="plan-header-left">
+                    <h3
+                      className="plan-header-left"
+                      id="consultations"
+                    >
                       Expert Consultations
                     </h3>
                     <div className="plan-header-right">

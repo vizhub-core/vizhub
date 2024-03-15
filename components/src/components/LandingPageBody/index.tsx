@@ -1,4 +1,5 @@
 import { Footer } from '../Footer';
+import { Testimonial } from '../Testimonial';
 import { Button } from '../bootstrap';
 import { image } from '../image';
 import './styles.scss';
@@ -73,6 +74,67 @@ export const LandingPageBody = ({
               <Button href="/pricing">See Plans</Button>
             </div>
           </div>
+
+          {/* <Testimonial
+            quote={
+              <>
+                Curran quickly understood my complex
+                codebase, and was able to fix many of my
+                visualization's bugs that I couldn't find
+                solutions for online. Additionally, he gave
+                specific, best-practice advice to improve
+                the load time, UI responsiveness, and
+                maintainability of my D3 implementation.
+                Curran was great to work with and I would
+                100% recommend him to anyone stuck with D3
+                bugs, or looking to refactor their code to
+                follow best practices.
+              </>
+            }
+            name="Louis Parizeau"
+            title="Co-Founder, Highgate Analytics"
+          /> */}
+          <Testimonial
+            quote={
+              <>
+                <p>
+                  For the past two years, I've relied on
+                  VizHub for both my undergraduate and
+                  graduate Data Visualization courses.
+                  VizHub offers a seamless platform for
+                  hosting P5 and D3 code online, providing
+                  students with the invaluable ability to
+                  make instant changes to their code and
+                  observe the results in real-time. This has
+                  been a huge hit for my students and me.
+                </p>
+                <p>
+                  {' '}
+                  In my course, students are required to
+                  maintain a portfolio of their assignments,
+                  and VizHub simplifies this process
+                  significantly by allowing them to
+                  effortlessly embed their projects onto
+                  their personal websites. One of the
+                  standout features of VizHub is its ongoing
+                  improvement under the diligent guidance of
+                  Curran Kelleher, the platform's creator.
+                  For example, when I reached out to him
+                  about my students running into problems
+                  with using P5 on Vizhub, he found a
+                  solution and promptly made change to
+                  Vizhub to allow my students to use P5. His
+                  proactive approach ensures that VizHub
+                  remains at the forefront of online
+                  solutions for educators and students alike
+                  who are keen on exploring and showcasing
+                  their visualization projects.
+                </p>
+              </>
+            }
+            name="Alark Joshi"
+            title="Associate Professor of Computer Science, University of San Francisco"
+          />
 
           <div className="feature-section">
             <div className="feature-section-content brand-background">
