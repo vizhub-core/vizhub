@@ -1,0 +1,48 @@
+// export const Testimonial = ({ quote, name, title }) => (
+//   <div className="vh-testimonial">
+//     <div className="quote">{quote}</div>
+//     <div className="author">
+//       <div className="name">{name}</div>
+//       <div className="title">{title}</div>
+//     </div>
+//   </div>
+// );
+.vh-testimonial {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: var(--vh-box-shadow);
+  background-color: white;
+  max-width: 760px;
+
+  .quote {
+    font-size: 18px;
+  }
+
+  .headshot {
+    width: 164px;
+    height: 164px;
+    border-radius: 50%;
+    margin-bottom: 12px;
+    box-shadow: var(--vh-box-shadow);
+  }
+
+  .author {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+
+    .name {
+      color: var(--vh-color-neutral-03);
+      font-weight: bold;
+    }
+
+    .title {
+      color: var(--vh-color-neutral-03);
+    }
+  }
+}

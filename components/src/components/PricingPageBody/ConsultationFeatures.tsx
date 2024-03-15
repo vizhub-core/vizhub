@@ -1,3 +1,4 @@
+import { Testimonial } from '../Testimonial';
 import { Feature } from './Feature';
 
 export const ConsultationFeatures = ({}) => (
@@ -16,7 +17,7 @@ export const ConsultationFeatures = ({}) => (
       title="Visualize Your Data"
       id="visualize-your-data"
       hasBottomBorder={true}
-      startsExpanded={true}
+      // startsExpanded={true}
     >
       Get help with your data visualization project. Bring
       your data and your questions, and we'll work together
@@ -28,7 +29,7 @@ export const ConsultationFeatures = ({}) => (
       title="Work Through Hard Problems"
       id="work-through-hard-problems"
       hasBottomBorder={true}
-      startsExpanded={true}
+      // startsExpanded={true}
     >
       Have you been stuck for hours or days on a data
       visualization problem? Bring your problem to the
@@ -38,7 +39,7 @@ export const ConsultationFeatures = ({}) => (
       title="Design Interactive Visualizations"
       id="design-interactive-visualizations"
       hasBottomBorder={true}
-      startsExpanded={true}
+      // startsExpanded={true}
     >
       Do you have a rich or complex dataset that you want to
       visualize in an interactive way, but you're not sure
@@ -50,7 +51,7 @@ export const ConsultationFeatures = ({}) => (
       title="Optimize Performance"
       id="optimize-performance"
       hasBottomBorder={true}
-      startsExpanded={true}
+      // startsExpanded={true}
     >
       Is your data visualization slow or sluggish? We can
       help you optimize its performance. Bring your
@@ -62,7 +63,7 @@ export const ConsultationFeatures = ({}) => (
       title="Create Custom Visualizations"
       id="create-custom-visualizations"
       hasBottomBorder={true}
-      startsExpanded={true}
+      // startsExpanded={true}
     >
       Need a unique visualization that doesn't fit standard
       templates? Let's create a custom solution tailored to
@@ -74,7 +75,7 @@ export const ConsultationFeatures = ({}) => (
       title="Integrate Visualizations with Your Platform"
       id="integrate-visualizations-with-your-platform"
       hasBottomBorder={true}
-      startsExpanded={true}
+      // startsExpanded={true}
     >
       Want to seamlessly integrate your visualizations into
       your website or application? We can help. Bring your
@@ -86,7 +87,7 @@ export const ConsultationFeatures = ({}) => (
       title="Learn Data Visualization Best Practices"
       id="learn-data-visualization-best-practices"
       hasBottomBorder={false}
-      startsExpanded={true}
+      // startsExpanded={true}
     >
       New to data visualization or looking to improve your
       skills? Join our consultation to learn about best

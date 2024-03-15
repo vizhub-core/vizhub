@@ -68,7 +68,8 @@
       width: 100%;
       display: flex;
       flex-direction: column;
-      gap: 150px;
+      align-items: center;
+      gap: 70px;
       padding-bottom: 150px;
 
       .white-background-section {
@@ -83,7 +84,24 @@
         }
 
         .vh-lede-01 {
-          max-width: 763px;
+          max-width: 600px;
+        }
+      }
+      .white-background-section.blurb-and-testimonial {
+        margin-top: 70px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+
+        // mobile
+        @media (max-width: 1400px) {
+          flex-direction: column;
+          align-items: center;
+          gap: 50px;
+        }
+        .landing-page-content {
+          width: auto;
+          max-width: none;
         }
       }
       .feature-section {
