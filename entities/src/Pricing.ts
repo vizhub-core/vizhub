@@ -34,4 +34,6 @@ export type FeatureId =
   | 'create-custom-visualizations'
   | 'integrate-visualizations-with-your-platform'
   | 'learn-data-visualization-best-practices'
-  | 'money-back-guarantee';
+  | 'money-back-guarantee'
+  | 'first-meeting-free'
+  | 'augment-your-engineering-team';

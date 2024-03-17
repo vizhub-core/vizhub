@@ -122,29 +122,6 @@ export const LandingPageBody = ({
             />
           </div>
 
-          {/* <Testimonial
-             headshotImgSrc={image('louis-alark')}
-          link="https://www.linkedin.com/in/louis-parizeau-6b0510156/"
-            quote={
-              <>
-                Curran quickly understood my complex
-                codebase, and was able to fix many of my
-                visualization's bugs that I couldn't find
-                solutions for online. Additionally, he gave
-                specific, best-practice advice to improve
-                the load time, UI responsiveness, and
-                maintainability of my D3 implementation.
-                Curran was great to work with and I would
-                100% recommend him to anyone stuck with D3
-                bugs, or looking to refactor their code to
-                follow best practices.
-              </>
-            }
-            name="Louis Parizeau"
-            title="Co-Founder"
-             association="Highgate Analytics"
-          /> */}
-
           <div className="feature-section">
             <div className="feature-section-content brand-background">
               <div className="feature-section-copy">
