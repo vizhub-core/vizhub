@@ -14,6 +14,7 @@ import { PremiumFeatures } from './PremiumFeatures';
 import { HighlightedFeatureProvider } from './HighlightedFeatureContext';
 import { ConsultationFeatures } from './ConsultationFeatures';
 import './styles.scss';
+import { Testimonial } from '../Testimonial';
 
 const enableImages = false;
 
@@ -299,7 +300,8 @@ export const PricingPageBody = ({
                     <a href="https://vizhub.com/curran">
                       Curran Kelleher
                     </a>
-                    .
+                    . Note: Rate is increasing to
+                    $120/session on April 1, 2024.
                   </p>
 
                   <Button
@@ -317,6 +319,33 @@ export const PricingPageBody = ({
                   </div>
                 </div>
               </div>
+              <Testimonial
+                headshotImgSrc={image('headshot-louis')}
+                style={{
+                  maxWidth: '420px',
+                  justifyContent: 'space-around',
+                }}
+                link="https://www.linkedin.com/in/louis-parizeau-6b0510156/"
+                quote={
+                  <>
+                    Curran quickly understood my complex
+                    codebase, and was able to fix many of my
+                    visualization's bugs that I couldn't
+                    find solutions for online. Additionally,
+                    he gave specific, best-practice advice
+                    to improve the load time, UI
+                    responsiveness, and maintainability of
+                    my D3 implementation. Curran was great
+                    to work with and I would 100% recommend
+                    him to anyone stuck with D3 bugs, or
+                    looking to refactor their code to follow
+                    best practices.
+                  </>
+                }
+                name="Louis Parizeau"
+                title="Co-Founder"
+                association="Highgate Analytics"
+              />
             </div>
           </div>
           <Footer />
