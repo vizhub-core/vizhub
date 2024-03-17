@@ -10,11 +10,12 @@ export const PremiumFeatures = ({}) => (
       learnMoreHref={
         'https://vizhub.com/forum/t/making-vizzes-private/977'
       }
+      startsExpanded={true}
     >
-      Protect your exclusive insights. With private
-      visualizations, your confidential data remains secure.
-      Perfect for sensitive projects in professional
-      settings.
+      Make your visualizations private to only you and your
+      collaborators. Keep your work secure and share it only
+      with those you choose. Perfect for sensitive data and
+      work in progress.
     </Feature>
     <Feature
       title="White Label Embedding"
@@ -48,9 +49,8 @@ export const PremiumFeatures = ({}) => (
         'https://vizhub.com/forum/t/importing-data-and-code-across-vizzes/973'
       }
     >
-      Handle larger data with ease. Our increased data limit
-      of {premiumTierSizeLimitMB} MB per viz enables more
-      detailed analysis and richer storytelling.
+      Freely upload your raw data, with an increased limit
+      of {premiumTierSizeLimitMB} MB per viz.
     </Feature>
   </>
 );

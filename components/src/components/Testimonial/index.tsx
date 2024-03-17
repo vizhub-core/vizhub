@@ -6,8 +6,9 @@ export const Testimonial = ({
   title,
   association,
   headshotImgSrc,
+  style = {},
 }) => (
-  <div className="vh-testimonial">
+  <div className="vh-testimonial" style={style}>
     <img
       className="headshot"
       src={headshotImgSrc}

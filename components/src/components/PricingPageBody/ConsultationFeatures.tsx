@@ -1,17 +1,21 @@
-import { Testimonial } from '../Testimonial';
 import { Feature } from './Feature';
 
 export const ConsultationFeatures = ({}) => (
   <>
     <Feature
-      title="Satisfaction Guarantee"
-      id="money-back-guarantee"
+      title="First Meeting Free"
+      id="first-meeting-free"
       hasBottomBorder={true}
       startsExpanded={true}
     >
-      If you're not satisfied with the consultation for any
-      reason, just let us know and we'll refund your
-      payment.
+      Not sure if this format is right for you, or
+      interested in a larger fixed-price custom
+      visualization engagement?{' '}
+      <a href="https://calendly.com/curran-kelleher/casual">
+        Schedule an exploratory call for free
+      </a>
+      to find out how I can help you with your interactive
+      data visualization needs.
     </Feature>
     <Feature
       title="Visualize Your Data"
@@ -24,19 +28,8 @@ export const ConsultationFeatures = ({}) => (
       to create a visualization that tells the story of your
       data.
     </Feature>
-
     <Feature
-      title="Work Through Hard Problems"
-      id="work-through-hard-problems"
-      hasBottomBorder={true}
-      // startsExpanded={true}
-    >
-      Have you been stuck for hours or days on a data
-      visualization problem? Bring your problem to the
-      consultation, and we'll work through it together.
-    </Feature>
-    <Feature
-      title="Design Interactive Visualizations"
+      title="Design & Build Interactive Visualizations"
       id="design-interactive-visualizations"
       hasBottomBorder={true}
       // startsExpanded={true}
@@ -46,6 +39,27 @@ export const ConsultationFeatures = ({}) => (
       where to begin? Bring your data and your ideas, and
       we'll work together to brainstorm, strategize, sketch,
       and prototype an interactive visualization.
+    </Feature>
+    <Feature
+      title="Augment your Engineering Team"
+      id="augment-your-engineering-team"
+      hasBottomBorder={true}
+      // startsExpanded={true}
+    >
+      Are you looking to develop next level visualizations,
+      but your team does not have the right expertise? I can
+      help you develop your visualization project, and
+      provide guidance to your team on an ongoing basis.
+    </Feature>
+    <Feature
+      title="Work Through Hard Problems"
+      id="work-through-hard-problems"
+      hasBottomBorder={true}
+      // startsExpanded={true}
+    >
+      Have you been stuck for hours or days on a data
+      visualization problem? Bring your problem to the
+      consultation, and we'll work through it together.
     </Feature>
     <Feature
       title="Optimize Performance"
@@ -59,18 +73,7 @@ export const ConsultationFeatures = ({}) => (
       identifying bottlenecks and implementing strategies to
       improve its speed and efficiency.
     </Feature>
-    <Feature
-      title="Create Custom Visualizations"
-      id="create-custom-visualizations"
-      hasBottomBorder={true}
-      // startsExpanded={true}
-    >
-      Need a unique visualization that doesn't fit standard
-      templates? Let's create a custom solution tailored to
-      your specific needs. Bring your vision and data, and
-      we'll collaborate to design and build a one-of-a-kind
-      visualization that stands out.
-    </Feature>
+
     <Feature
       title="Integrate Visualizations with Your Platform"
       id="integrate-visualizations-with-your-platform"
@@ -82,18 +85,6 @@ export const ConsultationFeatures = ({}) => (
       platform details and visualization requirements, and
       we'll work together to ensure a smooth integration
       that enhances your user experience.
-    </Feature>
-    <Feature
-      title="Learn Data Visualization Best Practices"
-      id="learn-data-visualization-best-practices"
-      hasBottomBorder={false}
-      // startsExpanded={true}
-    >
-      New to data visualization or looking to improve your
-      skills? Join our consultation to learn about best
-      practices, effective design principles, and tips for
-      creating compelling visualizations that effectively
-      communicate your data's story.
     </Feature>
   </>
 );
