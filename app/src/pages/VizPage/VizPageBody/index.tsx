@@ -44,7 +44,6 @@ import { useBrandedEmbedNotice } from './useBrandedEmbedNotice';
 import { useComments } from './useComments';
 import { getAvatarURL } from '../../../accessors/getAvatarURL';
 import { VizPageContext } from '../VizPageContext';
-import { useToggleState } from '../useToggleState';
 
 const debug = false;
 
@@ -90,6 +89,9 @@ export const VizPageBody = () => {
     initialCommentAuthors,
     vizKit,
     connected,
+    showRevisionHistory,
+    revisionHistoryCommits,
+    toggleShowRevisionHistory,
   } = useContext(VizPageContext);
 
   const {
@@ -332,10 +334,6 @@ export const VizPageBody = () => {
     [authenticatedUser],
   );
 
-  // Move to context?
-  const [showRevisionHistory, toggleShowRevisionHistory] =
-    useToggleState(false);
-
   return isEmbedMode ? (
     <>
       {renderVizRunner()}
@@ -359,7 +357,11 @@ export const VizPageBody = () => {
   ) : (
     <div className="vh-page">
       {!showEditor && !isFileOpen && <SmartHeader />}
-      {showRevisionHistory && <RevisionHistory />}
+      {showRevisionHistory && (
+        <RevisionHistory
+          revisionHistoryCommits={revisionHistoryCommits}
+        />
+      )}
       <VizPageHead
         showEditor={showEditor}
         setShowEditor={setShowEditor}
