@@ -23,6 +23,7 @@ import {
 import { useRuntime } from 'runtime';
 import {
   RevisionHistory,
+  RevisionHistoryNavigator,
   VizPageHead,
   VizPageUpgradeBanner,
   VizPageViewer,
@@ -90,7 +91,7 @@ export const VizPageBody = () => {
     vizKit,
     connected,
     showRevisionHistory,
-    revisionHistoryCommits,
+    revisionHistory,
     toggleShowRevisionHistory,
   } = useContext(VizPageContext);
 
@@ -358,8 +359,8 @@ export const VizPageBody = () => {
     <div className="vh-page">
       {!showEditor && !isFileOpen && <SmartHeader />}
       {showRevisionHistory && (
-        <RevisionHistory
-          revisionHistoryCommits={revisionHistoryCommits}
+        <RevisionHistoryNavigator
+          revisionHistory={revisionHistory}
         />
       )}
       <VizPageHead

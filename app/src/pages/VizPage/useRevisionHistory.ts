@@ -1,5 +1,5 @@
 import { VizKitAPI } from 'api/src/VizKit';
-import { Commit, VizId } from 'entities';
+import { RevisionHistory, VizId } from 'entities';
 import { Result } from 'gateways';
 import { useEffect, useState } from 'react';
 
@@ -12,29 +12,29 @@ export const useRevisionHistory = ({
   vizKit: VizKitAPI;
   id: VizId;
 }) => {
-  const [
-    revisionHistoryCommits,
-    setRevisionHistoryCommits,
-  ] = useState<Array<Commit> | null>(null);
+  const [revisionHistory, setRevisionHistory] =
+    useState<RevisionHistory | null>(null);
 
   // Fetch the data
   useEffect(() => {
-    if (!showRevisionHistory) return;
-    console.log('Fetching revision history commits');
+    // Clear out the data so that a user can
+    // toggle the revision history to get fresh data.
+    if (!showRevisionHistory) {
+      if (revisionHistory) {
+        setRevisionHistory(null);
+      }
+      return;
+    }
     vizKit.rest
       .getRevisionHistoryCommits(id)
-      .then((result: Result<Array<Commit>>) => {
-        console.log('result', result);
+      .then((result: Result<RevisionHistory>) => {
+        if (result.outcome === 'failure') {
+          console.error(result.error);
+          return;
+        }
+        setRevisionHistory(result.value);
       });
-    // vizKit
-    //   .getRevisionHistoryCommits(id)
-    //   .then((commits) => {
-    //     setRevisionHistoryCommits(commits);
-    //   })
-    //   .catch((err) => {
-    //     console.error(err);
-    //   });
   }, [showRevisionHistory, id]);
 
-  return { revisionHistoryCommits };
+  return { revisionHistory };
 };

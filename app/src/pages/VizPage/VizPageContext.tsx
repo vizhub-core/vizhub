@@ -14,6 +14,7 @@ import {
   Commit,
   Content,
   Info,
+  RevisionHistory,
   SlugKey,
   Snapshot,
   User,
@@ -115,7 +116,7 @@ export type VizPageContextValue = {
   toggleShowRevisionHistory: () => void;
 
   // null signifies that the data is still loading.
-  revisionHistoryCommits: Array<Commit> | null;
+  revisionHistory: RevisionHistory | null;
 };
 
 export const VizPageContext =
@@ -226,7 +227,7 @@ export const VizPageProvider = ({
   /////////////// Revision History ///////////////////
   ////////////////////////////////////////////////////
 
-  const { revisionHistoryCommits } = useRevisionHistory({
+  const { revisionHistory } = useRevisionHistory({
     showRevisionHistory,
     vizKit,
     id: info.id,
@@ -421,7 +422,7 @@ export const VizPageProvider = ({
     setUncommitted,
     showRevisionHistory,
     toggleShowRevisionHistory,
-    revisionHistoryCommits,
+    revisionHistory,
   };
 
   return (

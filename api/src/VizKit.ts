@@ -9,6 +9,7 @@ import {
   Comment,
   Commit,
   CommentId,
+  RevisionHistory,
 } from 'entities';
 import { Result, Success } from 'gateways';
 import { InfosAndOwners } from 'interactors/src/getInfosAndOwners';
@@ -130,7 +131,7 @@ export interface VizKitAPI {
 
     getRevisionHistoryCommits: (
       vizId: VizId,
-    ) => Promise<Result<Array<Commit>>>;
+    ) => Promise<Result<RevisionHistory>>;
   };
 }
 
