@@ -8,6 +8,7 @@ import {
   User,
   Comment,
   Commit,
+  CommentId,
 } from 'entities';
 import { Result, Success } from 'gateways';
 import { InfosAndOwners } from 'interactors/src/getInfosAndOwners';
@@ -115,7 +116,7 @@ export interface VizKitAPI {
     }) => Promise<Result<Success>>;
 
     deleteComment: (options: {
-      id: string;
+      id: CommentId;
     }) => Promise<Result<Success>>;
 
     upvoteViz: (vizId: VizId) => Promise<Result<Success>>;
@@ -128,7 +129,7 @@ export interface VizKitAPI {
     }) => Promise<Result<boolean>>;
 
     getRevisionHistoryCommits: (
-      id: VizId,
+      vizId: VizId,
     ) => Promise<Result<Array<Commit>>>;
   };
 }
@@ -296,11 +297,10 @@ export const VizKit = ({
           options,
         ),
 
-      getRevisionHistoryCommits: async (id: VizId) =>
-        await postJSON(
-          `${baseUrl}/get-revision-history-commits`,
-          { id },
-        ),
+      getRevisionHistoryCommits: async (vizId: VizId) =>
+        await postJSON(`${baseUrl}/get-revision-history`, {
+          vizId,
+        }),
     },
   };
 };
