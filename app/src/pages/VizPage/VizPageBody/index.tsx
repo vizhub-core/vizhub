@@ -22,6 +22,7 @@ import {
 } from 'entities';
 import { useRuntime } from 'runtime';
 import {
+  RevisionHistory,
   VizPageHead,
   VizPageUpgradeBanner,
   VizPageViewer,
@@ -43,6 +44,7 @@ import { useBrandedEmbedNotice } from './useBrandedEmbedNotice';
 import { useComments } from './useComments';
 import { getAvatarURL } from '../../../accessors/getAvatarURL';
 import { VizPageContext } from '../VizPageContext';
+import { useToggleState } from '../useToggleState';
 
 const debug = false;
 
@@ -330,6 +332,10 @@ export const VizPageBody = () => {
     [authenticatedUser],
   );
 
+  // Move to context?
+  const [showRevisionHistory, toggleShowRevisionHistory] =
+    useToggleState(false);
+
   return isEmbedMode ? (
     <>
       {renderVizRunner()}
@@ -353,6 +359,7 @@ export const VizPageBody = () => {
   ) : (
     <div className="vh-page">
       {!showEditor && !isFileOpen && <SmartHeader />}
+      {showRevisionHistory && <RevisionHistory />}
       <VizPageHead
         showEditor={showEditor}
         setShowEditor={setShowEditor}
@@ -365,6 +372,9 @@ export const VizPageBody = () => {
         showTrashButton={canUserDeleteViz}
         onTrashClick={toggleDeleteVizConfirmationModal}
         downloadImageHref={downloadImageHref}
+        toggleShowRevisionHistory={
+          toggleShowRevisionHistory
+        }
       />
       {isUpgradeBannerVisible && (
         <VizPageUpgradeBanner

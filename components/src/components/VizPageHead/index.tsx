@@ -8,8 +8,10 @@ import { ExportSVG } from '../Icons/sam/ExportSVG';
 import { ArrowLeftSVG } from '../Icons/sam/ArrowLeftSVG';
 import { ArrowRightSVG } from '../Icons/sam/ArrowRightSVG';
 import { ServerSVG } from '../Icons/sam/ServerSVG';
+import { RectangleStackSVG } from '../Icons/sam/RectangleStackSVG';
 import './styles.scss';
 
+const enableRevisionHistory = true;
 const enableDownloadImage = true;
 const enableAPIButton = false;
 
@@ -25,6 +27,7 @@ export const VizPageHead = ({
   onSettingsClick,
   onTrashClick,
   downloadImageHref,
+  toggleShowRevisionHistory,
 }) => {
   const toggleShowEditor = useCallback(
     () => setShowEditor(!showEditor),
@@ -46,6 +49,15 @@ export const VizPageHead = ({
         </Button>
       </div>
       <div className="side">
+        {enableRevisionHistory && (
+          <Button
+            variant="dark"
+            onClick={toggleShowRevisionHistory}
+          >
+            <RectangleStackSVG />
+            <div className="btn-text">Revision History</div>
+          </Button>
+        )}
         {enableDownloadImage && (
           <Button
             as="a"
@@ -54,12 +66,12 @@ export const VizPageHead = ({
             download
           >
             <ImageSVG />
-            <div className="btn-text">Download Image</div>
+            <div className="btn-text">Image</div>
           </Button>
         )}
         <Button variant="dark" as="a" href={exportHref}>
           <ExportSVG />
-          <div className="btn-text">Export Code</div>
+          <div className="btn-text">Code</div>
         </Button>
         {enableAPIButton && (
           <Button
