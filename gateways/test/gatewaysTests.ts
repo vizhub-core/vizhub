@@ -16,6 +16,7 @@ import { getUsersByIdsTest } from './getUsersByIdsTest';
 import { getInfoBySlugTest } from './getInfoBySlugTest';
 // import { embeddingsTest } from './embeddingsTest';
 import { getUsersForTypeaheadTest } from './getUsersForTypeaheadTest';
+import { getCommitsForVizTest } from './getCommitsForVizTest';
 
 export const gatewaysTests = () => {
   describe(`CRUD`, () => {
@@ -38,6 +39,7 @@ export const gatewaysTests = () => {
   getUsersByIdsTest();
   getUsersForTypeaheadTest();
   getInfoBySlugTest();
+  getCommitsForVizTest();
 
   // embeddingsTest();
 };

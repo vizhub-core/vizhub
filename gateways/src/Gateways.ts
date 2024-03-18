@@ -530,4 +530,9 @@ export interface Gateways {
   getCommentsForResource(
     resource: VizId | MergeRequestId,
   ): Promise<Result<Array<Snapshot<Comment>>>>;
+
+  // Gets the commits for a particular viz.
+  getCommitsForViz(
+    vizId: VizId,
+  ): Promise<Result<Array<Commit>>>;
 }

@@ -188,8 +188,8 @@ export type EntityName =
   | 'MergeRequest'
   | 'BetaProgramSignup'
   | 'AnalyticsEvent'
-  | 'MigrationStatus'
-  | 'MigrationBatch'
+  // | 'MigrationStatus'
+  // | 'MigrationBatch'
   | 'VizEmbedding'
   | 'ImageMetadata'
   | 'StoredImage';
