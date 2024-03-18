@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { FREE, FeatureId, Plan } from 'entities';
 import { Footer } from '../Footer';
 import { GreenCheckSVG } from '../Icons/sam/GreenCheckSVG';
@@ -13,8 +13,8 @@ import { StarterFeatures } from './StarterFeatures';
 import { PremiumFeatures } from './PremiumFeatures';
 import { HighlightedFeatureProvider } from './HighlightedFeatureContext';
 import { ConsultationFeatures } from './ConsultationFeatures';
-import './styles.scss';
 import { Testimonial } from '../Testimonial';
+import './styles.scss';
 
 const enableImages = false;
 
@@ -27,10 +27,10 @@ const percentSavings = Math.round(
     100,
 );
 
-const randomImage = (options) =>
-  image(
-    options[Math.floor(Math.random() * options.length)],
-  );
+// const randomImage = (options) =>
+//   image(
+//     options[Math.floor(Math.random() * options.length)],
+//   );
 
 const headerBackgroundSrc = image('pricing-header-bkg');
 // const starterSpiritSrc = image('pricing-spirit-starter');
@@ -40,19 +40,19 @@ const headerBackgroundSrc = image('pricing-header-bkg');
 //   'pricing-spirit-professional',
 // );
 
-const starterImages = [
-  'pricing-spirit-starter',
-  'pricing-spirit-starter-1',
-  'pricing-spirit-starter-2',
-];
-const premiumImages = [
-  // 'pricing-spirit-premium',
-  'pricing-spirit-premium-2',
-  'pricing-spirit-premium-4',
-  'pricing-spirit-premium-5',
-  'pricing-spirit-premium-6',
-  'pricing-spirit-premium-7',
-];
+// const starterImages = [
+//   'pricing-spirit-starter',
+//   'pricing-spirit-starter-1',
+//   'pricing-spirit-starter-2',
+// ];
+// const premiumImages = [
+//   // 'pricing-spirit-premium',
+//   'pricing-spirit-premium-2',
+//   'pricing-spirit-premium-4',
+//   'pricing-spirit-premium-5',
+//   'pricing-spirit-premium-6',
+//   'pricing-spirit-premium-7',
+// ];
 
 const CurrentButton = () => (
   <Button
