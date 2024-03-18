@@ -23,6 +23,7 @@ import { getVizEndpoint } from './getVizEndpoint';
 import { setVizEndpoint } from './setVizEndpoint';
 import { oembedEndpoint } from './oembedEndpoint';
 import { exportVizEndpoint } from './exportVizEndpoint';
+import { getRevisionHistoryCommitsEndpoint } from './getRevisionHistoryCommitsEndpoint';
 
 // TODO get this working in a secure way using API keys
 const enableSetVizEndpoint = false;
@@ -54,6 +55,7 @@ export const endpoints = [
   isSlugAvailableEndpoint,
   getVizEndpoint,
   oembedEndpoint,
+  getRevisionHistoryCommitsEndpoint,
 ];
 
 if (enableSetVizEndpoint) {

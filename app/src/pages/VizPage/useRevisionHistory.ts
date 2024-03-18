@@ -1,5 +1,6 @@
 import { VizKitAPI } from 'api/src/VizKit';
 import { Commit, VizId } from 'entities';
+import { Result } from 'gateways';
 import { useEffect, useState } from 'react';
 
 export const useRevisionHistory = ({
@@ -20,6 +21,11 @@ export const useRevisionHistory = ({
   useEffect(() => {
     if (!showRevisionHistory) return;
     console.log('Fetching revision history commits');
+    vizKit.rest
+      .getRevisionHistoryCommits(id)
+      .then((result: Result<Array<Commit>>) => {
+        console.log('result', result);
+      });
     // vizKit
     //   .getRevisionHistoryCommits(id)
     //   .then((commits) => {
