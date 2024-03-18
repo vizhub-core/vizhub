@@ -56,6 +56,8 @@ export type {
   SecondaryParentType,
   Milestone,
   MilestoneId,
+  CommitMetadata,
+  RevisionHistory,
 } from './RevisionHistory';
 
 export type { Tagging, TaggingId } from './Tags';

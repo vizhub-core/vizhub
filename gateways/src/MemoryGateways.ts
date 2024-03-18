@@ -428,12 +428,15 @@ export const MemoryGateways = (): Gateways => {
       : err(resourceNotFoundError(slug, 'Info'));
   };
 
-  const getCommitsForViz = async (vizId: VizId) =>
-    ok(
-      Object.values(documents.Commit).filter(
-        (commit) => commit.viz === vizId,
-      ),
-    );
+  const getRevisionHistory = async (vizId: VizId) =>
+    ok({
+      commitMetadatas: Object.values(documents.Commit)
+        .filter((commit) => commit.viz === vizId)
+        .map((commit) => ({
+          id: commit.id,
+          parent: commit.parent,
+        })),
+    });
 
   // Populate non-CRUD methods.
   let memoryGateways: Gateways = {
@@ -483,7 +486,7 @@ export const MemoryGateways = (): Gateways => {
     // @ts-ignore
     getInfoByUserAndSlug,
     // @ts-ignore
-    getCommitsForViz,
+    getRevisionHistory,
   };
 
   // Packages up save, get, and delete

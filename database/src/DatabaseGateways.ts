@@ -908,6 +908,16 @@ export const DatabaseGateways = ({
       );
     });
 
+  const getCommitsForViz = async (vizId: VizId) => {
+    const entityName = 'Commit';
+    const from = toCollectionName(entityName);
+    const collection = mongoDBDatabase.collection(from);
+    const results = await collection
+      .find({ viz: vizId })
+      .toArray();
+    return ok(results);
+  };
+
   let databaseGateways = {
     type: 'DatabaseGateways',
     getForks,
@@ -929,6 +939,7 @@ export const DatabaseGateways = ({
     getInfoByUserAndSlug,
     getUserIdByStripeCustomerId,
     getCommentsForResource,
+    getCommitsForViz,
   };
 
   for (const entityName of crudEntityNames) {
