@@ -59,8 +59,8 @@ export const crudEntityNames: Array<EntityName> = [
   'MergeRequest',
   'BetaProgramSignup',
   'AnalyticsEvent',
-  'MigrationStatus',
-  'MigrationBatch',
+  // 'MigrationStatus',
+  // 'MigrationBatch',
   'ImageMetadata',
   'StoredImage',
 ];
@@ -428,6 +428,16 @@ export const MemoryGateways = (): Gateways => {
       : err(resourceNotFoundError(slug, 'Info'));
   };
 
+  const getRevisionHistory = async (vizId: VizId) =>
+    ok({
+      commitMetadatas: Object.values(documents.Commit)
+        .filter((commit) => commit.viz === vizId)
+        .map((commit) => ({
+          id: commit.id,
+          parent: commit.parent,
+        })),
+    });
+
   // Populate non-CRUD methods.
   let memoryGateways: Gateways = {
     type: 'MemoryGateways',
@@ -475,6 +485,8 @@ export const MemoryGateways = (): Gateways => {
     getUsersForTypeahead,
     // @ts-ignore
     getInfoByUserAndSlug,
+    // @ts-ignore
+    getRevisionHistory,
   };
 
   // Packages up save, get, and delete

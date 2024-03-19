@@ -908,6 +908,41 @@ export const DatabaseGateways = ({
       );
     });
 
+  // // TODO make this project `id` and `parent` in the query
+  // const getRevisionHistory = async (vizId: VizId) => {
+  //   const entityName = 'Commit';
+  //   const from = toCollectionName(entityName);
+  //   const collection = mongoDBDatabase.collection(from);
+  //   const results = await collection
+  //     .find({ viz: vizId })
+  //     .toArray();
+  //   return ok({
+  //     commitMetadatas: results.map((commit) => ({
+  //       id: commit._id,
+  //       parent: commit.parent,
+  //     })),
+  //   });
+  // };
+
+  const getRevisionHistory = async (vizId: VizId) => {
+    const entityName = 'Commit';
+    const from = toCollectionName(entityName);
+    const collection = mongoDBDatabase.collection(from);
+    const results = await collection
+      .find(
+        { viz: vizId },
+        // Only fetch _id and parent fields
+        { projection: { _id: 1, parent: 1 } },
+      )
+      .toArray();
+    return ok({
+      commitMetadatas: results.map((commitMetadata) => ({
+        id: commitMetadata._id,
+        parent: commitMetadata.parent,
+      })),
+    });
+  };
+
   let databaseGateways = {
     type: 'DatabaseGateways',
     getForks,
@@ -929,6 +964,7 @@ export const DatabaseGateways = ({
     getInfoByUserAndSlug,
     getUserIdByStripeCustomerId,
     getCommentsForResource,
+    getRevisionHistory,
   };
 
   for (const entityName of crudEntityNames) {

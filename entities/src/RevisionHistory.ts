@@ -92,6 +92,21 @@ export interface Commit {
   milestone?: MilestoneId;
 }
 
+// This simplified form of Commit is used to power the
+// revision history navigation UI. It is a subset of the
+// full Commit type that does _not_ include the ops field.
+// This is because the ops field can be quite large and
+// is not needed for the UI.
+export interface CommitMetadata {
+  id: CommitId;
+  parent?: CommitId;
+}
+
+// The revision history of a viz is encapsulated in this type.
+export interface RevisionHistory {
+  commitMetadatas: Array<CommitMetadata>;
+}
+
 // MilestoneId
 //  * Unique identifier string for a Milestone.
 export type MilestoneId = string;

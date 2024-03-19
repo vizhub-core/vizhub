@@ -44,7 +44,6 @@ export const GetThumbnail = (gateways: Gateways) => {
     saveImageMetadata,
     saveStoredImage,
     getStoredImage,
-    lock,
   } = gateways;
 
   const verifyVizAccess = VerifyVizAccess(gateways);

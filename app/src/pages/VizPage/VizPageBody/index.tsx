@@ -22,6 +22,8 @@ import {
 } from 'entities';
 import { useRuntime } from 'runtime';
 import {
+  RevisionHistory,
+  RevisionHistoryNavigator,
   VizPageHead,
   VizPageUpgradeBanner,
   VizPageViewer,
@@ -88,6 +90,9 @@ export const VizPageBody = () => {
     initialCommentAuthors,
     vizKit,
     connected,
+    showRevisionHistory,
+    revisionHistory,
+    toggleShowRevisionHistory,
   } = useContext(VizPageContext);
 
   const {
@@ -353,6 +358,11 @@ export const VizPageBody = () => {
   ) : (
     <div className="vh-page">
       {!showEditor && !isFileOpen && <SmartHeader />}
+      {showRevisionHistory && (
+        <RevisionHistoryNavigator
+          revisionHistory={revisionHistory}
+        />
+      )}
       <VizPageHead
         showEditor={showEditor}
         setShowEditor={setShowEditor}
@@ -365,6 +375,9 @@ export const VizPageBody = () => {
         showTrashButton={canUserDeleteViz}
         onTrashClick={toggleDeleteVizConfirmationModal}
         downloadImageHref={downloadImageHref}
+        toggleShowRevisionHistory={
+          toggleShowRevisionHistory
+        }
       />
       {isUpgradeBannerVisible && (
         <VizPageUpgradeBanner

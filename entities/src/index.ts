@@ -56,6 +56,8 @@ export type {
   SecondaryParentType,
   Milestone,
   MilestoneId,
+  CommitMetadata,
+  RevisionHistory,
 } from './RevisionHistory';
 
 export type { Tagging, TaggingId } from './Tags';
@@ -188,8 +190,8 @@ export type EntityName =
   | 'MergeRequest'
   | 'BetaProgramSignup'
   | 'AnalyticsEvent'
-  | 'MigrationStatus'
-  | 'MigrationBatch'
+  // | 'MigrationStatus'
+  // | 'MigrationBatch'
   | 'VizEmbedding'
   | 'ImageMetadata'
   | 'StoredImage';
