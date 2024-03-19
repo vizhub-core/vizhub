@@ -1,9 +1,8 @@
 .vh-revision-history {
-  display: flex;
-  flex-wrap: wrap;
-  overflow: auto;
+  height: 300px;
+  background-color: red;
 
-  img {
-    padding: 10px;
+  svg {
+    position: absolute;
   }
 }
