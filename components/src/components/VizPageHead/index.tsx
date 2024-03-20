@@ -11,7 +11,7 @@ import { ServerSVG } from '../Icons/sam/ServerSVG';
 import { RectangleStackSVG } from '../Icons/sam/RectangleStackSVG';
 import './styles.scss';
 
-const enableRevisionHistory = true;
+const enableRevisionHistory = false;
 const enableDownloadImage = true;
 const enableAPIButton = false;
 
