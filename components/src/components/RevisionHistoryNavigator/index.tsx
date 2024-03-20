@@ -4,12 +4,14 @@ import {
   useRef,
   useState,
 } from 'react';
+import { select } from 'd3-selection';
 import {
   stratify,
   tree,
   HierarchyNode,
   HierarchyLink,
 } from 'd3-hierarchy';
+import { zoom, zoomIdentity } from 'd3-zoom';
 import {
   CommitMetadata,
   Content,
@@ -26,6 +28,9 @@ const revisionThumbnailWidth = defaultVizWidth / 4;
 // The width of the gap between the nodes
 const gap = 20;
 
+// TODO make this a dynamic import
+// so that the d3 modules are not included
+// in the main bundle.
 const Body = ({
   revisionHistory,
   size,
@@ -92,11 +97,29 @@ const Body = ({
     );
   }, [content.height]);
 
+  // Use d3-zoom
+  const [transform, setTransform] = useState(zoomIdentity);
+  // console.log(JSON.stringify(transform, null, 2));
+  // Outputs:
+  // {
+  //   "k": 1,
+  //   "x": 0,
+  //   "y": 0
+  // }
+  const svgRef = useRef(null);
+  useEffect(() => {
+    if (svgRef.current) {
+      select(svgRef.current).call(
+        zoom().on('zoom', (event) => {
+          setTransform(event.transform);
+        }),
+      );
+    }
+  }, []);
+
   return (
-    <svg width={width} height={height}>
-      <g
-        transform={`translate(${revisionThumbnailWidth}, 0)`}
-      >
+    <svg width={width} height={height} ref={svgRef}>
+      <g transform={transform}>
         {root
           .links()
           .map((link: HierarchyLink<CommitMetadata>) => (
@@ -111,19 +134,68 @@ const Body = ({
           ))}
         {root
           .descendants()
+          .map((node: HierarchyNode<CommitMetadata>) => {
+            // Calculate the transformed position of the node
+            const transformedX = transform.applyX(node.y);
+            const transformedY = transform.applyY(node.x);
+
+            // Check if the image falls within the viewport
+            const isVisible =
+              transformedX + revisionThumbnailWidth / 4 >
+                0 &&
+              transformedX - revisionThumbnailWidth / 4 <
+                width &&
+              transformedY + revisionThumbnailHeight / 4 >
+                0 &&
+              transformedY - revisionThumbnailHeight / 4 <
+                height;
+
+            return (
+              <g
+                key={node.id}
+                transform={`translate(${node.y}, ${node.x})`}
+              >
+                <circle r={5} fill="black" />
+                {isVisible && (
+                  <image
+                    transform={`translate(${-revisionThumbnailWidth / 4}, ${-revisionThumbnailHeight / 4})`}
+                    href={`/api/viz-thumbnail/${node.id}-${revisionThumbnailWidth}.png`}
+                    width={revisionThumbnailWidth / 2}
+                  />
+                )}
+              </g>
+            );
+          })}
+
+        {/* {root
+          .descendants()
           .map((node: HierarchyNode<CommitMetadata>) => (
             <g
               key={node.id}
               transform={`translate(${node.y}, ${node.x})`}
             >
               <circle r={5} fill="black" />
-              <image
+              {/* <image
                 transform={`translate(${-revisionThumbnailWidth / 4}, ${-revisionThumbnailHeight / 4})`}
                 href={`/api/viz-thumbnail/${node.id}-${revisionThumbnailWidth}.png`}
                 width={revisionThumbnailWidth / 2}
-              />
+              /> 
+              {
+                // only show the image if it falls within the viewport
+                // node.y > 0 &&
+                //   node.y < width &&
+                //   node.x > 0 &&
+                //   node.x < height &&
+                // TODO take transform into account, using transform.x, y, and k
+
+                <image
+                  transform={`translate(${-revisionThumbnailWidth / 4}, ${-revisionThumbnailHeight / 4})`}
+                  href={`/api/viz-thumbnail/${node.id}-${revisionThumbnailWidth}.png`}
+                  width={revisionThumbnailWidth / 2}
+                />
+              }
             </g>
-          ))}
+          ))} */}
       </g>
     </svg>
   );
