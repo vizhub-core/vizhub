@@ -45,6 +45,7 @@ import { useBrandedEmbedNotice } from './useBrandedEmbedNotice';
 import { useComments } from './useComments';
 import { getAvatarURL } from '../../../accessors/getAvatarURL';
 import { VizPageContext } from '../VizPageContext';
+import { use } from 'marked';
 
 const debug = false;
 
@@ -335,6 +336,16 @@ export const VizPageBody = () => {
     [authenticatedUser],
   );
 
+  const getVizPageHrefForCommit = useCallback(
+    (commitId: string) =>
+      getVizPageHref({
+        ownerUser,
+        info,
+        commitId,
+      }),
+    [ownerUser, info],
+  );
+
   return isEmbedMode ? (
     <>
       {renderVizRunner()}
@@ -363,6 +374,7 @@ export const VizPageBody = () => {
           revisionHistory={revisionHistory}
           info={info}
           content={content}
+          getVizPageHrefForCommit={getVizPageHrefForCommit}
         />
       )}
       <VizPageHead

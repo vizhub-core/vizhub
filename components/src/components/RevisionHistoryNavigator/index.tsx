@@ -13,6 +13,7 @@ import {
 } from 'd3-hierarchy';
 import { zoom, zoomIdentity } from 'd3-zoom';
 import {
+  CommitId,
   CommitMetadata,
   Content,
   Info,
@@ -36,6 +37,7 @@ const Body = ({
   size,
   info,
   content,
+  getVizPageHrefForCommit,
 }: {
   revisionHistory: RevisionHistory | null;
   size: {
@@ -44,6 +46,7 @@ const Body = ({
   };
   info: Info;
   content: Content;
+  getVizPageHrefForCommit: (commitId: CommitId) => string;
 }) => {
   const { width, height } = size;
   const { commitMetadatas } = revisionHistory;
@@ -97,8 +100,38 @@ const Body = ({
     );
   }, [content.height]);
 
+  // Isolate the node that corresponds to the latest commit `info.end`.
+  const endNode = useMemo(
+    () =>
+      root.descendants().find((node) => {
+        return node.data.id === info.end;
+      }),
+    [root, info.end],
+  );
+
+  // Zoom to the end node
+  // such that the end node is on the right side of the viewport
+  // and centered vertically.
+  const initialTransform = useMemo(() => {
+    if (endNode) {
+      return zoomIdentity
+        .translate(
+          width -
+            revisionThumbnailWidth / 4 -
+            gap -
+            endNode.y,
+          height / 2 - endNode.x,
+        )
+        .scale(1);
+    } else {
+      return zoomIdentity;
+    }
+  }, [endNode, width, height]);
+
   // Use d3-zoom
-  const [transform, setTransform] = useState(zoomIdentity);
+  const [transform, setTransform] = useState(
+    initialTransform,
+  );
   // console.log(JSON.stringify(transform, null, 2));
   // Outputs:
   // {
@@ -109,17 +142,20 @@ const Body = ({
   const svgRef = useRef(null);
   useEffect(() => {
     if (svgRef.current) {
-      select(svgRef.current).call(
-        zoom().on('zoom', (event) => {
-          setTransform(event.transform);
-        }),
-      );
+      const zoomBehavior = zoom().on('zoom', (event) => {
+        setTransform(event.transform);
+      });
+      select(svgRef.current)
+        // Set up the interaction
+        .call(zoomBehavior)
+        // Initialize the initial transform
+        .call(zoomBehavior.transform, initialTransform);
     }
   }, []);
 
   return (
     <svg width={width} height={height} ref={svgRef}>
-      <g transform={transform}>
+      <g transform={transform.toString()}>
         {root
           .links()
           .map((link: HierarchyLink<CommitMetadata>) => (
@@ -157,45 +193,24 @@ const Body = ({
               >
                 <circle r={5} fill="black" />
                 {isVisible && (
-                  <image
-                    transform={`translate(${-revisionThumbnailWidth / 4}, ${-revisionThumbnailHeight / 4})`}
-                    href={`/api/viz-thumbnail/${node.id}-${revisionThumbnailWidth}.png`}
-                    width={revisionThumbnailWidth / 2}
-                  />
+                  <a
+                    href={getVizPageHrefForCommit(
+                      node.data.id,
+                    )}
+                    target="_blank"
+                  >
+                    <image
+                      transform={`translate(${-revisionThumbnailWidth / 4}, ${-revisionThumbnailHeight / 4})`}
+                      href={`/api/viz-thumbnail/${node.id}-${revisionThumbnailWidth}.png`}
+                      // Display the thumbnail at half size
+                      // so that it looks good on high DPI screens.
+                      width={revisionThumbnailWidth / 2}
+                    />
+                  </a>
                 )}
               </g>
             );
           })}
-
-        {/* {root
-          .descendants()
-          .map((node: HierarchyNode<CommitMetadata>) => (
-            <g
-              key={node.id}
-              transform={`translate(${node.y}, ${node.x})`}
-            >
-              <circle r={5} fill="black" />
-              {/* <image
-                transform={`translate(${-revisionThumbnailWidth / 4}, ${-revisionThumbnailHeight / 4})`}
-                href={`/api/viz-thumbnail/${node.id}-${revisionThumbnailWidth}.png`}
-                width={revisionThumbnailWidth / 2}
-              /> 
-              {
-                // only show the image if it falls within the viewport
-                // node.y > 0 &&
-                //   node.y < width &&
-                //   node.x > 0 &&
-                //   node.x < height &&
-                // TODO take transform into account, using transform.x, y, and k
-
-                <image
-                  transform={`translate(${-revisionThumbnailWidth / 4}, ${-revisionThumbnailHeight / 4})`}
-                  href={`/api/viz-thumbnail/${node.id}-${revisionThumbnailWidth}.png`}
-                  width={revisionThumbnailWidth / 2}
-                />
-              }
-            </g>
-          ))} */}
       </g>
     </svg>
   );
@@ -205,10 +220,12 @@ export const RevisionHistoryNavigator = ({
   revisionHistory,
   info,
   content,
+  getVizPageHrefForCommit,
 }: {
   revisionHistory: RevisionHistory | null;
   info: Info;
   content: Content;
+  getVizPageHrefForCommit: (commitId: CommitId) => string;
 }) => {
   // Measure size
   const containerRef = useRef(null);
@@ -241,6 +258,7 @@ export const RevisionHistoryNavigator = ({
           size={size}
           info={info}
           content={content}
+          getVizPageHrefForCommit={getVizPageHrefForCommit}
         />
       ) : (
         <Spinner />
