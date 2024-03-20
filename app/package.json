@@ -37,6 +37,7 @@
     "buble-jsx-only": "^0.21.0",
     "cookie": "^0.6.0",
     "d3-format": "^3.1.0",
+    "d3-hierarchy": "^3.1.2",
     "d3-time-format": "^4.1.0",
     "d3-transition": "^3.0.1",
     "express-openid-connect": "^2.17.1",
@@ -66,6 +67,7 @@
   },
   "devDependencies": {
     "@types/d3-format": "^3.0.4",
+    "@types/d3-hierarchy": "^3.1.7",
     "@types/d3-time-format": "^4.0.3",
     "@types/jsdom": "^21.1.6",
     "@types/ws": "^8.5.10",
