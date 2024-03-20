@@ -21,7 +21,6 @@ import {
   sampleMergeRequest,
   sampleBetaProgramSignup,
   sampleMigrationStatus,
-  sampleMigrationBatch,
   sampleImageMetadata,
 } from 'entities/test/fixtures';
 import { EntityName } from 'entities';
@@ -121,7 +120,7 @@ export const sampleEntities = {
   MergeRequest: sampleMergeRequest,
   BetaProgramSignup: sampleBetaProgramSignup,
   // Embedding: sampleEmbedding,
-  MigrationStatus: sampleMigrationStatus,
-  MigrationBatch: sampleMigrationBatch,
+  // MigrationStatus: sampleMigrationStatus,
+  // MigrationBatch: sampleMigrationBatch,
   ImageMetadata: sampleImageMetadata,
 };

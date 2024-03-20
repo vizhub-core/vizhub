@@ -11,9 +11,10 @@ import { useShareDBConnectionStatus } from '../../useShareDBConnectionStatus';
 import { ShareDBDoc, useSubmitOperation } from 'vzcode';
 import {
   Comment,
+  Commit,
   Content,
   Info,
-  PREMIUM,
+  RevisionHistory,
   SlugKey,
   Snapshot,
   User,
@@ -45,6 +46,7 @@ import {
 import { useUpvoting } from './useUpvoting';
 import { getVizExportHref } from '../../accessors/getVizExportHref';
 import { VizHubError } from 'gateways';
+import { useRevisionHistory } from './useRevisionHistory';
 
 export type VizPageContextValue = {
   info: Info;
@@ -110,6 +112,11 @@ export type VizPageContextValue = {
   showAIAssistUpgradeNudgeModal: boolean;
   showExportCodeUpgradeNudgeModal: boolean;
   toggleExportCodeUpgradeNudgeModal: () => void;
+  showRevisionHistory: boolean;
+  toggleShowRevisionHistory: () => void;
+
+  // null signifies that the data is still loading.
+  revisionHistory: RevisionHistory | null;
 };
 
 export const VizPageContext =
@@ -191,9 +198,9 @@ export const VizPageProvider = ({
     'User',
   );
 
-  // /////////////////////////////////////////
-  /////////////// Modals /////////////////////
-  // /////////////////////////////////////////
+  // ///////////////////////////////////////////////////
+  /////////////// Modals & Toggles /////////////////////
+  // ///////////////////////////////////////////////////
 
   const [showForkModal, toggleForkModal] = useToggleState();
   const [showSettingsModal, toggleSettingsModal] =
@@ -212,6 +219,19 @@ export const VizPageProvider = ({
     showExportCodeUpgradeNudgeModal,
     toggleExportCodeUpgradeNudgeModal,
   ] = useToggleState();
+
+  const [showRevisionHistory, toggleShowRevisionHistory] =
+    useToggleState(false);
+
+  ////////////////////////////////////////////////////
+  /////////////// Revision History ///////////////////
+  ////////////////////////////////////////////////////
+
+  const { revisionHistory } = useRevisionHistory({
+    showRevisionHistory,
+    vizKit,
+    id: info.id,
+  });
 
   ///////////////////////////////////////////
   /////////////// Forking ///////////////////
@@ -400,6 +420,9 @@ export const VizPageProvider = ({
     handleUpvoteClick,
     vizKit,
     setUncommitted,
+    showRevisionHistory,
+    toggleShowRevisionHistory,
+    revisionHistory,
   };
 
   return (

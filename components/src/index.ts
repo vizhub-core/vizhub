@@ -23,4 +23,5 @@ export { KitchenSinkApp } from './KitchenSinkApp';
 export { BrandedEmbedControl } from './components/BrandedEmbedControl';
 export { ExportCodeUpgradeNudgeModal } from './components/ExportCodeUpgradeNudgeModal';
 export { HomeStarter } from './components/HomeStarter';
+export { RevisionHistoryNavigator } from './components/RevisionHistoryNavigator';
 import './components/index.scss';

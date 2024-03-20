@@ -77,7 +77,7 @@ export const ConsultationFeatures = ({}) => (
     <Feature
       title="Integrate Visualizations with Your Platform"
       id="integrate-visualizations-with-your-platform"
-      hasBottomBorder={true}
+      hasBottomBorder={false}
       // startsExpanded={true}
     >
       Want to seamlessly integrate your visualizations into

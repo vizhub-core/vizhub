@@ -7,14 +7,14 @@ import { OrganizationsSVG } from '../Icons/sam/OrganizationsSVG';
 import { SharedSVG } from '../Icons/sam/SharedSVG';
 import { StarSVG } from '../Icons/sam/StarSVG';
 import { SectionId, SortId } from 'entities';
-import { useContext, useMemo } from 'react';
+import { useMemo } from 'react';
 import { SidebarSection } from './SidebarSection';
 import { UpgradeCallout } from '../UpgradeCallout';
 import { CreateNewButton } from '../CreateNewButton';
 import { ServerSVG } from '../Icons/sam/ServerSVG';
 import { BellSVG } from '../Icons/sam/BellSVG';
-import './styles.scss';
 import { PrivateVizzesUpgradeCallout } from '../PrivateVizzesUpgradeCallout';
+import './styles.scss';
 
 const enableEditBio = false;
 const enableCreateVizButton = true;

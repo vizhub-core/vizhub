@@ -7,6 +7,9 @@ import {
   SectionId,
   User,
   Comment,
+  Commit,
+  CommentId,
+  RevisionHistory,
 } from 'entities';
 import { Result, Success } from 'gateways';
 import { InfosAndOwners } from 'interactors/src/getInfosAndOwners';
@@ -114,7 +117,7 @@ export interface VizKitAPI {
     }) => Promise<Result<Success>>;
 
     deleteComment: (options: {
-      id: string;
+      id: CommentId;
     }) => Promise<Result<Success>>;
 
     upvoteViz: (vizId: VizId) => Promise<Result<Success>>;
@@ -125,6 +128,10 @@ export interface VizKitAPI {
       owner: UserId;
       slug: string;
     }) => Promise<Result<boolean>>;
+
+    getRevisionHistoryCommits: (
+      vizId: VizId,
+    ) => Promise<Result<RevisionHistory>>;
   };
 }
 
@@ -142,6 +149,8 @@ export const VizKit = ({
     fetch = window.fetch;
   }
 
+  // We use HTTP POST requests for all endpoints,
+  // because it's easy to send JSON data that way.
   const postJSON = async (
     url: string,
     data: { [key: string]: any } | null = null,
@@ -288,6 +297,11 @@ export const VizKit = ({
           `${baseUrl}/is-slug-available`,
           options,
         ),
+
+      getRevisionHistoryCommits: async (vizId: VizId) =>
+        await postJSON(`${baseUrl}/get-revision-history`, {
+          vizId,
+        }),
     },
   };
 };

@@ -52,6 +52,7 @@ import {
   BetaProgramSignup,
   Visibility,
   ResourceLockId,
+  RevisionHistory,
 } from 'entities';
 import { Result, Success } from './Result';
 import { MigrationStatusId } from 'entities/src/Migration';
@@ -530,4 +531,9 @@ export interface Gateways {
   getCommentsForResource(
     resource: VizId | MergeRequestId,
   ): Promise<Result<Array<Snapshot<Comment>>>>;
+
+  // Gets the revision history for a viz.
+  getRevisionHistory(
+    vizId: VizId,
+  ): Promise<Result<RevisionHistory>>;
 }
