@@ -61,7 +61,7 @@
     "stripe": "^14.21.0",
     "vizhub-libraries": "^1.8.0",
     "vizhub-ui": "^3.21.0",
-    "vzcode": "^0.77.0",
+    "vzcode": "^0.78.0",
     "ws": "^8.16.0",
     "xss": "^1.0.15"
   },
@@ -73,7 +73,7 @@
     "@types/ws": "^8.5.10",
     "@vitejs/plugin-react": "^4.2.1",
     "compression": "^1.7.4",
-    "express": "^4.18.3",
+    "express": "^4.19.0",
     "pm2": "^5.3.1",
     "prettier": "^3.2.5",
     "rollup-plugin-visualizer": "^5.12.0",
