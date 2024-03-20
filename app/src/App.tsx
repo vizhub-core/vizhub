@@ -31,11 +31,20 @@ export const App = ({ pageData }) => {
   return (
     <Routes>
       {pages.map((Page) => (
-        <Route
-          key={Page.path}
-          path={Page.path}
-          element={<Page pageData={pageData} />}
-        />
+        <>
+          <Route
+            key={Page.path}
+            path={Page.path}
+            element={<Page pageData={pageData} />}
+          />
+          {Page.path2 && (
+            <Route
+              key={Page.path2}
+              path={Page.path2}
+              element={<Page pageData={pageData} />}
+            />
+          )}
+        </>
       ))}
 
       {/*

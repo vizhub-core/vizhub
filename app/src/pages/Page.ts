@@ -9,6 +9,10 @@ export type Page = {
   // e.g. '/:userName/:id';
   path: string;
 
+  // An optional second path to this page, with parameters.
+  // e.g. '/:userName/:id/:commitId';
+  path2?: string;
+
   // A server-side-only function that returns the data for this page.
   getPageData?: ({
     params,

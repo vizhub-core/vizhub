@@ -66,6 +66,10 @@ VizPage.getPageData = async ({
   try {
     const idOrSlug: VizId | string = params.idOrSlug;
     const ownerUserName: string = params.userName;
+    const commitId: string = params.commitId;
+
+    // TODO use this to get the content at this commit
+    console.log('commitId', commitId);
 
     // Get the User entity for the owner of the viz.
     const ownerUserResult =
