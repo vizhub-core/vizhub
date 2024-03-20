@@ -362,6 +362,7 @@ export const VizPageBody = () => {
         <RevisionHistoryNavigator
           revisionHistory={revisionHistory}
           info={info}
+          content={content}
         />
       )}
       <VizPageHead
