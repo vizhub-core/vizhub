@@ -216,7 +216,7 @@ export const VizPageViewer = ({
             )}
           </div>
         </div>
-        <div className="vh-markdown-body">
+        <div className="vh-markdown-body vh-rendered-readme">
           {renderMarkdownHTML()}
         </div>
         <div className="license">{license} Licensed</div>
