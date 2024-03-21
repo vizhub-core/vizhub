@@ -5,6 +5,7 @@ import {
   useState,
 } from 'react';
 import { select } from 'd3-selection';
+import { utcFormat } from 'd3-time-format';
 import {
   stratify,
   tree,
@@ -18,7 +19,9 @@ import {
   Content,
   Info,
   RevisionHistory,
+  Timestamp,
   defaultVizWidth,
+  timestampToDate,
 } from 'entities';
 import { Spinner } from '../Spinner';
 import './styles.scss';
@@ -28,6 +31,11 @@ const revisionThumbnailWidth = defaultVizWidth / 4;
 
 // The width of the gap between the nodes
 const gap = 20;
+
+// Formats a timestamp to the format "1/1/20 4:45 PM".
+const format = utcFormat('%-m/%-d/%y %-I:%M %p');
+const formatCommitTimestamp = (timestamp: Timestamp) =>
+  format(timestampToDate(timestamp));
 
 // TODO make this a dynamic import
 // so that the d3 modules are not included
@@ -50,6 +58,19 @@ const Body = ({
 }) => {
   const { width, height } = size;
   const { commitMetadatas } = revisionHistory;
+
+  // Compute the formatted dates only once
+  const formattedDatesByCommitId = useMemo(() => {
+    return commitMetadatas.reduce(
+      (acc, commitMetadata) => {
+        acc[commitMetadata.id] = formatCommitTimestamp(
+          commitMetadata.timestamp,
+        );
+        return acc;
+      },
+      {} as Record<CommitId, string>,
+    );
+  }, [commitMetadatas]);
 
   // Compute the tree
   const root = useMemo(
@@ -209,11 +230,23 @@ const Body = ({
                   </a>
                 )}
                 {
+                  // Show the timestamp as a human-readable date.
+                  // if the node corresponds to the current version.
+                  <text
+                    transform={`translate(0, ${revisionThumbnailHeight / 4 + 18})`}
+                    textAnchor="middle"
+                    fontSize="12"
+                    className="time-label"
+                  >
+                    {formattedDatesByCommitId[node.data.id]}
+                  </text>
+                }
+                {
                   // Show text that says "Current version"
                   // if the node corresponds to the current version.
                   node.data.id === info.end && (
                     <text
-                      transform={`translate(0, ${revisionThumbnailHeight / 4 + 18})`}
+                      transform={`translate(0, ${-revisionThumbnailHeight / 4 - 6})`}
                       textAnchor="middle"
                       fontSize="14"
                       fill="black"
