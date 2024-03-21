@@ -8,6 +8,7 @@ import {
   VizId,
 } from 'entities';
 import { PageData } from '../Page';
+import { BuildVizResult } from 'interactors/src/buildViz';
 
 export type VizPageData = PageData & {
   infoSnapshot: Snapshot<Info>;
@@ -16,17 +17,11 @@ export type VizPageData = PageData & {
   forkedFromOwnerUserSnapshot: Snapshot<User> | null;
   authenticatedUserSnapshot: Snapshot<User> | null;
   initialReadmeHTML: string;
-  initialSrcdoc: string;
-  initialSrcdocError: string | null;
   canUserEditViz: boolean;
   canUserDeleteViz: boolean;
-  vizCacheContentSnapshots: Record<
-    VizId,
-    Snapshot<Content>
-  >;
   initialCollaborators: Array<User>;
   initialIsUpvoted: boolean;
-  slugResolutionCache: Record<SlugKey, VizId>;
   initialComments: Array<Snapshot<Comment>>;
   initialCommentAuthors: Array<Snapshot<User>>;
+  buildVizResult: BuildVizResult;
 };

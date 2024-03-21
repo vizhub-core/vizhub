@@ -138,17 +138,24 @@ export const VizPageProvider = ({
     initialReadmeHTML,
     forkedFromInfoSnapshot,
     forkedFromOwnerUserSnapshot,
-    initialSrcdoc,
-    initialSrcdocError,
     canUserEditViz,
     canUserDeleteViz,
-    vizCacheContentSnapshots,
     initialCollaborators,
     initialIsUpvoted,
-    slugResolutionCache,
     initialComments,
     initialCommentAuthors,
+    buildVizResult,
   } = pageData;
+
+  if (buildVizResult.type === 'versioned') {
+    throw new Error('Versioned viz not supported');
+  }
+  const {
+    initialSrcdoc,
+    initialSrcdocError,
+    slugResolutionCache,
+    vizCacheContentSnapshots,
+  } = buildVizResult;
 
   // /////////////////////////////////////////
   /////////////// ShareDB ////////////////////

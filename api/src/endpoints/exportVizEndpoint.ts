@@ -113,21 +113,11 @@ export const exportVizEndpoint = ({
       // support public vizzes.
       const authenticatedUserId = undefined;
 
-      // Build the viz!
+      // Build the viz, to get the imported vizzes!
       const {
         vizCacheInfoSnapshots,
         vizCacheContentSnapshots,
         slugResolutionCache,
-      }: {
-        vizCacheInfoSnapshots: Record<
-          VizId,
-          Snapshot<Info>
-        >;
-        vizCacheContentSnapshots: Record<
-          VizId,
-          Snapshot<Content>
-        >;
-        slugResolutionCache: Record<string, VizId>;
       } = await buildViz({
         id,
         infoSnapshot,
@@ -244,24 +234,24 @@ export const exportVizEndpoint = ({
           allFiles = [...allFiles, ...vizFiles];
         }
 
-        // Add the top level package.json that defines the
+        // TODO? Add the top level package.json that defines the
         // NPM workspaces for the exported vizzes.
-        const topLevelPackageJson: File = {
-          name: 'package.json',
-          text: JSON.stringify(
-            {
-              name: '@vizhub/exports',
-              workspaces: Object.values(
-                vizCacheInfoSnapshots,
-              ).map(
-                (vizId) =>
-                  `vizhub-exports/${ownerUserName}/${vizId}`,
-              ),
-            },
-            null,
-            2,
-          ),
-        };
+        // const topLevelPackageJson: File = {
+        //   name: 'package.json',
+        //   text: JSON.stringify(
+        //     {
+        //       name: '@vizhub/exports',
+        //       workspaces: Object.values(
+        //         vizCacheInfoSnapshots,
+        //       ).map(
+        //         (vizId) =>
+        //           `vizhub-exports/${ownerUserName}/${vizId}`,
+        //       ),
+        //     },
+        //     null,
+        //     2,
+        //   ),
+        // };
 
         const zipBuffer: Buffer = zipFiles(
           Object.values(allFiles),

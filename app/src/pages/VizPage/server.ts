@@ -319,17 +319,17 @@ VizPage.getPageData = async ({
     }
 
     // Build the viz!
-    const {
-      initialSrcdoc,
-      initialSrcdocError,
-      vizCacheContentSnapshots,
-      slugResolutionCache,
-    } = await buildViz({
+    const buildVizResult = await buildViz({
+      type: 'live',
       id,
       infoSnapshot,
       contentSnapshot,
       authenticatedUserId,
     });
+
+    if (buildVizResult.type !== 'live') {
+      return null;
+    }
 
     // Get the collaborators on the viz.
     // TODO use a ShareDB query instead of fetching
@@ -433,14 +433,11 @@ VizPage.getPageData = async ({
       initialReadmeHTML,
       canUserEditViz,
       canUserDeleteViz,
-      initialSrcdoc,
-      initialSrcdocError,
-      vizCacheContentSnapshots,
-      slugResolutionCache,
       initialCollaborators,
       initialIsUpvoted,
       initialComments,
       initialCommentAuthors,
+      buildVizResult,
     };
   } catch (e) {
     console.log(
