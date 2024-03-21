@@ -9,11 +9,15 @@ export const useMarkUncommitted = ({
   setUncommitted,
   authenticatedUser,
 }: {
-  contentShareDBDoc: ShareDBDoc<Content>;
+  contentShareDBDoc: ShareDBDoc<Content> | undefined;
   setUncommitted: (authenticatedUser: User | null) => void;
   authenticatedUser: User | null;
 }) => {
   useEffect(() => {
+    // Do nothing if we are looking at a static version of the viz.
+    if (!contentShareDBDoc) {
+      return;
+    }
     const handleOp = (op, source) => {
       // Only mark the Viz as uncommitted if the change was made locally.
       // If the change was made remotely, that clients sets the Viz as

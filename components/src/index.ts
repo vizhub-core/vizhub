@@ -24,4 +24,5 @@ export { BrandedEmbedControl } from './components/BrandedEmbedControl';
 export { ExportCodeUpgradeNudgeModal } from './components/ExportCodeUpgradeNudgeModal';
 export { HomeStarter } from './components/HomeStarter';
 export { RevisionHistoryNavigator } from './components/RevisionHistoryNavigator';
+export { VizPageVersionBanner } from './components/VizPageVersionBanner';
 import './components/index.scss';

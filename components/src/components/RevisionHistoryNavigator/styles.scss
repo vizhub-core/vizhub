@@ -1,8 +1,15 @@
 .vh-revision-history {
   height: 300px;
-  background-color: red;
 
   svg {
     position: absolute;
+
+    text.time-label {
+      fill: var(--vh-color-neutral-03);
+    }
+
+    line {
+      stroke: var(--vh-color-neutral-03);
+    }
   }
 }

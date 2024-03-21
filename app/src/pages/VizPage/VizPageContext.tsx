@@ -12,6 +12,7 @@ import { ShareDBDoc, useSubmitOperation } from 'vzcode';
 import {
   Comment,
   Commit,
+  CommitMetadata,
   Content,
   Info,
   RevisionHistory,
@@ -117,6 +118,7 @@ export type VizPageContextValue = {
 
   // null signifies that the data is still loading.
   revisionHistory: RevisionHistory | null;
+  commitMetadata?: CommitMetadata;
 };
 
 export const VizPageContext =
@@ -138,41 +140,74 @@ export const VizPageProvider = ({
     initialReadmeHTML,
     forkedFromInfoSnapshot,
     forkedFromOwnerUserSnapshot,
-    initialSrcdoc,
-    initialSrcdocError,
     canUserEditViz,
     canUserDeleteViz,
-    vizCacheContentSnapshots,
     initialCollaborators,
     initialIsUpvoted,
-    slugResolutionCache,
     initialComments,
     initialCommentAuthors,
+    buildVizResult,
+    commitMetadata,
   } = pageData;
 
-  // /////////////////////////////////////////
-  /////////////// ShareDB ////////////////////
-  // /////////////////////////////////////////
-  const { connected } = useShareDBConnectionStatus();
+  const {
+    initialSrcdoc,
+    initialSrcdocError,
+    slugResolutionCache,
+  } = buildVizResult;
+
+  // TODO use static Info that shows `info.end` equal to
+  // the commit id we are looking at.
   const infoShareDBDoc: ShareDBDoc<Info> =
     useShareDBDoc<Info>(infoSnapshot, 'Info');
   const info: Info = useData(infoSnapshot, infoShareDBDoc);
   const submitInfoOperation =
     useSubmitOperation<Info>(infoShareDBDoc);
 
-  const vizCacheShareDBDocs = useShareDBDocs(
-    vizCacheContentSnapshots,
-    'Content',
-  );
-  const vizCacheContents: Record<string, Content> =
-    useDataRecord(
+  // All of these declarations that follow are defined differently
+  // depending on whether the viz is at a specific version or live.
+  let connected: boolean;
+  let vizCacheShareDBDocs:
+    | Record<string, ShareDBDoc<Content>>
+    | undefined;
+  let vizCacheContents: Record<string, Content> | undefined;
+  let contentShareDBDoc: ShareDBDoc<Content> | undefined;
+
+  // If we are loading a specific version of the viz...
+  if (buildVizResult.type === 'versioned') {
+    const { vizCacheContentsStatic } = buildVizResult;
+
+    // If we are the viz at a specific version,
+    // we do not need to connect to ShareDB at all.
+    connected = false;
+
+    // The viz cache, used for resolving imported vizzes,
+    // uses the static viz cache contents from the server.
+    vizCacheContents = vizCacheContentsStatic;
+  }
+
+  // If we are loading a live viz (most typical scenario)...
+  else if (buildVizResult.type === 'live') {
+    const { vizCacheContentSnapshots } = buildVizResult;
+
+    // If we are the live viz, we need to connect to ShareDB.
+    connected = useShareDBConnectionStatus().connected;
+
+    // The viz cache, used for resolving imported vizzes,
+    // is always kept up to date via ShareDB docs.
+    vizCacheShareDBDocs = useShareDBDocs<Content>(
+      vizCacheContentSnapshots,
+      'Content',
+    );
+    vizCacheContents = useDataRecord(
       vizCacheContentSnapshots,
       vizCacheShareDBDocs,
     );
 
-  const contentShareDBDoc: ShareDBDoc<Content> =
-    vizCacheShareDBDocs[info.id];
-  const content: Content = vizCacheContents[info.id];
+    contentShareDBDoc = vizCacheShareDBDocs[info.id];
+  }
+
+  let content: Content = vizCacheContents[info.id];
 
   const submitContentOperation: (
     next: (content: Content) => Content,
@@ -423,6 +458,7 @@ export const VizPageProvider = ({
     showRevisionHistory,
     toggleShowRevisionHistory,
     revisionHistory,
+    commitMetadata,
   };
 
   return (

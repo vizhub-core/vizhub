@@ -327,6 +327,15 @@ async function createServer(
 
       for (const page of pages) {
         match = matchPath({ path: page.path }, urlToMatch);
+
+        // Attempt to match the URL to the secondary path
+        if (!match && page.path2) {
+          match = matchPath(
+            { path: page.path2 },
+            urlToMatch,
+          );
+        }
+
         if (match) {
           matchedPage = page;
           break;
