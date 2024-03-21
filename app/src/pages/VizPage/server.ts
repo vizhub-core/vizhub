@@ -14,6 +14,8 @@ import {
   absoluteURL,
   Comment,
   CommitId,
+  CommitMetadata,
+  Commit,
 } from 'entities';
 import { JSDOM } from 'jsdom';
 import {
@@ -33,6 +35,7 @@ import { VizAccess } from 'interactors/src/verifyVizAccess';
 import { Result } from 'gateways';
 import { setJSDOM } from 'runtime';
 import { VizPageData } from './VizPageData';
+import { BuildVizOptions } from 'interactors/src/buildViz';
 
 setJSDOM(JSDOM);
 
@@ -56,6 +59,7 @@ VizPage.getPageData = async ({
     getUsersByIds,
     getUpvote,
     deleteInfo,
+    getCommit,
   } = gateways;
   const verifyVizAccess = VerifyVizAccess(gateways);
   const commitViz = CommitViz(gateways);
@@ -76,6 +80,23 @@ VizPage.getPageData = async ({
     // using the revision history navigator.
     // This is usually undefined.
     const commitId: CommitId | undefined = params.commitId;
+
+    // If `commitId` is present, then we need to fetch the commit metadata.
+    let commitMetadata: CommitMetadata | undefined;
+    if (commitId) {
+      const getCommitResult = await getCommit(commitId);
+      if (getCommitResult.outcome === 'failure') {
+        console.log('Error when fetching commit:');
+        console.log(getCommitResult.error);
+        return null;
+      }
+      const commit: Commit = getCommitResult.value;
+      commitMetadata = {
+        id: commitId,
+        parent: commit.parent,
+        timestamp: commit.timestamp,
+      };
+    }
 
     // Get the User entity for the owner of the viz.
     const ownerUserResult =
@@ -320,16 +341,25 @@ VizPage.getPageData = async ({
 
     // Build the viz!
     const buildVizResult = await buildViz({
-      type: 'live',
       id,
-      infoSnapshot,
-      contentSnapshot,
       authenticatedUserId,
+      ...(commitId
+        ? // If we have a `commitId`, we are building the viz
+          // as it was at that commit.
+          {
+            type: 'versioned',
+            contentStatic: content,
+            infoStatic: info,
+            commitMetadata,
+          }
+        : // If we don't have a `commitId`, we are building the latest
+          // version of the viz.
+          {
+            type: 'live',
+            infoSnapshot,
+            contentSnapshot,
+          }),
     });
-
-    if (buildVizResult.type !== 'live') {
-      return null;
-    }
 
     // Get the collaborators on the viz.
     // TODO use a ShareDB query instead of fetching
@@ -422,7 +452,7 @@ VizPage.getPageData = async ({
 
     scoreStaleVizzes();
 
-    return {
+    const vizPageData: VizPageData = {
       infoSnapshot,
       ownerUserSnapshot,
       forkedFromInfoSnapshot,
@@ -439,6 +469,15 @@ VizPage.getPageData = async ({
       initialCommentAuthors,
       buildVizResult,
     };
+
+    // If we are viewing a versioned page,
+    // the presence of `commitMetadata` is our signal for that
+    // on the client side.
+    if (commitMetadata) {
+      vizPageData.commitMetadata = commitMetadata;
+    }
+
+    return vizPageData;
   } catch (e) {
     console.log(
       'error fetching viz with idOrSlug',

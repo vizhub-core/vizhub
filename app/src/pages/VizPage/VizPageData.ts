@@ -1,5 +1,6 @@
 import {
   Comment,
+  CommitMetadata,
   Content,
   Info,
   SlugKey,
@@ -24,4 +25,5 @@ export type VizPageData = PageData & {
   initialComments: Array<Snapshot<Comment>>;
   initialCommentAuthors: Array<Snapshot<User>>;
   buildVizResult: BuildVizResult;
+  commitMetadata?: CommitMetadata;
 };

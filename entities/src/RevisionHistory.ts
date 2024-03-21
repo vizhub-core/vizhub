@@ -100,6 +100,7 @@ export interface Commit {
 export interface CommitMetadata {
   id: CommitId;
   parent?: CommitId;
+  timestamp: Timestamp;
 }
 
 // The revision history of a viz is encapsulated in this type.

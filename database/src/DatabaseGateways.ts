@@ -931,14 +931,15 @@ export const DatabaseGateways = ({
     const results = await collection
       .find(
         { viz: vizId },
-        // Only fetch _id and parent fields
-        { projection: { _id: 1, parent: 1 } },
+        // Only fetch _id, parent, and timestamp fields
+        { projection: { _id: 1, parent: 1, timestamp: 1 } },
       )
       .toArray();
     return ok({
       commitMetadatas: results.map((commitMetadata) => ({
         id: commitMetadata._id,
         parent: commitMetadata.parent,
+        timestamp: commitMetadata.timestamp,
       })),
     });
   };
