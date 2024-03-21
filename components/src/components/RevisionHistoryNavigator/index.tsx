@@ -208,6 +208,20 @@ const Body = ({
                     />
                   </a>
                 )}
+                {
+                  // Show text that says "Current version"
+                  // if the node corresponds to the current version.
+                  node.data.id === info.end && (
+                    <text
+                      transform={`translate(0, ${revisionThumbnailHeight / 4 + 18})`}
+                      textAnchor="middle"
+                      fontSize="14"
+                      fill="black"
+                    >
+                      Current version
+                    </text>
+                  )
+                }
               </g>
             );
           })}

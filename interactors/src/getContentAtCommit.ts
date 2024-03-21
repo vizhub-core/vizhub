@@ -72,6 +72,7 @@ export const GetContentAtCommit =
     // Start with empty content in case of not starting from a milestone.
     // In this case we traverse the entire commit history, all the way
     // back to the primordial commit.
+    // @ts-ignore
     let content: Content = {};
     if (debug) {
       console.log(

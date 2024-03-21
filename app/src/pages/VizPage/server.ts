@@ -13,11 +13,13 @@ import {
   getVizThumbnailURL,
   absoluteURL,
   Comment,
+  CommitId,
 } from 'entities';
 import { JSDOM } from 'jsdom';
 import {
   BuildViz,
   CommitViz,
+  GetContentAtCommit,
   GetInfoByIdOrSlug,
   ScoreStaleVizzes,
   VerifyVizAccess,
@@ -60,16 +62,20 @@ VizPage.getPageData = async ({
   const scoreStaleVizzes = ScoreStaleVizzes(gateways);
   const getInfoByIdOrSlug = GetInfoByIdOrSlug(gateways);
   const buildViz = BuildViz(gateways);
+  const getContentAtCommit = GetContentAtCommit(gateways);
 
   // TODO move all this into an interactor called
   // getVizPageData or something like that.
   try {
     const idOrSlug: VizId | string = params.idOrSlug;
     const ownerUserName: string = params.userName;
-    const commitId: string = params.commitId;
 
-    // TODO use this to get the content at this commit
-    console.log('commitId', commitId);
+    // If this commitId is present, then we are looking at a specific commit.
+    // This is when the URL looks like /:userName/:idOrSlug/:commitId.
+    // One way users can end up at this page is by
+    // using the revision history navigator.
+    // This is usually undefined.
+    const commitId: CommitId | undefined = params.commitId;
 
     // Get the User entity for the owner of the viz.
     const ownerUserResult =
@@ -133,8 +139,10 @@ VizPage.getPageData = async ({
     // This is used to determine whether to show the "Delete" button.
     const canUserDeleteViz: boolean = vizAccess[DELETE];
 
-    // If the viz is not committed, then commit it.
-    if (!info.committed) {
+    // If the viz is not committed (!info.committed),
+    // and we are not looking at an older version (!commitId),
+    // then commit it.
+    if (!info.committed && !commitId) {
       if (debug) {
         console.log(
           'Viz is not committed, committing it now',
@@ -199,41 +207,63 @@ VizPage.getPageData = async ({
 
     // If we're here, then the user has read access to the viz,
     // so it's worth fetching the content.
-    const contentResult = await getContent(id);
+    // Now it's a question of which version of the content we need!
+    let content: Content;
+    let contentSnapshot: Snapshot<Content> | undefined;
 
-    if (contentResult.outcome === 'failure') {
-      // This shouold never happen - if the info is there
-      // then the content should be there too.
-      // TODO Handle vizzes that are "frozen" (not implemented yet).
-
-      console.log(
-        "Error when fetching viz's content (info is defined but not content):",
-      );
-      // Update 2024_03_08 this DOES happen sometimes due to a bug in the
-      // forking interactor when the viz was attempted to be forked, but could
-      // not be forked due to a size limit error. This happens when a user on
-      // the free plan attempts to fork a large viz.
-      // If we're here, what we really want to do is delete the info,
-      // because it leads to no content and should not be there in the first place.
-      console.log(
-        "Deleting info because it has no content (it's a bug that it's there in the first place)",
-      );
-      const deleteResult = await deleteInfo(id);
-      if (deleteResult.outcome === 'failure') {
+    // If we are viewing the viz at a certain version,
+    // then we get the content at that commit.
+    if (commitId) {
+      const getContentAtCommitResult =
+        await getContentAtCommit(commitId);
+      if (getContentAtCommitResult.outcome === 'failure') {
         console.log(
-          'Error when deleting info: ',
-          deleteResult.error,
+          'Error when fetching viz content at commit:',
         );
-      } else {
-        console.log('Deleted info: ', deleteResult.value);
+        console.log(getContentAtCommitResult.error);
+        return null;
       }
+      content = getContentAtCommitResult.value;
+    } else {
+      // In this case, we are viewing the latest version of the viz,
+      // and we want to serve a ShareDB snapshot so the client can
+      // set up the ShareDB document with real-time updates.
 
-      console.log(contentResult.error);
-      return null;
+      const contentResult = await getContent(id);
+
+      if (contentResult.outcome === 'failure') {
+        // This should never happen - if the info is there
+        // then the content should be there too.
+        // TODO Handle vizzes that are "frozen" (not implemented yet).
+
+        console.log(
+          "Error when fetching viz's content (info is defined but not content):",
+        );
+        // Update 2024_03_08 this DOES happen sometimes due to a bug in the
+        // forking interactor when the viz was attempted to be forked, but could
+        // not be forked due to a size limit error. This happens when a user on
+        // the free plan attempts to fork a large viz.
+        // If we're here, what we really want to do is delete the info,
+        // because it leads to no content and should not be there in the first place.
+        console.log(
+          "Deleting info because it has no content (it's a bug that it's there in the first place)",
+        );
+        const deleteResult = await deleteInfo(id);
+        if (deleteResult.outcome === 'failure') {
+          console.log(
+            'Error when deleting info: ',
+            deleteResult.error,
+          );
+        } else {
+          console.log('Deleted info: ', deleteResult.value);
+        }
+
+        console.log(contentResult.error);
+        return null;
+      }
+      contentSnapshot = contentResult.value;
+      content = contentSnapshot.data;
     }
-    const contentSnapshot: Snapshot<Content> =
-      contentResult.value;
-    const content: Content = contentSnapshot.data;
 
     // Render Markdown server-side.
     // TODO cache it per commit.
