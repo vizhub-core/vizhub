@@ -1,6 +1,7 @@
 import { rollup } from 'rollup';
 import { compile } from 'svelte/compiler';
 import {
+  CommitMetadata,
   Content,
   Info,
   READ,
@@ -22,21 +23,67 @@ import { ResolveSlug } from './resolveSlug';
 
 const debug = false;
 
+export type BuildVizOptions = {
+  type: 'live' | 'versioned';
+  id: VizId;
+  authenticatedUserId: UserId | undefined;
+} & (
+  | {
+      type: 'live';
+      contentSnapshot: Snapshot<Content>;
+      infoSnapshot: Snapshot<Info>;
+    }
+  | {
+      type: 'versioned';
+      contentStatic: Content;
+      infoStatic: Info;
+      commitMetadata: CommitMetadata;
+    }
+);
+
+export type BuildVizResult = {
+  type: 'live' | 'versioned';
+  initialSrcdoc: string;
+  initialSrcdocError: string | null;
+  slugResolutionCache: Record<string, VizId>;
+} & (
+  | {
+      type: 'live';
+      vizCacheInfoSnapshots: Record<VizId, Snapshot<Info>>;
+      vizCacheContentSnapshots: Record<
+        VizId,
+        Snapshot<Content>
+      >;
+    }
+  | {
+      type: 'versioned';
+      vizCacheInfosStatic: Record<VizId, Info>;
+      vizCacheContentsStatic: Record<VizId, Content>;
+    }
+);
+
+// This is called by the VizPage server-side to build the viz.
+// Responsibilities:
+// - Computes the initial srcdoc for the viz iframe
+// - Resolves slugs to viz IDs
+// - Fetches and caches content for imported vizzes
+//   - If fetching the latest version, returns ShareDB snapshots
+//     to support initial client-side hydration with `ingestSnapshot`.
+//     This is the case where `type` is 'live'.
+//   - If fetching a specific version (commit), returns the content of the
+//     imported vizzes as they were at the time of the specific version.
+//     This is the case where `type` is 'versioned'.
 export const BuildViz = (gateways: Gateways) => {
   const { getInfo, getContent } = gateways;
   const verifyVizAccess = VerifyVizAccess(gateways);
 
-  return async ({
-    id,
-    contentSnapshot,
-    infoSnapshot,
-    authenticatedUserId,
-  }: {
-    id: VizId;
-    contentSnapshot: Snapshot<Content>;
-    infoSnapshot: Snapshot<Info>;
-    authenticatedUserId: UserId | undefined;
-  }) => {
+  let content: Content;
+  return async (
+    buildVizOptions: BuildVizOptions,
+  ): Promise<BuildVizResult> => {
+    const { type, id, authenticatedUserId } =
+      buildVizOptions;
+
     // A cache for resolving slugs to viz IDs.
     // Keys are of the form `${userName}/${slug}`.
     const slugResolutionCache: Record<string, VizId> = {};
@@ -46,21 +93,41 @@ export const BuildViz = (gateways: Gateways) => {
       slugResolutionCache,
     );
 
-    // Content snapshots for client-side hydration
-    // using ShareDB's ingestSnapshot API.
-    const vizCacheContentSnapshots: Record<
+    let vizCacheContentSnapshots: Record<
       VizId,
       Snapshot<Content>
-    > = { [id]: contentSnapshot };
-
-    // Content snapshots for client-side hydration
-    // using ShareDB's ingestSnapshot API.
-    const vizCacheInfoSnapshots: Record<
+    >;
+    let vizCacheInfoSnapshots: Record<
       VizId,
       Snapshot<Info>
-    > = { [id]: infoSnapshot };
+    >;
 
-    const content: Content = contentSnapshot.data;
+    let vizCacheContentsStatic: Record<VizId, Content>;
+    let vizCacheInfosStatic: Record<VizId, Info>;
+
+    if (type === 'live') {
+      const { contentSnapshot, infoSnapshot } =
+        buildVizOptions;
+
+      // Content snapshots for client-side hydration
+      // using ShareDB's ingestSnapshot API.
+      vizCacheContentSnapshots = {
+        [id]: contentSnapshot,
+      };
+
+      // Content snapshots for client-side hydration
+      // using ShareDB's ingestSnapshot API.
+      vizCacheInfoSnapshots = { [id]: infoSnapshot };
+
+      content = contentSnapshot.data;
+    } else if (buildVizOptions.type === 'versioned') {
+      const { contentStatic, infoStatic } = buildVizOptions;
+
+      vizCacheContentsStatic = { [id]: contentStatic };
+      vizCacheInfosStatic = { [id]: infoStatic };
+
+      content = contentStatic;
+    }
 
     const vizCache: VizCache = createVizCache({
       initialContents: [content],
@@ -117,6 +184,7 @@ export const BuildViz = (gateways: Gateways) => {
             vizId,
           );
         }
+        // TODO get content at timestampe based on commitMetadata.timestamp
         const contentResult = await getContent(vizId);
         if (contentResult.outcome === 'failure') {
           console.log(
@@ -128,11 +196,20 @@ export const BuildViz = (gateways: Gateways) => {
         const importedContentSnapshot: Snapshot<Content> =
           contentResult.value;
 
-        // Store the content snapshot to support
-        // client-side hydration using ShareDB's ingestSnapshot API.
-        vizCacheContentSnapshots[vizId] =
-          importedContentSnapshot;
-        vizCacheInfoSnapshots[vizId] = importedInfoSnapshot;
+        if (type === 'live') {
+          // Store the content snapshot to support
+          // client-side hydration using ShareDB's ingestSnapshot API.
+          vizCacheContentSnapshots[vizId] =
+            importedContentSnapshot;
+          vizCacheInfoSnapshots[vizId] =
+            importedInfoSnapshot;
+        } else if (type === 'versioned') {
+          // Store the content as it was at the time of the specific version.
+          vizCacheContentsStatic[vizId] =
+            importedContentSnapshot.data;
+          vizCacheInfosStatic[vizId] =
+            importedInfoSnapshot.data;
+        }
 
         if (debug) {
           console.log('Fetched content for viz cache');
@@ -157,12 +234,22 @@ export const BuildViz = (gateways: Gateways) => {
       console.log('initialSrcdoc');
       console.log(initialSrcdoc.substring(0, 200));
     }
-    return {
-      initialSrcdoc,
-      initialSrcdocError,
-      vizCacheInfoSnapshots,
-      vizCacheContentSnapshots,
-      slugResolutionCache,
-    };
+    return type === 'live'
+      ? {
+          type: 'live',
+          initialSrcdoc,
+          initialSrcdocError,
+          slugResolutionCache,
+          vizCacheInfoSnapshots,
+          vizCacheContentSnapshots,
+        }
+      : {
+          type: 'versioned',
+          initialSrcdoc,
+          initialSrcdocError,
+          slugResolutionCache,
+          vizCacheInfosStatic,
+          vizCacheContentsStatic,
+        };
   };
 };

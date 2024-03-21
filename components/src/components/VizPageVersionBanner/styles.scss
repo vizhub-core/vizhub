@@ -1,0 +1,13 @@
+.vh-viz-page-version-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background-color: var(--vh-color-caution-01);
+  .side {
+    display: flex;
+    align-items: center;
+    padding-left: 8px;
+    gap: 12px;
+  }
+}

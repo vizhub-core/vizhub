@@ -35,3 +35,4 @@ export const VizPage: Page = ({
 };
 
 VizPage.path = '/:userName/:idOrSlug';
+VizPage.path2 = '/:userName/:idOrSlug/:commitId';

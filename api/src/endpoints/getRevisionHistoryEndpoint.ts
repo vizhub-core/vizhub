@@ -55,8 +55,6 @@ export const getRevisionHistoryEndpoint = ({
           );
         }
 
-        console.log('Access granted');
-
         return res.send(await getRevisionHistory(vizId));
       }
     },

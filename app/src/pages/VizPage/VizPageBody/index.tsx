@@ -22,10 +22,10 @@ import {
 } from 'entities';
 import { useRuntime } from 'runtime';
 import {
-  RevisionHistory,
   RevisionHistoryNavigator,
   VizPageHead,
   VizPageUpgradeBanner,
+  VizPageVersionBanner,
   VizPageViewer,
 } from 'components';
 import { AuthenticatedUserContext } from '../../../contexts/AuthenticatedUserContext';
@@ -45,6 +45,7 @@ import { useBrandedEmbedNotice } from './useBrandedEmbedNotice';
 import { useComments } from './useComments';
 import { getAvatarURL } from '../../../accessors/getAvatarURL';
 import { VizPageContext } from '../VizPageContext';
+import { formatCommitTimestamp } from 'components/src/components/formatCommitTimestamp';
 
 const debug = false;
 
@@ -93,6 +94,7 @@ export const VizPageBody = () => {
     showRevisionHistory,
     revisionHistory,
     toggleShowRevisionHistory,
+    commitMetadata,
   } = useContext(VizPageContext);
 
   const {
@@ -335,6 +337,16 @@ export const VizPageBody = () => {
     [authenticatedUser],
   );
 
+  const getVizPageHrefForCommit = useCallback(
+    (commitId: string) =>
+      getVizPageHref({
+        ownerUser,
+        info,
+        commitId,
+      }),
+    [ownerUser, info],
+  );
+
   return isEmbedMode ? (
     <>
       {renderVizRunner()}
@@ -363,6 +375,7 @@ export const VizPageBody = () => {
           revisionHistory={revisionHistory}
           info={info}
           content={content}
+          getVizPageHrefForCommit={getVizPageHrefForCommit}
         />
       )}
       <VizPageHead
@@ -381,9 +394,16 @@ export const VizPageBody = () => {
           toggleShowRevisionHistory
         }
       />
-      {isUpgradeBannerVisible && (
+      {isUpgradeBannerVisible && !commitMetadata && (
         <VizPageUpgradeBanner
           onClose={handleUpgradeBannerClose}
+        />
+      )}
+      {commitMetadata && (
+        <VizPageVersionBanner
+          commitTimestampFormatted={formatCommitTimestamp(
+            commitMetadata.timestamp,
+          )}
         />
       )}
       <div className="vh-viz-page-body">

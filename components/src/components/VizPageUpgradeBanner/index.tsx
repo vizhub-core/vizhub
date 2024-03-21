@@ -28,7 +28,7 @@ export const VizPageUpgradeBanner = ({ onClose }) => {
         <Button
           as="a"
           variant="secondary"
-          href="/pricing"
+          href="/pricing?utm_source=viz_page_upgrade_banner&utm_medium=web&utm_campaign=upgrade_banner"
           target="_blank"
           rel="noopener noreferrer"
           style={{ marginRight: -4, marginLeft: 16 }}

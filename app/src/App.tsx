@@ -1,13 +1,13 @@
 // Inspired by
 // https://github.com/vitejs/vite-plugin-react/blob/main/playground/ssr-react/src/App.jsx
 // https://github.com/vizhub-core/vizhub/blob/main/vizhub-v2/packages/neoFrontend/src/App.js
+import { useMemo, Fragment } from 'react';
 import {
   Route,
   Routes,
   useLocation,
 } from 'react-router-dom';
 import { pages } from './pages/client';
-import { useMemo } from 'react';
 
 const debug = false;
 
@@ -31,11 +31,18 @@ export const App = ({ pageData }) => {
   return (
     <Routes>
       {pages.map((Page) => (
-        <Route
-          key={Page.path}
-          path={Page.path}
-          element={<Page pageData={pageData} />}
-        />
+        <Fragment key={Page.path}>
+          <Route
+            path={Page.path}
+            element={<Page pageData={pageData} />}
+          />
+          {Page.path2 && (
+            <Route
+              path={Page.path2}
+              element={<Page pageData={pageData} />}
+            />
+          )}
+        </Fragment>
       ))}
 
       {/*
