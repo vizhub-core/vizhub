@@ -77,9 +77,13 @@ export const BuildViz = (gateways: Gateways) => {
   const { getInfo, getContent } = gateways;
   const verifyVizAccess = VerifyVizAccess(gateways);
 
+  let content: Content;
   return async (
     buildVizOptions: BuildVizOptions,
   ): Promise<BuildVizResult> => {
+    const { type, id, authenticatedUserId } =
+      buildVizOptions;
+
     // A cache for resolving slugs to viz IDs.
     // Keys are of the form `${userName}/${slug}`.
     const slugResolutionCache: Record<string, VizId> = {};
@@ -89,143 +93,163 @@ export const BuildViz = (gateways: Gateways) => {
       slugResolutionCache,
     );
 
-    if (buildVizOptions.type === 'live') {
-      const {
-        id,
-        contentSnapshot,
-        infoSnapshot,
-        authenticatedUserId,
-      } = buildVizOptions;
+    let vizCacheContentSnapshots: Record<
+      VizId,
+      Snapshot<Content>
+    >;
+    let vizCacheInfoSnapshots: Record<
+      VizId,
+      Snapshot<Info>
+    >;
+
+    let vizCacheContentsStatic: Record<VizId, Content>;
+    let vizCacheInfosStatic: Record<VizId, Info>;
+
+    if (type === 'live') {
+      const { contentSnapshot, infoSnapshot } =
+        buildVizOptions;
 
       // Content snapshots for client-side hydration
       // using ShareDB's ingestSnapshot API.
-      const vizCacheContentSnapshots: Record<
-        VizId,
-        Snapshot<Content>
-      > = { [id]: contentSnapshot };
+      vizCacheContentSnapshots = {
+        [id]: contentSnapshot,
+      };
 
       // Content snapshots for client-side hydration
       // using ShareDB's ingestSnapshot API.
-      const vizCacheInfoSnapshots: Record<
-        VizId,
-        Snapshot<Info>
-      > = { [id]: infoSnapshot };
+      vizCacheInfoSnapshots = { [id]: infoSnapshot };
 
-      const content: Content = contentSnapshot.data;
+      content = contentSnapshot.data;
+    } else if (buildVizOptions.type === 'versioned') {
+      const { contentStatic, infoStatic } = buildVizOptions;
 
-      const vizCache: VizCache = createVizCache({
-        initialContents: [content],
-        handleCacheMiss: async (vizId: VizId) => {
-          // Verify that the user has access to the imported viz.
-          const getImportedInfoResult =
-            await getInfo(vizId);
-          if (getImportedInfoResult.outcome === 'failure') {
-            console.log(
-              'Error when fetching imported viz info:',
-            );
-            console.log(getImportedInfoResult.error);
-            throw new Error(
-              'Error when fetching imported viz info',
-            );
-          }
+      vizCacheContentsStatic = { [id]: contentStatic };
+      vizCacheInfosStatic = { [id]: infoStatic };
 
-          const importedInfoSnapshot: Snapshot<Info> =
-            getImportedInfoResult.value;
-          const importedInfo: Info =
-            importedInfoSnapshot.data;
-          const verifyImportedVizReadAccessResult: Result<VizAccess> =
-            await verifyVizAccess({
-              authenticatedUserId,
-              info: importedInfo,
-              actions: [READ],
-            });
-          if (
-            verifyImportedVizReadAccessResult.outcome ===
-            'failure'
-          ) {
-            console.log('Error when verifying viz access:');
-            console.log(
-              verifyImportedVizReadAccessResult.error,
-            );
-            throw new Error(
-              'Error when verifying viz access',
-            );
-          }
-          const importedVizAccess: VizAccess =
-            verifyImportedVizReadAccessResult.value;
+      content = contentStatic;
+    }
 
-          if (!importedVizAccess[READ]) {
-            console.log(
-              'User does not have read access to viz',
-            );
-            throw new Error(
-              'User does not have read access to imported viz',
-            );
-          }
+    const vizCache: VizCache = createVizCache({
+      initialContents: [content],
+      handleCacheMiss: async (vizId: VizId) => {
+        // Verify that the user has access to the imported viz.
+        const getImportedInfoResult = await getInfo(vizId);
+        if (getImportedInfoResult.outcome === 'failure') {
+          console.log(
+            'Error when fetching imported viz info:',
+          );
+          console.log(getImportedInfoResult.error);
+          throw new Error(
+            'Error when fetching imported viz info',
+          );
+        }
 
-          if (debug) {
-            console.log(
-              'Handling cache miss for vizId',
-              vizId,
-            );
-          }
-          const contentResult = await getContent(vizId);
-          if (contentResult.outcome === 'failure') {
-            console.log(
-              'Error when fetching content for viz cache:',
-            );
-            console.log(contentResult.error);
-            return null;
-          }
-          const importedContentSnapshot: Snapshot<Content> =
-            contentResult.value;
+        const importedInfoSnapshot: Snapshot<Info> =
+          getImportedInfoResult.value;
+        const importedInfo: Info =
+          importedInfoSnapshot.data;
+        const verifyImportedVizReadAccessResult: Result<VizAccess> =
+          await verifyVizAccess({
+            authenticatedUserId,
+            info: importedInfo,
+            actions: [READ],
+          });
+        if (
+          verifyImportedVizReadAccessResult.outcome ===
+          'failure'
+        ) {
+          console.log('Error when verifying viz access:');
+          console.log(
+            verifyImportedVizReadAccessResult.error,
+          );
+          throw new Error(
+            'Error when verifying viz access',
+          );
+        }
+        const importedVizAccess: VizAccess =
+          verifyImportedVizReadAccessResult.value;
 
+        if (!importedVizAccess[READ]) {
+          console.log(
+            'User does not have read access to viz',
+          );
+          throw new Error(
+            'User does not have read access to imported viz',
+          );
+        }
+
+        if (debug) {
+          console.log(
+            'Handling cache miss for vizId',
+            vizId,
+          );
+        }
+        // TODO get content at timestampe based on commitMetadata.timestamp
+        const contentResult = await getContent(vizId);
+        if (contentResult.outcome === 'failure') {
+          console.log(
+            'Error when fetching content for viz cache:',
+          );
+          console.log(contentResult.error);
+          return null;
+        }
+        const importedContentSnapshot: Snapshot<Content> =
+          contentResult.value;
+
+        if (type === 'live') {
           // Store the content snapshot to support
           // client-side hydration using ShareDB's ingestSnapshot API.
           vizCacheContentSnapshots[vizId] =
             importedContentSnapshot;
           vizCacheInfoSnapshots[vizId] =
             importedInfoSnapshot;
+        } else if (type === 'versioned') {
+          // Store the content as it was at the time of the specific version.
+          vizCacheContentsStatic[vizId] =
+            importedContentSnapshot.data;
+          vizCacheInfosStatic[vizId] =
+            importedInfoSnapshot.data;
+        }
 
-          if (debug) {
-            console.log('Fetched content for viz cache');
-            console.log(contentResult.value.data);
-          }
-          return contentResult.value.data;
-        },
+        if (debug) {
+          console.log('Fetched content for viz cache');
+          console.log(contentResult.value.data);
+        }
+        return contentResult.value.data;
+      },
+    });
+
+    // Compute srcdoc for iframe.
+    // TODO cache it per commit.
+    const { initialSrcdoc, initialSrcdocError } =
+      await computeSrcDoc({
+        rollup,
+        getSvelteCompiler: async () => compile,
+        content,
+        vizCache,
+        resolveSlug,
       });
 
-      // Compute srcdoc for iframe.
-      // TODO cache it per commit.
-      const { initialSrcdoc, initialSrcdocError } =
-        await computeSrcDoc({
-          rollup,
-          getSvelteCompiler: async () => compile,
-          content,
-          vizCache,
-          resolveSlug,
-        });
-
-      if (debug) {
-        console.log('initialSrcdoc');
-        console.log(initialSrcdoc.substring(0, 200));
-      }
-      return {
-        type: 'live',
-        initialSrcdoc,
-        initialSrcdocError,
-        slugResolutionCache,
-        vizCacheInfoSnapshots,
-        vizCacheContentSnapshots,
-      };
-    } else if (buildVizOptions.type === 'versioned') {
-      // const {
-      //   id,
-      //   contentStatic,
-      //   infoStatic,
-      //   commitMetadata,
-      // } = buildVizOptions;
-      throw new Error('Versioned build not implemented');
+    if (debug) {
+      console.log('initialSrcdoc');
+      console.log(initialSrcdoc.substring(0, 200));
     }
+    return type === 'live'
+      ? {
+          type: 'live',
+          initialSrcdoc,
+          initialSrcdocError,
+          slugResolutionCache,
+          vizCacheInfoSnapshots,
+          vizCacheContentSnapshots,
+        }
+      : {
+          type: 'versioned',
+          initialSrcdoc,
+          initialSrcdocError,
+          slugResolutionCache,
+          vizCacheInfosStatic,
+          vizCacheContentsStatic,
+        };
   };
 };
