@@ -22,10 +22,10 @@ import {
 } from 'entities';
 import { useRuntime } from 'runtime';
 import {
-  RevisionHistory,
   RevisionHistoryNavigator,
   VizPageHead,
   VizPageUpgradeBanner,
+  VizPageVersionBanner,
   VizPageViewer,
 } from 'components';
 import { AuthenticatedUserContext } from '../../../contexts/AuthenticatedUserContext';
@@ -45,7 +45,7 @@ import { useBrandedEmbedNotice } from './useBrandedEmbedNotice';
 import { useComments } from './useComments';
 import { getAvatarURL } from '../../../accessors/getAvatarURL';
 import { VizPageContext } from '../VizPageContext';
-import { use } from 'marked';
+import { formatCommitTimestamp } from 'components/src/components/formatCommitTimestamp';
 
 const debug = false;
 
@@ -94,6 +94,7 @@ export const VizPageBody = () => {
     showRevisionHistory,
     revisionHistory,
     toggleShowRevisionHistory,
+    commitMetadata,
   } = useContext(VizPageContext);
 
   const {
@@ -393,9 +394,16 @@ export const VizPageBody = () => {
           toggleShowRevisionHistory
         }
       />
-      {isUpgradeBannerVisible && (
+      {isUpgradeBannerVisible && !commitMetadata && (
         <VizPageUpgradeBanner
           onClose={handleUpgradeBannerClose}
+        />
+      )}
+      {commitMetadata && (
+        <VizPageVersionBanner
+          commitTimestampFormatted={formatCommitTimestamp(
+            commitMetadata.timestamp,
+          )}
         />
       )}
       <div className="vh-viz-page-body">

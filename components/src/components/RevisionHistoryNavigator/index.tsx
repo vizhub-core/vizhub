@@ -5,7 +5,6 @@ import {
   useState,
 } from 'react';
 import { select } from 'd3-selection';
-import { utcFormat } from 'd3-time-format';
 import {
   stratify,
   tree,
@@ -19,23 +18,17 @@ import {
   Content,
   Info,
   RevisionHistory,
-  Timestamp,
   defaultVizWidth,
-  timestampToDate,
 } from 'entities';
 import { Spinner } from '../Spinner';
 import './styles.scss';
+import { formatCommitTimestamp } from '../formatCommitTimestamp';
 
 // The width of the thumbnail
 const revisionThumbnailWidth = defaultVizWidth / 4;
 
 // The width of the gap between the nodes
 const gap = 20;
-
-// Formats a timestamp to the format "1/1/20 4:45 PM".
-const format = utcFormat('%-m/%-d/%y %-I:%M %p');
-const formatCommitTimestamp = (timestamp: Timestamp) =>
-  format(timestampToDate(timestamp));
 
 // TODO make this a dynamic import
 // so that the d3 modules are not included

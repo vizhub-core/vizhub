@@ -12,6 +12,7 @@ import { ShareDBDoc, useSubmitOperation } from 'vzcode';
 import {
   Comment,
   Commit,
+  CommitMetadata,
   Content,
   Info,
   RevisionHistory,
@@ -117,6 +118,7 @@ export type VizPageContextValue = {
 
   // null signifies that the data is still loading.
   revisionHistory: RevisionHistory | null;
+  commitMetadata?: CommitMetadata;
 };
 
 export const VizPageContext =
@@ -145,6 +147,7 @@ export const VizPageProvider = ({
     initialComments,
     initialCommentAuthors,
     buildVizResult,
+    commitMetadata,
   } = pageData;
 
   const {
@@ -455,6 +458,7 @@ export const VizPageProvider = ({
     showRevisionHistory,
     toggleShowRevisionHistory,
     revisionHistory,
+    commitMetadata,
   };
 
   return (
