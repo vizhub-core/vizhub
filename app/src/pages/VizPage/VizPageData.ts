@@ -12,7 +12,6 @@ import { PageData } from '../Page';
 import { BuildVizResult } from 'interactors/src/buildViz';
 
 export type VizPageData = PageData & {
-  infoSnapshot: Snapshot<Info>;
   ownerUserSnapshot: Snapshot<User>;
   forkedFromInfoSnapshot: Snapshot<Info> | null;
   forkedFromOwnerUserSnapshot: Snapshot<User> | null;
@@ -25,5 +24,16 @@ export type VizPageData = PageData & {
   initialComments: Array<Snapshot<Comment>>;
   initialCommentAuthors: Array<Snapshot<User>>;
   buildVizResult: BuildVizResult;
+
+  // If commitMetadata is defined,
+  // we are viewing a specific version of the viz.
   commitMetadata?: CommitMetadata;
+
+  // This ShareDB snapshot contains the viz's Info.
+  // This is `undefined` if `commitMetadata` is defined.
+  infoSnapshot?: Snapshot<Info>;
+
+  // This is the modified Info object that is used to render the page.
+  // This is only defined if `commitMetadata` is defined.
+  infoStatic?: Info;
 };
