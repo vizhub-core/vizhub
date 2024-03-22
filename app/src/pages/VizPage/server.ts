@@ -429,8 +429,19 @@ VizPage.getPageData = async ({
       console.log(initialCommentsResult.error);
       return null;
     }
+
+    // If we're looking at an older version,
+    // only show the comments up until that timestamp.
     const initialComments: Array<Snapshot<Comment>> =
-      initialCommentsResult.value;
+      commitMetadata
+        ? initialCommentsResult.value.filter(
+            (commentSnapshot) =>
+              commentSnapshot.data.created <=
+              commitMetadata.timestamp,
+          )
+        : initialCommentsResult.value;
+
+    // Fetch authors for comments.
     const initialCommentAuthorsResult = await getUsersByIds(
       Array.from(
         new Set(
@@ -450,10 +461,11 @@ VizPage.getPageData = async ({
     const initialCommentAuthors: Array<Snapshot<User>> =
       initialCommentAuthorsResult.value;
 
+    // Score stale vizzes (small batch).
     scoreStaleVizzes();
 
+    // Compose the data for the page.
     const vizPageData: VizPageData = {
-      infoSnapshot,
       ownerUserSnapshot,
       forkedFromInfoSnapshot,
       forkedFromOwnerUserSnapshot,
@@ -475,6 +487,29 @@ VizPage.getPageData = async ({
     // on the client side.
     if (commitMetadata) {
       vizPageData.commitMetadata = commitMetadata;
+
+      // In this case, we include the Info snapshot,
+      // but modified to be similar to the way it was at the commit.
+      //  - Show old title
+      //  - Show old last updated date
+      //  - Show old end commit (in revision history navigator)
+      vizPageData.infoStatic = {
+        ...info,
+
+        // The title is versioned on the content
+        title: content.title,
+
+        // Set the last updated date
+        // to the commit timestamp.
+        updated: commitMetadata.timestamp,
+
+        // Set the `end` commit to the commitId.
+        end: commitMetadata.id,
+      };
+    } else {
+      // Only if we are viewing a live page do we include the
+      // Info snapshot.
+      vizPageData.infoSnapshot = infoSnapshot;
     }
 
     return vizPageData;

@@ -136,6 +136,7 @@ export const VizPageProvider = ({
   // Unpack server-rendered data.
   const {
     infoSnapshot,
+    infoStatic,
     ownerUserSnapshot,
     initialReadmeHTML,
     forkedFromInfoSnapshot,
@@ -156,16 +157,13 @@ export const VizPageProvider = ({
     slugResolutionCache,
   } = buildVizResult;
 
-  // TODO use static Info that shows `info.end` equal to
-  // the commit id we are looking at.
-  const infoShareDBDoc: ShareDBDoc<Info> =
-    useShareDBDoc<Info>(infoSnapshot, 'Info');
-  const info: Info = useData(infoSnapshot, infoShareDBDoc);
-  const submitInfoOperation =
-    useSubmitOperation<Info>(infoShareDBDoc);
-
   // All of these declarations that follow are defined differently
   // depending on whether the viz is at a specific version or live.
+
+  let info: Info;
+  let submitInfoOperation:
+    | ((next: (data: Info) => Info) => void)
+    | undefined;
   let connected: boolean;
   let vizCacheShareDBDocs:
     | Record<string, ShareDBDoc<Content>>
@@ -176,6 +174,9 @@ export const VizPageProvider = ({
   // If we are loading a specific version of the viz...
   if (buildVizResult.type === 'versioned') {
     const { vizCacheContentsStatic } = buildVizResult;
+
+    // Set up the static Info.
+    info = infoStatic;
 
     // If we are the viz at a specific version,
     // we do not need to connect to ShareDB at all.
@@ -189,6 +190,13 @@ export const VizPageProvider = ({
   // If we are loading a live viz (most typical scenario)...
   else if (buildVizResult.type === 'live') {
     const { vizCacheContentSnapshots } = buildVizResult;
+
+    // Set up the live Info ShareDB doc.
+    const infoShareDBDoc: ShareDBDoc<Info> =
+      useShareDBDoc<Info>(infoSnapshot, 'Info');
+    info = useData(infoSnapshot, infoShareDBDoc);
+    submitInfoOperation =
+      useSubmitOperation<Info>(infoShareDBDoc);
 
     // If we are the live viz, we need to connect to ShareDB.
     connected = useShareDBConnectionStatus().connected;

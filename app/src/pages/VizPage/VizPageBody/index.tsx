@@ -378,16 +378,26 @@ export const VizPageBody = () => {
           getVizPageHrefForCommit={getVizPageHrefForCommit}
         />
       )}
+
       <VizPageHead
+        showForkButton={
+          isUserAuthenticated && !commitMetadata
+        }
+        showSettingsButton={
+          canUserEditViz && !commitMetadata
+        }
+        showTrashButton={
+          canUserDeleteViz && !commitMetadata
+        }
+        showExportButton={!commitMetadata}
+        showShareButton={!commitMetadata}
+        showImageButton={!commitMetadata}
         showEditor={showEditor}
         setShowEditor={setShowEditor}
         exportHref={exportHref}
         onShareClick={toggleShareModal}
-        showForkButton={isUserAuthenticated}
         onForkClick={toggleForkModal}
-        showSettingsButton={canUserEditViz}
         onSettingsClick={toggleSettingsModal}
-        showTrashButton={canUserDeleteViz}
         onTrashClick={toggleDeleteVizConfirmationModal}
         downloadImageHref={downloadImageHref}
         toggleShowRevisionHistory={
