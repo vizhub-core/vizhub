@@ -16,18 +16,14 @@ export default defineConfig({
       // because it messes up the WASM part of the build.
       '@rollup/browser',
 
-      // Uncomment the following to use npm link with Vite.
-      // Exclude VZCode, so that we can use `npm link` locally
-      // and still have it work with Vite.
+      // Using `npm link` with VZCode
+      // Steps:
+      // cd ../vzcode
+      // npm link ../vizhub3/node_modules/react-router-dom ../vizhub3/node_modules/react-bootstrap
+      // cd ../vizhub3
+      // npm link vzcode
+      // Uncomment the following line
       // 'vzcode',
-      // 'react-router',
-      // 'react-router-dom',
-      // 'react-dom',
-
-      // Put vzcode here only in dev mode:
-      // ...(process.env.NODE_ENV === 'production'
-      //   ? []
-      //   : ['vzcode']),
     ],
 
     // Fixes "React is undefined" error with VZCode imports

@@ -11,7 +11,7 @@ import { ServerSVG } from '../Icons/sam/ServerSVG';
 import { RectangleStackSVG } from '../Icons/sam/RectangleStackSVG';
 import './styles.scss';
 
-const enableRevisionHistory = false;
+const enableRevisionHistory = true;
 const enableDownloadImage = true;
 const enableAPIButton = false;
 
@@ -24,6 +24,9 @@ export const VizPageHead = ({
   showForkButton,
   showTrashButton,
   showSettingsButton,
+  showExportButton,
+  showShareButton,
+  showImageButton,
   onSettingsClick,
   onTrashClick,
   downloadImageHref,
@@ -58,7 +61,7 @@ export const VizPageHead = ({
             <div className="btn-text">Revision History</div>
           </Button>
         )}
-        {enableDownloadImage && (
+        {enableDownloadImage && showImageButton && (
           <Button
             as="a"
             variant="dark"
@@ -69,10 +72,12 @@ export const VizPageHead = ({
             <div className="btn-text">Image</div>
           </Button>
         )}
-        <Button variant="dark" as="a" href={exportHref}>
-          <ExportSVG />
-          <div className="btn-text">Code</div>
-        </Button>
+        {showExportButton && (
+          <Button variant="dark" as="a" href={exportHref}>
+            <ExportSVG />
+            <div className="btn-text">Code</div>
+          </Button>
+        )}
         {enableAPIButton && (
           <Button
             as="a"
@@ -86,28 +91,30 @@ export const VizPageHead = ({
           </Button>
         )}
 
-        <Button variant="dark" onClick={onShareClick}>
-          <SharedSVG />
-          <div className="btn-text">Share</div>
-        </Button>
-        {showSettingsButton ? (
+        {showShareButton && (
+          <Button variant="dark" onClick={onShareClick}>
+            <SharedSVG />
+            <div className="btn-text">Share</div>
+          </Button>
+        )}
+        {showSettingsButton && (
           <Button variant="dark" onClick={onSettingsClick}>
             <GearSVG />
             <div className="btn-text">Settings</div>
           </Button>
-        ) : null}
-        {showTrashButton ? (
+        )}
+        {showTrashButton && (
           <Button variant="dark" onClick={onTrashClick}>
             <TrashSVG />
             <div className="btn-text">Delete</div>
           </Button>
-        ) : null}
-        {showForkButton ? (
+        )}
+        {showForkButton && (
           <Button variant="dark" onClick={onForkClick}>
             <ForkSVG />
             <div className="btn-text">Fork</div>
           </Button>
-        ) : null}
+        )}
       </div>
     </div>
   );
