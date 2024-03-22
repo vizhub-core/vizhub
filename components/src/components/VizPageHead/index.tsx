@@ -58,7 +58,9 @@ export const VizPageHead = ({
             onClick={toggleShowRevisionHistory}
           >
             <RectangleStackSVG />
-            <div className="btn-text">Revision History</div>
+            <div className="btn-text">
+              Revision History (beta)
+            </div>
           </Button>
         )}
         {enableDownloadImage && showImageButton && (
