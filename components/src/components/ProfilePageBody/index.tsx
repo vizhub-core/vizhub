@@ -22,6 +22,7 @@ import './styles.scss';
 
 const enableEditBio = false;
 const enableCreateVizButton = true;
+const enableAPIKeys = false;
 
 // Feature flags for which sections to show.
 const enabledSections: Set<SectionId> = new Set([
@@ -29,10 +30,13 @@ const enabledSections: Set<SectionId> = new Set([
   SectionId.Private,
   SectionId.Shared,
   SectionId.Starred,
-  SectionId.ApiKeys,
+  // SectionId.ApiKeys,
   // SectionId.Notifications,
   // SectionId.Orgs,
 ]);
+if (enableAPIKeys) {
+  enabledSections.add(SectionId.ApiKeys);
+}
 
 type ProfileSection = {
   id: SectionId;
