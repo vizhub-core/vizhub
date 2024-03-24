@@ -5,6 +5,7 @@ import {
   ForkModal,
   SettingsModal,
   ShareModal,
+  copyToClipboard,
 } from 'components';
 import {
   FREE,
@@ -24,7 +25,6 @@ import { AuthenticatedUserContext } from '../../contexts/AuthenticatedUserContex
 import { getVizPageHref } from '../../accessors';
 import { useOnTrashViz } from './useOnTrashViz';
 import { useValidateSlug } from './useValidateSlug';
-import { copyToClipboard } from './copyToClipboard';
 import { VizPageContext } from './VizPageContext';
 import { isFreeTrialEligible } from '../../accessors/isFreeTrialEligible';
 

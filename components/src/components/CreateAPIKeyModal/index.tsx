@@ -4,25 +4,38 @@ import {
   useRef,
   useEffect,
 } from 'react';
-import { Modal, Form, Button } from '../bootstrap';
-import { VisibilityControl } from '../VisibilityControl';
-import { OwnerControl } from '../OwnerControl';
-import { Plan, UserId, Visibility } from 'entities';
+import {
+  Modal,
+  Form,
+  Button,
+  InputGroup,
+  FormControl,
+} from '../bootstrap';
+import { Spinner } from '../Spinner';
+import { CopyKeySection } from './CopyKeySection';
+import { copyToClipboard } from '../copyToClipboard';
 
 export const CreateAPIKeyModal = ({
   show,
   onClose,
-  onCreate,
+  createAPIKey,
   // currentPlan,
   // enableFreeTrial,
 }: {
   show: boolean;
   onClose: () => void;
-  onCreate: ({ name }: { name: string }) => void;
+  createAPIKey: ({
+    name,
+  }: {
+    name: string;
+  }) => Promise<string>;
   // currentPlan: Plan;
   // enableFreeTrial: boolean;
 }) => {
   const [name, setName] = useState<string>('');
+  const [isCreatingAPIKey, setIsCreatingAPIKey] =
+    useState<boolean>(false);
+  const [apiKey, setApiKey] = useState<string | null>(null);
 
   const handleNameChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,7 +45,12 @@ export const CreateAPIKeyModal = ({
   );
 
   const handleCreateClick = useCallback(() => {
-    onCreate({ name });
+    setName('');
+    setIsCreatingAPIKey(true);
+    createAPIKey({ name }).then((apiKey) => {
+      setApiKey(apiKey);
+      setIsCreatingAPIKey(false);
+    });
   }, [name]);
 
   const inputRef = useRef(null);
@@ -59,38 +77,59 @@ export const CreateAPIKeyModal = ({
     [handleCreateClick],
   );
 
-  return show ? (
+  const handleHide = useCallback(() => {
+    setApiKey(null);
+    setName('');
+    onClose();
+  }, [onClose]);
+
+  return (
     <Modal
       show={show}
-      onHide={onClose}
-      animation={false}
+      onHide={handleHide}
+      animation={true}
       onKeyDown={handleKeyDown}
     >
       <Modal.Header closeButton>
-        <Modal.Title>Create new API key</Modal.Title>
+        <Modal.Title>
+          {apiKey
+            ? 'Save your API key'
+            : 'Create new API key'}
+        </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form.Group className="mb-3" controlId="title">
-          <Form.Label>Name</Form.Label>
-          <Form.Control
-            type="text"
-            value={name}
-            onChange={handleNameChange}
-            ref={inputRef}
-          />
-          <Form.Text className="text-muted">
-            Choose a name for your API key
-          </Form.Text>
-        </Form.Group>
+        {apiKey ? (
+          <CopyKeySection textToCopy={apiKey} />
+        ) : (
+          <Form.Group className="mb-3" controlId="title">
+            <Form.Label>Name</Form.Label>
+            <Form.Control
+              type="text"
+              value={name}
+              onChange={handleNameChange}
+              ref={inputRef}
+            />
+            <Form.Text className="text-muted">
+              Choose a name for your API key
+            </Form.Text>
+          </Form.Group>
+        )}
       </Modal.Body>
       <Modal.Footer>
         <Button
           variant="primary"
-          onClick={handleCreateClick}
+          onClick={apiKey ? handleHide : handleCreateClick}
+          disabled={
+            apiKey ? false : !name || isCreatingAPIKey
+          }
         >
-          Create
+          {isCreatingAPIKey
+            ? 'Creating...'
+            : apiKey
+              ? 'Done'
+              : 'Create'}
         </Button>
       </Modal.Footer>
     </Modal>
-  ) : null;
+  );
 };
