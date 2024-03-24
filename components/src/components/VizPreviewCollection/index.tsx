@@ -5,10 +5,16 @@ import './styles.scss';
 export const VizPreviewCollection = ({
   children,
   opacity = 1,
+  includeSymbols = true,
 }) => (
   <>
-    <ForkSVGSymbol />
-    <StarSVGSymbol />
+    {includeSymbols && (
+      <>
+        <ForkSVGSymbol />
+        <StarSVGSymbol />
+      </>
+    )}
+
     <div
       className="viz-preview-collection"
       style={{

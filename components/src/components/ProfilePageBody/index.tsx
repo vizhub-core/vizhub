@@ -5,7 +5,10 @@ import { PublicSVG } from '../Icons/sam/PublicSVG';
 import { PrivateSVG } from '../Icons/sam/PrivateSVG';
 import { OrganizationsSVG } from '../Icons/sam/OrganizationsSVG';
 import { SharedSVG } from '../Icons/sam/SharedSVG';
-import { StarSVG } from '../Icons/sam/StarSVG';
+import {
+  StarSVG,
+  StarSVGSymbol,
+} from '../Icons/sam/StarSVG';
 import { SectionId, SortId } from 'entities';
 import { useMemo } from 'react';
 import { SidebarSection } from './SidebarSection';
@@ -14,6 +17,7 @@ import { CreateNewButton } from '../CreateNewButton';
 import { ServerSVG } from '../Icons/sam/ServerSVG';
 import { BellSVG } from '../Icons/sam/BellSVG';
 import { PrivateVizzesUpgradeCallout } from '../PrivateVizzesUpgradeCallout';
+import { ForkSVGSymbol } from '../Icons/sam/ForkSVG';
 import './styles.scss';
 
 const enableEditBio = false;
@@ -25,7 +29,7 @@ const enabledSections: Set<SectionId> = new Set([
   SectionId.Private,
   SectionId.Shared,
   SectionId.Starred,
-  // SectionId.ApiKeys,
+  SectionId.ApiKeys,
   // SectionId.Notifications,
   // SectionId.Orgs,
 ]);
@@ -62,6 +66,8 @@ export const ProfilePageBody = ({
 
   showUpgradeCallout,
   enableFreeTrial,
+
+  handleCreateAPIKeyClick,
 }: {
   // Viz preview list props.
   renderVizPreviews: () => React.ReactNode;
@@ -89,6 +95,8 @@ export const ProfilePageBody = ({
   // their private vizzes
   showUpgradeCallout: boolean;
   enableFreeTrial: boolean;
+
+  handleCreateAPIKeyClick: () => void;
 }) => {
   const sections: Array<ProfileSection> = useMemo(
     () =>
@@ -155,6 +163,12 @@ export const ProfilePageBody = ({
 
   return (
     <div className="vh-page vh-profile-page">
+      {/*
+       * Icon symbols are defined here and not in VizPreviews
+       * because the star icon is used in the sidebar.
+       */}
+      <ForkSVGSymbol />
+      <StarSVGSymbol />
       <div className="profile-body vh-page-container">
         <div className="profile-sidebar">
           <div>
@@ -192,17 +206,28 @@ export const ProfilePageBody = ({
             sectionId === 'public' && <HomeStarter />} */}
           <div className="profile-header">
             <h2>{profileHeader}</h2>
-
             <div className="profile-header-controls">
-              {sortOptions ? (
-                <SortControl
-                  sortId={sortId}
-                  setSortId={setSortId}
-                  sortOptions={sortOptions}
+              {sectionId === SectionId.ApiKeys ? (
+                <CreateNewButton
+                  href={null}
+                  label="Create API key"
+                  onClick={handleCreateAPIKeyClick}
                 />
-              ) : null}
-              {enableCreateVizButton &&
-                isViewingOwnProfile && <CreateNewButton />}
+              ) : (
+                <>
+                  {sortOptions ? (
+                    <SortControl
+                      sortId={sortId}
+                      setSortId={setSortId}
+                      sortOptions={sortOptions}
+                    />
+                  ) : null}
+                  {enableCreateVizButton &&
+                    isViewingOwnProfile && (
+                      <CreateNewButton />
+                    )}
+                </>
+              )}
             </div>
           </div>
           {showUpgradeCallout && (
@@ -213,11 +238,16 @@ export const ProfilePageBody = ({
               <PrivateVizzesUpgradeCallout />
             </UpgradeCallout>
           )}
-          <VizPreviewCollection
-            opacity={showUpgradeCallout ? 0.5 : 1}
-          >
-            {renderVizPreviews()}
-          </VizPreviewCollection>
+          {sectionId === SectionId.ApiKeys ? (
+            'API Keys go here'
+          ) : (
+            <VizPreviewCollection
+              opacity={showUpgradeCallout ? 0.5 : 1}
+              includeSymbols={false}
+            >
+              {renderVizPreviews()}
+            </VizPreviewCollection>
+          )}
           <More
             hasMore={hasMore}
             onMoreClick={onMoreClick}
