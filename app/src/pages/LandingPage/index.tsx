@@ -51,4 +51,5 @@ export const LandingPage: Page = ({ pageData }) => {
   );
 };
 
-LandingPage.path = '/';
+LandingPage.path = '/features';
+// LandingPage.path = '/';
