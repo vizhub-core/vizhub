@@ -17,8 +17,10 @@ import { isFreeTrialEligible } from '../../accessors/isFreeTrialEligible';
 
 export const Body = ({
   profileUser,
+  handleCreateAPIKeyClick,
 }: {
   profileUser: User;
+  handleCreateAPIKeyClick: () => void;
 }) => {
   const { userName, picture } = profileUser;
   const authenticatedUser = useContext(
@@ -115,6 +117,7 @@ export const Body = ({
         setSectionId={setSectionId}
         showUpgradeCallout={showUpgradeCallout}
         enableFreeTrial={enableFreeTrial}
+        handleCreateAPIKeyClick={handleCreateAPIKeyClick}
       />
     </div>
   );

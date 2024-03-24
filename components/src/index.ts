@@ -25,4 +25,6 @@ export { ExportCodeUpgradeNudgeModal } from './components/ExportCodeUpgradeNudge
 export { HomeStarter } from './components/HomeStarter';
 export { RevisionHistoryNavigator } from './components/RevisionHistoryNavigator';
 export { VizPageVersionBanner } from './components/VizPageVersionBanner';
+export { CreateAPIKeyModal } from './components/CreateAPIKeyModal';
+export { copyToClipboard } from './components/copyToClipboard';
 import './components/index.scss';

@@ -9,6 +9,8 @@ import { SectionSortProvider } from '../../contexts/SectionSortContext';
 import { Page, PageData } from '../Page';
 import { ProfilePageToasts } from './ProfilePageToasts';
 import { Body } from './Body';
+import { CreateAPIKeyModal } from 'components';
+import { useCallback, useState } from 'react';
 
 export type ProfilePageData = PageData &
   InfosAndOwnersPageData & {
@@ -35,6 +37,28 @@ export const ProfilePage: Page = ({
     'User',
   );
 
+  const [showCreateAPIKeyModal, setShowCreateAPIKeyModal] =
+    useState(false);
+
+  const handleCreateAPIKeyClick = useCallback(() => {
+    setShowCreateAPIKeyModal(true);
+  }, []);
+
+  const handleCloseCreateAPIKeyModal = useCallback(() => {
+    setShowCreateAPIKeyModal(false);
+  }, []);
+
+  const createAPIKey = useCallback(
+    async ({ name }: { name: string }) => {
+      console.log('Creating API key with name:', name);
+      await new Promise((resolve) =>
+        setTimeout(resolve, 3000),
+      );
+      return '43257483295748329';
+    },
+    [],
+  );
+
   return (
     <AuthenticatedUserProvider
       authenticatedUserSnapshot={authenticatedUserSnapshot}
@@ -46,10 +70,20 @@ export const ProfilePage: Page = ({
           hasMoreInitially={hasMore}
           owner={profileUser.id}
         >
-          <Body profileUser={profileUser} />
+          <Body
+            profileUser={profileUser}
+            handleCreateAPIKeyClick={
+              handleCreateAPIKeyClick
+            }
+          />
           <ProfilePageToasts />
         </InfosAndOwnersProvider>
       </SectionSortProvider>
+      <CreateAPIKeyModal
+        show={showCreateAPIKeyModal}
+        onClose={handleCloseCreateAPIKeyModal}
+        createAPIKey={createAPIKey}
+      />
     </AuthenticatedUserProvider>
   );
 };

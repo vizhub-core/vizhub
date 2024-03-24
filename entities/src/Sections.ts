@@ -6,7 +6,7 @@ export enum SectionId {
   Orgs = 'orgs',
   Starred = 'starred',
   Shared = 'shared',
-  ApiKeys = 'apiKeys',
+  ApiKeys = 'api-keys',
   Notifications = 'notifications',
 }
 
