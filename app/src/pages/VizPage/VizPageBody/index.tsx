@@ -48,6 +48,7 @@ import { VizPageContext } from '../VizPageContext';
 import { formatCommitTimestamp } from 'components/src/components/formatCommitTimestamp';
 
 const debug = false;
+const enableVizPageUpgradeBanner = false;
 
 export const VizPageBody = () => {
   // The currently authenticated user, if any.
@@ -404,11 +405,13 @@ export const VizPageBody = () => {
           toggleShowRevisionHistory
         }
       />
-      {isUpgradeBannerVisible && !commitMetadata && (
-        <VizPageUpgradeBanner
-          onClose={handleUpgradeBannerClose}
-        />
-      )}
+      {enableVizPageUpgradeBanner &&
+        isUpgradeBannerVisible &&
+        !commitMetadata && (
+          <VizPageUpgradeBanner
+            onClose={handleUpgradeBannerClose}
+          />
+        )}
       {commitMetadata && (
         <VizPageVersionBanner
           commitTimestampFormatted={formatCommitTimestamp(
