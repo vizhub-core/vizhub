@@ -10,6 +10,7 @@ SandboxPage.getPageData = async ({ gateways }) => {
     'event.pageview.pricing': 'Pricing Page Views',
     'event.login': 'Logins',
     'event.aiAssist': 'AI Assist Invocations',
+    'event.exportViz': 'Viz Exports',
   };
 
   const analyticsEventSnapshots = (

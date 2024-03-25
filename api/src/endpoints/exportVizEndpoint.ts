@@ -14,7 +14,11 @@ import {
   missingParameterError,
 } from 'gateways';
 import { accessDeniedError } from 'gateways/src/errors';
-import { BuildViz, GetInfoByIdOrSlug } from 'interactors';
+import {
+  BuildViz,
+  GetInfoByIdOrSlug,
+  RecordAnalyticsEvents,
+} from 'interactors';
 import { zipFiles } from './zipFiles';
 import { BuildVizResult } from 'interactors/src/buildViz';
 
@@ -28,6 +32,8 @@ export const exportVizEndpoint = ({
   const { getUserByUserName, getContent } = gateways;
   const getInfoByIdOrSlug = GetInfoByIdOrSlug(gateways);
   const buildViz = BuildViz(gateways);
+  const recordAnalyticsEvents =
+    RecordAnalyticsEvents(gateways);
 
   app.get(
     '/api/export-viz/:userName/:vizIdOrSlug/:format',
@@ -277,6 +283,10 @@ export const exportVizEndpoint = ({
           `attachment; filename="${info.slug || slugify(info.title)}.zip"`,
         );
         res.send(zipBuffer);
+
+        await recordAnalyticsEvents({
+          eventId: `event.exportViz`,
+        });
       }
     },
   );
