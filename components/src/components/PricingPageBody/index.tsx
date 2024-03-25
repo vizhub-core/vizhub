@@ -20,6 +20,7 @@ const enableImages = false;
 
 const premiumPriceMonthly = 9.99;
 const premiumPriceAnnually = 99.99;
+const enableConsulting = false;
 
 // The percent saved by paying annually.
 const percentSavings = Math.round(
@@ -165,13 +166,12 @@ export const PricingPageBody = ({
                 </OverlayTrigger>
               </ButtonGroup>
             </div>
-            <p
+            {/* <p
               className="vh-lede-01"
               style={{ color: 'white' }}
             >
-              Our prices will increase by 20% on April 1st,
-              2024. Sign up today to lock in the low rate!
-            </p>
+              Prices increasing on April 1st.
+            </p> */}
             <div className="pricing-page-plans">
               <div className="pricing-page-plan">
                 {enableImages && starterSpiritSrc && (
@@ -269,84 +269,87 @@ export const PricingPageBody = ({
                 </div>
               </div>
             </div>
-            <div className="pricing-page-plans">
-              <div className="pricing-page-plan">
-                {enableImages && premiumSpiritSrc && (
-                  <img
-                    className="plan-spirit"
-                    src={consultationSpiritSrc}
-                    alt="Breakthrough in a data visualization consultation"
-                  />
-                )}
-                <div className="pricing-page-plan-body">
-                  <div className="plan-header">
-                    <h3
-                      className="plan-header-left"
-                      id="consultations"
-                    >
-                      Expert Consultations
-                    </h3>
-                    <div className="plan-header-right">
-                      <h3>$99.99</h3>
-                      <h3 className="plan-header-right-faint">
-                        /session
+            {enableConsulting && (
+              <div className="pricing-page-plans">
+                <div className="pricing-page-plan">
+                  {enableImages && premiumSpiritSrc && (
+                    <img
+                      className="plan-spirit"
+                      src={consultationSpiritSrc}
+                      alt="Breakthrough in a data visualization consultation"
+                    />
+                  )}
+                  <div className="pricing-page-plan-body">
+                    <div className="plan-header">
+                      <h3
+                        className="plan-header-left"
+                        id="consultations"
+                      >
+                        Expert Consultations
                       </h3>
+                      <div className="plan-header-right">
+                        <h3>$99.99</h3>
+                        <h3 className="plan-header-right-faint">
+                          /session
+                        </h3>
+                      </div>
+                    </div>
+                    <p>
+                      Need expert help? Schedule a 1 hour
+                      consultation with data visualization
+                      VizHub expert and VizHub creator{' '}
+                      <a href="https://vizhub.com/curran">
+                        Curran Kelleher
+                      </a>
+                      . Note: Rate is increasing to
+                      $120/session on April 1, 2024.
+                    </p>
+
+                    <Button
+                      variant="primary"
+                      className="pricing-page-plan-button"
+                      as="a"
+                      href="https://calendly.com/curran-kelleher/data-visualization-consultation"
+                      size="lg"
+                    >
+                      Book now
+                    </Button>
+
+                    <div className="pricing-page-plan-features">
+                      <ConsultationFeatures />
                     </div>
                   </div>
-                  <p>
-                    Need expert help? Schedule a 1 hour
-                    consultation with data visualization
-                    VizHub expert and VizHub creator{' '}
-                    <a href="https://vizhub.com/curran">
-                      Curran Kelleher
-                    </a>
-                    . Note: Rate is increasing to
-                    $120/session on April 1, 2024.
-                  </p>
-
-                  <Button
-                    variant="primary"
-                    className="pricing-page-plan-button"
-                    as="a"
-                    href="https://calendly.com/curran-kelleher/data-visualization-consultation"
-                    size="lg"
-                  >
-                    Book now
-                  </Button>
-
-                  <div className="pricing-page-plan-features">
-                    <ConsultationFeatures />
-                  </div>
                 </div>
+                <Testimonial
+                  headshotImgSrc={image('headshot-louis')}
+                  style={{
+                    maxWidth: '420px',
+                    justifyContent: 'space-around',
+                  }}
+                  link="https://www.linkedin.com/in/louis-parizeau-6b0510156/"
+                  quote={
+                    <>
+                      Curran quickly understood my complex
+                      codebase, and was able to fix many of
+                      my visualization's bugs that I
+                      couldn't find solutions for online.
+                      Additionally, he gave specific,
+                      best-practice advice to improve the
+                      load time, UI responsiveness, and
+                      maintainability of my D3
+                      implementation. Curran was great to
+                      work with and I would 100% recommend
+                      him to anyone stuck with D3 bugs, or
+                      looking to refactor their code to
+                      follow best practices.
+                    </>
+                  }
+                  name="Louis Parizeau"
+                  title="Co-Founder"
+                  association="Highgate Analytics"
+                />
               </div>
-              <Testimonial
-                headshotImgSrc={image('headshot-louis')}
-                style={{
-                  maxWidth: '420px',
-                  justifyContent: 'space-around',
-                }}
-                link="https://www.linkedin.com/in/louis-parizeau-6b0510156/"
-                quote={
-                  <>
-                    Curran quickly understood my complex
-                    codebase, and was able to fix many of my
-                    visualization's bugs that I couldn't
-                    find solutions for online. Additionally,
-                    he gave specific, best-practice advice
-                    to improve the load time, UI
-                    responsiveness, and maintainability of
-                    my D3 implementation. Curran was great
-                    to work with and I would 100% recommend
-                    him to anyone stuck with D3 bugs, or
-                    looking to refactor their code to follow
-                    best practices.
-                  </>
-                }
-                name="Louis Parizeau"
-                title="Co-Founder"
-                association="Highgate Analytics"
-              />
-            </div>
+            )}
           </div>
           <Footer />
         </div>

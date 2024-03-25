@@ -5,6 +5,7 @@ import {
   Dropdown,
   Button,
 } from '../bootstrap';
+import { discordLink } from '../discordLink';
 import { HelpSVG } from '../Icons/HelpSVG';
 import { LogoSVG } from '../Icons/LogoSVG';
 import { SearchBox } from '../SearchBox';
@@ -57,8 +58,11 @@ export const Header = ({
           />
         </Nav>
         <Nav className="align-items-md-center">
-          <Nav.Link href="/explore">Explore</Nav.Link>
-          {/* <Nav.Link href="/features">Features</Nav.Link> */}
+          <Nav.Link href={pricingHref}>Pricing</Nav.Link>
+          {/* <Nav.Link href="/explore">Explore</Nav.Link> */}
+          <Nav.Link href="/features">Features</Nav.Link>
+
+          <Nav.Link href={discordLink}>Discord</Nav.Link>
 
           {enableResources && (
             <Dropdown align="end">
@@ -82,7 +86,7 @@ export const Header = ({
               </Dropdown.Menu>
             </Dropdown>
           )}
-          <Nav.Link href={pricingHref}>Pricing</Nav.Link>
+
           <Nav.Link href={createVizHref}>Create</Nav.Link>
           {enableHelpSVG && (
             <Nav.Link

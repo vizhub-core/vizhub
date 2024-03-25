@@ -2,9 +2,17 @@ import { PlusSVG } from '../Icons/sam/PlusSVG';
 import { Button } from '../bootstrap';
 import './styles.scss';
 
-export const CreateNewButton = () => (
-  <Button className="create-new-button" href="/create-viz">
+export const CreateNewButton = ({
+  href = '/create-viz',
+  label = 'Create viz',
+  onClick = undefined,
+}) => (
+  <Button
+    className="create-new-button"
+    href={href}
+    onClick={onClick}
+  >
     <PlusSVG />
-    Create new
+    {label}
   </Button>
 );

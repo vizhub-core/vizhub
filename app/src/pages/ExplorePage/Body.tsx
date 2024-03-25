@@ -67,11 +67,11 @@ export const Body = ({ featuredLiveViz }) => {
         onMoreClick={fetchNextPage}
         isLoadingNextPage={isLoadingNextPage}
       >
-        <HomeStarter />
-        <FeaturedLiveViz
+        {/* <HomeStarter /> */}
+        {/* <FeaturedLiveViz
           userName={featuredLiveViz.userName}
           vizIdOrSlug={featuredLiveViz.vizIdOrSlug}
-        />
+        /> */}
       </ExplorePageBody>
     </div>
   );

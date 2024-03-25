@@ -16,7 +16,7 @@ export const ExplorePageBody = ({
   setSortId,
   sortOptions,
   hasMore,
-  children,
+  children = null,
 }) => {
   return (
     <div className="vh-page vh-explore-page">

@@ -19,8 +19,7 @@ export const HomeStarter = () => {
             others
           </li>
           <li>
-            Join our community on Discord today and say
-            hello!
+            Stay up to data with VizHub platform changes
           </li>
         </ul>
       </div>
@@ -52,7 +51,7 @@ export const HomeStarter = () => {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Browse Forum
+          Forum
         </Button>
         <Button
           variant="secondary"
@@ -61,7 +60,7 @@ export const HomeStarter = () => {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Free Courses
+          Courses
         </Button>
         <Button
           variant="secondary"
