@@ -14,8 +14,13 @@ import {
   missingParameterError,
 } from 'gateways';
 import { accessDeniedError } from 'gateways/src/errors';
-import { BuildViz, GetInfoByIdOrSlug } from 'interactors';
+import {
+  BuildViz,
+  GetInfoByIdOrSlug,
+  RecordAnalyticsEvents,
+} from 'interactors';
 import { zipFiles } from './zipFiles';
+import { BuildVizResult } from 'interactors/src/buildViz';
 
 export const exportVizEndpoint = ({
   app,
@@ -27,6 +32,8 @@ export const exportVizEndpoint = ({
   const { getUserByUserName, getContent } = gateways;
   const getInfoByIdOrSlug = GetInfoByIdOrSlug(gateways);
   const buildViz = BuildViz(gateways);
+  const recordAnalyticsEvents =
+    RecordAnalyticsEvents(gateways);
 
   app.get(
     '/api/export-viz/:userName/:vizIdOrSlug/:format',
@@ -114,16 +121,25 @@ export const exportVizEndpoint = ({
       const authenticatedUserId = undefined;
 
       // Build the viz, to get the imported vizzes!
+      const buildVizResult: BuildVizResult = await buildViz(
+        {
+          type: 'live',
+          id,
+          infoSnapshot,
+          contentSnapshot,
+          authenticatedUserId,
+        },
+      );
+
+      if (buildVizResult.type !== 'live') {
+        throw new Error('Expected live buildVizResult');
+      }
+
       const {
         vizCacheInfoSnapshots,
         vizCacheContentSnapshots,
         slugResolutionCache,
-      } = await buildViz({
-        id,
-        infoSnapshot,
-        contentSnapshot,
-        authenticatedUserId,
-      });
+      } = buildVizResult;
 
       // Lets us look up the slug (${userName}/${slug}) for a given viz ID.
       // Example value of this map:
@@ -267,6 +283,10 @@ export const exportVizEndpoint = ({
           `attachment; filename="${info.slug || slugify(info.title)}.zip"`,
         );
         res.send(zipBuffer);
+
+        await recordAnalyticsEvents({
+          eventId: `event.exportViz`,
+        });
       }
     },
   );
