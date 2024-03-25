@@ -445,58 +445,91 @@ export const LandingPageBody = ({
                 </p>
                 <ul>
                   <li>
-                    API Keys for Read/Write Viz Access via
-                    API
+                    <a href="https://github.com/vizhub-core/vizhub-feedback/issues/788">
+                      API Keys for Read/Write Viz Access via
+                      API
+                    </a>
                   </li>
                   <li>
-                    Revision History: Restore to Previous
-                    Version
+                    <a href="https://github.com/vizhub-core/vizhub-feedback/issues/781">
+                      Revision History: Restore to Previous
+                      Version
+                    </a>
                   </li>
                   <li>
-                    Revision History: Embeds Previousy
-                    Version
+                    <a href="https://github.com/vizhub-core/vizhub-feedback/issues/789">
+                      Revision History: Embed Previous
+                      Version
+                    </a>
                   </li>
                   <li>
-                    Revision History: Export Previous
-                    Version
+                    <a href="https://github.com/vizhub-core/vizhub-feedback/issues/790">
+                      Revision History: Export Previous
+                      Version
+                    </a>
                   </li>
                   <li>
-                    Revision History: Fork From Previous
-                    Version
-                  </li>
-                  <li>Comments: Notifications</li>
-                  <li>Comments: @-Mentions</li>
-                  <li>
-                    Export Formats: Export as React, Vue or
-                    Svelte app
+                    <a href="https://github.com/vizhub-core/vizhub-feedback/issues/791">
+                      Revision History: Fork From Previous
+                      Version
+                    </a>
                   </li>
                   <li>
-                    Export Formats: Export High Resolution
-                    Image
+                    <a href="https://github.com/vizhub-core/vizhub-feedback/issues/792">
+                      Comments: Notifications
+                    </a>
                   </li>
                   <li>
-                    Real-time Apps (persistent dynamic
-                    state)
+                    <a href="https://github.com/vizhub-core/vizhub-feedback/issues/793">
+                      Comments: @-Mentions
+                    </a>
                   </li>
                   <li>
-                    Better Search (text embeddings & vector
-                    similarity search)
+                    <a href="https://github.com/vizhub-core/vizhub-feedback/issues/702">
+                      Export Formats: Export as React, Vue
+                      or Svelte app
+                    </a>
                   </li>
                   <li>
-                    Image Search (image embeddings & vector
-                    similarity search)
+                    <a href="https://github.com/vizhub-core/vizhub-feedback/issues/794">
+                      Persistent Configuration
+                    </a>
                   </li>
-                  <li>Recommended Vizzes</li>
-                  <li>Visual Forks Tree Navigator</li>
                   <li>
-                    Ready-made Branded Dataviz Templates
+                    <a href="https://github.com/vizhub-core/vizhub-feedback/issues/795">
+                      Better Search (text embeddings &
+                      vector similarity search)
+                    </a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/vizhub-core/vizhub-feedback/issues/796">
+                      Image Search (image embeddings &
+                      vector similarity search)
+                    </a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/vizhub-core/vizhub-feedback/issues/797">
+                      Recommended Vizzes
+                    </a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/vizhub-core/vizhub-feedback/issues/798">
+                      Visual Forks Tree Navigator
+                    </a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/vizhub-core/vizhub-feedback/issues/799">
+                      Ready-made Branded Dataviz Templates
+                    </a>
                   </li>
                 </ul>
                 <p>
-                  If you have more ideas for features that
-                  would make VizHub more useful to you,
-                  please let us know by{' '}
-                  <a href="https://github.com/vizhub-core/vizhub-feedback/issues/new/choose">
+                  If any of these resonate with you, please
+                  help us priotitize by commenting on the
+                  linked issues above. If you have more
+                  ideas for features that would make VizHub
+                  more useful to you, please let us know by{' '}
+                  <a href="https://github.com/vizhub-core/vizhub-feedback/issues/new">
                     opening a new issue
                   </a>{' '}
                   or{' '}
