@@ -42,7 +42,7 @@ export const HomeStarter = () => {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Join Discord
+          Discord
         </Button>
         <Button
           variant="secondary"
@@ -64,12 +64,12 @@ export const HomeStarter = () => {
         </Button>
         <Button
           variant="secondary"
-          href="https://github.com/vizhub-core/vizhub-feedback/issues/new/choose"
+          href="https://github.com/vizhub-core/vizhub-feedback/issues/new"
           as="a"
           target="_blank"
           rel="noopener noreferrer"
         >
-          Give Feedback
+          Feedback
         </Button>
       </div>
     </div>

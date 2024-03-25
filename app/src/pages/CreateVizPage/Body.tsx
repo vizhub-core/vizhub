@@ -9,7 +9,6 @@ import {
   curatedVizzes,
 } from './curatedVizzes';
 import { VizPreviewCollection } from 'components/src/components/VizPreviewCollection';
-import { Footer } from 'components/src/components/Footer';
 
 export const Body = () => {
   const { allInfoSnapshots, ownerUserSnapshotsById } =
