@@ -166,12 +166,15 @@ export const PricingPageBody = ({
                 </OverlayTrigger>
               </ButtonGroup>
             </div>
-            {/* <p
+            <p
               className="vh-lede-01"
-              style={{ color: 'white' }}
+              style={{
+                color: 'var(--vh-color-caution-01)',
+              }}
             >
-              Prices increasing on April 1st.
-            </p> */}
+              Price increasing on April 1st to $12/mo.
+              Upgrade now to save!
+            </p>
             <div className="pricing-page-plans">
               <div className="pricing-page-plan">
                 {enableImages && starterSpiritSrc && (

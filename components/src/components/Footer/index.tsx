@@ -21,12 +21,13 @@ export const Footer = () => {
             Pricing
           </a>
           <a
-            href="/explore"
+            href="/features"
             target="_blank"
             rel="noreferrer"
           >
-            Explore
+            Features
           </a>
+
           <a
             href="/create-Viz"
             target="_blank"
@@ -40,6 +41,9 @@ export const Footer = () => {
           <div className="footer-links-title">
             Community
           </div>
+          <a href="/" target="_blank" rel="noreferrer">
+            Explore
+          </a>
           <a
             href={discordLink}
             target="_blank"
