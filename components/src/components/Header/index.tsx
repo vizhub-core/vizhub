@@ -15,7 +15,7 @@ import './styles.css';
 const enableHelpSVG = false;
 
 // Feature flag to enable/disable resources link
-const enableResources = false;
+const enableResources = true;
 
 export const Header = ({
   authenticatedUserAvatarURL,
