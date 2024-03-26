@@ -29,7 +29,7 @@ import { generateAPIKeyEndpoint } from './generateAPIKeyEndpoint';
 import { revokeAPIKeyEndpoint } from './revokeAPIKeyEndpoint';
 
 // TODO get this working in a secure way using API keys
-const enableSetVizEndpoint = false;
+const enableSetVizEndpoint = true;
 
 // TODO get this working
 const enableExportVizEndpoint = true;

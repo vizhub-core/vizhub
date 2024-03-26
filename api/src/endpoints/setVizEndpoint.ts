@@ -33,7 +33,8 @@ const upload = multer({ storage: multer.memoryStorage() });
 
 // This actually works:
 // curl -X POST \
-//      -F "file=@vizhub-export-new.zip" \
+//      -H "Authorization: ${VIZHUB_API_KEY}" \
+//      -F "file=@vizhub-export.zip" \
 //      http://localhost:5173/api/set-viz/curran/awesome
 export const setVizEndpoint = ({
   app,
@@ -60,6 +61,31 @@ export const setVizEndpoint = ({
       const ownerUserName: string = req.params?.userName;
       const file: Express.Multer.File | undefined =
         req.file;
+
+      // Access the Authorization header
+      const apiKeyString: string | undefined =
+        req.headers.authorization;
+      // console.log(
+      //   'authorizationHeader',
+      //   authorizationHeader,
+      // );
+
+      // console.log(
+      //   'authorizationHeader?.split(" ")',
+      //   authorizationHeader?.split(' '),
+      // );
+      // // Extract the VIZHUB_API_KEY from the Authorization header
+      // const apiKeyString: string | undefined =
+      //   authorizationHeader?.split(' ')[1];
+
+      console.log('apiKeyString', apiKeyString);
+
+      // Fail if no API key is provided
+      if (apiKeyString === undefined) {
+        return res
+          .status(400)
+          .send(err(missingParameterError('apiKey')));
+      }
 
       if (!file) {
         return res
@@ -141,6 +167,8 @@ export const setVizEndpoint = ({
       const contentSnapshot = getContentResult.value;
       const oldContent: Content = contentSnapshot.data;
 
+      // Save the new content with isInteracting set to true
+      // so that it triggers a build / hot reload.
       const newContent: Content = {
         ...oldContent,
         files,
