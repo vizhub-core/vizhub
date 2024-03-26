@@ -557,4 +557,9 @@ export interface Gateways {
   getAPIKeys(
     userId: UserId,
   ): Promise<Result<Array<APIKey>>>;
+
+  // Gets the API keys ID for the given hash.
+  getAPIKeyIdFromHash(
+    hash: string,
+  ): Promise<Result<APIKeyId>>;
 }

@@ -9,6 +9,7 @@ import {
 import { accessDeniedError } from 'gateways/src/errors';
 import {
   CommitViz,
+  GetAPIKeyOwner,
   GetInfoByIdOrSlug,
   SaveViz,
 } from 'interactors';
@@ -49,6 +50,7 @@ export const setVizEndpoint = ({
     saveContent,
     getContent,
   } = gateways;
+  const getAPIKeyOwner = GetAPIKeyOwner(gateways);
   const getInfoByIdOrSlug = GetInfoByIdOrSlug(gateways);
   const saveViz = SaveViz({ saveInfo, saveContent });
 
@@ -65,20 +67,6 @@ export const setVizEndpoint = ({
       // Access the Authorization header
       const apiKeyString: string | undefined =
         req.headers.authorization;
-      // console.log(
-      //   'authorizationHeader',
-      //   authorizationHeader,
-      // );
-
-      // console.log(
-      //   'authorizationHeader?.split(" ")',
-      //   authorizationHeader?.split(' '),
-      // );
-      // // Extract the VIZHUB_API_KEY from the Authorization header
-      // const apiKeyString: string | undefined =
-      //   authorizationHeader?.split(' ')[1];
-
-      console.log('apiKeyString', apiKeyString);
 
       // Fail if no API key is provided
       if (apiKeyString === undefined) {
@@ -109,6 +97,29 @@ export const setVizEndpoint = ({
       }
       const ownerUserSnapshot = ownerUserResult.value;
       const userId = ownerUserSnapshot.data.id;
+
+      // Get the owner of the API key
+      const apiKeyOwnerResult =
+        await getAPIKeyOwner(apiKeyString);
+      if (apiKeyOwnerResult.outcome === 'failure') {
+        return res
+          .status(404)
+          .send(apiKeyOwnerResult.error);
+      }
+
+      // Validate that the owner of the API key is the same as
+      // the owner of the viz
+      if (apiKeyOwnerResult.value !== userId) {
+        return res
+          .status(403)
+          .send(
+            err(
+              accessDeniedError(
+                'You are not the owner of this API key. Only the owner can update the viz.',
+              ),
+            ),
+          );
+      }
 
       // Get the Info entity of the Viz.
       const infoResult = await getInfoByIdOrSlug({

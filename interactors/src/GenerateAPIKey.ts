@@ -1,22 +1,14 @@
-import crypto from 'crypto';
 import { Gateways, Result, ok } from 'gateways';
 import {
   UserId,
   APIKey,
   APIKeyId,
   APIKeyHash,
-  dateToTimestamp,
   APIKeyPermission,
   Timestamp,
 } from 'entities';
 import { generateId } from './generateId';
-
-export const computeHash = (apiKey: string): string => {
-  return crypto
-    .createHash('sha256')
-    .update(apiKey)
-    .digest('hex');
-};
+import { computeHash } from './computeHash';
 
 // generatingAPIKey
 // * Generates and stores a new `APIKey` and `APIKeyHash`
