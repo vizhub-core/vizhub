@@ -6,13 +6,17 @@
   .profile-body {
     display: flex;
     flex-direction: row;
-    gap: 70px;
+    gap: 30px;
     width: 100%;
+
+    @media (max-width: 1280px) {
+      flex-direction: column;
+    }
 
     .profile-sidebar {
       display: flex;
       flex-direction: column;
-      gap: 32px;
+      gap: 30px;
       flex: 0 0 300px;
 
       .profile-avatar {
@@ -77,10 +81,17 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 32px;
+      gap: 30px;
+
       .profile-header {
         display: flex;
         justify-content: space-between;
+
+        @media (max-width: 750px) {
+          flex-direction: column;
+          gap: 20px;
+        }
+
         h2 {
           color: var(--vh-color-neutral-01);
           margin-bottom: 0;
@@ -89,6 +100,18 @@
         .profile-header-controls {
           display: flex;
           gap: 28px;
+          align-items: center;
+
+          @media (max-width: 576px) {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 20px;
+          }
+        }
+      }
+
+      .viz-preview-collection {
+        @media (max-width: 576px) {
           align-items: center;
         }
       }
