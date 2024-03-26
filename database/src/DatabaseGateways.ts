@@ -970,6 +970,16 @@ export const DatabaseGateways = ({
     });
   };
 
+  const getAPIKeys = async (userId: UserId) => {
+    const entityName = 'APIKey';
+    const from = toCollectionName(entityName);
+    const collection = mongoDBDatabase.collection(from);
+    const results = await collection
+      .find({ owner: userId })
+      .toArray();
+    return ok(results);
+  };
+
   let databaseGateways = {
     type: 'DatabaseGateways',
     getForks,
@@ -992,6 +1002,7 @@ export const DatabaseGateways = ({
     getUserIdByStripeCustomerId,
     getCommentsForResource,
     getRevisionHistory,
+    getAPIKeys,
   };
 
   for (const entityName of crudEntityNames) {

@@ -24,6 +24,7 @@ import { setVizEndpoint } from './setVizEndpoint';
 import { oembedEndpoint } from './oembedEndpoint';
 import { exportVizEndpoint } from './exportVizEndpoint';
 import { getRevisionHistoryEndpoint } from './getRevisionHistoryEndpoint';
+import { getAPIKeysEndpoint } from './getAPIKeysEndpoint';
 import { generateAPIKeyEndpoint } from './generateAPIKeyEndpoint';
 
 // TODO get this working in a secure way using API keys
@@ -57,6 +58,7 @@ export const endpoints = [
   getVizEndpoint,
   oembedEndpoint,
   getRevisionHistoryEndpoint,
+  getAPIKeysEndpoint,
   generateAPIKeyEndpoint,
 ];
 

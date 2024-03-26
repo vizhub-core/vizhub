@@ -30,7 +30,7 @@ export interface APIKey {
   // A name for this API key.
   name: string;
 
-  // The user or organization that owns this API key.
+  // The user that owns this API key.
   owner: UserId;
 
   // When this API key was created.

@@ -134,6 +134,8 @@ export interface VizKitAPI {
       vizId: VizId,
     ) => Promise<Result<RevisionHistory>>;
 
+    getAPIKeys: () => Promise<Result<Array<APIKey>>>;
+
     generateAPIKey: (options: { name: string }) => Promise<
       Result<{
         apiKey: APIKey;
@@ -319,6 +321,9 @@ export const VizKit = (
         await postJSON(`${baseUrl}/get-revision-history`, {
           vizId,
         }),
+
+      getAPIKeys: async () =>
+        await postJSON(`${baseUrl}/get-api-keys`),
 
       generateAPIKey: async (options: { name: string }) =>
         await postJSON(

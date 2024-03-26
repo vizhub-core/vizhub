@@ -552,4 +552,9 @@ export interface Gateways {
   getRevisionHistory(
     vizId: VizId,
   ): Promise<Result<RevisionHistory>>;
+
+  // Gets the API keys for the given user.
+  getAPIKeys(
+    userId: UserId,
+  ): Promise<Result<Array<APIKey>>>;
 }
