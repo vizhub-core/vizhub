@@ -382,7 +382,7 @@ export const DatabaseGateways = ({
     const collection = mongoDBDatabase.collection(from);
 
     // Get info IDs where the 'popularityUpdated' field is older than 1 day
-    // or nonexistent. Limited to 500 results. Soprted by priority.
+    // or nonexistent. Limited to 500 results. Sorted by priority.
     const oneDayAgo = dateToTimestamp(
       new Date(Date.now() - 1000 * 60 * 60 * 24),
     );
@@ -391,6 +391,14 @@ export const DatabaseGateways = ({
     // const oneDayAgo = dateToTimestamp(
     //   new Date(Date.now() - 1000),
     // );
+
+    // Also, because sometimes vizzes created in the last 24 hours
+    // are scored much higher than they shouold be, we want to update
+    // them more frequently. So we also include vizzes that were created
+    // less than 24 hours ago AND have been scored more than 30 minutes ago.
+    const thirtyMinutesAgo = dateToTimestamp(
+      new Date(Date.now() - 1000 * 60 * 30),
+    );
 
     const results = await collection
       .aggregate([
@@ -408,6 +416,24 @@ export const DatabaseGateways = ({
               { popularityUpdated: { $lt: oneDayAgo } },
               // Score vizzes that have never been scored
               { popularityUpdated: { $exists: false } },
+              // Score Infos created less than 24 hours ago
+              // AND scored more than 30 minutes ago
+              // so that vizzes created in the last 24 hours
+              // are scored more frequently and.
+              // The problem this solves is that non-interesting
+              // vizzes tend to cluster at the top of the list
+              // just because they happen to be scored soon
+              // after creation.
+              {
+                $and: [
+                  { created: { $gte: oneDayAgo } },
+                  {
+                    popularityUpdated: {
+                      $lte: thirtyMinutesAgo,
+                    },
+                  },
+                ],
+              },
             ],
             //   },
             // ],

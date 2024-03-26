@@ -9,21 +9,21 @@
 
 /* This is for setting the padding on the page responsively */
 .vh-page-container {
-  padding: 70px 280px;
+  padding: 70px 140px;
 
   /* Reduced padding for large screens (Bootstrap's xl breakpoint) */
   @media (max-width: 1400px) {
-    padding: 70px 200px;
+    padding: 70px 120px;
   }
 
   /* Further reduced padding for medium-large screens (Bootstrap's lg breakpoint) */
   @media (max-width: 1200px) {
-    padding: 70px 150px;
+    padding: 70px 100px;
   }
 
   /* Moderate padding for small screens/tablets (Bootstrap's md breakpoint) */
   @media (max-width: 992px) {
-    padding: 70px 100px;
+    padding: 70px 70px;
   }
 
   /* Lesser padding for smaller devices (Bootstrap's sm breakpoint) */
@@ -39,8 +39,8 @@
 
 .vh-page-header {
   display: flex;
-  margin-bottom: 40px;
+  margin-bottom: 30px;
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: center;
   width: 100%;
 }
