@@ -977,6 +977,9 @@ export const DatabaseGateways = ({
     const results = await collection
       .find({ owner: userId })
       .toArray();
+    for (const result of results) {
+      delete result._id;
+    }
     return ok(results);
   };
 

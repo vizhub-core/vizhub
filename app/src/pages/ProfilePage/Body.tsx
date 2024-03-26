@@ -15,6 +15,7 @@ import {
   SectionId,
 } from 'entities';
 import {
+  APIKeysList,
   CreateAPIKeyModal,
   ProfilePageBody,
   Spinner,
@@ -126,11 +127,9 @@ export const Body = ({
       apiKeys === null &&
       sectionId === SectionId.ApiKeys
     ) {
-      console.log('Fetching API keys');
       const fetchAPIKeys = async () => {
         const apiKeysResult: Result<Array<APIKey>> =
           await vizKit.rest.getAPIKeys();
-        console.log('apiKeysResult:', apiKeysResult);
         if (apiKeysResult.outcome === 'failure') {
           console.error(
             'Failed to fetch API keys:',
@@ -165,15 +164,14 @@ export const Body = ({
 
       // Side effect: Add the new API key
       // to the list of API keys that feeds into the UI.
-      // setAPIKeys((apiKeys) => typeof apiKeys === Array[...apiKeys, apiKey]);
-      // setAPIKeys((apiKeys) => {
-      //   if (apiKeys === null) {
-      //     return [apiKey];
-      //   } else if (apiKeys === 'LOADING') {
-      //     return 'LOADING';
-      //   }
-      //   return [...apiKeys, apiKey];
-      // }
+      setAPIKeys((apiKeys) => {
+        if (!Array.isArray(apiKeys)) {
+          throw new Error(
+            'API keys should be an array at this point',
+          );
+        }
+        return [...apiKeys, apiKey];
+      });
 
       // Return the string that the user can copy.
       return apiKeyString;
@@ -192,11 +190,6 @@ export const Body = ({
     setShowCreateAPIKeyModal(false);
   }, []);
 
-  const showCreateAPIKeyButton = useMemo(
-    () => apiKeys !== 'LOADING' && apiKeys !== null,
-    [apiKeys],
-  );
-
   return (
     <div className="vh-page overflow-auto">
       <SmartHeader />
@@ -214,11 +207,14 @@ export const Body = ({
         showUpgradeCallout={showUpgradeCallout}
         enableFreeTrial={enableFreeTrial}
         handleCreateAPIKeyClick={handleCreateAPIKeyClick}
-        showCreateAPIKeyButton={showCreateAPIKeyButton}
+        showCreateAPIKeyButton={Array.isArray(apiKeys)}
       >
         {sectionId === SectionId.ApiKeys ? (
-          // <APIKeysList apiKeys={apiKeys} />
-          <Spinner />
+          Array.isArray(apiKeys) ? (
+            <APIKeysList apiKeys={apiKeys} />
+          ) : (
+            <Spinner />
+          )
         ) : (
           <>
             <VizPreviewCollection

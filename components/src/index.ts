@@ -27,4 +27,5 @@ export { RevisionHistoryNavigator } from './components/RevisionHistoryNavigator'
 export { VizPageVersionBanner } from './components/VizPageVersionBanner';
 export { CreateAPIKeyModal } from './components/CreateAPIKeyModal';
 export { copyToClipboard } from './components/copyToClipboard';
+export { APIKeysList } from './components/APIKeysList';
 import './components/index.scss';
