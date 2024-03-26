@@ -1,10 +1,4 @@
-import {
-  Content,
-  FREE,
-  PREMIUM,
-  PRO,
-  User,
-} from 'entities';
+import { Content, PREMIUM, PRO, User } from 'entities';
 import { useMemo } from 'react';
 import type { ShareDBDoc } from 'vzcode';
 import {
@@ -16,6 +10,7 @@ import {
 
 import PrettierWorker from 'vzcode/src/client/usePrettier/worker.ts?worker';
 import TypeScriptWorker from 'vzcode/src/client/useTypeScript/worker?worker';
+import { customInteractRules } from './customInteractRules';
 
 // Instantiate the Prettier and TypeScript workers
 // in the client, but not in SSR.
@@ -136,6 +131,7 @@ export const VizPageEditor = ({
         aiAssistOptions={aiAssistOptions}
         aiAssistTooltipText={aiAssistTooltipText}
         aiAssistClickOverride={aiAssistClickOverride}
+        customInteractRules={customInteractRules}
       />
       {showEditor && <VZResizer side="left" />}
       <VZResizer
