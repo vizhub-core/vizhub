@@ -46,11 +46,7 @@ type ProfileSection = {
 };
 
 export const ProfilePageBody = ({
-  // Viz preview list props.
-  renderVizPreviews,
-  hasMore,
-  onMoreClick,
-  isLoadingNextPage,
+  children,
 
   // User info props.
   userName,
@@ -72,12 +68,9 @@ export const ProfilePageBody = ({
   enableFreeTrial,
 
   handleCreateAPIKeyClick,
+  showCreateAPIKeyButton,
 }: {
-  // Viz preview list props.
-  renderVizPreviews: () => React.ReactNode;
-  hasMore: boolean;
-  onMoreClick: () => void;
-  isLoadingNextPage: boolean;
+  children: React.ReactNode;
 
   // User info props.
   userName: string;
@@ -101,6 +94,7 @@ export const ProfilePageBody = ({
   enableFreeTrial: boolean;
 
   handleCreateAPIKeyClick: () => void;
+  showCreateAPIKeyButton: boolean;
 }) => {
   const sections: Array<ProfileSection> = useMemo(
     () =>
@@ -212,11 +206,13 @@ export const ProfilePageBody = ({
             <h2>{profileHeader}</h2>
             <div className="profile-header-controls">
               {sectionId === SectionId.ApiKeys ? (
-                <CreateNewButton
-                  href={null}
-                  label="Create API key"
-                  onClick={handleCreateAPIKeyClick}
-                />
+                showCreateAPIKeyButton ? (
+                  <CreateNewButton
+                    href={null}
+                    label="Create API key"
+                    onClick={handleCreateAPIKeyClick}
+                  />
+                ) : null
               ) : (
                 <>
                   {sortOptions ? (
@@ -242,21 +238,7 @@ export const ProfilePageBody = ({
               <PrivateVizzesUpgradeCallout />
             </UpgradeCallout>
           )}
-          {sectionId === SectionId.ApiKeys ? (
-            'API Keys go here'
-          ) : (
-            <VizPreviewCollection
-              opacity={showUpgradeCallout ? 0.5 : 1}
-              includeSymbols={false}
-            >
-              {renderVizPreviews()}
-            </VizPreviewCollection>
-          )}
-          <More
-            hasMore={hasMore}
-            onMoreClick={onMoreClick}
-            isLoadingNextPage={isLoadingNextPage}
-          />
+          {children}
         </div>
       </div>
     </div>

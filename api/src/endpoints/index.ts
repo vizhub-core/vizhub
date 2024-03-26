@@ -24,9 +24,12 @@ import { setVizEndpoint } from './setVizEndpoint';
 import { oembedEndpoint } from './oembedEndpoint';
 import { exportVizEndpoint } from './exportVizEndpoint';
 import { getRevisionHistoryEndpoint } from './getRevisionHistoryEndpoint';
+import { getAPIKeysEndpoint } from './getAPIKeysEndpoint';
+import { generateAPIKeyEndpoint } from './generateAPIKeyEndpoint';
+import { revokeAPIKeyEndpoint } from './revokeAPIKeyEndpoint';
 
 // TODO get this working in a secure way using API keys
-const enableSetVizEndpoint = false;
+const enableSetVizEndpoint = true;
 
 // TODO get this working
 const enableExportVizEndpoint = true;
@@ -56,6 +59,9 @@ export const endpoints = [
   getVizEndpoint,
   oembedEndpoint,
   getRevisionHistoryEndpoint,
+  getAPIKeysEndpoint,
+  generateAPIKeyEndpoint,
+  revokeAPIKeyEndpoint,
 ];
 
 if (enableSetVizEndpoint) {

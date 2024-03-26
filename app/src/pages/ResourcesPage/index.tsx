@@ -5,7 +5,7 @@ import { SmartHeader } from '../../smartComponents/SmartHeader';
 import { AuthenticatedUserProvider } from '../../contexts/AuthenticatedUserContext';
 import { Page, PageData } from '../Page';
 
-const vizKit = VizKit({ baseUrl: './api' });
+const vizKit = VizKit();
 
 export type ResourcesPageData = PageData & {
   description: string;
