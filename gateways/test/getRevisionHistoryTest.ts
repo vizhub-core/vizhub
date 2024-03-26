@@ -13,6 +13,7 @@ const isolateMetadata = (
 ): CommitMetadata => ({
   id: commit.id,
   parent: commit.parent,
+  timestamp: commit.timestamp,
 });
 
 export const getRevisionHistoryTest = () => {

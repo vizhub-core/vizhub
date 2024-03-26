@@ -223,7 +223,11 @@ export {
 
 export { isId, generateId, generateFileId } from './Id';
 
-export type { APIKeyId, APIKey } from './APIKeys';
+export type {
+  APIKeyId,
+  APIKey,
+  APIKeyHash,
+} from './APIKeys';
 export { APIKeyPermission } from './APIKeys';
 
 export type {

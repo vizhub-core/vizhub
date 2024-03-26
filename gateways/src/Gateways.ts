@@ -53,10 +53,12 @@ import {
   Visibility,
   ResourceLockId,
   RevisionHistory,
+  APIKey,
 } from 'entities';
 import { Result, Success } from './Result';
 import { MigrationStatusId } from 'entities/src/Migration';
 import { ImageHash } from 'entities/src/Images';
+import { APIKeyHash, APIKeyId } from 'entities/src/APIKeys';
 
 // The maximum number of Info documents to return in a single page from `getInfos()`
 // export const pageSize = 5;
@@ -263,6 +265,20 @@ export interface Gateways {
   deleteBetaProgramSignup(
     id: string,
   ): Promise<Result<Success>>;
+
+  saveUser(user: User): Promise<Result<Success>>;
+  getUser(id: UserId): Promise<Result<Snapshot<User>>>;
+  deleteUser(id: UserId): Promise<Result<Success>>;
+
+  saveAPIKey(apiKey: APIKey): Promise<Result<Success>>;
+  getAPIKey(id: APIKeyId): Promise<Result<APIKey>>;
+  deleteAPIKey(id: APIKeyId): Promise<Result<Success>>;
+
+  saveAPIKeyHash(
+    apiKeyHash: APIKeyHash,
+  ): Promise<Result<Success>>;
+  getAPIKeyHash(id: APIKeyId): Promise<Result<APIKeyHash>>;
+  deleteAPIKeyHash(id: APIKeyId): Promise<Result<Success>>;
 
   // TODO implement these backed by `pgvector` in Supabase
   // saveEmbedding(
