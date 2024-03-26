@@ -17,6 +17,7 @@ import {
 import {
   APIKeysList,
   CreateAPIKeyModal,
+  DeleteAPIKeyConfirmationModal,
   ProfilePageBody,
   Spinner,
 } from 'components';
@@ -182,6 +183,9 @@ export const Body = ({
   const [showCreateAPIKeyModal, setShowCreateAPIKeyModal] =
     useState(false);
 
+  const [apiKeyBeingDeleted, setApiKeyBeingDeleted] =
+    useState<APIKey | null>(null);
+
   const handleCreateAPIKeyClick = useCallback(() => {
     setShowCreateAPIKeyModal(true);
   }, []);
@@ -189,6 +193,15 @@ export const Body = ({
   const handleCloseCreateAPIKeyModal = useCallback(() => {
     setShowCreateAPIKeyModal(false);
   }, []);
+
+  const handleDeleteAPIKeyModalClose = useCallback(() => {
+    setApiKeyBeingDeleted(null);
+  }, []);
+
+  const handleDeleteAPIKeyModalConfirm = useCallback(() => {
+    console.log('TODO delete API key', apiKeyBeingDeleted);
+    setApiKeyBeingDeleted(null);
+  }, [apiKeyBeingDeleted]);
 
   return (
     <div className="vh-page overflow-auto">
@@ -211,7 +224,10 @@ export const Body = ({
       >
         {sectionId === SectionId.ApiKeys ? (
           Array.isArray(apiKeys) ? (
-            <APIKeysList apiKeys={apiKeys} />
+            <APIKeysList
+              apiKeys={apiKeys}
+              setApiKeyBeingDeleted={setApiKeyBeingDeleted}
+            />
           ) : (
             <Spinner />
           )
@@ -235,6 +251,11 @@ export const Body = ({
         show={showCreateAPIKeyModal}
         onClose={handleCloseCreateAPIKeyModal}
         createAPIKey={createAPIKey}
+      />
+      <DeleteAPIKeyConfirmationModal
+        show={apiKeyBeingDeleted !== null}
+        onClose={handleDeleteAPIKeyModalClose}
+        onConfirm={handleDeleteAPIKeyModalConfirm}
       />
     </div>
   );

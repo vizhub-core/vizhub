@@ -4,6 +4,7 @@ import {
   Timestamp,
   timestampToDate,
 } from 'entities';
+import { useCallback } from 'react';
 import { Button, Table } from 'react-bootstrap';
 
 // export const APIKeysList = ({
@@ -26,10 +27,55 @@ export const formatTimestamp = (timestamp: Timestamp) => {
   return format(timestampToDate(timestamp));
 };
 
+const APIKeyRow = ({ apiKey, setApiKeyBeingDeleted }) => {
+  const handleDeleteClick = useCallback(() => {
+    setApiKeyBeingDeleted(apiKey);
+  }, [apiKey, setApiKeyBeingDeleted]);
+
+  return (
+    <tr key={apiKey.id}>
+      <td>{apiKey.name}</td>
+      {/* <td>{`sk...${apiKey.id.substring(0, 4)}`}</td>{' '} */}
+      {/* <td>
+  <Button variant="success" size="sm">
+    Enable
+  </Button>
+</td> */}
+      <td>{formatTimestamp(apiKey.created)}</td>
+      <td>
+        {apiKey.lastUsed
+          ? formatTimestamp(apiKey.lastUsed)
+          : 'Never'}
+      </td>
+      {/* <td>{apiKey.permission}</td> */}
+      <td>
+        {/* <Button variant="warning" size="sm">
+    Edit
+  </Button>{' '} */}
+        <Button
+          variant="danger"
+          size="sm"
+          onClick={handleDeleteClick}
+        >
+          Delete
+        </Button>
+      </td>
+    </tr>
+  );
+};
+
 export const APIKeysList = ({
   apiKeys,
+  setApiKeyBeingDeleted,
+  // const handleDeleteAPIKeyClick = useCallback(
+  //   (apiKey: APIKey) => {
+  //     setApiKeyBeingDeleted(apiKey);
+  //   },
+  //   [],
+  // );
 }: {
   apiKeys: Array<APIKey>;
+  setApiKeyBeingDeleted: (apiKey: APIKey | null) => void;
 }) => {
   return (
     <Table striped bordered hover>
@@ -46,30 +92,11 @@ export const APIKeysList = ({
       </thead>
       <tbody>
         {apiKeys.map((apiKey) => (
-          <tr key={apiKey.id}>
-            <td>{apiKey.name}</td>
-            {/* <td>{`sk...${apiKey.id.substring(0, 4)}`}</td>{' '} */}
-            {/* <td>
-              <Button variant="success" size="sm">
-                Enable
-              </Button>
-            </td> */}
-            <td>{formatTimestamp(apiKey.created)}</td>
-            <td>
-              {apiKey.lastUsed
-                ? formatTimestamp(apiKey.lastUsed)
-                : 'Never'}
-            </td>
-            {/* <td>{apiKey.permission}</td> */}
-            <td>
-              {/* <Button variant="warning" size="sm">
-                Edit
-              </Button>{' '} */}
-              <Button variant="danger" size="sm">
-                Delete
-              </Button>
-            </td>
-          </tr>
+          <APIKeyRow
+            key={apiKey.id}
+            apiKey={apiKey}
+            setApiKeyBeingDeleted={setApiKeyBeingDeleted}
+          />
         ))}
       </tbody>
     </Table>
