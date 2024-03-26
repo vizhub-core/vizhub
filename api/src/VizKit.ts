@@ -11,6 +11,7 @@ import {
   CommentId,
   RevisionHistory,
   APIKey,
+  APIKeyId,
 } from 'entities';
 import { Result, Success } from 'gateways';
 import { InfosAndOwners } from 'interactors/src/getInfosAndOwners';
@@ -142,6 +143,10 @@ export interface VizKitAPI {
         apiKeyString: string;
       }>
     >;
+
+    revokeAPIKey: (
+      apiKeyId: string,
+    ) => Promise<Result<Success>>;
   };
 }
 
@@ -330,6 +335,11 @@ export const VizKit = (
           `${baseUrl}/generate-api-key`,
           options,
         ),
+
+      revokeAPIKey: async (apiKeyId: APIKeyId) =>
+        await postJSON(`${baseUrl}/revoke-api-key`, {
+          apiKeyId,
+        }),
     },
   };
 };

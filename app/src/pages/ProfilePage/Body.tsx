@@ -29,7 +29,7 @@ import { SectionSortContext } from '../../contexts/SectionSortContext';
 import { image } from 'components/src/components/image';
 import { isFreeTrialEligible } from '../../accessors/isFreeTrialEligible';
 import { VizKit } from 'api/src/VizKit';
-import { Result } from 'gateways';
+import { Result, Success } from 'gateways';
 import { VizPreviewCollection } from 'components/src/components/VizPreviewCollection';
 import { More } from 'components/src/components/More';
 
@@ -198,10 +198,34 @@ export const Body = ({
     setApiKeyBeingDeleted(null);
   }, []);
 
-  const handleDeleteAPIKeyModalConfirm = useCallback(() => {
-    console.log('TODO delete API key', apiKeyBeingDeleted);
-    setApiKeyBeingDeleted(null);
-  }, [apiKeyBeingDeleted]);
+  const handleDeleteAPIKeyModalConfirm =
+    useCallback(async () => {
+      setApiKeyBeingDeleted(null);
+
+      const apiKeysResult: Result<Success> =
+        await vizKit.rest.revokeAPIKey(
+          apiKeyBeingDeleted.id,
+        );
+      if (apiKeysResult.outcome === 'failure') {
+        console.error(
+          'Failed to delete API key:',
+          apiKeysResult.error,
+        );
+        return;
+      }
+
+      // Remove the API key from the list after it's been deleted.
+      setAPIKeys((apiKeys) => {
+        if (!Array.isArray(apiKeys)) {
+          throw new Error(
+            'API keys should be an array at this point',
+          );
+        }
+        return apiKeys.filter(
+          (apiKey) => apiKey.id !== apiKeyBeingDeleted.id,
+        );
+      });
+    }, [apiKeyBeingDeleted]);
 
   return (
     <div className="vh-page overflow-auto">

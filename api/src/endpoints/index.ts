@@ -26,6 +26,7 @@ import { exportVizEndpoint } from './exportVizEndpoint';
 import { getRevisionHistoryEndpoint } from './getRevisionHistoryEndpoint';
 import { getAPIKeysEndpoint } from './getAPIKeysEndpoint';
 import { generateAPIKeyEndpoint } from './generateAPIKeyEndpoint';
+import { revokeAPIKeyEndpoint } from './revokeAPIKeyEndpoint';
 
 // TODO get this working in a secure way using API keys
 const enableSetVizEndpoint = false;
@@ -60,6 +61,7 @@ export const endpoints = [
   getRevisionHistoryEndpoint,
   getAPIKeysEndpoint,
   generateAPIKeyEndpoint,
+  revokeAPIKeyEndpoint,
 ];
 
 if (enableSetVizEndpoint) {
