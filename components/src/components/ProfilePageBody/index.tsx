@@ -22,7 +22,7 @@ import './styles.scss';
 
 const enableEditBio = false;
 const enableCreateVizButton = true;
-const enableAPIKeys = false;
+const enableAPIKeys = true;
 
 // Feature flags for which sections to show.
 const enabledSections: Set<SectionId> = new Set([
