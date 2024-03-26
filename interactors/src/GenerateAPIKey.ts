@@ -27,12 +27,12 @@ export const computeHash = (apiKey: string): string => {
 export const GenerateAPIKey =
   ({ saveAPIKey, saveAPIKeyHash }: Gateways) =>
   async ({
+    name,
     owner,
-    authenticatedUser,
     timestamp,
   }: {
+    name: string;
     owner: UserId;
-    authenticatedUser: UserId;
     // The timestamp when the API key was generated.
     timestamp: Timestamp;
   }): Promise<
@@ -50,6 +50,7 @@ export const GenerateAPIKey =
     const apiKeyHash: APIKeyHash = { id, hash };
     const apiKey: APIKey = {
       id,
+      name,
       owner,
       created: timestamp, //dateToTimestamp(new Date()),
       status: 'active',

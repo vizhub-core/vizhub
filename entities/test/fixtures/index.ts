@@ -583,6 +583,7 @@ export const primordialVizThumbnail =
 
 export const sampleAPIKey: APIKey = {
   id: 'apiKey1',
+  name: 'My API Key',
   owner: userJoe.id,
   created: ts1,
   lastUsed: ts2,

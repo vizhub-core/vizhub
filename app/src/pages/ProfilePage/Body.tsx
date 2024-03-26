@@ -10,6 +10,7 @@ import {
   getBio,
   getUserDisplayName,
   FREE,
+  APIKey,
 } from 'entities';
 import {
   CreateAPIKeyModal,
@@ -23,6 +24,7 @@ import { SectionSortContext } from '../../contexts/SectionSortContext';
 import { image } from 'components/src/components/image';
 import { isFreeTrialEligible } from '../../accessors/isFreeTrialEligible';
 import { VizKit } from 'api/src/VizKit';
+import { Result } from 'gateways';
 
 const vizKit = VizKit();
 
@@ -106,16 +108,35 @@ export const Body = ({
     [authenticatedUser],
   );
 
+  const [apiKeys, setAPIKeys] = useState<Array<APIKey>>([]);
+
   const createAPIKey = useCallback(
     async ({ name }: { name: string }) => {
-      console.log('Creating API key with name:', name);
-      vizKit.rest.createAPIKey({ name });
-      await new Promise((resolve) =>
-        setTimeout(resolve, 3000),
-      );
-      return '43257483295748329';
+      console.log('Creating API with name:', name);
+      const generateAPIKeyResult: Result<{
+        apiKey: APIKey;
+        apiKeyString: string;
+      }> = await vizKit.rest.generateAPIKey({ name });
+
+      if (generateAPIKeyResult.outcome === 'failure') {
+        console.error(
+          'Failed to generate API key:',
+          generateAPIKeyResult.error,
+        );
+        return 'Error';
+      }
+
+      const { apiKey, apiKeyString } =
+        generateAPIKeyResult.value;
+
+      // Side effect: Add the new API key
+      // to the list of API keys that feeds into the UI.
+      setAPIKeys([...apiKeys, apiKey]);
+
+      // Return the string that the user can copy.
+      return apiKeyString;
     },
-    [],
+    [apiKeys],
   );
 
   const [showCreateAPIKeyModal, setShowCreateAPIKeyModal] =

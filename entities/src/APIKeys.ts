@@ -27,6 +27,9 @@ export interface APIKey {
   // to the actual hashed API key value `APIKeyHash`.
   id: APIKeyId;
 
+  // A name for this API key.
+  name: string;
+
   // The user or organization that owns this API key.
   owner: UserId;
 

@@ -10,6 +10,7 @@ import {
   Commit,
   CommentId,
   RevisionHistory,
+  APIKey,
 } from 'entities';
 import { Result, Success } from 'gateways';
 import { InfosAndOwners } from 'interactors/src/getInfosAndOwners';
@@ -132,6 +133,13 @@ export interface VizKitAPI {
     getRevisionHistoryCommits: (
       vizId: VizId,
     ) => Promise<Result<RevisionHistory>>;
+
+    generateAPIKey: (options: { name: string }) => Promise<
+      Result<{
+        apiKey: APIKey;
+        apiKeyString: string;
+      }>
+    >;
   };
 }
 
@@ -311,6 +319,12 @@ export const VizKit = (
         await postJSON(`${baseUrl}/get-revision-history`, {
           vizId,
         }),
+
+      generateAPIKey: async (options: { name: string }) =>
+        await postJSON(
+          `${baseUrl}/generate-api-key`,
+          options,
+        ),
     },
   };
 };
