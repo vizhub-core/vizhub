@@ -9,6 +9,7 @@ import {
 import { accessDeniedError } from 'gateways/src/errors';
 import {
   CommitViz,
+  GetAPIKeyOwner,
   GetInfoByIdOrSlug,
   SaveViz,
 } from 'interactors';
@@ -33,7 +34,8 @@ const upload = multer({ storage: multer.memoryStorage() });
 
 // This actually works:
 // curl -X POST \
-//      -F "file=@vizhub-export-new.zip" \
+//      -H "Authorization: ${VIZHUB_API_KEY}" \
+//      -F "file=@vizhub-export.zip" \
 //      http://localhost:5173/api/set-viz/curran/awesome
 export const setVizEndpoint = ({
   app,
@@ -48,6 +50,7 @@ export const setVizEndpoint = ({
     saveContent,
     getContent,
   } = gateways;
+  const getAPIKeyOwner = GetAPIKeyOwner(gateways);
   const getInfoByIdOrSlug = GetInfoByIdOrSlug(gateways);
   const saveViz = SaveViz({ saveInfo, saveContent });
 
@@ -60,6 +63,17 @@ export const setVizEndpoint = ({
       const ownerUserName: string = req.params?.userName;
       const file: Express.Multer.File | undefined =
         req.file;
+
+      // Access the Authorization header
+      const apiKeyString: string | undefined =
+        req.headers.authorization;
+
+      // Fail if no API key is provided
+      if (apiKeyString === undefined) {
+        return res
+          .status(400)
+          .send(err(missingParameterError('apiKey')));
+      }
 
       if (!file) {
         return res
@@ -83,6 +97,29 @@ export const setVizEndpoint = ({
       }
       const ownerUserSnapshot = ownerUserResult.value;
       const userId = ownerUserSnapshot.data.id;
+
+      // Get the owner of the API key
+      const apiKeyOwnerResult =
+        await getAPIKeyOwner(apiKeyString);
+      if (apiKeyOwnerResult.outcome === 'failure') {
+        return res
+          .status(404)
+          .send(apiKeyOwnerResult.error);
+      }
+
+      // Validate that the owner of the API key is the same as
+      // the owner of the viz
+      if (apiKeyOwnerResult.value !== userId) {
+        return res
+          .status(403)
+          .send(
+            err(
+              accessDeniedError(
+                'You are not the owner of this API key. Only the owner can update the viz.',
+              ),
+            ),
+          );
+      }
 
       // Get the Info entity of the Viz.
       const infoResult = await getInfoByIdOrSlug({
@@ -141,6 +178,8 @@ export const setVizEndpoint = ({
       const contentSnapshot = getContentResult.value;
       const oldContent: Content = contentSnapshot.data;
 
+      // Save the new content with isInteracting set to true
+      // so that it triggers a build / hot reload.
       const newContent: Content = {
         ...oldContent,
         files,

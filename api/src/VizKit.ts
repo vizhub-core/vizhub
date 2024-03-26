@@ -10,6 +10,8 @@ import {
   Commit,
   CommentId,
   RevisionHistory,
+  APIKey,
+  APIKeyId,
 } from 'entities';
 import { Result, Success } from 'gateways';
 import { InfosAndOwners } from 'interactors/src/getInfosAndOwners';
@@ -132,15 +134,37 @@ export interface VizKitAPI {
     getRevisionHistoryCommits: (
       vizId: VizId,
     ) => Promise<Result<RevisionHistory>>;
+
+    getAPIKeys: () => Promise<Result<Array<APIKey>>>;
+
+    generateAPIKey: (options: { name: string }) => Promise<
+      Result<{
+        apiKey: APIKey;
+        apiKeyString: string;
+      }>
+    >;
+
+    revokeAPIKey: (
+      apiKeyId: string,
+    ) => Promise<Result<Success>>;
   };
 }
 
 // Modeled after https://github.com/octokit/octokit.js/#constructor-options
 // See also https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#uploading_json_data
-export const VizKit = ({
-  baseUrl,
-  ssrFetch = null,
-}): VizKitAPI => {
+const defaultBaseURL = '/api';
+export const VizKit = (
+  options: {
+    baseUrl?: string;
+    ssrFetch?: typeof window.fetch;
+  } = {
+    baseUrl: defaultBaseURL,
+    ssrFetch: null,
+  },
+): VizKitAPI => {
+  const { baseUrl = defaultBaseURL, ssrFetch = null } =
+    options;
+
   let fetch: typeof window.fetch | typeof ssrFetch;
 
   if (import.meta.env.SSR) {
@@ -301,6 +325,20 @@ export const VizKit = ({
       getRevisionHistoryCommits: async (vizId: VizId) =>
         await postJSON(`${baseUrl}/get-revision-history`, {
           vizId,
+        }),
+
+      getAPIKeys: async () =>
+        await postJSON(`${baseUrl}/get-api-keys`),
+
+      generateAPIKey: async (options: { name: string }) =>
+        await postJSON(
+          `${baseUrl}/generate-api-key`,
+          options,
+        ),
+
+      revokeAPIKey: async (apiKeyId: APIKeyId) =>
+        await postJSON(`${baseUrl}/revoke-api-key`, {
+          apiKeyId,
         }),
     },
   };

@@ -20,8 +20,9 @@ import {
   sampleDeployment,
   sampleMergeRequest,
   sampleBetaProgramSignup,
-  sampleMigrationStatus,
   sampleImageMetadata,
+  sampleAPIKeyHash,
+  sampleAPIKey,
 } from 'entities/test/fixtures';
 import { EntityName } from 'entities';
 
@@ -123,4 +124,6 @@ export const sampleEntities = {
   // MigrationStatus: sampleMigrationStatus,
   // MigrationBatch: sampleMigrationBatch,
   ImageMetadata: sampleImageMetadata,
+  APIKey: sampleAPIKey,
+  APIKeyHash: sampleAPIKeyHash,
 };

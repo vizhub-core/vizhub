@@ -7,7 +7,7 @@ import { Page, PageData } from '../Page';
 // import { EditorDemo } from './EditorDemo';
 import './styles.scss';
 
-const vizKit = VizKit({ baseUrl: './api' });
+const vizKit = VizKit();
 
 export type HomePageData = PageData & {
   description: string;

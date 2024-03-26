@@ -8,6 +8,7 @@
 // https://gitlab.com/curran/vizhub-ee/-/blob/main/prototypes/commitDataModelV1/src/gateways/DatabaseGateways.js
 import { descending } from 'd3-array';
 import {
+  APIKeyHash,
   CommitId,
   EntityName,
   FolderId,
@@ -970,6 +971,32 @@ export const DatabaseGateways = ({
     });
   };
 
+  const getAPIKeys = async (userId: UserId) => {
+    const entityName = 'APIKey';
+    const from = toCollectionName(entityName);
+    const collection = mongoDBDatabase.collection(from);
+    const results = await collection
+      .find({ owner: userId })
+      .toArray();
+    for (const result of results) {
+      delete result._id;
+    }
+    return ok(results);
+  };
+
+  const getAPIKeyIdFromHash = async (hash: string) => {
+    const entity = 'APIKeyHash';
+    const from = toCollectionName(entity);
+    const collection = mongoDBDatabase.collection(from);
+    const result: APIKeyHash = await collection.findOne({
+      hash,
+    });
+    if (result === null) {
+      return err(resourceNotFoundError(hash, entity));
+    }
+    return ok(result.id);
+  };
+
   let databaseGateways = {
     type: 'DatabaseGateways',
     getForks,
@@ -992,6 +1019,8 @@ export const DatabaseGateways = ({
     getUserIdByStripeCustomerId,
     getCommentsForResource,
     getRevisionHistory,
+    getAPIKeys,
+    getAPIKeyIdFromHash,
   };
 
   for (const entityName of crudEntityNames) {

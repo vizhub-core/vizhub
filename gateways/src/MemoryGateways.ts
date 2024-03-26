@@ -22,7 +22,6 @@ import {
   User,
   ResourceId,
   EntityName,
-  ResourceLockId,
   Info,
 } from 'entities';
 import { fakeSnapshot } from 'entities/test/fixtures';
@@ -63,6 +62,8 @@ export const crudEntityNames: Array<EntityName> = [
   // 'MigrationBatch',
   'ImageMetadata',
   'StoredImage',
+  'APIKey',
+  'APIKeyHash',
 ];
 
 // These entities are stored directly in Mongo,
@@ -73,6 +74,8 @@ export const noSnapshot = {
   Milestone: true,
   BetaProgramSignup: true,
   StoredImage: true,
+  APIKey: true,
+  APIKeyHash: true,
 };
 
 // An in-memory implementation for gateways,
