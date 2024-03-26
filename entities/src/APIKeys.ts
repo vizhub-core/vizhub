@@ -11,8 +11,8 @@ export type APIKeyId = string;
 //  * 'ReadSpecificViz': Permission to read a specific viz.
 //  * 'WriteSpecificViz': Permission to write to a specific viz.
 export enum APIKeyPermission {
-  ReadAllPrivateVizzes = 'read_all_private_vizzes',
-  WriteAllPrivateVizzes = 'write_all_private_vizzes',
+  ReadAllVizzes = 'read_all_vizzes',
+  WriteAllVizzes = 'write_all_vizzes',
   ReadSpecificViz = 'read_specific_viz',
   WriteSpecificViz = 'write_specific_viz',
 }
@@ -22,6 +22,9 @@ export enum APIKeyPermission {
 //  * Includes information such as the key's owner, creation date, status, and permissions.
 export interface APIKey {
   // A unique identifier for the API key.
+  // Note: This is not the actual API key itself.
+  // It's just an id that links the `APIKey` (metadata)
+  // to the actual hashed API key value `APIKeyHash`.
   id: APIKeyId;
 
   // The user or organization that owns this API key.
@@ -53,4 +56,25 @@ export interface APIKey {
   // The number of times this API key has been used.
   // Useful for tracking and limiting usage.
   usageCount: number;
+}
+
+// APIKeyHash
+//  * Represents the hashed value of an API key.
+//  * Used for secure storage and comparison of API key values.
+export interface APIKeyHash {
+  // A unique identifier for the API key.
+  // Note: This is not the actual API key itself.
+  // It's just an id that links the `APIKey` (metadata)
+  // to the actual hashed API key value `APIKeyHash`.
+  id: APIKeyId;
+
+  // The hashed value of the API key.
+  // Used for secure storage and comparison of API key values.
+  // Computed using a secure one-way hashing algorithm.
+  // Example implementation:
+  //   import crypto from 'crypto';
+  //   export const computeHash = (apiKey: string): string => {
+  //     return crypto.createHash('sha256').update(apiKey).digest('hex');
+  //   };
+  hash: string;
 }

@@ -27,7 +27,7 @@ export const InfosAndOwnersContext = createContext<{
   hasMore: boolean;
 }>(null);
 
-const vizKit = VizKit({ baseUrl: '/api' });
+const vizKit = VizKit();
 
 // State machine
 // SETTLED --> NEXT_PAGE_REQUESTED --|

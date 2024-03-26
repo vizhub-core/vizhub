@@ -137,10 +137,19 @@ export interface VizKitAPI {
 
 // Modeled after https://github.com/octokit/octokit.js/#constructor-options
 // See also https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#uploading_json_data
-export const VizKit = ({
-  baseUrl,
-  ssrFetch = null,
-}): VizKitAPI => {
+const defaultBaseURL = '/api';
+export const VizKit = (
+  options: {
+    baseUrl?: string;
+    ssrFetch?: typeof window.fetch;
+  } = {
+    baseUrl: defaultBaseURL,
+    ssrFetch: null,
+  },
+): VizKitAPI => {
+  const { baseUrl = defaultBaseURL, ssrFetch = null } =
+    options;
+
   let fetch: typeof window.fetch | typeof ssrFetch;
 
   if (import.meta.env.SSR) {

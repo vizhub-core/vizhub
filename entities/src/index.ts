@@ -194,7 +194,9 @@ export type EntityName =
   // | 'MigrationBatch'
   | 'VizEmbedding'
   | 'ImageMetadata'
-  | 'StoredImage';
+  | 'StoredImage'
+  | 'APIKey'
+  | 'APIKeyHash';
 
 export {
   getFileText,
@@ -221,11 +223,8 @@ export {
 
 export { isId, generateId, generateFileId } from './Id';
 
-export type {
-  APIKeyId,
-  APIKeyPermission,
-  APIKey,
-} from './APIKeys';
+export type { APIKeyId, APIKey } from './APIKeys';
+export { APIKeyPermission } from './APIKeys';
 
 export type {
   NotificationId,

@@ -1,4 +1,9 @@
-import { useCallback, useContext, useMemo } from 'react';
+import {
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+} from 'react';
 import {
   User,
   sortOptions,
@@ -6,7 +11,10 @@ import {
   getUserDisplayName,
   FREE,
 } from 'entities';
-import { ProfilePageBody } from 'components';
+import {
+  CreateAPIKeyModal,
+  ProfilePageBody,
+} from 'components';
 import { SmartHeader } from '../../smartComponents/SmartHeader';
 import { VizPreviewPresenter } from '../../smartComponents/VizPreviewPresenter';
 import { InfosAndOwnersContext } from '../../contexts/InfosAndOwnersContext';
@@ -14,13 +22,14 @@ import { AuthenticatedUserContext } from '../../contexts/AuthenticatedUserContex
 import { SectionSortContext } from '../../contexts/SectionSortContext';
 import { image } from 'components/src/components/image';
 import { isFreeTrialEligible } from '../../accessors/isFreeTrialEligible';
+import { VizKit } from 'api/src/VizKit';
+
+const vizKit = VizKit();
 
 export const Body = ({
   profileUser,
-  handleCreateAPIKeyClick,
 }: {
   profileUser: User;
-  handleCreateAPIKeyClick: () => void;
 }) => {
   const { userName, picture } = profileUser;
   const authenticatedUser = useContext(
@@ -97,6 +106,29 @@ export const Body = ({
     [authenticatedUser],
   );
 
+  const createAPIKey = useCallback(
+    async ({ name }: { name: string }) => {
+      console.log('Creating API key with name:', name);
+      vizKit.rest.createAPIKey({ name });
+      await new Promise((resolve) =>
+        setTimeout(resolve, 3000),
+      );
+      return '43257483295748329';
+    },
+    [],
+  );
+
+  const [showCreateAPIKeyModal, setShowCreateAPIKeyModal] =
+    useState(false);
+
+  const handleCreateAPIKeyClick = useCallback(() => {
+    setShowCreateAPIKeyModal(true);
+  }, []);
+
+  const handleCloseCreateAPIKeyModal = useCallback(() => {
+    setShowCreateAPIKeyModal(false);
+  }, []);
+
   return (
     <div className="vh-page overflow-auto">
       <SmartHeader />
@@ -118,6 +150,11 @@ export const Body = ({
         showUpgradeCallout={showUpgradeCallout}
         enableFreeTrial={enableFreeTrial}
         handleCreateAPIKeyClick={handleCreateAPIKeyClick}
+      />
+      <CreateAPIKeyModal
+        show={showCreateAPIKeyModal}
+        onClose={handleCloseCreateAPIKeyModal}
+        createAPIKey={createAPIKey}
       />
     </div>
   );

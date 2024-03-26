@@ -9,7 +9,7 @@ import { VizPageProvider } from './VizPageContext';
 import { VizPageData } from './VizPageData';
 import './styles.scss';
 
-const vizKit = VizKit({ baseUrl: '/api' });
+const vizKit = VizKit();
 
 // Inspired by https://github.com/vitejs/vite-plugin-react/blob/main/playground/ssr-react/src/pages/Home.jsx
 export const VizPage: Page = ({

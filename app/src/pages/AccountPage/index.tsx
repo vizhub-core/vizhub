@@ -12,7 +12,7 @@ import { setCookie } from '../cookies';
 import './styles.scss';
 import { AccountPageToasts } from './AccountPageToasts';
 
-const vizKit = VizKit({ baseUrl: './api' });
+const vizKit = VizKit();
 
 export type AccountPageData = PageData & {
   description: string;
