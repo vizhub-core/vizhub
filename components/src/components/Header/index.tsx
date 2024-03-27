@@ -15,7 +15,7 @@ import './styles.css';
 const enableHelpSVG = false;
 
 // Feature flag to enable/disable resources link
-const enableResources = false;
+const enableResources = true;
 
 export const Header = ({
   authenticatedUserAvatarURL,
@@ -60,9 +60,9 @@ export const Header = ({
         <Nav className="align-items-md-center">
           <Nav.Link href={pricingHref}>Pricing</Nav.Link>
           {/* <Nav.Link href="/explore">Explore</Nav.Link> */}
-          <Nav.Link href="/features">Features</Nav.Link>
+          {/* <Nav.Link href="/features">Features</Nav.Link> */}
 
-          <Nav.Link href={discordLink}>Discord</Nav.Link>
+          {/* <Nav.Link href={discordLink}>Discord</Nav.Link> */}
 
           {enableResources && (
             <Dropdown align="end">
@@ -73,21 +73,29 @@ export const Header = ({
                 Resources
               </Dropdown.Toggle>
               <Dropdown.Menu>
-                <Dropdown.Item href="#resource1">
-                  Resource 1
+                <Dropdown.Item href="/features">
+                  Features
                 </Dropdown.Item>
-                <Dropdown.Item href="#resource2">
-                  Resource 2
+                <Dropdown.Item href={discordLink}>
+                  Discord
                 </Dropdown.Item>
-                <Dropdown.Item href="#resource3">
-                  Resource 3
+                <Dropdown.Item href="/forum">
+                  Forum
                 </Dropdown.Item>
-                {/* Add more resources as needed */}
+                {/* <Dropdown.Item href="/documentation">
+                  Documentation
+                </Dropdown.Item> */}
+                <Dropdown.Item href="https://github.com/vizhub-core/vizhub-feedback/issues">
+                  Feedback
+                </Dropdown.Item>
+                <Dropdown.Item href={createVizHref}>
+                  Create Viz
+                </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
           )}
 
-          <Nav.Link href={createVizHref}>Create</Nav.Link>
+          {/* <Nav.Link href={createVizHref}>Create</Nav.Link> */}
           {enableHelpSVG && (
             <Nav.Link
               href="https://vizhub.com/forum/c/help/6"

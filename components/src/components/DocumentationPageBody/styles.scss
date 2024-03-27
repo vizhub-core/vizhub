@@ -1,0 +1,255 @@
+.vh-documentation-page {
+  overflow: auto;
+  position: relative;
+
+  h3 {
+    line-height: 1.5;
+  }
+
+  a {
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  img.header-background {
+    position: absolute;
+    width: 100%;
+    height: 836px;
+    object-fit: cover;
+  }
+
+  .landing-page-body {
+    position: absolute;
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    .landing-page-content {
+      width: 100%;
+      max-width: 1200px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 10px;
+
+      .landing-page-tagline {
+        color: white;
+        opacity: 0.5;
+        font-size: 26px;
+        font-weight: 600;
+        padding-top: 128px;
+        text-align: center;
+      }
+
+      .landing-page-headline {
+        color: white;
+        font-weight: 600;
+        font-size: 52px;
+        text-align: center;
+        line-height: 72px;
+        padding-bottom: 55px;
+        padding-top: 32px;
+      }
+
+      img.header-foreground {
+        width: 1128px;
+        border-radius: 16px;
+        box-shadow: 0px 64px 60px 0px rgba(0, 0, 0, 0.11);
+        margin-top: 100px;
+        margin-bottom: 100px;
+      }
+    }
+    .features-container {
+      background-color: white;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 70px;
+      padding-bottom: 150px;
+
+      .white-background-section {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        h1 {
+          margin-top: 120px;
+          margin-bottom: 28px;
+        }
+
+        .vh-lede-01 {
+          max-width: 760px;
+        }
+      }
+      .white-background-section.blurb-and-testimonial {
+        // margin-top: 70px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+
+        // mobile
+        @media (max-width: 1400px) {
+          flex-direction: column;
+          align-items: center;
+          gap: 50px;
+        }
+        .landing-page-content {
+          width: auto;
+          max-width: none;
+        }
+      }
+      .feature-section {
+        color: var(--vh-color-neutral-01);
+
+        width: 100%;
+        display: flex;
+        justify-content: center;
+
+        .feature-section-content {
+          width: 1500px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          border-radius: 20px;
+
+          /* Flex direction column media query */
+          @media (max-width: 1200px) {
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+          }
+
+          .feature-section-copy,
+          .feature-section-image {
+            padding: 0 100px;
+            position: relative;
+
+            @media (max-width: 1200px) {
+              display: flex;
+              flex-direction: column;
+              gap: 30px;
+            }
+
+            .collaboration-demo-video-overlay {
+              @media (min-width: 1200px) {
+                position: absolute;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                left: 0;
+              }
+
+              display: flex;
+              align-items: flex-start;
+              justify-content: center;
+
+              video {
+                border-radius: 20px;
+
+                @media (min-width: 1200px) {
+                  position: absolute;
+                  max-width: 650px;
+                  top: -10px;
+                }
+              }
+            }
+            .explore-thumbnails {
+              box-shadow: var(--vh-box-shadow);
+            }
+          }
+
+          @keyframes rotate-back-and-forth {
+            0%,
+            100% {
+              transform: rotate(-30deg);
+            }
+            50% {
+              transform: rotate(30deg);
+            }
+          }
+
+          .feature-section-image.rotating-image img {
+            animation: rotate-back-and-forth 70s infinite
+              alternate ease-in-out;
+            border-radius: 50%;
+          }
+
+          .feature-section-copy {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+            max-width: 760px;
+            align-items: flex-start;
+
+            @media (max-width: 768px) {
+              gap: 12px;
+            }
+
+            p {
+              font-size: 20px;
+              line-height: 32px;
+            }
+          }
+
+          .feature-section-copy,
+          .feature-section-image {
+            flex: 1;
+            padding: 100px;
+
+            /* Less padding on tablet */
+            @media (max-width: 1200px) {
+              padding: 50px;
+            }
+            /* Even less padding on mobile */
+            @media (max-width: 768px) {
+              padding: 30px;
+            }
+          }
+
+          .feature-section-image {
+            img,
+            video {
+              border-radius: 20px;
+
+              /* Scale it down based on available width */
+              width: 100%;
+            }
+          }
+        }
+        .feature-section-content.brand-background {
+          background: var(--vh-color-background-01);
+          position: relative; /* This is needed to position the pseudo-element */
+          overflow: hidden; /* This will clip the circle at the edges of the container */
+
+          /* The circle */
+          &::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-1%, -50%);
+            width: 1200px;
+            height: 1200px;
+            background-color: var(--vh-color-background-02);
+            border-radius: 50%;
+          }
+
+          .feature-section-image {
+            position: relative;
+          }
+
+          video {
+            box-shadow: var(--vh-box-shadow);
+          }
+        }
+      }
+    }
+  }
+}

@@ -227,15 +227,21 @@ export const exportVizEndpoint = ({
           // If there is a package.json file, update the name field
           const nameField = `@${ownerUserName}/${directoryName}`;
           if (packageJsonFile) {
-            const packageJson = JSON.parse(
-              packageJsonFile.text,
-            );
-            packageJson.name = nameField;
-            packageJsonFile.text = JSON.stringify(
-              packageJson,
-              null,
-              2,
-            );
+            // Attempt to add the `name` field to the package.json file.
+            try {
+              const packageJson = JSON.parse(
+                packageJsonFile.text,
+              );
+              packageJson.name = nameField;
+              packageJsonFile.text = JSON.stringify(
+                packageJson,
+                null,
+                2,
+              );
+            } catch (e) {
+              // Invalid JSON? Oh well! ¯\_(ツ)_/¯
+              // No name field for you.
+            }
           } else {
             // If there is no package.json file, create one
             const newPackageJson = {
