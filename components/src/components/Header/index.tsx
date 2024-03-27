@@ -88,13 +88,14 @@ export const Header = ({
                 <Dropdown.Item href="https://github.com/vizhub-core/vizhub-feedback/issues">
                   Feedback
                 </Dropdown.Item>
-
-                {/* Add more resources as needed */}
+                <Dropdown.Item href={createVizHref}>
+                  Create Viz
+                </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
           )}
 
-          <Nav.Link href={createVizHref}>Create</Nav.Link>
+          {/* <Nav.Link href={createVizHref}>Create</Nav.Link> */}
           {enableHelpSVG && (
             <Nav.Link
               href="https://vizhub.com/forum/c/help/6"
