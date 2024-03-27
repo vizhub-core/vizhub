@@ -13,6 +13,7 @@ import { ResourcesPage } from './ResourcesPage/server';
 import { KitchenSinkPage } from './KitchenSinkPage/server';
 import { CreateVizPage } from './CreateVizPage/server';
 import { StargazersPage } from './StargazersPage/server';
+import { DocumentationPage } from './DocumentationPage/server';
 
 // import { ExploreRedirect } from './ExploreRedirect';
 
@@ -33,6 +34,7 @@ export const pages = [
   SandboxPage,
   ExplorePage,
   // ExploreRedirect,
+  DocumentationPage,
   PricingPage,
   AccountPage,
   SearchPage,

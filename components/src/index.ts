@@ -29,4 +29,5 @@ export { CreateAPIKeyModal } from './components/CreateAPIKeyModal';
 export { copyToClipboard } from './components/copyToClipboard';
 export { APIKeysList } from './components/APIKeysList';
 export { DeleteAPIKeyConfirmationModal } from './components/DeleteAPIKeyConfirmationModal';
+export { DocumentationPageBody } from './components/DocumentationPageBody';
 import './components/index.scss';

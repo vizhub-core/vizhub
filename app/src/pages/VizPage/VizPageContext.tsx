@@ -119,6 +119,7 @@ export type VizPageContextValue = {
   // null signifies that the data is still loading.
   revisionHistory: RevisionHistory | null;
   commitMetadata?: CommitMetadata;
+  runtimeVersion: number;
 };
 
 export const VizPageContext =
@@ -467,6 +468,7 @@ export const VizPageProvider = ({
     toggleShowRevisionHistory,
     revisionHistory,
     commitMetadata,
+    runtimeVersion,
   };
 
   return (
