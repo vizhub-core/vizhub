@@ -19,7 +19,7 @@ import './styles.scss';
 import { useSearchParams } from 'react-router-dom';
 import { isFreeTrialEligible } from '../../accessors/isFreeTrialEligible';
 
-const vizKit = VizKit({ baseUrl: './api' });
+const vizKit = VizKit();
 
 export type PricingPageData = PageData & {
   description: string;

@@ -1,11 +1,9 @@
 import express from 'express';
 import {
   Info,
-  Permission,
   PermissionId,
   UserId,
   VizId,
-  dateToTimestamp,
 } from 'entities';
 import {
   Gateways,

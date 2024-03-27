@@ -31,3 +31,6 @@ export { ScoreStaleVizzes } from './scoreStaleVizzes';
 export { GetInfoByIdOrSlug } from './getInfoByIdOrSlug';
 export { ResolveSlug } from './resolveSlug';
 export { BuildViz } from './buildViz';
+export { GenerateAPIKey } from './GenerateAPIKey';
+export { RevokeAPIKey } from './RevokeAPIKey';
+export { GetAPIKeyOwner } from './GetAPIKeyOwner';

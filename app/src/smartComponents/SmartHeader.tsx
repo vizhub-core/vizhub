@@ -4,8 +4,7 @@ import { AuthenticatedUserContext } from '../contexts/AuthenticatedUserContext';
 import { useOpenBillingPortal } from '../pages/useOpenBillingPortal';
 import { VizKit } from 'api/src/VizKit';
 
-// TODO move this to a context.
-const vizKit = VizKit({ baseUrl: './api' });
+const vizKit = VizKit();
 
 // Navigate to the home page when the user clicks on the VizHub logo.
 const handleVizHubClick = () => {

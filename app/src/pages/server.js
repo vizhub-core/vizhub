@@ -22,13 +22,13 @@ export const pages = [
   LandingPage,
   AboutPage,
 
+  StargazersPage,
   // Forks pave MUST come before viz page
   // because otherwise the path conflicts
   // with the versioned variant of the viz page.
   ForksPage,
 
   VizPage,
-  StargazersPage,
   BetaConfirmPage,
   SandboxPage,
   ExplorePage,

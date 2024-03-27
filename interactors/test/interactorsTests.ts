@@ -22,6 +22,7 @@ import { getImageTest } from './getImageTest';
 import { getThumbnailTest } from './getThumbnailTest';
 import { deleteVizTest } from './deleteVizTest';
 import { getInfoByIdOrSlugTest } from './getInfoByIdOrSlugTest';
+import { apiKeyManagementTest } from './apiKeyManagementTest';
 
 export const interactorsTests = () => {
   describe('Interactors', () => {
@@ -44,6 +45,8 @@ export const interactorsTests = () => {
 
     deleteVizTest();
     getInfoByIdOrSlugTest();
+
+    apiKeyManagementTest();
     // restoreVersionTest();
     // mergeTest();
 

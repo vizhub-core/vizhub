@@ -4,16 +4,8 @@ import {
   useRef,
   useEffect,
 } from 'react';
-import {
-  Modal,
-  Form,
-  Button,
-  InputGroup,
-  FormControl,
-} from '../bootstrap';
-import { Spinner } from '../Spinner';
+import { Modal, Form, Button } from '../bootstrap';
 import { CopyKeySection } from './CopyKeySection';
-import { copyToClipboard } from '../copyToClipboard';
 
 export const CreateAPIKeyModal = ({
   show,
