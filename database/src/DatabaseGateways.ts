@@ -388,11 +388,6 @@ export const DatabaseGateways = ({
       new Date(Date.now() - 1000 * 60 * 60 * 24),
     );
 
-    // Temporarily disable to recompute all vizzes sooner
-    // const oneDayAgo = dateToTimestamp(
-    //   new Date(Date.now() - 1000),
-    // );
-
     // Also, because sometimes vizzes created in the last 24 hours
     // are scored much higher than they shouold be, we want to update
     // them more frequently. So we also include vizzes that were created
@@ -405,47 +400,51 @@ export const DatabaseGateways = ({
       .aggregate([
         {
           $match: {
-            // $and: [
-            //   {
-            //     // Only score vizzes older than 1 day
-            //     created: { $lt: oneDayAgo },
-            //   },
-            //   {
             $or: [
               // Score vizzes whose popularity score
-              // has not been updated in the last 1 day
+              // has not been updated in the last 1 day.
               { popularityUpdated: { $lt: oneDayAgo } },
+
               // Score vizzes that have never been scored
               { popularityUpdated: { $exists: false } },
+
               // Score Infos created less than 24 hours ago
               // AND scored more than 30 minutes ago
               // so that vizzes created in the last 24 hours
-              // are scored more frequently and.
+              // are scored more frequently.
+              //
               // The problem this solves is that non-interesting
               // vizzes tend to cluster at the top of the list
               // just because they happen to be scored soon
               // after creation.
               {
                 $and: [
-                  { created: { $gte: oneDayAgo } },
+                  { created: { $gt: oneDayAgo } },
                   {
                     popularityUpdated: {
-                      $lte: thirtyMinutesAgo,
+                      $lt: thirtyMinutesAgo,
                     },
                   },
                 ],
               },
             ],
-            //   },
-            // ],
           },
         },
         {
           $project: {
             _id: 1,
             popularityUpdated: 1,
+
+            // Figure out if it was created in the last 24 hours
+            recentlyCreated: {
+              $cond: {
+                if: { $gte: ['$created', oneDayAgo] },
+                then: 1,
+                else: 0,
+              },
+            },
             // Add a field to sort documents with no popularityUpdated to the top
-            sortField: {
+            neverScored: {
               $cond: {
                 if: {
                   $ifNull: ['$popularityUpdated', false],
@@ -457,13 +456,15 @@ export const DatabaseGateways = ({
           },
         },
         {
-          // Sort by the new field in descending order (nulls first)
-          // and then by popularityUpdated in ascending order
-          // In other words:
-          // * Priority 1: Documents with no popularityUpdated
-          // * Priority 2: Documents with popularityUpdated,
-          //               updating the oldest scores first.
-          $sort: { sortField: -1, popularityUpdated: 1 },
+          // Sort by the new fields in the following order:
+          // 1. Documents with no popularityUpdated (nulls first)
+          // 2. Documents created within the last 24 hours (recent first)
+          // 3. Documents with popularityUpdated, updating the oldest scores first.
+          $sort: {
+            neverScored: -1,
+            recentlyCreated: -1,
+            popularityUpdated: 1,
+          },
         },
         { $limit: batchSize },
       ])
