@@ -120,9 +120,10 @@ export const VizPageEditor = ({
   const { runtimeVersion } = useContext(VizPageContext);
 
   // Allow globals in the linter for runtime version 2.
-  const allowGlobals = useMemo(() => {
-    runtimeVersion !== 3;
-  }, [runtimeVersion]);
+  const allowGlobals = useMemo(
+    () => runtimeVersion !== 3,
+    [runtimeVersion],
+  );
 
   return (
     <VZCodeProvider
