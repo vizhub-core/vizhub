@@ -1,10 +1,4 @@
-import {
-  Content,
-  PREMIUM,
-  PRO,
-  User,
-  getRuntimeVersion,
-} from 'entities';
+import { Content, PREMIUM, PRO, User } from 'entities';
 import { useContext, useMemo } from 'react';
 import type { ShareDBDoc } from 'vzcode';
 import {
@@ -15,7 +9,7 @@ import {
 } from 'vzcode';
 
 import PrettierWorker from 'vzcode/src/client/usePrettier/worker.ts?worker';
-import TypeScriptWorker from 'vzcode/src/client/useTypeScript/worker?worker';
+import TypeScriptWorker from 'vzcode/src/client/useTypeScript/worker/index.ts?worker';
 import { customInteractRules } from './customInteractRules';
 import { VizPageContext } from '../VizPageContext';
 
@@ -124,6 +118,8 @@ export const VizPageEditor = ({
     () => runtimeVersion !== 3,
     [runtimeVersion],
   );
+
+  // console.log('allowGlobals', allowGlobals);
 
   return (
     <VZCodeProvider
