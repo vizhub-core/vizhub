@@ -24,7 +24,7 @@
     "vizhub-ui": "^3.21.0"
   },
   "devDependencies": {
-    "@types/react": "^18.2.71",
+    "@types/react": "^18.2.72",
     "@types/react-dom": "^18.2.22",
     "@vitejs/plugin-react": "^4.2.1",
     "prettier": "^3.2.5",

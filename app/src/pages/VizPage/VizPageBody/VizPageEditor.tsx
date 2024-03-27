@@ -1,5 +1,11 @@
-import { Content, PREMIUM, PRO, User } from 'entities';
-import { useMemo } from 'react';
+import {
+  Content,
+  PREMIUM,
+  PRO,
+  User,
+  getRuntimeVersion,
+} from 'entities';
+import { useContext, useMemo } from 'react';
 import type { ShareDBDoc } from 'vzcode';
 import {
   VZCodeProvider,
@@ -11,6 +17,7 @@ import {
 import PrettierWorker from 'vzcode/src/client/usePrettier/worker.ts?worker';
 import TypeScriptWorker from 'vzcode/src/client/useTypeScript/worker?worker';
 import { customInteractRules } from './customInteractRules';
+import { VizPageContext } from '../VizPageContext';
 
 // Instantiate the Prettier and TypeScript workers
 // in the client, but not in SSR.
@@ -110,6 +117,13 @@ export const VizPageEditor = ({
       }
     }, [canUserUseAIAssist]);
 
+  const { runtimeVersion } = useContext(VizPageContext);
+
+  // Allow globals in the linter for runtime version 2.
+  const allowGlobals = useMemo(() => {
+    runtimeVersion !== 3;
+  }, [runtimeVersion]);
+
   return (
     <VZCodeProvider
       content={content}
@@ -132,6 +146,7 @@ export const VizPageEditor = ({
         aiAssistTooltipText={aiAssistTooltipText}
         aiAssistClickOverride={aiAssistClickOverride}
         customInteractRules={customInteractRules}
+        allowGlobals={allowGlobals}
       />
       {showEditor && <VZResizer side="left" />}
       <VZResizer
