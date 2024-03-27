@@ -19,9 +19,9 @@ import { StargazersPage } from './StargazersPage';
 export const pages = [
   LandingPage,
   AboutPage,
-  VizPage,
-  ForksPage,
   StargazersPage,
+  ForksPage,
+  VizPage,
   BetaConfirmPage,
   SandboxPage,
   ExplorePage,
