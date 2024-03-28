@@ -27,7 +27,7 @@ export const getVizEndpoint = ({
   const { getUserByUserName, getContent } = gateways;
   const getInfoByIdOrSlug = GetInfoByIdOrSlug(gateways);
   app.get(
-    '/api/get-viz/:userName/:vizIdOrSlug.:format',
+    '/api/get-viz/:format/:userName/:vizIdOrSlug',
     express.json(),
     async (req, res) => {
       const idOrSlug: VizId | undefined =
