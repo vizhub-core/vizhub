@@ -1,7 +1,13 @@
-import { UserId, Visibility, VizId } from 'entities';
+import {
+  Content,
+  UserId,
+  Visibility,
+  VizId,
+} from 'entities';
 import { useCallback } from 'react';
 import { Result, VizHubErrorCode } from 'gateways';
 import { setCookie } from '../cookies';
+import { VizKitAPI } from 'api/src/VizKit';
 
 // Useful for debugging fork flow.
 const debug = false;
@@ -13,23 +19,33 @@ export const useOnFork = ({
   id,
   content,
   setShareDBError,
+  toggleForkModal,
+}: {
+  vizKit: VizKitAPI;
+  id: VizId;
+  content: Content;
+  setShareDBError: (error: any) => void;
+  toggleForkModal: () => void;
 }) =>
   useCallback(
-    ({
+    async ({
       owner,
       title,
       visibility,
+      preserveREADME,
     }: {
       // These values come from the fork modal
       owner: UserId;
       title: string;
       visibility: Visibility;
+      preserveREADME?: boolean;
     }) => {
       const forkVizOptions = {
         forkedFrom: id,
         owner,
         title,
         visibility,
+        preserveREADME,
       };
       if (debug) {
         console.log(
@@ -37,37 +53,27 @@ export const useOnFork = ({
           JSON.stringify(forkVizOptions, null, 2),
         );
       }
-      vizKit.rest.forkViz(forkVizOptions).then(
-        (
-          result: Result<{
-            vizId: VizId;
-            ownerUserName: string;
-          }>,
-        ) => {
-          if (result.outcome === 'failure') {
-            if (
-              result.error.code ===
-              VizHubErrorCode.tooLargeForFree
-            ) {
-              console.log(result.error);
-              setShareDBError(result.error);
-            } else {
-              console.log('TODO handle failure to fork');
-              console.log(result.error);
-            }
 
-            return;
-          }
-          const { vizId, ownerUserName } = result.value;
-          const url = `/${ownerUserName}/${vizId}`;
+      const forkVizResult: Result<{
+        vizId: VizId;
+        ownerUserName: string;
+      }> = await vizKit.rest.forkViz(forkVizOptions);
 
-          // Populate cookie to show toast on the other side, after redirect.
-          // See Toasts.tsx
-          setCookie('showForkToast', 'true', 1);
+      // Show any errors as a toast.
+      // Most common error is that the viz is too large.
+      if (forkVizResult.outcome === 'failure') {
+        setShareDBError(forkVizResult.error);
+        toggleForkModal();
+        return;
+      }
+      const { vizId, ownerUserName } = forkVizResult.value;
+      const url = `/${ownerUserName}/${vizId}`;
 
-          window.location.href = url;
-        },
-      );
+      // Populate cookie to show toast on the other side, after redirect.
+      // See Toasts.tsx
+      setCookie('showForkToast', 'true', 1);
+
+      window.location.href = url;
     },
     [id, content],
   );

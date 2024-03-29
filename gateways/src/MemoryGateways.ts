@@ -438,6 +438,7 @@ export const MemoryGateways = (): Gateways => {
         .map((commit) => ({
           id: commit.id,
           parent: commit.parent,
+          timestamp: commit.timestamp,
         })),
     });
 

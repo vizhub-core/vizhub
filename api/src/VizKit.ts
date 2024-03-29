@@ -65,9 +65,12 @@ export interface VizKitAPI {
 
       // The visibility of the forked viz
       visibility?: Visibility;
-    }) => Promise<{
-      forkedVizId: VizId;
-    }>;
+    }) => Promise<
+      Result<{
+        vizId: VizId;
+        ownerUserName: string;
+      }>
+    >;
 
     trashViz: (options: {
       id: VizId;
