@@ -136,6 +136,11 @@ const vizVerify = (gateways: Gateways, action: Action) => {
     // all interactions there are mediated by interactors,
     // which take access control into account.
     if (isServer) {
+      if (debug) {
+        console.log(
+          '[vizVerify] allowing operation for server-side interactor',
+        );
+      }
       return next();
     }
 

@@ -307,12 +307,14 @@ export const VizPageProvider = ({
     setShareDBError,
   } = useShareDBError();
 
-  // When the user clicks "Fork" from within the fork modal.
+  // When the user clicks "Fork" from within the fork modal
+  // or from the fork link in the toast.
   const onFork = useOnFork({
     vizKit,
     id: info.id,
     content,
     setShareDBError,
+    toggleForkModal,
   });
 
   ////////////////////////////////////////////
