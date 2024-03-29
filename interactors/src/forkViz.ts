@@ -1,4 +1,10 @@
-import { Gateways, Result, ok, err } from 'gateways';
+import {
+  Gateways,
+  Result,
+  ok,
+  err,
+  VizHubErrorCode,
+} from 'gateways';
 import { diff } from 'ot';
 import {
   VizId,
@@ -15,6 +21,8 @@ import { SaveViz } from './saveViz';
 import { GetContentAtCommit } from './getContentAtCommit';
 import { CommitViz } from './commitViz';
 
+const debug = false;
+
 // forkViz
 //  * Forks a viz (makes a copy of it)
 //  * Returns the id of the newly minted viz
@@ -27,8 +35,13 @@ import { CommitViz } from './commitViz';
 //  * See also
 //    https://gitlab.com/curran/vizhub-ee/-/blob/main/vizhub-ee-interactors/src/ForkVizEE.ts
 export const ForkViz = (gateways: Gateways) => {
-  const { saveCommit, getInfo, incrementForksCount } =
-    gateways;
+  const {
+    saveCommit,
+    getInfo,
+    incrementForksCount,
+    deleteCommit,
+    deleteInfo,
+  } = gateways;
   const saveViz = SaveViz(gateways);
   const getContentAtCommit = GetContentAtCommit(gateways);
   const commitViz = CommitViz(gateways);
@@ -60,8 +73,9 @@ export const ForkViz = (gateways: Gateways) => {
 
     // Get the info for the viz we are forking from.
     const infoResult = await getInfo(forkedFrom);
-    if (infoResult.outcome === 'failure')
+    if (infoResult.outcome === 'failure') {
       return err(infoResult.error);
+    }
     const info: Info = infoResult.value.data;
 
     // Choose a particular commit to fork from.
@@ -138,8 +152,9 @@ export const ForkViz = (gateways: Gateways) => {
 
     const oldContentResult =
       await getContentAtCommit(parentCommitId);
-    if (oldContentResult.outcome === 'failure')
+    if (oldContentResult.outcome === 'failure') {
       return oldContentResult;
+    }
     const oldContent = oldContentResult.value;
 
     const newContent: Content = {
@@ -165,12 +180,49 @@ export const ForkViz = (gateways: Gateways) => {
     if (saveCommitResult.outcome !== 'success') {
       return saveCommitResult;
     }
-
     const saveVizResult = await saveViz({
       info: newInfo,
       content: newContent,
     });
     if (saveVizResult.outcome !== 'success') {
+      if (debug) {
+        console.log(
+          'saveVizResult.error.code',
+          saveVizResult.error.code,
+        );
+      }
+      // If the save failed due to a size limit check,
+      // we need to delete the commit and the info.
+      if (
+        saveVizResult.error.code ===
+          VizHubErrorCode.tooLarge ||
+        saveVizResult.error.code ===
+          VizHubErrorCode.tooLargeForFree
+      ) {
+        if (debug) {
+          console.log(
+            'Failed due to size limit, deleting Commit and Info...',
+          );
+        }
+        const deleteCommitResult =
+          await deleteCommit(commitId);
+        if (deleteCommitResult.outcome !== 'success') {
+          console.error(
+            'Failed to delete commit',
+            deleteCommitResult,
+          );
+          // return deleteCommitResult;
+        }
+        const deleteInfoResult = await deleteInfo(newVizId);
+        if (deleteInfoResult.outcome !== 'success') {
+          console.error(
+            'Failed to delete info',
+            deleteInfoResult,
+          );
+          // return deleteInfoResult;
+        }
+      }
+
       return saveVizResult;
     }
 

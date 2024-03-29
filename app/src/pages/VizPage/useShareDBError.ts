@@ -11,10 +11,9 @@ export const useShareDBError = () => {
   useEffect(() => {
     const connection = getConnection();
     const handleError = (error) => {
-      console.log('error', error);
-      console.log('error.code', error.code);
-      console.log('error.message', error.message);
-
+      console.error('error', error);
+      console.error('error.code', error.code);
+      console.error('error.message', error.message);
       setShareDBError(error);
     };
 

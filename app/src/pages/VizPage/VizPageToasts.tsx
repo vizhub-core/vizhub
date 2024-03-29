@@ -44,6 +44,15 @@ export const VizPageToasts = () => {
     }
   }, []);
 
+  // console.log(
+  //   'shareDBError in VizPageToasts',
+  //   shareDBError,
+  // );
+  // console.log(
+  //   'shareDBError.message',
+  //   shareDBError?.message,
+  // );
+
   return (
     <>
       {shareDBError && (

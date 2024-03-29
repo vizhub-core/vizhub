@@ -30,6 +30,7 @@ import {
   err,
   crudEntityNames,
   noSnapshot,
+  VizHubError,
 } from 'gateways';
 import { otType, diff } from 'ot';
 import { toCollectionName } from './toCollectionName';
@@ -89,11 +90,27 @@ export const DatabaseGateways = ({
             );
             shareDBDoc.fetch((error) => {
               if (error) {
-                return resolve(err(error));
+                return resolve(
+                  err(
+                    new VizHubError(
+                      error.message,
+                      error.code,
+                    ),
+                  ),
+                );
               }
 
               const callback = (error) => {
-                if (error) return resolve(err(error));
+                if (error) {
+                  return resolve(
+                    err(
+                      new VizHubError(
+                        error.message,
+                        error.code,
+                      ),
+                    ),
+                  );
+                }
                 resolve(ok('success'));
               };
 
