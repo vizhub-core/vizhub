@@ -3,10 +3,6 @@ import { ResolvedVizFileId } from './types';
 import { parseId } from './parseId';
 import { Content, getFileText } from 'entities';
 import { VizCache } from './vizCache';
-import {
-  missingImportError,
-  rollupError,
-} from 'gateways/src/errors';
 
 const debug = false;
 
