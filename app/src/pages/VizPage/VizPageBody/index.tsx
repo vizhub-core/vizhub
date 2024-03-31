@@ -157,13 +157,6 @@ export const VizPageBody = () => {
   const [srcdocErrorMessage, setSrcdocErrorMessage] =
     useState<string | null>(initialSrcdocError);
 
-  const setSrcdocError = useCallback(
-    (errorMessage: string | null) => {
-      setSrcdocErrorMessage(errorMessage);
-    },
-    [],
-  );
-
   // Allow vizzes to just be documentation / articles
   // if there is only one file and that file is README.md.
   const isVisual = useMemo(() => {
@@ -181,7 +174,8 @@ export const VizPageBody = () => {
   useRuntime({
     content,
     iframeRef,
-    setSrcdocError,
+    srcdocErrorMessage,
+    setSrcdocErrorMessage,
     vizCacheContents,
     isVisual,
     slugResolutionCache,

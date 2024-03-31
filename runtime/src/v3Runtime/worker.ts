@@ -1,9 +1,10 @@
 import { rollup } from '@rollup/browser';
 import { build } from './build';
-import { createVizCache } from './vizCache';
+import { VizCache, createVizCache } from './vizCache';
 import { Content, VizId } from 'entities';
 import { V3BuildResult, V3WorkerMessage } from './types';
 import { svelteCompilerUrl } from './transformSvelte';
+import { computeSrcDocV3 } from './computeSrcDocV3';
 
 const debug = false;
 
@@ -18,7 +19,7 @@ const pendingContentResponsePromises = new Map();
 const pendingResolveSlugResponsePromises = new Map();
 
 // Create a viz cache that's backed by the main thread
-const vizCache = createVizCache({
+let vizCache: VizCache = createVizCache({
   initialContents: [],
   handleCacheMiss: async (
     vizId: VizId,
@@ -76,6 +77,21 @@ const resolveSlug = ({
   });
 };
 
+// Inspired by
+// https://github.com/sveltejs/sites/blob/master/packages/repl/src/lib/workers/bundler/index.js#L44
+// unpkg doesn't set the correct MIME type for .cjs files
+// https://github.com/mjackson/unpkg/issues/355
+const getSvelteCompiler = async () => {
+  const compiler = await fetch(svelteCompilerUrl).then(
+    (r) => r.text(),
+  );
+  (0, eval)(compiler);
+
+  // console.log(self.svelte);
+  // @ts-ignore
+  return self.svelte.compile;
+};
+
 // Handle messages from the main thread
 addEventListener('message', async ({ data }) => {
   const message: V3WorkerMessage = data as V3WorkerMessage;
@@ -91,17 +107,6 @@ addEventListener('message', async ({ data }) => {
         );
       }
 
-      // try{    }
-      // // Handle build errors
-      // if (errors.length > 0) {
-      //   setSrcdocError(
-      //     errors
-      //       .map(generateRollupErrorMessage)
-      //       .join('\n\n'),
-      //   );
-      //   resolve();
-      //   return;
-      // }
       let error: Error | undefined;
       let buildResult: V3BuildResult | undefined;
       try {
@@ -111,20 +116,7 @@ addEventListener('message', async ({ data }) => {
           rollup,
           vizCache,
           resolveSlug,
-          getSvelteCompiler: async () => {
-            // Inspired by
-            // https://github.com/sveltejs/sites/blob/master/packages/repl/src/lib/workers/bundler/index.js#L44
-            // unpkg doesn't set the correct MIME type for .cjs files
-            // https://github.com/mjackson/unpkg/issues/355
-            const compiler = await fetch(
-              svelteCompilerUrl,
-            ).then((r) => r.text());
-            (0, eval)(compiler);
-
-            // console.log(self.svelte);
-            // @ts-ignore
-            return self.svelte.compile;
-          },
+          getSvelteCompiler,
         });
       } catch (e) {
         if (debug) console.error(e);
@@ -190,6 +182,49 @@ addEventListener('message', async ({ data }) => {
           message.requestId,
         );
       }
+      break;
+    }
+
+    case 'resetSrcdocRequest': {
+      // Invalidate viz cache for changed vizzes.
+      const { vizId, changedVizIds } = message;
+      for (const changedVizId of changedVizIds) {
+        vizCache.invalidate(changedVizId);
+      }
+
+      // Compute a fresh build/
+      let error: Error | undefined;
+      let buildResult: V3BuildResult | undefined;
+      try {
+        buildResult = await build({
+          vizId,
+          enableSourcemap: true,
+          rollup,
+          vizCache,
+          resolveSlug,
+          getSvelteCompiler,
+        });
+      } catch (e) {
+        if (debug) console.error(e);
+        error = e;
+      }
+
+      let srcdoc: string | undefined;
+      if (buildResult !== undefined) {
+        srcdoc = await computeSrcDocV3({
+          vizCache,
+          buildResult,
+        });
+      }
+
+      // Post the result of the build process
+      const responseMessage: V3WorkerMessage = {
+        type: 'resetSrcdocResponse',
+        srcdoc,
+        error,
+      };
+      postMessage(responseMessage);
+
       break;
     }
   }

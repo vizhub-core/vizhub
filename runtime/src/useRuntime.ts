@@ -12,26 +12,25 @@ import {
   getRuntimeVersion,
 } from 'entities';
 import { V3Runtime } from './v3Runtime/setupV3Runtime';
+import { computeSrcDocV3 } from './v3Runtime/computeSrcDocV3';
 
 const debug = false;
-
-// Debounce the v3 runtime updates when not interacting
-// by this many milliseconds.
-const v3RunDebounceMs = 1000;
 
 // Sets up either the v2 or v3 runtime environment.
 // Meant to support dynamic switching between the two.
 export const useRuntime = ({
   content,
   iframeRef,
-  setSrcdocError,
+  srcdocErrorMessage,
+  setSrcdocErrorMessage,
   vizCacheContents,
   isVisual,
   slugResolutionCache,
 }: {
   content: Content;
   iframeRef: RefObject<HTMLIFrameElement>;
-  setSrcdocError: (error: string | null) => void;
+  srcdocErrorMessage: string | null;
+  setSrcdocErrorMessage: (error: string | null) => void;
   vizCacheContents: Record<string, Content>;
 
   // If this is false, there is no iframeRef.current.
@@ -170,7 +169,7 @@ export const useRuntime = ({
           v3RuntimeRef.current = setupV3Runtime({
             vizId: content.id,
             iframe,
-            setSrcdocError,
+            setSrcdocErrorMessage,
             getLatestContent,
             resolveSlugKey,
           });
@@ -181,6 +180,15 @@ export const useRuntime = ({
 
   // Send updates of imported vizzes to the V3 runtime.
   const previousVizCacheContents = useRef(vizCacheContents);
+
+  // Track the srcdoc error message, but only check it
+  // when we are attempting to run (do not re-run when
+  // the error message changes or is cleared).
+  const srcdocErrorMessageRef = useRef(srcdocErrorMessage);
+  useEffect(() => {
+    srcdocErrorMessageRef.current = srcdocErrorMessage;
+  }, [srcdocErrorMessage]);
+
   useEffect(() => {
     // Don't crash for v2 runtime!
     if (runtimeVersion !== 3) {
@@ -242,7 +250,30 @@ export const useRuntime = ({
         throw new Error('v3Runtime is null');
       }
       if (isInteracting) {
-        v3Runtime.invalidateVizCache(changedVizIds);
+        console.log('Running the code!');
+        console.log(
+          'srcdocErrorMessageRef.current',
+          srcdocErrorMessageRef.current,
+        );
+
+        // If we are recovering from an error,
+        // clear the error message, and run the code
+        // totally fresh by re-computing the srcdoc.
+        if (srcdocErrorMessageRef.current) {
+          v3Runtime.resetSrcdoc(changedVizIds);
+          // try {
+          //   const srcdoc = await computeSrcDocV3(content);
+          //   if (iframeRef.current) {
+          //     iframeRef.current.srcdoc = srcdoc;
+          //   }
+          // } catch (error) {
+          //   console.error(error);
+          //   setSrcdocErrorMessage(error.message);
+          // }
+        } else {
+          // Re-run the code with hot reloading.
+          v3Runtime.invalidateVizCache(changedVizIds);
+        }
       }
     };
     update();
@@ -281,8 +312,7 @@ export const useRuntime = ({
           }
         } catch (error) {
           console.error(error);
-
-          setSrcdocError(error.message);
+          setSrcdocErrorMessage(error.message);
         }
       };
       if (content.isInteracting) {
