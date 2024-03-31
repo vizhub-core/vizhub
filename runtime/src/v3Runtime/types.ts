@@ -54,12 +54,14 @@ export type V3WorkerMessage =
   // `buildResponse`
   //  * Sent from the worker to the main thread.
   //  * When the worker responds to a `buildRequest` message.
-  //  * This message includes the result of the build.
   //  * This message is sent to the main thread.
+  //  * This message includes
+  //  * EITHER `buildResult` the result of the build
+  //  * OR `error` if the build failed.
   | {
       type: 'buildResponse';
-      buildResult: V3BuildResult | undefined;
-      error: Error | undefined;
+      buildResult?: V3BuildResult;
+      error?: Error;
     }
 
   // `invalidateVizCache`

@@ -90,7 +90,7 @@ export const setupV3Runtime = ({
 
   // Pending promise resolvers.
   let pendingBuildPromise:
-    | ((buildResult: V3BuildResult) => void)
+    | ((buildResult?: V3BuildResult) => void)
     | null = null;
   let pendingRunPromise: (() => void) | null = null;
 
@@ -127,17 +127,17 @@ export const setupV3Runtime = ({
         }
       }
 
-      if (pendingBuildPromise && buildResult) {
+      // Regardless of whether the build succeeded or failed,
+      // resolve the pending build promise,
+      // so that the system remains responsive.
+      if (pendingBuildPromise) {
         pendingBuildPromise(buildResult);
         pendingBuildPromise = null;
-      } else if (error) {
-        console.log('build error', error);
-      } else {
-        // Sanity check.
-        // Should never happen.
-        throw new Error(
-          '[v3 runtime] build worker sent message with no pending promise',
-        );
+      }
+
+      if (error) {
+        // console.log('build error', error);
+        setSrcdocError(error.message);
       }
     }
 
@@ -268,6 +268,20 @@ export const setupV3Runtime = ({
     }, 1000);
   }
 
+  const build = () => {
+    return new Promise<V3BuildResult | undefined>(
+      (resolve) => {
+        pendingBuildPromise = resolve;
+        const message: V3WorkerMessage = {
+          type: 'buildRequest',
+          vizId,
+          enableSourcemap: true,
+        };
+        worker.postMessage(message);
+      },
+    );
+  };
+
   // Builds and runs the latest files.
   const update = async () => {
     state = PENDING_CLEAN;
@@ -275,7 +289,15 @@ export const setupV3Runtime = ({
       console.log('update: before run');
     }
 
-    await run(await build());
+    // Build the code. This may fail and return `undefined`.
+    const buildResult: V3BuildResult | undefined =
+      await build();
+
+    // If the build was successful, run the code.
+    if (buildResult !== undefined) {
+      await run(buildResult);
+    }
+
     if (debug) {
       console.log('update: after run');
     }
@@ -289,18 +311,6 @@ export const setupV3Runtime = ({
     } else {
       state = IDLE;
     }
-  };
-
-  const build = () => {
-    return new Promise<V3BuildResult>((resolve) => {
-      pendingBuildPromise = resolve;
-      const message: V3WorkerMessage = {
-        type: 'buildRequest',
-        vizId,
-        enableSourcemap: true,
-      };
-      worker.postMessage(message);
-    });
   };
 
   let previousCSSFiles: Array<ResolvedVizFileId> = [];
