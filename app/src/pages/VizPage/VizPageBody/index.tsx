@@ -348,6 +348,13 @@ export const VizPageBody = () => {
     [ownerUser, info],
   );
 
+  // Hide the top bar when the editor is open or a file is open
+  // AND the user is logged in.
+  const hideTopBar = useMemo(
+    () => authenticatedUser && (showEditor || isFileOpen),
+    [showEditor, isFileOpen, authenticatedUser],
+  );
+
   return isEmbedMode ? (
     <>
       {renderVizRunner()}
@@ -370,7 +377,7 @@ export const VizPageBody = () => {
     </>
   ) : (
     <div className="vh-page">
-      {!showEditor && !isFileOpen && <SmartHeader />}
+      {!hideTopBar && <SmartHeader />}
       {showRevisionHistory && (
         <RevisionHistoryNavigator
           revisionHistory={revisionHistory}
