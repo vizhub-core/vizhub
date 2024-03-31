@@ -9,6 +9,7 @@ import {
 } from './types';
 import { Content, VizId, getFileText } from 'entities';
 import { parseId } from './parseId';
+import { cleanRollupErrorMessage } from './cleanRollupErrorMessage';
 
 // Flag for debugging.
 const debug = false;
@@ -136,8 +137,12 @@ export const setupV3Runtime = ({
       }
 
       if (error) {
-        // console.log('build error', error);
-        setSrcdocError(error.message);
+        setSrcdocError(
+          cleanRollupErrorMessage({
+            rawMessage: error.message,
+            vizId,
+          }),
+        );
       }
     }
 

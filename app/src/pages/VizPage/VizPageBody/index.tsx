@@ -154,9 +154,6 @@ export const VizPageBody = () => {
   const iframeRef: RefObject<HTMLIFrameElement> =
     useRef<HTMLIFrameElement>(null);
 
-  // TODO
-  // * [ ] clear this out on local build & qa that it works
-  // * [ ] update this from client-side Rollup errors & QA that it works
   const [srcdocErrorMessage, setSrcdocErrorMessage] =
     useState<string | null>(initialSrcdocError);
 
