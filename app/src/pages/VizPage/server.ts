@@ -35,7 +35,6 @@ import { VizAccess } from 'interactors/src/verifyVizAccess';
 import { Result } from 'gateways';
 import { setJSDOM } from 'runtime';
 import { VizPageData } from './VizPageData';
-import { BuildVizOptions } from 'interactors/src/buildViz';
 
 setJSDOM(JSDOM);
 

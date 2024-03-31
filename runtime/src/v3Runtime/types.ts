@@ -54,12 +54,14 @@ export type V3WorkerMessage =
   // `buildResponse`
   //  * Sent from the worker to the main thread.
   //  * When the worker responds to a `buildRequest` message.
-  //  * This message includes the result of the build.
   //  * This message is sent to the main thread.
+  //  * This message includes
+  //  * EITHER `buildResult` the result of the build
+  //  * OR `error` if the build failed.
   | {
       type: 'buildResponse';
-      buildResult: V3BuildResult | undefined;
-      error: Error | undefined;
+      buildResult?: V3BuildResult;
+      error?: Error;
     }
 
   // `invalidateVizCache`
@@ -95,6 +97,28 @@ export type V3WorkerMessage =
       slugKey: string;
       vizId: VizId;
       requestId: string;
+    }
+
+  // `resetRequest`
+  //  * Sent from the main thread to the worker.
+  //  * When the main thread wants to reset the runtime
+  //  * This happens when an error occurs.
+  | {
+      type: 'resetSrcdocRequest';
+      vizId: VizId;
+      changedVizIds: Array<VizId>;
+    }
+
+  // `resetResponse`
+  //  * Sent from the worker to the main thread.
+  //  * When the worker responds to a `resetRequest` message.
+  //  * Provides:
+  //  * EITHER a fresh `srcdoc` for the iframe
+  //  * OR an `error` if the build failed.
+  | {
+      type: 'resetSrcdocResponse';
+      srcdoc?: string;
+      error?: Error;
     };
 
 // Messages sent to and from the IFrame window.

@@ -154,18 +154,8 @@ export const VizPageBody = () => {
   const iframeRef: RefObject<HTMLIFrameElement> =
     useRef<HTMLIFrameElement>(null);
 
-  // TODO
-  // * [ ] clear this out on local build & qa that it works
-  // * [ ] update this from client-side Rollup errors & QA that it works
   const [srcdocErrorMessage, setSrcdocErrorMessage] =
     useState<string | null>(initialSrcdocError);
-
-  const setSrcdocError = useCallback(
-    (errorMessage: string | null) => {
-      setSrcdocErrorMessage(errorMessage);
-    },
-    [],
-  );
 
   // Allow vizzes to just be documentation / articles
   // if there is only one file and that file is README.md.
@@ -184,7 +174,8 @@ export const VizPageBody = () => {
   useRuntime({
     content,
     iframeRef,
-    setSrcdocError,
+    srcdocErrorMessage,
+    setSrcdocErrorMessage,
     vizCacheContents,
     isVisual,
     slugResolutionCache,

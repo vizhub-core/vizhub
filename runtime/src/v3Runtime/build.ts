@@ -70,6 +70,8 @@ let cache: RollupCache | undefined;
 const isWebWorker =
   typeof self !== 'undefined' && self.window === self;
 
+// Builds the code.
+// Throws errors if the build fails.
 export const build = async ({
   vizId,
   enableSourcemap = false,

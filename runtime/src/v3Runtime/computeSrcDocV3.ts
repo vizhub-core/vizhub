@@ -98,7 +98,12 @@ export const computeSrcDocV3 = async ({
           render();
         };
         const run = () => {
-          setState((state) => state || {});
+          try {
+            setState((state) => state || {});
+          } catch (error) {
+            console.error(error);
+            parent.postMessage({ type: 'runError', error }, "*");
+          }
         }
         run();
         const runJS = (src) => {
@@ -123,14 +128,8 @@ export const computeSrcDocV3 = async ({
         onmessage = (message) => {
           switch (message.data.type) {
             case 'runJS':
-              try {
-                runJS(message.data.src);
-              } catch (error) {
-                console.error(error);
-                parent.postMessage({ type: 'runError', error }, "*");
-              } finally {
-                parent.postMessage({ type: 'runDone' }, "*");
-              }
+              runJS(message.data.src);
+              parent.postMessage({ type: 'runDone' }, "*");
               break;
             case 'runCSS':
               runCSS(message.data.src, message.data.id);

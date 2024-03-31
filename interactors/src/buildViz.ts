@@ -20,6 +20,7 @@ import {
 } from './verifyVizAccess';
 import { computeSrcDoc } from 'runtime';
 import { ResolveSlug } from './resolveSlug';
+import { cleanRollupErrorMessage } from 'runtime/src/v3Runtime/cleanRollupErrorMessage';
 
 const debug = false;
 
@@ -221,7 +222,7 @@ export const BuildViz = (gateways: Gateways) => {
 
     // Compute srcdoc for iframe.
     // TODO cache it per commit.
-    const { initialSrcdoc, initialSrcdocError } =
+    let { initialSrcdoc, initialSrcdocError } =
       await computeSrcDoc({
         rollup,
         getSvelteCompiler: async () => compile,
@@ -229,6 +230,14 @@ export const BuildViz = (gateways: Gateways) => {
         vizCache,
         resolveSlug,
       });
+
+    // Clean up the error message to make it more user-friendly.
+    if (initialSrcdocError) {
+      initialSrcdocError = cleanRollupErrorMessage({
+        rawMessage: initialSrcdocError,
+        vizId: id,
+      });
+    }
 
     if (debug) {
       console.log('initialSrcdoc');

@@ -9,6 +9,7 @@ import {
 } from './types';
 import { Content, VizId, getFileText } from 'entities';
 import { parseId } from './parseId';
+import { cleanRollupErrorMessage } from './cleanRollupErrorMessage';
 
 // Flag for debugging.
 const debug = false;
@@ -30,20 +31,27 @@ const PENDING_CLEAN = 'PENDING_CLEAN';
 const PENDING_DIRTY = 'PENDING_DIRTY';
 
 export type V3Runtime = {
+  // Performs a hot reload of a new build.
   handleCodeChange: (content: Content) => void;
+
+  // Performs a hot reload of a new build.
   invalidateVizCache: (changedVizIds: Array<VizId>) => void;
+
+  // Performs a hard reset of the srcdoc and
+  // entire runtime environment.
+  resetSrcdoc: (changedVizIds: Array<VizId>) => void;
 };
 
 export const setupV3Runtime = ({
   vizId,
   iframe,
-  setSrcdocError,
+  setSrcdocErrorMessage,
   getLatestContent,
   resolveSlugKey,
 }: {
   vizId: VizId;
   iframe: HTMLIFrameElement;
-  setSrcdocError: (error: string | null) => void;
+  setSrcdocErrorMessage: (error: string | null) => void;
   getLatestContent: (vizId: VizId) => Promise<Content>;
   resolveSlugKey: (slugKey: string) => Promise<VizId>;
 }): V3Runtime => {
@@ -90,7 +98,7 @@ export const setupV3Runtime = ({
 
   // Pending promise resolvers.
   let pendingBuildPromise:
-    | ((buildResult: V3BuildResult) => void)
+    | ((buildResult?: V3BuildResult) => void)
     | null = null;
   let pendingRunPromise: (() => void) | null = null;
 
@@ -127,16 +135,20 @@ export const setupV3Runtime = ({
         }
       }
 
-      if (pendingBuildPromise && buildResult) {
+      // Regardless of whether the build succeeded or failed,
+      // resolve the pending build promise,
+      // so that the system remains responsive.
+      if (pendingBuildPromise) {
         pendingBuildPromise(buildResult);
         pendingBuildPromise = null;
-      } else if (error) {
-        console.log('build error', error);
-      } else {
-        // Sanity check.
-        // Should never happen.
-        throw new Error(
-          '[v3 runtime] build worker sent message with no pending promise',
+      }
+
+      if (error) {
+        setSrcdocErrorMessage(
+          cleanRollupErrorMessage({
+            rawMessage: error.message,
+            vizId,
+          }),
         );
       }
     }
@@ -203,6 +215,26 @@ export const setupV3Runtime = ({
       // Leverage existing infra for executing the hot reloading.
       handleCodeChange();
     }
+
+    if (message.type === 'resetSrcdocResponse') {
+      const srcdoc: string | undefined = message.srcdoc;
+      const error: Error | undefined = message.error;
+
+      if (error) {
+        setSrcdocErrorMessage(
+          cleanRollupErrorMessage({
+            rawMessage: error.message,
+            vizId,
+          }),
+        );
+      } else {
+        setSrcdocErrorMessage(null);
+
+        // Really reset the srcdoc!
+        // console.log('Really reset the srcdoc!');
+        iframe.srcdoc = srcdoc;
+      }
+    }
   });
 
   // This runs when the IFrame sends a message.
@@ -213,21 +245,16 @@ export const setupV3Runtime = ({
       data.type === 'runDone' ||
       data.type === 'runError'
     ) {
+      console.log('got ' + data.type);
       if (pendingRunPromise) {
         // TODO pass errors out for display
         // pendingRunPromise(data as V3WindowMessage);
         pendingRunPromise();
         pendingRunPromise = null;
-      } else {
-        // Sanity check.
-        // Should never happen.
-        throw new Error(
-          '[v3 runtime] iframe sent message with no pending promise',
-        );
       }
     }
     if (data.type === 'runError') {
-      setSrcdocError(data.error.message);
+      setSrcdocErrorMessage(data.error.message);
     }
   });
 
@@ -268,6 +295,20 @@ export const setupV3Runtime = ({
     }, 1000);
   }
 
+  const build = () => {
+    return new Promise<V3BuildResult | undefined>(
+      (resolve) => {
+        pendingBuildPromise = resolve;
+        const message: V3WorkerMessage = {
+          type: 'buildRequest',
+          vizId,
+          enableSourcemap: true,
+        };
+        worker.postMessage(message);
+      },
+    );
+  };
+
   // Builds and runs the latest files.
   const update = async () => {
     state = PENDING_CLEAN;
@@ -275,7 +316,15 @@ export const setupV3Runtime = ({
       console.log('update: before run');
     }
 
-    await run(await build());
+    // Build the code. This may fail and return `undefined`.
+    const buildResult: V3BuildResult | undefined =
+      await build();
+
+    // If the build was successful, run the code.
+    if (buildResult !== undefined) {
+      await run(buildResult);
+    }
+
     if (debug) {
       console.log('update: after run');
     }
@@ -289,18 +338,6 @@ export const setupV3Runtime = ({
     } else {
       state = IDLE;
     }
-  };
-
-  const build = () => {
-    return new Promise<V3BuildResult>((resolve) => {
-      pendingBuildPromise = resolve;
-      const message: V3WorkerMessage = {
-        type: 'buildRequest',
-        vizId,
-        enableSourcemap: true,
-      };
-      worker.postMessage(message);
-    });
   };
 
   let previousCSSFiles: Array<ResolvedVizFileId> = [];
@@ -331,13 +368,13 @@ export const setupV3Runtime = ({
       // Handle build warnings
       if (warnings.length > 0) {
         // TODO: Distinguish between warnings and errors in UI
-        setSrcdocError(
+        setSrcdocErrorMessage(
           warnings
             .map((warning) => warning.message)
             .join('\n\n'),
         );
       } else {
-        setSrcdocError(null); // Clear error message if no warnings
+        setSrcdocErrorMessage(null); // Clear error message if no warnings
       }
 
       if (iframe.contentWindow) {
@@ -398,7 +435,7 @@ export const setupV3Runtime = ({
         }
 
         // Clear the console before each run.
-        console.clear();
+        // console.clear();
 
         const runJSMessage: V3WindowMessage = {
           type: 'runJS',
@@ -412,11 +449,21 @@ export const setupV3Runtime = ({
     });
   };
 
-  // Kick off the initial render
-  // TODO work out race conditions,
-  // make sure iframe and worker are both primed
-  // TODO initialization handshake to avoid race condition bugs
-  // using "ping" and "pong"
+  const resetSrcdoc = (changedVizIds: Array<VizId>) => {
+    state = IDLE;
+    pendingBuildPromise = null;
+    pendingRunPromise = null;
+    const message: V3WorkerMessage = {
+      type: 'resetSrcdocRequest',
+      vizId,
+      changedVizIds,
+    };
+    worker.postMessage(message);
+  };
 
-  return { handleCodeChange, invalidateVizCache };
+  return {
+    handleCodeChange,
+    invalidateVizCache,
+    resetSrcdoc,
+  };
 };
