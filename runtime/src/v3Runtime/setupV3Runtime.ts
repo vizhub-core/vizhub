@@ -251,12 +251,6 @@ export const setupV3Runtime = ({
         // pendingRunPromise(data as V3WindowMessage);
         pendingRunPromise();
         pendingRunPromise = null;
-      } else {
-        // Sanity check.
-        // Should never happen.
-        throw new Error(
-          '[v3 runtime] iframe sent message with no pending promise',
-        );
       }
     }
     if (data.type === 'runError') {
