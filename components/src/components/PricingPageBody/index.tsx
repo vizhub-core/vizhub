@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { FREE, FeatureId, Plan } from 'entities';
+import { FeatureId, Plan } from 'entities';
 import { Footer } from '../Footer';
 import { GreenCheckSVG } from '../Icons/sam/GreenCheckSVG';
 import {
@@ -17,13 +17,12 @@ import { Testimonial } from '../Testimonial';
 import './styles.scss';
 
 const enableImages = false;
-
-const premiumPriceMonthly = 9.99;
+const premiumPriceMonthly = 12;
 const premiumPriceAnnually = 99.99;
 const enableConsulting = false;
 
 // The percent saved by paying annually.
-const percentSavings = Math.round(
+const percentSavings = Math.floor(
   (1 - premiumPriceAnnually / 12 / premiumPriceMonthly) *
     100,
 );
@@ -166,7 +165,7 @@ export const PricingPageBody = ({
                 </OverlayTrigger>
               </ButtonGroup>
             </div>
-            <p
+            {/* <p
               className="vh-lede-01"
               style={{
                 color: 'var(--vh-color-caution-01)',
@@ -174,7 +173,7 @@ export const PricingPageBody = ({
             >
               Price increasing on April 1st to $12/mo.
               Upgrade now to save!
-            </p>
+            </p> */}
             <div className="pricing-page-plans">
               <div className="pricing-page-plan">
                 {enableImages && starterSpiritSrc && (
@@ -188,17 +187,17 @@ export const PricingPageBody = ({
                 <div className="pricing-page-plan-body">
                   <div className="plan-header">
                     <h3 className="plan-header-left">
-                      VizHub Starter
+                      Starter
                     </h3>
                     <div className="plan-header-right">
                       <h3>Free</h3>
                     </div>
                   </div>
 
-                  <p>
+                  {/* <p>
                     Ideal for beginners, students, and
                     hobbyist.
-                  </p>
+                  </p> */}
                   {currentPlan === 'free' ? (
                     <CurrentButton />
                   ) : (
@@ -228,7 +227,7 @@ export const PricingPageBody = ({
                 <div className="pricing-page-plan-body">
                   <div className="plan-header">
                     <h3 className="plan-header-left">
-                      VizHub Premium
+                      Premium
                     </h3>
                     <div className="plan-header-right">
                       <h3>${premiumPrice}</h3>
@@ -237,13 +236,13 @@ export const PricingPageBody = ({
                       </h3>
                     </div>
                   </div>
-                  <p>
+                  {/* <p>
                     Ideal for professionals.
                     {currentPlan === FREE &&
                       (enableFreeTrial
                         ? ' Includes 7 day free trial.'
                         : ' Your 7 day free trial has expired.')}
-                  </p>
+                  </p> */}
                   {currentPlan === 'premium' ? (
                     <CurrentButton />
                   ) : (
@@ -260,7 +259,7 @@ export const PricingPageBody = ({
                   )}
 
                   <div className="pricing-page-plan-features">
-                    <div className="vh-lede-01 mb-3 vh-color-neutral-02">
+                    <div className="vh-lede-01 mb-2 mt-2 vh-color-neutral-02">
                       Everything in{' '}
                       <span style={{ fontWeight: 600 }}>
                         Starter
