@@ -245,7 +245,7 @@ export const setupV3Runtime = ({
       data.type === 'runDone' ||
       data.type === 'runError'
     ) {
-      console.log('got ' + data.type);
+      // console.log('got ' + data.type);
       if (pendingRunPromise) {
         // TODO pass errors out for display
         // pendingRunPromise(data as V3WindowMessage);
