@@ -1,42 +1,43 @@
-import { freeTierSizeLimitMB } from 'entities';
 import { Feature } from './Feature';
 
 export const StarterFeatures = () => {
   return (
     <>
       <Feature
-        title="Fork & Edit Public Vizzes"
+        title="Fork & Modify Public Vizzes"
         id="public-vizzes"
         hasBottomBorder={true}
+        startsExpanded={true}
       >
-        Fork & modify public visualizations. Jump straght
-        into coding without the need to set up a local
-        development environment. Share your work with the
-        world. Data uploads are limited to{' '}
-        {freeTierSizeLimitMB * 1024} kB.
+        Create your own works right in your browser.
       </Feature>
       <Feature
-        title="Real-Time Collaborators"
+        title="Unlimited Real-Time Collaborators"
         id="real-time-collaborators"
         hasBottomBorder={true}
+        startsExpanded={true}
         learnMoreHref={
           'https://vizhub.com/forum/t/real-time-collaborators/976'
         }
       >
-        Work together in real-time. Share your work with
-        others and see their changes instantly. Perfect for
-        pair programming and collaboration on projects.
+        Invite others to edit code with you in real time.
       </Feature>
       <Feature
         title="Hot Reloading & Interactive Widgets"
         id="hot-reloading"
         hasBottomBorder={true}
+        startsExpanded={true}
         learnMoreHref="https://vizhub.com/forum/t/hot-reloading-and-interactive-widgets/968"
       >
-        Experience a new kind of development workflow with
-        interactive widgets and hot reloading. This allows
-        you to tweak numbers, colors, and booleans in
-        real-time, without needing to refresh the page.
+        Iterate faster with truly instant feedback.
+      </Feature>
+
+      <Feature
+        title="Search Public Vizzes"
+        id="search"
+        hasBottomBorder={true}
+      >
+        Find compelling open source visualizations.
       </Feature>
       <Feature
         title="Export Code"
@@ -52,39 +53,28 @@ export const StarterFeatures = () => {
         </a>
         .
       </Feature>
-      <Feature
-        title="Search Public Vizzes"
-        id="search"
-        hasBottomBorder={true}
-      >
-        Search by keyword to find public visualizations that
-        inspire you. Explore and learn from the community's
-        best work. Most content is MIT licensed, so you can
-        use it in your own projects.
-      </Feature>
-      <Feature
+      {/* <Feature
         title="Community Access"
         id="community-access"
         hasBottomBorder={true}
       >
-        Connect, share, and grow with peers and experts
-        committed to the art and science of visualization.
         Join our{' '}
         <a href="https://discord.gg/wbtJ7SCtYr">Discord</a>{' '}
         and <a href="https://vizhub.com/forum/">Forum</a> to
-        connect with our community. Ask for help any time!
-      </Feature>
+        connect with our community. Ask for help or any
+        time!
+      </Feature> */}
       <Feature
         title="Free Courses"
         id="free-courses"
         hasBottomBorder={false}
       >
-        Never stop learning. Our{' '}
+        Access our{' '}
         <a href="https://vizhub.com/forum/t/index-of-courses/289">
           free online courses
         </a>{' '}
-        offer the knowledge you need to start or advance
-        your journey in data visualization.
+        to get started or level up your data visualization
+        skills.
       </Feature>
     </>
   );
