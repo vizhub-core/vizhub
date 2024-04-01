@@ -15,9 +15,9 @@ import {
 import { Page, PageData } from '../Page';
 import { FeatureId, User } from 'entities';
 import { useOpenBillingPortal } from '../useOpenBillingPortal';
-import './styles.scss';
 import { useSearchParams } from 'react-router-dom';
 import { isFreeTrialEligible } from '../../accessors/isFreeTrialEligible';
+import './styles.scss';
 
 const vizKit = VizKit();
 

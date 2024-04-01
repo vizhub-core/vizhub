@@ -82,6 +82,8 @@ export const CommitViz = (gateways: Gateways) => {
       const runtimeVersion = getRuntimeVersion(content);
       if (runtimeVersion === 3) {
         newInfo.v3 = true;
+      } else {
+        delete newInfo.v3;
       }
 
       // If something goes wrong with saving the commit,

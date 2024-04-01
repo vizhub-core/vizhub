@@ -24,11 +24,22 @@ export const computePopularity = (info: Info): number => {
 
   // Compute popularity "points" by weighting
   // upvotes and forks.
-  const upvotePoints =
-    (upvotesCount ? upvotesCount : 0) * 4;
-  const forkPoints = forksCount ? forksCount : 0;
-  const v3Points = v3 ? 8 : 0;
-  const points = upvotePoints + forkPoints + v3Points;
+
+  // Forks are worth 1 point each.
+  const forkPoints = forksCount || 0;
+
+  // Upvotes are worth 5 points each.
+  const upvotePoints = (upvotesCount || 0) * 5;
+
+  // V3 vizzes are worth 2 points.
+  const v3Points = v3 ? 2 : 0;
+
+  let points = upvotePoints + forkPoints + v3Points;
+
+  // Multiplier effect for v3 vizzes.
+  if (v3) {
+    points = points * 2;
+  }
 
   const popularity = infinityIfNaN(
     hackerHotScore(points, midpointDate),
