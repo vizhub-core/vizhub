@@ -1,6 +1,6 @@
 .vh-navbar.navbar {
   background-color: var(--vh-color-neutral-01);
-  padding: 20px 16px;
+  padding: 16px 8px;
 
   @media (max-width: 1200px) {
     padding: 8px 0px;
@@ -53,7 +53,7 @@
     background-color: var(--vh-color-neutral-02);
     color: white;
 
-    border-color: transparent;
+    /* border-color: transparent; */
 
     &:focus {
       border-color: white;

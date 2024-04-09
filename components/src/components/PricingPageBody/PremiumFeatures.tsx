@@ -47,8 +47,7 @@ export const PremiumFeatures = ({}) => (
       }
     >
       Increased size limit from {freeTierSizeLimitMB * 1024}{' '}
-      kB to
-      {premiumTierSizeLimitMB} MB per viz.
+      kB to {premiumTierSizeLimitMB} MB per viz.
     </Feature>
   </>
 );

@@ -132,6 +132,7 @@ export const oembedEndpoint = ({
           ownerUserName,
           idOrSlug,
           height,
+          brandedOption: 'branded',
         }),
         width: 960,
         height,
