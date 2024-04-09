@@ -11,3 +11,9 @@ export type RequestWithAuth = Express.Request & {
 export type ResponseWithJSON = Express.Response & {
   json: (result: any) => void;
 };
+
+export type Endpoint = (args: {
+  app: any;
+  gateways: any;
+  shareDBConnection: any;
+}) => void;

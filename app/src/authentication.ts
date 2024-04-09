@@ -41,10 +41,10 @@ export const authentication = ({ env, gateways, app }) => {
 
       const options = {
         id,
-        userName: claims.nickname,
-        displayName: claims.name,
-        email: claims.email,
-        picture: claims.picture,
+        userName: claims.nickname as string,
+        displayName: claims.name as string,
+        email: claims.email as string,
+        picture: claims.picture as string,
       };
 
       const result = await updateOrCreateUser(options);
