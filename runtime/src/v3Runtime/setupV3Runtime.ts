@@ -435,7 +435,7 @@ export const setupV3Runtime = ({
         }
 
         // Clear the console before each run.
-        // console.clear();
+        console.clear();
 
         const runJSMessage: V3WindowMessage = {
           type: 'runJS',
