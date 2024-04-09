@@ -15,6 +15,7 @@ import { HighlightedFeatureProvider } from './HighlightedFeatureContext';
 import { ConsultationFeatures } from './ConsultationFeatures';
 import { Testimonial } from '../Testimonial';
 import './styles.scss';
+import { HomeStarter } from '../HomeStarter';
 
 const enableImages = false;
 const premiumPriceMonthly = 12;
@@ -270,6 +271,9 @@ export const PricingPageBody = ({
                   </div>
                 </div>
               </div>
+            </div>
+            <div className="mt-5">
+              <HomeStarter />
             </div>
             {enableConsulting && (
               <div className="pricing-page-plans">

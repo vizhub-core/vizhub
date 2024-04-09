@@ -27,6 +27,7 @@ import { getRevisionHistoryEndpoint } from './getRevisionHistoryEndpoint';
 import { getAPIKeysEndpoint } from './getAPIKeysEndpoint';
 import { generateAPIKeyEndpoint } from './generateAPIKeyEndpoint';
 import { revokeAPIKeyEndpoint } from './revokeAPIKeyEndpoint';
+import { Endpoint } from '../types';
 
 // TODO get this working in a secure way using API keys
 const enableSetVizEndpoint = true;
@@ -34,7 +35,7 @@ const enableSetVizEndpoint = true;
 // TODO get this working
 const enableExportVizEndpoint = true;
 
-export const endpoints = [
+export const endpoints: Array<Endpoint> = [
   healthCheck,
   privateBetaEmailSubmit,
   recordAnalyticsEvents,

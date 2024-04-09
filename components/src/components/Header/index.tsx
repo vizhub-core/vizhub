@@ -145,7 +145,11 @@ export const Header = ({
               </Dropdown.Menu>
             </Dropdown>
           ) : (
-            <Button as="a" href={loginHref}>
+            <Button
+              as="a"
+              href={loginHref}
+              className="ms-3"
+            >
               Log in
             </Button>
           )}

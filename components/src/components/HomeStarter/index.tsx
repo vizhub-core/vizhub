@@ -46,6 +46,15 @@ export const HomeStarter = () => {
         </Button>
         <Button
           variant="secondary"
+          href="https://github.com/vizhub-core/vizhub-feedback/issues/new"
+          as="a"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Feedback
+        </Button>
+        <Button
+          variant="secondary"
           href="https://vizhub.com/forum/"
           as="a"
           target="_blank"
@@ -64,12 +73,12 @@ export const HomeStarter = () => {
         </Button>
         <Button
           variant="secondary"
-          href="https://github.com/vizhub-core/vizhub-feedback/issues/new"
+          href="https://github.com/vizhub-core/vzcode"
           as="a"
           target="_blank"
           rel="noopener noreferrer"
         >
-          Feedback
+          VZCode
         </Button>
       </div>
     </div>
