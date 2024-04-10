@@ -5,7 +5,7 @@ import { Semaphore } from '../Semaphore';
 const debug = false;
 
 // The maximum number of concurrent screenshots
-const maxSimultaneousScreenshots = 3;
+const maxSimultaneousScreenshots = 4;
 
 // The maximum time to wait for a page to load (in ms)
 const maxPageLoadTimeMS = 5000;
@@ -19,8 +19,8 @@ const maxMemoryMB = 50;
 const launchBrowser = async () => {
   // if (!browser) {
   const browser = await puppeteer.launch({
-    executablePath: 'google-chrome-stable',
-    headless: 'new',
+    // executablePath: 'google-chrome-stable',
+    // headless: 'new',
     args: [
       '--no-sandbox',
       '--disable-setuid-sandbox',
@@ -114,7 +114,11 @@ export const takeScreenshot = async ({
       );
     }
     screenshotSemaphore.release();
-    await page.close();
-    await browser.close();
+    if (page) {
+      await page.close();
+    }
+    if (browser) {
+      await browser.close();
+    }
   }
 };
