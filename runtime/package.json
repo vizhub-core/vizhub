@@ -21,14 +21,14 @@
   "dependencies": {
     "d3-dsv": "^3.0.1",
     "react": "^18.2.0",
-    "rollup": "^4.14.1",
-    "svelte": "^4.2.12"
+    "rollup": "^4.14.3",
+    "svelte": "^4.2.14"
   },
   "devDependencies": {
     "@types/d3-dsv": "^3.0.7",
     "i": "^0.3.7",
-    "npm": "^10.5.1",
-    "typescript": "^5.4.4",
-    "vitest": "^1.4.0"
+    "npm": "^10.5.2",
+    "typescript": "^5.4.5",
+    "vitest": "^1.5.0"
   }
 }
