@@ -15,6 +15,7 @@ import { FullScreenSVG } from '../Icons/sam/FullScreenSVG';
 import { StarSVGSymbol } from '../Icons/sam/StarSVG';
 import { Comments } from '../Comments';
 import './styles.scss';
+import { UnlistedSVG } from '../Icons/sam/UnlistedSVG';
 
 export const VizPageViewer = ({
   vizTitle,
@@ -182,7 +183,7 @@ export const VizPageViewer = ({
             ) : null}
             {isUnlisted ? (
               <div className="visibility-label unlisted">
-                <VisibilityUnlistedSVG />
+                <UnlistedSVG />
                 <div>UNLISTED</div>
               </div>
             ) : null}
