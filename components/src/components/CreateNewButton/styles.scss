@@ -3,4 +3,12 @@
   gap: 8px;
   padding-right: 16px;
   padding-left: 8px;
+  $button-scale-factor: 1.15;
+  transition: transform 0.3s ease; // Add a smooth transition effect
+
+  &:hover {
+    transform: scale(
+      $button-scale-factor
+    ); // Scale the button on hover
+  }
 }
