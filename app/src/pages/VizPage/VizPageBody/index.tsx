@@ -48,7 +48,7 @@ import { VizPageContext } from '../VizPageContext';
 import { formatCommitTimestamp } from 'components/src/components/formatCommitTimestamp';
 
 const debug = false;
-const enableVizPageUpgradeBanner = true;
+const enableVizPageUpgradeBanner = false;
 
 export const VizPageBody = () => {
   // The currently authenticated user, if any.
@@ -460,8 +460,7 @@ export const VizPageBody = () => {
               ownerUserHref={ownerUserHref}
               upvotesCount={info.upvotesCount}
               license={license}
-              isPrivate={info.visibility === 'private'}
-              isUnlisted={info.visibility === 'unlisted'}
+              visibility={info.visibility}
               isVisual={isVisual}
               isUpvoted={isUpvoted}
               handleUpvoteClick={handleUpvoteClick}

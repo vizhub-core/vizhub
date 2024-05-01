@@ -38,6 +38,7 @@ export const ShareModal = ({
   brandedOption,
   setBrandedOption,
   enableFreeTrial,
+  isPrivate,
 }: {
   show: boolean;
   linkToCopy: string;
@@ -65,6 +66,7 @@ export const ShareModal = ({
   brandedOption: string;
   setBrandedOption: (brandedOption: string) => void;
   enableFreeTrial: boolean;
+  isPrivate: boolean;
 }) => {
   const [section, setSection] = useState('link');
 
@@ -162,6 +164,7 @@ export const ShareModal = ({
             brandedOption={brandedOption}
             setBrandedOption={setBrandedOption}
             currentPlan={currentPlan}
+            isPrivate={isPrivate}
           />
         )}
         {/* {section === 'snippet' && (

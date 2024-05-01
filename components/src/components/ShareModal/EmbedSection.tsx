@@ -6,8 +6,10 @@ import {
   Button,
   Tooltip,
   Overlay,
+  Alert,
 } from '../bootstrap';
 import { BrandedEmbedControl } from '../BrandedEmbedControl';
+import { Plan } from 'entities';
 
 export const EmbedSection = ({
   embedSnippetToCopy,
@@ -16,6 +18,15 @@ export const EmbedSection = ({
   brandedOption,
   setBrandedOption,
   enableFreeTrial,
+  isPrivate,
+}: {
+  embedSnippetToCopy: string;
+  onEmbedSnippetCopy?: () => void;
+  currentPlan: Plan;
+  brandedOption: string;
+  setBrandedOption: (brandedOption: string) => void;
+  enableFreeTrial: boolean;
+  isPrivate: boolean;
 }) => {
   // Tracks when to show the "Copied" tooltip.
   const [showTooltip, setShowTooltip] = useState(false);
@@ -38,6 +49,14 @@ export const EmbedSection = ({
 
   return (
     <Form.Group className="mt-4" controlId="formShareLink">
+      {isPrivate && (
+        <Alert variant="danger">
+          This visualization is currently{' '}
+          <strong>private</strong>, so embedding will not
+          work. You need to make it <strong>public</strong>{' '}
+          or <strong>unlisted</strong> to embed it.
+        </Alert>
+      )}
       <BrandedEmbedControl
         enableFreeTrial={enableFreeTrial}
         currentPlan={currentPlan}

@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Spinner } from '../../';
+import { Spinner, VisibilityLabel } from '../../';
 import { UpvoteWidget } from '../UpvoteWidget';
 import { ForksWidget } from '../ForksWidget';
-import { PrivateSVG } from '../Icons/sam/PrivateSVG';
 import './styles.scss';
 
 // If we're in thr browser
@@ -64,6 +63,7 @@ export const VizPreview = ({
             <Spinner />
           </div>
         )}
+        <VisibilityLabel visibility={visibility} />
       </div>
 
       <div className="content-container">
@@ -96,12 +96,6 @@ export const VizPreview = ({
           </div>
         </div>
       </div>
-      {visibility === 'private' && (
-        <div className="private-notice">
-          PRIVATE
-          <PrivateSVG />
-        </div>
-      )}
     </a>
   );
 };

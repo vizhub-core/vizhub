@@ -1,0 +1,20 @@
+.visibility-label {
+  font-size: 14px;
+  font-weight: bold;
+
+  border-radius: 16px;
+  padding: 0 10px 0 12px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  &.private {
+    background-color: var(--vh-color-warning-01);
+    color: white;
+  }
+  &.unlisted {
+    color: var(--vh-color-neutral-02);
+    background-color: var(--vh-color-caution-01);
+  }
+}

@@ -7,7 +7,7 @@ import { Feature } from './Feature';
 export const PremiumFeatures = ({}) => (
   <>
     <Feature
-      title="Private Vizzes"
+      title="Private & Unlisted Vizzes"
       id="private-vizzes"
       hasBottomBorder={true}
       learnMoreHref={

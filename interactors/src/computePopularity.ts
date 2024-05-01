@@ -5,7 +5,7 @@ import decay from 'decay';
 
 // Default gravity is 1.8
 // The higher the gravity, the more quickly scores decay.
-const gravity = 1.4;
+const gravity = 1.2;
 
 const hackerHotScore = decay.hackerHot(gravity);
 const infinityIfNaN = (number) =>
@@ -32,13 +32,13 @@ export const computePopularity = (info: Info): number => {
   const upvotePoints = (upvotesCount || 0) * 5;
 
   // V3 vizzes are worth 2 points.
-  const v3Points = v3 ? 2 : 0;
+  // const v3Points = v3 ? 2 : 0;
 
-  let points = upvotePoints + forkPoints + v3Points;
+  let points = upvotePoints + forkPoints;
 
   // Multiplier effect for v3 vizzes.
   if (v3) {
-    points = points * 2;
+    points = points * 1.5;
   }
 
   const popularity = infinityIfNaN(

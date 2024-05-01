@@ -28,6 +28,19 @@ export type InfosAndOwners = {
   hasMore: boolean;
 };
 
+// Maps section IDs to visibilities.
+const visibilitiesBySection: {
+  [key: string]: Array<Visibility> | null;
+} = {
+  public: ['public'],
+  private: ['private'],
+  unlisted: ['unlisted'],
+
+  // We want to query against all visibilities
+  // for the "Shared with me" section.
+  shared: null,
+};
+
 export const GetInfosAndOwners = (gateways: Gateways) => {
   const { getInfos } = gateways;
 
@@ -72,26 +85,24 @@ export const GetInfosAndOwners = (gateways: Gateways) => {
       defaultSortId,
     );
 
-    // Check access to private infos.
+    // Verify that the authenticaed user is the profile owner when
+    // attempting to access private, unlisted, and shared-with-me infos.
     if (
-      (sectionId === 'private' || sectionId === 'shared') &&
+      (sectionId === 'private' ||
+        sectionId === 'shared' ||
+        sectionId === 'unlisted') &&
       authenticatedUserId !== owner
     ) {
       return err(
         accessDeniedError(
-          "Can't access someone else's private vizzes.",
+          `Can't access someone else's ${sectionId} vizzes.`,
         ),
       );
     }
 
     const visibilities: Array<Visibility> | null =
-      sectionId === 'private'
-        ? ['private']
-        : // We want to query against all visibilities
-          // for the "Shared with me" section.
-          sectionId === 'shared'
-          ? null
-          : ['public'];
+      visibilitiesBySection[sectionId] ||
+      visibilitiesBySection.public;
 
     const getInfosOptions = {
       owner,

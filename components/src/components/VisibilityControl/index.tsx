@@ -1,19 +1,21 @@
 import { useCallback, useState } from 'react';
 import { Plan, Visibility } from 'entities';
 import { Form } from '../bootstrap';
-import './styles.css';
 import { UpgradeCallout } from '../UpgradeCallout';
 import { image } from '../image';
 import { PrivateVizzesUpgradeCallout } from '../PrivateVizzesUpgradeCallout';
+import './styles.css';
 
-const enableUnlisted = false;
+const enableUnlisted = true;
 
 const visibilities: {
   [K in Visibility]: string;
 } = {
   public: 'Anyone can view this viz.',
-  private: 'Only you and collaborators can view this viz.',
-  unlisted: 'Anyone with the link can view this viz.',
+  private:
+    'Only you and collaborators can view this viz. Embeds are disabled.',
+  unlisted:
+    'Anyone with the link can view this viz. Embeds are enabled.',
 };
 
 export const VisibilityControl = ({
@@ -39,7 +41,8 @@ export const VisibilityControl = ({
       // show the upgrade callout.
       if (
         currentPlan === 'free' &&
-        newVisibility === 'private'
+        (newVisibility === 'private' ||
+          newVisibility === 'unlisted')
       ) {
         setShowUpgradeCallout(true);
       } else {
