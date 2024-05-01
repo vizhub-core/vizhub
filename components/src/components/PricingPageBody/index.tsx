@@ -14,8 +14,8 @@ import { PremiumFeatures } from './PremiumFeatures';
 import { HighlightedFeatureProvider } from './HighlightedFeatureContext';
 import { ConsultationFeatures } from './ConsultationFeatures';
 import { Testimonial } from '../Testimonial';
-import './styles.scss';
 import { HomeStarter } from '../HomeStarter';
+import './styles.scss';
 
 const enableImages = false;
 const premiumPriceMonthly = 12;
