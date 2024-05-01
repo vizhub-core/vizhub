@@ -28,6 +28,14 @@ export type InfosAndOwners = {
   hasMore: boolean;
 };
 
+const visibilitiesBySection: {
+  [key: string]: Array<Visibility> | null;
+} = {
+  public: ['public'],
+  private: ['private'],
+  unlisted: ['unlisted'],
+};
+
 export const GetInfosAndOwners = (gateways: Gateways) => {
   const { getInfos } = gateways;
 
@@ -85,13 +93,7 @@ export const GetInfosAndOwners = (gateways: Gateways) => {
     }
 
     const visibilities: Array<Visibility> | null =
-      sectionId === 'private'
-        ? ['private']
-        : // We want to query against all visibilities
-          // for the "Shared with me" section.
-          sectionId === 'shared'
-          ? null
-          : ['public'];
+      visibilitiesBySection[sectionId] || null;
 
     const getInfosOptions = {
       owner,
