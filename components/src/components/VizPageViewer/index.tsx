@@ -4,9 +4,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import { UpvoteWidget } from 'components';
-import { VisibilityUnlistedSVG } from '../Icons/VisibilityUnlistedSVG';
-import { PrivateSVG } from '../Icons/sam/PrivateSVG';
+import { UpvoteWidget, VisibilityLabel } from 'components';
 import { ForkSVGSymbol } from '../Icons/sam/ForkSVG';
 import { EditSVG } from '../Icons/EditSVG';
 import { ForksWidget } from '../ForksWidget';
@@ -35,8 +33,7 @@ export const VizPageViewer = ({
   upvotesCount,
   license,
   defaultVizWidth,
-  isPrivate,
-  isUnlisted,
+  visibility,
   isVisual,
   isUpvoted,
   handleUpvoteClick,
@@ -174,18 +171,7 @@ export const VizPageViewer = ({
               isUpvoted={isUpvoted}
               stargazersHref={stargazersHref}
             />
-            {isPrivate ? (
-              <div className="visibility-label private">
-                PRIVATE
-                <PrivateSVG />
-              </div>
-            ) : null}
-            {isUnlisted ? (
-              <div className="visibility-label unlisted">
-                <VisibilityUnlistedSVG />
-                <div>UNLISTED</div>
-              </div>
-            ) : null}
+            <VisibilityLabel visibility={visibility} />
           </div>
         </div>
 

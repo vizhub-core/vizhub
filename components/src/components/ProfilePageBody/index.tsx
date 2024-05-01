@@ -19,6 +19,7 @@ import { BellSVG } from '../Icons/sam/BellSVG';
 import { PrivateVizzesUpgradeCallout } from '../PrivateVizzesUpgradeCallout';
 import { ForkSVGSymbol } from '../Icons/sam/ForkSVG';
 import './styles.scss';
+import { UnlistedSVG } from '../Icons/sam/UnlistedSVG';
 
 const enableEditBio = false;
 const enableCreateVizButton = true;
@@ -28,6 +29,7 @@ const enableAPIKeys = true;
 const enabledSections: Set<SectionId> = new Set([
   SectionId.Public,
   SectionId.Private,
+  SectionId.Unlisted,
   SectionId.Shared,
   SectionId.Starred,
   // SectionId.ApiKeys,
@@ -110,6 +112,12 @@ export const ProfilePageBody = ({
           id: SectionId.Private,
           SVGComponent: PrivateSVG,
           label: 'My private vizzes',
+          show: isViewingOwnProfile,
+        },
+        {
+          id: SectionId.Unlisted,
+          SVGComponent: UnlistedSVG,
+          label: 'My unlisted vizzes',
           show: isViewingOwnProfile,
         },
         {

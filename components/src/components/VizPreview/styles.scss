@@ -4,7 +4,7 @@
   justify-content: space-between;
   background-color: white;
   box-shadow: var(--vh-box-shadow);
-  border-radius: 24px;
+  border-radius: 26px;
   cursor: pointer;
 
   // Style .vh-viz-preview.hot-viz
@@ -28,6 +28,16 @@
     transition: background-position 3s;
     background-size: cover;
     position: relative;
+
+    .visibility-label {
+      position: absolute;
+      bottom: -11px;
+      right: 0px;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+      padding-right: 6px;
+      height: 32px;
+    }
   }
 
   /* Spinner overlay */
@@ -82,10 +92,10 @@
   .analytics-container {
     // Slightly less on the left because of
     // the icon padding
-    padding: 10px 16px 10px 12px;
+    padding: 8px 16px 8px 12px;
   }
   .meta-container {
-    padding: 10px 12px 10px 12px;
+    padding: 8px 12px 8px 10px;
 
     .owner {
       display: flex;
@@ -103,7 +113,7 @@
         flex-direction: column;
         justify-content: center;
         gap: 4px;
-        margin-left: 10px;
+        margin-left: 8px;
 
         .owner-name {
           color: var(--vh-color-neutral-03);
@@ -126,27 +136,6 @@
     color: var(--vh-foreground-color-light);
     font-weight: 500;
     line-height: 16px;
-  }
-
-  position: relative;
-  .private-notice {
-    position: absolute;
-    top: 131px;
-    left: 0px;
-    font-size: 14px;
-    background-color: var(--vh-color-warning-01);
-    color: white;
-
-    font-size: 14px;
-    font-weight: bold;
-
-    border-top-right-radius: 16px;
-    border-bottom-right-radius: 16px;
-    padding: 0 10px 0 10px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
   }
 }
 

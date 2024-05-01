@@ -99,26 +99,6 @@
         display: flex;
         align-items: center;
         gap: 12px;
-
-        .visibility-label {
-          font-size: 14px;
-          font-weight: bold;
-          color: white;
-
-          border-radius: 16px;
-          padding: 0 10px 0 14px;
-          height: 32px;
-          display: flex;
-          align-items: center;
-          gap: 6px;
-
-          &.private {
-            background-color: var(--vh-color-warning-01);
-          }
-          &.unlisted {
-            background-color: #b1a28d;
-          }
-        }
       }
     }
     .meta-info {

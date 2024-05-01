@@ -261,6 +261,7 @@ export const VizPageModals = () => {
           brandedOption={brandedOption}
           setBrandedOption={setBrandedOption}
           enableFreeTrial={enableFreeTrial}
+          isPrivate={info.visibility === 'private'}
         />
       )}
       {showDeleteVizConfirmationModal && (

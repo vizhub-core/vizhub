@@ -30,4 +30,5 @@ export { copyToClipboard } from './components/copyToClipboard';
 export { APIKeysList } from './components/APIKeysList';
 export { DeleteAPIKeyConfirmationModal } from './components/DeleteAPIKeyConfirmationModal';
 export { DocumentationPageBody } from './components/DocumentationPageBody';
+export { VisibilityLabel } from './components/VisibilityLabel';
 import './components/index.scss';

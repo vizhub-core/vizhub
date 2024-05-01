@@ -3,6 +3,7 @@
 export enum SectionId {
   Public = 'public',
   Private = 'private',
+  Unlisted = 'unlisted',
   Orgs = 'orgs',
   Starred = 'starred',
   Shared = 'shared',
