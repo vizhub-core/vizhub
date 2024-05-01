@@ -12,8 +12,10 @@ const visibilities: {
   [K in Visibility]: string;
 } = {
   public: 'Anyone can view this viz.',
-  private: 'Only you and collaborators can view this viz.',
-  unlisted: 'Anyone with the link can view this viz.',
+  private:
+    'Only you and collaborators can view this viz. Embeds are disabled.',
+  unlisted:
+    'Anyone with the link can view this viz. Embeds are enabled.',
 };
 
 export const VisibilityControl = ({
