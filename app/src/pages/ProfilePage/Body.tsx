@@ -66,13 +66,19 @@ export const Body = ({
     [profileUser],
   );
 
-  const isViewingOwnProfile =
-    authenticatedUser?.id === profileUser.id;
+  const isViewingOwnProfile = useMemo(
+    () => authenticatedUser?.id === profileUser.id,
+    [authenticatedUser, profileUser],
+  );
 
-  const showUpgradeCallout =
-    isViewingOwnProfile &&
-    authenticatedUser?.plan === FREE &&
-    sectionId === 'private';
+  const showUpgradeCallout = useMemo(
+    () =>
+      isViewingOwnProfile &&
+      authenticatedUser?.plan === FREE &&
+      (sectionId === SectionId.Private ||
+        sectionId === SectionId.Unlisted),
+    [isViewingOwnProfile, authenticatedUser, sectionId],
+  );
 
   const renderVizPreviews = useCallback(
     () => (
