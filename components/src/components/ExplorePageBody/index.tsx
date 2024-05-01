@@ -23,7 +23,10 @@ export const ExplorePageBody = ({
       <div className="vh-page-container">
         {children}
         <div className="vh-page-header">
-          <h2 className="mb-0">Explore</h2>
+          <div className="explore-heading-div">
+            <h1>Explore</h1>
+          </div>
+
           <div className="explore-header-controls">
             {sortOptions ? (
               <SortControl
