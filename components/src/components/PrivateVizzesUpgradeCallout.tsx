@@ -1,9 +1,11 @@
 export const PrivateVizzesUpgradeCallout = () => (
   <>
-    Protect your exclusive insights. With private
-    visualizations, your confidential data remains secure,
-    perfect for sensitive projects in professional settings.
-    <p>
+    With VizHub Premium, you can make an unlimited number of
+    your vizzes <strong>private</strong> or{' '}
+    <strong>unlisted</strong>. These features are perfect
+    for client work, personal projects, and other situations
+    where you want to control who can see your vizzes.
+    {/* <p>
       <a
         href="https://vizhub.com/forum/t/making-vizzes-private/977"
         target="_blank"
@@ -11,6 +13,6 @@ export const PrivateVizzesUpgradeCallout = () => (
       >
         Learn more about private vizzes
       </a>
-    </p>
+    </p> */}
   </>
 );

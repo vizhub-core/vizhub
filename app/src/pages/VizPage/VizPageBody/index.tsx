@@ -48,7 +48,7 @@ import { VizPageContext } from '../VizPageContext';
 import { formatCommitTimestamp } from 'components/src/components/formatCommitTimestamp';
 
 const debug = false;
-const enableVizPageUpgradeBanner = true;
+const enableVizPageUpgradeBanner = false;
 
 export const VizPageBody = () => {
   // The currently authenticated user, if any.
