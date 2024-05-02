@@ -1,8 +1,27 @@
 .vh-explore-page {
+  .vh-page-header {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    .explore-heading-div {
+      background-color: steelblue;
+      height: 250px;
+      width: 100%;
+      justify-content: center;
+      align-items: center;
+      padding-top: 90px;
+      padding-left: 42%;
+      color: white;
+      border-radius: 18px;
+      margin-bottom: 60px;
+    }
+  }
+
   .explore-header-controls {
     display: flex;
-    gap: 28px;
+    gap: 1020px;
     align-items: center;
+    padding-bottom: 18px;
   }
   .vh-page-container {
     // padding-top: 30px;
