@@ -93,8 +93,11 @@ export const EmbedSection = ({
         </Overlay>
       </InputGroup>
       <Form.Text className="text-muted">
-        Pasting this snippet in HTML will embed the viz into
-        the Web page.
+        <div>
+          Pasting this snippet in HTML will embed the viz
+          into the Web page.
+        </div>
+        <div>VizHub embeds do not set any cookies.</div>
       </Form.Text>
     </Form.Group>
   );
