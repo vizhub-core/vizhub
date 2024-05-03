@@ -26,7 +26,7 @@
     "d3-array": "^3.2.4"
   },
   "devDependencies": {
-    "vitest": "^1.5.3",
+    "vitest": "^1.6.0",
     "concurrently": "^8.2.2",
     "prettier": "^3.2.5",
     "typescript": "^5.4.5"
