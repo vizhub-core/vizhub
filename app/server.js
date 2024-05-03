@@ -29,6 +29,17 @@ const __dirname = path.dirname(
 const resolve = (p) => path.resolve(__dirname, p);
 const isTest = env.VITEST;
 
+const googleAnalyticsScript = `
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-N0T7CPN61K"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+      gtag('config', 'G-N0T7CPN61K');
+    </script>`;
+
 // TODO better 404 page
 const send404 = (res) => {
   res
@@ -390,19 +401,26 @@ async function createServer(
         pageData.description,
       );
       const image = pageData.image;
+      const disableGoogleAnalytics =
+        pageData.disableGoogleAnalytics;
 
       // Functions are used as the second argument to `replace()`
       // so that they are only evaluated when the template is rendered.
       // This avoids issues with special characters like "$$" in the page data.
       const html = template
         .replace(/<!--title-->/, () => titleSanitized)
-        .replace(/<!--seo-meta-tags-->/, () =>
-          seoMetaTags({
-            titleSanitized,
-            descriptionSanitized,
-            relativeUrl: originalUrl,
-            image,
-          }),
+        .replace(
+          /<!--seo-meta-tags-->/,
+          () =>
+            seoMetaTags({
+              titleSanitized,
+              descriptionSanitized,
+              relativeUrl: originalUrl,
+              image,
+            }) +
+            (disableGoogleAnalytics
+              ? ''
+              : googleAnalyticsScript),
         )
         .replace(/<!--app-html-->/, () => render(pageData))
         .replace(
