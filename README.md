@@ -1,6 +1,6 @@
 # vizhub3
 
-VizHub Platform V3
+VizHub Platform V3.
 
 ## Getting Started as a VizHub Developer
 
