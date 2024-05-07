@@ -1,4 +1,4 @@
-import { getFileText } from 'entities';
+import { FilesV2 } from 'entities';
 
 const EMPTY_PKG_JSON = {
   dependencies: {},
@@ -6,11 +6,15 @@ const EMPTY_PKG_JSON = {
   license: 'MIT',
 };
 
-export const packageJSON = (files) => {
-  const packageJsonText = getFileText(
-    files,
-    'package.json',
+export const packageJSON = (files: FilesV2) => {
+  const packageJsonFile = files.find(
+    (file) => file.name === 'package.json',
   );
+  if (!packageJsonFile) {
+    return EMPTY_PKG_JSON;
+  }
+  const packageJsonText = packageJsonFile.text;
+
   try {
     const pkg = packageJsonText
       ? JSON.parse(packageJsonText)
@@ -22,10 +26,10 @@ export const packageJSON = (files) => {
   }
 };
 
-export const dependencies = (files) =>
+export const dependencies = (files: FilesV2) =>
   packageJSON(files).dependencies || {};
 
-export const getConfiguredLibraries = (files) => {
+export const getConfiguredLibraries = (files: FilesV2) => {
   const vizhubConfig = packageJSON(files).vizhub;
   return vizhubConfig ? vizhubConfig.libraries : {};
 };
