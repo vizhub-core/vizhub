@@ -293,6 +293,12 @@ export const useRuntime = ({
     if (runtimeVersion === 2) {
       // // Debounce the updates.
       const v2Run = async () => {
+        // Clear the console before each run.
+        console.clear();
+
+        // Clear out the old error.
+        setSrcdocErrorMessage(null);
+
         // v2RuntimeWorker.current.postMessage({ content });
 
         // Set process on global scope so computeSrcDoc doesn't break.
