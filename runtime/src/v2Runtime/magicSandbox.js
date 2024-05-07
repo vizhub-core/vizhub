@@ -251,13 +251,14 @@ export default function (template, files) {
         if (input instanceof Request) {
           url = input.url
         }
-      
+
         // This is a hack that seems to fix a problem with the way Mapbox is requesting its TileJSON
         // Not sure what blob:// protocol is anyway...
-        url = url.replace('blob://', 'http://')
-          
+        if(typeof url === 'string') {
+          url = url.replace('blob://', 'http://')
+        }
+
         if(__fileNames.indexOf(url) >= 0) {
-      
           var responseText = __files[url];
           return Promise.resolve({
             ok: true,

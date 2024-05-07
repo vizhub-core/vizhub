@@ -48,6 +48,8 @@ export const bundle = async (files) => {
       }),
     ],
     external: Object.keys(libraries),
+    // Suppress Rollup warnings
+    onwarn: () => {},
   };
   const rollupBundle = await rollup(inputOptions);
   const { output } =
