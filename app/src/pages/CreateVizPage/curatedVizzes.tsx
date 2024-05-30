@@ -57,7 +57,7 @@ const starters = [
 
 const constructingVisualizations2024 = [
   // Blank Slate
-  '28307c11745740cb965ecb69a1794aec',
+  'curran/blank-slate',
   // Circles with D3
   '3d67423b84a845019c17ca761b60b619',
   // D3 Transitions
@@ -272,11 +272,14 @@ const getItRight = [
   '924d1df0f527460391a6aaa9c595a39c',
 ];
 
+// e.g. 'jim/cool-viz'
+export type UserSlugPair = string;
+
 export type CuratedVizCollection = {
   title: string;
   id: string;
   description: () => React.ReactNode;
-  vizIds: Array<VizId>;
+  vizIds: Array<VizId | UserSlugPair>;
 };
 
 export const curatedVizzes: Array<CuratedVizCollection> = [
