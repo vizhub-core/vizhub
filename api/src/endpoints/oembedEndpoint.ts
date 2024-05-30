@@ -94,7 +94,10 @@ export const oembedEndpoint = ({
 
       // Only works on public vizzes, for now
       // TODO: support unlisted vizzes
-      if (info.visibility !== 'public') {
+      if (
+        info.visibility !== 'public' &&
+        info.visibility !== 'unlisted'
+      ) {
         return res.send(
           err(
             accessDeniedError(

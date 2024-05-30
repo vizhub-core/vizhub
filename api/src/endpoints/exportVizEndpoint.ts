@@ -85,7 +85,10 @@ export const exportVizEndpoint = ({
       const id = info.id;
 
       // Only works on public vizzes, for now
-      if (info.visibility !== 'public') {
+      if (
+        info.visibility !== 'public' &&
+        info.visibility !== 'unlisted'
+      ) {
         return res.send(
           err(
             accessDeniedError(
