@@ -176,24 +176,19 @@ async function createServer(
 
     Sentry.init({
       dsn: 'https://645705f71cac4ca08b3714784eb530f0@o4505320347271168.ingest.sentry.io/4505320348581888',
-      integrations: [
-        // enable HTTP calls tracing
-        new Sentry.Integrations.Http({ tracing: true }),
-        // enable Express.js middleware tracing
-        new Sentry.Integrations.Express({ app }),
-        // Automatically instrument Node.js libraries and frameworks
-        ...Sentry.autoDiscoverNodePerformanceMonitoringIntegrations(),
-      ],
+      integrations: [],
 
-      // Set tracesSampleRate to 1.0 to capture 100%
-      // of transactions for performance monitoring.
-      // We recommend adjusting this value in production
-      tracesSampleRate: 1.0,
+      // Performance Monitoring
+      tracesSampleRate: 1.0, //  Capture 100% of the transactions
+
+      // Set sampling rate for profiling - this is relative to tracesSampleRate
+      profilesSampleRate: 1.0,
     });
 
+    Sentry.setupExpressErrorHandler(app);
     // RequestHandler creates a separate execution context, so that all
     // transactions/spans/breadcrumbs are isolated across requests
-    app.use(Sentry.Handlers.requestHandler());
+    // app.use(Sentry.Handlers.requestHandler());
     // TracingHandler creates a trace for every incoming request
     // app.use(Sentry.Handlers.tracingHandler());
   }
@@ -293,9 +288,9 @@ async function createServer(
   await api({ app, gateways, shareDBConnection });
 
   // Debug for testing sentry
-  app.get('/debug-sentry', function mainHandler(req, res) {
-    throw new Error('My first Sentry error!');
-  });
+  // app.get('/debug-sentry', function mainHandler(req, res) {
+  //   throw new Error('My first Sentry error!');
+  // });
 
   // Handle SSR pages in such a way that they update (like hot reloading)
   // in dev on each page request, so we don't need to restart the server all the time.
@@ -443,7 +438,7 @@ async function createServer(
   });
 
   // The error handler must be before any other error middleware and after all controllers
-  app.use(Sentry.Handlers.errorHandler());
+  // app.use(Sentry.Handlers.errorHandler());
 
   const BASE_URL = `http://localhost:${port}`;
   const ENDPOINTS = [
