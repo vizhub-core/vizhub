@@ -20,7 +20,7 @@ import './styles.scss';
 const enableImages = false;
 const premiumPriceMonthly = 12;
 const premiumPriceAnnually = 99.99;
-const enableConsulting = false;
+const enableConsulting = true;
 
 // The percent saved by paying annually.
 const percentSavings = Math.floor(
@@ -291,12 +291,12 @@ export const PricingPageBody = ({
                         className="plan-header-left"
                         id="consultations"
                       >
-                        Expert Consultations
+                        Custom Development Services
                       </h3>
                       <div className="plan-header-right">
-                        <h3>$99.99</h3>
+                        <h3>$200</h3>
                         <h3 className="plan-header-right-faint">
-                          /session
+                          /hour
                         </h3>
                       </div>
                     </div>
@@ -307,18 +307,17 @@ export const PricingPageBody = ({
                       <a href="https://vizhub.com/curran">
                         Curran Kelleher
                       </a>
-                      . Note: Rate is increasing to
-                      $120/session on April 1, 2024.
+                      .
                     </p>
 
                     <Button
                       variant="primary"
                       className="pricing-page-plan-button"
                       as="a"
-                      href="https://calendly.com/curran-kelleher/data-visualization-consultation"
+                      href="https://calendly.com/curran-kelleher/casual"
                       size="lg"
                     >
-                      Book now
+                      Book a first free call now
                     </Button>
 
                     <div className="pricing-page-plan-features">

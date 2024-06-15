@@ -22,7 +22,7 @@
     "d3-dsv": "^3.0.1",
     "react": "^18.3.1",
     "rollup": "^4.18.0",
-    "svelte": "^4.2.17"
+    "svelte": "^4.2.18"
   },
   "devDependencies": {
     "@types/d3-dsv": "^3.0.7",
