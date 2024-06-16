@@ -64,8 +64,8 @@
     "stripe": "^15.11.0",
     "vizhub-libraries": "^1.8.0",
     "vizhub-ui": "^3.23.0",
-    "vzcode": "^1.4.0",
-    "ws": "^8.17.0",
+    "vzcode": "^1.5.0",
+    "ws": "^8.17.1",
     "xss": "^1.0.15"
   },
   "devDependencies": {
