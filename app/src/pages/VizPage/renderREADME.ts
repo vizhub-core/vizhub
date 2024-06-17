@@ -9,11 +9,11 @@ import { marked, Renderer } from 'marked';
 // https://github.com/markedjs/marked/issues/144
 // https://github.com/vizhub-core/vizhub/blob/main/vizhub-v2/packages/neoFrontend/src/pages/VizPage/Body/Viewer/DescriptionSection/renderMarkdown.js
 const renderer = new Renderer();
-renderer.link = function (href, title, text) {
-  return Renderer.prototype.link
-    .call(this, href, title, text)
-    .replace('<a', '<a target="_blank"');
-};
+// renderer.link = function ({ href, title, text }) {
+//   return Renderer.prototype.link
+//     .call(this, href, title, text)
+//     .replace('<a', '<a target="_blank"');
+// };
 
 marked.use(
   {
