@@ -5,18 +5,18 @@ import {
   useMemo,
   useState,
 } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { FeatureId, User } from 'entities';
 import { PricingPageBody } from 'components/src/components/PricingPageBody';
 import { VizKit } from 'api/src/VizKit';
 import { SmartHeader } from '../../smartComponents/SmartHeader';
+import { isFreeTrialEligible } from '../../accessors/isFreeTrialEligible';
 import {
   AuthenticatedUserContext,
   AuthenticatedUserProvider,
 } from '../../contexts/AuthenticatedUserContext';
 import { Page, PageData } from '../Page';
-import { FeatureId, User } from 'entities';
 import { useOpenBillingPortal } from '../useOpenBillingPortal';
-import { useSearchParams } from 'react-router-dom';
-import { isFreeTrialEligible } from '../../accessors/isFreeTrialEligible';
 import './styles.scss';
 
 const vizKit = VizKit();
@@ -107,6 +107,11 @@ const Body = () => {
       // setCookie('showUpgradeSuccessToast', 'true', 1);
     }, [authenticatedUser, isMonthly]);
 
+  // TODO make this happen!
+  const handleProfessionalUpgradeClick = useCallback(() => {
+    console.log('Professional upgrade clicked');
+  }, []);
+
   const openBillingPortal = useOpenBillingPortal({
     vizKit,
     authenticatedUser,
@@ -126,6 +131,9 @@ const Body = () => {
     <PricingPageBody
       onPremiumUpgradeClick={handlePremiumUpgradeClick}
       onStarterDowngradeClick={handleStarterDowngradeClick}
+      onProfessionalUpgradeClick={
+        handleProfessionalUpgradeClick
+      }
       isMonthly={isMonthly}
       setIsMonthly={setIsMonthly}
       currentPlan={authenticatedUser?.plan}

@@ -1,26 +1,32 @@
 import { useCallback, useState } from 'react';
 import { FeatureId, Plan } from 'entities';
-import { Footer } from '../Footer';
-import { GreenCheckSVG } from '../Icons/sam/GreenCheckSVG';
 import {
   Button,
   ButtonGroup,
   OverlayTrigger,
   Tooltip,
 } from '../bootstrap';
+import { Footer } from '../Footer';
+import { GreenCheckSVG } from '../Icons/sam/GreenCheckSVG';
 import { image } from '../image';
+import { Testimonial } from '../Testimonial';
+import { HomeStarter } from '../HomeStarter';
 import { StarterFeatures } from './StarterFeatures';
 import { PremiumFeatures } from './PremiumFeatures';
 import { HighlightedFeatureProvider } from './HighlightedFeatureContext';
 import { ConsultationFeatures } from './ConsultationFeatures';
-import { Testimonial } from '../Testimonial';
-import { HomeStarter } from '../HomeStarter';
+import { OrgFeatures } from './OrgFeatures';
 import './styles.scss';
 
-const enableImages = false;
+// TODO move these into entities
 const premiumPriceMonthly = 12;
 const premiumPriceAnnually = 99.99;
-const enableConsulting = true;
+const orgPrice = 24;
+
+// Feature flags
+const enableImages = false;
+const enableConsulting = false;
+const enableOrgPlan = false;
 
 // The percent saved by paying annually.
 const percentSavings = Math.floor(
@@ -73,7 +79,7 @@ const consultationSpiritSrc = image(
 export const PricingPageBody = ({
   onStarterDowngradeClick,
   onPremiumUpgradeClick,
-  // onEnterpriseClick,
+  onProfessionalUpgradeClick,
   isMonthly,
   setIsMonthly,
   currentPlan = 'free',
@@ -82,7 +88,7 @@ export const PricingPageBody = ({
 }: {
   onStarterDowngradeClick: () => void;
   onPremiumUpgradeClick: () => void;
-  // onEnterpriseClick: () => void;
+  onProfessionalUpgradeClick: () => void;
   isMonthly: boolean;
   setIsMonthly: (isMonthly: boolean) => void;
   currentPlan: Plan;
@@ -100,6 +106,7 @@ export const PricingPageBody = ({
   const premiumPrice = isMonthly
     ? premiumPriceMonthly
     : premiumPriceAnnually;
+
   // Make sure there is consistency between the
   // server-side and client-side rendering of the
   // initial pricing page.
@@ -272,6 +279,58 @@ export const PricingPageBody = ({
                 </div>
               </div>
             </div>
+            <div className="pricing-page-plans">
+              {enableOrgPlan && (
+                <div className="pricing-page-plan">
+                  <div className="pricing-page-plan-body">
+                    <div className="plan-header">
+                      <h3 className="plan-header-left">
+                        Organization
+                      </h3>
+                      <div className="plan-header-right">
+                        <h3>${orgPrice}</h3>
+                        <h3 className="plan-header-right-faint">
+                          /editor/
+                          {isMonthly ? 'month' : 'year'}
+                        </h3>
+                      </div>
+                    </div>
+                    {/* <p>
+                    Ideal for professionals.
+                    {currentPlan === FREE &&
+                      (enableFreeTrial
+                        ? ' Includes 7 day free trial.'
+                        : ' Your 7 day free trial has expired.')}
+                  </p> */}
+                    {currentPlan === 'premium' ? (
+                      <CurrentButton />
+                    ) : (
+                      <Button
+                        variant="primary"
+                        className="pricing-page-plan-button"
+                        onClick={onPremiumUpgradeClick}
+                        size="lg"
+                      >
+                        {enableFreeTrial
+                          ? 'Start tree trial'
+                          : 'Upgrade now'}
+                      </Button>
+                    )}
+
+                    <div className="pricing-page-plan-features">
+                      <div className="vh-lede-01 mb-2 mt-2 vh-color-neutral-02">
+                        Everything in{' '}
+                        <span style={{ fontWeight: 600 }}>
+                          Starter
+                        </span>
+                        , plus:
+                      </div>
+                      <PremiumFeatures />
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
             <div className="mt-5">
               <HomeStarter />
             </div>
@@ -319,7 +378,63 @@ export const PricingPageBody = ({
                     >
                       Book a first free call now
                     </Button>
+                    {enableOrgPlan && (
+                      <div className="pricing-page-plan">
+                        <div className="pricing-page-plan-body">
+                          <div className="plan-header">
+                            <h3 className="plan-header-left">
+                              Professional
+                            </h3>
+                            <div className="plan-header-right">
+                              <h3>${orgPrice}</h3>
+                              <h3 className="plan-header-right-faint">
+                                /editor/
+                                {isMonthly
+                                  ? 'month'
+                                  : 'year'}
+                              </h3>
+                            </div>
+                          </div>
+                          {/* <p>
+                    Ideal for professionals.
+                    {currentPlan === FREE &&
+                      (enableFreeTrial
+                        ? ' Includes 7 day free trial.'
+                        : ' Your 7 day free trial has expired.')}
+                  </p> */}
+                          {currentPlan ===
+                          'professional' ? (
+                            <CurrentButton />
+                          ) : (
+                            <Button
+                              variant="primary"
+                              className="pricing-page-plan-button"
+                              onClick={
+                                onProfessionalUpgradeClick
+                              }
+                              size="lg"
+                            >
+                              {enableFreeTrial
+                                ? 'Start tree trial'
+                                : 'Upgrade now'}
+                            </Button>
+                          )}
 
+                          <div className="pricing-page-plan-features">
+                            <div className="vh-lede-01 mb-2 mt-2 vh-color-neutral-02">
+                              Everything in{' '}
+                              <span
+                                style={{ fontWeight: 600 }}
+                              >
+                                Premium
+                              </span>
+                              , but for your organization:
+                            </div>
+                            <OrgFeatures />
+                          </div>
+                        </div>
+                      </div>
+                    )}
                     <div className="pricing-page-plan-features">
                       <ConsultationFeatures />
                     </div>

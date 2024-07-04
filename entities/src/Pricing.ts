@@ -26,6 +26,9 @@ export type FeatureId =
   | 'search'
   | 'public-vizzes'
   | 'free-courses'
+  // Org features
+  | 'private-org'
+  | 'per-editor-pricing'
   // Consultation features
   | 'visualize-your-data'
   | 'work-through-hard-problems'
