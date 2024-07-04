@@ -25,16 +25,16 @@
     "decay": "^1.0.12",
     "deep-equal": "^2.2.3",
     "multiscale-timeseries": "^2.0.0",
-    "puppeteer": "^22.11.0",
+    "puppeteer": "^22.12.1",
     "sharp": "^0.33.4",
     "uuid": "^10.0.0"
   },
   "devDependencies": {
     "@types/deep-equal": "^1.0.4",
-    "@types/node": "^20.14.2",
+    "@types/node": "^20.14.9",
     "concurrently": "^8.2.2",
     "prettier": "^3.3.2",
-    "typescript": "^5.4.5",
+    "typescript": "^5.5.3",
     "vitest": "^1.6.0"
   }
 }
