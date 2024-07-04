@@ -9,7 +9,7 @@ export const getStripe = () => {
     stripe = new Stripe(
       process.env.VIZHUB_STRIPE_SECRET_KEY,
       {
-        apiVersion: '2024-04-10',
+        apiVersion: '2024-06-20',
       },
     );
   }
