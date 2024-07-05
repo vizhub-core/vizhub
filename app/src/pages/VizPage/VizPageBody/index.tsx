@@ -203,6 +203,10 @@ export const VizPageBody = () => {
                   transform: `scale(${iframeScale})`,
                 },
               })}
+          // These values for `sandbox` and `allow` are based on
+          // codesandbox.io as of 2024-07-05
+          sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts allow-downloads allow-pointer-lock"
+          allow="accelerometer; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; clipboard-write;"
         />
       ),
     [initialSrcdoc, vizHeight, isEmbedMode, isHideMode],
