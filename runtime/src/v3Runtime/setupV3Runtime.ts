@@ -232,7 +232,9 @@ export const setupV3Runtime = ({
 
         // Really reset the srcdoc!
         // console.log('Really reset the srcdoc!');
-        iframe.srcdoc = srcdoc;
+        if (srcdoc) {
+          iframe.srcdoc = srcdoc;
+        }
       }
     }
   });
@@ -255,6 +257,9 @@ export const setupV3Runtime = ({
     }
     if (data.type === 'runError') {
       setSrcdocErrorMessage(data.error.message);
+    }
+    if (data.type === 'writeFile') {
+      console.log('writeFile', data);
     }
   });
 
