@@ -37,7 +37,10 @@ const googleAnalyticsScript = `
         dataLayer.push(arguments);
       }
       gtag('js', new Date());
-      gtag('config', 'G-N0T7CPN61K');
+      gtag('config', 'G-N0T7CPN61K', {
+        'anonymize_ip': true, // Anonymize IP addresses
+        'cookie_flags': 'SameSite=None;Secure' // Ensure cookies are set with the SameSite attribute
+      });
     </script>`;
 
 // TODO better 404 page
