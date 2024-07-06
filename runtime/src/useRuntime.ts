@@ -7,12 +7,13 @@ import {
 } from 'react';
 import {
   Content,
+  FileId,
   SlugKey,
   VizId,
+  generateFileId,
   getRuntimeVersion,
 } from 'entities';
 import { V3Runtime } from './v3Runtime/setupV3Runtime';
-import { computeSrcDocV3 } from './v3Runtime/computeSrcDocV3';
 
 const debug = false;
 
@@ -26,6 +27,7 @@ export const useRuntime = ({
   vizCacheContents,
   isVisual,
   slugResolutionCache,
+  submitContentOperation,
 }: {
   content: Content;
   iframeRef: RefObject<HTMLIFrameElement>;
@@ -36,6 +38,9 @@ export const useRuntime = ({
   // If this is false, there is no iframeRef.current.
   isVisual: boolean;
   slugResolutionCache: Record<SlugKey, VizId>;
+  submitContentOperation: (
+    next: (content: Content) => Content,
+  ) => void;
 }) => {
   // This ref is used to skip the first mount.
   const initialMount = useRef(true);
@@ -166,17 +171,50 @@ export const useRuntime = ({
             throw new Error('content.id is not defined');
           }
 
+          // Writes the content of a file.
+          const writeFile = (
+            name: string,
+            text: string,
+          ) => {
+            submitContentOperation((content: Content) => {
+              // For new files, generate a fileId.
+              let fileId: FileId = generateFileId();
+
+              // For existing files, get the fileId.
+              if (content.files) {
+                const fileIds = Object.keys(content.files);
+                fileId = fileIds.find((fileId) => {
+                  return (
+                    content.files[fileId].name === name
+                  );
+                });
+              }
+
+              return {
+                ...content,
+                files: {
+                  ...content.files,
+                  [fileId]: {
+                    name,
+                    text,
+                  },
+                },
+              };
+            });
+          };
+
           v3RuntimeRef.current = setupV3Runtime({
             vizId: content.id,
             iframe,
             setSrcdocErrorMessage,
             getLatestContent,
             resolveSlugKey,
+            writeFile,
           });
         },
       );
     }
-  }, [runtimeVersion, isVisual]);
+  }, [runtimeVersion, isVisual, submitContentOperation]);
 
   // Send updates of imported vizzes to the V3 runtime.
   const previousVizCacheContents = useRef(vizCacheContents);

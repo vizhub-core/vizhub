@@ -48,12 +48,14 @@ export const setupV3Runtime = ({
   setSrcdocErrorMessage,
   getLatestContent,
   resolveSlugKey,
+  writeFile,
 }: {
   vizId: VizId;
   iframe: HTMLIFrameElement;
   setSrcdocErrorMessage: (error: string | null) => void;
   getLatestContent: (vizId: VizId) => Promise<Content>;
   resolveSlugKey: (slugKey: string) => Promise<VizId>;
+  writeFile: (fileName: string, content: string) => void;
 }): V3Runtime => {
   // The "build worker", a Web Worker that does the building.
   const worker = new Worker();
@@ -259,7 +261,9 @@ export const setupV3Runtime = ({
       setSrcdocErrorMessage(data.error.message);
     }
     if (data.type === 'writeFile') {
-      console.log('writeFile', data);
+      if (data.fileName && data.content) {
+        writeFile(data.fileName, data.content);
+      }
     }
   });
 
