@@ -33,24 +33,42 @@ export const Comments = ({
   // The comment that the user has entered
   const [comment, setComment] = useState('');
 
-  // When the comment form is submitted
-  const handleSubmit = useCallback(
-    (event: React.FormEvent<HTMLFormElement>) => {
-      event.preventDefault();
-      handleCommentSubmit(
-        event.currentTarget.commentBox.value,
-      );
-      // Clear the comment box after submission
-      setComment('');
-    },
-    [handleCommentSubmit],
-  );
-
-  // When the user types a character into the comment box
+  // When the user types a character into the comment box,
+  // update the comment state
   const handleChange = useCallback(
     (event: React.ChangeEvent<HTMLTextAreaElement>) =>
       setComment(event.target.value),
     [],
+  );
+
+  // Submits the comment and clears the comment box
+  const submit = useCallback(() => {
+    handleCommentSubmit(comment);
+    setComment('');
+  }, [handleCommentSubmit, comment]);
+
+  // When the comment form is submitted
+  const handleSubmit = useCallback(
+    (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      submit();
+    },
+    [submit],
+  );
+
+  // Support Ctrl+Enter to submit the comment
+  const handleKeyDown = useCallback(
+    (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+      if (event.key === 'Enter' && event.ctrlKey) {
+        event.preventDefault();
+
+        // Don't let the outer listener get this event,
+        // or it will attempt to run the code.
+        event.stopPropagation();
+        submit();
+      }
+    },
+    [handleSubmit],
   );
 
   return (
@@ -85,6 +103,7 @@ export const Comments = ({
                 placeholder="Leave a comment"
                 value={comment}
                 onChange={handleChange}
+                onKeyDown={handleKeyDown}
                 rows={6}
               />
             </Form.Group>

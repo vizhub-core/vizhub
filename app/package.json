@@ -28,8 +28,8 @@
   },
   "homepage": "https://github.com/vizhub-core/vizhub3#readme",
   "dependencies": {
-    "@rollup/browser": "^4.18.0",
-    "@sentry/node": "^8.15.0",
+    "@rollup/browser": "^4.18.1",
+    "@sentry/node": "^8.16.0",
     "@teamwork/websocket-json-stream": "^2.0.0",
     "@types/react-router-dom": "^5.3.3",
     "@types/sharedb": "^3.3.11",
@@ -57,14 +57,14 @@
     "react-markdown": "^9.0.1",
     "react-router-dom": "^6.24.1",
     "remark-gfm": "^4.0.0",
-    "rollup": "^4.18.0",
+    "rollup": "^4.18.1",
     "rollup-pluginutils": "^2.8.2",
     "sharedb": "^5.0.2",
     "sharedb-mongo": "^5.0.0",
     "stripe": "^16.2.0",
     "vizhub-libraries": "^1.8.0",
     "vizhub-ui": "^3.23.0",
-    "vzcode": "^1.8.0",
+    "vzcode": "^1.9.0",
     "ws": "^8.18.0",
     "xss": "^1.0.15"
   },
@@ -79,12 +79,12 @@
     "@vitejs/plugin-react": "^4.3.1",
     "compression": "^1.7.4",
     "express": "^4.19.2",
-    "pm2": "^5.4.1",
+    "pm2": "^5.4.2",
     "prettier": "^3.3.2",
     "rollup-plugin-visualizer": "^5.12.0",
     "sass": "^1.77.6",
     "serve-static": "^1.15.0",
     "vite": "^5.3.3",
-    "vitest": "^1.6.0"
+    "vitest": "^2.0.1"
   }
 }

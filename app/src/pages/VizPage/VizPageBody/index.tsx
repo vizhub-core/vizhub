@@ -179,6 +179,7 @@ export const VizPageBody = () => {
     vizCacheContents,
     isVisual,
     slugResolutionCache,
+    submitContentOperation,
   });
 
   // Render the viz runner iframe.

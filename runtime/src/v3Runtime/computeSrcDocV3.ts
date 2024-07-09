@@ -91,11 +91,14 @@ export const computeSrcDocV3 = async ({
         const render = () => {
           const container = document.getElementById('${vizContainerId}');
           typeof cleanup === 'function' && cleanup();
-          cleanup = Viz.main(container, { state: window.state, setState });
+          cleanup = Viz.main(container, { state: window.state, setState, writeFile });
         };
         const setState = (next) => {
           window.state = next(window.state);
           render();
+        };
+        const writeFile = (fileName, content) => {
+          parent.postMessage({ type: 'writeFile', fileName, content }, "*");
         };
         const run = () => {
           try {
