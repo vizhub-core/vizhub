@@ -21,7 +21,7 @@
   "dependencies": {
     "diff-match-patch": "^1.0.5",
     "json0-ot-diff": "^1.1.2",
-    "sharedb-client-browser": "^5.0.1"
+    "sharedb-client-browser": "^5.0.2"
   },
   "devDependencies": {
     "prettier": "^3.3.2"
