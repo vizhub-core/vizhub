@@ -23,13 +23,13 @@
     "@types/d3-time": "^3.0.3",
     "@types/uuid": "^10.0.0",
     "vite": "^5.3.3",
-    "vitest": "^2.0.1"
+    "vitest": "^2.0.2"
   },
   "dependencies": {
     "d3-time": "^3.1.0",
     "gpt-3-encoder": "^1.1.4",
     "mongodb-legacy": "^6.1.0",
-    "openai": "^4.52.4",
+    "openai": "^4.52.5",
     "prompt-sync": "^4.2.0"
   }
 }
