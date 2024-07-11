@@ -2,7 +2,6 @@
 
 VizHub Platform V3.
 
-
 ## Getting Started as a VizHub Developer
 
 ### UI Development Only
