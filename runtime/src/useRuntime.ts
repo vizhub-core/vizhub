@@ -181,13 +181,15 @@ export const useRuntime = ({
               let fileId: FileId = generateFileId();
 
               // For existing files, get the fileId.
-              if (content.files) {
-                const fileIds = Object.keys(content.files);
-                fileId = fileIds.find((fileId) => {
-                  return (
-                    content.files[fileId].name === name
-                  );
-                });
+              const { files } = content;
+              if (files !== undefined) {
+                const fileIds = Object.keys(files);
+                const foundFileId = fileIds.find(
+                  (fileId) => files[fileId].name === name,
+                );
+                if (foundFileId) {
+                  fileId = foundFileId;
+                }
               }
 
               return {
@@ -199,8 +201,21 @@ export const useRuntime = ({
                     text,
                   },
                 },
+                // Trigger a re-run.
+                isInteracting: true,
               };
             });
+
+            // Clear the `isInteracting` property.
+            setTimeout(() => {
+              // This somewhat cryptic logic
+              // deletes the `isInteracting` property
+              // from the document.
+              submitContentOperation(
+                ({ isInteracting, ...newDocument }) =>
+                  newDocument,
+              );
+            }, 0);
           };
 
           v3RuntimeRef.current = setupV3Runtime({
