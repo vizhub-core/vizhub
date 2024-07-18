@@ -1,5 +1,5 @@
 import { useContext, useMemo } from 'react';
-import { VizId } from 'entities';
+import { VizId, VizPath } from 'entities';
 import { CreateVizPageBody } from 'components';
 import { SmartHeader } from '../../smartComponents/SmartHeader';
 import { VizPreviewPresenter } from '../../smartComponents/VizPreviewPresenter';
@@ -33,14 +33,16 @@ export const Body = () => {
         renderVizPreviews={() =>
           curatedVizzes.map(
             (collection: CuratedVizCollection) => {
-              const { title, description, vizIds } =
+              const { title, description, vizPaths } =
                 collection;
               return (
                 <div key={title}>
                   <h2>{title}</h2>
                   <p>{description()}</p>
                   <VizPreviewCollection>
-                    {vizIds.map((id: VizId) => {
+                    {vizPaths.map((vizPath: VizPath) => {
+                      const id: VizId =
+                        vizIdsByPath[vizPath];
                       const infoSnapshot =
                         infoSnapshotsById[id];
 

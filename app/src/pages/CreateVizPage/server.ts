@@ -1,9 +1,13 @@
 import { CreateVizPage, CreateVizPageData } from './index';
 import { Gateways } from 'gateways';
 import { Auth0User } from '../Page';
-import { GetInfosAndOwners } from 'interactors';
+import {
+  GetInfosAndOwners,
+  ResolveVizPaths,
+} from 'interactors';
 import { getAuthenticatedUser } from '../getAuthenticatedUser';
 import { curatedVizzes } from './curatedVizzes';
+import { VizPath } from 'entities';
 
 CreateVizPage.getPageData = async ({
   gateways,
@@ -13,17 +17,18 @@ CreateVizPage.getPageData = async ({
   auth0User: Auth0User | null;
 }): Promise<CreateVizPageData> => {
   const getInfosAndOwners = GetInfosAndOwners(gateways);
+  const resolveVizPaths = ResolveVizPaths(gateways);
 
-  // Gather all the vizIds from the curatedVizzes
-  const vizIds = curatedVizzes.reduce(
-    (acc, { vizIds }) => [...acc, ...vizIds],
-    [] as Array<string>,
+  // Gather all the VizPaths from the curatedVizzes
+  const vizPaths: Array<VizPath> = curatedVizzes.reduce(
+    (acc, { vizPaths }) => [...acc, ...vizPaths],
+    [],
   );
 
   // Detect and report any duplicates
-  const duplicates = vizIds.reduce((acc, vizId) => {
-    if (acc.includes(vizId)) {
-      return [...acc, vizId];
+  const duplicates = vizPaths.reduce((acc, vizPath) => {
+    if (acc.includes(vizPath)) {
+      return [...acc, vizPath];
     }
     return acc;
   }, [] as Array<string>);
@@ -32,6 +37,18 @@ CreateVizPage.getPageData = async ({
     console.log(duplicates);
     return null;
   }
+
+  const resolvedVizIdsResult = await resolveVizPaths({
+    vizPaths,
+  });
+  if (resolvedVizIdsResult.outcome === 'failure') {
+    console.log('Error when resolving vizPaths:');
+    console.log(resolvedVizIdsResult.error);
+    return null;
+  }
+
+  const { vizIdsByPath, vizIds } =
+    resolvedVizIdsResult.value;
 
   const infosAndOwnersResult = await getInfosAndOwners({
     noNeedToFetchUsers: [],
