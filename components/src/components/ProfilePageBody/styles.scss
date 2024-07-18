@@ -68,12 +68,11 @@
         .profile-sidebar-section.active {
           background-color: var(--vh-color-action-03);
           color: var(--vh-color-action-01);
+          pointer-events: none;
 
           svg {
             color: var(--vh-color-action-01);
           }
-
-          pointer-events: none;
         }
       }
     }

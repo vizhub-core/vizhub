@@ -1,6 +1,6 @@
-import { VizId } from 'entities';
+import { VizPath } from 'entities';
 
-const templates = [
+const templates: Array<VizPath> = [
   // Circles with D3
   '3d67423b84a845019c17ca761b60b619',
 
@@ -26,7 +26,7 @@ const templates = [
   '8fa016be1b024afeaf55aec9a44cef47',
 ];
 
-const starters = [
+const starters: Array<VizPath> = [
   // // Circles with D3 (v3)
   // '3d67423b84a845019c17ca761b60b619',
 
@@ -37,7 +37,7 @@ const starters = [
   'f74abcce08d24c5c80c0b7262bb98185',
 
   // P5.js Starter (v3)
-  '1d2b9e55dcc54d9cbd3032b7488338a5',
+  // '1d2b9e55dcc54d9cbd3032b7488338a5',
 
   // React Starter
   'c3b14112dae34ef395999cef5783324f',
@@ -55,7 +55,7 @@ const starters = [
   // '96c12ef980e541f8abc9b2e7e140bf33',
 ];
 
-const constructingVisualizations2024 = [
+const constructingVisualizations2024: Array<VizPath> = [
   // Blank Slate
   '28307c11745740cb965ecb69a1794aec',
   // Circles with D3
@@ -124,9 +124,28 @@ const constructingVisualizations2024 = [
   'a6c068082da148f3b637e7c5b4bfabcb',
   // Draggable Circles with Voronoi Overlay
   '1b28ff39707f4bc2bd6f4216a7fe051b',
+  // Parallel Coordinates with Brushing
+  'curran/parallel-coordinates-with-brushing',
+  // Globe with Panning & Zooming
+  'https://vizhub.com/curran/globe-with-panning-zooming',
+  // Common UI Elements with D3
+  'https://vizhub.com/curran/919aac257ce540ae86ae6d7a299e00a7',
+  // Menu with D3
+  'https://vizhub.com/curran/menu-with-d3',
+  // Multiple Menus with D3
+  'https://vizhub.com/curran/multiple-menus-with-d3',
+  // Interactive Stacked Bar Chart
+  'https://vizhub.com/curran/interactive-stacked-bar-chart',
+  // Submarine Cables Globe
+  'https://vizhub.com/curran/submarine-cables-globe',
+  // D3 Grouped Selections
+  'https://vizhub.com/curran/d3-grouped-selections',
+  'https://vizhub.com/curran/code-tree-viz-from-livestream',
+  'https://vizhub.com/curran/label-filtering-algorithm-prototype',
+  'https://vizhub.com/curran/interactive-sparkline',
 ];
 
-const communityTemplates = [
+const communityTemplates: Array<VizPath> = [
   '437b18383bf347a98756806665689ec1',
   'd788e83f632b4158b0786304710a692e',
   '5a7cf326924944d8971a5f8b93a8166d',
@@ -134,7 +153,7 @@ const communityTemplates = [
   '7fcc84f68758417a8a1f6076410e98ab',
 ];
 
-const mostForked = [
+const mostForked: Array<VizPath> = [
   '469e558ba77941aa9e1b416ea521b0aa',
   '86a75dc8bdbe4965ba353a79d4bd44c8',
   'be771477cb974c938cd8603dd8b59d32',
@@ -142,7 +161,7 @@ const mostForked = [
   '366c38ba5ebc4631b4bd936f3b709744',
 ];
 
-const datavis2018Templates = [
+const datavis2018Templates: Array<VizPath> = [
   '1e6587bb27c54c368deae8b79a7ca59a',
   '3b8a76ab64a649d19d73ddcaff6bdaf3',
   '366c38ba5ebc4631b4bd936f3b709744',
@@ -174,7 +193,7 @@ const datavis2018Templates = [
   'b6de507a869d4e0581fd8a652b786a7e',
   '501f3fe24cfb4e6785ac75008b530a83',
 ];
-const datavis2020Templates = [
+const datavis2020Templates: Array<VizPath> = [
   'e54aba86481147a482f339763d4fc598',
   'fbf0dfea4bcc41f898f3ab9f10c4a279',
   '3a00f5c877ac4e30b7269c17f29d2e4d',
@@ -247,7 +266,7 @@ const datavis2020Templates = [
   'f192e44054aa4731b5ceba1b833028d6',
 ];
 
-const getItRight = [
+const getItRight: Array<VizPath> = [
   'df49fdfb56bf430b81cccc33a7e3a3bb',
   '4a4b732986a64dcaa84147aa0a39a888',
   'abbd62f9798a491e8eb35767fecba519',
@@ -276,10 +295,30 @@ export type CuratedVizCollection = {
   title: string;
   id: string;
   description: () => React.ReactNode;
-  vizIds: Array<VizId>;
+  vizPaths: Array<VizPath>;
 };
 
 export const curatedVizzes: Array<CuratedVizCollection> = [
+  {
+    title: 'Constructing Visualizations',
+    id: 'constructing-visualizations',
+    description: () => (
+      <div>
+        Vizzes that support{' '}
+        <span className="vh-text-hot-shadow">
+          hot reloading
+        </span>{' '}
+        and use <a href="https://d3js.org/">D3.js</a>.
+        <br />
+        From the course{' '}
+        <a href="https://vizhub.com/forum/t/constructing-visualizations-2024-index/950">
+          Constructing Visualizations
+        </a>
+        .
+      </div>
+    ),
+    vizPaths: constructingVisualizations2024,
+  },
   {
     title: 'Templates',
     id: 'templates',
@@ -290,7 +329,7 @@ export const curatedVizzes: Array<CuratedVizCollection> = [
         fork and modify with your own data.
       </div>
     ),
-    vizIds: templates,
+    vizPaths: templates,
   },
   {
     title: 'Technology Starters',
@@ -301,41 +340,22 @@ export const curatedVizzes: Array<CuratedVizCollection> = [
         technologies.
       </div>
     ),
-    vizIds: starters,
+    vizPaths: starters,
   },
-  {
-    title: 'Constructing Visualizations 2024',
-    id: 'constructing-visualizations-2024',
-    description: () => (
-      <div>
-        Vizzes that support{' '}
-        <span className="vh-text-hot-shadow">
-          hot reloading
-        </span>{' '}
-        and use only <a href="https://d3js.org/">D3.js</a>.
-        <br />
-        From the free online course{' '}
-        <a href="https://vizhub.com/forum/t/constructing-visualizations-2024-index/950">
-          Constructing Visualizations 2024
-        </a>
-        .
-      </div>
-    ),
-    vizIds: constructingVisualizations2024,
-  },
+
   {
     title: 'Community Templates',
     id: 'community-templates',
     description: () =>
       'A collection of templates from the community.',
-    vizIds: communityTemplates,
+    vizPaths: communityTemplates,
   },
   {
     title: 'Most Forked',
     id: 'most-forked',
     description: () =>
       'A collection of the most forked projects.',
-    vizIds: mostForked,
+    vizPaths: mostForked,
   },
   {
     title: 'Get it Right in Black & White',
@@ -349,7 +369,7 @@ export const curatedVizzes: Array<CuratedVizCollection> = [
         .
       </div>
     ),
-    vizIds: getItRight,
+    vizPaths: getItRight,
   },
   {
     title: 'Datavis 2020',
@@ -363,7 +383,7 @@ export const curatedVizzes: Array<CuratedVizCollection> = [
         .
       </div>
     ),
-    vizIds: datavis2020Templates,
+    vizPaths: datavis2020Templates,
   },
   {
     title: 'Datavis 2018',
@@ -378,6 +398,6 @@ export const curatedVizzes: Array<CuratedVizCollection> = [
       </div>
     ),
 
-    vizIds: datavis2018Templates,
+    vizPaths: datavis2018Templates,
   },
 ];

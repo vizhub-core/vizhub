@@ -82,6 +82,7 @@ export {
 export type {
   Viz,
   VizId,
+  VizPath,
   Info,
   Content,
   License,

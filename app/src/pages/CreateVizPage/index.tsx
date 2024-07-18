@@ -1,3 +1,4 @@
+import { VizId, VizPath } from 'entities';
 import { AuthenticatedUserProvider } from '../../contexts/AuthenticatedUserContext';
 import { Page, PageData } from '../Page';
 import { Body } from './Body';
@@ -8,7 +9,9 @@ import {
 import './styles.scss';
 
 export type CreateVizPageData = PageData &
-  InfosAndOwnersPageData;
+  InfosAndOwnersPageData & {
+    vizIdsByPath: { [key: VizPath]: VizId };
+  };
 
 export const CreateVizPage: Page = ({
   pageData,
@@ -26,7 +29,7 @@ export const CreateVizPage: Page = ({
         ownerUserSnapshots={pageData.ownerUserSnapshots}
         hasMoreInitially={pageData.hasMore}
       >
-        <Body />
+        <Body vizIdsByPath={pageData.vizIdsByPath} />
       </InfosAndOwnersProvider>
     </AuthenticatedUserProvider>
   );

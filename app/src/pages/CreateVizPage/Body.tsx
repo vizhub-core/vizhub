@@ -1,5 +1,5 @@
 import { useContext, useMemo } from 'react';
-import { VizId } from 'entities';
+import { VizId, VizPath } from 'entities';
 import { CreateVizPageBody } from 'components';
 import { SmartHeader } from '../../smartComponents/SmartHeader';
 import { VizPreviewPresenter } from '../../smartComponents/VizPreviewPresenter';
@@ -10,7 +10,7 @@ import {
 } from './curatedVizzes';
 import { VizPreviewCollection } from 'components/src/components/VizPreviewCollection';
 
-export const Body = () => {
+export const Body = ({ vizIdsByPath }) => {
   const { allInfoSnapshots, ownerUserSnapshotsById } =
     useContext(InfosAndOwnersContext);
 
@@ -33,14 +33,16 @@ export const Body = () => {
         renderVizPreviews={() =>
           curatedVizzes.map(
             (collection: CuratedVizCollection) => {
-              const { title, description, vizIds } =
+              const { title, description, vizPaths } =
                 collection;
               return (
                 <div key={title}>
                   <h2>{title}</h2>
-                  <p>{description()}</p>
+                  <div>{description()}</div>
                   <VizPreviewCollection>
-                    {vizIds.map((id: VizId) => {
+                    {vizPaths.map((vizPath: VizPath) => {
+                      const id: VizId =
+                        vizIdsByPath[vizPath];
                       const infoSnapshot =
                         infoSnapshotsById[id];
 
@@ -48,7 +50,7 @@ export const Body = () => {
                       // these ids are not present.
                       if (!infoSnapshot) {
                         console.warn(
-                          `No infoSnapshot for id ${id}`,
+                          `No infoSnapshot for id ${id}, vizPath ${vizPath}`,
                         );
                         return null;
                       }
