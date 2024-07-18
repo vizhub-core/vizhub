@@ -22,7 +22,7 @@
   "homepage": "https://github.com/vizhub-core/vizhub3#readme",
   "dependencies": {
     "@sesamecare-oss/redlock": "^1.3.1",
-    "@supabase/supabase-js": "^2.44.3",
+    "@supabase/supabase-js": "^2.44.4",
     "d3-array": "^3.2.4",
     "ioredis": "^5.4.1",
     "mongodb": "^6.8.0",
@@ -33,7 +33,7 @@
     "uuid": "^10.0.0"
   },
   "devDependencies": {
-    "prettier": "^3.3.2",
-    "vitest": "^2.0.2"
+    "prettier": "^3.3.3",
+    "vitest": "^2.0.3"
   }
 }

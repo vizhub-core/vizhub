@@ -280,3 +280,10 @@ export const slugify = (str: string) =>
     .replace(/-+$/, '')
     // Remove all emoji
     .replace(/[\u{1F600}-\u{1F64F}]/gu, '');
+
+// VizPath
+// A way of identifying a viz, either by:
+// - ID e.g. `924d1df0f527460391a6aaa9c595a39c`
+// - a qualified slug e.g. `curran/parallel-coordinates-with-brushing`
+// - or a full URL e.g. `https://vizhub.com/curran/parallel-coordinates-with-brushing`
+export type VizPath = string;

@@ -1,10 +1,9 @@
-import React from 'react';
 import { Button } from '../bootstrap';
 import { featureData } from './featureData';
-import './styles.scss';
 import { LogoSVG } from '../Icons/LogoSVG';
 import { FacebookSVG } from '../Icons/FacebookSVG';
 import { TwitterSVG } from '../Icons/TwitterSVG';
+import './styles.scss';
 const Hero = () => (
   <div
     className="hero"
