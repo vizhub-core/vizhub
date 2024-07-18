@@ -10,7 +10,7 @@ import {
 } from './curatedVizzes';
 import { VizPreviewCollection } from 'components/src/components/VizPreviewCollection';
 
-export const Body = () => {
+export const Body = ({ vizIdsByPath }) => {
   const { allInfoSnapshots, ownerUserSnapshotsById } =
     useContext(InfosAndOwnersContext);
 
@@ -38,7 +38,7 @@ export const Body = () => {
               return (
                 <div key={title}>
                   <h2>{title}</h2>
-                  <p>{description()}</p>
+                  <div>{description()}</div>
                   <VizPreviewCollection>
                     {vizPaths.map((vizPath: VizPath) => {
                       const id: VizId =
@@ -50,7 +50,7 @@ export const Body = () => {
                       // these ids are not present.
                       if (!infoSnapshot) {
                         console.warn(
-                          `No infoSnapshot for id ${id}`,
+                          `No infoSnapshot for id ${id}, vizPath ${vizPath}`,
                         );
                         return null;
                       }

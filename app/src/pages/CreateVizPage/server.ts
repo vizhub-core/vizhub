@@ -50,6 +50,8 @@ CreateVizPage.getPageData = async ({
   const { vizIdsByPath, vizIds } =
     resolvedVizIdsResult.value;
 
+  // console.log({ vizIdsByPath, vizIds });
+
   const infosAndOwnersResult = await getInfosAndOwners({
     noNeedToFetchUsers: [],
     sortId: 'mostForked',
@@ -78,6 +80,7 @@ CreateVizPage.getPageData = async ({
     infoSnapshots,
     ownerUserSnapshots,
     hasMore,
+    vizIdsByPath,
   };
 };
 

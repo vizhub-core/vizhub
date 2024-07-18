@@ -142,6 +142,7 @@ const constructingVisualizations2024: Array<VizPath> = [
   'https://vizhub.com/curran/d3-grouped-selections',
   'https://vizhub.com/curran/code-tree-viz-from-livestream',
   'https://vizhub.com/curran/label-filtering-algorithm-prototype',
+  'https://vizhub.com/curran/interactive-sparkline',
 ];
 
 const communityTemplates: Array<VizPath> = [

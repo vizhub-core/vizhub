@@ -1,12 +1,13 @@
 .vh-viz-page-head {
   padding: 4px 8px;
-  @media (max-width: 1200px) {
-    padding: 0;
-  }
   background-color: var(--vh-color-neutral-02);
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  @media (max-width: 1200px) {
+    padding: 0;
+  }
 
   .side {
     display: flex;
@@ -28,10 +29,10 @@
       }
 
       svg {
+        color: var(--vh-color-neutral-04);
         @media (min-width: 1201px) {
           margin-right: 8px;
         }
-        color: var(--vh-color-neutral-04);
       }
       .btn-text {
         /* Hide on mobile */

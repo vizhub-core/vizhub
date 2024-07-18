@@ -179,6 +179,7 @@
     flex-direction: row;
     margin-top: 60px;
     gap: 30px;
+    justify-content: center;
 
     &__title_main {
       font-size: 32px;
@@ -186,7 +187,8 @@
       margin: 60px 0 0px 0;
       color: rgba(0, 0, 0, 0.9);
     }
-    justify-content: center &__title {
+
+    &__title {
       font-size: 32px;
       font-weight: 300;
       margin: 60px 0 0px 0;
