@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { FeatureId, Plan } from 'entities';
 import {
   Button,
@@ -24,8 +24,8 @@ const premiumPriceAnnually = 99.99;
 const orgPrice = 24;
 
 // Feature flags
-const enableImages = false;
-const enableConsulting = false;
+const enableImages = true;
+const enableConsulting = true;
 const enableOrgPlan = false;
 
 // The percent saved by paying annually.
@@ -126,6 +126,12 @@ export const PricingPageBody = ({
   //   setPremiumSpiritSrc(randomImage(premiumImages));
   // }, []);
 
+  // Figure out if we are currently before or after August 1st, 2024
+  const showJulyDiscount = useMemo(
+    () => new Date() < new Date('2024-08-01'),
+    [],
+  );
+
   return (
     <HighlightedFeatureProvider
       highlightedFeature={highlightedFeature}
@@ -173,15 +179,27 @@ export const PricingPageBody = ({
                 </OverlayTrigger>
               </ButtonGroup>
             </div>
-            {/* <p
-              className="vh-lede-01"
-              style={{
-                color: 'var(--vh-color-caution-01)',
-              }}
-            >
-              Price increasing on April 1st to $12/mo.
-              Upgrade now to save!
-            </p> */}
+            {showJulyDiscount && currentPlan === 'free' && (
+              // <p
+              //   className="vh-lede-01"
+              //   style={{
+              //     color: 'var(--vh-color-caution-01)',
+              //   }}
+              // >
+              //   Limited time offer! Get 50% off your first
+              //   year of Premium. Use code{' '}
+              //   <strong>JULY50</strong> at checkout.
+              // </p>
+              <div className="alert alert-warning mt-3">
+                <p className="mb-0">
+                  Limited time offer! Get 50% off your first
+                  year of Premium. Use code{' '}
+                  <strong>JULY50</strong> at checkout. Offer
+                  expires August 1st, 2024.
+                </p>
+              </div>
+            )}
+
             <div className="pricing-page-plans">
               <div className="pricing-page-plan">
                 {enableImages && starterSpiritSrc && (
@@ -331,9 +349,7 @@ export const PricingPageBody = ({
                 </div>
               )}
             </div>
-            <div className="mt-5">
-              <HomeStarter />
-            </div>
+
             {enableConsulting && (
               <div className="pricing-page-plans">
                 <div className="pricing-page-plan">
@@ -350,33 +366,28 @@ export const PricingPageBody = ({
                         className="plan-header-left"
                         id="consultations"
                       >
-                        Custom Development Services
+                        Expert Consultations
                       </h3>
                       <div className="plan-header-right">
-                        <h3>$200</h3>
+                        <h3>$100</h3>
                         <h3 className="plan-header-right-faint">
-                          /hour
+                          /session
                         </h3>
                       </div>
                     </div>
                     <p>
                       Need expert help? Schedule a 1 hour
-                      consultation with data visualization
-                      VizHub expert and VizHub creator{' '}
-                      <a href="https://vizhub.com/curran">
-                        Curran Kelleher
-                      </a>
-                      .
+                      expert consultation today!
                     </p>
 
                     <Button
                       variant="primary"
                       className="pricing-page-plan-button"
                       as="a"
-                      href="https://calendly.com/curran-kelleher/casual"
+                      href="https://calendly.com/curran-kelleher/data-visualization-consultation"
                       size="lg"
                     >
-                      Book a first free call now
+                      Book a consultation now
                     </Button>
                     {enableOrgPlan && (
                       <div className="pricing-page-plan">

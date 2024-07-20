@@ -3,6 +3,15 @@ import { Feature } from './Feature';
 export const ConsultationFeatures = ({}) => (
   <>
     <Feature
+      title="Satisfaction Guaranteed"
+      id="satisfaction-guarantee"
+      hasBottomBorder={true}
+      startsExpanded={true}
+    >
+      If you're not satisfied with the consultation, I'll
+      refund your money, no questions asked.
+    </Feature>
+    {/* <Feature
       title="First Meeting Free"
       id="first-meeting-free"
       hasBottomBorder={true}
@@ -16,7 +25,7 @@ export const ConsultationFeatures = ({}) => (
       </a>
       to find out how I can help you with your interactive
       data visualization needs.
-    </Feature>
+    </Feature> */}
     <Feature
       title="Visualize Your Data"
       id="visualize-your-data"
