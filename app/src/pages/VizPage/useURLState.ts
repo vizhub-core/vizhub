@@ -41,24 +41,25 @@ export const useURLState = () => {
     [searchParams],
   );
 
-  const setShowEditor = useCallback(
-    (next: boolean) => {
-      setSearchParams(
-        (oldSearchParams: URLSearchParams) => {
-          const updatedSearchParams = new URLSearchParams(
-            oldSearchParams,
-          );
-          if (next) {
-            updatedSearchParams.set('edit', 'files');
-          } else {
-            updatedSearchParams.delete('edit');
-          }
-          return updatedSearchParams;
-        },
-      );
-    },
-    [setSearchParams],
-  );
+  const setShowEditor: (next: boolean) => void =
+    useCallback(
+      (next: boolean) => {
+        setSearchParams(
+          (oldSearchParams: URLSearchParams) => {
+            const updatedSearchParams = new URLSearchParams(
+              oldSearchParams,
+            );
+            if (next) {
+              updatedSearchParams.set('edit', 'files');
+            } else {
+              updatedSearchParams.delete('edit');
+            }
+            return updatedSearchParams;
+          },
+        );
+      },
+      [setSearchParams],
+    );
 
   return {
     isEmbedMode,
