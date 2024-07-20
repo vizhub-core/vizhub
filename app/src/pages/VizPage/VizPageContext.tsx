@@ -388,33 +388,6 @@ export const VizPageProvider = ({
     [ownerUser, info],
   );
 
-  // const authenticatedUser: User = useContext(
-  //   AuthenticatedUserContext,
-  // );
-
-  // const handleExportCodeClick = useCallback(() => {
-  //   vizKit.rest.recordAnalyticsEvents(
-  //     `event.click.export-code.viz.owner:${ownerUser.id}.viz:${info.id}`,
-  //   );
-  //   if (authenticatedUser?.plan === PREMIUM) {
-  //     // Trigger a download of the .zip file.
-  //     const exportHref = getVizExportHref({
-  //       ownerUser,
-  //       info,
-  //     });
-  //     // Simulate the user clicking on a link
-  //     // that will download the file.
-  //     const link = document.createElement('a');
-  //     link.setAttribute('href', exportHref);
-  //     link.setAttribute('download', info.title);
-  //     document.body.appendChild(link);
-  //     link.click();
-  //     document.body.removeChild(link);
-  //   } else {
-  //     toggleExportCodeUpgradeNudgeModal();
-  //   }
-  // }, [authenticatedUser, ownerUser, info]);
-
   const contextValue: VizPageContextValue = {
     info,
     ownerUser,

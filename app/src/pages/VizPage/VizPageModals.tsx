@@ -51,6 +51,7 @@ export const VizPageModals = () => {
     showExportCodeUpgradeNudgeModal,
     toggleExportCodeUpgradeNudgeModal,
   } = useContext(VizPageContext);
+
   // The currently authenticated user, if any.
   const authenticatedUser: User | null = useContext(
     AuthenticatedUserContext,
