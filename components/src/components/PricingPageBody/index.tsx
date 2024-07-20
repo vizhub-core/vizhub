@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { FeatureId, Plan } from 'entities';
 import {
   Button,
@@ -126,6 +126,12 @@ export const PricingPageBody = ({
   //   setPremiumSpiritSrc(randomImage(premiumImages));
   // }, []);
 
+  // Figure out if we are currently before or after August 1st, 2024
+  const showJulyDiscount = useMemo(
+    () => new Date() < new Date('2024-08-01'),
+    [],
+  );
+
   return (
     <HighlightedFeatureProvider
       highlightedFeature={highlightedFeature}
@@ -173,15 +179,27 @@ export const PricingPageBody = ({
                 </OverlayTrigger>
               </ButtonGroup>
             </div>
-            {/* <p
-              className="vh-lede-01"
-              style={{
-                color: 'var(--vh-color-caution-01)',
-              }}
-            >
-              Price increasing on April 1st to $12/mo.
-              Upgrade now to save!
-            </p> */}
+            {showJulyDiscount && currentPlan === 'free' && (
+              // <p
+              //   className="vh-lede-01"
+              //   style={{
+              //     color: 'var(--vh-color-caution-01)',
+              //   }}
+              // >
+              //   Limited time offer! Get 50% off your first
+              //   year of Premium. Use code{' '}
+              //   <strong>JULY50</strong> at checkout.
+              // </p>
+              <div className="alert alert-warning mt-3">
+                <p className="mb-0">
+                  Limited time offer! Get 50% off your first
+                  year of Premium. Use code{' '}
+                  <strong>JULY50</strong> at checkout. Offer
+                  expires August 1st, 2024.
+                </p>
+              </div>
+            )}
+
             <div className="pricing-page-plans">
               <div className="pricing-page-plan">
                 {enableImages && starterSpiritSrc && (
