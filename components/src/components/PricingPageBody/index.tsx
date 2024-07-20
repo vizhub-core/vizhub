@@ -24,8 +24,8 @@ const premiumPriceAnnually = 99.99;
 const orgPrice = 24;
 
 // Feature flags
-const enableImages = false;
-const enableConsulting = false;
+const enableImages = true;
+const enableConsulting = true;
 const enableOrgPlan = false;
 
 // The percent saved by paying annually.
@@ -349,9 +349,7 @@ export const PricingPageBody = ({
                 </div>
               )}
             </div>
-            <div className="mt-5">
-              <HomeStarter />
-            </div>
+
             {enableConsulting && (
               <div className="pricing-page-plans">
                 <div className="pricing-page-plan">
@@ -368,33 +366,28 @@ export const PricingPageBody = ({
                         className="plan-header-left"
                         id="consultations"
                       >
-                        Custom Development Services
+                        Expert Consultations
                       </h3>
                       <div className="plan-header-right">
-                        <h3>$200</h3>
+                        <h3>$100</h3>
                         <h3 className="plan-header-right-faint">
-                          /hour
+                          /session
                         </h3>
                       </div>
                     </div>
                     <p>
                       Need expert help? Schedule a 1 hour
-                      consultation with data visualization
-                      VizHub expert and VizHub creator{' '}
-                      <a href="https://vizhub.com/curran">
-                        Curran Kelleher
-                      </a>
-                      .
+                      expert consultation today!
                     </p>
 
                     <Button
                       variant="primary"
                       className="pricing-page-plan-button"
                       as="a"
-                      href="https://calendly.com/curran-kelleher/casual"
+                      href="https://calendly.com/curran-kelleher/data-visualization-consultation"
                       size="lg"
                     >
-                      Book a first free call now
+                      Book a consultation now
                     </Button>
                     {enableOrgPlan && (
                       <div className="pricing-page-plan">

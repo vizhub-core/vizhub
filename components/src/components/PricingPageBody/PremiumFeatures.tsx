@@ -27,7 +27,7 @@ export const PremiumFeatures = ({}) => (
       learnMoreHref={
         'https://vizhub.com/forum/t/making-vizzes-private/977'
       }
-      startsExpanded={true}
+      // startsExpanded={true}
     >
       Make your work private. Invite specific collaborators.
     </Feature>
@@ -35,7 +35,7 @@ export const PremiumFeatures = ({}) => (
       title="White Label Embedding"
       id="white-label-embedding"
       hasBottomBorder={true}
-      startsExpanded={true}
+      // startsExpanded={true}
       learnMoreHref={
         'https://vizhub.com/forum/t/embedding-vizzes/975'
       }
@@ -46,7 +46,7 @@ export const PremiumFeatures = ({}) => (
       title="AI-Assisted Coding"
       id="ai-assisted-coding"
       hasBottomBorder={true}
-      startsExpanded={true}
+      // startsExpanded={true}
       learnMoreHref="https://vizhub.com/forum/t/ai-assisted-coding/952"
     >
       Leverage artificial intelligence to code faster.
@@ -55,7 +55,7 @@ export const PremiumFeatures = ({}) => (
       title="Upload Larger Datasets"
       id="larger-datasets"
       hasBottomBorder={false}
-      startsExpanded={true}
+      // startsExpanded={true}
       learnMoreHref={
         'https://vizhub.com/forum/t/importing-data-and-code-across-vizzes/973'
       }

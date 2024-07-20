@@ -7,7 +7,7 @@ export const StarterFeatures = () => {
         title="Fork & Modify Public Vizzes"
         id="public-vizzes"
         hasBottomBorder={true}
-        startsExpanded={true}
+        // startsExpanded={true}
       >
         Create your own works right in your browser.
       </Feature>
@@ -15,7 +15,7 @@ export const StarterFeatures = () => {
         title="Hot Reloading & Interactive Widgets"
         id="hot-reloading"
         hasBottomBorder={true}
-        startsExpanded={true}
+        // startsExpanded={true}
         learnMoreHref="https://vizhub.com/forum/t/hot-reloading-and-interactive-widgets/968"
       >
         Iterate faster with truly instant feedback.
@@ -24,7 +24,7 @@ export const StarterFeatures = () => {
         title="Unlimited Real-Time Collaborators"
         id="real-time-collaborators"
         hasBottomBorder={true}
-        startsExpanded={true}
+        // startsExpanded={true}
         learnMoreHref={
           'https://vizhub.com/forum/t/real-time-collaborators/976'
         }

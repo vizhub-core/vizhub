@@ -1,6 +1,6 @@
 import { useContext, useEffect } from 'react';
 import { Info, Snapshot, sortOptions } from 'entities';
-import { ExplorePageBody } from 'components';
+import { ExplorePageBody, HomeStarter } from 'components';
 import { SmartHeader } from '../../smartComponents/SmartHeader';
 import { VizPreviewPresenter } from '../../smartComponents/VizPreviewPresenter';
 import { InfosAndOwnersContext } from '../../contexts/InfosAndOwnersContext';
@@ -66,7 +66,7 @@ export const Body = ({ featuredLiveViz }) => {
         onMoreClick={fetchNextPage}
         isLoadingNextPage={isLoadingNextPage}
       >
-        {/* <HomeStarter /> */}
+        <HomeStarter />
         {/* <FeaturedLiveViz
           userName={featuredLiveViz.userName}
           vizIdOrSlug={featuredLiveViz.vizIdOrSlug}
