@@ -12,6 +12,15 @@ export const StarterFeatures = () => {
         Create your own works right in your browser.
       </Feature>
       <Feature
+        title="Hot Reloading & Interactive Widgets"
+        id="hot-reloading"
+        hasBottomBorder={true}
+        startsExpanded={true}
+        learnMoreHref="https://vizhub.com/forum/t/hot-reloading-and-interactive-widgets/968"
+      >
+        Iterate faster with truly instant feedback.
+      </Feature>
+      <Feature
         title="Unlimited Real-Time Collaborators"
         id="real-time-collaborators"
         hasBottomBorder={true}
@@ -23,35 +32,11 @@ export const StarterFeatures = () => {
         Invite others to edit code with you in real time.
       </Feature>
       <Feature
-        title="Hot Reloading & Interactive Widgets"
-        id="hot-reloading"
-        hasBottomBorder={true}
-        startsExpanded={true}
-        learnMoreHref="https://vizhub.com/forum/t/hot-reloading-and-interactive-widgets/968"
-      >
-        Iterate faster with truly instant feedback.
-      </Feature>
-
-      <Feature
         title="Search Public Vizzes"
         id="search"
         hasBottomBorder={true}
       >
         Find compelling open source visualizations.
-      </Feature>
-      <Feature
-        title="Export Code"
-        id="api-access-for-vizzes"
-        learnMoreHref="https://vizhub.com/forum/t/api-access-for-vizzes/971"
-        hasBottomBorder={true}
-      >
-        Export public vizzes as code. Perfect for
-        integration with your existing workflows and
-        applications. See also{' '}
-        <a href="https://github.com/vizhub-core/vite-export-template">
-          Vite Export Template
-        </a>
-        .
       </Feature>
       {/* <Feature
         title="Community Access"

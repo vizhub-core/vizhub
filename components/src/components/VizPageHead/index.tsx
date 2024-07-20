@@ -31,10 +31,44 @@ export const VizPageHead = ({
   onTrashClick,
   downloadImageHref,
   toggleShowRevisionHistory,
+  userCanExport,
+  toggleExportCodeUpgradeNudgeModal,
 }) => {
   const toggleShowEditor = useCallback(
     () => setShowEditor(!showEditor),
     [showEditor, setShowEditor],
+  );
+
+  // const handleExportImageClick = useCallback(
+  //   (
+  //     event: React.MouseEvent<
+  //       HTMLAnchorElement,
+  //       MouseEvent
+  //     >,
+  //   ) => {
+  //     if (!userCanExport) {
+  //       event.preventDefault();
+  //       alert(
+  //         'This feature is available for pro users only.',
+  //       );
+  //     }
+  //   },
+  //   [userCanExport],
+  // );
+
+  const handleExportCodeClick = useCallback(
+    (
+      event: React.MouseEvent<
+        HTMLButtonElement,
+        MouseEvent
+      >,
+    ) => {
+      if (!userCanExport) {
+        event.preventDefault();
+        toggleExportCodeUpgradeNudgeModal();
+      }
+    },
+    [userCanExport, toggleExportCodeUpgradeNudgeModal],
   );
 
   return (
@@ -71,13 +105,18 @@ export const VizPageHead = ({
             download
           >
             <ImageSVG />
-            <div className="btn-text">Image</div>
+            <div className="btn-text">Export Image</div>
           </Button>
         )}
         {showExportButton && (
-          <Button variant="dark" as="a" href={exportHref}>
+          <Button
+            variant="dark"
+            as="a"
+            href={userCanExport ? exportHref : '#'}
+            onClick={handleExportCodeClick}
+          >
             <ExportSVG />
-            <div className="btn-text">Code</div>
+            <div className="btn-text">Export Code</div>
           </Button>
         )}
         {enableAPIButton && (
