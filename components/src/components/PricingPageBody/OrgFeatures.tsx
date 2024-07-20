@@ -6,7 +6,7 @@ export const OrgFeatures = ({}) => (
       title="Private Organization"
       id="private-org"
       hasBottomBorder={true}
-      startsExpanded={true}
+      // startsExpanded={true}
     >
       Create a VizHub Organization for your proprietary work
     </Feature>
@@ -14,7 +14,7 @@ export const OrgFeatures = ({}) => (
       title="Per-Editor Pricing"
       id="per-editor-pricing"
       hasBottomBorder={true}
-      startsExpanded={true}
+      // startsExpanded={true}
     >
       Only pay for org members who create and edit vizzes.
     </Feature>

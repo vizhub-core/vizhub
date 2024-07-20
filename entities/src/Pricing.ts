@@ -30,6 +30,7 @@ export type FeatureId =
   | 'private-org'
   | 'per-editor-pricing'
   // Consultation features
+  | 'satisfaction-guarantee'
   | 'visualize-your-data'
   | 'work-through-hard-problems'
   | 'design-interactive-visualizations'
