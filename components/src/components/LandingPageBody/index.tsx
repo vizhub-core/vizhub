@@ -1,13 +1,13 @@
 import { Footer } from '../Footer';
 import { HomeStarter } from '../HomeStarter';
-import { Testimonial } from '../Testimonial';
+// import { Testimonial } from '../Testimonial';
 import { Button } from '../bootstrap';
 import { discordLink } from '../discordLink';
 import { image } from '../image';
 import './styles.scss';
 
 const enableFooter = true;
-
+const enablePublicRoadmap = false;
 const headerBackgroundSrc = image('landing-header-bkg');
 
 export const LandingPageBody = ({
@@ -59,7 +59,7 @@ export const LandingPageBody = ({
           <div className="white-background-section blurb-and-testimonial">
             <div className="landing-page-content">
               <h1 className="section-heading">
-                VizHub Features
+                Welcome to VizHub!
               </h1>
               <div className="vh-lede-01 mb-3">
                 <p>
@@ -104,9 +104,9 @@ export const LandingPageBody = ({
                   </li>
                 </ul>
               </div>
-              {/* <Button href="/create-viz" size="lg">
-                Create Viz
-              </Button> */}
+              <Button href="/explore" size="lg">
+                Explore VizHub
+              </Button>
             </div>
             {/* <Testimonial
               headshotImgSrc={image('headshot-alark')}
@@ -433,114 +433,117 @@ export const LandingPageBody = ({
             </div>
           </div>
           */}
-          <div className="white-background-section blurb-and-testimonial">
-            <div className="landing-page-content">
-              <h1 className="section-heading">
-                Public Roadmap
-              </h1>
-              <div className="vh-lede-01 mb-3">
-                <p>
-                  Here are some plans we have for the future
-                  of VizHub.
-                </p>
-                <ul>
-                  <li>
-                    <a href="https://github.com/vizhub-core/vizhub-feedback/issues/788">
-                      API Keys for Read/Write Viz Access via
-                      API
+          {enablePublicRoadmap && (
+            <div className="white-background-section blurb-and-testimonial">
+              <div className="landing-page-content">
+                <h1 className="section-heading">
+                  Public Roadmap
+                </h1>
+                <div className="vh-lede-01 mb-3">
+                  <p>
+                    Here are some plans we have for the
+                    future of VizHub.
+                  </p>
+                  <ul>
+                    <li>
+                      <a href="https://github.com/vizhub-core/vizhub-feedback/issues/788">
+                        API Keys for Read/Write Viz Access
+                        via API
+                      </a>
+                    </li>
+                    <li>
+                      <a href="https://github.com/vizhub-core/vizhub-feedback/issues/781">
+                        Revision History: Restore to
+                        Previous Version
+                      </a>
+                    </li>
+                    <li>
+                      <a href="https://github.com/vizhub-core/vizhub-feedback/issues/789">
+                        Revision History: Embed Previous
+                        Version
+                      </a>
+                    </li>
+                    <li>
+                      <a href="https://github.com/vizhub-core/vizhub-feedback/issues/790">
+                        Revision History: Export Previous
+                        Version
+                      </a>
+                    </li>
+                    <li>
+                      <a href="https://github.com/vizhub-core/vizhub-feedback/issues/791">
+                        Revision History: Fork From Previous
+                        Version
+                      </a>
+                    </li>
+                    <li>
+                      <a href="https://github.com/vizhub-core/vizhub-feedback/issues/792">
+                        Comments: Notifications
+                      </a>
+                    </li>
+                    <li>
+                      <a href="https://github.com/vizhub-core/vizhub-feedback/issues/793">
+                        Comments: @-Mentions
+                      </a>
+                    </li>
+                    <li>
+                      <a href="https://github.com/vizhub-core/vizhub-feedback/issues/702">
+                        Export Formats: Export as React, Vue
+                        or Svelte app
+                      </a>
+                    </li>
+                    <li>
+                      <a href="https://github.com/vizhub-core/vizhub-feedback/issues/794">
+                        Persistent Configuration
+                      </a>
+                    </li>
+                    <li>
+                      <a href="https://github.com/vizhub-core/vizhub-feedback/issues/795">
+                        Better Search (text embeddings &
+                        vector similarity search)
+                      </a>
+                    </li>
+                    <li>
+                      <a href="https://github.com/vizhub-core/vizhub-feedback/issues/796">
+                        Image Search (image embeddings &
+                        vector similarity search)
+                      </a>
+                    </li>
+                    <li>
+                      <a href="https://github.com/vizhub-core/vizhub-feedback/issues/797">
+                        Recommended Vizzes
+                      </a>
+                    </li>
+                    <li>
+                      <a href="https://github.com/vizhub-core/vizhub-feedback/issues/798">
+                        Visual Forks Tree Navigator
+                      </a>
+                    </li>
+                    <li>
+                      <a href="https://github.com/vizhub-core/vizhub-feedback/issues/799">
+                        Ready-made Branded Dataviz Templates
+                      </a>
+                    </li>
+                  </ul>
+                  <p>
+                    If any of these resonate with you,
+                    please help us priotitize by commenting
+                    on the linked issues above. If you have
+                    more ideas for features that would make
+                    VizHub more useful to you, please let us
+                    know by{' '}
+                    <a href="https://github.com/vizhub-core/vizhub-feedback/issues/new">
+                      opening a new issue
+                    </a>{' '}
+                    or{' '}
+                    <a href={discordLink}>
+                      chatting in Discord
                     </a>
-                  </li>
-                  <li>
-                    <a href="https://github.com/vizhub-core/vizhub-feedback/issues/781">
-                      Revision History: Restore to Previous
-                      Version
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://github.com/vizhub-core/vizhub-feedback/issues/789">
-                      Revision History: Embed Previous
-                      Version
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://github.com/vizhub-core/vizhub-feedback/issues/790">
-                      Revision History: Export Previous
-                      Version
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://github.com/vizhub-core/vizhub-feedback/issues/791">
-                      Revision History: Fork From Previous
-                      Version
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://github.com/vizhub-core/vizhub-feedback/issues/792">
-                      Comments: Notifications
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://github.com/vizhub-core/vizhub-feedback/issues/793">
-                      Comments: @-Mentions
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://github.com/vizhub-core/vizhub-feedback/issues/702">
-                      Export Formats: Export as React, Vue
-                      or Svelte app
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://github.com/vizhub-core/vizhub-feedback/issues/794">
-                      Persistent Configuration
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://github.com/vizhub-core/vizhub-feedback/issues/795">
-                      Better Search (text embeddings &
-                      vector similarity search)
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://github.com/vizhub-core/vizhub-feedback/issues/796">
-                      Image Search (image embeddings &
-                      vector similarity search)
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://github.com/vizhub-core/vizhub-feedback/issues/797">
-                      Recommended Vizzes
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://github.com/vizhub-core/vizhub-feedback/issues/798">
-                      Visual Forks Tree Navigator
-                    </a>
-                  </li>
-                  <li>
-                    <a href="https://github.com/vizhub-core/vizhub-feedback/issues/799">
-                      Ready-made Branded Dataviz Templates
-                    </a>
-                  </li>
-                </ul>
-                <p>
-                  If any of these resonate with you, please
-                  help us priotitize by commenting on the
-                  linked issues above. If you have more
-                  ideas for features that would make VizHub
-                  more useful to you, please let us know by{' '}
-                  <a href="https://github.com/vizhub-core/vizhub-feedback/issues/new">
-                    opening a new issue
-                  </a>{' '}
-                  or{' '}
-                  <a href={discordLink}>
-                    chatting in Discord
-                  </a>
-                  !
-                </p>
+                    !
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
+          )}
           <HomeStarter />
         </div>
         {enableFooter && <Footer />}

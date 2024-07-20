@@ -66,7 +66,7 @@ export const Body = ({ featuredLiveViz }) => {
         onMoreClick={fetchNextPage}
         isLoadingNextPage={isLoadingNextPage}
       >
-        <HomeStarter />
+        {/* <HomeStarter /> */}
         {/* <FeaturedLiveViz
           userName={featuredLiveViz.userName}
           vizIdOrSlug={featuredLiveViz.vizIdOrSlug}
