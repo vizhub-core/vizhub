@@ -73,7 +73,7 @@ export const Header = ({
                 Resources
               </Dropdown.Toggle>
               <Dropdown.Menu>
-                <Dropdown.Item href="/features">
+                <Dropdown.Item href="/">
                   Features
                 </Dropdown.Item>
                 <Dropdown.Item href={discordLink}>

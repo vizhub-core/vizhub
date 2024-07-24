@@ -1,4 +1,9 @@
-import { useState, useCallback, useRef } from 'react';
+import {
+  useState,
+  useCallback,
+  useRef,
+  useEffect,
+} from 'react';
 import {
   Modal,
   Form,
@@ -147,6 +152,24 @@ export const SettingsModal = ({
       height: validHeight,
     });
   }, [title, visibility, owner, slug, height, onSave]);
+
+  // Run handleSaveClick on Enter key press
+  useEffect(() => {
+    const handleKeyPress = (event: KeyboardEvent) => {
+      if (event.key === 'Enter') {
+        handleSaveClick();
+      }
+    };
+
+    document.addEventListener('keypress', handleKeyPress);
+
+    return () => {
+      document.removeEventListener(
+        'keypress',
+        handleKeyPress,
+      );
+    };
+  }, [handleSaveClick]);
 
   return show ? (
     <Modal
