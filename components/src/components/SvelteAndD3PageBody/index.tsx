@@ -1,22 +1,9 @@
 import { Footer } from '../Footer';
-import {
-  Button,
-  Card,
-  Col,
-  Container,
-  Row,
-} from '../bootstrap';
+import { Button, Col, Container, Row } from '../bootstrap';
 import { image } from '../image';
 import './styles.scss';
 
 const enableFooter = true;
-const enablePublicRoadmap = false;
-const headerBackgroundSrc = image('landing-header-bkg');
-
-console.log('Col');
-console.log(Col);
-console.log('Row');
-console.log(Row);
 
 export const SvelteAndD3PageBody = ({
   isUserAuthenticated,
