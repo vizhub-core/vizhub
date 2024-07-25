@@ -21,6 +21,7 @@ export const computeSrcDocV3 = async ({
 
   let cdn = '';
   let styles = '';
+  let importMap = '';
 
   if (debug) {
     console.log('computeSrcDocV3:');
@@ -40,15 +41,53 @@ export const computeSrcDocV3 = async ({
       vizhub: { libraries },
     } = pkg;
 
-    cdn = Object.keys(dependencies)
+    // Filter out dependencies that are not UMD.
+    const umdDependencies = Object.keys(
+      dependencies,
+    ).filter((dependency) => libraries[dependency].global);
+
+    // Pull UMD dependencies from CDN.
+    cdn = umdDependencies
       .map((dependency, i) => {
+        console.log('libraries[dependency]');
+        console.log(libraries[dependency]);
+        console.log('libraries[dependency]');
+        console.log(libraries[dependency]);
         const version = dependencies[dependency];
         const path = libraries[dependency].path;
+
         const src = `https://cdn.jsdelivr.net/npm/${dependency}@${version}${path}`;
         const indent = i > 0 ? '    ' : '\n    ';
         return `${indent}<script src="${src}"></script>`;
       })
       .join('\n');
+
+    // Isolate ESM dependencies.
+    const esmDependencies = Object.keys(
+      dependencies,
+    ).filter((dependency) => !libraries[dependency].global);
+
+    //   <script type="importmap">
+    //   {
+    //     "imports": {
+    //       "d3": "https://cdn.skypack.dev/d3@7.9.0"
+    //     }
+    //   }
+    // </script>
+    // Generate import map for ESM dependencies.
+    importMap = `\n    <script type="importmap">
+      {
+        "imports": {
+          ${esmDependencies
+            .map((dependency) => {
+              const version = dependencies[dependency];
+              const path = libraries[dependency].path;
+              return `"${dependency}": "https://cdn.jsdelivr.net/npm/${dependency}@${version}${path}"`;
+            })
+            .join(',\n')}
+        }
+      }
+    </script>`;
   }
 
   // Inject CSS files.
@@ -71,7 +110,7 @@ export const computeSrcDocV3 = async ({
   return `<!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">${cdn}${styles}
+    <meta charset="utf-8">${cdn}${importMap}${styles}
     <style>
       body {
         margin: 0;
