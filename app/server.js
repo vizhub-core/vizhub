@@ -29,24 +29,29 @@ const __dirname = path.dirname(
 const resolve = (p) => path.resolve(__dirname, p);
 const isTest = env.VITEST;
 
-const googleAnalyticsScript = `
+// Old one for reference
+// window.dataLayer = window.dataLayer || [];
+// function gtag() {
+//   dataLayer.push(arguments);
+// }
+// gtag('js', new Date());
+// // Analytics
+// gtag('config', 'G-N0T7CPN61K', {
+//   'anonymize_ip': true, // Anonymize IP addresses
+//   'cookie_flags': 'SameSite=None;Secure' // Ensure cookies are set with the SameSite attribute
+// });
+// // Ads
+// gtag('config', 'G-5BVJNTEF9V');
 
-<!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-N0T7CPN61K"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag('js', new Date());
-      // Analytics
-      gtag('config', 'G-N0T7CPN61K', {
-        'anonymize_ip': true, // Anonymize IP addresses
-        'cookie_flags': 'SameSite=None;Secure' // Ensure cookies are set with the SameSite attribute
-      });
-      // Ads
-      gtag('config', 'G-5BVJNTEF9V');
-    </script>
+// <!-- Google tag (gtag.js) -->
+const googleAnalyticsScript = `
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-5BVJNTEF9V"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-5BVJNTEF9V');
+</script>
 `;
 
 // TODO better 404 page
