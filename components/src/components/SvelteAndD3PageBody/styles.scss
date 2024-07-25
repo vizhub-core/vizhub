@@ -1,0 +1,19 @@
+.community-svelte-and-d3-page {
+  overflow: auto;
+
+  p,
+  li {
+    font-size: 18px;
+  }
+
+  .responsive-link {
+    display: inline-block;
+    max-width: 100%;
+    max-width: 1200px;
+  }
+
+  .responsive-img {
+    max-width: 100%;
+    height: auto;
+  }
+}
