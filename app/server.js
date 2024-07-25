@@ -30,6 +30,8 @@ const resolve = (p) => path.resolve(__dirname, p);
 const isTest = env.VITEST;
 
 const googleAnalyticsScript = `
+
+<!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-N0T7CPN61K"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -37,11 +39,15 @@ const googleAnalyticsScript = `
         dataLayer.push(arguments);
       }
       gtag('js', new Date());
+      // Analytics
       gtag('config', 'G-N0T7CPN61K', {
         'anonymize_ip': true, // Anonymize IP addresses
         'cookie_flags': 'SameSite=None;Secure' // Ensure cookies are set with the SameSite attribute
       });
-    </script>`;
+      // Ads
+      gtag('config', 'G-5BVJNTEF9V');
+    </script>
+`;
 
 // TODO better 404 page
 const send404 = (res) => {
