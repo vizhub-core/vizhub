@@ -28,8 +28,8 @@
   },
   "homepage": "https://github.com/vizhub-core/vizhub3#readme",
   "dependencies": {
-    "@rollup/browser": "^4.18.1",
-    "@sentry/node": "^8.19.0",
+    "@rollup/browser": "^4.19.0",
+    "@sentry/node": "^8.20.0",
     "@teamwork/websocket-json-stream": "^2.0.0",
     "@types/react-router-dom": "^5.3.3",
     "@types/sharedb": "^3.3.11",
@@ -46,10 +46,10 @@
     "express-openid-connect": "^2.17.1",
     "http-proxy-middleware": "^3.0.0",
     "jose": "^5.6.3",
-    "jsdom": "^24.1.0",
+    "jsdom": "^24.1.1",
     "marked": "^13.0.2",
     "mongodb-legacy": "^6.1.0",
-    "partysocket": "^1.0.1",
+    "partysocket": "^1.0.2",
     "path": "^0.12.7",
     "path-posix": "^1.0.0",
     "react": "^18.3.1",
@@ -57,11 +57,11 @@
     "react-markdown": "^9.0.1",
     "react-router-dom": "^6.25.1",
     "remark-gfm": "^4.0.0",
-    "rollup": "^4.18.1",
+    "rollup": "^4.19.0",
     "rollup-pluginutils": "^2.8.2",
     "sharedb": "^5.0.2",
     "sharedb-mongo": "^5.0.0",
-    "stripe": "^16.2.0",
+    "stripe": "^16.4.0",
     "vizhub-libraries": "^1.8.0",
     "vizhub-ui": "^3.23.0",
     "vzcode": "^1.12.0",
@@ -84,7 +84,7 @@
     "rollup-plugin-visualizer": "^5.12.0",
     "sass": "^1.77.8",
     "serve-static": "^1.15.0",
-    "vite": "^5.3.4",
-    "vitest": "^2.0.3"
+    "vite": "^5.3.5",
+    "vitest": "^2.0.4"
   }
 }
