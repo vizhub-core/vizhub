@@ -24,7 +24,7 @@ const premiumPriceAnnually = 99.99;
 const orgPrice = 24;
 
 // Feature flags
-const enableImages = true;
+const enableImages = false;
 const enableConsulting = true;
 const enableOrgPlan = false;
 

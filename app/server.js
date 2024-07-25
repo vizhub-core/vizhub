@@ -456,6 +456,7 @@ async function createServer(
     '/create-viz',
     '/vizhub-ui-kitchen-sink',
     '/search?query=map',
+    '/community/svelte-and-d3',
   ];
 
   server.listen(port, () => {

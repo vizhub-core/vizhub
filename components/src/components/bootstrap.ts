@@ -13,7 +13,7 @@ import Container from 'react-bootstrap/cjs/Container.js';
 import Dropdown from 'react-bootstrap/cjs/Dropdown.js';
 import Image from 'react-bootstrap/cjs/Image.js';
 import Row from 'react-bootstrap/cjs/Row.js';
-import Col from 'react-bootstrap/cjs/Col.js';
+import ColRaw from 'react-bootstrap/cjs/Col.js';
 import Toast from 'react-bootstrap/cjs/Toast.js';
 import ToastContainer from 'react-bootstrap/cjs/ToastContainer.js';
 import Alert from 'react-bootstrap/cjs/Alert.js';
@@ -21,6 +21,11 @@ import Card from 'react-bootstrap/cjs/Card.js';
 import Tooltip from 'react-bootstrap/cjs/Tooltip.js';
 import Overlay from 'react-bootstrap/cjs/Overlay.js';
 import OverlayTrigger from 'react-bootstrap/cjs/OverlayTrigger.js';
+
+// Some fucked up shit right here
+// https://github.com/react-bootstrap/react-bootstrap/issues/6539#issuecomment-2251250267
+// @ts-ignore
+const Col = ColRaw.default || ColRaw;
 
 export {
   Alert,
