@@ -334,6 +334,7 @@ async function createServer(
       // If the URL is `/`, match it to the home page.
       const urlToMatch = baseUrl || '/';
 
+      console.log('Matching URL: ', urlToMatch);
       for (const page of pages) {
         match = matchPath({ path: page.path }, urlToMatch);
 
@@ -347,9 +348,11 @@ async function createServer(
 
         if (match) {
           matchedPage = page;
+          console.log('Matched page: ', page.path);
           break;
         }
       }
+      console.log('Matched URL');
 
       const params = match ? match.params : null;
 
@@ -456,6 +459,7 @@ async function createServer(
     '/create-viz',
     '/vizhub-ui-kitchen-sink',
     '/search?query=map',
+    '/community/svelte-and-d3',
   ];
 
   server.listen(port, () => {

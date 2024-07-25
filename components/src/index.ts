@@ -31,4 +31,5 @@ export { APIKeysList } from './components/APIKeysList';
 export { DeleteAPIKeyConfirmationModal } from './components/DeleteAPIKeyConfirmationModal';
 export { DocumentationPageBody } from './components/DocumentationPageBody';
 export { VisibilityLabel } from './components/VisibilityLabel';
+export { SvelteAndD3PageBody } from './components/SvelteAndD3PageBody';
 import './components/index.scss';
