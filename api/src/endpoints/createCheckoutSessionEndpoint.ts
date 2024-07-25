@@ -62,6 +62,7 @@ export const createCheckoutSession = ({
 
       // Redirect to the profile page after successful payment.
       // const success_url = `${urlBase}/${authenticatedUser.userName}`;
+      // TODO redirect to a dedicated "Welcome to VizHub Premium" page
       const success_url = `${urlBase}/pricing`;
       const cancel_url = success_url;
 
@@ -120,9 +121,9 @@ export const createCheckoutSession = ({
           //   : 'always',
 
           // Don't collect payment method, to lower the barrier to entry
-          // payment_method_collection: 'if_required',
+          payment_method_collection: 'if_required',
           // Fuck it, let's collect the card details!
-          payment_method_collection: 'always',
+          // payment_method_collection: 'always',
 
           allow_promotion_codes: true,
 
