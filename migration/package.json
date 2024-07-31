@@ -29,7 +29,7 @@
     "mongodb-legacy": "^6.1.0",
     "openai": "^4",
     "ot-json0": "^1.1.0",
-    "redis": "^4.6.15",
+    "redis": "^4.7.0",
     "redis-parser": "^3.0.0",
     "sharedb-mongo": "^5.0.0",
     "uuid": "^10.0.0"

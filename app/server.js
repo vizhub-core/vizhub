@@ -50,7 +50,10 @@ const googleAnalyticsScript = `
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-  gtag('config', 'G-5BVJNTEF9V');
+  gtag('config', 'G-5BVJNTEF9V', {
+    'anonymize_ip': true, // Anonymize IP addresses
+    'cookie_flags': 'SameSite=None;Secure' // Ensure cookies are set with the SameSite attribute
+  });
 </script>
 `;
 
