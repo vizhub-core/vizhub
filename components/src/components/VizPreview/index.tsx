@@ -69,17 +69,24 @@ export const VizPreview = ({
       <div className="content-container">
         <h4 className="title">{title}</h4>
       </div>
-      <div className="analytics-container">
-        <ForksWidget
-          forksCount={forksCount}
-          notClickable={true}
-        />
-        <UpvoteWidget
-          upvotesCount={upvotesCount}
-          isUpvoted={false}
-          notClickable={true}
-        />
-      </div>
+      {forksCount > 0 ||
+        (upvotesCount > 0 && (
+          <div className="analytics-container">
+            {forksCount > 0 && (
+              <ForksWidget
+                forksCount={forksCount}
+                notClickable={true}
+              />
+            )}
+            {upvotesCount > 0 && (
+              <UpvoteWidget
+                upvotesCount={upvotesCount}
+                isUpvoted={false}
+                notClickable={true}
+              />
+            )}
+          </div>
+        ))}
 
       <div className="meta-container">
         <div className="owner">
