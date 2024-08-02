@@ -65,17 +65,14 @@ export const LandingPageBody = ({
                 <p>
                   VizHub is a platform for creating,
                   sharing, and collaborating on interactive
-                  data visualizations. It's designed for
-                  data scientists, developers, and designers
-                  who want to deliver high quality bespoke
-                  interactive visualizations. It's free for
-                  open source, with a premium plan that
-                  supports professional work.
+                  data visualizations. It's perfect for data
+                  scientists, developers, and designers who
+                  want to create high-quality, custom
+                  visualizations. VizHub is free for
+                  open-source projects, with a premium plan
+                  for professional use.
                 </p>
-                <p>
-                  Here are a few features that makes VizHub
-                  unique:
-                </p>
+                <p>Unique Features:</p>
                 <ul>
                   <li>
                     <a href="#hot-reloading">
@@ -104,9 +101,18 @@ export const LandingPageBody = ({
                   </li>
                 </ul>
               </div>
-              <Button href="/explore" size="lg">
-                Explore VizHub
-              </Button>
+              <div style={{ display: 'flex', gap: '8px' }}>
+                <Button href="/explore" size="lg">
+                  Explore VizHub
+                </Button>
+                <Button
+                  href="/pricing"
+                  size="lg"
+                  variant="secondary"
+                >
+                  See Plans
+                </Button>
+              </div>
             </div>
             {/* <Testimonial
               headshotImgSrc={image('headshot-alark')}
