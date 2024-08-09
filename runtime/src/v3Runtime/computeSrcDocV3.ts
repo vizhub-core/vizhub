@@ -128,6 +128,17 @@ export const computeSrcDocV3 = async ({
           }
           style.textContent = src;
         };
+
+        const originalFetch = window.fetch;
+        const pendingFetches = {};
+        window.fetch = function(url, init) {
+          return new Promise((resolve, reject) => {
+            const requestId = Math.random().toString().slice(2, 7);
+            parent.postMessage({ type: 'fetchRequest', url, init, requestId }, "*");
+            pendingFetches[requestId] = { resolve, reject, url, init };
+          });
+        }
+
         onmessage = (message) => {
           switch (message.data.type) {
             case 'runJS':
@@ -140,6 +151,38 @@ export const computeSrcDocV3 = async ({
             case 'ping':
               parent.postMessage({ type: 'pong' }, "*");
               break;
+            case 'fetchResponse':
+              const { responseText, requestId } = message.data; 
+              const { resolve, reject, url, init } = pendingFetches[requestId];
+              delete pendingFetchPromises[input];
+              resolve(responseText 
+                ? {
+                  ok: true,
+                  status: 200,
+                  statusText: 'ok',
+                  url,
+                  text: function(){ return Promise.resolve(responseText) },
+                  json: function(){ return Promise.resolve(responseText).then(JSON.parse) },
+                  blob: function(){ return Promise.resolve(new Blob([responseText])) },
+                }
+                : originalFetch(input, init)
+              );
+
+              // const url = input;
+              // if(__fileNames.indexOf(url) >= 0) {
+              //   var responseText = __files[url];
+              //   return Promise.resolve({
+              //     ok: true,
+              //     status: 200,
+              //     statusText: 'ok',
+              //     url: url,
+              //     text: function(){ return Promise.resolve(responseText) },
+              //     json: function(){ return Promise.resolve(responseText).then(JSON.parse) },
+              //     blob: function(){ return Promise.resolve(new Blob([responseText])) },
+              //   })
+              // }
+            
+              // return originalFetch(input, init)
             default:
               break;
           }
