@@ -28,8 +28,8 @@
   },
   "homepage": "https://github.com/vizhub-core/vizhub3#readme",
   "dependencies": {
-    "@rollup/browser": "^4.19.2",
-    "@sentry/node": "^8.22.0",
+    "@rollup/browser": "^4.20.0",
+    "@sentry/node": "^8.25.0",
     "@teamwork/websocket-json-stream": "^2.0.0",
     "@types/react-router-dom": "^5.3.3",
     "@types/sharedb": "^3.3.12",
@@ -47,7 +47,7 @@
     "http-proxy-middleware": "^3.0.0",
     "jose": "^5.6.3",
     "jsdom": "^24.1.1",
-    "marked": "^13.0.3",
+    "marked": "^14.0.0",
     "mongodb-legacy": "^6.1.0",
     "partysocket": "^1.0.2",
     "path": "^0.12.7",
@@ -57,14 +57,14 @@
     "react-markdown": "^9.0.1",
     "react-router-dom": "^6.26.0",
     "remark-gfm": "^4.0.0",
-    "rollup": "^4.19.2",
+    "rollup": "^4.20.0",
     "rollup-pluginutils": "^2.8.2",
     "sharedb": "^5.0.3",
     "sharedb-mongo": "^5.0.0",
-    "stripe": "^16.6.0",
+    "stripe": "^16.7.0",
     "vizhub-libraries": "^1.8.0",
     "vizhub-ui": "^3.23.0",
-    "vzcode": "^1.15.0",
+    "vzcode": "^1.16.0",
     "ws": "^8.18.0",
     "xss": "^1.0.15"
   },
@@ -84,7 +84,7 @@
     "rollup-plugin-visualizer": "^5.12.0",
     "sass": "^1.77.8",
     "serve-static": "^1.15.0",
-    "vite": "^5.3.5",
+    "vite": "^5.4.0",
     "vitest": "^2.0.5"
   }
 }
