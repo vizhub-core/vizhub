@@ -6,7 +6,9 @@ export const zipFiles = (files: Array<File>): Buffer => {
   const zip = new AdmZip();
   for (const file of files) {
     const { text, name } = file;
-    zip.addFile(name, Buffer.alloc(text.length, text));
+    if (text && name) {
+      zip.addFile(name, Buffer.alloc(text.length, text));
+    }
   }
   return zip.toBuffer();
 };

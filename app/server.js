@@ -45,16 +45,13 @@ const isTest = env.VITEST;
 
 // <!-- Google tag (gtag.js) -->
 const googleAnalyticsScript = `
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-5BVJNTEF9V"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-5BVJNTEF9V', {
-    'anonymize_ip': true, // Anonymize IP addresses
-    'cookie_flags': 'SameSite=None;Secure' // Ensure cookies are set with the SameSite attribute
-  });
-</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-5BVJNTEF9V"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-5BVJNTEF9V');
+  </script>
 `;
 
 // TODO better 404 page
