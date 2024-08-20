@@ -27,7 +27,6 @@ import { InfosAndOwnersContext } from '../../contexts/InfosAndOwnersContext';
 import { AuthenticatedUserContext } from '../../contexts/AuthenticatedUserContext';
 import { SectionSortContext } from '../../contexts/SectionSortContext';
 import { image } from 'components/src/components/image';
-import { isFreeTrialEligible } from '../../accessors/isFreeTrialEligible';
 import { VizKit } from 'api/src/VizKit';
 import { Result, Success } from 'gateways';
 import { VizPreviewCollection } from 'components/src/components/VizPreviewCollection';
@@ -114,11 +113,6 @@ export const Body = ({
       </>
     ),
     [allInfoSnapshots, profileUser, showUpgradeCallout],
-  );
-
-  const enableFreeTrial = useMemo(
-    () => isFreeTrialEligible(authenticatedUser),
-    [authenticatedUser],
   );
 
   // TODO hydrate API keys from the server
@@ -248,7 +242,6 @@ export const Body = ({
         sectionId={sectionId}
         setSectionId={setSectionId}
         showUpgradeCallout={showUpgradeCallout}
-        enableFreeTrial={enableFreeTrial}
         handleCreateAPIKeyClick={handleCreateAPIKeyClick}
         showCreateAPIKeyButton={Array.isArray(apiKeys)}
       >

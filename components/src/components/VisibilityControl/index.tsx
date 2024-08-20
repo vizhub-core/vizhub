@@ -22,12 +22,10 @@ export const VisibilityControl = ({
   visibility,
   setVisibility,
   currentPlan,
-  enableFreeTrial,
 }: {
   visibility: Visibility;
   setVisibility: (visibility: Visibility) => void;
   currentPlan: Plan;
-  enableFreeTrial: boolean;
 }) => {
   const [showUpgradeCallout, setShowUpgradeCallout] =
     useState(false);
@@ -81,7 +79,6 @@ export const VisibilityControl = ({
       </Form.Text>
       {showUpgradeCallout && (
         <UpgradeCallout
-          enableFreeTrial={enableFreeTrial}
           featureId="private-vizzes"
           imageSrc={image('empty-private-vizzes', 'svg')}
           isVertical={true}

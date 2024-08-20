@@ -11,11 +11,9 @@ import { image } from '../image';
 export const AIAssistUpgradeNudgeModal = ({
   show,
   onClose,
-  enableFreeTrial,
 }: {
   show: boolean;
   onClose: () => void;
-  enableFreeTrial: boolean;
 }) => {
   return (
     <Modal show={show} onHide={onClose} centered>
@@ -24,7 +22,6 @@ export const AIAssistUpgradeNudgeModal = ({
       </Modal.Header>
 
       <UpgradeCallout
-        enableFreeTrial={enableFreeTrial}
         featureId="ai-assisted-coding"
         imageSrc={image('ai-assist-demo-5', 'mp4')}
         isVideo={true}
