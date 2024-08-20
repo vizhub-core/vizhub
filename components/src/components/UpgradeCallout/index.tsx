@@ -5,7 +5,6 @@ import './styles.scss';
 
 export const UpgradeCallout = ({
   featureId,
-  enableFreeTrial,
   showImage = true,
   imageSrc = image('upgrade-callout-feature'),
   isVideo = false,
@@ -17,7 +16,6 @@ export const UpgradeCallout = ({
   includeHeader = true,
 }: {
   featureId: FeatureId;
-  enableFreeTrial: boolean;
   showImage?: boolean;
   imageSrc?: string;
   isVideo?: boolean;
@@ -48,18 +46,13 @@ export const UpgradeCallout = ({
         {includeHeader && <h4>Upgrade to Premium</h4>}
         <div className="vh-block-01">{children}</div>
         <div className="upgrade-callout-buttons">
-          {/* <Button variant="secondary">
-            Remind me Later
-          </Button> */}
           <Button
             variant="primary"
             href={`/pricing?feature=${featureId}`}
             target="_blank"
             rel="noreferrer"
           >
-            {enableFreeTrial
-              ? 'Start Free Trial'
-              : 'Upgrade Now'}
+            Upgrade Now
           </Button>
         </div>
       </div>

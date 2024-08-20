@@ -67,7 +67,6 @@ export const ProfilePageBody = ({
   setSectionId,
 
   showUpgradeCallout,
-  enableFreeTrial,
 
   handleCreateAPIKeyClick,
   showCreateAPIKeyButton,
@@ -93,7 +92,6 @@ export const ProfilePageBody = ({
   // True when the user is on the free plan and viewing
   // their private vizzes
   showUpgradeCallout: boolean;
-  enableFreeTrial: boolean;
 
   handleCreateAPIKeyClick: () => void;
   showCreateAPIKeyButton: boolean;
@@ -239,10 +237,7 @@ export const ProfilePageBody = ({
             </div>
           </div>
           {showUpgradeCallout && (
-            <UpgradeCallout
-              featureId="private-vizzes"
-              enableFreeTrial={enableFreeTrial}
-            >
+            <UpgradeCallout featureId="private-vizzes">
               <PrivateVizzesUpgradeCallout />
             </UpgradeCallout>
           )}

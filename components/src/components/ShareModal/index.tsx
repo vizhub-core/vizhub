@@ -37,7 +37,6 @@ export const ShareModal = ({
   showCollaboratorsSection,
   brandedOption,
   setBrandedOption,
-  enableFreeTrial,
   isPrivate,
 }: {
   show: boolean;
@@ -65,7 +64,6 @@ export const ShareModal = ({
   showCollaboratorsSection: boolean;
   brandedOption: string;
   setBrandedOption: (brandedOption: string) => void;
-  enableFreeTrial: boolean;
   isPrivate: boolean;
 }) => {
   const [section, setSection] = useState('link');
@@ -123,9 +121,6 @@ export const ShareModal = ({
         <Modal.Title>Share</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {/* <div className="vh-form-note contextual">
-          SHARE WITH
-        </div> */}
         {navItemsToShow.length > 1 && (
           <ShareSectionsNav
             section={section}
@@ -146,8 +141,6 @@ export const ShareModal = ({
             }
             showAnyoneCanEdit={showAnyoneCanEdit}
             initialCollaborators={initialCollaborators}
-            // currentPlan={currentPlan}
-            // enableFreeTrial={enableFreeTrial}
           />
         )}
         {section === 'link' && (
@@ -158,7 +151,6 @@ export const ShareModal = ({
         )}
         {section === 'embed' && (
           <EmbedSection
-            enableFreeTrial={enableFreeTrial}
             embedSnippetToCopy={embedSnippetToCopy}
             onEmbedSnippetCopy={onEmbedSnippetCopy}
             brandedOption={brandedOption}

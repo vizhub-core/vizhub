@@ -21,12 +21,10 @@ export const BrandedEmbedControl = ({
   brandedOption,
   setBrandedOption,
   currentPlan,
-  enableFreeTrial,
 }: {
   brandedOption: string;
   setBrandedOption: (option: string) => void;
   currentPlan: Plan;
-  enableFreeTrial: boolean;
 }) => {
   const [showUpgradeCallout, setShowUpgradeCallout] =
     useState(false);
@@ -75,7 +73,6 @@ export const BrandedEmbedControl = ({
       {showUpgradeCallout && (
         <UpgradeCallout
           featureId="white-label-embedding"
-          enableFreeTrial={enableFreeTrial}
           imageSrc={image('whitelabel-embedding-2')}
           isVertical={true}
           topMargin={true}

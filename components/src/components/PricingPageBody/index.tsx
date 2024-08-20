@@ -18,14 +18,13 @@ import { ConsultationFeatures } from './ConsultationFeatures';
 import { OrgFeatures } from './OrgFeatures';
 import './styles.scss';
 
-// TODO move these into entities
-const premiumPriceMonthly = 12;
-const premiumPriceAnnually = 99.99;
+const premiumPriceMonthly = 10;
+const premiumPriceAnnually = 100;
 const orgPrice = 24;
 
 // Feature flags
 const enableImages = false;
-const enableConsulting = true;
+const enableConsulting = false;
 const enableOrgPlan = false;
 
 // The percent saved by paying annually.
@@ -83,7 +82,6 @@ export const PricingPageBody = ({
   isMonthly,
   setIsMonthly,
   currentPlan = 'free',
-  enableFreeTrial,
   highlightedFeature,
 }: {
   onStarterDowngradeClick: () => void;
@@ -92,7 +90,6 @@ export const PricingPageBody = ({
   isMonthly: boolean;
   setIsMonthly: (isMonthly: boolean) => void;
   currentPlan: Plan;
-  enableFreeTrial: boolean;
   highlightedFeature?: FeatureId;
 }) => {
   const handleMonthlyClick = useCallback(() => {
@@ -278,9 +275,7 @@ export const PricingPageBody = ({
                       onClick={onPremiumUpgradeClick}
                       size="lg"
                     >
-                      {enableFreeTrial
-                        ? 'Start tree trial'
-                        : 'Upgrade now'}
+                      Upgrade now
                     </Button>
                   )}
 
@@ -329,9 +324,7 @@ export const PricingPageBody = ({
                         onClick={onPremiumUpgradeClick}
                         size="lg"
                       >
-                        {enableFreeTrial
-                          ? 'Start tree trial'
-                          : 'Upgrade now'}
+                        Upgrade now
                       </Button>
                     )}
 
@@ -425,9 +418,7 @@ export const PricingPageBody = ({
                               }
                               size="lg"
                             >
-                              {enableFreeTrial
-                                ? 'Start tree trial'
-                                : 'Upgrade now'}
+                              Upgrade Now
                             </Button>
                           )}
 

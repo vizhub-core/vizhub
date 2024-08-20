@@ -17,7 +17,6 @@ export const EmbedSection = ({
   currentPlan,
   brandedOption,
   setBrandedOption,
-  enableFreeTrial,
   isPrivate,
 }: {
   embedSnippetToCopy: string;
@@ -25,7 +24,6 @@ export const EmbedSection = ({
   currentPlan: Plan;
   brandedOption: string;
   setBrandedOption: (brandedOption: string) => void;
-  enableFreeTrial: boolean;
   isPrivate: boolean;
 }) => {
   // Tracks when to show the "Copied" tooltip.
@@ -58,7 +56,6 @@ export const EmbedSection = ({
         </Alert>
       )}
       <BrandedEmbedControl
-        enableFreeTrial={enableFreeTrial}
         currentPlan={currentPlan}
         brandedOption={brandedOption}
         setBrandedOption={setBrandedOption}

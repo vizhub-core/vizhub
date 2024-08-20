@@ -41,7 +41,6 @@ export const SettingsModal = ({
   userName,
   enableURLChange = false,
   validateSlug,
-  enableFreeTrial,
 }: {
   show: boolean;
   onClose: () => void;
@@ -70,7 +69,6 @@ export const SettingsModal = ({
   validateSlug: (
     slug: string,
   ) => Promise<'valid' | 'invalid'>;
-  enableFreeTrial: boolean;
 }) => {
   // Local state for the title
   const [title, setTitle] = useState(initialTitle);
@@ -198,7 +196,6 @@ export const SettingsModal = ({
           visibility={visibility}
           setVisibility={setVisibility}
           currentPlan={currentPlan}
-          enableFreeTrial={enableFreeTrial}
         />
         {enableURLChange && (
           <Form.Group

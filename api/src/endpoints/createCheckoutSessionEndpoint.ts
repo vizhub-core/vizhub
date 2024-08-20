@@ -42,18 +42,6 @@ export const createCheckoutSession = ({
         res.json(err(userResult.error));
         return;
       }
-      const authenticatedUser: User = userResult.value.data;
-
-      // For debugging.
-      const alwaysAllowFreeTrial = false;
-
-      // Only allow one free trial per user
-      // by checking if user.stripeCustomerId is defined
-      const trial_period_days =
-        authenticatedUser.stripeCustomerId &&
-        !alwaysAllowFreeTrial
-          ? undefined
-          : 7;
 
       const stripe = getStripe();
 
@@ -94,46 +82,10 @@ export const createCheckoutSession = ({
             },
           ],
 
-          // Free trial
-          // See https://stripe.com/docs/payments/checkout/free-trials
-          subscription_data: {
-            trial_settings: {
-              end_behavior: {
-                missing_payment_method: 'cancel',
-              },
-            },
-            trial_period_days,
-          },
+          subscription_data: {},
 
-          // Yes, we do always want to collect payment method.
-          // By signing up, the user is agreeing to pay for the
-          // service, so we want to collect payment method
-          // regardless of whether they have a coupon or not.
-
-          // If they have a coupon for one free year that comes with
-          // joining the beta, then they will get a free year.
-
-          // payment_method_collection: 'always',
-
-          // Enable WPI signups without payment method
-          // payment_method_collection: discountCode
-          //   ? 'if_required'
-          //   : 'always',
-
-          // Don't collect payment method, to lower the barrier to entry
           payment_method_collection: 'if_required',
-          // Fuck it, let's collect the card details!
-          // payment_method_collection: 'always',
-
           allow_promotion_codes: true,
-
-          // discounts: discountCode
-          //   ? [
-          //       {
-          //         coupon: discountCode,
-          //       },
-          //     ]
-          //   : undefined,
         },
       );
       res.json(ok({ sessionURL: session.url }));
