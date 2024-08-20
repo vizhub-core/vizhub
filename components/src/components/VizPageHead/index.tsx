@@ -39,23 +39,6 @@ export const VizPageHead = ({
     [showEditor, setShowEditor],
   );
 
-  // const handleExportImageClick = useCallback(
-  //   (
-  //     event: React.MouseEvent<
-  //       HTMLAnchorElement,
-  //       MouseEvent
-  //     >,
-  //   ) => {
-  //     if (!userCanExport) {
-  //       event.preventDefault();
-  //       alert(
-  //         'This feature is available for pro users only.',
-  //       );
-  //     }
-  //   },
-  //   [userCanExport],
-  // );
-
   const handleExportCodeClick = useCallback(
     (
       event: React.MouseEvent<

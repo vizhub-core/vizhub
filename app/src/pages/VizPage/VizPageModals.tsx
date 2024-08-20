@@ -26,7 +26,6 @@ import { getVizPageHref } from '../../accessors';
 import { useOnTrashViz } from './useOnTrashViz';
 import { useValidateSlug } from './useValidateSlug';
 import { VizPageContext } from './VizPageContext';
-import { isFreeTrialEligible } from '../../accessors/isFreeTrialEligible';
 
 export const VizPageModals = () => {
   const {
@@ -190,11 +189,6 @@ export const VizPageModals = () => {
     owner: info.owner,
   });
 
-  const enableFreeTrial = useMemo(
-    () => isFreeTrialEligible(authenticatedUser),
-    [authenticatedUser],
-  );
-
   return (
     <>
       {showForkModal && (
@@ -214,7 +208,6 @@ export const VizPageModals = () => {
           onClose={toggleForkModal}
           onFork={onFork}
           currentPlan={authenticatedUser?.plan}
-          enableFreeTrial={enableFreeTrial}
         />
       )}
       {showSettingsModal && (
@@ -232,7 +225,6 @@ export const VizPageModals = () => {
           userName={authenticatedUser?.userName}
           initialSlug={info.slug || info.id}
           validateSlug={validateSlug}
-          enableFreeTrial={enableFreeTrial}
         />
       )}
       {showShareModal && (
@@ -261,7 +253,6 @@ export const VizPageModals = () => {
           }
           brandedOption={brandedOption}
           setBrandedOption={setBrandedOption}
-          enableFreeTrial={enableFreeTrial}
           isPrivate={info.visibility === 'private'}
         />
       )}
@@ -276,14 +267,12 @@ export const VizPageModals = () => {
         <AIAssistUpgradeNudgeModal
           show={showAIAssistUpgradeNudgeModal}
           onClose={toggleAIAssistUpgradeNudgeModal}
-          enableFreeTrial={enableFreeTrial}
         />
       )}
       {showExportCodeUpgradeNudgeModal && (
         <ExportCodeUpgradeNudgeModal
           show={showExportCodeUpgradeNudgeModal}
           onClose={toggleExportCodeUpgradeNudgeModal}
-          enableFreeTrial={enableFreeTrial}
         />
       )}
     </>

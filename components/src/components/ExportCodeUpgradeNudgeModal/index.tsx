@@ -5,11 +5,9 @@ import { image } from '../image';
 export const ExportCodeUpgradeNudgeModal = ({
   show,
   onClose,
-  enableFreeTrial,
 }: {
   show: boolean;
   onClose: () => void;
-  enableFreeTrial: boolean;
 }) => {
   return (
     <Modal show={show} onHide={onClose} centered>
@@ -19,7 +17,6 @@ export const ExportCodeUpgradeNudgeModal = ({
 
       <UpgradeCallout
         featureId="api-access-for-vizzes"
-        enableFreeTrial={enableFreeTrial}
         imageSrc={image('export-code', 'mp4')}
         isVideo={true}
         isVertical={true}

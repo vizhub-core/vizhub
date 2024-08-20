@@ -10,7 +10,6 @@ import { FeatureId, User } from 'entities';
 import { PricingPageBody } from 'components/src/components/PricingPageBody';
 import { VizKit } from 'api/src/VizKit';
 import { SmartHeader } from '../../smartComponents/SmartHeader';
-import { isFreeTrialEligible } from '../../accessors/isFreeTrialEligible';
 import {
   AuthenticatedUserContext,
   AuthenticatedUserProvider,
@@ -43,12 +42,6 @@ const Body = () => {
 
   // Default to monthly billing.
   const [isMonthly, setIsMonthly] = useState(true);
-
-  // Only enable one free trial per user.
-  const enableFreeTrial = useMemo(
-    () => isFreeTrialEligible(authenticatedUser),
-    [authenticatedUser],
-  );
 
   // When the user clicks "Upgrade" in the Premium card.
   const handlePremiumUpgradeClick =
@@ -137,7 +130,6 @@ const Body = () => {
       isMonthly={isMonthly}
       setIsMonthly={setIsMonthly}
       currentPlan={authenticatedUser?.plan}
-      enableFreeTrial={enableFreeTrial}
       highlightedFeature={highlightedFeature}
     />
   );
