@@ -16,19 +16,19 @@
     "d3-format": "^3.1.0",
     "d3-time-format": "^4.1.0",
     "react": "^18.3.1",
-    "react-aria": "^3.34.2",
-    "react-bootstrap": "^2.10.4",
+    "react-aria": "^3.35.0",
+    "react-bootstrap": "^2.10.5",
     "react-bootstrap-typeahead": "^6.3.2",
     "react-dom": "^18.3.1",
-    "react-stately": "^3.32.2",
+    "react-stately": "^3.33.0",
     "vizhub-ui": "^3.23.0"
   },
   "devDependencies": {
-    "@types/react": "^18.3.4",
+    "@types/react": "^18.3.11",
     "@types/react-dom": "^18.3.0",
-    "@vitejs/plugin-react": "^4.3.1",
+    "@vitejs/plugin-react": "^4.3.2",
     "prettier": "^3.3.3",
-    "sass": "^1.77.8",
-    "vite": "^5.4.2"
+    "sass": "^1.79.4",
+    "vite": "^5.4.8"
   }
 }
