@@ -1,7 +1,19 @@
-# vizhub3
+# VizHub
 
-VizHub Platform V3
+This repository contains the VizHub platform source code, which is currently deployed to https://vizhub.com/.
 
+Tour of the app:
+
+ * https://vizhub.com/explore - Explore user generated content
+![image](https://github.com/user-attachments/assets/297ac688-88ab-42f1-b04c-47e66ac9d153)
+ * https://vizhub.com/curran - An example Profile Page
+![image](https://github.com/user-attachments/assets/17a0794d-3f05-46b1-bd4e-e2076a055c39)
+ * https://vizhub.com/curran/circles-with-d3 - An example Viz Page
+![image](https://github.com/user-attachments/assets/5bacc288-c407-4a64-8d50-ec0895a62ee6)
+ * https://vizhub.com/curran/circles-with-d3?edit=files&file=index.js - The Viz Page with editor open ([VZCode](https://github.com/vizhub-core/vzcode)), which lets you edit code in the browser
+![image](https://github.com/user-attachments/assets/033f129e-cd6f-4dec-92f8-e5359d8875cf)
+
+All code changes are synchronized in real time to remote collaborators. You can use "interactive widgets" using Alt+drag on numbers for truly instant feedback (~60FPS hot reloading for simple examples).
 
 ## Getting Started as a VizHub Developer
 
