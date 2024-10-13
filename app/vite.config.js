@@ -32,4 +32,12 @@ export default defineConfig({
       jsx: 'automatic',
     },
   },
+  // Fix CSS warnings
+  css: {
+    preprocessorOptions: {
+      scss: {
+        api: 'modern-compiler',
+      },
+    },
+  },
 });
