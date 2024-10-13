@@ -29,7 +29,7 @@
     "d3-time": "^3.1.0",
     "gpt-3-encoder": "^1.1.4",
     "mongodb-legacy": "^6.1.2",
-    "openai": "^4.67.1",
+    "openai": "^4.67.3",
     "prompt-sync": "^4.2.0"
   }
 }
