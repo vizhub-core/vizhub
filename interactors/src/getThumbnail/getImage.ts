@@ -17,7 +17,7 @@ import {
   computeSrcDoc,
   VizCache,
   createVizCache,
-} from 'vizhub-runtime';
+} from '@vizhub-core/runtime';
 import { GetContentAtCommit } from '../getContentAtCommit';
 import { takeScreenshot } from './takeScreenshot';
 import {

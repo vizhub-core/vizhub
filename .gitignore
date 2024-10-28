@@ -2,3 +2,5 @@ node_modules
 *.swp
 dist
 .vscode
+.aider*
+.env

@@ -19,7 +19,7 @@ import {
   VizCache,
   createVizCache,
   cleanRollupErrorMessage,
-} from 'vizhub-runtime';
+} from '@vizhub-core/runtime';
 import { ResolveSlug } from './resolveSlug';
 
 const debug = false;

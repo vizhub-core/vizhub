@@ -18,6 +18,7 @@ import {
   Commit,
 } from 'entities';
 import { JSDOM } from 'jsdom';
+import { setJSDOM } from '@vizhub-core/runtime';
 import {
   BuildViz,
   CommitViz,
@@ -33,7 +34,6 @@ import { renderREADME } from './renderREADME';
 import { getAuthenticatedUser } from '../getAuthenticatedUser';
 import { VizAccess } from 'interactors/src/verifyVizAccess';
 import { Result } from 'gateways';
-import { setJSDOM } from 'vizhub-runtime';
 import { VizPageData } from './VizPageData';
 
 setJSDOM(JSDOM);
