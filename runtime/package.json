@@ -30,5 +30,8 @@
     "npm": "^10.9.0",
     "typescript": "^5.6.3",
     "vitest": "^2.1.2"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
