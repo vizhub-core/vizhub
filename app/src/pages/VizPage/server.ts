@@ -18,7 +18,7 @@ import {
   Commit,
 } from 'entities';
 import { JSDOM } from 'jsdom';
-import { setJSDOM } from '@vizhub-core/runtime';
+import { setJSDOM } from '@vizhub/runtime';
 import {
   BuildViz,
   CommitViz,

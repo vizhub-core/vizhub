@@ -1,5 +1,5 @@
 {
-  "name": "@vizhub-core/runtime",
+  "name": "@vizhub/runtime",
   "version": "1.0.0",
   "type": "module",
   "main": "src/index",
