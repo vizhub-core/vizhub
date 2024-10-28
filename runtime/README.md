@@ -13,54 +13,68 @@ The `@vizhub-core/runtime` package is a core component of the VizHub platform, r
 
 ## Installation
 
-To install the package, use npm:
+Install the package using npm:
 
-\`\`\`
+```bash
 npm install @vizhub-core/runtime
-\`\`\`
+```
 
 ## Usage
 
-The `@vizhub-core/runtime` package is designed to be used within the VizHub platform, but it can also be used in other environments where isolated execution of visualizations is required.
+The `@vizhub-core/runtime` package is designed to be used within the VizHub platform but can also be utilized in other environments where isolated execution of visualizations is required.
 
 ### Example
 
-Here is an example of how to use the runtime to compute the `srcdoc` for a visualization:
+Here's an example of how to use the runtime to compute the `srcdoc` for a visualization:
 
-\`\`\`typescript
+```javascript
 import { computeSrcDoc } from '@vizhub-core/runtime';
 import { rollup } from 'rollup';
 import { createVizCache } from '@vizhub-core/runtime/v3Runtime/vizCache';
 
 const vizCache = createVizCache({
-initialContents: [],
-handleCacheMiss: async (vizId) => {
-// Fetch the content for the vizId
-},
+  initialContents: [],
+  handleCacheMiss: async (vizId) => {
+    // Fetch the content for the vizId
+  },
 });
 
 const content = {
-id: 'example-viz',
-files: {
-'index.js': { name: 'index.js', text: 'console.log("Hello World");' },
-'index.html': { name: 'index.html', text: '<html><body><h1>Hello World</h1></body></html>' },
-},
+  id: 'example-viz',
+  files: {
+    'index.js': {
+      name: 'index.js',
+      text: 'console.log("Hello World");',
+    },
+    'index.html': {
+      name: 'index.html',
+      text: '<html><body><h1>Hello World</h1></body></html>',
+    },
+  },
 };
 
-const srcdoc = await computeSrcDoc({
-rollup,
-content,
-vizCache,
-resolveSlug: async ({ userName, slug }) => {
-// Resolve slug to vizId
-},
-getSvelteCompiler: async () => {
-// Return the Svelte compiler
-},
-});
+const { initialSrcdoc, initialSrcdocError } =
+  await computeSrcDoc({
+    rollup,
+    content,
+    vizCache,
+    resolveSlug: async ({ userName, slug }) => {
+      // Resolve slug to vizId
+    },
+    getSvelteCompiler: async () => {
+      // Return the Svelte compiler
+    },
+  });
 
-console.log(srcdoc);
-\`\`\`
+if (initialSrcdocError) {
+  console.error(
+    'Error computing srcdoc:',
+    initialSrcdocError,
+  );
+} else {
+  console.log('Computed srcdoc:', initialSrcdoc);
+}
+```
 
 ## API Documentation
 
@@ -68,89 +82,91 @@ console.log(srcdoc);
 
 Computes the `srcdoc` for a visualization based on its content and dependencies.
 
-#### Parameters:
+#### Parameters
 
-- `rollup`: The Rollup instance used for bundling.
-- `content`: The content of the visualization, including files like `index.js` and `index.html`.
-- `vizCache`: A cache of visualizations used to resolve imports from other visualizations.
-- `resolveSlug`: A function to resolve slug-based imports to a viz ID.
-- `getSvelteCompiler`: A function to get the Svelte compiler.
+- **`rollup`**: The Rollup instance used for bundling.
+- **`content`**: The content of the visualization, including files like `index.js` and `index.html`.
+- **`vizCache`**: A cache of visualizations used to resolve imports from other visualizations.
+- **`resolveSlug`**: A function to resolve slug-based imports to a viz ID.
+- **`getSvelteCompiler`**: A function to get the Svelte compiler.
 
-#### Returns:
+#### Returns
 
-- A promise that resolves to an object containing:
-  - `initialSrcdoc`: The computed `srcdoc` for the visualization.
-  - `initialSrcdocError`: Any error that occurred during the computation.
+A promise that resolves to an object containing:
+
+- **`initialSrcdoc`**: The computed `srcdoc` for the visualization.
+- **`initialSrcdocError`**: Any error that occurred during the computation.
 
 ### `createVizCache`
 
 Creates a cache for visualizations, used to resolve imports from other visualizations.
 
-#### Parameters:
+#### Parameters
 
-- `initialContents`: An array of initial contents to populate the cache.
-- `handleCacheMiss`: A function that is called when a visualization is not found in the cache.
+- **`initialContents`**: An array of initial contents to populate the cache.
+- **`handleCacheMiss`**: A function called when a visualization is not found in the cache.
 
-#### Returns:
+#### Returns
 
-- A `VizCache` object with the following methods:
-  - `get(vizId)`: Retrieves the content of a visualization by its ID.
-  - `set(content)`: Adds or updates the content of a visualization in the cache.
-  - `invalidate(vizId)`: Invalidates the cache for a specific visualization.
+A `VizCache` object with the following methods:
+
+- **`get(vizId)`**: Retrieves the content of a visualization by its ID.
+- **`set(content)`**: Adds or updates the content of a visualization in the cache.
+- **`invalidate(vizId)`**: Invalidates the cache for a specific visualization.
 
 ### `setJSDOM`
 
-Sets the DOM parser for environments where the native DOMParser is not available (e.g., Node.js).
+Sets the DOM parser for environments where the native `DOMParser` is not available (e.g., Node.js).
 
-#### Parameters:
+#### Parameters
 
-- `JSDOM`: The JSDOM instance to use for parsing HTML.
+- **`JSDOM`**: The `JSDOM` instance to use for parsing HTML.
 
 ### `cleanRollupErrorMessage`
 
 Cleans up Rollup error messages by removing unnecessary details like the viz ID.
 
-#### Parameters:
+#### Parameters
 
-- `rawMessage`: The raw error message from Rollup.
-- `vizId`: The ID of the visualization.
+- **`rawMessage`**: The raw error message from Rollup.
+- **`vizId`**: The ID of the visualization.
 
-#### Returns:
+#### Returns
 
-- A cleaned-up error message.
+- A cleaned-up error message string.
 
 ## Development
 
 To contribute to the development of this package, follow these steps:
 
-### Clone the repository
+### Clone the Repository
 
-\`\`\`
+```bash
 git clone https://github.com/vizhub-core/vizhub3.git
 cd vizhub3
-\`\`\`
+```
 
-### Install dependencies
+### Install Dependencies
 
-\`\`\`
+```bash
 npm install
-\`\`\`
+```
 
-### Run tests
+### Run Tests
 
-The package uses Vitest for testing. To run the tests, use the following command:
+The package uses Vitest for testing. Run the tests with:
 
-\`\`\`
+```bash
 npm run test
-\`\`\`
+```
 
-### Build the package
+### Build the Package
 
-To build the package, use the following command:
+To build the package, use:
 
-\`\`\`
+```bash
 npm run build
-\`\`\`
+```
 
 ## License
 
