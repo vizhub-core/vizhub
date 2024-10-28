@@ -1,5 +1,5 @@
 {
-  "name": "runtime",
+  "name": "vizhub-runtime",
   "version": "1.0.0",
   "type": "module",
   "main": "src/index",
@@ -13,7 +13,7 @@
     "url": "git+https://github.com/vizhub-core/vizhub3.git"
   },
   "author": "Curran Kelleher",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/vizhub-core/vizhub3/issues"
   },

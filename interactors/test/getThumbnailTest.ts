@@ -1,6 +1,6 @@
 import { describe, it, expect, assert } from 'vitest';
 import { JSDOM } from 'jsdom';
-import { setJSDOM } from 'runtime';
+import { setJSDOM } from 'vizhub-runtime';
 import { GetThumbnail } from '../src';
 import { initGateways } from 'gateways/test';
 import {

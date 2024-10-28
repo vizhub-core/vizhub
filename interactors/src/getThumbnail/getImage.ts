@@ -13,7 +13,11 @@ import {
   ImageId,
   VizId,
 } from 'entities';
-import { computeSrcDoc } from 'runtime';
+import {
+  computeSrcDoc,
+  VizCache,
+  createVizCache,
+} from 'vizhub-runtime';
 import { GetContentAtCommit } from '../getContentAtCommit';
 import { takeScreenshot } from './takeScreenshot';
 import {
@@ -22,12 +26,7 @@ import {
 } from 'entities/src/Images';
 import { FetchImageMetadata } from './fetchImageMetadata';
 import { PollImageGenerationStatus } from './PollImageGenerationStatus';
-import {
-  VizCache,
-  createVizCache,
-} from 'runtime/src/v3Runtime/vizCache';
 import { generateImageHash } from './generateImageHash';
-import { imageMetadataLock } from 'entities/src/Lock';
 import { ResolveSlug } from '../resolveSlug';
 
 const debug = false;

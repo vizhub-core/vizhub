@@ -11,16 +11,16 @@ import {
 } from 'entities';
 import { Gateways, Result } from 'gateways';
 import {
-  VizCache,
-  createVizCache,
-} from 'runtime/src/v3Runtime/vizCache';
-import {
   VerifyVizAccess,
   VizAccess,
 } from './verifyVizAccess';
-import { computeSrcDoc } from 'runtime';
+import {
+  computeSrcDoc,
+  VizCache,
+  createVizCache,
+  cleanRollupErrorMessage,
+} from 'vizhub-runtime';
 import { ResolveSlug } from './resolveSlug';
-import { cleanRollupErrorMessage } from 'runtime/src/v3Runtime/cleanRollupErrorMessage';
 
 const debug = false;
 
