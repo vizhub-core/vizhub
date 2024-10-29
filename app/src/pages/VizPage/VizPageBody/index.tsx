@@ -172,7 +172,6 @@ export const VizPageBody = () => {
   }, [content]);
 
   // Set up the runtime environment.
-  console.log('before useRuntime');
   useRuntime({
     content,
     iframeRef,
@@ -183,7 +182,6 @@ export const VizPageBody = () => {
     slugResolutionCache,
     submitContentOperation,
   });
-  console.log('after useRuntime');
 
   // Render the viz runner iframe.
   const renderVizRunner = useCallback(

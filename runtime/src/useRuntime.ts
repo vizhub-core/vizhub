@@ -42,7 +42,6 @@ export const useRuntime = ({
     next: (content: Content) => Content,
   ) => void;
 }) => {
-  console.log('here in useRuntime!');
   // This ref is used to skip the first mount.
   const initialMount = useRef(true);
 
