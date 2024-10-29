@@ -6,7 +6,9 @@
   "scripts": {
     "tsc": "tsc --noEmit",
     "test": "vitest run --reporter verbose",
-    "prettier": "prettier {*.*,**/*.*} --single-quote --write"
+    "build": "rollup -c",
+    "prettier": "prettier {*.*,**/*.*} --single-quote --write",
+    "prepublishOnly": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -25,6 +27,8 @@
     "svelte": "^4.2.19"
   },
   "devDependencies": {
+    "@rollup/plugin-node-resolve": "^15.3.0",
+    "@rollup/plugin-typescript": "^12.1.1",
     "@types/d3-dsv": "^3.0.7",
     "i": "^0.3.7",
     "npm": "^10.9.0",
