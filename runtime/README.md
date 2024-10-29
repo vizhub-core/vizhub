@@ -4,12 +4,13 @@ The `@vizhub-core/runtime` package is a core component of the VizHub platform, r
 
 ## Features
 
-- **Multi-version runtime support**: Supports both V2 and V3 runtime environments, allowing for backward compatibility and future-proofing.
+- **Source code to HTML transformation**: Converts source code to HTML with embedded scripts and styles, ready for rendering in a browser.
+- **File transformations**: Transforms various file types (e.g., JavaScript, CSS, CSV, Svelte) to be used in the runtime environment.
 - **Hot reloading**: Automatically reloads visualizations when files are updated, providing a smooth development experience.
 - **Dependency management**: Handles external dependencies via CDN and supports custom package configurations.
-- **File transformations**: Transforms various file types (e.g., JavaScript, CSS, CSV, Svelte) to be used in the runtime environment.
 - **Virtual file system**: Implements a virtual file system for handling imports and file loading within the runtime.
 - **Web Worker-based build system**: Uses Web Workers to offload the build process, ensuring a responsive UI during development.
+- **Multi-version runtime support**: Supports both V2 and V3 runtime environments, allowing for backward compatibility and future-proofing.
 
 ## Installation
 
@@ -64,11 +65,16 @@ test("computeSrcDoc", async () => {
     resolveSlug,
     getSvelteCompiler,
   });
-  console.log("initialSrcdoc", initialSrcdoc);
-  console.log("initialSrcdocError", initialSrcdocError);
-  // TODO fix error where ID changes each time (expected behavior)
-  // by adding an option to omit the id on the `viz-container` class.
-  expect(initialSrcdoc).toEqual(`<html>
+
+  const randomID = initialSrcdoc.match(/viz-container-(\d+)/)?.[1];
+
+  const srcdocWithoutMapping = initialSrcdoc.replace(
+    /\/\/# sourceMappingURL=.*$/gm,
+    ""
+  );
+
+  expect(srcdocWithoutMapping).toEqual(`<!DOCTYPE html>
+<html>
   <head>
     <meta charset="utf-8">
     <style>
@@ -76,21 +82,21 @@ test("computeSrcDoc", async () => {
         margin: 0;
         overflow: hidden;
       }
-      #viz-container-74148 {
+      #viz-container-${randomID} {
         height: 100vh;
       }
     </style>
   </head>
   <body>
-    <div id="viz-container-74148"></div>
-    <script id="injected-script">(function(g,f){typeof exports==='object'&&typeof module!=='undefined'?f(exports):typeof define==='function'&&define.amd?define(['exports'],f):(g=typeof globalThis!=='undefined'?globalThis:g||self,f(g.Viz={}));})(this,(function(exports){'use strict';const main = (container) => container.innerHTML = 'Hello, world!';exports.main=main;}));//# sourceMappingURL=index.js.map
+    <div id="viz-container-${randomID}"></div>
+    <script id="injected-script">(function(g,f){typeof exports==='object'&&typeof module!=='undefined'?f(exports):typeof define==='function'&&define.amd?define(['exports'],f):(g=typeof globalThis!=='undefined'?globalThis:g||self,f(g.Viz={}));})(this,(function(exports){'use strict';const main = (container) => container.innerHTML = 'Hello, world!';exports.main=main;}));
 
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VzIjpbInVuZGVmaW5lZC9pbmRleC5qcyJdLCJzb3VyY2VzQ29udGVudCI6WyJleHBvcnQgY29uc3QgbWFpbiA9IChjb250YWluZXIpID0+IGNvbnRhaW5lci5pbm5lckhUTUwgPSAnSGVsbG8sIHdvcmxkISc7Il0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJ5UEFBWSxNQUFDLElBQUksR0FBRyxDQUFDLFNBQVMsS0FBSyxTQUFTLENBQUMsU0FBUyxHQUFHIn0=</script>
+
     <script>
       (() => {
         let cleanup;
         const render = () => {
-          const container = document.getElementById('viz-container-74148');
+          const container = document.getElementById('viz-container-${randomID}');
           typeof cleanup === 'function' && cleanup();
           cleanup = Viz.main(container, { state: window.state, setState, writeFile });
         };
