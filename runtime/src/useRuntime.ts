@@ -42,6 +42,7 @@ export const useRuntime = ({
     next: (content: Content) => Content,
   ) => void;
 }) => {
+  console.log('here in useRuntime!');
   // This ref is used to skip the first mount.
   const initialMount = useRef(true);
 
@@ -303,12 +304,6 @@ export const useRuntime = ({
         throw new Error('v3Runtime is null');
       }
       if (isInteracting) {
-        // console.log('Running the code!');
-        // console.log(
-        //   'srcdocErrorMessageRef.current',
-        //   srcdocErrorMessageRef.current,
-        // );
-
         // If we are recovering from an error,
         // clear the error message, and run the code
         // totally fresh by re-computing the srcdoc.

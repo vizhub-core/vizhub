@@ -4,6 +4,7 @@
   "type": "module",
   "main": "dist/index",
   "types": "dist/index.d.ts",
+  "exports": "./src/index.ts",
   "scripts": {
     "tsc": "tsc --noEmit",
     "test": "vitest run --reporter verbose",
