@@ -1,12 +1,13 @@
 {
   "name": "@vizhub/runtime",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "type": "module",
   "main": "dist/index",
+  "types": "dist/index.d.ts",
   "scripts": {
     "tsc": "tsc --noEmit",
     "test": "vitest run --reporter verbose",
-    "build": "vite build --ssr src/index.ts --outDir dist",
+    "build": "vite build --ssr src/index.ts --outDir dist && tsc --emitDeclarationOnly",
     "prettier": "prettier {*.*,**/*.*} --single-quote --write",
     "prepublishOnly": "npm run build"
   },
