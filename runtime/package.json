@@ -2,11 +2,11 @@
   "name": "@vizhub/runtime",
   "version": "0.0.1",
   "type": "module",
-  "main": "src/index",
+  "main": "dist/index",
   "scripts": {
     "tsc": "tsc --noEmit",
     "test": "vitest run --reporter verbose",
-    "build": "rollup -c",
+    "build": "vite build --ssr src/index.ts --outDir dist",
     "prettier": "prettier {*.*,**/*.*} --single-quote --write",
     "prepublishOnly": "npm run build"
   },
@@ -30,12 +30,14 @@
     "@rollup/plugin-node-resolve": "^15.3.0",
     "@rollup/plugin-typescript": "^12.1.1",
     "@types/d3-dsv": "^3.0.7",
-    "i": "^0.3.7",
-    "npm": "^10.9.0",
     "typescript": "^5.6.3",
+    "vite": "^5.4.10",
     "vitest": "^2.1.2"
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "files": [
+    "dist"
+  ]
 }
