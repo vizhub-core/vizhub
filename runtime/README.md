@@ -26,6 +26,63 @@ The `@vizhub-core/runtime` package is designed to be used within the VizHub plat
 
 ### Example
 
+Here's an example that defines a utility function that converts a listing of files into HTML:
+
+```js
+import { rollup } from "rollup";
+import { computeSrcDoc, createVizCache, VizCache } from "@vizhub/runtime";
+
+export const filesToHTML = async (
+  files: Array<{ name: string; text: string }>
+) => {
+  let fileIdCounter = 0;
+
+  type Content = Record<
+    string,
+    {
+      name: string;
+      text: string;
+    }
+  >;
+
+  const content: Content = files.reduce((acc, { name, text }) => {
+    const fileId = fileIdCounter++;
+    acc[fileId] = { name, text };
+    return acc;
+  }, {} as Content);
+
+  const vizCache: VizCache = createVizCache({
+    initialContents: [content],
+    handleCacheMiss: async () => {
+      return content;
+    },
+  });
+
+  const resolveSlug = async (slug: string) => {
+    throw new Error("Not implemented");
+  };
+
+  const getSvelteCompiler = async () => {
+    throw new Error("Not implemented");
+  };
+
+  const { initialSrcdoc, initialSrcdocError } = await computeSrcDoc({
+    rollup,
+    content,
+    vizCache,
+    resolveSlug,
+    getSvelteCompiler,
+  });
+  //   console.log("initialSrcdoc", initialSrcdoc);
+  //   console.log("initialSrcdocError", initialSrcdocError);
+
+  return {
+    html: initialSrcdoc,
+    errror: initialSrcdocError,
+  };
+};
+```
+
 Here's an example of how to use the runtime to compute the `srcdoc` for a visualization:
 
 ```javascript
