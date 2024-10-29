@@ -6,7 +6,11 @@
     "jsx": "react-jsx",
     "types": ["vite/client"],
     "module": "ESNext",
-    "moduleResolution": "Bundler"
+    "moduleResolution": "Bundler",
+    "baseUrl": ".",
+    "paths": {
+      "@vizhub/runtime": ["../runtime/src"]
+    }
   },
   "include": ["src/**/*"]
 }

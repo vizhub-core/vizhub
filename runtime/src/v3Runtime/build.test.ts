@@ -44,7 +44,7 @@ describe('v3 build', () => {
           throw new Error('Not implemented');
         },
       });
-    }).rejects.toThrow(missingIndexJSError());
+    }).rejects.toThrow('Missing index.js');
   });
 
   it('Should build successfully with valid inputs', async () => {
@@ -355,9 +355,7 @@ describe('v3 build', () => {
         },
       });
     }).rejects.toThrow(
-      missingImportError(
-        `"missing-viz" is imported by "test-viz/index.js", but could not be resolved.`,
-      ),
+      `"missing-viz" is imported by "test-viz/index.js", but could not be resolved.`,
     );
   });
 
@@ -389,9 +387,7 @@ describe('v3 build', () => {
         },
       });
     }).rejects.toThrow(
-      missingImportError(
-        `Could not load test-viz/missing.js (imported by test-viz/index.js): Imported file "missing.js" not found.`,
-      ),
+      `Could not load test-viz/missing.js (imported by test-viz/index.js): Imported file "missing.js" not found.`,
     );
   });
   it('Should throw an error when a local import is missing', async () => {
@@ -422,9 +418,7 @@ describe('v3 build', () => {
         },
       });
     }).rejects.toThrow(
-      missingImportError(
-        `Could not load missing.js (imported by index.js): Imported file "missing.js" not found.`,
-      ),
+      `Could not load missing.js (imported by index.js): Imported file "missing.js" not found.`,
     );
   });
 
