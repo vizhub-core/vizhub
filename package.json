@@ -1,6 +1,6 @@
 {
   "name": "vizhub3",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "description": "The proprietary VizHub SaaS product codebase.",
   "main": "index.js",
   "scripts": {
