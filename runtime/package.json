@@ -1,6 +1,6 @@
 {
   "name": "@vizhub/runtime",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "type": "module",
   "main": "dist/index",
   "types": "dist/index.d.ts",
@@ -24,6 +24,7 @@
   "dependencies": {
     "buble": "^0.20.0",
     "d3-dsv": "^3.0.1",
+    "path-posix": "^1.0.0",
     "react": "^18.3.1",
     "rollup": "^4.24.0",
     "svelte": "^4.2.19"
