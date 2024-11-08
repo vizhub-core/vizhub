@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "declaration": true, // Generate .d.ts files
+    "outDir": "./dist", // Output directory for .d.ts files
+    "strict": true, // Enable strict type checking
+    "esModuleInterop": true, // Enable interoperability between CommonJS and ES modules
+    "skipLibCheck": true // Skip type checking of declaration files
+  },
+  "include": ["src/**/*.ts"] // Include all TypeScript files in the src directory
+}
