@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/vizhub-core/vizhub3#readme",
   "devDependencies": {
-    "typescript": "^5.6.3"
+    "typescript": "^5.7.2"
   },
   "publishConfig": {
     "access": "public"

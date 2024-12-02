@@ -1,6 +1,6 @@
 // Inspired by https://github.com/vitejs/vite-plugin-react/blob/main/playground/ssr-react/src/entry-server.jsx
 import { renderToString } from 'react-dom/server';
-import { StaticRouter } from 'react-router-dom/server';
+import { StaticRouter } from 'react-router-dom';
 import { App } from './App';
 export { pages } from './pages/server';
 export { api } from 'api';
