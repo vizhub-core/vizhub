@@ -3,7 +3,12 @@ import { OrgId } from './Orgs';
 import { CommitId } from './RevisionHistory';
 import { FolderId } from './Folders';
 import { Timestamp, Visibility } from './common';
-import { FileId, File, Files, VZCodeContent } from 'vzcode';
+import type {
+  FileId,
+  File,
+  Files,
+  VZCodeContent,
+} from 'vzcode';
 
 export type { FileId, File, Files };
 

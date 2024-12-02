@@ -25,18 +25,19 @@
   },
   "homepage": "https://github.com/vizhub-core/vizhub3#readme",
   "workspaces": [
+    "runtime",
+    "entities",
+    "viz-types",
     "api",
     "app",
     "components",
     "database",
     "demo",
-    "entities",
     "gateways",
     "interactors",
     "migration",
     "migration2",
     "migration3",
-    "ot",
-    "runtime"
+    "ot"
   ]
 }

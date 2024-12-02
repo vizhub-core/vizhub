@@ -303,12 +303,6 @@ export const useRuntime = ({
         throw new Error('v3Runtime is null');
       }
       if (isInteracting) {
-        // console.log('Running the code!');
-        // console.log(
-        //   'srcdocErrorMessageRef.current',
-        //   srcdocErrorMessageRef.current,
-        // );
-
         // If we are recovering from an error,
         // clear the error message, and run the code
         // totally fresh by re-computing the srcdoc.

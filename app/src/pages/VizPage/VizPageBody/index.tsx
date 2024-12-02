@@ -20,7 +20,7 @@ import {
   getVizThumbnailURL,
   FREE,
 } from 'entities';
-import { useRuntime } from 'runtime';
+import { useRuntime } from '@vizhub/runtime';
 import {
   RevisionHistoryNavigator,
   VizPageHead,

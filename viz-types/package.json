@@ -1,26 +1,31 @@
 {
-  "name": "demo",
-  "version": "1.0.0",
-  "description": "Demonstration database content for testing.",
-  "type": "module",
+  "name": "@vizhub/viz-types",
+  "version": "0.0.1",
+  "description": "A package for VizHub types and utilities",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "test": "",
-    "tsc": "",
+    "build": "tsc",
     "prettier": "prettier {*.*,**/*.*} --single-quote --write",
-    "populate": "vitest run"
+    "prepublishOnly": "npm run build"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vizhub-core/vizhub3.git"
   },
   "author": "Curran Kelleher",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/vizhub-core/vizhub3/issues"
   },
   "homepage": "https://github.com/vizhub-core/vizhub3#readme",
-  "dependencies": {},
   "devDependencies": {
-    "vitest": "^2.1.8"
-  }
+    "typescript": "^5.7.2"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist"
+  ]
 }
