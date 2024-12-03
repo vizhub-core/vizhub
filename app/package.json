@@ -55,7 +55,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-markdown": "^9.0.1",
-    "react-router-dom": "^7.0.1",
+    "react-router-dom": "^7.0.2",
     "remark-gfm": "^4.0.0",
     "rollup": "^4.28.0",
     "rollup-pluginutils": "^2.8.2",
@@ -64,7 +64,7 @@
     "stripe": "^17.4.0",
     "vizhub-libraries": "^1.8.0",
     "vizhub-ui": "^3.23.0",
-    "vzcode": "^1.18.0",
+    "vzcode": "^1.19.0",
     "ws": "^8.18.0",
     "xss": "^1.0.15"
   },
@@ -82,7 +82,7 @@
     "pm2": "^5.4.3",
     "prettier": "^3.4.1",
     "rollup-plugin-visualizer": "^5.12.0",
-    "sass": "^1.81.0",
+    "sass": "^1.81.1",
     "serve-static": "^1.16.2",
     "vite": "^6.0.2",
     "vitest": "^2.1.8"
