@@ -45,7 +45,7 @@ const debug = false;
 export const DatabaseGateways = ({
   shareDBConnection,
   mongoDBDatabase,
-  redlock,
+  // redlock,
   // supabase,
 }) => {
   // A function that locks a set or resources,
@@ -59,16 +59,18 @@ export const DatabaseGateways = ({
   ) => {
     let returnValue: T | null = null;
 
-    await redlock.using(lockIds, duration, async () => {
-      returnValue = await fn();
-    });
+    // await redlock.using(lockIds, duration, async () => {
+    //   returnValue = await fn();
+    // });
 
-    if (returnValue === null) {
-      throw new Error(
-        'Function did not return a value for locks ' +
-          lockIds.join(', '),
-      );
-    }
+    returnValue = await fn();
+
+    // if (returnValue === null) {
+    //   throw new Error(
+    //     'Function did not return a value for locks ' +
+    //       lockIds.join(', '),
+    //   );
+    // }
 
     return returnValue;
   };
