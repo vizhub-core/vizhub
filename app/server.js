@@ -43,15 +43,8 @@ const isTest = env.VITEST;
 // // Ads
 // gtag('config', 'G-5BVJNTEF9V');
 
-// <!-- Google tag (gtag.js) -->
-const googleAnalyticsScript = `
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-5BVJNTEF9V"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-5BVJNTEF9V');
-  </script>
+const analyticsScript = `
+  <script defer data-domain="vizhub.com" src="https://plausible.io/js/script.js"></script>
 `;
 
 // TODO better 404 page
@@ -410,8 +403,7 @@ async function createServer(
         pageData.description,
       );
       const image = pageData.image;
-      const disableGoogleAnalytics =
-        pageData.disableGoogleAnalytics;
+      const disableAnalytics = pageData.disableAnalytics;
 
       // Functions are used as the second argument to `replace()`
       // so that they are only evaluated when the template is rendered.
@@ -426,10 +418,7 @@ async function createServer(
               descriptionSanitized,
               relativeUrl: originalUrl,
               image,
-            }) +
-            (disableGoogleAnalytics
-              ? ''
-              : googleAnalyticsScript),
+            }) + (disableAnalytics ? '' : analyticsScript),
         )
         .replace(/<!--app-html-->/, () => render(pageData))
         .replace(

@@ -183,10 +183,10 @@ VizPage.getPageData = async ({
 
     const isEmbedMode = query.mode === 'embed';
 
-    // Disable Google Analytics in embed mode,
+    // Disable Analytics in embed mode,
     // so that we can say for certain that
     // no cookies are being set.
-    const disableGoogleAnalytics = isEmbedMode;
+    const disableAnalytics = isEmbedMode;
 
     // If the viz has a slug, and we are using its id in the URL,
     // AND we are not in embed mode,
@@ -484,7 +484,7 @@ VizPage.getPageData = async ({
       initialComments,
       initialCommentAuthors,
       buildVizResult,
-      disableGoogleAnalytics,
+      disableAnalytics,
     };
 
     // If we are viewing a versioned page,

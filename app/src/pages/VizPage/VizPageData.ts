@@ -37,7 +37,7 @@ export type VizPageData = PageData & {
   // This is only defined if `commitMetadata` is defined.
   infoStatic?: Info;
 
-  // True to disable Google Analytics on this page.
-  // Used for disabling GA on the embed page.
-  disableGoogleAnalytics?: boolean;
+  // True to disable Analytics on this page.
+  // Used for embed page.
+  disableAnalytics?: boolean;
 };
