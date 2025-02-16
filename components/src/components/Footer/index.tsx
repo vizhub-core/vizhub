@@ -20,7 +20,11 @@ export const Footer = () => {
           >
             Pricing
           </a>
-          <a href="/" target="_blank" rel="noreferrer">
+          <a
+            href="/features"
+            target="_blank"
+            rel="noreferrer"
+          >
             Features
           </a>
           <a
