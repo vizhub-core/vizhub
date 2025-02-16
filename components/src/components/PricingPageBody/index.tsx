@@ -18,8 +18,8 @@ import { ConsultationFeatures } from './ConsultationFeatures';
 import { OrgFeatures } from './OrgFeatures';
 import './styles.scss';
 
-const premiumPriceMonthly = 10;
-const premiumPriceAnnually = 100;
+const premiumPriceMonthly = 1.99;
+const premiumPriceAnnually = 19.99;
 const orgPrice = 24;
 
 // Feature flags
