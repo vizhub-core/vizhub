@@ -48,8 +48,6 @@ export const GetInfosAndOwners = (gateways: Gateways) => {
     noNeedToFetchUsers,
     sectionId,
     sortId,
-    // For most cases, default sort is most recent.
-    // For the explore page, default sort is popular.
     defaultSortId = 'mostRecent',
     pageNumber,
     owner,
