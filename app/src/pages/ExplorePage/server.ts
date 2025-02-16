@@ -27,7 +27,7 @@ ExplorePage.getPageData = async ({
   const infosAndOwnersResult = await getInfosAndOwners({
     noNeedToFetchUsers: [],
     sortId,
-    defaultSortId: 'popular',
+    defaultSortId: explorePageDefaultSortId,
     pageNumber: 0,
   });
   if (infosAndOwnersResult.outcome === 'failure') {
