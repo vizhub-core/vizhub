@@ -72,9 +72,6 @@ export const forkVizEndpoint = ({
           return;
         }
 
-        // TODO validate that the authenticated user is the owner of the viz being forked,
-        // or is a member of the organization that owns the viz being forked.
-
         const forkVizOptions: {
           forkedFrom: VizId; // The ID of the viz being forked.
           timestamp: Timestamp; // The timestamp at which this viz is forked.

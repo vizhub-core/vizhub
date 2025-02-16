@@ -7,6 +7,34 @@ import { Feature } from './Feature';
 export const PremiumFeatures = ({}) => (
   <>
     <Feature
+      title="Fork & Modify Vizzes"
+      id="public-vizzes"
+      hasBottomBorder={true}
+      // startsExpanded={true}
+    >
+      Create your own works right in your browser.
+    </Feature>
+    <Feature
+      title="Hot Reloading & Interactive Widgets"
+      id="hot-reloading"
+      hasBottomBorder={true}
+      // startsExpanded={true}
+      learnMoreHref="https://vizhub.com/forum/t/hot-reloading-and-interactive-widgets/968"
+    >
+      Iterate faster with truly instant feedback.
+    </Feature>
+    <Feature
+      title="Unlimited Real-Time Collaborators"
+      id="real-time-collaborators"
+      hasBottomBorder={true}
+      // startsExpanded={true}
+      learnMoreHref={
+        'https://vizhub.com/forum/t/real-time-collaborators/976'
+      }
+    >
+      Invite others to edit code with you in real time.
+    </Feature>
+    <Feature
       title="Export Code"
       id="api-access-for-vizzes"
       learnMoreHref="https://vizhub.com/forum/t/api-access-for-vizzes/971"
