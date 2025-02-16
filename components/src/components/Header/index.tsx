@@ -73,7 +73,7 @@ export const Header = ({
                 Resources
               </Dropdown.Toggle>
               <Dropdown.Menu>
-                <Dropdown.Item href="/">
+                <Dropdown.Item href="/features">
                   Features
                 </Dropdown.Item>
                 <Dropdown.Item href={discordLink}>
@@ -85,8 +85,8 @@ export const Header = ({
                 {/* <Dropdown.Item href="/documentation">
                   Documentation
                 </Dropdown.Item> */}
-                <Dropdown.Item href="https://github.com/vizhub-core/vizhub-feedback/issues/new/choose">
-                  Feedback
+                <Dropdown.Item href="https://github.com/vizhub-core">
+                  Open Source
                 </Dropdown.Item>
                 {/* <Dropdown.Item href={createVizHref}>
                   Create Viz
