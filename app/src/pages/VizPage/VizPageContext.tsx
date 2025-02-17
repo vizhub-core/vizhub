@@ -120,6 +120,9 @@ export type VizPageContextValue = {
   revisionHistory: RevisionHistory | null;
   commitMetadata?: CommitMetadata;
   runtimeVersion: number;
+
+  toggleEditWithAIModal: () => void;
+  showEditWithAIModal: boolean;
 };
 
 export const VizPageContext =
@@ -265,6 +268,9 @@ export const VizPageProvider = ({
   ] = useToggleState();
 
   const [showRevisionHistory, toggleShowRevisionHistory] =
+    useToggleState(false);
+
+  const [showEditWithAIModal, toggleEditWithAIModal] =
     useToggleState(false);
 
   ////////////////////////////////////////////////////
@@ -444,6 +450,8 @@ export const VizPageProvider = ({
     revisionHistory,
     commitMetadata,
     runtimeVersion,
+    toggleEditWithAIModal,
+    showEditWithAIModal,
   };
 
   return (
