@@ -52,6 +52,7 @@ export const VizPageModals = () => {
     toggleExportCodeUpgradeNudgeModal,
     showEditWithAIModal,
     toggleEditWithAIModal,
+    onEditWithAI,
   } = useContext(VizPageContext);
 
   // The currently authenticated user, if any.
@@ -283,9 +284,7 @@ export const VizPageModals = () => {
           show={showEditWithAIModal}
           onClose={toggleEditWithAIModal}
           currentPlan={authenticatedUser?.plan || FREE}
-          onSubmit={(prompt) => {
-            console.log('Prompt: ', prompt);
-          }}
+          onSubmit={onEditWithAI}
         />
       )}
     </>

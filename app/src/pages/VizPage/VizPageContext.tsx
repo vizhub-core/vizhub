@@ -48,6 +48,7 @@ import { useUpvoting } from './useUpvoting';
 import { getVizExportHref } from '../../accessors/getVizExportHref';
 import { VizHubError } from 'gateways';
 import { useRevisionHistory } from './useRevisionHistory';
+import { useOnEditWithAI } from './useOnEditWithAI';
 
 export type VizPageContextValue = {
   info: Info;
@@ -123,6 +124,7 @@ export type VizPageContextValue = {
 
   toggleEditWithAIModal: () => void;
   showEditWithAIModal: boolean;
+  onEditWithAI: (prompt: string) => void;
 };
 
 export const VizPageContext =
@@ -323,6 +325,11 @@ export const VizPageProvider = ({
     toggleForkModal,
   });
 
+  const { onEditWithAI } = useOnEditWithAI({
+    vizKit,
+    id: info.id,
+  });
+
   ////////////////////////////////////////////
   /////////////// Settings ///////////////////
   ////////////////////////////////////////////
@@ -452,6 +459,7 @@ export const VizPageProvider = ({
     runtimeVersion,
     toggleEditWithAIModal,
     showEditWithAIModal,
+    onEditWithAI,
   };
 
   return (
