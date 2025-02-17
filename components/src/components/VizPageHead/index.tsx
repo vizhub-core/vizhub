@@ -33,6 +33,7 @@ export const VizPageHead = ({
   toggleShowRevisionHistory,
   userCanExport,
   toggleExportCodeUpgradeNudgeModal,
+  onEditWithAIClick,
 }) => {
   const toggleShowEditor = useCallback(
     () => setShowEditor(!showEditor),
@@ -66,6 +67,9 @@ export const VizPageHead = ({
           <div className="btn-text">
             {showEditor ? 'Close' : 'Open'} Editor
           </div>
+        </Button>
+        <Button variant="dark" onClick={onEditWithAIClick}>
+          Edit with AI
         </Button>
       </div>
       <div className="side">

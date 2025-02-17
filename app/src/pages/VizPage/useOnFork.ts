@@ -5,7 +5,7 @@ import {
   VizId,
 } from 'entities';
 import { useCallback } from 'react';
-import { Result, VizHubErrorCode } from 'gateways';
+import { Result } from 'gateways';
 import { setCookie } from '../cookies';
 import { VizKitAPI } from 'api/src/VizKit';
 

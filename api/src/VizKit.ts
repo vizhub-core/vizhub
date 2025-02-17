@@ -150,6 +150,11 @@ export interface VizKitAPI {
     revokeAPIKey: (
       apiKeyId: string,
     ) => Promise<Result<Success>>;
+
+    editWithAI: (options: {
+      id: VizId;
+      prompt: string;
+    }) => Promise<Result<Success>>;
   };
 }
 
@@ -343,6 +348,12 @@ export const VizKit = (
         await postJSON(`${baseUrl}/revoke-api-key`, {
           apiKeyId,
         }),
+
+      editWithAI: async (options: {
+        id: VizId;
+        prompt: string;
+      }) =>
+        await postJSON(`${baseUrl}/edit-with-ai`, options),
     },
   };
 };

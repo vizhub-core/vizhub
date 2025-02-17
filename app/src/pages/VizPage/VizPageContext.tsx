@@ -48,6 +48,7 @@ import { useUpvoting } from './useUpvoting';
 import { getVizExportHref } from '../../accessors/getVizExportHref';
 import { VizHubError } from 'gateways';
 import { useRevisionHistory } from './useRevisionHistory';
+import { useOnEditWithAI } from './useOnEditWithAI';
 
 export type VizPageContextValue = {
   info: Info;
@@ -120,6 +121,10 @@ export type VizPageContextValue = {
   revisionHistory: RevisionHistory | null;
   commitMetadata?: CommitMetadata;
   runtimeVersion: number;
+
+  toggleEditWithAIModal: () => void;
+  showEditWithAIModal: boolean;
+  onEditWithAI: (prompt: string) => void;
 };
 
 export const VizPageContext =
@@ -267,6 +272,9 @@ export const VizPageProvider = ({
   const [showRevisionHistory, toggleShowRevisionHistory] =
     useToggleState(false);
 
+  const [showEditWithAIModal, toggleEditWithAIModal] =
+    useToggleState(false);
+
   ////////////////////////////////////////////////////
   /////////////// Revision History ///////////////////
   ////////////////////////////////////////////////////
@@ -315,6 +323,11 @@ export const VizPageProvider = ({
     content,
     setShareDBError,
     toggleForkModal,
+  });
+
+  const { onEditWithAI } = useOnEditWithAI({
+    vizKit,
+    id: info.id,
   });
 
   ////////////////////////////////////////////
@@ -444,6 +457,9 @@ export const VizPageProvider = ({
     revisionHistory,
     commitMetadata,
     runtimeVersion,
+    toggleEditWithAIModal,
+    showEditWithAIModal,
+    onEditWithAI,
   };
 
   return (
