@@ -27,6 +27,7 @@ import { getRevisionHistoryEndpoint } from './getRevisionHistoryEndpoint';
 import { getAPIKeysEndpoint } from './getAPIKeysEndpoint';
 import { generateAPIKeyEndpoint } from './generateAPIKeyEndpoint';
 import { revokeAPIKeyEndpoint } from './revokeAPIKeyEndpoint';
+import { editWithAIEndpoint } from './editWithAIEndpoint';
 import { Endpoint } from '../types';
 
 // TODO get this working in a secure way using API keys
@@ -63,6 +64,7 @@ export const endpoints: Array<Endpoint> = [
   getAPIKeysEndpoint,
   generateAPIKeyEndpoint,
   revokeAPIKeyEndpoint,
+  editWithAIEndpoint,
 ];
 
 if (enableSetVizEndpoint) {

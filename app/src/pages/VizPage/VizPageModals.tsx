@@ -2,6 +2,7 @@ import {
   AIAssistUpgradeNudgeModal,
   DeleteVizConfirmationModal,
   ExportCodeUpgradeNudgeModal,
+  EditWithAIModal,
   ForkModal,
   SettingsModal,
   ShareModal,
@@ -49,6 +50,9 @@ export const VizPageModals = () => {
     toggleAIAssistUpgradeNudgeModal,
     showExportCodeUpgradeNudgeModal,
     toggleExportCodeUpgradeNudgeModal,
+    showEditWithAIModal,
+    toggleEditWithAIModal,
+    onEditWithAI,
   } = useContext(VizPageContext);
 
   // The currently authenticated user, if any.
@@ -273,6 +277,14 @@ export const VizPageModals = () => {
         <ExportCodeUpgradeNudgeModal
           show={showExportCodeUpgradeNudgeModal}
           onClose={toggleExportCodeUpgradeNudgeModal}
+        />
+      )}
+      {showEditWithAIModal && (
+        <EditWithAIModal
+          show={showEditWithAIModal}
+          onClose={toggleEditWithAIModal}
+          currentPlan={authenticatedUser?.plan || FREE}
+          onSubmit={onEditWithAI}
         />
       )}
     </>

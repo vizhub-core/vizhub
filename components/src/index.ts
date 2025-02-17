@@ -32,4 +32,5 @@ export { DeleteAPIKeyConfirmationModal } from './components/DeleteAPIKeyConfirma
 export { DocumentationPageBody } from './components/DocumentationPageBody';
 export { VisibilityLabel } from './components/VisibilityLabel';
 export { SvelteAndD3PageBody } from './components/SvelteAndD3PageBody';
+export { EditWithAIModal } from './components/EditWithAIModal';
 import './components/index.scss';
