@@ -11,7 +11,7 @@ import {
 } from 'llm-code-format';
 import { toCollectionName } from 'database/src/toCollectionName';
 import { getAuthenticatedUserId } from '../parseAuth0User';
-import { err, ok } from 'gateways';
+import { err, ok, Result } from 'gateways';
 import {
   accessDeniedError,
   authenticationRequiredError,
@@ -19,6 +19,10 @@ import {
 } from 'gateways/src/errors';
 import { RecordAnalyticsEvents } from 'interactors';
 import { diff } from 'ot';
+import {
+  VerifyVizAccess,
+  VizAccess,
+} from 'interactors/src/verifyVizAccess';
 
 const debug = false;
 
@@ -38,7 +42,9 @@ export const editWithAIEndpoint = ({
   shareDBConnection,
   gateways,
 }) => {
-  const { getUser } = gateways;
+  const { getUser, getInfo } = gateways;
+  const verifyVizAccess = VerifyVizAccess(gateways);
+
   const recordAnalyticsEvents =
     RecordAnalyticsEvents(gateways);
 
@@ -92,6 +98,26 @@ export const editWithAIEndpoint = ({
           return;
         }
 
+        // Verify write access to this viz
+        const infoResult = await getInfo(id);
+        if (infoResult.outcome === 'failure') {
+          return err(infoResult.error);
+        }
+        const vizAccessResult: Result<VizAccess> =
+          await verifyVizAccess({
+            authenticatedUserId,
+            info: infoResult.value.data,
+            actions: ['write'],
+          });
+        if (vizAccessResult.outcome === 'failure') {
+          return err(vizAccessResult.error);
+        }
+        if (!vizAccessResult.value.write) {
+          return err(
+            accessDeniedError('Write access denied'),
+          );
+        }
+
         // Get the ShareDB document for the viz content
         const entityName: EntityName = 'Content';
         const shareDBDoc = shareDBConnection.get(
@@ -119,17 +145,6 @@ export const editWithAIEndpoint = ({
         // console.log(
         //   'got shareDB doc' + JSON.stringify(shareDBDoc.data),
         // );
-
-        if (shareDBDoc.data.owner !== authenticatedUserId) {
-          res.json(
-            err(
-              accessDeniedError(
-                'Only the owner of the content can use AI Assist.',
-              ),
-            ),
-          );
-          return;
-        }
 
         const files: Files = shareDBDoc.data.files;
 
