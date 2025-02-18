@@ -53,181 +53,206 @@ export const editWithAIEndpoint = ({
           req.body,
         );
 
-      const authenticatedUserId =
-        getAuthenticatedUserId(req);
+      try {
+        const authenticatedUserId =
+          getAuthenticatedUserId(req);
 
-      if (!authenticatedUserId) {
-        res.json(err(authenticationRequiredError()));
-        return;
-      }
+        if (!authenticatedUserId) {
+          res.json(err(authenticationRequiredError()));
+          return;
+        }
 
-      const userResult = await getUser(authenticatedUserId);
-      if (userResult.outcome === 'failure') {
-        res.json(err(userResult.error));
-        return;
-      }
-      const authenticatedUser = userResult.value.data;
-      if (authenticatedUser.plan !== 'premium') {
-        res.json(
-          err(
-            accessDeniedError(
-              'Only Premium users can use AI Assist. Please upgrade your plan.',
+        const userResult = await getUser(
+          authenticatedUserId,
+        );
+        if (userResult.outcome === 'failure') {
+          res.json(err(userResult.error));
+          return;
+        }
+        const authenticatedUser = userResult.value.data;
+        if (authenticatedUser.plan !== 'premium') {
+          res.json(
+            err(
+              accessDeniedError(
+                'Only Premium users can use AI Assist. Please upgrade your plan.',
+              ),
             ),
-          ),
+          );
+          return;
+        }
+
+        const { id, prompt } = req.body;
+
+        if (!id || !prompt) {
+          res.json(
+            missingParameterError(
+              "Missing 'id' or 'prompt'",
+            ),
+          );
+          return;
+        }
+
+        // Get the ShareDB document for the viz content
+        const entityName: EntityName = 'Content';
+        const shareDBDoc = shareDBConnection.get(
+          toCollectionName(entityName),
+          id,
         );
-        return;
-      }
 
-      const { id, prompt } = req.body;
+        // console.log('Subscribing to ShareDB document');
 
-      if (!id || !prompt) {
-        res.json(
-          missingParameterError("Missing 'id' or 'prompt'"),
-        );
-        return;
-      }
-
-      // Get the ShareDB document for the viz content
-      const entityName: EntityName = 'Content';
-      const shareDBDoc = shareDBConnection.get(
-        toCollectionName(entityName),
-        id,
-      );
-
-      console.log('Subscribing to ShareDB document');
-
-      await new Promise<void>((resolve, reject) => {
-        shareDBDoc.subscribe((error) => {
-          if (error) {
-            console.error(
-              'shareDBDoc.subscribe error:',
-              error,
-            );
-            reject(error);
-            return;
-          }
-          console.log('Subscribed to ShareDB document');
-          resolve();
+        await new Promise<void>((resolve, reject) => {
+          shareDBDoc.subscribe((error) => {
+            if (error) {
+              console.error(
+                'shareDBDoc.subscribe error:',
+                error,
+              );
+              reject(error);
+              return;
+            }
+            // console.log('Subscribed to ShareDB document');
+            resolve();
+          });
         });
-      });
 
-      console.log(
-        'got shareDB doc' + JSON.stringify(shareDBDoc.data),
-      );
+        // console.log(
+        //   'got shareDB doc' + JSON.stringify(shareDBDoc.data),
+        // );
 
-      const files: Files = shareDBDoc.data.files;
+        if (shareDBDoc.data.owner !== authenticatedUserId) {
+          res.json(
+            err(
+              accessDeniedError(
+                'Only the owner of the content can use AI Assist.',
+              ),
+            ),
+          );
+          return;
+        }
 
-      const filesContext = serializeMarkdownFiles(
-        Object.values(files),
-      );
+        const files: Files = shareDBDoc.data.files;
 
-      const fullPrompt = [
-        prompt,
-        formatInstructions,
-        filesContext,
-      ].join('\n\n');
+        const filesContext = serializeMarkdownFiles(
+          Object.values(files),
+        );
 
-      // debug &&
-      //   console.log('fullPrompt:`' + fullPrompt + '`');
+        const fullPrompt = [
+          prompt,
+          formatInstructions,
+          filesContext,
+        ].join('\n\n');
 
-      const options: ChatOpenAIFields = {
-        modelName:
-          process.env.VIZHUB_EDIT_WITH_AI_MODEL_NAME,
-        configuration: {
-          apiKey: process.env.VIZHUB_EDIT_WITH_AI_API_KEY,
-          baseURL: process.env.VIZHUB_EDIT_WITH_AI_BASE_URL,
-        },
-        streaming: false,
-      };
+        // debug &&
+        //   console.log('fullPrompt:`' + fullPrompt + '`');
 
-      const chatModel = new ChatOpenAI(options);
+        const options: ChatOpenAIFields = {
+          modelName:
+            process.env.VIZHUB_EDIT_WITH_AI_MODEL_NAME,
+          configuration: {
+            apiKey: process.env.VIZHUB_EDIT_WITH_AI_API_KEY,
+            baseURL:
+              process.env.VIZHUB_EDIT_WITH_AI_BASE_URL,
+          },
+          streaming: false,
+        };
 
-      const result = await chatModel.invoke(fullPrompt);
-      const parser = new StringOutputParser();
-      const resultString = await parser.invoke(result);
+        const chatModel = new ChatOpenAI(options);
 
-      debug &&
-        console.log('resultString:`' + resultString + '`');
+        const result = await chatModel.invoke(fullPrompt);
+        const parser = new StringOutputParser();
+        const resultString = await parser.invoke(result);
 
-      const changedFiles = parseMarkdownFiles(resultString);
-
-      // console.log('changedFiles:', changedFiles);
-      // newFiles: {
-      //   files: [
-      //     {
-      //       name: 'index.js',
-      //       text: "import { select, transition, easeLinear } from 'd3';\n" +
-      //         "import data from './data.csv';\n" +
-      //         "import  selected from './se
-      // console.log('files:', files);
-      // files: {
-      //   '59504239': {
-      //     name: 'directory/color.js',
-      //     text: "\nexport const color = '#302EBD';"
-      //   },
-
-      const newFiles: Files = Object.keys(files).reduce(
-        (acc, fileId) => {
-          const file = files[fileId];
-
-          const changedFile = changedFiles.files.find(
-            (changedFile) => changedFile.name === file.name,
+        debug &&
+          console.log(
+            'resultString:`' + resultString + '`',
           );
 
-          acc[fileId] = {
-            ...file,
-            text: changedFile
-              ? changedFile.text
-              : file.text,
-          };
+        const changedFiles =
+          parseMarkdownFiles(resultString);
 
-          // if (changedFile) {
-          //   acc[fileId] = {
-          //     ...file,
-          //     text: changedFile.text,
-          //   };
-          // }
-          return acc;
-        },
-        {},
-      );
+        // console.log('changedFiles:', changedFiles);
+        // newFiles: {
+        //   files: [
+        //     {
+        //       name: 'index.js',
+        //       text: "import { select, transition, easeLinear } from 'd3';\n" +
+        //         "import data from './data.csv';\n" +
+        //         "import  selected from './se
+        // console.log('files:', files);
+        // files: {
+        //   '59504239': {
+        //     name: 'directory/color.js',
+        //     text: "\nexport const color = '#302EBD';"
+        //   },
 
-      const op1 = diff(shareDBDoc.data, {
-        ...shareDBDoc.data,
-        // update the files
-        files: newFiles,
-        // Trigger a re-run.
-        isInteracting: true,
-      });
+        const newFiles: Files = Object.keys(files).reduce(
+          (acc, fileId) => {
+            const file = files[fileId];
 
-      // console.log('op', JSON.stringify(op1));
+            const changedFile = changedFiles.files.find(
+              (changedFile) =>
+                changedFile.name === file.name,
+            );
 
-      // Subscribe to ShareDB document.
-      // Required to call submitOp.
+            acc[fileId] = {
+              ...file,
+              text: changedFile
+                ? changedFile.text
+                : file.text,
+            };
 
-      shareDBDoc.submitOp(op1);
+            // if (changedFile) {
+            //   acc[fileId] = {
+            //     ...file,
+            //     text: changedFile.text,
+            //   };
+            // }
+            return acc;
+          },
+          {},
+        );
 
-      // Wait for 10ms to allow the ShareDB document to update.
-      await new Promise((resolve) =>
-        setTimeout(resolve, 10),
-      );
+        const op1 = diff(shareDBDoc.data, {
+          ...shareDBDoc.data,
+          // update the files
+          files: newFiles,
+          // Trigger a re-run.
+          isInteracting: true,
+        });
 
-      // Unset isInteracting.
-      const op2 = diff(
-        { isInteracting: true },
-        {
-          isInteracting: false,
-        },
-      );
-      shareDBDoc.submitOp(op2);
+        // console.log('op', JSON.stringify(op1));
 
-      shareDBDoc.unsubscribe();
+        // Subscribe to ShareDB document.
+        // Required to call submitOp.
 
-      await recordAnalyticsEvents({
-        eventId: `event.editWithAI.${authenticatedUserId}`,
-      });
+        shareDBDoc.submitOp(op1);
 
-      res.json(ok('success'));
+        // Wait for 10ms to allow the ShareDB document to update.
+        await new Promise((resolve) =>
+          setTimeout(resolve, 10),
+        );
+
+        // Unset isInteracting.
+        const op2 = diff(
+          { isInteracting: true },
+          {
+            isInteracting: false,
+          },
+        );
+        shareDBDoc.submitOp(op2);
+
+        shareDBDoc.unsubscribe();
+
+        await recordAnalyticsEvents({
+          eventId: `event.editWithAI.${authenticatedUserId}`,
+        });
+
+        res.json(ok('success'));
+      } catch (error) {
+        console.error('[editWithAIEndpoint] error:', error);
+        res.json(err(error));
+      }
     },
   );
 };
