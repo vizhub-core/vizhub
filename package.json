@@ -39,9 +39,5 @@
     "migration2",
     "migration3",
     "ot"
-  ],
-  "dependencies": {
-    "@langchain/core": "^0.3.40",
-    "@langchain/openai": "^0.4.4"
-  }
+  ]
 }
