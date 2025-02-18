@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import { Result } from 'gateways';
 import { VizKitAPI } from 'api/src/VizKit';
 
-const debug = true;
+const debug = false;
 
 // const { onEditWithAI } = useOnEditWithAI({
 //   vizKit,

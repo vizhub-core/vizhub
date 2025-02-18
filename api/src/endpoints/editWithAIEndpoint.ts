@@ -20,7 +20,7 @@ import {
 import { RecordAnalyticsEvents } from 'interactors';
 import { diff } from 'ot';
 
-const debug = true;
+const debug = false;
 
 const formatInstructions = [
   'Formatting instructions: ',
