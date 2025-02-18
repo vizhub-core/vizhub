@@ -13,8 +13,8 @@
     "build:client": "vite build --outDir dist/client",
     "//build:client": "NODE_ENV=development vite build --mode development --outDir dist/client",
     "build:server": "vite build --ssr src/entry-server.tsx --outDir dist/server",
-    "serve": "NODE_ENV=production pm2 start server.js --name 'app-server' --no-daemon",
-    "///serve": "NODE_ENV=production node server",
+    "///serve": "NODE_ENV=production pm2 start server.js --name 'app-server' --no-daemon",
+    "serve": "NODE_ENV=production node server",
     "//serve": "node server.js"
   },
   "repository": {
@@ -67,7 +67,7 @@
     "stripe": "^17.4.0",
     "vizhub-libraries": "^1.8.0",
     "vizhub-ui": "^3.23.0",
-    "vzcode": "^1.24.0",
+    "vzcode": "^1.25.0",
     "ws": "^8.18.0",
     "xss": "^1.0.15"
   },
