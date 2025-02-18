@@ -108,8 +108,10 @@ export const GetThumbnail = (gateways: Gateways) => {
         // TODO handle this error better
         // Needs a refactor of the returned type
         // return err(commitVizResult.error);
-        console.log('Error when committing viz:');
-        console.log(commitVizResult.error);
+        console.log(
+          'Error when committing viz in GetThumbnail',
+        );
+        // console.log(commitVizResult.error);
       }
     }
 

@@ -151,7 +151,7 @@ export const editWithAIEndpoint = ({
 
       const changedFiles = parseMarkdownFiles(resultString);
 
-      console.log('changedFiles:', changedFiles);
+      // console.log('changedFiles:', changedFiles);
       // newFiles: {
       //   files: [
       //     {
@@ -159,7 +159,7 @@ export const editWithAIEndpoint = ({
       //       text: "import { select, transition, easeLinear } from 'd3';\n" +
       //         "import data from './data.csv';\n" +
       //         "import  selected from './se
-      console.log('files:', files);
+      // console.log('files:', files);
       // files: {
       //   '59504239': {
       //     name: 'directory/color.js',
@@ -200,7 +200,7 @@ export const editWithAIEndpoint = ({
         isInteracting: true,
       });
 
-      console.log('op', JSON.stringify(op1));
+      // console.log('op', JSON.stringify(op1));
 
       // Subscribe to ShareDB document.
       // Required to call submitOp.

@@ -16,8 +16,6 @@ import { createProxyMiddleware } from 'http-proxy-middleware';
 
 const version = '3.1.0';
 
-console.log('Starting server at version ', version);
-
 // Generate a random server ID for debugging scaling.
 const serverId = Math.random().toString(36).slice(2);
 
@@ -462,6 +460,8 @@ async function createServer(
   ];
 
   server.listen(port, () => {
+    console.log('Starting server at version ', version);
+
     console.log(
       `VizHub App Server listening at ${BASE_URL}`,
     );

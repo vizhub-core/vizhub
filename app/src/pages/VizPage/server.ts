@@ -173,8 +173,10 @@ VizPage.getPageData = async ({
         // TODO handle this error better
         // Needs a refactor of the returned type
         // return err(commitVizResult.error);
-        console.log('Error when committing viz:');
-        console.log(commitVizResult.error);
+        console.log(
+          'Error when committing viz in Viz Page',
+        );
+        // console.log(commitVizResult.error);
       } else {
         info = commitVizResult.value;
       }
