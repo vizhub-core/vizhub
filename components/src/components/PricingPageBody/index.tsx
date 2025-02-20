@@ -288,6 +288,11 @@ export const PricingPageBody = ({
                       , plus:
                     </div>
                     <PremiumFeatures />
+                    <div className="vh-lede-01 mb-2 mt-2 vh-color-neutral-02">
+                      Professors: reach out to
+                      contact@vizhub.com for student
+                      discount codes!
+                    </div>
                   </div>
                 </div>
               </div>

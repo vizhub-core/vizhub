@@ -22,8 +22,12 @@ export const EditWithAIModal = ({
     [],
   );
 
+  // When submitting, close the modal, reset the prompt, and
+  // call the onSubmit callback with the prompt text.
   const handleSubmitClick = useCallback(() => {
     onSubmit(prompt);
+    onClose();
+    setPrompt('');
   }, [prompt, onSubmit]);
 
   return (

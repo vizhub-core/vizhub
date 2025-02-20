@@ -44,7 +44,7 @@ const isTest = env.VITEST;
 // gtag('config', 'G-5BVJNTEF9V');
 
 const analyticsScript = `
-  <script defer data-domain="vizhub.com" src="https://plausible.io/js/script.js"></script>
+  <script defer data-domain="vizhub.com" src="https://plausible.io/js/script.tagged-events.js"></script>
 `;
 
 // TODO better 404 page

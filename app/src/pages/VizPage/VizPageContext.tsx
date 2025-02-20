@@ -125,6 +125,7 @@ export type VizPageContextValue = {
   toggleEditWithAIModal: () => void;
   showEditWithAIModal: boolean;
   onEditWithAI: (prompt: string) => void;
+  isEditingWithAI: boolean;
 };
 
 export const VizPageContext =
@@ -325,10 +326,12 @@ export const VizPageProvider = ({
     toggleForkModal,
   });
 
-  const { onEditWithAI } = useOnEditWithAI({
-    vizKit,
-    id: info.id,
-  });
+  const { onEditWithAI, isEditingWithAI } = useOnEditWithAI(
+    {
+      vizKit,
+      id: info.id,
+    },
+  );
 
   ////////////////////////////////////////////
   /////////////// Settings ///////////////////
@@ -460,6 +463,7 @@ export const VizPageProvider = ({
     toggleEditWithAIModal,
     showEditWithAIModal,
     onEditWithAI,
+    isEditingWithAI,
   };
 
   return (

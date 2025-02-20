@@ -10,6 +10,7 @@ import { ArrowRightSVG } from '../Icons/sam/ArrowRightSVG';
 import { ServerSVG } from '../Icons/sam/ServerSVG';
 import { RectangleStackSVG } from '../Icons/sam/RectangleStackSVG';
 import './styles.scss';
+import { Spinner } from '../Spinner';
 
 const enableRevisionHistory = true;
 const enableDownloadImage = true;
@@ -34,6 +35,7 @@ export const VizPageHead = ({
   userCanExport,
   toggleExportCodeUpgradeNudgeModal,
   onEditWithAIClick,
+  isEditingWithAI,
 }) => {
   const toggleShowEditor = useCallback(
     () => setShowEditor(!showEditor),
@@ -68,8 +70,20 @@ export const VizPageHead = ({
             {showEditor ? 'Close' : 'Open'} Editor
           </div>
         </Button>
-        <Button variant="dark" onClick={onEditWithAIClick}>
-          Edit with AI
+        <Button
+          variant="dark"
+          onClick={onEditWithAIClick}
+          disabled={isEditingWithAI}
+          className="plausible-event-name=Edit+With+AI"
+        >
+          {isEditingWithAI ? (
+            <>
+              <Spinner height={20} />
+              <span>Editing with AI...</span>{' '}
+            </>
+          ) : (
+            <> Edit with AI</>
+          )}
         </Button>
       </div>
       <div className="side">

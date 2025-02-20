@@ -98,6 +98,7 @@ export const VizPageBody = () => {
     commitMetadata,
     toggleExportCodeUpgradeNudgeModal,
     toggleEditWithAIModal,
+    isEditingWithAI,
   } = useContext(VizPageContext);
 
   const {
@@ -444,6 +445,7 @@ export const VizPageBody = () => {
           toggleExportCodeUpgradeNudgeModal
         }
         onEditWithAIClick={toggleEditWithAIModal}
+        isEditingWithAI={isEditingWithAI}
       />
       {enableVizPageUpgradeBanner &&
         isUpgradeBannerVisible &&

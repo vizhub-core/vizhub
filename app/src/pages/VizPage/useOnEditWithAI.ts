@@ -1,14 +1,9 @@
 import { VizId } from 'entities';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { Result } from 'gateways';
 import { VizKitAPI } from 'api/src/VizKit';
 
 const debug = false;
-
-// const { onEditWithAI } = useOnEditWithAI({
-//   vizKit,
-//   id: info.id,
-// });
 
 export const useOnEditWithAI = ({
   vizKit,
@@ -18,7 +13,11 @@ export const useOnEditWithAI = ({
   id: VizId;
 }): {
   onEditWithAI: (prompt: string) => void;
+  isEditingWithAI: boolean;
 } => {
+  const [isEditingWithAI, setIsEditingWithAI] =
+    useState(false);
+
   const onEditWithAI = useCallback(
     async (prompt: string) => {
       const editWithAIOptions = {
@@ -32,20 +31,21 @@ export const useOnEditWithAI = ({
         );
       }
 
-      const editWithAIResult: Result<{
-        vizId: VizId;
-        ownerUserName: string;
-      }> = await vizKit.rest.editWithAI(editWithAIOptions);
+      setIsEditingWithAI(true);
+
+      const editWithAIResult: Result<'success'> =
+        await vizKit.rest.editWithAI(editWithAIOptions);
 
       if (editWithAIResult.outcome === 'failure') {
         console.log(
           'Failed to edit with AI: ',
           editWithAIResult.error,
         );
-        return;
       }
+
+      setIsEditingWithAI(false);
     },
-    [id, vizKit],
+    [id, vizKit, setIsEditingWithAI],
   );
-  return { onEditWithAI };
+  return { onEditWithAI, isEditingWithAI };
 };

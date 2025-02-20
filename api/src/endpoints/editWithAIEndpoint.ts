@@ -4,7 +4,11 @@ import {
   ChatOpenAIFields,
 } from '@langchain/openai';
 import { StringOutputParser } from '@langchain/core/output_parsers';
-import { EntityName, Files } from 'entities';
+import {
+  EntityName,
+  Files,
+  generateFileId,
+} from 'entities';
 import {
   parseMarkdownFiles,
   serializeMarkdownFiles,
@@ -17,7 +21,10 @@ import {
   authenticationRequiredError,
   missingParameterError,
 } from 'gateways/src/errors';
-import { RecordAnalyticsEvents } from 'interactors';
+import {
+  CommitViz,
+  RecordAnalyticsEvents,
+} from 'interactors';
 import { diff } from 'ot';
 import {
   VerifyVizAccess,
@@ -27,13 +34,11 @@ import {
 const debug = false;
 
 const formatInstructions = [
-  'Formatting instructions: ',
-  'Format your solution as code listings ',
-  'in _exactly_ the same way as the original code listings. For example:\n\n',
+  'Format your solution as code listings like this:\n\n',
   '**fileA.js**\n```js\n// Updated code for fileA\n```\n\n',
   '**fileB.js**\n```js\n// Updated for fileB\n```\n\n',
   'Only include the files that need to be updated or created.\n\n',
-  'Do not create files within directories, only top-level files are supported.\n\n',
+  'Refactor unreasonably long files into smaller modules.\n\n',
   'The original code listings:',
 ].join('');
 
@@ -44,6 +49,7 @@ export const editWithAIEndpoint = ({
 }) => {
   const { getUser, getInfo } = gateways;
   const verifyVizAccess = VerifyVizAccess(gateways);
+  const commitViz = CommitViz(gateways);
 
   const recordAnalyticsEvents =
     RecordAnalyticsEvents(gateways);
@@ -146,10 +152,28 @@ export const editWithAIEndpoint = ({
         //   'got shareDB doc' + JSON.stringify(shareDBDoc.data),
         // );
 
+        // The "old files" existing in the viz.
         const files: Files = shareDBDoc.data.files;
 
         const filesContext = serializeMarkdownFiles(
-          Object.values(files),
+          Object.values(files).map((file) => ({
+            name: file.name,
+
+            // Truncate .csv and .json files to the first 50 lines
+            // and other files to the first 500 lines.
+            // Max chars per line is 200.
+            text: file.text
+              .split('\n')
+              .slice(
+                0,
+                file.name.endsWith('.csv') ||
+                  file.name.endsWith('.json')
+                  ? 50
+                  : 500,
+              )
+              .map((line) => line.slice(0, 200))
+              .join('\n'),
+          })),
         );
 
         const fullPrompt = [
@@ -194,14 +218,17 @@ export const editWithAIEndpoint = ({
         //       text: "import { select, transition, easeLinear } from 'd3';\n" +
         //         "import data from './data.csv';\n" +
         //         "import  selected from './se
+        //         ...
         // console.log('files:', files);
         // files: {
         //   '59504239': {
         //     name: 'directory/color.js',
         //     text: "\nexport const color = '#302EBD';"
         //   },
+        //   ...
 
-        const newFiles: Files = Object.keys(files).reduce(
+        // Update the files with the changed files.
+        let newFiles: Files = Object.keys(files).reduce(
           (acc, fileId) => {
             const file = files[fileId];
 
@@ -216,17 +243,26 @@ export const editWithAIEndpoint = ({
                 ? changedFile.text
                 : file.text,
             };
-
-            // if (changedFile) {
-            //   acc[fileId] = {
-            //     ...file,
-            //     text: changedFile.text,
-            //   };
-            // }
             return acc;
           },
           {},
         );
+
+        // Now account for newly created files:
+        changedFiles.files.forEach((changedFile) => {
+          const existingFile = Object.values(newFiles).find(
+            (file) => file.name === changedFile.name,
+          );
+
+          // If we cannot find it in `newFiles`, it must be a new file
+          if (!existingFile) {
+            const fileId = generateFileId();
+            newFiles[fileId] = {
+              name: changedFile.name,
+              text: changedFile.text,
+            };
+          }
+        });
 
         const op1 = diff(shareDBDoc.data, {
           ...shareDBDoc.data,
@@ -245,7 +281,7 @@ export const editWithAIEndpoint = ({
 
         // Wait for 10ms to allow the ShareDB document to update.
         await new Promise((resolve) =>
-          setTimeout(resolve, 10),
+          setTimeout(resolve, 100),
         );
 
         // Unset isInteracting.
@@ -258,6 +294,9 @@ export const editWithAIEndpoint = ({
         shareDBDoc.submitOp(op2);
 
         shareDBDoc.unsubscribe();
+
+        // Make a new commit for this change
+        await commitViz(id);
 
         await recordAnalyticsEvents({
           eventId: `event.editWithAI.${authenticatedUserId}`,
