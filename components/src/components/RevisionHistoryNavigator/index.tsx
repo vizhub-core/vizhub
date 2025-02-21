@@ -128,7 +128,7 @@ const Body = ({
     if (endNode) {
       return zoomIdentity
         .translate(
-          width - revisionThumbnailWidth / 4 - endNode.y,
+          width / 2 - endNode.y,
           height / 2 - endNode.x,
         )
         .scale(1);
