@@ -164,6 +164,15 @@ const Body = ({
 
   return (
     <svg width={width} height={height} ref={svgRef}>
+      <defs>
+        <clipPath id="circleClip">
+          <circle 
+            r={CIRCLE_RADIUS}
+            cx={CIRCLE_RADIUS}
+            cy={CIRCLE_RADIUS}
+          />
+        </clipPath>
+      </defs>
       <g transform={transform.toString()}>
         {root
           .links()
@@ -244,6 +253,7 @@ const Body = ({
                       width={CIRCLE_RADIUS * 2}
                       height={CIRCLE_RADIUS * 2}
                       preserveAspectRatio="xMidYMid slice"
+                      clipPath="url(#circleClip)"
                       clipPath="url(#circleClip)"
                     />
                   )}
