@@ -36,5 +36,24 @@ export const useRevisionHistory = ({
       });
   }, [showRevisionHistory, id]);
 
-  return { revisionHistory };
+  const restoreToRevision = (commitId: string) => {
+    vizKit.rest
+      .restoreToRevision(id, commitId)
+      .then((result) => {
+        if (result.outcome === 'failure') {
+          console.error(result.error);
+          return;
+        }
+        // Current URL is something like:
+        // http://localhost:5173/curran/1afb1dcafbf244fd8bdfb9530ecaa7bd/88fa7da478a64aa2ad0d696bc124d610
+        // We want to navigate to:
+        // http://localhost:5173/curran/1afb1dcafbf244fd8bdfb9530ecaa7bd
+        window.location.href = window.location.href
+          .split('/')
+          .slice(0, -1)
+          .join('/');
+      });
+  };
+
+  return { revisionHistory, restoreToRevision };
 };

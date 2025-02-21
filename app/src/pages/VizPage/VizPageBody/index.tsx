@@ -95,11 +95,18 @@ export const VizPageBody = () => {
     showRevisionHistory,
     revisionHistory,
     toggleShowRevisionHistory,
+    restoreToRevision,
     commitMetadata,
     toggleExportCodeUpgradeNudgeModal,
     toggleEditWithAIModal,
     isEditingWithAI,
   } = useContext(VizPageContext);
+
+  const handleRestoreToVersionClick = useCallback(() => {
+    if (commitMetadata) {
+      restoreToRevision(commitMetadata.id);
+    }
+  }, [commitMetadata, restoreToRevision]);
 
   const {
     commentsFormatted,
@@ -459,6 +466,10 @@ export const VizPageBody = () => {
           commitTimestampFormatted={formatCommitTimestamp(
             commitMetadata.timestamp,
           )}
+          onRestoreToVersionClick={
+            handleRestoreToVersionClick
+          }
+          showRestoreButton={!!authenticatedUser}
         />
       )}
       <div className="vh-viz-page-body">

@@ -315,6 +315,18 @@ export const editWithAIEndpoint = ({
 
         shareDBDoc.submitOp(op1);
 
+        // Wait for 100ms to ensure the `isInteracting` flag propagates to the client
+        // via WebSocket before unsetting it.
+        // TODO solve this in a more robust way.
+        //  - The problem is that the ShareDB OT may "collapse" the ops
+        //  - so that the `isInteracting` flag is not sent to the client.
+        //  - This is a hack to ensure the flag is sent before unsetting it.
+        //  - A more long-term solution would be to use a different mechanism
+        //  - such as introducing the notion of a "Run ID" or "Run Key" in the Info doc.
+        await new Promise((resolve) =>
+          setTimeout(resolve, 100),
+        );
+
         // Unset isInteracting.
         const op2 = diff(
           { isInteracting: true },

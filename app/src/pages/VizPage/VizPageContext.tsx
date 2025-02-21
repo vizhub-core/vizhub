@@ -12,6 +12,7 @@ import { ShareDBDoc, useSubmitOperation } from 'vzcode';
 import {
   Comment,
   Commit,
+  CommitId,
   CommitMetadata,
   Content,
   Info,
@@ -116,6 +117,7 @@ export type VizPageContextValue = {
   toggleExportCodeUpgradeNudgeModal: () => void;
   showRevisionHistory: boolean;
   toggleShowRevisionHistory: () => void;
+  restoreToRevision: (commitId: CommitId) => void;
 
   // null signifies that the data is still loading.
   revisionHistory: RevisionHistory | null;
@@ -280,11 +282,12 @@ export const VizPageProvider = ({
   /////////////// Revision History ///////////////////
   ////////////////////////////////////////////////////
 
-  const { revisionHistory } = useRevisionHistory({
-    showRevisionHistory,
-    vizKit,
-    id: info.id,
-  });
+  const { revisionHistory, restoreToRevision } =
+    useRevisionHistory({
+      showRevisionHistory,
+      vizKit,
+      id: info.id,
+    });
 
   ///////////////////////////////////////////
   /////////////// Forking ///////////////////
@@ -458,6 +461,7 @@ export const VizPageProvider = ({
     showRevisionHistory,
     toggleShowRevisionHistory,
     revisionHistory,
+    restoreToRevision,
     commitMetadata,
     runtimeVersion,
     toggleEditWithAIModal,

@@ -138,6 +138,11 @@ export interface VizKitAPI {
       vizId: VizId,
     ) => Promise<Result<RevisionHistory>>;
 
+    restoreToRevision: (
+      vizId: VizId,
+      commitId: string,
+    ) => Promise<Result<Success>>;
+
     getAPIKeys: () => Promise<Result<Array<APIKey>>>;
 
     generateAPIKey: (options: { name: string }) => Promise<
@@ -354,6 +359,15 @@ export const VizKit = (
         prompt: string;
       }) =>
         await postJSON(`${baseUrl}/edit-with-ai`, options),
+
+      restoreToRevision: async (
+        vizId: VizId,
+        commitId: string,
+      ) =>
+        await postJSON(`${baseUrl}/restore-to-revision`, {
+          vizId,
+          commitId,
+        }),
     },
   };
 };

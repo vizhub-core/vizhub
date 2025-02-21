@@ -5,6 +5,14 @@ import { VizKitAPI } from 'api/src/VizKit';
 
 const debug = false;
 
+// Refresh the page to ensure:
+//  - The full code is executed (not hot reloaded, which is unreliable)
+//  - The user gets the fresh revision history
+// TODO refactor things so we don't need to do a hard reload here
+//  - Trigger a full run of the code
+//  - Dynamically fetch the latest revision history
+const RELOAD_AFTER_EDIT_WITH_AI = true;
+
 export const useOnEditWithAI = ({
   vizKit,
   id,
@@ -44,6 +52,10 @@ export const useOnEditWithAI = ({
       }
 
       setIsEditingWithAI(false);
+
+      if (RELOAD_AFTER_EDIT_WITH_AI) {
+        window.location.reload();
+      }
     },
     [id, vizKit, setIsEditingWithAI],
   );

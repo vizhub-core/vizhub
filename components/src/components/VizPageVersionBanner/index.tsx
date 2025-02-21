@@ -4,6 +4,8 @@ import './styles.scss';
 
 export const VizPageVersionBanner = ({
   commitTimestampFormatted,
+  onRestoreToVersionClick,
+  showRestoreButton,
 }) => {
   return (
     <div className="vh-viz-page-version-banner">
@@ -15,13 +17,14 @@ export const VizPageVersionBanner = ({
         </span>
       </div>
       <div className="side vh-base-01 vh-color-neutral-02">
-        {/* <span className="d-none d-lg-inline">
-          Upgrade to create private vizzes
-        </span> */}
-        <span className="d-inline d-lg-none"></span>
-        <Button variant="primary" disabled>
-          Restore to this version (coming soon!)
-        </Button>
+        {showRestoreButton && (
+          <Button
+            variant="primary"
+            onClick={onRestoreToVersionClick}
+          >
+            Restore to this version
+          </Button>
+        )}
       </div>
     </div>
   );
