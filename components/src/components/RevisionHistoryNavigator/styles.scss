@@ -4,12 +4,20 @@
   svg {
     position: absolute;
 
+    text {
+      text-decoration: none;
+    }
+
     text.time-label {
       fill: var(--vh-color-neutral-03);
     }
 
     line {
       stroke: var(--vh-color-neutral-03);
+    }
+
+    a {
+      text-decoration: none;
     }
   }
 }
