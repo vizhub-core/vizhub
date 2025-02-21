@@ -21,14 +21,26 @@ import {
   defaultVizWidth,
 } from 'entities';
 import { Spinner } from '../Spinner';
-import './styles.scss';
 import { formatCommitTimestamp } from '../formatCommitTimestamp';
+import './styles.scss';
 
 // The width of the thumbnail
 const revisionThumbnailWidth = defaultVizWidth / 4;
 
-// The width of the gap between the nodes
-const gap = 20;
+// Tree layout params
+const NODE_WIDTH = 120;
+const NODE_HEIGHT = 120;
+
+// The size of the circles to use for the nodes
+// TODO use `CIRCLE_RADIUS` instead of `revisionThumbnailWidth / 4`
+const CIRCLE_RADIUS = revisionThumbnailWidth / 6;
+
+// The additional radius to add to the circle
+// that corresponds to the current version.
+const CURRENT_CIRCLE_RADIUS_OFFSET = 4;
+
+// Vertical offset of the label
+const LABEL_OFFSET_Y = 10;
 
 // TODO make this a dynamic import
 // so that the d3 modules are not included
@@ -84,25 +96,11 @@ const Body = ({
     [commitMetadatas],
   );
 
-  // Compute the width of the tree
-  const treeWidth = useMemo(() => {
-    const depth: number = root
-      .descendants()
-      .reduce(
-        (
-          maxDepth: number,
-          node: HierarchyNode<CommitMetadata>,
-        ) => Math.max(maxDepth, node.depth),
-        0,
-      );
-    return depth * (revisionThumbnailWidth / 2 + gap);
-  }, [root]);
-
   // This is a side effect that mutates the nodes in the tree
   // to include the x and y coordinates of the nodes.
   useMemo(() => {
-    tree().size([height, treeWidth])(root);
-  }, [root, treeWidth, height]);
+    tree().nodeSize([NODE_WIDTH, NODE_HEIGHT])(root);
+  }, [root, NODE_WIDTH, NODE_HEIGHT]);
 
   // Compute the height of the thumbnail
   // Assume that the aspect ratio of the thumbnail is the same
@@ -130,10 +128,7 @@ const Body = ({
     if (endNode) {
       return zoomIdentity
         .translate(
-          width -
-            revisionThumbnailWidth / 4 -
-            gap -
-            endNode.y,
+          width - revisionThumbnailWidth / 4 - endNode.y,
           height / 2 - endNode.x,
         )
         .scale(1);
@@ -201,54 +196,83 @@ const Body = ({
                 height;
 
             return (
-              <g
-                key={node.id}
-                transform={`translate(${node.y}, ${node.x})`}
+              <a
+                href={getVizPageHrefForCommit(node.data.id)}
+                target="_blank"
+                className="node-link"
               >
-                <circle r={5} fill="black" />
-                {isVisible && (
-                  <a
-                    href={getVizPageHrefForCommit(
-                      node.data.id,
-                    )}
-                    target="_blank"
-                  >
+                <g
+                  key={node.id}
+                  transform={`translate(${node.y}, ${node.x})`}
+                >
+                  {
+                    // Show text that says "Current version"
+                    // if the node corresponds to the current version.
+                    node.data.id === info.end && (
+                      <>
+                        <circle
+                          r={
+                            CIRCLE_RADIUS +
+                            CURRENT_CIRCLE_RADIUS_OFFSET
+                          }
+                          fill="white"
+                          stroke="black"
+                          strokeWidth="2"
+                        />
+                        <text
+                          transform={`translate(0, ${-CIRCLE_RADIUS - LABEL_OFFSET_Y - CURRENT_CIRCLE_RADIUS_OFFSET})`}
+                          textAnchor="middle"
+                          alignmentBaseline="middle"
+                          fontSize="14"
+                          fontWeight={600}
+                          fill="black"
+                        >
+                          Current version
+                        </text>
+                      </>
+                    )
+                  }
+                  <circle
+                    r={CIRCLE_RADIUS}
+                    fill="white"
+                    stroke="var(--vh-color-neutral-03)"
+                  />
+                  {isVisible && (
                     <image
-                      transform={`translate(${-revisionThumbnailWidth / 4}, ${-revisionThumbnailHeight / 4})`}
+                      transform={`translate(${-CIRCLE_RADIUS}, ${-CIRCLE_RADIUS})`}
                       href={`/api/viz-thumbnail/${node.id}-${revisionThumbnailWidth}.png`}
-                      // Display the thumbnail at half size
-                      // so that it looks good on high DPI screens.
-                      width={revisionThumbnailWidth / 2}
+                      width={CIRCLE_RADIUS * 2}
+                      height={CIRCLE_RADIUS * 2}
+                      preserveAspectRatio="xMidYMid slice"
+                      clipPath="url(#circleClip)"
                     />
-                  </a>
-                )}
-                {
-                  // Show the timestamp as a human-readable date.
-                  // if the node corresponds to the current version.
-                  <text
-                    transform={`translate(0, ${revisionThumbnailHeight / 4 + 18})`}
-                    textAnchor="middle"
-                    fontSize="12"
-                    className="time-label"
-                  >
-                    {formattedDatesByCommitId[node.data.id]}
-                  </text>
-                }
-                {
-                  // Show text that says "Current version"
-                  // if the node corresponds to the current version.
-                  node.data.id === info.end && (
+                  )}
+
+                  {
+                    // Show the timestamp as a human-readable date.
+                    // if the node corresponds to the current version.
                     <text
-                      transform={`translate(0, ${-revisionThumbnailHeight / 4 - 6})`}
+                      transform={`translate(0, ${
+                        CIRCLE_RADIUS +
+                        LABEL_OFFSET_Y +
+                        (node.data.id === info.end
+                          ? CURRENT_CIRCLE_RADIUS_OFFSET
+                          : 0)
+                      })`}
                       textAnchor="middle"
-                      fontSize="14"
-                      fill="black"
+                      alignmentBaseline="middle"
+                      fontSize="12"
+                      className="time-label"
                     >
-                      Current version
+                      {
+                        formattedDatesByCommitId[
+                          node.data.id
+                        ]
+                      }
                     </text>
-                  )
-                }
-              </g>
+                  }
+                </g>{' '}
+              </a>
             );
           })}
       </g>
