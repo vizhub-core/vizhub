@@ -5,6 +5,7 @@ import {
 } from '@langchain/openai';
 import { StringOutputParser } from '@langchain/core/output_parsers';
 import {
+  dateToTimestamp,
   EntityName,
   Files,
   generateFileId,
@@ -33,21 +34,12 @@ import {
 
 const debug = false;
 
-const formatInstructions = [
-  'Format your solution as code listings like this:\n\n',
-  '**fileA.js**\n```js\n// Updated code for fileA\n```\n\n',
-  '**fileB.js**\n```js\n// Updated for fileB\n```\n\n',
-  'Only include the files that need to be updated or created.\n\n',
-  'Refactor unreasonably long files into smaller modules.\n\n',
-  'The original code listings:',
-].join('');
-
 export const editWithAIEndpoint = ({
   app,
   shareDBConnection,
   gateways,
 }) => {
-  const { getUser, getInfo } = gateways;
+  const { getUser, getInfo, saveInfo } = gateways;
   const verifyVizAccess = VerifyVizAccess(gateways);
   const commitViz = CommitViz(gateways);
 
@@ -109,10 +101,11 @@ export const editWithAIEndpoint = ({
         if (infoResult.outcome === 'failure') {
           return err(infoResult.error);
         }
+        const info = infoResult.value.data;
         const vizAccessResult: Result<VizAccess> =
           await verifyVizAccess({
             authenticatedUserId,
-            info: infoResult.value.data,
+            info,
             actions: ['write'],
           });
         if (vizAccessResult.outcome === 'failure') {
@@ -176,18 +169,19 @@ export const editWithAIEndpoint = ({
           })),
         );
 
-        const fullPrompt = [
-          prompt,
-          formatInstructions,
+        const fullPrompt = assembleFullPrompt({
           filesContext,
-        ].join('\n\n');
+          prompt,
+        });
 
-        // debug &&
-        //   console.log('fullPrompt:`' + fullPrompt + '`');
+        debug &&
+          console.log('fullPrompt:`' + fullPrompt + '`');
+
+        const modelName =
+          process.env.VIZHUB_EDIT_WITH_AI_MODEL_NAME;
 
         const options: ChatOpenAIFields = {
-          modelName:
-            process.env.VIZHUB_EDIT_WITH_AI_MODEL_NAME,
+          modelName,
           configuration: {
             apiKey: process.env.VIZHUB_EDIT_WITH_AI_API_KEY,
             baseURL:
@@ -199,6 +193,13 @@ export const editWithAIEndpoint = ({
         const chatModel = new ChatOpenAI(options);
 
         const result = await chatModel.invoke(fullPrompt);
+
+        debug &&
+          console.log(
+            'result:`' +
+              JSON.stringify(result, null, 2) +
+              '`',
+          );
         const parser = new StringOutputParser();
         const resultString = await parser.invoke(result);
 
@@ -207,8 +208,10 @@ export const editWithAIEndpoint = ({
             'resultString:`' + resultString + '`',
           );
 
-        const changedFiles =
-          parseMarkdownFiles(resultString);
+        const changedFiles = parseMarkdownFiles(
+          resultString,
+          'bold',
+        );
 
         // console.log('changedFiles:', changedFiles);
         // newFiles: {
@@ -264,6 +267,11 @@ export const editWithAIEndpoint = ({
           }
         });
 
+        // Before making the AI edits, let's make sure the latest change
+        // before the AI edit is committed.
+        await commitViz(id);
+
+        // Apply the AI edits to the files.
         const op1 = diff(shareDBDoc.data, {
           ...shareDBDoc.data,
           // update the files
@@ -272,17 +280,40 @@ export const editWithAIEndpoint = ({
           isInteracting: true,
         });
 
+        // Fetch the Info doc again, just in case
+        // anything changed during AI generation.
+        const latestInfoResult = await getInfo(id);
+        if (latestInfoResult.outcome === 'failure') {
+          return err(latestInfoResult.error);
+        }
+        const latestInfo = latestInfoResult.value.data;
+
+        // Mark the info uncommitted, so that the AI edit
+        // will trigger a new commit.
+        // TODO refactor to unify with app/src/pages/VizPage/useVizMutations.ts
+
+        const newInfo = {
+          ...latestInfo,
+          committed: false,
+
+          // Add the authenticated user to the list of commit authors
+          commitAuthors: [
+            authenticatedUser.id,
+            'AI:' + modelName,
+          ],
+
+          // Update the last updated timestamp, as this is used as the
+          // timestamp for the next commit.
+          updated: dateToTimestamp(new Date()),
+        };
+        await saveInfo(newInfo);
+
         // console.log('op', JSON.stringify(op1));
 
         // Subscribe to ShareDB document.
         // Required to call submitOp.
 
         shareDBDoc.submitOp(op1);
-
-        // Wait for 10ms to allow the ShareDB document to update.
-        await new Promise((resolve) =>
-          setTimeout(resolve, 100),
-        );
 
         // Unset isInteracting.
         const op2 = diff(
@@ -308,5 +339,38 @@ export const editWithAIEndpoint = ({
         res.json(err(error));
       }
     },
+  );
+};
+
+const task = (prompt: string) => {
+  return `## Your Task\n\n${prompt}`;
+};
+
+const files = (filesContext: string) => {
+  return `## Original Files\n\n${filesContext}`;
+};
+
+const format = [
+  '## Formatting Instructions\n\n',
+  'Suggest changes to the original files using this exact format:\n\n',
+  '**fileA.js**\n\n```js\n// Entire updated code for fileA\n```\n\n',
+  '**fileB.js**\n\n```js\n// Entire updated code for fileB\n```\n\n',
+  'Only include the files that need to be updated or created.\n\n',
+  'To suggest changes you MUST include the ENTIRE content of the updated file.\n\n',
+  'Refactor large files into smaller files in the same directory.\n\n',
+  'For D3 logic, make sure it remains idempotent (use data joins), ',
+  'and prefer function signatures like `someFunction(selection, options)` ',
+  'where `selection` is a D3 selection and `options` is an object.\n\n',
+].join('');
+
+const assembleFullPrompt = ({
+  filesContext,
+  prompt,
+}: {
+  filesContext: string;
+  prompt: string;
+}) => {
+  return [task(prompt), files(filesContext), format].join(
+    '\n\n',
   );
 };

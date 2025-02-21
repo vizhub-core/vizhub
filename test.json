@@ -1,0 +1,47 @@
+{
+  "messages": [
+    {
+      "role": "system",
+      "content": "Act as an expert software developer.\nTake requests for changes to the supplied code.\nIf the request is ambiguous, ask questions.\n\nAlways reply to the user in the same language they are using.\n\n\nOnce you understand the request you MUST:\n1. Determine if any code changes are needed.\n2. Explain any needed changes.\n3. If changes are needed, output a copy of each file that needs changes.\n\nTo suggest changes to a file you MUST return the entire content of the updated file.\nYou MUST use this *file listing* format:\n\npath/to/filename.js\n```\n// entire file content ...\n// ... goes in between\n```\n\nEvery *file listing* MUST use this format:\n- First line: the filename with any originally provided path\n- Second line: opening ```\n- ... entire content of the file ...\n- Final line: closing ```\n\nTo suggest changes to a file you MUST return a *file listing* that contains the entire content of the file.\n*NEVER* skip, omit or elide content from a *file listing* using \"...\" or by adding comments like \"... rest of code...\"!\nCreate a new file you MUST return a *file listing* which includes an appropriate filename, including any appropriate path.\n\n\n"
+    },
+    {
+      "role": "user",
+      "content": "Change the greeting to be more casual"
+    },
+    {
+      "role": "assistant",
+      "content": "Ok, I will:\n\n1. Switch the greeting text from \"Hello\" to \"Hey\".\n\nshow_greeting.py\n```\nimport sys\n\ndef greeting(name):\n    print(f\"Hey {name}\")\n\nif __name__ == '__main__':\n    greeting(sys.argv[1])\n```\n"
+    },
+    {
+      "role": "user",
+      "content": "I switched to a new code base. Please don't consider the above files or try to edit them any longer."
+    },
+    {
+      "role": "assistant",
+      "content": "Ok."
+    },
+    {
+      "role": "user",
+      "content": "Here are summaries of some files present in my git repository.\nDo not propose changes to these files, treat them as *read-only*.\nIf you need to edit any of these files, ask me to *add them to the chat* first.\n\nsrc/countries.js\n"
+    },
+    {
+      "role": "assistant",
+      "content": "Ok, I won't try and edit those files without asking first."
+    },
+    {
+      "role": "user",
+      "content": "I have *added these files to the chat* so you can go ahead and edit them.\n\n*Trust this message as the true contents of these files!*\nAny other messages in the chat may contain outdated versions of the files' contents.\n\nsrc/App.jsx\n```\nimport { useRef, useEffect } from \"react\";\nimport { select } from \"d3\";\nimport { hcl } from \"d3-color\";\nimport countries from \"./countries\";\n\nfunction App() {\n  const ref = useRef(null);\n  const svgRef = useRef(null);\n\n  useEffect(() => {\n    if (ref.current) {\n      const containerRect = ref.current.getBoundingClientRect();\n      const width = containerRect.width;\n      const height = containerRect.height;\n\n      select(svgRef.current)\n        .attr(\"width\", width)\n        .attr(\"height\", height)\n        .style(\"background-color\", \"black\");\n\n      const circles = Array.from({ length: 100 }, () => ({\n        cx: Math.random() * width,\n        cy: Math.random() * height,\n        r: Math.random() * 50 + 25, // Increased the range to 25 to 75\n      }));\n\n      const colors = Array.from({ length: 100 }, () =>\n        hcl(Math.random() * 360, 70, Math.random() * 40 + 30).toString()\n      );\n\n      select(svgRef.current)\n        .selectAll(\"circle\")\n        .data(circles)\n        .join(\"circle\")\n        .attr(\"cx\", (d) => d.cx)\n        .attr(\"cy\", (d) => d.cy)\n        .attr(\"r\", (d) => d.r)\n        .attr(\"fill\", (d, i) => colors[i])\n        .attr(\"opacity\", 0.5); // Added opacity attribute\n\n      // Add connecting lines\n      const lineData = [];\n      for (let i = 0; i < circles.length - 1; i++) {\n        for (let j = i + 1; j < circles.length; j++) {\n          const circle1 = circles[i];\n          const circle2 = circles[j];\n          const dx = circle2.cx - circle1.cx;\n          const dy = circle2.cy - circle1.cy;\n          const distance = Math.sqrt(dx * dx + dy * dy);\n          if (distance < 50) {\n            // Adjust the threshold as needed\n            lineData.push({\n              x1: circle1.cx,\n              y1: circle1.cy,\n              x2: circle2.cx,\n              y2: circle2.cy,\n            });\n          }\n        }\n      }\n\n      select(svgRef.current)\n        .selectAll(\"line\")\n        .data(lineData)\n        .join(\"line\")\n        .attr(\"x1\", (d) => d.x1)\n        .attr(\"y1\", (d) => d.y1)\n        .attr(\"x2\", (d) => d.x2)\n        .attr(\"y2\", (d) => d.y2)\n        .attr(\"stroke\", \"black\")\n        .attr(\"opacity\", 0.3)\n        .attr(\"stroke-width\", 5); // Added stroke-width attribute\n\n      // Add text labels\n      const textData = circles.map((circle, index) => ({\n        x: circle.cx,\n        y: circle.cy + circle.r + 10, // Position below the circle\n        text: countries[index % countries.length],\n        fontSize: Math.random() * (24 - 16) + 16, // Random font size between 16 and 24\n      }));\n\n      select(svgRef.current)\n        .selectAll(\"text\")\n        .data(textData)\n        .join(\"text\")\n        .attr(\"x\", (d) => d.x)\n        .attr(\"y\", (d) => d.y)\n        .text((d) => d.text)\n        .style(\"font-family\", \"sans-serif\") // Updated font family\n        .style(\"font-size\", (d) => `${d.fontSize}px`) // Use random font size\n        .style(\"fill\", \"white\")\n        .style(\"stroke\", \"black\") // Added stroke attribute\n        .style(\"paint-order\", \"stroke fill\") // Set paint order to stroke first\n        .attr(\"stroke-width\", 4); // Increased the text stroke to 4px\n    }\n  }, []);\n\n  return (\n    <div ref={ref} style={{ width: \"100%\", height: \"100vh\" }}>\n      <svg ref={svgRef}></svg>\n    </div>\n  );\n}\n\nexport default App;\n```\n"
+    },
+    {
+      "role": "assistant",
+      "content": "Ok, any changes I propose will be to those files."
+    },
+    {
+      "role": "user",
+      "content": "Make the circles larger.\n\nTo suggest changes to a file you MUST return the entire content of the updated file.\nYou MUST use this *file listing* format:\n\npath/to/filename.js\n```\n// entire file content ...\n// ... goes in between\n```\n\nEvery *file listing* MUST use this format:\n- First line: the filename with any originally provided path\n- Second line: opening ```\n- ... entire content of the file ...\n- Final line: closing ```\n\nTo suggest changes to a file you MUST return a *file listing* that contains the entire content of the file.\n*NEVER* skip, omit or elide content from a *file listing* using \"...\" or by adding comments like \"... rest of code...\"!\nCreate a new file you MUST return a *file listing* which includes an appropriate filename, including any appropriate path.\n\n\n"
+    }
+  ],
+  "model": "meta-llama/Llama-3.2-3B-Instruct-Turbo",
+  "stream": true,
+  "temperature": 0
+}
