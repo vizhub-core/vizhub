@@ -540,8 +540,8 @@ async function getGenerationMetadata({
   inputTokens: number;
   outputTokens: number;
 }> {
-  console.log("apiKey: '" + apiKey + "'");
-  console.log("generationId: '" + generationId + "'");
+  // console.log("apiKey: '" + apiKey + "'");
+  // console.log("generationId: '" + generationId + "'");
   const url = `https://openrouter.ai/api/v1/generation?id=${generationId}`;
   // const url = `http://localhost:8080/https://openrouter.ai/api/v1/generation?id=${generationId}`;
 
@@ -549,8 +549,8 @@ async function getGenerationMetadata({
     Authorization: `Bearer ${apiKey}`,
   };
 
-  const curl = `curl -G "${url}" \\\n  -H "Authorization: Bearer ${apiKey}"`;
-  console.log('Equivalent curl command:\n', curl);
+  // const curl = `curl -G "${url}" \\\n  -H "Authorization: Bearer ${apiKey}"`;
+  // console.log('Equivalent curl command:\n', curl);
 
   // Sometimes OpenRouter returns a 404 if we request
   // the cost too soon after the generation.
