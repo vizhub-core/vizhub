@@ -54,6 +54,7 @@ import {
   ResourceLockId,
   RevisionHistory,
   APIKey,
+  AIEditMetadata,
 } from 'entities';
 import { Result, Success } from './Result';
 import { MigrationStatusId } from 'entities/src/Migration';
@@ -269,6 +270,10 @@ export interface Gateways {
   saveUser(user: User): Promise<Result<Success>>;
   getUser(id: UserId): Promise<Result<Snapshot<User>>>;
   deleteUser(id: UserId): Promise<Result<Success>>;
+
+  saveAIEditMetadata(
+    aiEditMetadata: AIEditMetadata,
+  ): Promise<Result<Success>>;
 
   saveAPIKey(apiKey: APIKey): Promise<Result<Success>>;
   getAPIKey(id: APIKeyId): Promise<Result<APIKey>>;

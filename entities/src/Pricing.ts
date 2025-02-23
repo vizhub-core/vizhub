@@ -11,6 +11,16 @@ export const PREMIUM: Plan = 'premium';
 // A paying customer on the professional plan.
 export const PRO: Plan = 'professional';
 
+// The number of AI credits a user starts with (in cents).
+// Correspones with the `User.creditBalance` field.
+export const STARTING_CREDITS: number = 200;
+
+// The markup on AI transaction fees.
+// e.g. if the AI provider's fee is $0.02 for a given transaction,
+// then the user's AI credit will be charged $0.03
+// if the CREDIT_MARKUP is 1.5.
+export const CREDIT_MARKUP: number = 1.5;
+
 // FeatureId is an enum of all the features that are
 // highlighted in the pricing page.
 export type FeatureId =

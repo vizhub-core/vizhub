@@ -60,6 +60,8 @@ export type {
   RevisionHistory,
 } from './RevisionHistory';
 
+export type { AIEditMetadata } from './AIEditMetadata';
+
 export type { Tagging, TaggingId } from './Tags';
 
 export type {
@@ -197,7 +199,8 @@ export type EntityName =
   | 'ImageMetadata'
   | 'StoredImage'
   | 'APIKey'
-  | 'APIKeyHash';
+  | 'APIKeyHash'
+  | 'AIEditMetadata';
 
 export {
   getFileText,

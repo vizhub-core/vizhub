@@ -72,13 +72,6 @@ const Body = () => {
         await vizKit.rest.createCheckoutSession({
           userId: authenticatedUser.id,
           isMonthly,
-          discountCode:
-            typeof window !== 'undefined' &&
-            // Extract from the URL query string.
-            // e.g. ?discountCode=abc123
-            new URLSearchParams(window.location.search).get(
-              'discountCode',
-            ),
         });
       if (
         createCheckoutSessionResult.outcome === 'failure'

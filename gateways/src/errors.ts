@@ -14,6 +14,7 @@ export enum VizHubErrorCode {
   tooLarge = 'tooLarge',
   tooLargeForFree = 'tooLargeForFree',
   buildError = 'buildError',
+  creditsNeeded = 'creditsNeeded',
 }
 
 export const errorCodeLabels = {
@@ -148,3 +149,8 @@ export const missingImportError = (
     'Missing import: ' + message,
     VizHubErrorCode.buildError,
   );
+
+export const creditsNeededError = (
+  message: string,
+): VizHubError =>
+  new VizHubError(message, VizHubErrorCode.creditsNeeded);

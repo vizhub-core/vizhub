@@ -3,14 +3,7 @@ import { Gateways, err, ok } from 'gateways';
 import { authenticationRequiredError } from 'gateways/src/errors';
 import { getAuthenticatedUserId } from '../parseAuth0User';
 import { getStripe } from './getStripe';
-import { User } from 'entities';
-
-const isValidDiscountCode = (discountCode: string) => {
-  return (
-    discountCode === 'WPIFREEYEAR' ||
-    discountCode === 'WPIFREEYEAR2024'
-  );
-};
+import Stripe from 'stripe';
 
 export const createCheckoutSession = ({
   app,
@@ -54,38 +47,41 @@ export const createCheckoutSession = ({
       const success_url = `${urlBase}/pricing`;
       const cancel_url = success_url;
 
-      const { isMonthly } = req.body;
+      const { isMonthly, isCreditTopUp } = req.body;
 
-      let discountCode;
-      if (
-        req.body.discountCode &&
-        isValidDiscountCode(req.body.discountCode)
-      ) {
-        discountCode = req.body.discountCode;
-      }
+      const price = isCreditTopUp
+        ? process.env.VIZHUB_CREDIT_TOP_UP_STRIPE_PRICE_ID
+        : isMonthly
+          ? process.env
+              .VIZHUB_PREMIUM_MONTHLY_STRIPE_PRICE_ID
+          : process.env
+              .VIZHUB_PREMIUM_ANNUAL_STRIPE_PRICE_ID;
 
-      const price = isMonthly
-        ? process.env.VIZHUB_PREMIUM_MONTHLY_STRIPE_PRICE_ID
-        : process.env.VIZHUB_PREMIUM_ANNUAL_STRIPE_PRICE_ID;
+      // This is the config for subscriptions
+      const lineItem: Stripe.Checkout.SessionCreateParams.LineItem =
+        {
+          price,
+          quantity: 1,
+        };
+
 
       // https://stripe.com/docs/api/checkout/sessions/create#create_checkout_session-client_reference_id
       const session = await stripe.checkout.sessions.create(
         {
-          mode: 'subscription',
+          mode: isCreditTopUp ? 'payment' : 'subscription',
           success_url,
           cancel_url,
           client_reference_id: authenticatedUserId,
-          line_items: [
-            {
-              price,
-              quantity: 1,
-            },
-          ],
+          line_items: [lineItem],
 
-          subscription_data: {},
+          subscription_data: isCreditTopUp ? undefined : {},
 
-          payment_method_collection: 'if_required',
-          allow_promotion_codes: true,
+          ...(isCreditTopUp
+            ? { allow_promotion_codes: false }
+            : {
+                payment_method_collection: 'if_required',
+                allow_promotion_codes: true,
+              }),
         },
       );
       res.json(ok({ sessionURL: session.url }));

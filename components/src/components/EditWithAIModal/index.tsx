@@ -1,17 +1,25 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { Modal, Form, Button } from '../bootstrap';
-import { Plan } from 'entities';
+import { Plan, UserId } from 'entities';
+import { VizKit } from 'api/src/VizKit';
+import { formatCreditBalance } from 'entities/src/accessors';
+
+const vizKit = VizKit();
 
 export const EditWithAIModal = ({
   show,
   onClose,
   onSubmit,
+  creditBalance,
   currentPlan,
+  userId,
 }: {
   show: boolean;
   onClose: () => void;
   onSubmit: (prompt: string) => void;
+  creditBalance?: number;
   currentPlan: Plan;
+  userId?: UserId;
 }) => {
   const [prompt, setPrompt] = useState<string>('');
 
@@ -30,13 +38,55 @@ export const EditWithAIModal = ({
     setPrompt('');
   }, [prompt, onSubmit]);
 
+  const formattedCreditBalance = useMemo(
+    () => formatCreditBalance(creditBalance),
+    [creditBalance],
+  );
+
+  const handleTopUpClick = useCallback(async () => {
+    // Sanity check - should never happen
+    if (!userId) {
+      return;
+    }
+
+    // Record analytics of the click.
+    vizKit.rest.recordAnalyticsEvents(
+      'event.click.ai.top-up',
+    );
+
+    // Create a Stripe Checkout session.
+    const createCheckoutSessionResult =
+      await vizKit.rest.createCheckoutSession({
+        userId,
+        isCreditTopUp: true,
+      });
+    if (createCheckoutSessionResult.outcome === 'failure') {
+      console.error(
+        'Error creating checkout session',
+        createCheckoutSessionResult.error,
+      );
+      return;
+    }
+
+    // Redirect the user to the Stripe Checkout page.
+    const { sessionURL } =
+      createCheckoutSessionResult.value;
+    window.location.href = sessionURL;
+  }, [userId]);
+
   return (
     <Modal show={show} onHide={onClose} centered>
       <Modal.Header closeButton>
         <Modal.Title>Edit with AI</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {currentPlan === 'premium' ? (
+        {currentPlan === 'premium' &&
+        creditBalance === 0 ? (
+          <p>
+            You need to top up your AI credit balance to use
+            AI-powered editing features.
+          </p>
+        ) : currentPlan === 'premium' ? (
           <Form.Group className="mb-3" controlId="prompt">
             <Form.Label>
               What would you like to change?
@@ -63,14 +113,32 @@ export const EditWithAIModal = ({
         )}
       </Modal.Body>
       <Modal.Footer>
-        {currentPlan === 'premium' ? (
-          <Button
-            variant="primary"
-            onClick={handleSubmitClick}
-            disabled={!prompt.trim()}
-          >
-            Submit
-          </Button>
+        {currentPlan === 'premium' &&
+        creditBalance === 0 ? (
+          <>
+            <Form.Text className="text-muted">
+              AI Credit Balance: {formattedCreditBalance}
+            </Form.Text>
+            <Button
+              variant="primary"
+              onClick={handleTopUpClick}
+            >
+              Top Up Balance
+            </Button>
+          </>
+        ) : currentPlan === 'premium' ? (
+          <>
+            <Form.Text className="text-muted">
+              AI Credit Balance: {formattedCreditBalance}
+            </Form.Text>
+            <Button
+              variant="primary"
+              onClick={handleSubmitClick}
+              disabled={!prompt.trim()}
+            >
+              Submit
+            </Button>
+          </>
         ) : (
           <Button
             variant="primary"

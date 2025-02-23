@@ -11,3 +11,5 @@ export { getAnyoneCanEdit } from './getAnyoneCanEdit';
 export { getVizThumbnailURL } from './getVizThumbnailURL';
 export { absoluteURL } from './absoluteURL';
 export { iframeSnippet } from './iframeSnippet';
+export { getCreditBalance } from './getCreditBalance';
+export { formatCreditBalance } from './formatCreditBalance';

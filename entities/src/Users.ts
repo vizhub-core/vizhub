@@ -72,6 +72,10 @@ export interface User {
   // migratedFromV2
   //  * Whether this user was migrated from the V2 database.
   migratedFromV2?: boolean;
+
+  // creditBalance
+  //  * The amount of AI credit this user has, in cents.
+  creditBalance?: number;
 }
 
 // One of these is created

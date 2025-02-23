@@ -5,11 +5,16 @@ import {
 } from '@langchain/openai';
 import { StringOutputParser } from '@langchain/core/output_parsers';
 import {
+  AIEditMetadata,
   dateToTimestamp,
   EntityName,
   File,
   Files,
   generateFileId,
+  generateId,
+  Info,
+  User,
+  userLock,
 } from 'entities';
 import {
   parseMarkdownFiles,
@@ -21,6 +26,7 @@ import { err, ok, Result } from 'gateways';
 import {
   accessDeniedError,
   authenticationRequiredError,
+  creditsNeededError,
   missingParameterError,
 } from 'gateways/src/errors';
 import {
@@ -32,15 +38,27 @@ import {
   VerifyVizAccess,
   VizAccess,
 } from 'interactors/src/verifyVizAccess';
+import { getCreditBalance } from 'entities/src/accessors';
+import { CREDIT_MARKUP } from 'entities/src/Pricing';
 
 const debug = false;
+
+// Versions of the prompt template.
+const promptTemplateVersion = 1;
 
 export const editWithAIEndpoint = ({
   app,
   shareDBConnection,
   gateways,
 }) => {
-  const { getUser, getInfo, saveInfo } = gateways;
+  const {
+    getUser,
+    getInfo,
+    saveInfo,
+    saveUser,
+    lock,
+    saveAIEditMetadata,
+  } = gateways;
   const verifyVizAccess = VerifyVizAccess(gateways);
   const commitViz = CommitViz(gateways);
 
@@ -52,7 +70,7 @@ export const editWithAIEndpoint = ({
     '/api/edit-with-ai/',
     bodyParser.json(),
     async (req, res) => {
-      if (debug)
+      debug &&
         console.log(
           '[editWithAIEndpoint] req.body:',
           req.body,
@@ -118,6 +136,29 @@ export const editWithAIEndpoint = ({
           );
         }
 
+        // ************************
+        // *** AI Credits Logic ***
+        // ************************
+
+        const creditBalance = getCreditBalance(
+          authenticatedUser,
+        );
+
+        debug &&
+          console.log('creditBalance', creditBalance);
+
+        // Check if the user has enough AI credits.
+        // If not, return an error.
+        if (creditBalance === 0) {
+          return res.send(
+            err(
+              creditsNeededError(
+                'You need more AI credits to use this feature.',
+              ),
+            ),
+          );
+        }
+
         // Get the ShareDB document for the viz content
         const entityName: EntityName = 'Content';
         const shareDBDoc = shareDBConnection.get(
@@ -180,13 +221,16 @@ export const editWithAIEndpoint = ({
 
         const modelName =
           process.env.VIZHUB_EDIT_WITH_AI_MODEL_NAME;
+        const apiKey =
+          process.env.VIZHUB_EDIT_WITH_AI_API_KEY;
+        const baseURL =
+          process.env.VIZHUB_EDIT_WITH_AI_BASE_URL;
 
         const options: ChatOpenAIFields = {
           modelName,
           configuration: {
-            apiKey: process.env.VIZHUB_EDIT_WITH_AI_API_KEY,
-            baseURL:
-              process.env.VIZHUB_EDIT_WITH_AI_BASE_URL,
+            apiKey,
+            baseURL,
           },
           streaming: false,
         };
@@ -194,6 +238,13 @@ export const editWithAIEndpoint = ({
         const chatModel = new ChatOpenAI(options);
 
         const result = await chatModel.invoke(fullPrompt);
+
+        // Get the cost of the AI edit
+        const generationMetadataPromise =
+          getGenerationMetadata({
+            apiKey,
+            generationId: result.lc_kwargs.id,
+          });
 
         debug &&
           console.log(
@@ -203,11 +254,6 @@ export const editWithAIEndpoint = ({
           );
         const parser = new StringOutputParser();
         const resultString = await parser.invoke(result);
-
-        debug &&
-          console.log(
-            'resultString:`' + resultString + '`',
-          );
 
         const changedFiles = parseMarkdownFiles(
           resultString,
@@ -347,11 +393,93 @@ export const editWithAIEndpoint = ({
         shareDBDoc.unsubscribe();
 
         // Make a new commit for this change
-        await commitViz(id);
+        const commitVizResult = await commitViz(id);
+        if (commitVizResult.outcome === 'failure') {
+          return err(commitVizResult.error);
+        }
+        const infoWithNewCommit: Info =
+          commitVizResult.value;
+        // This is the commit ID for this new AI change.
+        const commit = infoWithNewCommit.end;
 
         await recordAnalyticsEvents({
           eventId: `event.editWithAI.${authenticatedUserId}`,
         });
+
+        // Get the cost of the AI edit
+        const {
+          upstreamCostCents,
+          userCostCents,
+          provider,
+          inputTokens,
+          outputTokens,
+        } = await generationMetadataPromise;
+
+        // Charge the user for the AI edit.
+        let updatedCreditBalance: number;
+        await lock(
+          [userLock(authenticatedUser.id)],
+          async () => {
+            // Get a fresh copy of the user just in case
+            // it changed during the AI edit.
+            const userResult = await getUser(
+              authenticatedUser.id,
+            );
+            if (userResult.outcome === 'failure') {
+              return res.send(err(userResult.error));
+            }
+            const user: User = userResult.value.data;
+
+            user.creditBalance =
+              creditBalance - userCostCents;
+
+            // Don't let the credit balance go negative,
+            // because we check for 0 exactly to trigger
+            // the "You need more AI credits" error.
+            if (user.creditBalance < 0) {
+              user.creditBalance = 0;
+            }
+            updatedCreditBalance = user.creditBalance;
+
+            const saveUserResult = await saveUser(user);
+            if (saveUserResult.outcome === 'failure') {
+              return res.send(err(saveUserResult.error));
+            }
+          },
+        );
+
+        // model: string;
+        // provider: string;
+
+        // Store the metadata of this transaction
+        // for future reference.
+        const aiEditMetadata: AIEditMetadata = {
+          id: generateId(),
+          openRouterGenerationId: result.lc_kwargs.id,
+          timestamp: dateToTimestamp(new Date()),
+          user: authenticatedUser.id,
+          viz: id,
+          commit,
+          upstreamCostCents,
+          userCostCents,
+          updatedCreditBalance,
+          model: modelName,
+          provider,
+          inputTokens,
+          outputTokens,
+          userPrompt: prompt,
+          promptTemplateVersion,
+        };
+
+        const saveAIEditMetadataResult =
+          await saveAIEditMetadata(aiEditMetadata);
+        if (
+          saveAIEditMetadataResult.outcome === 'failure'
+        ) {
+          return res.send(
+            err(saveAIEditMetadataResult.error),
+          );
+        }
 
         res.json(ok('success'));
       } catch (error) {
@@ -380,6 +508,7 @@ const format = [
   '**fileB.js**\n\n```js\n// Entire updated code for fileB\n```\n\n',
   'Only include the files that need to be updated or created.\n\n',
   'To suggest changes you MUST include the ENTIRE content of the updated file.\n\n',
+  'NEVER leave out sections as in "... rest of the code remain the same ...".\n\n',
   'Refactor large files into smaller files in the same directory.\n\n',
   'Delete all unused files, but we need to keep `README.md`. ',
   'Files can be deleted by setting their content to empty, for example:\n\n',
@@ -400,3 +529,105 @@ const assembleFullPrompt = ({
     '\n\n',
   );
 };
+
+async function getGenerationMetadata({
+  apiKey,
+  generationId,
+}): Promise<{
+  upstreamCostCents: number;
+  userCostCents: number;
+  provider: string;
+  inputTokens: number;
+  outputTokens: number;
+}> {
+  console.log("apiKey: '" + apiKey + "'");
+  console.log("generationId: '" + generationId + "'");
+  const url = `https://openrouter.ai/api/v1/generation?id=${generationId}`;
+  // const url = `http://localhost:8080/https://openrouter.ai/api/v1/generation?id=${generationId}`;
+
+  const headers = {
+    Authorization: `Bearer ${apiKey}`,
+  };
+
+  const curl = `curl -G "${url}" \\\n  -H "Authorization: Bearer ${apiKey}"`;
+  console.log('Equivalent curl command:\n', curl);
+
+  // Sometimes OpenRouter returns a 404 if we request
+  // the cost too soon after the generation.
+  // We retry a few times to get the cost reliably.
+  const maxRetries = 10;
+  const retryDelay = 1000; // 1 second
+
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    const response = await fetch(url, {
+      method: 'GET',
+      headers,
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+
+      debug &&
+        console.log(
+          '[getCost] data:',
+          JSON.stringify(data, null, 2),
+        );
+
+      // The upstream cost in USD from OpenRouter
+      const upstreamCostInDollars = data.data.total_cost;
+      const upstreamCostCents = upstreamCostInDollars * 100;
+
+      const provider = data.data.provider_name;
+      const inputTokens = data.data.tokens_prompt;
+      const outputTokens = data.data.tokens_completion;
+
+      debug &&
+        console.log('upstreamCostCents', upstreamCostCents);
+
+      // The amount of credits that we deduct from the user.
+      // How it's calculated:
+      // - The upstream cost is what VizHub pays to OpenRouter.
+      // - We add a fixed percentage markup to the cost of each request.
+      // - We round up to the nearest cent, so the credit balance
+      //   is always an integer number of cents, and each request
+      //   costs at minimum 1 cent to the end user.
+      const userCostCents = Math.ceil(
+        upstreamCostCents * CREDIT_MARKUP,
+      );
+
+      debug && console.log('userCostCents', userCostCents);
+      return {
+        upstreamCostCents,
+        userCostCents,
+        provider,
+        inputTokens,
+        outputTokens,
+      };
+    } else {
+      // Log the text
+      const text = await response.text();
+      debug &&
+        console.error(
+          'Attempt',
+          attempt,
+          'failed. Response code:',
+          response.status,
+          text,
+        );
+
+      if (attempt < maxRetries) {
+        debug &&
+          console.log(
+            `Retrying in ${retryDelay / 1000} seconds...`,
+          );
+        await new Promise((resolve) =>
+          setTimeout(resolve, retryDelay),
+        );
+      } else {
+        throw new Error(
+          `HTTP error! Status: ${response.status} after ${maxRetries} attempts.`,
+        );
+      }
+    }
+  }
+}

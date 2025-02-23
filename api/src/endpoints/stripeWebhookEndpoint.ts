@@ -1,8 +1,8 @@
 import express from 'express';
-import { FREE, UserId } from 'entities';
+import { FREE, User, UserId, userLock } from 'entities';
 import { getStripe } from './getStripe';
 import { UpdateUserStripeId } from 'interactors';
-import { Gateways, Result } from 'gateways';
+import { err, Gateways, Result } from 'gateways';
 
 const debug = false;
 
@@ -22,7 +22,12 @@ export const stripeWebhookEndpoint = ({
   app: any;
   gateways: Gateways;
 }) => {
-  const { getUserIdByStripeCustomerId } = gateways;
+  const {
+    getUserIdByStripeCustomerId,
+    lock,
+    getUser,
+    saveUser,
+  } = gateways;
   const updateUserStripeId = UpdateUserStripeId(gateways);
 
   app.post(
@@ -73,7 +78,7 @@ export const stripeWebhookEndpoint = ({
         console.log('[stripe-webhook] event:', event);
       }
 
-      // Upgrade via checkout session
+      // Handle completed checkout sessions (both subscriptions and one-time payments)
       if (event.type == 'checkout.session.completed') {
         if (debug) {
           console.log(
@@ -82,6 +87,7 @@ export const stripeWebhookEndpoint = ({
         }
 
         const checkoutSessionCompleted = event.data.object;
+        const mode = checkoutSessionCompleted.mode;
 
         const userId: UserId =
           checkoutSessionCompleted.client_reference_id;
@@ -91,23 +97,69 @@ export const stripeWebhookEndpoint = ({
 
         if (debug) {
           console.log(
-            '[stripe-webhook] Updating user stripe id and plan',
-            userId,
-            stripeCustomerId,
+            '[stripe-webhook] Processing checkout completion',
+            { mode, userId, stripeCustomerId },
           );
         }
 
-        const upgradeResult = await updateUserStripeId({
-          userId,
-          stripeCustomerId,
-          plan: 'premium',
-        });
+        if (mode === 'subscription') {
+          // Handle subscription creation
+          const upgradeResult = await updateUserStripeId({
+            userId,
+            stripeCustomerId,
+            plan: 'premium',
+          });
 
-        if (upgradeResult.outcome === 'failure') {
-          console.log(
-            'error updating user stripe id',
-            upgradeResult.error,
-          );
+          if (upgradeResult.outcome === 'failure') {
+            console.log(
+              'error updating user stripe id',
+              upgradeResult.error,
+            );
+          }
+        } else if (mode === 'payment') {
+          // Handle credit top-up
+          // TODO: Implement credit addition logic here
+          debug &&
+            console.log(
+              '[stripe-webhook] Credit top-up completed',
+              {
+                userId,
+                amount:
+                  checkoutSessionCompleted.amount_total,
+              },
+            );
+
+          debug &&
+            console.log(
+              "[stripe-webhook] Updating user's credit balance",
+            );
+          // Charge the user for the AI edit.
+          await lock([userLock(userId)], async () => {
+            // Get a fresh copy of the user just in case
+            // it changed during the AI edit.
+            const userResult = await getUser(userId);
+            if (userResult.outcome === 'failure') {
+              return response.send(err(userResult.error));
+            }
+            const user: User = userResult.value.data;
+
+            user.creditBalance =
+              user.creditBalance +
+              checkoutSessionCompleted.amount_total;
+
+            const saveUserResult = await saveUser(user);
+            if (saveUserResult.outcome === 'failure') {
+              return response.send(
+                err(saveUserResult.error),
+              );
+            }
+
+            debug &&
+              console.log(
+                "[stripe-webhook] Updated user's credit balance to " +
+                  user.creditBalance,
+              );
+          });
         }
       }
 

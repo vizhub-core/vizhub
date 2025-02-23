@@ -44,17 +44,19 @@ export const useOnEditWithAI = ({
       const editWithAIResult: Result<'success'> =
         await vizKit.rest.editWithAI(editWithAIOptions);
 
+      if (editWithAIResult.outcome === 'success') {
+        setIsEditingWithAI(false);
+        if (RELOAD_AFTER_EDIT_WITH_AI) {
+          window.location.reload();
+        }
+      }
+
       if (editWithAIResult.outcome === 'failure') {
+        setIsEditingWithAI(false);
         console.log(
           'Failed to edit with AI: ',
           editWithAIResult.error,
         );
-      }
-
-      setIsEditingWithAI(false);
-
-      if (RELOAD_AFTER_EDIT_WITH_AI) {
-        window.location.reload();
       }
     },
     [id, vizKit, setIsEditingWithAI],
