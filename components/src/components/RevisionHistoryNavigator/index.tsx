@@ -166,7 +166,7 @@ const Body = ({
     <svg width={width} height={height} ref={svgRef}>
       <defs>
         <clipPath id="circleClip">
-          <circle 
+          <circle
             r={CIRCLE_RADIUS}
             cx={CIRCLE_RADIUS}
             cy={CIRCLE_RADIUS}
@@ -253,7 +253,6 @@ const Body = ({
                       width={CIRCLE_RADIUS * 2}
                       height={CIRCLE_RADIUS * 2}
                       preserveAspectRatio="xMidYMid slice"
-                      clipPath="url(#circleClip)"
                       clipPath="url(#circleClip)"
                     />
                   )}

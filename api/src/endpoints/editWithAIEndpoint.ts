@@ -7,6 +7,7 @@ import { StringOutputParser } from '@langchain/core/output_parsers';
 import {
   dateToTimestamp,
   EntityName,
+  File,
   Files,
   generateFileId,
 } from 'entities';
@@ -240,13 +241,17 @@ export const editWithAIEndpoint = ({
                 changedFile.name === file.name,
             );
 
-            acc[fileId] = {
-              ...file,
-              text: changedFile
-                ? changedFile.text
-                : file.text,
-            };
-            return acc;
+            if (shouldDeleteFile(changedFile)) {
+              return acc;
+            } else {
+              acc[fileId] = {
+                ...file,
+                text: changedFile
+                  ? changedFile.text
+                  : file.text,
+              };
+              return acc;
+            }
           },
           {},
         );
@@ -258,7 +263,10 @@ export const editWithAIEndpoint = ({
           );
 
           // If we cannot find it in `newFiles`, it must be a new file
-          if (!existingFile) {
+          if (
+            !existingFile &&
+            !shouldDeleteFile(changedFile)
+          ) {
             const fileId = generateFileId();
             newFiles[fileId] = {
               name: changedFile.name,
@@ -354,6 +362,9 @@ export const editWithAIEndpoint = ({
   );
 };
 
+const shouldDeleteFile = (file?: File) =>
+  file && file.text.trim() === '';
+
 const task = (prompt: string) => {
   return `## Your Task\n\n${prompt}`;
 };
@@ -370,6 +381,9 @@ const format = [
   'Only include the files that need to be updated or created.\n\n',
   'To suggest changes you MUST include the ENTIRE content of the updated file.\n\n',
   'Refactor large files into smaller files in the same directory.\n\n',
+  'Delete all unused files, but we need to keep `README.md`. ',
+  'Files can be deleted by setting their content to empty, for example:\n\n',
+  '**fileToDelete.js**\n\n```\n```\n\n',
   'For D3 logic, make sure it remains idempotent (use data joins), ',
   'and prefer function signatures like `someFunction(selection, options)` ',
   'where `selection` is a D3 selection and `options` is an object.\n\n',
