@@ -86,7 +86,7 @@ export interface VizKitAPI {
 
     createCheckoutSession: (options: {
       userId: UserId;
-      isMonthly: boolean;
+      isMonthly?: boolean;
       isCreditTopUp?: boolean;
     }) => Promise<
       Result<{

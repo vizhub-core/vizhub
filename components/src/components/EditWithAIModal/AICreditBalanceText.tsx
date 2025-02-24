@@ -1,6 +1,5 @@
 import { formatCreditBalance } from 'entities/src/accessors';
 import { useCallback, useMemo } from 'react';
-import { Form } from '../bootstrap';
 
 export const AICreditBalanceText = ({
   creditBalance,
@@ -8,40 +7,33 @@ export const AICreditBalanceText = ({
   onTopUpClick,
 }: {
   creditBalance?: number;
-  showTopUpText: boolean;
-  onTopUpClick: () => void;
+  showTopUpText?: boolean;
+  onTopUpClick?: () => void;
 }) => {
   const formattedCreditBalance = useMemo(
     () => formatCreditBalance(creditBalance),
     [creditBalance],
   );
 
+  const handleTopUpClick = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      e.preventDefault();
+      onTopUpClick();
+    },
+    [onTopUpClick],
+  );
+
   return (
     <div className="d-flex flex-column">
-      <Form.Text className="text-muted">
+      <div className="text-muted form-text">
         AI Credit Balance: {formattedCreditBalance}
-      </Form.Text>
+      </div>
       {showTopUpText && (
-        <div style={{ marginTop: '0.25rem' }}>
-          <small>
-            <a
-              href="#"
-              onClick={useCallback(
-                (e) => {
-                  e.preventDefault();
-                  onTopUpClick();
-                },
-                [onTopUpClick],
-              )}
-              style={{
-                textDecoration: 'underline',
-                color: '#6c757d',
-                fontSize: '0.75em',
-              }}
-            >
-              top up
-            </a>
-          </small>
+        <div
+          className="text-muted"
+          onClick={handleTopUpClick}
+        >
+          top up
         </div>
       )}
     </div>

@@ -1,8 +1,9 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback } from 'react';
 import { Modal, Form, Button } from '../bootstrap';
 import { Plan, UserId } from 'entities';
 import { VizKit } from 'api/src/VizKit';
-import { formatCreditBalance } from 'entities/src/accessors';
+
+import { AICreditBalanceText } from './AICreditBalanceText';
 
 const vizKit = VizKit();
 
@@ -37,11 +38,6 @@ export const EditWithAIModal = ({
     onClose();
     setPrompt('');
   }, [prompt, onSubmit]);
-
-  const formattedCreditBalance = useMemo(
-    () => formatCreditBalance(creditBalance),
-    [creditBalance],
-  );
 
   const handleTopUpClick = useCallback(async () => {
     // Sanity check - should never happen
@@ -115,22 +111,25 @@ export const EditWithAIModal = ({
       <Modal.Footer>
         {currentPlan === 'premium' &&
         creditBalance === 0 ? (
-          <>
-            <Form.Text className="text-muted">
-              AI Credit Balance: {formattedCreditBalance}
-            </Form.Text>
+          <div className="d-flex justify-content-between align-items-center flex-grow-1">
+            <AICreditBalanceText
+              creditBalance={creditBalance}
+            />
             <Button
               variant="primary"
               onClick={handleTopUpClick}
+              className="ms-auto"
             >
               Top Up Balance
             </Button>
-          </>
+          </div>
         ) : currentPlan === 'premium' ? (
-          <>
-            <Form.Text className="text-muted">
-              AI Credit Balance: {formattedCreditBalance}
-            </Form.Text>
+          <div className="d-flex justify-content-between align-items-center flex-grow-1">
+            <AICreditBalanceText
+              creditBalance={creditBalance}
+              showTopUpText={true}
+              onTopUpClick={handleTopUpClick}
+            />
             <Button
               variant="primary"
               onClick={handleSubmitClick}
@@ -138,7 +137,7 @@ export const EditWithAIModal = ({
             >
               Submit
             </Button>
-          </>
+          </div>
         ) : (
           <Button
             variant="primary"
