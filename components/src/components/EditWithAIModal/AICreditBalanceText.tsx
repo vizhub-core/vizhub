@@ -30,7 +30,11 @@ export const AICreditBalanceText = ({
                 e.preventDefault();
                 onTopUpClick();
               }, [onTopUpClick])}
-              style={{ textDecoration: 'underline' }}
+              style={{ 
+                textDecoration: 'underline',
+                color: '#6c757d',
+                fontSize: '0.75em'
+              }}
             >
               top up
             </a>
