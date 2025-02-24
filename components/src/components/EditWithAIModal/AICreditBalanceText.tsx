@@ -17,8 +17,26 @@ export const AICreditBalanceText = ({
   );
 
   return (
-    <Form.Text className="text-muted">
-      AI Credit Balance: {formattedCreditBalance}
-    </Form.Text>
+    <div>
+      <Form.Text className="text-muted">
+        AI Credit Balance: {formattedCreditBalance}
+      </Form.Text>
+      {showTopUpText && (
+        <div>
+          <small>
+            <a
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                onTopUpClick();
+              }}
+              style={{ textDecoration: 'underline' }}
+            >
+              top up
+            </a>
+          </small>
+        </div>
+      )}
+    </div>
   );
 };
