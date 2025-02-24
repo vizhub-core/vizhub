@@ -22,7 +22,7 @@ export const AICreditBalanceText = ({
         AI Credit Balance: {formattedCreditBalance}
       </Form.Text>
       {showTopUpText && (
-        <div>
+        <div style={{ marginTop: '-0.25rem' }}>
           <small>
             <a
               href="#"
