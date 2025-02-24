@@ -17,12 +17,12 @@ export const AICreditBalanceText = ({
   );
 
   return (
-    <div className="d-flex align-items-center gap-2">
-      <Form.Text className="text-muted mb3">
+    <div className="d-flex flex-column">
+      <Form.Text className="text-muted">
         AI Credit Balance: {formattedCreditBalance}
       </Form.Text>
       {showTopUpText && (
-        <div>
+        <div style={{ marginTop: '0.25rem' }}>
           <small>
             <a
               href="#"
