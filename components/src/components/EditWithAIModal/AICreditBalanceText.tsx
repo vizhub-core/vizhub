@@ -18,22 +18,25 @@ export const AICreditBalanceText = ({
 
   return (
     <div>
-      <Form.Text className="text-muted">
+      <Form.Text className="text-muted mb3">
         AI Credit Balance: {formattedCreditBalance}
       </Form.Text>
       {showTopUpText && (
-        <div style={{ marginTop: '-0.25rem' }}>
+        <div>
           <small>
             <a
               href="#"
-              onClick={useCallback((e) => {
-                e.preventDefault();
-                onTopUpClick();
-              }, [onTopUpClick])}
-              style={{ 
+              onClick={useCallback(
+                (e) => {
+                  e.preventDefault();
+                  onTopUpClick();
+                },
+                [onTopUpClick],
+              )}
+              style={{
                 textDecoration: 'underline',
                 color: '#6c757d',
-                fontSize: '0.75em'
+                fontSize: '0.75em',
               }}
             >
               top up
