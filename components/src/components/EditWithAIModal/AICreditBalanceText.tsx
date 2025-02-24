@@ -30,10 +30,11 @@ export const AICreditBalanceText = ({
       </div>
       {showTopUpText && (
         <div
-          className="text-muted"
+          className="text-muted text-decoration-underline"
+          style={{ cursor: 'pointer', fontSize: '12px' }}
           onClick={handleTopUpClick}
         >
-          top up
+          Top up
         </div>
       )}
     </div>

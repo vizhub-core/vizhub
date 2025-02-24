@@ -19,7 +19,7 @@ export const STARTING_CREDITS: number = 200;
 // e.g. if the AI provider's fee is $0.02 for a given transaction,
 // then the user's AI credit will be charged $0.03
 // if the CREDIT_MARKUP is 1.5.
-export const CREDIT_MARKUP: number = 1.5;
+export const CREDIT_MARKUP: number = 1.2;
 
 // FeatureId is an enum of all the features that are
 // highlighted in the pricing page.

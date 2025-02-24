@@ -288,14 +288,21 @@ export const PricingPageBody = ({
                       , plus:
                     </div>
                     <PremiumFeatures />
-                    <div className="vh-lede-01 mb-2 mt-2 vh-color-neutral-02">
-                      Professors: reach out to
-                      contact@vizhub.com for student
-                      discount codes!
-                    </div>
                   </div>
                 </div>
               </div>
+            </div>
+            <div className="vh-lede-01 mb-2 mt-4 vh-color-neutral-02">
+              Educators: reach out to contact@vizhub.com to
+              grant VizHub access to students in your
+              courses
+            </div>
+            <div className="vh-lede-01 mb-2 mt-2 vh-color-neutral-02">
+              Questions? Reach out on{' '}
+              <a href="https://discord.gg/wbtJ7SCtYr">
+                Discord
+              </a>
+              .
             </div>
             <div className="pricing-page-plans">
               {enableOrgPlan && (
