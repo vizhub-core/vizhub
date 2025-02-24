@@ -1,5 +1,5 @@
 import { formatCreditBalance } from 'entities/src/accessors';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { Form } from '../bootstrap';
 
 export const AICreditBalanceText = ({
@@ -26,10 +26,10 @@ export const AICreditBalanceText = ({
           <small>
             <a
               href="#"
-              onClick={(e) => {
+              onClick={useCallback((e) => {
                 e.preventDefault();
                 onTopUpClick();
-              }}
+              }, [onTopUpClick])}
               style={{ textDecoration: 'underline' }}
             >
               top up
