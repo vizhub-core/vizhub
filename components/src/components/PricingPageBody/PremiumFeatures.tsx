@@ -3,6 +3,7 @@ import {
   premiumTierSizeLimitMB,
 } from 'entities';
 import { Feature } from './Feature';
+import { CREDIT_MARKUP } from 'entities/src/Pricing';
 
 export const PremiumFeatures = ({}) => (
   <>
@@ -13,6 +14,42 @@ export const PremiumFeatures = ({}) => (
       // startsExpanded={true}
     >
       Create your own works right in your browser.
+    </Feature>
+    <Feature
+      title="Edit with AI"
+      id="ai-assisted-coding"
+      hasBottomBorder={true}
+      startsExpanded={true}
+      // learnMoreHref="https://vizhub.com/forum/t/ai-assisted-coding/952"
+    >
+      Leverage artificial intelligence to code faster. How
+      it works:
+      <ul className="mt-2">
+        <li>
+          <strong>Get $2 in AI Credits</strong> with VizHub
+          Premium (once at signup)
+        </li>
+        <li>
+          <strong>Top up any time</strong> when you need
+          more credits
+        </li>
+        <li>
+          AI requests are{' '}
+          <strong>
+            billed at a{' '}
+            {Math.round((CREDIT_MARKUP - 1) * 100)}% markup
+          </strong>{' '}
+          on the provider price
+        </li>
+        <li>
+          Each request cost is{' '}
+          <strong>rounded up to the nearest cent</strong>
+        </li>
+        <li>
+          "Edit with AI" uses Claude 3.5 Sonnet via
+          OpenRouter
+        </li>
+      </ul>
     </Feature>
     <Feature
       title="Hot Reloading & Interactive Widgets"
@@ -69,15 +106,6 @@ export const PremiumFeatures = ({}) => (
       }
     >
       Embed your work in your Web site or app.
-    </Feature>
-    <Feature
-      title="AI-Assisted Coding"
-      id="ai-assisted-coding"
-      hasBottomBorder={true}
-      // startsExpanded={true}
-      learnMoreHref="https://vizhub.com/forum/t/ai-assisted-coding/952"
-    >
-      Leverage artificial intelligence to code faster.
     </Feature>
     <Feature
       title="Upload Larger Datasets"
