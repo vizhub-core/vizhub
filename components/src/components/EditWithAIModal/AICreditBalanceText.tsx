@@ -17,7 +17,7 @@ export const AICreditBalanceText = ({
   );
 
   return (
-    <div>
+    <div className="d-flex align-items-center gap-2">
       <Form.Text className="text-muted mb3">
         AI Credit Balance: {formattedCreditBalance}
       </Form.Text>
