@@ -53,13 +53,8 @@ export const VizPageEditor = ({
   const docPresence =
     contentShareDBDocPresence?.docPresence;
 
-  // AI assist needs to know which viz we're in.
-  const aiAssistOptions = {
-    vizId: content?.id,
-  };
-
-  // Custom AI assist endpoint for VizHub.
-  const aiAssistEndpoint = '/api/ai-assist';
+  // Custom AI copilot endpoint for VizHub.
+  const aiCopilotEndpoint = '/api/ai-copilot';
 
   // Propagate the initial username from VizHub's platform auth
   // into VZCode for use in presence features.
@@ -138,12 +133,10 @@ export const VizPageEditor = ({
         <VZLeft enableUsernameField={false} />
       ) : null}
       <VZMiddle
-        aiAssistEndpoint={aiAssistEndpoint}
-        aiAssistOptions={aiAssistOptions}
-        aiAssistTooltipText={aiAssistTooltipText}
-        aiAssistClickOverride={aiAssistClickOverride}
+        aiCopilotEndpoint={aiCopilotEndpoint}
         customInteractRules={customInteractRules}
         allowGlobals={allowGlobals}
+        enableAIAssist={false}
       />
       {showEditor && <VZResizer side="left" />}
       <VZResizer

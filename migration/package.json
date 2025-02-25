@@ -32,10 +32,10 @@
     "redis": "^4.7.0",
     "redis-parser": "^3.0.0",
     "sharedb-mongo": "^5.0.0",
-    "uuid": "^11.0.3"
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
-    "prettier": "^3.4.1",
-    "typescript": "^5.7.2"
+    "prettier": "^3.5.2",
+    "typescript": "^5.7.3"
   }
 }

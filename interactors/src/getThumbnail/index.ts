@@ -109,7 +109,8 @@ export const GetThumbnail = (gateways: Gateways) => {
         // Needs a refactor of the returned type
         // return err(commitVizResult.error);
         console.log(
-          'Error when committing viz in GetThumbnail',
+          'Error when committing viz in GetThumbnail for viz id ' +
+            info.id,
         );
         // console.log(commitVizResult.error);
       }
