@@ -39,15 +39,22 @@ export const PremiumFeatures = ({}) => (
             billed at a{' '}
             {Math.round((CREDIT_MARKUP - 1) * 100)}% markup
           </strong>{' '}
-          on the provider price
+          on the OpenRouter price
         </li>
         <li>
           Each request cost is{' '}
           <strong>rounded up to the nearest cent</strong>
         </li>
         <li>
-          "Edit with AI" uses Claude 3.5 Sonnet via
-          OpenRouter
+          "Edit with AI" uses{' '}
+          <strong>Claude 3.7 Sonnet</strong>
+        </li>
+        <li>
+          AI Completions (ghost text) use{' '}
+          <strong>Gemini Flash 2.0</strong>
+        </li>
+        <li>
+          AI Completions are free: no AI credits deducted
         </li>
       </ul>
     </Feature>

@@ -91,8 +91,8 @@ export const setVizEndpoint = ({
       const ownerUserResult =
         await getUserByUserName(ownerUserName);
       if (ownerUserResult.outcome === 'failure') {
-        console.log('Error when fetching owner user:');
-        console.log(ownerUserResult.error);
+        // console.log('Error when fetching owner user:');
+        // console.log(ownerUserResult.error);
         return res.status(404).send(ownerUserResult.error);
       }
       const ownerUserSnapshot = ownerUserResult.value;

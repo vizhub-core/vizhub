@@ -25,18 +25,18 @@
     "buble": "^0.20.0",
     "d3-dsv": "^3.0.1",
     "path-posix": "^1.0.0",
-    "react": "^18.3.1",
-    "rollup": "^4.28.0",
-    "svelte": "^5.4.0",
+    "react": "^18",
+    "rollup": "^4.34.8",
+    "svelte": "^5.20.4",
     "vizhub-libraries": "^1.8.0"
   },
   "devDependencies": {
-    "@rollup/plugin-node-resolve": "^15.3.0",
-    "@rollup/plugin-typescript": "^12.1.1",
+    "@rollup/plugin-node-resolve": "^16.0.0",
+    "@rollup/plugin-typescript": "^12.1.2",
     "@types/d3-dsv": "^3.0.7",
-    "typescript": "^5.7.2",
-    "vite": "^6.0.2",
-    "vitest": "^2.1.8"
+    "typescript": "^5.7.3",
+    "vite": "^6.1.1",
+    "vitest": "^3.0.7"
   },
   "publishConfig": {
     "access": "public"

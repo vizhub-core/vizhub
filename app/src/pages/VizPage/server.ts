@@ -101,8 +101,8 @@ VizPage.getPageData = async ({
     const ownerUserResult =
       await getUserByUserName(ownerUserName);
     if (ownerUserResult.outcome === 'failure') {
-      console.log('Error when fetching owner user:');
-      console.log(ownerUserResult.error);
+      // console.log('Error when fetching owner user:');
+      // console.log(ownerUserResult.error);
       return null;
     }
     const ownerUserSnapshot = ownerUserResult.value;

@@ -31,8 +31,8 @@ StargazersPage.getPageData = async ({
   // Get the User entity for the owner of the viz.
   const ownerUserResult = await getUserByUserName(userName);
   if (ownerUserResult.outcome === 'failure') {
-    console.log('Error when fetching owner user:');
-    console.log(ownerUserResult.error);
+    // console.log('Error when fetching owner user:');
+    // console.log(ownerUserResult.error);
     return null;
   }
   const ownerUserSnapshot = ownerUserResult.value;
