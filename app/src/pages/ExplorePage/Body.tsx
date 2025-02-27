@@ -1,6 +1,6 @@
 import { useContext, useEffect } from 'react';
 import { Info, Snapshot, sortOptions } from 'entities';
-import { ExplorePageBody, HomeStarter } from 'components';
+import { ExplorePageBody } from 'components';
 import { SmartHeader } from '../../smartComponents/SmartHeader';
 import { VizPreviewPresenter } from '../../smartComponents/VizPreviewPresenter';
 import { InfosAndOwnersContext } from '../../contexts/InfosAndOwnersContext';
@@ -9,7 +9,7 @@ import { VizKit } from 'api/src/VizKit';
 
 const vizKit = VizKit();
 
-export const Body = ({ featuredLiveViz }) => {
+export const Body = () => {
   // Send an analytics event to track this page view.
   useEffect(() => {
     vizKit.rest.recordAnalyticsEvents(
@@ -27,6 +27,7 @@ export const Body = ({ featuredLiveViz }) => {
     ownerUserSnapshotsById,
     isLoadingNextPage,
     hasMore,
+    thumbnailURLs,
   } = useContext(InfosAndOwnersContext);
 
   // For local thumbnail generation triggering
@@ -55,6 +56,7 @@ export const Body = ({ featuredLiveViz }) => {
                     infoSnapshot.data.owner
                   ].data
                 }
+                thumbnailURLs={thumbnailURLs}
               />
             ),
           )

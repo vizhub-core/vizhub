@@ -29,6 +29,7 @@ export const Body = ({
     ownerUserSnapshotsById,
     isLoadingNextPage,
     hasMore,
+    thumbnailURLs,
   } = useContext(InfosAndOwnersContext);
 
   return (
@@ -46,6 +47,7 @@ export const Body = ({
                     infoSnapshot.data.owner
                   ].data
                 }
+                thumbnailURLs={thumbnailURLs}
               />
             ),
           )

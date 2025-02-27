@@ -58,7 +58,10 @@ import {
 } from 'entities';
 import { Result, Success } from './Result';
 import { MigrationStatusId } from 'entities/src/Migration';
-import { ImageHash } from 'entities/src/Images';
+import {
+  CommitImageKey,
+  ImageHash,
+} from 'entities/src/Images';
 import { APIKeyHash, APIKeyId } from 'entities/src/APIKeys';
 
 // The maximum number of Info documents to return in a single page from `getInfos()`
@@ -567,4 +570,16 @@ export interface Gateways {
   getAPIKeyIdFromHash(
     hash: string,
   ): Promise<Result<APIKeyId>>;
+
+  // Gets the image keys for the given commit IDs.
+  // If a given commit ID does not have an image key,
+  // it will not be included in the result.
+  getCommitImageKeys(
+    commitIds: Array<CommitId>,
+  ): Promise<Result<Array<CommitImageKey>>>;
+
+  // Saves multiple commit image keys.
+  saveCommitImageKeys(
+    commitImageKeys: Array<CommitImageKey>,
+  ): Promise<Result<Success>>;
 }

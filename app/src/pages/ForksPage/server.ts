@@ -74,8 +74,12 @@ ForksPage.getPageData = async ({
     console.log(infosAndOwnersResult.error);
     return null;
   }
-  const { infoSnapshots, ownerUserSnapshots, hasMore } =
-    infosAndOwnersResult.value;
+  const {
+    infoSnapshots,
+    ownerUserSnapshots,
+    hasMore,
+    thumbnailURLs,
+  } = infosAndOwnersResult.value;
 
   const { authenticatedUserSnapshot } =
     await getAuthenticatedUser({
@@ -115,6 +119,7 @@ ForksPage.getPageData = async ({
     forkedFromInfoSnapshot,
     forkedFromOwnerUserSnapshot,
     hasMore,
+    thumbnailURLs,
   };
 };
 

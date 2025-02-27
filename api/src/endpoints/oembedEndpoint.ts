@@ -35,6 +35,7 @@ export const oembedEndpoint = ({
   app.get(
     '/api/oembed',
     express.json(),
+    // @ts-ignore
     async (req, res) => {
       // e.g. "https://vizhub.com/xujames0214/81f86931ad864c4db73efba71e508cda"
       const url: string = req.query.url as string;

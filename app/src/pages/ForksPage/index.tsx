@@ -50,6 +50,7 @@ export const ForksPage: Page = ({
         ownerUserSnapshots={pageData.ownerUserSnapshots}
         forkedFrom={pageData.forkedFrom}
         hasMoreInitially={pageData.hasMore}
+        thumbnailURLs={pageData.thumbnailURLs}
       >
         <Body
           forkedFromInfo={

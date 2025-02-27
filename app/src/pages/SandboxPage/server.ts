@@ -1,5 +1,6 @@
 import { SandboxPage } from './index';
 
+// @ts-ignore TODO circle back to this page and fix type errors
 SandboxPage.getPageData = async ({ gateways }) => {
   const { getAnalyticsEvent } = gateways;
 

@@ -28,6 +28,7 @@ export const CreateVizPage: Page = ({
         infoSnapshots={pageData.infoSnapshots}
         ownerUserSnapshots={pageData.ownerUserSnapshots}
         hasMoreInitially={pageData.hasMore}
+        thumbnailURLs={pageData.thumbnailURLs}
       >
         <Body vizIdsByPath={pageData.vizIdsByPath} />
       </InfosAndOwnersProvider>

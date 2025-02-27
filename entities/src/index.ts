@@ -200,7 +200,8 @@ export type EntityName =
   | 'StoredImage'
   | 'APIKey'
   | 'APIKeyHash'
-  | 'AIEditMetadata';
+  | 'AIEditMetadata'
+  | 'CommitImageKey';
 
 export {
   getFileText,

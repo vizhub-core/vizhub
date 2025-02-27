@@ -1,11 +1,10 @@
 import { useMemo } from 'react';
 import {
+  CommitId,
   Info,
   Snapshot,
   User,
   getUserDisplayName,
-  thumbnailWidth,
-  getVizThumbnailURL,
 } from 'entities';
 import { VizPreview } from 'components/src/components/VizPreview';
 import { useShareDBDocData } from '../useShareDBDocData';
@@ -15,9 +14,11 @@ import { getAvatarURL } from '../accessors/getAvatarURL';
 export const VizPreviewPresenter = ({
   infoSnapshot,
   ownerUser,
+  thumbnailURLs,
 }: {
   infoSnapshot: Snapshot<Info>;
   ownerUser: User;
+  thumbnailURLs: Record<CommitId, string>;
 }) => {
   const info: Info = useShareDBDocData<Info>(
     infoSnapshot,
@@ -47,11 +48,6 @@ export const VizPreviewPresenter = ({
     [ownerUser],
   );
 
-  const thumbnailImageURL = useMemo(
-    () => getVizThumbnailURL(end, thumbnailWidth),
-    [end, thumbnailWidth],
-  );
-
   const lastUpdatedDateFormatted = useMemo(
     () => formatTimestamp(updated),
     [updated],
@@ -65,7 +61,7 @@ export const VizPreviewPresenter = ({
   return (
     <VizPreview
       title={title}
-      thumbnailImageURL={thumbnailImageURL}
+      thumbnailImageURL={thumbnailURLs[end]}
       lastUpdatedDateFormatted={lastUpdatedDateFormatted}
       ownerName={ownerName}
       ownerAvatarURL={ownerAvatarURL}

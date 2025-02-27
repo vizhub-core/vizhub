@@ -7,6 +7,7 @@ import {
   useReducer,
 } from 'react';
 import {
+  CommitId,
   Info,
   Snapshot,
   SortId,
@@ -25,6 +26,7 @@ export const InfosAndOwnersContext = createContext<{
   };
   isLoadingNextPage: boolean;
   hasMore: boolean;
+  thumbnailURLs: Record<CommitId, string>;
 }>(null);
 
 const vizKit = VizKit();
@@ -179,6 +181,8 @@ export type InfosAndOwnersPageData = {
 
   // True if there are more pages of results
   hasMore: boolean;
+
+  thumbnailURLs: Record<CommitId, string>;
 };
 
 // Define an initializer function for the reducer state.
@@ -219,6 +223,7 @@ export const InfosAndOwnersProvider = ({
   children,
   hasMoreInitially,
   searchQuery,
+  thumbnailURLs,
 }: {
   infoSnapshots: Array<Snapshot<Info>>;
   ownerUserSnapshots: Array<Snapshot<User>>;
@@ -227,6 +232,7 @@ export const InfosAndOwnersProvider = ({
   children: React.ReactNode;
   hasMoreInitially: boolean;
   searchQuery?: string;
+  thumbnailURLs;
 }) => {
   const { sectionId, sortId } = useContext(
     SectionSortContext,
@@ -345,12 +351,14 @@ export const InfosAndOwnersProvider = ({
       hasMore:
         paginationState.sectionsAndSorts[currentKey]
           ?.hasMore || false,
+      thumbnailURLs,
     }),
     [
       allInfoSnapshots,
       fetchNextPage,
       paginationState,
       currentKey,
+      thumbnailURLs,
     ],
   );
 
