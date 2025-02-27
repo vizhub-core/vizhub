@@ -50,7 +50,8 @@ ExplorePage.getPageData = async ({
 
   return {
     title: `VizHub`,
-    description: 'Data visualization platform for the web',
+    description:
+      'AI-powered data visualization and creative coding',
     authenticatedUserSnapshot,
     infoSnapshots,
     ownerUserSnapshots,
