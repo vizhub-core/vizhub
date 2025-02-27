@@ -26,7 +26,7 @@ import {
 } from '@vizhub/runtime';
 import { ResolveSlug } from './resolveSlug';
 
-const DEBUG = true;
+const DEBUG = false;
 
 let screenshotgenie: ScreenshotGenie;
 
