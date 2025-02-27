@@ -100,7 +100,7 @@ export const GetThumbnailURLs = (gateways: Gateways) => {
         return false;
       });
 
-    console.log(
+    DEBUG && console.log(
       'commitIdsNeedingNewImageKeys ',
       JSON.stringify(commitIdsNeedingNewImageKeys, null, 2),
     );
