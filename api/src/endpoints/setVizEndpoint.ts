@@ -57,6 +57,7 @@ export const setVizEndpoint = ({
   app.post(
     '/api/set-viz/:userName/:vizIdOrSlug',
     upload.single('file'),
+    // @ts-ignore
     async (req, res) => {
       const vizIdOrSlug: string | undefined =
         req.params?.vizIdOrSlug;

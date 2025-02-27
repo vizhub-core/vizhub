@@ -64,7 +64,6 @@ export const createCheckoutSession = ({
           quantity: 1,
         };
 
-
       // https://stripe.com/docs/api/checkout/sessions/create#create_checkout_session-client_reference_id
       const session = await stripe.checkout.sessions.create(
         {
@@ -73,9 +72,10 @@ export const createCheckoutSession = ({
           cancel_url,
           client_reference_id: authenticatedUserId,
           line_items: [lineItem],
-
           subscription_data: isCreditTopUp ? undefined : {},
-
+          metadata: {
+            product: 'vizhub',
+          },
           ...(isCreditTopUp
             ? { allow_promotion_codes: false }
             : {

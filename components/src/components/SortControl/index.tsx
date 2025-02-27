@@ -7,6 +7,11 @@ export const SortControl = ({
   setSortId,
   sortOptions,
   isVertical = false,
+}: {
+  sortId: string;
+  setSortId: (sortId: string) => void;
+  sortOptions: Array<{ id: string; label: string }>;
+  isVertical?: boolean;
 }) => {
   // Possible sorts that are not the current sort.
   const otherSortOptions = useMemo(

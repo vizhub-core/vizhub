@@ -53,8 +53,12 @@ ProfilePage.getPageData = async ({
       console.log(infosAndOwnersResult.error);
       return null;
     }
-    const { infoSnapshots, ownerUserSnapshots, hasMore } =
-      infosAndOwnersResult.value;
+    const {
+      infoSnapshots,
+      ownerUserSnapshots,
+      hasMore,
+      thumbnailURLs,
+    } = infosAndOwnersResult.value;
 
     const pageData: ProfilePageData = {
       title: `${userName} on VizHub`,
@@ -63,6 +67,7 @@ ProfilePage.getPageData = async ({
       ownerUserSnapshots,
       infoSnapshots,
       hasMore,
+      thumbnailURLs,
     };
 
     return pageData;

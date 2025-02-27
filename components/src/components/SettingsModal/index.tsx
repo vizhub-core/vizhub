@@ -100,6 +100,8 @@ export const SettingsModal = ({
       if (slugValidationTimeout.current) {
         clearTimeout(slugValidationTimeout.current);
       }
+
+      // @ts-ignore
       slugValidationTimeout.current = setTimeout(
         async () => {
           const newSlugSlugified = slugify(newSlug);

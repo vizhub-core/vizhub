@@ -17,8 +17,10 @@ import {
   Visibility,
   SectionId,
   Upvote,
+  CommitId,
 } from 'entities';
 import { accessDeniedError } from 'gateways/src/errors';
+import { GetThumbnailURLs } from './getThumbnailURLs';
 
 const debug = false;
 
@@ -26,6 +28,7 @@ export type InfosAndOwners = {
   infoSnapshots: Array<Snapshot<Info>>;
   ownerUserSnapshots: Array<Snapshot<User>>;
   hasMore: boolean;
+  thumbnailURLs: Record<CommitId, string>;
 };
 
 // Maps section IDs to visibilities.
@@ -43,6 +46,7 @@ const visibilitiesBySection: {
 
 export const GetInfosAndOwners = (gateways: Gateways) => {
   const { getInfos } = gateways;
+  const getThumbnailURLs = GetThumbnailURLs(gateways);
 
   return async ({
     noNeedToFetchUsers,
@@ -288,10 +292,16 @@ export const GetInfosAndOwners = (gateways: Gateways) => {
       );
     }
 
+    const thumbnailURLs: Record<CommitId, string> =
+      await getThumbnailURLs(
+        infoSnapshots.map((snapshot) => snapshot.data.end),
+      );
+
     return ok({
       infoSnapshots,
       ownerUserSnapshots,
       hasMore: infoSnapshots.length === pageSize,
+      thumbnailURLs,
     });
   };
 };

@@ -43,13 +43,6 @@ export const Footer = () => {
           <a href="/" target="_blank" rel="noreferrer">
             Explore
           </a>
-          <a
-            href={discordLink}
-            target="_blank"
-            rel="noreferrer"
-          >
-            Discord
-          </a>
           <a href="/forum" target="_blank" rel="noreferrer">
             Forum
           </a>
@@ -64,29 +57,28 @@ export const Footer = () => {
             Twitter
           </a>
           <a
-            href="https://www.youtube.com/@currankelleher"
+            href="https://www.youtube.com/@viz_hub"
             target="_blank"
             rel="noreferrer"
           >
             YouTube
           </a>
-          <a
-            href="https://www.facebook.com/people/VizHub/100071381815409/"
-            target="_blank"
-            rel="noreferrer"
-          >
-            {enableSocialIcons && <FacebookSVG />}
-            Facebook
-          </a>
         </div>
         <div className="footer-links">
           <div className="footer-links-title">Contact</div>
-          <a
+          {/* <a
             href="https://calendly.com/curran-kelleher/data-visualization-consultation"
             target="_blank"
             rel="noreferrer"
           >
             Consulting
+          </a> */}
+          <a
+            href={discordLink}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Discord
           </a>
           <a href="mailto:contact@vizhub.com">Email</a>
         </div>

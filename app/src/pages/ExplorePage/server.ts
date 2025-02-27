@@ -35,38 +35,18 @@ ExplorePage.getPageData = async ({
     console.log(infosAndOwnersResult.error);
     return null;
   }
-  const { infoSnapshots, ownerUserSnapshots, hasMore } =
-    infosAndOwnersResult.value;
+  const {
+    infoSnapshots,
+    ownerUserSnapshots,
+    hasMore,
+    thumbnailURLs,
+  } = infosAndOwnersResult.value;
 
   const { authenticatedUserSnapshot } =
     await getAuthenticatedUser({
       gateways,
       auth0User,
     });
-
-  const mostRecentInfoSnapshots = await getInfosAndOwners({
-    noNeedToFetchUsers: [],
-    sortId: 'mostRecent',
-    defaultSortId: 'mostRecent',
-    pageNumber: 0,
-    pageSize: 1,
-  });
-  if (mostRecentInfoSnapshots.outcome === 'failure') {
-    console.log('Error when fetching most recent infos:');
-    console.log(mostRecentInfoSnapshots.error);
-    return null;
-  }
-  const {
-    infoSnapshots: mostRecentInfos,
-    ownerUserSnapshots: mostRecentOwners,
-  } = mostRecentInfoSnapshots.value;
-
-  const featuredLiveViz = {
-    vizIdOrSlug:
-      mostRecentInfos[0].data.slug ||
-      mostRecentInfos[0].data.id,
-    userName: mostRecentOwners[0].data.userName,
-  };
 
   return {
     title: `VizHub`,
@@ -78,7 +58,7 @@ ExplorePage.getPageData = async ({
     hasMore,
     image:
       'https://vizhub-images.s3.amazonaws.com/home-unfurl.webp',
-    featuredLiveViz,
+    thumbnailURLs,
   };
 };
 

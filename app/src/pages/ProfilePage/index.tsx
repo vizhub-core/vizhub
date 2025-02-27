@@ -45,6 +45,7 @@ export const ProfilePage: Page = ({
           ownerUserSnapshots={pageData.ownerUserSnapshots}
           hasMoreInitially={hasMore}
           owner={profileUser.id}
+          thumbnailURLs={pageData.thumbnailURLs}
         >
           <Body profileUser={profileUser} />
           <ProfilePageToasts />

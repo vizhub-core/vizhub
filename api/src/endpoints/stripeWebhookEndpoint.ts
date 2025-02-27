@@ -4,7 +4,7 @@ import { getStripe } from './getStripe';
 import { UpdateUserStripeId } from 'interactors';
 import { err, Gateways, Result } from 'gateways';
 
-const debug = false;
+const debug = true;
 
 // Critical for Stripe development - run this incantation
 // stripe listen --forward-to localhost:5173/api/stripe-webhook
@@ -34,6 +34,52 @@ export const stripeWebhookEndpoint = ({
     '/api/stripe-webhook',
     express.raw({ type: 'application/json' }),
     async (request, response) => {
+      // Check if the request is even for VizHub.
+      // We may be getting requests from Stripe for other services,
+      // such as Screenshot Genie, in which case we return 200 status to ignore.
+
+      // 1) Read the raw text body (needed later for signature verification).
+      const payload = await request.text();
+
+      // 2) Peek at JSON to see if it matches Screenshot Genie at all.
+      let parsedPayload: any;
+      try {
+        parsedPayload = JSON.parse(payload);
+      } catch (err) {
+        // If we can’t parse JSON, we don’t know what it is—but we also don’t want Stripe to keep retrying.
+        debug &&
+          console.log(
+            '[Webhook action] JSON parse error; ignoring event',
+          );
+        return new Response(
+          'Ignoring event for unrelated or invalid payload',
+          {
+            status: 200,
+          },
+        );
+      }
+
+      debug &&
+        console.log(
+          'product is ',
+          parsedPayload?.data?.object?.metadata?.product,
+        );
+      const product =
+        parsedPayload?.data?.object?.metadata?.product;
+      if (product !== 'vizhub') {
+        debug &&
+          console.log(
+            '[Webhook action] Ignoring event for unrelated product:',
+            product,
+          );
+        return new Response(
+          'Ignoring event for unrelated product',
+          {
+            status: 200,
+          },
+        );
+      }
+
       // Verify signature to prevent spoofing
       // See https://stripe.com/docs/webhooks#verify-official-libraries
       const sig = request.headers['stripe-signature'];

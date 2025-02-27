@@ -53,6 +53,7 @@ export const Body = ({
     fetchNextPage,
     isLoadingNextPage,
     hasMore,
+    thumbnailURLs,
   } = useContext(InfosAndOwnersContext);
 
   const displayName = useMemo(
@@ -95,6 +96,7 @@ export const Body = ({
                     infoSnapshot.data.owner
                   ].data
             }
+            thumbnailURLs={thumbnailURLs}
           />
         ))}
         {showUpgradeCallout &&

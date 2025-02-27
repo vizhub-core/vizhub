@@ -29,6 +29,7 @@ export const getVizEndpoint = ({
   app.get(
     '/api/get-viz/:userName/:vizIdOrSlug.:format',
     express.json(),
+    // @ts-ignore
     async (req, res) => {
       const idOrSlug: VizId | undefined =
         req.params?.vizIdOrSlug;

@@ -14,14 +14,12 @@ import { KitchenSinkPage } from './KitchenSinkPage';
 import { CreateVizPage } from './CreateVizPage';
 import { StargazersPage } from './StargazersPage';
 import { DocumentationPage } from './DocumentationPage';
-import { SvelteAndD3Page } from './Community/SvelteAndD3Page';
 
 // Note: order matters (profile page should come last)
 // Need to update `server.js` as well
 export const pages = [
   LandingPage,
   AboutPage,
-  SvelteAndD3Page,
   StargazersPage,
   ForksPage,
   VizPage,

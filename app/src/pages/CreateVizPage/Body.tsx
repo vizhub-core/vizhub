@@ -11,8 +11,11 @@ import {
 import { VizPreviewCollection } from 'components/src/components/VizPreviewCollection';
 
 export const Body = ({ vizIdsByPath }) => {
-  const { allInfoSnapshots, ownerUserSnapshotsById } =
-    useContext(InfosAndOwnersContext);
+  const {
+    allInfoSnapshots,
+    ownerUserSnapshotsById,
+    thumbnailURLs,
+  } = useContext(InfosAndOwnersContext);
 
   const infoSnapshotsById = useMemo(
     () =>
@@ -64,6 +67,7 @@ export const Body = ({ vizIdsByPath }) => {
                               infoSnapshot.data.owner
                             ].data
                           }
+                          thumbnailURLs={thumbnailURLs}
                         />
                       );
                     })}

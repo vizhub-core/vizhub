@@ -36,6 +36,7 @@ import { otType, diff } from 'ot';
 import { toCollectionName } from './toCollectionName';
 import { pageSize as defaultPageSize } from 'gateways/src/Gateways';
 import { ShareDBDoc } from 'vzcode';
+import { CommitImageKey } from 'entities/src/Images';
 // import { embeddingMethods } from './embeddingMethods';
 
 const debug = false;
@@ -1017,6 +1018,45 @@ export const DatabaseGateways = ({
     return ok(result.id);
   };
 
+  const getCommitImageKeys = async (
+    commitIds: Array<CommitId>,
+  ) => {
+    const entityName = 'CommitImageKey';
+    const from = toCollectionName(entityName);
+    const collection = mongoDBDatabase.collection(from);
+    const results = await collection
+      .find({ commitId: { $in: commitIds } })
+      .toArray();
+    for (const result of results) {
+      delete result._id;
+    }
+    return ok(results);
+  };
+
+  const saveCommitImageKeys = async (
+    commitImageKeys: Array<CommitImageKey>,
+  ) => {
+    const entityName = 'CommitImageKey';
+    const from = toCollectionName(entityName);
+    const collection = mongoDBDatabase.collection(from);
+
+    if (commitImageKeys.length === 0) return ok('success');
+
+    const bulkOps = commitImageKeys.map(
+      (commitImageKey) => ({
+        updateOne: {
+          filter: { commitId: commitImageKey.commitId },
+          update: { $set: commitImageKey },
+          upsert: true,
+        },
+      }),
+    );
+
+    await collection.bulkWrite(bulkOps);
+
+    return ok('success');
+  };
+
   let databaseGateways = {
     type: 'DatabaseGateways',
     getForks,
@@ -1041,6 +1081,8 @@ export const DatabaseGateways = ({
     getRevisionHistory,
     getAPIKeys,
     getAPIKeyIdFromHash,
+    getCommitImageKeys,
+    saveCommitImageKeys,
   };
 
   for (const entityName of crudEntityNames) {

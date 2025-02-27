@@ -35,6 +35,7 @@ import { getAuthenticatedUser } from '../getAuthenticatedUser';
 import { VizAccess } from 'interactors/src/verifyVizAccess';
 import { Result } from 'gateways';
 import { VizPageData } from './VizPageData';
+import { GetThumbnailURLs } from 'interactors/src/getThumbnailURLs';
 
 setJSDOM(JSDOM);
 
@@ -66,6 +67,7 @@ VizPage.getPageData = async ({
   const getInfoByIdOrSlug = GetInfoByIdOrSlug(gateways);
   const buildViz = BuildViz(gateways);
   const getContentAtCommit = GetContentAtCommit(gateways);
+  const getThumbnailURLs = GetThumbnailURLs(gateways);
 
   // TODO move all this into an interactor called
   // getVizPageData or something like that.
@@ -410,9 +412,11 @@ VizPage.getPageData = async ({
     //  * the collaborators
 
     // The unfurl image URL for the page.
-    const image = absoluteURL(
-      getVizThumbnailURL(end, defaultVizWidth),
+    const thumbnailURLs = await getThumbnailURLs(
+      [end],
+      defaultVizWidth,
     );
+    const image = thumbnailURLs[end];
 
     // Figure out if the authenticated user has upvoted the viz.
     let initialIsUpvoted: boolean = false;

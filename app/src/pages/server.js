@@ -14,7 +14,6 @@ import { KitchenSinkPage } from './KitchenSinkPage/server';
 import { CreateVizPage } from './CreateVizPage/server';
 import { StargazersPage } from './StargazersPage/server';
 import { DocumentationPage } from './DocumentationPage/server';
-import { SvelteAndD3Page } from './Community/SvelteAndD3Page/server';
 
 // import { ExploreRedirect } from './ExploreRedirect';
 
@@ -23,7 +22,6 @@ import { SvelteAndD3Page } from './Community/SvelteAndD3Page/server';
 export const pages = [
   LandingPage,
   AboutPage,
-  SvelteAndD3Page,
 
   StargazersPage,
   // Forks pave MUST come before viz page
