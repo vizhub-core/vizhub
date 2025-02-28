@@ -15,14 +15,6 @@ export const GetViz =
       content: Content;
     }>
   > => {
-    // TODO investigate why this Promise.all call fails when resource not found
-    // console.log('Before Promise.all');
-    // const [infoResult, contentResult] = await Promise.all([
-    //   getInfo(id),
-    //   getContent(id),
-    // ]);
-    // console.log('After Promise.all');
-
     const infoResult = await getInfo(id);
 
     if (infoResult.outcome === 'failure') {

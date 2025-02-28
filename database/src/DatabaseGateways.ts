@@ -956,40 +956,33 @@ export const DatabaseGateways = ({
       );
     });
 
-  // // TODO make this project `id` and `parent` in the query
-  // const getRevisionHistory = async (vizId: VizId) => {
-  //   const entityName = 'Commit';
-  //   const from = toCollectionName(entityName);
-  //   const collection = mongoDBDatabase.collection(from);
-  //   const results = await collection
-  //     .find({ viz: vizId })
-  //     .toArray();
-  //   return ok({
-  //     commitMetadatas: results.map((commit) => ({
-  //       id: commit._id,
-  //       parent: commit.parent,
-  //     })),
-  //   });
-  // };
-
-  const getRevisionHistory = async (vizId: VizId) => {
+  const getRevisionHistoryCommitMetadata = async (
+    vizId: VizId,
+  ) => {
     const entityName = 'Commit';
     const from = toCollectionName(entityName);
     const collection = mongoDBDatabase.collection(from);
     const results = await collection
       .find(
         { viz: vizId },
-        // Only fetch _id, parent, and timestamp fields
-        { projection: { _id: 1, parent: 1, timestamp: 1 } },
+        {
+          projection: {
+            _id: 1,
+            parent: 1,
+            timestamp: 1,
+            authors: 1,
+          },
+        },
       )
       .toArray();
-    return ok({
-      commitMetadatas: results.map((commitMetadata) => ({
+    return ok(
+      results.map((commitMetadata) => ({
         id: commitMetadata._id,
         parent: commitMetadata.parent,
         timestamp: commitMetadata.timestamp,
+        authors: commitMetadata.authors,
       })),
-    });
+    );
   };
 
   const getAPIKeys = async (userId: UserId) => {
@@ -1078,7 +1071,7 @@ export const DatabaseGateways = ({
     getInfoByUserAndSlug,
     getUserIdByStripeCustomerId,
     getCommentsForResource,
-    getRevisionHistory,
+    getRevisionHistoryCommitMetadata,
     getAPIKeys,
     getAPIKeyIdFromHash,
     getCommitImageKeys,

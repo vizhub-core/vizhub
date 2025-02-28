@@ -101,11 +101,13 @@ export interface CommitMetadata {
   id: CommitId;
   parent?: CommitId;
   timestamp: Timestamp;
+  authors: Array<UserId>;
 }
 
 // The revision history of a viz is encapsulated in this type.
 export interface RevisionHistory {
-  commitMetadatas: Array<CommitMetadata>;
+  commitMetadataList: Array<CommitMetadata>;
+  thumbnailURLs: Record<CommitId, string>;
 }
 
 // MilestoneId

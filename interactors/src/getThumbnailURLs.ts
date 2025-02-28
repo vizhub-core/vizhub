@@ -100,10 +100,15 @@ export const GetThumbnailURLs = (gateways: Gateways) => {
         return false;
       });
 
-    DEBUG && console.log(
-      'commitIdsNeedingNewImageKeys ',
-      JSON.stringify(commitIdsNeedingNewImageKeys, null, 2),
-    );
+    DEBUG &&
+      console.log(
+        'commitIdsNeedingNewImageKeys ',
+        JSON.stringify(
+          commitIdsNeedingNewImageKeys,
+          null,
+          2,
+        ),
+      );
 
     // process.exit(0);
 
@@ -170,16 +175,25 @@ export const GetThumbnailURLs = (gateways: Gateways) => {
         height: getHeight(content.height),
       };
 
-      const imageKey: ImageKey =
-        await screenshotgenie.createImageKey(
-          imageGenerationInputs,
-        );
+      try {
+        const imageKey: ImageKey =
+          await screenshotgenie.createImageKey(
+            imageGenerationInputs,
+          );
 
-      const commitImageKey: CommitImageKey = {
-        commitId,
-        imageKey,
-      };
-      newCommitImageKeys.push(commitImageKey);
+        const commitImageKey: CommitImageKey = {
+          commitId,
+          imageKey,
+        };
+        newCommitImageKeys.push(commitImageKey);
+      } catch (e) {
+        console.error(e);
+
+        // If this errors out, we don't want to
+        // crash the whole process, so we just
+        // skip this commit.
+        continue;
+      }
     }
 
     // Save the new image keys to the DB.

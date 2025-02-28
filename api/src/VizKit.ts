@@ -134,7 +134,7 @@ export interface VizKitAPI {
       slug: string;
     }) => Promise<Result<boolean>>;
 
-    getRevisionHistoryCommits: (
+    getRevisionHistory: (
       vizId: VizId,
     ) => Promise<Result<RevisionHistory>>;
 
@@ -335,7 +335,7 @@ export const VizKit = (
           options,
         ),
 
-      getRevisionHistoryCommits: async (vizId: VizId) =>
+      getRevisionHistory: async (vizId: VizId) =>
         await postJSON(`${baseUrl}/get-revision-history`, {
           vizId,
         }),

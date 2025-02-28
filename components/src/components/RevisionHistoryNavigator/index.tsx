@@ -62,11 +62,12 @@ const Body = ({
   getVizPageHrefForCommit: (commitId: CommitId) => string;
 }) => {
   const { width, height } = size;
-  const { commitMetadatas } = revisionHistory;
+  const { commitMetadataList, thumbnailURLs } =
+    revisionHistory;
 
   // Compute the formatted dates only once
   const formattedDatesByCommitId = useMemo(() => {
-    return commitMetadatas.reduce(
+    return commitMetadataList.reduce(
       (acc, commitMetadata) => {
         acc[commitMetadata.id] = formatCommitTimestamp(
           commitMetadata.timestamp,
@@ -75,7 +76,7 @@ const Body = ({
       },
       {} as Record<CommitId, string>,
     );
-  }, [commitMetadatas]);
+  }, [commitMetadataList]);
 
   // Compute the tree
   const root = useMemo(
@@ -92,8 +93,8 @@ const Body = ({
           commitMetadata.id === info.start
             ? null
             : commitMetadata.parent,
-        )(commitMetadatas),
-    [commitMetadatas],
+        )(commitMetadataList),
+    [commitMetadataList],
   );
 
   // This is a side effect that mutates the nodes in the tree
@@ -249,7 +250,7 @@ const Body = ({
                   {isVisible && (
                     <image
                       transform={`translate(${-CIRCLE_RADIUS}, ${-CIRCLE_RADIUS})`}
-                      href={`/api/viz-thumbnail/${node.id}-${revisionThumbnailWidth}.png`}
+                      href={thumbnailURLs[node.data.id]}
                       width={CIRCLE_RADIUS * 2}
                       height={CIRCLE_RADIUS * 2}
                       preserveAspectRatio="xMidYMid slice"

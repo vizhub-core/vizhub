@@ -55,6 +55,7 @@ import {
   RevisionHistory,
   APIKey,
   AIEditMetadata,
+  CommitMetadata,
 } from 'entities';
 import { Result, Success } from './Result';
 import { MigrationStatusId } from 'entities/src/Migration';
@@ -557,9 +558,9 @@ export interface Gateways {
   ): Promise<Result<Array<Snapshot<Comment>>>>;
 
   // Gets the revision history for a viz.
-  getRevisionHistory(
+  getRevisionHistoryCommitMetadata(
     vizId: VizId,
-  ): Promise<Result<RevisionHistory>>;
+  ): Promise<Result<Array<CommitMetadata>>>;
 
   // Gets the API keys for the given user.
   getAPIKeys(

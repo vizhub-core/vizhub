@@ -25,15 +25,13 @@ export const useRevisionHistory = ({
       }
       return;
     }
-    vizKit.rest
-      .getRevisionHistoryCommits(id)
-      .then((result: Result<RevisionHistory>) => {
-        if (result.outcome === 'failure') {
-          console.error(result.error);
-          return;
-        }
-        setRevisionHistory(result.value);
-      });
+    vizKit.rest.getRevisionHistory(id).then((result) => {
+      if (result.outcome === 'failure') {
+        console.error(result.error);
+        return;
+      }
+      setRevisionHistory(result.value);
+    });
   }, [showRevisionHistory, id]);
 
   const restoreToRevision = (commitId: string) => {

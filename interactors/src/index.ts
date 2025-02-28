@@ -36,3 +36,5 @@ export { RevokeAPIKey } from './RevokeAPIKey';
 export { GetAPIKeyOwner } from './GetAPIKeyOwner';
 export { ResolveVizPaths } from './resolveVizPaths';
 export { RestoreToRevision } from './restoreToRevision';
+export { GetRevisionHistory } from './getRevisionHistory';
+export { GetThumbnailURLs } from './getThumbnailURLs';

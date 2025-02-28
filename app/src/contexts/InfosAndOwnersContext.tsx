@@ -73,6 +73,9 @@ type PaginationState = {
   ownerUserSnapshotsById: {
     [userId: string]: Snapshot<User>;
   };
+
+  // The thumbnails URLs for all the info.end commits
+  thumbnailURLs: Record<CommitId, string>;
 };
 
 type PaginationAction =
@@ -83,6 +86,7 @@ type PaginationAction =
       infoSnapshots: Array<Snapshot<Info>>;
       ownerUserSnapshots: Array<Snapshot<User>>;
       hasMore: boolean;
+      thumbnailURLs: Record<CommitId, string>;
     }
   | {
       type: 'ReportError';
@@ -145,6 +149,10 @@ const reducer = (
           ),
         },
         hasMore: action.hasMore,
+        thumbnailURLs: {
+          ...state.thumbnailURLs,
+          ...action.thumbnailURLs,
+        },
       };
 
     // When the request comes back with an error
@@ -191,12 +199,14 @@ const init = ({
   infoSnapshots,
   ownerUserSnapshots,
   hasMoreInitially,
+  thumbnailURLs,
 }: {
   currentKey: SectionSortKey;
   infoSnapshots: Array<Snapshot<Info>>;
   ownerUserSnapshots: Array<Snapshot<User>>;
   hasMoreInitially: boolean;
-}) => {
+  thumbnailURLs: Record<CommitId, string>;
+}): PaginationState => {
   return {
     sectionsAndSorts: {
       [currentKey]: {
@@ -212,6 +222,7 @@ const init = ({
       }),
       {},
     ),
+    thumbnailURLs,
   };
 };
 
@@ -232,7 +243,7 @@ export const InfosAndOwnersProvider = ({
   children: React.ReactNode;
   hasMoreInitially: boolean;
   searchQuery?: string;
-  thumbnailURLs;
+  thumbnailURLs: Record<CommitId, string>;
 }) => {
   const { sectionId, sortId } = useContext(
     SectionSortContext,
@@ -250,6 +261,7 @@ export const InfosAndOwnersProvider = ({
       infoSnapshots,
       ownerUserSnapshots,
       hasMoreInitially,
+      thumbnailURLs,
     },
     init,
   );
@@ -279,6 +291,7 @@ export const InfosAndOwnersProvider = ({
           infoSnapshots,
           ownerUserSnapshots,
           hasMore,
+          thumbnailURLs,
         } = result.value;
         paginationDispatch({
           type: 'ResolveNextPage',
@@ -286,6 +299,7 @@ export const InfosAndOwnersProvider = ({
           infoSnapshots,
           ownerUserSnapshots,
           hasMore,
+          thumbnailURLs,
         });
       } else {
         paginationDispatch({
@@ -351,7 +365,7 @@ export const InfosAndOwnersProvider = ({
       hasMore:
         paginationState.sectionsAndSorts[currentKey]
           ?.hasMore || false,
-      thumbnailURLs,
+      thumbnailURLs: paginationState.thumbnailURLs,
     }),
     [
       allInfoSnapshots,
