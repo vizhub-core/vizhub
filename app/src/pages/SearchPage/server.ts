@@ -14,6 +14,12 @@ SearchPage.getPageData = async ({
   const sortId: SortId | null =
     asSortId(query.sort) || explorePageDefaultSortId;
 
+  const { authenticatedUserSnapshot } =
+    await getAuthenticatedUser({
+      gateways,
+      auth0User,
+    });
+
   const infosAndOwnersResult = await getInfosAndOwners({
     query: query.query,
     noNeedToFetchUsers: [],
@@ -32,12 +38,6 @@ SearchPage.getPageData = async ({
     hasMore,
     thumbnailURLs,
   } = infosAndOwnersResult.value;
-
-  const { authenticatedUserSnapshot } =
-    await getAuthenticatedUser({
-      gateways,
-      auth0User,
-    });
 
   return {
     title: `VizHub Search Results`,
