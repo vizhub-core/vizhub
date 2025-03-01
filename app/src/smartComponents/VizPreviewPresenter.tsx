@@ -61,7 +61,9 @@ export const VizPreviewPresenter = ({
   return (
     <VizPreview
       title={title}
-      thumbnailImageURL={thumbnailURLs[end]}
+      thumbnailImageURL={
+        thumbnailURLs && thumbnailURLs[end]
+      }
       lastUpdatedDateFormatted={lastUpdatedDateFormatted}
       ownerName={ownerName}
       ownerAvatarURL={ownerAvatarURL}
