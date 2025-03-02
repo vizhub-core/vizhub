@@ -104,7 +104,19 @@ export const editWithAIEndpoint = ({
           return;
         }
 
-        const { id, prompt } = req.body;
+        console.log(
+          "req.body.modelName: '" +
+            req.body.modelName +
+            "'",
+        );
+        const {
+          id,
+          prompt,
+          modelName = process.env
+            .VIZHUB_EDIT_WITH_AI_MODEL_NAME,
+        } = req.body;
+
+        console.log("Using AI model '" + modelName + "'");
 
         if (!id || !prompt) {
           res.json(
@@ -219,8 +231,6 @@ export const editWithAIEndpoint = ({
         debug &&
           console.log('fullPrompt:`' + fullPrompt + '`');
 
-        const modelName =
-          process.env.VIZHUB_EDIT_WITH_AI_MODEL_NAME;
         const apiKey =
           process.env.VIZHUB_EDIT_WITH_AI_API_KEY;
         const baseURL =

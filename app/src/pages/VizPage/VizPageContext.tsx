@@ -128,6 +128,10 @@ export type VizPageContextValue = {
   showEditWithAIModal: boolean;
   onEditWithAI: (prompt: string) => void;
   isEditingWithAI: boolean;
+
+  modelName: string;
+  setModelName: (modelName: string) => void;
+  modelNameOptions: string[];
 };
 
 export const VizPageContext =
@@ -329,12 +333,16 @@ export const VizPageProvider = ({
     toggleForkModal,
   });
 
-  const { onEditWithAI, isEditingWithAI } = useOnEditWithAI(
-    {
-      vizKit,
-      id: info.id,
-    },
-  );
+  const {
+    onEditWithAI,
+    isEditingWithAI,
+    modelName,
+    setModelName,
+    modelNameOptions,
+  } = useOnEditWithAI({
+    vizKit,
+    id: info.id,
+  });
 
   ////////////////////////////////////////////
   /////////////// Settings ///////////////////
@@ -468,6 +476,9 @@ export const VizPageProvider = ({
     showEditWithAIModal,
     onEditWithAI,
     isEditingWithAI,
+    modelName,
+    setModelName,
+    modelNameOptions,
   };
 
   return (

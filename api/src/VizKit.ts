@@ -7,7 +7,6 @@ import {
   SectionId,
   User,
   Comment,
-  Commit,
   CommentId,
   RevisionHistory,
   APIKey,
@@ -159,6 +158,9 @@ export interface VizKitAPI {
     editWithAI: (options: {
       id: VizId;
       prompt: string;
+
+      // OpenRouter model name
+      modelName?: string;
     }) => Promise<Result<Success>>;
   };
 }
@@ -357,6 +359,7 @@ export const VizKit = (
       editWithAI: async (options: {
         id: VizId;
         prompt: string;
+        modelName: string;
       }) =>
         await postJSON(`${baseUrl}/edit-with-ai`, options),
 
