@@ -1,9 +1,10 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { Modal, Form, Button } from '../bootstrap';
 import { Plan, UserId } from 'entities';
 import { VizKit } from 'api/src/VizKit';
 
 import { AICreditBalanceText } from './AICreditBalanceText';
+import { Usage, UsageEntry } from './Usage';
 
 const vizKit = VizKit();
 
@@ -29,6 +30,8 @@ export const EditWithAIModal = ({
   modelNameOptions: string[];
 }) => {
   const [prompt, setPrompt] = useState<string>('');
+  const [showUsage, setShowUsage] =
+    useState<boolean>(false);
 
   const handlePromptChange = useCallback(
     (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -82,6 +85,38 @@ export const EditWithAIModal = ({
       createCheckoutSessionResult.value;
     window.location.href = sessionURL;
   }, [userId]);
+
+  const handleToggleUsage = useCallback(() => {
+    setShowUsage((prev) => !prev);
+  }, []);
+
+  // Sample usage data - in a real app, this would come from props or an API
+  const usageEntries = useMemo<UsageEntry[]>(
+    () => [
+      {
+        modelName: 'sonet',
+        prompt: 'Make it green',
+        cost: '$0.03',
+        result: 'abc',
+        timestamp: '2025-03-01 14:32',
+      },
+      {
+        modelName: 'gpt-4',
+        prompt: 'Add a dropdown menu',
+        cost: '$0.12',
+        result: 'Added Bootstrap dropdown',
+        timestamp: '2025-03-01 10:15',
+      },
+      {
+        modelName: 'claude',
+        prompt: 'Fix the layout',
+        cost: '$0.08',
+        result: 'Adjusted CSS grid',
+        timestamp: '2025-02-28 16:45',
+      },
+    ],
+    [],
+  );
 
   return (
     <Modal show={show} onHide={onClose} centered>
@@ -146,14 +181,24 @@ export const EditWithAIModal = ({
           <div className="d-flex justify-content-between align-items-center flex-grow-1">
             <AICreditBalanceText
               creditBalance={creditBalance}
+              showUsageText={true}
+              onUsageClick={handleToggleUsage}
             />
-            <Button
-              variant="primary"
-              onClick={handleTopUpClick}
-              className="ms-auto"
-            >
-              Top Up Balance
-            </Button>
+            <div className="ms-auto">
+              <Button
+                variant="outline-secondary"
+                onClick={handleToggleUsage}
+                className="me-2"
+              >
+                {showUsage ? 'Hide Usage' : 'Usage'}
+              </Button>
+              <Button
+                variant="primary"
+                onClick={handleTopUpClick}
+              >
+                Top Up Balance
+              </Button>
+            </div>
           </div>
         ) : currentPlan === 'premium' ? (
           <div className="d-flex justify-content-between align-items-center flex-grow-1">
@@ -161,14 +206,18 @@ export const EditWithAIModal = ({
               creditBalance={creditBalance}
               showTopUpText={true}
               onTopUpClick={handleTopUpClick}
+              showUsageText={true}
+              onUsageClick={handleToggleUsage}
             />
-            <Button
-              variant="primary"
-              onClick={handleSubmitClick}
-              disabled={!prompt.trim()}
-            >
-              Submit
-            </Button>
+            <div>
+              <Button
+                variant="primary"
+                onClick={handleSubmitClick}
+                disabled={!prompt.trim()}
+              >
+                Submit
+              </Button>
+            </div>
           </div>
         ) : (
           <Button
@@ -180,6 +229,7 @@ export const EditWithAIModal = ({
             Upgrade Now
           </Button>
         )}
+        <Usage showUsage={showUsage} usageEntries={usageEntries} />
       </Modal.Footer>
     </Modal>
   );
