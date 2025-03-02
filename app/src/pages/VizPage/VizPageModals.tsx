@@ -55,6 +55,9 @@ export const VizPageModals = () => {
     showEditWithAIModal,
     toggleEditWithAIModal,
     onEditWithAI,
+    modelName,
+    setModelName,
+    modelNameOptions,
   } = useContext(VizPageContext);
 
   // The currently authenticated user, if any.
@@ -291,6 +294,9 @@ export const VizPageModals = () => {
             authenticatedUser,
           )}
           userId={authenticatedUser?.id}
+          modelName={modelName}
+          setModelName={setModelName}
+          modelNameOptions={modelNameOptions}
         />
       )}
     </>

@@ -14,6 +14,9 @@ export const EditWithAIModal = ({
   creditBalance,
   currentPlan,
   userId,
+  modelName,
+  setModelName,
+  modelNameOptions,
 }: {
   show: boolean;
   onClose: () => void;
@@ -21,6 +24,9 @@ export const EditWithAIModal = ({
   creditBalance?: number;
   currentPlan: Plan;
   userId?: UserId;
+  modelName: string;
+  setModelName: (modelName: string) => void;
+  modelNameOptions: string[];
 }) => {
   const [prompt, setPrompt] = useState<string>('');
 
@@ -29,6 +35,13 @@ export const EditWithAIModal = ({
       setPrompt(event.target.value);
     },
     [],
+  );
+
+  const handleModelChange = useCallback(
+    (event: React.ChangeEvent<HTMLSelectElement>) => {
+      setModelName(event.target.value);
+    },
+    [setModelName],
   );
 
   // When submitting, close the modal, reset the prompt, and
@@ -83,22 +96,41 @@ export const EditWithAIModal = ({
             AI-powered editing features.
           </p>
         ) : currentPlan === 'premium' ? (
-          <Form.Group className="mb-3" controlId="prompt">
-            <Form.Label>
-              What would you like to change?
-            </Form.Label>
-            <Form.Control
-              as="textarea"
-              rows={4}
-              value={prompt}
-              onChange={handlePromptChange}
-              placeholder="Describe the changes you want to make..."
-            />
-            <Form.Text className="text-muted">
-              Be specific about what you want to modify in
-              your code
-            </Form.Text>
-          </Form.Group>
+          <>
+            <Form.Group className="mb-3" controlId="prompt">
+              <Form.Label>
+                What would you like to change?
+              </Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={4}
+                value={prompt}
+                onChange={handlePromptChange}
+                placeholder="Describe the changes you want to make..."
+              />
+              <Form.Text className="text-muted">
+                Be specific about what you want to modify in
+                your code
+              </Form.Text>
+            </Form.Group>
+            <Form.Group
+              className="mb-3"
+              controlId="modelSelect"
+            >
+              <Form.Label>Select AI Model</Form.Label>
+              <Form.Select
+                value={modelName}
+                onChange={handleModelChange}
+                aria-label="Select AI model"
+              >
+                {modelNameOptions.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </Form.Select>
+            </Form.Group>
+          </>
         ) : (
           <p>
             AI-powered code editing is available with VizHub

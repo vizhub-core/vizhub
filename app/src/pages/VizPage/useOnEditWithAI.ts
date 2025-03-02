@@ -22,15 +22,35 @@ export const useOnEditWithAI = ({
 }): {
   onEditWithAI: (prompt: string) => void;
   isEditingWithAI: boolean;
+  modelName: string;
+  setModelName: (modelName: string) => void;
+  modelNameOptions: string[];
 } => {
   const [isEditingWithAI, setIsEditingWithAI] =
     useState(false);
+  const [modelName, setModelName] = useState(
+    'anthropic/claude-3.7-sonnet',
+  );
+  const modelNameOptions = [
+    'anthropic/claude-3.7-sonnet',
+    'anthropic/claude-3.5-sonnet',
+    'openai/chatgpt-4o-latest',
+    // 'openai/o1', // Shockingly expensive
+    'openai/o1-mini',
+    'openai/o3-mini-high',
+    'deepseek/deepseek-r1',
+    'deepseek/deepseek-chat',
+    'google/gemini-2.0-flash-001',
+    'google/gemini-flash-1.5',
+    'qwen/qwen-2.5-coder-32b-instruct',
+  ];
 
   const onEditWithAI = useCallback(
     async (prompt: string) => {
       const editWithAIOptions = {
         id,
         prompt,
+        modelName,
       };
       if (debug) {
         console.log(
@@ -59,7 +79,13 @@ export const useOnEditWithAI = ({
         );
       }
     },
-    [id, vizKit, setIsEditingWithAI],
+    [id, vizKit, setIsEditingWithAI, modelName],
   );
-  return { onEditWithAI, isEditingWithAI };
+  return {
+    onEditWithAI,
+    isEditingWithAI,
+    modelName,
+    setModelName,
+    modelNameOptions,
+  };
 };

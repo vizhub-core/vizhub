@@ -9,8 +9,8 @@ import { ArrowLeftSVG } from '../Icons/sam/ArrowLeftSVG';
 import { ArrowRightSVG } from '../Icons/sam/ArrowRightSVG';
 import { ServerSVG } from '../Icons/sam/ServerSVG';
 import { RectangleStackSVG } from '../Icons/sam/RectangleStackSVG';
-import './styles.scss';
 import { Spinner } from '../Spinner';
+import './styles.scss';
 
 const enableRevisionHistory = true;
 const enableDownloadImage = true;
