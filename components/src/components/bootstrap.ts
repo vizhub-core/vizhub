@@ -21,6 +21,7 @@ import Card from 'react-bootstrap/cjs/Card.js';
 import Tooltip from 'react-bootstrap/cjs/Tooltip.js';
 import Overlay from 'react-bootstrap/cjs/Overlay.js';
 import OverlayTrigger from 'react-bootstrap/cjs/OverlayTrigger.js';
+import Table from 'react-bootstrap/cjs/Table.js';
 
 // Some fucked up shit right here
 // https://github.com/react-bootstrap/react-bootstrap/issues/6539#issuecomment-2251250267
@@ -48,4 +49,5 @@ export {
   Tooltip,
   Overlay,
   OverlayTrigger,
+  Table,
 };

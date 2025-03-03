@@ -56,7 +56,7 @@ export const AICreditBalanceText = ({
             style={{ cursor: 'pointer', fontSize: '12px' }}
             onClick={handleUsageClick}
           >
-            Usage
+            {showUsageText ? 'Usage' : 'Hide Usage'}
           </div>
         )}
       </div>

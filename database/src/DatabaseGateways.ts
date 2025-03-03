@@ -1050,6 +1050,29 @@ export const DatabaseGateways = ({
     return ok('success');
   };
 
+  const getAIEditMetadataForUser = async (
+    userId: UserId,
+  ) => {
+    const entityName = 'AIEditMetadata';
+    const from = toCollectionName(entityName);
+    const collection = mongoDBDatabase.collection(from);
+    const result = await collection
+      .find({ user: userId })
+      .toArray();
+    for (const item of result) {
+      delete item._id;
+      delete item.openRouterGenerationId;
+      delete item.user;
+      delete item.viz;
+      delete item.upstreamCostCents;
+      delete item.provider;
+      delete item.inputTokens;
+      delete item.outputTokens;
+      delete item.promptTemplateVersion;
+    }
+    return ok(result);
+  };
+
   let databaseGateways = {
     type: 'DatabaseGateways',
     getForks,
@@ -1076,6 +1099,7 @@ export const DatabaseGateways = ({
     getAPIKeyIdFromHash,
     getCommitImageKeys,
     saveCommitImageKeys,
+    getAIEditMetadataForUser,
   };
 
   for (const entityName of crudEntityNames) {

@@ -1,5 +1,5 @@
 import { useState, useCallback, useMemo } from 'react';
-import { Modal, Form, Button } from '../bootstrap';
+import { Modal, Form, Button, Table } from '../bootstrap';
 import { Plan, UserId } from 'entities';
 import { VizKit } from 'api/src/VizKit';
 
@@ -30,8 +30,9 @@ export const EditWithAIModal = ({
   modelNameOptions: string[];
 }) => {
   const [prompt, setPrompt] = useState<string>('');
-  const [showUsage, setShowUsage] =
-    useState<boolean>(false);
+  const [showUsage, setShowUsage] = useState<boolean>(false);
+  const [usageEntries, setUsageEntries] = useState<UsageEntry[]>([]);
+  const [isLoadingUsage, setIsLoadingUsage] = useState<boolean>(false);
 
   const handlePromptChange = useCallback(
     (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -86,37 +87,44 @@ export const EditWithAIModal = ({
     window.location.href = sessionURL;
   }, [userId]);
 
-  const handleToggleUsage = useCallback(() => {
-    setShowUsage((prev) => !prev);
-  }, []);
+  const fetchUsageData = useCallback(async () => {
+    if (!userId) return;
+    
+    setIsLoadingUsage(true);
+    try {
+      const result = await vizKit.rest.getAIUsage({ userId });
+      
+      if (result.outcome === 'success') {
+        // Transform the API data to match our UsageEntry format
+        const entries: UsageEntry[] = result.value.map(item => ({
+          modelName: item.model,
+          prompt: item.userPrompt || "No prompt available",
+          cost: `$${(item.userCostCents / 100).toFixed(2)}`,
+          result: "",
+          thumbnailURL: `https://via.placeholder.com/100?text=${encodeURIComponent(item.model)}`,
+          timestamp: new Date(item.timestamp).toLocaleString(),
+        }));
+        
+        setUsageEntries(entries);
+      } else {
+        console.error("Failed to fetch usage ", result.error);
+      }
+    } catch (error) {
+      console.error("Error fetching usage ", error);
+    } finally {
+      setIsLoadingUsage(false);
+    }
+  }, [userId]);
 
-  // Sample usage data - in a real app, this would come from props or an API
-  const usageEntries = useMemo<UsageEntry[]>(
-    () => [
-      {
-        modelName: 'sonet',
-        prompt: 'Make it green',
-        cost: '$0.03',
-        result: 'abc',
-        timestamp: '2025-03-01 14:32',
-      },
-      {
-        modelName: 'gpt-4',
-        prompt: 'Add a dropdown menu',
-        cost: '$0.12',
-        result: 'Added Bootstrap dropdown',
-        timestamp: '2025-03-01 10:15',
-      },
-      {
-        modelName: 'claude',
-        prompt: 'Fix the layout',
-        cost: '$0.08',
-        result: 'Adjusted CSS grid',
-        timestamp: '2025-02-28 16:45',
-      },
-    ],
-    [],
-  );
+  const handleToggleUsage = useCallback(() => {
+    const newShowUsage = !showUsage;
+    setShowUsage(newShowUsage);
+    
+    // Fetch usage data when opening the usage section
+    if (newShowUsage && usageEntries.length === 0 && !isLoadingUsage) {
+      fetchUsageData();
+    }
+  }, [showUsage, usageEntries.length, isLoadingUsage, fetchUsageData]);
 
   return (
     <Modal show={show} onHide={onClose} centered>
@@ -229,7 +237,11 @@ export const EditWithAIModal = ({
             Upgrade Now
           </Button>
         )}
-        <Usage showUsage={showUsage} usageEntries={usageEntries} />
+        <Usage
+          showUsage={showUsage}
+          usageEntries={usageEntries}
+          isLoading={isLoadingUsage}
+        />
       </Modal.Footer>
     </Modal>
   );

@@ -64,6 +64,7 @@ import {
   ImageHash,
 } from 'entities/src/Images';
 import { APIKeyHash, APIKeyId } from 'entities/src/APIKeys';
+import { AIEditMetadataUsage } from 'entities/src/AIEditMetadata';
 
 // The maximum number of Info documents to return in a single page from `getInfos()`
 // export const pageSize = 5;
@@ -583,4 +584,8 @@ export interface Gateways {
   saveCommitImageKeys(
     commitImageKeys: Array<CommitImageKey>,
   ): Promise<Result<Success>>;
+
+  getAIEditMetadataForUser(
+    userId: UserId,
+  ): Promise<Result<Array<AIEditMetadataUsage>>>;
 }
