@@ -1,4 +1,5 @@
 import { VizToast } from 'components/src/components/VizToast';
+import { VizToast as VizToastTailwind } from 'components/src/tailwindComponents/VizToast';
 import {
   useCallback,
   useContext,
@@ -8,11 +9,7 @@ import {
 import { deleteCookie, getCookie } from '../cookies';
 import { AuthenticatedUserContext } from '../../contexts/AuthenticatedUserContext';
 import { User } from 'entities';
-import {
-  VizHubError,
-  VizHubErrorCode,
-  errorCodeLabels,
-} from 'gateways';
+import { VizHubErrorCode, errorCodeLabels } from 'gateways';
 import { Button } from 'vzcode/src/client/bootstrap';
 import { VizPageContext } from './VizPageContext';
 
@@ -52,6 +49,11 @@ export const VizPageToasts = () => {
   //   'shareDBError.message',
   //   shareDBError?.message,
   // );
+
+  console.log(
+    'showForkToast in VizPageToasts',
+    showForkToast,
+  );
 
   return (
     <>
@@ -93,14 +95,10 @@ export const VizPageToasts = () => {
         </VizToast>
       )}
       {showForkToast ? (
-        <VizToast
-          title="Forked Successfully"
-          delay={6000}
-          autohide
+        <VizToastTailwind
+          message="Forked Successfully"
           onClose={handleForkToastClose}
-          closeButton={true}
-          headerOnly={true}
-        ></VizToast>
+        ></VizToastTailwind>
       ) : null}
     </>
   );

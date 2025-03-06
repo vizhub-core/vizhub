@@ -2,7 +2,6 @@
 import { hydrateRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { App } from './App';
-import './app.css';
 import 'vizhub-ui/dist/vizhub-ui.css';
 
 // @ts-ignore

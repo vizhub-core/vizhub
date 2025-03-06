@@ -8,6 +8,7 @@ import {
   useLocation,
 } from 'react-router-dom';
 import { pages } from './pages/client';
+import './app.css';
 
 const debug = false;
 
