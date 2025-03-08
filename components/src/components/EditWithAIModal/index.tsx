@@ -30,9 +30,13 @@ export const EditWithAIModal = ({
   modelNameOptions: string[];
 }) => {
   const [prompt, setPrompt] = useState<string>('');
-  const [showUsage, setShowUsage] = useState<boolean>(false);
-  const [usageEntries, setUsageEntries] = useState<UsageEntry[]>([]);
-  const [isLoadingUsage, setIsLoadingUsage] = useState<boolean>(false);
+  const [showUsage, setShowUsage] =
+    useState<boolean>(false);
+  const [usageEntries, setUsageEntries] = useState<
+    UsageEntry[]
+  >([]);
+  const [isLoadingUsage, setIsLoadingUsage] =
+    useState<boolean>(false);
 
   const handlePromptChange = useCallback(
     (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -89,28 +93,38 @@ export const EditWithAIModal = ({
 
   const fetchUsageData = useCallback(async () => {
     if (!userId) return;
-    
+
     setIsLoadingUsage(true);
     try {
-      const result = await vizKit.rest.getAIUsage({ userId });
-      
+      const result = await vizKit.rest.getAIUsage({
+        userId,
+      });
+
       if (result.outcome === 'success') {
         // Transform the API data to match our UsageEntry format
-        const entries: UsageEntry[] = result.value.map(item => ({
-          modelName: item.model,
-          prompt: item.userPrompt || "No prompt available",
-          cost: `$${(item.userCostCents / 100).toFixed(2)}`,
-          result: "",
-          thumbnailURL: `https://via.placeholder.com/100?text=${encodeURIComponent(item.model)}`,
-          timestamp: new Date(item.timestamp).toLocaleString(),
-        }));
-        
+        const entries: UsageEntry[] = result.value.map(
+          (item) => ({
+            modelName: item.model,
+            prompt:
+              item.userPrompt || 'No prompt available',
+            cost: `$${(item.userCostCents / 100).toFixed(2)}`,
+            result: '',
+            thumbnailURL: `https://via.placeholder.com/100?text=${encodeURIComponent(item.model)}`,
+            timestamp: new Date(
+              item.timestamp,
+            ).toLocaleString(),
+          }),
+        );
+
         setUsageEntries(entries);
       } else {
-        console.error("Failed to fetch usage ", result.error);
+        console.error(
+          'Failed to fetch usage ',
+          result.error,
+        );
       }
     } catch (error) {
-      console.error("Error fetching usage ", error);
+      console.error('Error fetching usage ', error);
     } finally {
       setIsLoadingUsage(false);
     }
@@ -119,12 +133,21 @@ export const EditWithAIModal = ({
   const handleToggleUsage = useCallback(() => {
     const newShowUsage = !showUsage;
     setShowUsage(newShowUsage);
-    
+
     // Fetch usage data when opening the usage section
-    if (newShowUsage && usageEntries.length === 0 && !isLoadingUsage) {
+    if (
+      newShowUsage &&
+      usageEntries.length === 0 &&
+      !isLoadingUsage
+    ) {
       fetchUsageData();
     }
-  }, [showUsage, usageEntries.length, isLoadingUsage, fetchUsageData]);
+  }, [
+    showUsage,
+    usageEntries.length,
+    isLoadingUsage,
+    fetchUsageData,
+  ]);
 
   return (
     <Modal show={show} onHide={onClose} centered>
@@ -216,6 +239,7 @@ export const EditWithAIModal = ({
               onTopUpClick={handleTopUpClick}
               showUsageText={true}
               onUsageClick={handleToggleUsage}
+              showUsage={showUsage}
             />
             <div>
               <Button
@@ -240,7 +264,6 @@ export const EditWithAIModal = ({
         <Usage
           showUsage={showUsage}
           usageEntries={usageEntries}
-          isLoading={isLoadingUsage}
         />
       </Modal.Footer>
     </Modal>

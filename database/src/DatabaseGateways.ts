@@ -1059,6 +1059,7 @@ export const DatabaseGateways = ({
     const result = await collection
       .find({ user: userId })
       .toArray();
+
     for (const item of result) {
       delete item._id;
       delete item.openRouterGenerationId;
@@ -1070,6 +1071,10 @@ export const DatabaseGateways = ({
       delete item.outputTokens;
       delete item.promptTemplateVersion;
     }
+
+    // Reverse so most recent comes first in the list
+    result.reverse();
+
     return ok(result);
   };
 

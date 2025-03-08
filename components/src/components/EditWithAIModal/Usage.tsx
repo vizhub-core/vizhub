@@ -23,34 +23,38 @@ export const Usage = ({
 
   return (
     <div className="mt-4 w-100">
-      <h5>Usage History</h5>
+      <h4>AI Usage History</h4>
       <div
         className="usage-table"
         style={{ maxHeight: '200px', overflowY: 'auto' }}
       >
-        <Table striped bordered hover size="sm">
+        <Table
+          striped
+          bordered
+          hover
+          size="sm"
+          style={{ width: '100%', fontSize: '12px' }}
+        >
           <thead>
             <tr>
               <th>Prompt</th>
               <th>Model</th>
-              <th>Result</th>
               <th>Cost</th>
+              {/* <th>Result</th> */}
             </tr>
           </thead>
           <tbody>
             {usageEntries.map((entry, index) => (
               <tr key={index}>
-                <td>{entry.modelName}</td>
                 <td
                   className="text-truncate"
                   style={{ maxWidth: '150px' }}
                 >
                   {entry.prompt}
                 </td>
-                <td className="text-primary">
-                  {entry.cost}
-                </td>
-                <td className="text-center">
+                <td>{entry.modelName}</td>
+                <td>{entry.cost}</td>
+                {/* <td className="text-center">
                   <img
                     src={entry.thumbnailURL}
                     alt="Result thumbnail"
@@ -60,7 +64,7 @@ export const Usage = ({
                       objectFit: 'contain',
                     }}
                   />
-                </td>
+                </td> */}
               </tr>
             ))}
           </tbody>

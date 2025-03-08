@@ -7,12 +7,14 @@ export const AICreditBalanceText = ({
   onTopUpClick,
   showUsageText,
   onUsageClick,
+  showUsage,
 }: {
   creditBalance?: number;
   showTopUpText?: boolean;
   onTopUpClick?: () => void;
   showUsageText?: boolean;
   onUsageClick?: () => void;
+  showUsage?: boolean;
 }) => {
   const formattedCreditBalance = useMemo(
     () => formatCreditBalance(creditBalance),
@@ -51,13 +53,18 @@ export const AICreditBalanceText = ({
           </div>
         )}
         {showUsageText && (
-          <div
-            className="text-muted text-decoration-underline"
-            style={{ cursor: 'pointer', fontSize: '12px' }}
-            onClick={handleUsageClick}
-          >
-            {showUsageText ? 'Usage' : 'Hide Usage'}
-          </div>
+          <>
+            <div
+              className="text-muted text-decoration-underline"
+              style={{
+                cursor: 'pointer',
+                fontSize: '12px',
+              }}
+              onClick={handleUsageClick}
+            >
+              {showUsage ? 'Hide Usage' : 'Usage'}
+            </div>
+          </>
         )}
       </div>
     </div>
