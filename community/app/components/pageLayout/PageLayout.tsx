@@ -1,7 +1,5 @@
-import React, { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
-import Header from './Header';
-import Footer from './Footer';
+import { Header } from './Header';
+import { Footer } from './Footer';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -9,11 +7,11 @@ interface LayoutProps {
   hideFooter?: boolean;
 }
 
-export default function PageLayout({
+export const PageLayout = ({
   children,
   fullWidth = false,
   hideFooter = false,
-}: LayoutProps) {
+}: LayoutProps) => {
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
@@ -27,4 +25,4 @@ export default function PageLayout({
       {!hideFooter && <Footer />}
     </div>
   );
-}
+};
