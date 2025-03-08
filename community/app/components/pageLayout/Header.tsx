@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router';
+import { Link } from 'react-router';
 import { Button } from '~/components/ui/button';
 import {
   Search,
@@ -24,23 +24,18 @@ import {
   DropdownMenuTrigger,
 } from '~/components/ui/dropdown-menu';
 
-// This is a placeholder - in a real app, you'd implement actual auth logic
-const useAuth = () => {
-  // Replace with actual auth logic
-  const [isAuthenticated, setIsAuthenticated] =
-    useState(false);
-  const login = () => setIsAuthenticated(true);
-  const logout = () => setIsAuthenticated(false);
+export interface HeaderProps {
+  isAuthenticated?: boolean;
+  onLogout?: () => void;
+}
 
-  return { isAuthenticated, login, logout };
-};
-
-export default function Header() {
+export const Header = ({
+  isAuthenticated = false,
+  onLogout = () => {},
+}: HeaderProps) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] =
     useState(false);
-  const { isAuthenticated, logout } = useAuth();
-  const location = useLocation();
 
   // Handle scroll effect
   useEffect(() => {
@@ -148,7 +143,7 @@ export default function Header() {
         <div className="hidden md:flex items-center space-x-3">
           {/* Search */}
           <button
-            className="p-2 text-foreground/70 hover:text-foreground rounded-full hover:bg-secondary transition-colors"
+            className="p-2 text-foreground/70 hover:text-foreground rounded-full hover:bg-secondary transition-colors cursor-pointer"
             aria-label="Search"
           >
             <Search className="w-5 h-5" />
@@ -162,7 +157,7 @@ export default function Header() {
           >
             <Link to="/create">
               <Plus className="w-4 h-4 mr-1.5" />
-              <span>Create</span>
+              <span className="mr-1">Create</span>
             </Link>
           </Button>
 
@@ -207,7 +202,7 @@ export default function Header() {
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={logout}>
+                  <DropdownMenuItem onClick={onLogout}>
                     Logout
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -218,11 +213,11 @@ export default function Header() {
               asChild
               variant="outline"
               size="sm"
-              className="rounded-full"
+              className="rounded-full hover:bg-secondary/80 transition-all duration-200"
             >
               <Link to="/login">
                 <LogIn className="w-4 h-4 mr-1.5" />
-                <span>Login</span>
+                <span className="mr-1">Login</span>
               </Link>
             </Button>
           )}
@@ -299,7 +294,7 @@ export default function Header() {
             >
               <Link to="/create">
                 <Plus className="w-4 h-4 mr-2" />
-                <span>Create</span>
+                <span className="mr-1">Create</span>
               </Link>
             </Button>
 
@@ -322,7 +317,7 @@ export default function Header() {
               >
                 <Link to="/login">
                   <LogIn className="w-4 h-4 mr-2" />
-                  <span>Login</span>
+                  <span className="mr-1">Login</span>
                 </Link>
               </Button>
             )}
@@ -343,4 +338,4 @@ export default function Header() {
       </div>
     </header>
   );
-}
+};
