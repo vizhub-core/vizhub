@@ -11,7 +11,9 @@ import {
   RevisionHistory,
   APIKey,
   APIKeyId,
+  AIEditMetadata,
 } from 'entities';
+import { AIEditMetadataUsage } from 'entities/src/AIEditMetadata';
 import { Result, Success } from 'gateways';
 import { InfosAndOwners } from 'interactors/src/getInfosAndOwners';
 
@@ -162,6 +164,10 @@ export interface VizKitAPI {
       // OpenRouter model name
       modelName?: string;
     }) => Promise<Result<Success>>;
+
+    getAIUsage: (options: {
+      userId: UserId;
+    }) => Promise<Result<Array<AIEditMetadataUsage>>>;
   };
 }
 
@@ -371,6 +377,8 @@ export const VizKit = (
           vizId,
           commitId,
         }),
+      getAIUsage: async (options: { userId: UserId }) =>
+        await postJSON(`${baseUrl}/get-ai-usage`, options),
     },
   };
 };

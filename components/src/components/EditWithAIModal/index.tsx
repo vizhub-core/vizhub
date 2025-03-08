@@ -1,9 +1,10 @@
-import { useState, useCallback } from 'react';
-import { Modal, Form, Button } from '../bootstrap';
+import { useState, useCallback, useMemo } from 'react';
+import { Modal, Form, Button, Table } from '../bootstrap';
 import { Plan, UserId } from 'entities';
 import { VizKit } from 'api/src/VizKit';
 
 import { AICreditBalanceText } from './AICreditBalanceText';
+import { Usage, UsageEntry } from './Usage';
 
 const vizKit = VizKit();
 
@@ -29,6 +30,13 @@ export const EditWithAIModal = ({
   modelNameOptions: string[];
 }) => {
   const [prompt, setPrompt] = useState<string>('');
+  const [showUsage, setShowUsage] =
+    useState<boolean>(false);
+  const [usageEntries, setUsageEntries] = useState<
+    UsageEntry[]
+  >([]);
+  const [isLoadingUsage, setIsLoadingUsage] =
+    useState<boolean>(false);
 
   const handlePromptChange = useCallback(
     (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -82,6 +90,64 @@ export const EditWithAIModal = ({
       createCheckoutSessionResult.value;
     window.location.href = sessionURL;
   }, [userId]);
+
+  const fetchUsageData = useCallback(async () => {
+    if (!userId) return;
+
+    setIsLoadingUsage(true);
+    try {
+      const result = await vizKit.rest.getAIUsage({
+        userId,
+      });
+
+      if (result.outcome === 'success') {
+        // Transform the API data to match our UsageEntry format
+        const entries: UsageEntry[] = result.value.map(
+          (item) => ({
+            modelName: item.model,
+            prompt:
+              item.userPrompt || 'No prompt available',
+            cost: `$${(item.userCostCents / 100).toFixed(2)}`,
+            result: '',
+            thumbnailURL: `https://via.placeholder.com/100?text=${encodeURIComponent(item.model)}`,
+            timestamp: new Date(
+              item.timestamp,
+            ).toLocaleString(),
+          }),
+        );
+
+        setUsageEntries(entries);
+      } else {
+        console.error(
+          'Failed to fetch usage ',
+          result.error,
+        );
+      }
+    } catch (error) {
+      console.error('Error fetching usage ', error);
+    } finally {
+      setIsLoadingUsage(false);
+    }
+  }, [userId]);
+
+  const handleToggleUsage = useCallback(() => {
+    const newShowUsage = !showUsage;
+    setShowUsage(newShowUsage);
+
+    // Fetch usage data when opening the usage section
+    if (
+      newShowUsage &&
+      usageEntries.length === 0 &&
+      !isLoadingUsage
+    ) {
+      fetchUsageData();
+    }
+  }, [
+    showUsage,
+    usageEntries.length,
+    isLoadingUsage,
+    fetchUsageData,
+  ]);
 
   return (
     <Modal show={show} onHide={onClose} centered>
@@ -146,14 +212,24 @@ export const EditWithAIModal = ({
           <div className="d-flex justify-content-between align-items-center flex-grow-1">
             <AICreditBalanceText
               creditBalance={creditBalance}
+              showUsageText={true}
+              onUsageClick={handleToggleUsage}
             />
-            <Button
-              variant="primary"
-              onClick={handleTopUpClick}
-              className="ms-auto"
-            >
-              Top Up Balance
-            </Button>
+            <div className="ms-auto">
+              <Button
+                variant="outline-secondary"
+                onClick={handleToggleUsage}
+                className="me-2"
+              >
+                {showUsage ? 'Hide Usage' : 'Usage'}
+              </Button>
+              <Button
+                variant="primary"
+                onClick={handleTopUpClick}
+              >
+                Top Up Balance
+              </Button>
+            </div>
           </div>
         ) : currentPlan === 'premium' ? (
           <div className="d-flex justify-content-between align-items-center flex-grow-1">
@@ -161,14 +237,19 @@ export const EditWithAIModal = ({
               creditBalance={creditBalance}
               showTopUpText={true}
               onTopUpClick={handleTopUpClick}
+              showUsageText={true}
+              onUsageClick={handleToggleUsage}
+              showUsage={showUsage}
             />
-            <Button
-              variant="primary"
-              onClick={handleSubmitClick}
-              disabled={!prompt.trim()}
-            >
-              Submit
-            </Button>
+            <div>
+              <Button
+                variant="primary"
+                onClick={handleSubmitClick}
+                disabled={!prompt.trim()}
+              >
+                Submit
+              </Button>
+            </div>
           </div>
         ) : (
           <Button
@@ -180,6 +261,10 @@ export const EditWithAIModal = ({
             Upgrade Now
           </Button>
         )}
+        <Usage
+          showUsage={showUsage}
+          usageEntries={usageEntries}
+        />
       </Modal.Footer>
     </Modal>
   );
