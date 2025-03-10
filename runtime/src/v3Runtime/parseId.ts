@@ -7,8 +7,7 @@ export const parseId = (
   vizId: VizId;
   fileName: string;
 } => {
-  const [vizId, fileName]: [VizId, string] = id.split(
-    '/',
-  ) as [VizId, string];
+  const [vizId, ...fileNameParts] = id.split('/');
+  const fileName = fileNameParts.join('/');
   return { vizId, fileName };
 };
