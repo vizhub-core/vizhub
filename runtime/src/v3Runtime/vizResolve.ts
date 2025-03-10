@@ -41,8 +41,6 @@ export const vizResolve = ({
       id.startsWith('./') &&
       !importer?.startsWith('https://')
     ) {
-      // const fileName = js(id.substring(2));
-
       let fileName = id.substring(2);
 
       // Handle CSS files
