@@ -465,5 +465,53 @@ describe('v3 build', () => {
     );
   });
 
+  it('Should handle relative imports within directories', async () => {
+    const vizCache = createVizCache({
+      initialContents: [
+        {
+          id: 'test-viz',
+          files: {
+            'index.js': {
+              name: 'index.js',
+              text: 'import { sum } from "./utils/sum.js";\nconsole.log(sum(2, 3));',
+            },
+            'utils/sum.js': {
+              name: 'utils/sum.js',
+              text: 'import { add } from "./add.js";\nexport const sum = (a, b) => add(a, b);',
+            },
+            'utils/add.js': {
+              name: 'utils/add.js',
+              text: 'export const add = (a, b) => a + b;',
+            },
+          },
+          title: 'Test Viz',
+        },
+      ],
+      handleCacheMiss: async () => {
+        throw new Error('Not implemented');
+      },
+    });
+
+    const buildResult = await build({
+      vizId: 'test-viz',
+      rollup,
+      vizCache,
+      resolveSlug: () => {
+        throw new Error('Not implemented');
+      },
+    });
+
+    expect(buildResult).toBeDefined();
+    expect(buildResult.warnings).toHaveLength(0);
+    expect(buildResult.cssFiles).toHaveLength(0);
+    expect(buildResult.src).toBeDefined();
+    expect(buildResult.time).toBeDefined();
+    expect(buildResult.pkg).toBeUndefined();
+
+    // Verify the bundled code contains our functions
+    expect(buildResult.src).toContain('const add = (a, b)');
+    expect(buildResult.src).toContain('const sum = (a, b)');
+  });
+
   // TODO test that covers invalidPackageJSONError
 });

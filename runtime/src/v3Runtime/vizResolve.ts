@@ -60,12 +60,16 @@ export const vizResolve = ({
       // const js = (name: string) =>
       // name.endsWith('.js') ? name : name + '.js';
 
-      // If there is an importer, then the file not part of
+      // If there is an importer, then the file is not part of
       // the entry point, so it should be resolved relative
-      // to the importer viz.
+      // to the importer's directory
       if (importer) {
-        const { vizId: importerVizId } = parseId(importer);
-        return importerVizId + '/' + fileName;
+        const { vizId: importerVizId, fileName: importerFileName } = parseId(importer);
+        // Get the directory of the importing file
+        const importerDir = importerFileName.split('/').slice(0, -1).join('/');
+        // Combine the directory with the imported file name
+        const resolvedFileName = importerDir ? `${importerDir}/${fileName}` : fileName;
+        return `${importerVizId}/${resolvedFileName}`;
       }
       return vizId + '/' + fileName;
     }
