@@ -1,9 +1,10 @@
 import { VizId } from 'entities';
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import { Result } from 'gateways';
 import { VizKitAPI } from 'api/src/VizKit';
 
 const debug = false;
+const LOCAL_STORAGE_MODEL_KEY = 'vizkit-ai-model-name';
 
 // Refresh the page to ensure:
 //  - The full code is executed (not hot reloaded, which is unreliable)
@@ -29,8 +30,18 @@ export const useOnEditWithAI = ({
   const [isEditingWithAI, setIsEditingWithAI] =
     useState(false);
   const [modelName, setModelName] = useState(
-    'anthropic/claude-3.7-sonnet',
+    'anthropic/claude-3.5-sonnet',
   );
+
+  useEffect(() => {
+    // Only access localStorage in the client
+    const savedModel = localStorage.getItem(
+      LOCAL_STORAGE_MODEL_KEY,
+    );
+    if (savedModel) {
+      setModelName(savedModel);
+    }
+  }, []);
   const modelNameOptions = [
     'anthropic/claude-3.7-sonnet',
     'anthropic/claude-3.5-sonnet',
@@ -42,6 +53,7 @@ export const useOnEditWithAI = ({
     'deepseek/deepseek-chat',
     'google/gemini-2.0-flash-001',
     'google/gemini-flash-1.5',
+    'qwen/qwq-32b',
     'qwen/qwen-2.5-coder-32b-instruct',
   ];
 
@@ -85,7 +97,15 @@ export const useOnEditWithAI = ({
     onEditWithAI,
     isEditingWithAI,
     modelName,
-    setModelName,
     modelNameOptions,
+    setModelName: (newModelName: string) => {
+      if (typeof window !== 'undefined') {
+        localStorage.setItem(
+          LOCAL_STORAGE_MODEL_KEY,
+          newModelName,
+        );
+      }
+      setModelName(newModelName);
+    },
   };
 };
