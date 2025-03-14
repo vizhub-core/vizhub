@@ -1,4 +1,5 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
+import { useSpeechRecognition } from './useSpeechRecognition';
 import { Modal, Form, Button } from '../bootstrap';
 import { Plan, UserId } from 'entities';
 import { VizKit } from 'api/src/VizKit';
@@ -37,10 +38,6 @@ export const EditWithAIModal = ({
   >([]);
   const [isLoadingUsage, setIsLoadingUsage] =
     useState<boolean>(false);
-  const [isSpeaking, setIsSpeaking] =
-    useState<boolean>(false);
-  const [recognition, setRecognition] =
-    useState<SpeechRecognition | null>(null);
 
   const handlePromptChange = useCallback(
     (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -153,79 +150,9 @@ export const EditWithAIModal = ({
     fetchUsageData,
   ]);
 
-  // Speech recognition setup
-  useEffect(() => {
-    // Check if browser supports SpeechRecognition
-    const SpeechRecognition =
-      window.SpeechRecognition ||
-      window.webkitSpeechRecognition;
-
-    if (SpeechRecognition) {
-      const recognitionInstance = new SpeechRecognition();
-      recognitionInstance.continuous = true;
-      recognitionInstance.interimResults = true;
-
-      recognitionInstance.onresult = (event) => {
-        const transcript = Array.from(event.results)
-          .map((result) => result[0].transcript)
-          .join('');
-
-        setPrompt((prev) => {
-          // For interim results, replace the last sentence
-          // For final results, append to existing text
-          const isInterim =
-            event.results[event.results.length - 1]
-              .isFinal === false;
-          if (isInterim && prev.includes('.')) {
-            const lastSentenceIndex = prev.lastIndexOf('.');
-            return (
-              prev.substring(0, lastSentenceIndex + 1) +
-              ' ' +
-              transcript
-            );
-          }
-          return transcript;
-        });
-      };
-
-      recognitionInstance.onerror = (event) => {
-        console.error(
-          'Speech recognition error',
-          event.error,
-        );
-        setIsSpeaking(false);
-      };
-
-      recognitionInstance.onend = () => {
-        setIsSpeaking(false);
-      };
-
-      setRecognition(recognitionInstance);
-    }
-
-    return () => {
-      if (recognition) {
-        recognition.abort();
-      }
-    };
-  }, []);
-
-  const toggleSpeechRecognition = useCallback(() => {
-    if (!recognition) {
-      console.error(
-        'Speech recognition not supported in this browser',
-      );
-      return;
-    }
-
-    if (isSpeaking) {
-      recognition.stop();
-      setIsSpeaking(false);
-    } else {
-      recognition.start();
-      setIsSpeaking(true);
-    }
-  }, [isSpeaking, recognition]);
+  // Use the speech recognition hook
+  const { isSpeaking, toggleSpeechRecognition } =
+    useSpeechRecognition(setPrompt);
 
   return (
     <Modal show={show} onHide={onClose} centered>
