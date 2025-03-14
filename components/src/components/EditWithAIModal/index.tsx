@@ -164,9 +164,14 @@ export const EditWithAIModal = ({
         ) : currentPlan === 'premium' ? (
           <>
             <Form.Group className="mb-3" controlId="prompt">
-              <Form.Label>
-                What would you like to change?
-              </Form.Label>
+              <div className="d-flex align-items-center justify-content-between mb-2">
+                <Form.Label className="me-2 my-auto">
+                  What would you like to change?
+                </Form.Label>
+                <Button variant="primary" size="sm">
+                  Speak
+                </Button>
+              </div>
               <Form.Control
                 as="textarea"
                 rows={4}
