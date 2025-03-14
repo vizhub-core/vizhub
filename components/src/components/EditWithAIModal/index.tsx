@@ -1,5 +1,6 @@
-import { useState, useCallback, useMemo } from 'react';
-import { Modal, Form, Button, Table } from '../bootstrap';
+import { useState, useCallback } from 'react';
+import { useSpeechRecognition } from './useSpeechRecognition';
+import { Modal, Form, Button } from '../bootstrap';
 import { Plan, UserId } from 'entities';
 import { VizKit } from 'api/src/VizKit';
 
@@ -52,13 +53,25 @@ export const EditWithAIModal = ({
     [setModelName],
   );
 
+  // Use the speech recognition hook
+  const {
+    isSpeaking,
+    toggleSpeechRecognition,
+    stopSpeaking,
+  } = useSpeechRecognition(setPrompt);
+
   // When submitting, close the modal, reset the prompt, and
   // call the onSubmit callback with the prompt text.
   const handleSubmitClick = useCallback(() => {
+    // If speech recognition is active, stop it
+    if (isSpeaking) {
+      stopSpeaking();
+    }
+
     onSubmit(prompt);
     onClose();
     setPrompt('');
-  }, [prompt, onSubmit]);
+  }, [prompt, onSubmit, isSpeaking, stopSpeaking]);
 
   const handleTopUpClick = useCallback(async () => {
     // Sanity check - should never happen
@@ -164,9 +177,20 @@ export const EditWithAIModal = ({
         ) : currentPlan === 'premium' ? (
           <>
             <Form.Group className="mb-3" controlId="prompt">
-              <Form.Label>
-                What would you like to change?
-              </Form.Label>
+              <div className="d-flex align-items-center justify-content-between mb-2">
+                <Form.Label className="me-2 my-auto">
+                  What would you like to change?
+                </Form.Label>
+                <Button
+                  variant={
+                    isSpeaking ? 'danger' : 'primary'
+                  }
+                  size="sm"
+                  onClick={toggleSpeechRecognition}
+                >
+                  {isSpeaking ? 'Stop speaking' : 'Speak'}
+                </Button>
+              </div>
               <Form.Control
                 as="textarea"
                 rows={4}
