@@ -9,6 +9,7 @@ import {
 export interface UseSpeechRecognitionResult {
   isSpeaking: boolean;
   toggleSpeechRecognition: () => void;
+  stopSpeaking: () => void;
 }
 
 export const useSpeechRecognition = (
@@ -93,8 +94,16 @@ export const useSpeechRecognition = (
     }
   }, [isSpeaking, recognition]);
 
+  const stopSpeaking = useCallback(() => {
+    if (recognition && isSpeaking) {
+      recognition.stop();
+      setIsSpeaking(false);
+    }
+  }, [isSpeaking, recognition]);
+
   return {
     isSpeaking,
     toggleSpeechRecognition,
+    stopSpeaking,
   };
 };

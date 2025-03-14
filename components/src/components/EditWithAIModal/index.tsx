@@ -53,13 +53,25 @@ export const EditWithAIModal = ({
     [setModelName],
   );
 
+  // Use the speech recognition hook
+  const {
+    isSpeaking,
+    toggleSpeechRecognition,
+    stopSpeaking,
+  } = useSpeechRecognition(setPrompt);
+
   // When submitting, close the modal, reset the prompt, and
   // call the onSubmit callback with the prompt text.
   const handleSubmitClick = useCallback(() => {
+    // If speech recognition is active, stop it
+    if (isSpeaking) {
+      stopSpeaking();
+    }
+
     onSubmit(prompt);
     onClose();
     setPrompt('');
-  }, [prompt, onSubmit]);
+  }, [prompt, onSubmit, isSpeaking, stopSpeaking]);
 
   const handleTopUpClick = useCallback(async () => {
     // Sanity check - should never happen
@@ -149,10 +161,6 @@ export const EditWithAIModal = ({
     isLoadingUsage,
     fetchUsageData,
   ]);
-
-  // Use the speech recognition hook
-  const { isSpeaking, toggleSpeechRecognition } =
-    useSpeechRecognition(setPrompt);
 
   return (
     <Modal show={show} onHide={onClose} centered>
