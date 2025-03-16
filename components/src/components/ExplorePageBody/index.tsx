@@ -5,6 +5,8 @@ import { Footer } from '../Footer';
 import { CreateNewButton } from '../CreateNewButton';
 import './styles.scss';
 
+const enableOfficeHoursLink = false;
+
 export const ExplorePageBody = ({
   // Viz preview list props.
   renderVizPreviews,
@@ -25,14 +27,16 @@ export const ExplorePageBody = ({
           className="alert alert-primary d-flex align-items-center justify-content-between p-3 mb-4"
           role="alert"
         >
-          <div>
-            <span className="fw-bold">
-              📅 Join VizHub Office Hours!
-            </span>{' '}
-            Get personalized help with your data
-            visualization projects and connect with the
-            community.
-          </div>
+          {enableOfficeHoursLink && (
+            <div>
+              <span className="fw-bold">
+                📅 Join VizHub Office Hours!
+              </span>{' '}
+              Get personalized help with your data
+              visualization projects and connect with the
+              community.
+            </div>
+          )}
           <div className="d-flex">
             <a
               href="https://www.youtube.com/watch?v=dRBdUyUNKUw&list=PLt6yKRJektF0Mk1Mq-bnmJuY2kVtLGovk&index=1"

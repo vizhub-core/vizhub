@@ -189,6 +189,12 @@ export const GetThumbnailURLs = (gateways: Gateways) => {
       } catch (e) {
         console.error(e);
 
+        console.log('imageGenerationInputs:');
+
+        console.log(
+          JSON.stringify(imageGenerationInputs, null, 2),
+        );
+
         // If this errors out, we don't want to
         // crash the whole process, so we just
         // skip this commit.
