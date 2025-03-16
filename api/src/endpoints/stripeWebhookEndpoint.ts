@@ -1,10 +1,10 @@
 import express from 'express';
 import { FREE, User, UserId, userLock } from 'entities';
-import { getStripe } from './getStripe';
+import { getNewStripe, getStripe } from './getStripe';
 import { UpdateUserStripeId } from 'interactors';
 import { err, Gateways, Result } from 'gateways';
 
-const debug = false;
+const debug = true;
 
 // Critical for Stripe development - run this incantation
 // stripe listen --forward-to localhost:5173/api/stripe-webhook
@@ -34,67 +34,33 @@ export const stripeWebhookEndpoint = ({
     '/api/stripe-webhook',
     express.raw({ type: 'application/json' }),
     async (request, response) => {
-      // Check if the request is even for VizHub.
-      // We may be getting requests from Stripe for other services,
-      // such as Screenshot Genie, in which case we return 200 status to ignore.
-
-      // 1) Read the raw text body (needed later for signature verification).
-      // const payload = await request.text();
-
-      // 2) Peek at JSON to see if it matches Screenshot Genie at all.
-      // let parsedPayload: any;
-      // try {
-      //   parsedPayload = JSON.parse(payload);
-      // } catch (err) {
-      //   // If we can’t parse JSON, we don’t know what it is—but we also don’t want Stripe to keep retrying.
-      //   debug &&
-      //     console.log(
-      //       '[Webhook action] JSON parse error; ignoring event',
-      //     );
-      //   return new Response(
-      //     'Ignoring event for unrelated or invalid payload',
-      //     {
-      //       status: 200,
-      //     },
-      //   );
-      // }
-
-      // debug &&
-      //   console.log(
-      //     'product is ',
-      //     parsedPayload?.data?.object?.metadata?.product,
-      //   );
-      // const product =
-      //   parsedPayload?.data?.object?.metadata?.product;
-      // if (product !== 'vizhub') {
-      //   debug &&
-      //     console.log(
-      //       '[Webhook action] Ignoring event for unrelated product:',
-      //       product,
-      //     );
-      //   return new Response(
-      //     'Ignoring event for unrelated product',
-      //     {
-      //       status: 200,
-      //     },
-      //   );
-      // }
-
       // Verify signature to prevent spoofing
       // See https://stripe.com/docs/webhooks#verify-official-libraries
       const sig = request.headers['stripe-signature'];
       const endpointSecret =
         process.env.VIZHUB_STRIPE_WEBHOOK_SIGNING_SECRET;
+      const newEndpointSecret =
+        process.env
+          .VIZHUB_NEW_STRIPE_WEBHOOK_SIGNING_SECRET;
+
+      // First we try with the old secret,
+      // then we try with the new secret.
+      // We are using the signing secret to check
+      // which stripe account we are using,
+      // during a transition period migrating
+      // from one to the other.
+      let shouldUseNewStripe = false;
       let event;
 
-      const stripe = getStripe();
+      let stripe;
 
       try {
         if (debug) {
           console.log(
-            '[stripe-webhook] verifying signature',
+            '[stripe-webhook] verifying signature with old secret',
           );
         }
+        stripe = getStripe();
         event = stripe.webhooks.constructEvent(
           request.body,
           sig,
@@ -102,25 +68,55 @@ export const stripeWebhookEndpoint = ({
         );
         if (debug) {
           console.log(
-            '[stripe-webhook] successfully verified signature!',
+            '[stripe-webhook] successfully verified signature with old secret!',
           );
         }
-      } catch (err) {
-        console.log(err);
-        return response
-          .status(400)
-          .send(`Webhook Error: ${err.message}`);
+      } catch (oldSecretErr) {
+        // If verification with old secret fails, try with new secret
+        try {
+          if (debug) {
+            console.log(
+              '[stripe-webhook] old secret failed, trying with new secret',
+              oldSecretErr.message,
+            );
+          }
+          stripe = getNewStripe();
+          event = stripe.webhooks.constructEvent(
+            request.body,
+            sig,
+            newEndpointSecret,
+          );
+
+          // If we get here, the new secret worked
+          shouldUseNewStripe = true;
+
+          if (debug) {
+            console.log(
+              '[stripe-webhook] successfully verified signature with new secret!',
+            );
+          }
+        } catch (newSecretErr) {
+          // Both secrets failed
+          console.log(
+            'Webhook signature verification failed with both secrets:',
+            newSecretErr,
+          );
+          return response
+            .status(400)
+            .send(`Webhook Error: ${newSecretErr.message}`);
+        }
       }
 
       // console.log(JSON.stringify(event, null, 2));
       if (debug) {
         console.log(
+          '[stripe-webhook] shouldUseNewStripe:',
+          shouldUseNewStripe,
+        );
+        console.log(
           '[stripe-webhook] received event',
           event,
         );
-      }
-
-      if (debug) {
         console.log('[stripe-webhook] event:', event);
       }
 

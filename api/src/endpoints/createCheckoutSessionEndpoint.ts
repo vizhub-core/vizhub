@@ -2,7 +2,7 @@ import express from 'express';
 import { Gateways, err, ok } from 'gateways';
 import { authenticationRequiredError } from 'gateways/src/errors';
 import { getAuthenticatedUserId } from '../parseAuth0User';
-import { getStripe } from './getStripe';
+import { getNewStripe } from './getStripe';
 import Stripe from 'stripe';
 
 export const createCheckoutSession = ({
@@ -36,7 +36,7 @@ export const createCheckoutSession = ({
         return;
       }
 
-      const stripe = getStripe();
+      const stripe = getNewStripe();
 
       // @ts-ignore
       const urlBase = req.headers.origin;
@@ -73,9 +73,7 @@ export const createCheckoutSession = ({
           client_reference_id: authenticatedUserId,
           line_items: [lineItem],
           subscription_data: isCreditTopUp ? undefined : {},
-          metadata: {
-            product: 'vizhub',
-          },
+          metadata: {},
           ...(isCreditTopUp
             ? { allow_promotion_codes: false }
             : {
