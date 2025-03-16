@@ -15,3 +15,16 @@ export const getStripe = () => {
   }
   return stripe;
 };
+
+let newStripe: Stripe;
+export const getNewStripe = () => {
+  if (!newStripe) {
+    newStripe = new Stripe(
+      process.env.VIZHUB_NEW_STRIPE_SECRET_KEY,
+      {
+        apiVersion: '2025-02-24.acacia',
+      },
+    );
+  }
+  return newStripe;
+};

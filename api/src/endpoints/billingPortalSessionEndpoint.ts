@@ -1,10 +1,10 @@
 import express from 'express';
-import { getStripe } from './getStripe';
+import { getNewStripe, getStripe } from './getStripe';
 import { getAuthenticatedUserId } from '../parseAuth0User';
 import { Gateways, ok } from 'gateways';
 import { User } from 'entities';
 
-const debug = false;
+const debug = true;
 
 export const billingPortalSessionEndpoint = ({
   app,
@@ -57,17 +57,52 @@ export const billingPortalSessionEndpoint = ({
       // Redirect to the profile page after
       const return_url = `${urlBase}/${authenticatedUser.userName}`;
 
-      const stripe = getStripe();
+      // First we try with the old Stripe account, then we try with the new Stripe account
+      // This helps us determine which account is tracking this customer during
+      // the transition period
+      const oldStripe = getStripe();
+      const newStripe = getNewStripe();
+
       try {
+        if (debug) {
+          console.log(
+            '[billingPortalSession] trying with old Stripe account',
+          );
+        }
+        // Try to create session with old Stripe account first
         const session =
-          await stripe.billingPortal.sessions.create({
+          await oldStripe.billingPortal.sessions.create({
             customer: stripeCustomerId,
             return_url,
           });
         res.json(ok({ sessionURL: session.url }));
-      } catch (err) {
-        console.error(err);
-        res.status(500).send('Internal Server Error');
+      } catch (oldStripeErr) {
+        if (debug) {
+          console.log(
+            '[billingPortalSession] old Stripe failed:',
+            oldStripeErr.message,
+          );
+          console.log(
+            '[billingPortalSession] trying with new Stripe account',
+          );
+        }
+
+        // If the old Stripe account fails, try with the new one
+        try {
+          const session =
+            await newStripe.billingPortal.sessions.create({
+              customer: stripeCustomerId,
+              return_url,
+            });
+          res.json(ok({ sessionURL: session.url }));
+        } catch (newStripeErr) {
+          // Both attempts failed
+          console.error(
+            'Billing portal creation failed with both Stripe accounts:',
+            newStripeErr,
+          );
+          res.status(500).send('Internal Server Error');
+        }
       }
     },
   );
