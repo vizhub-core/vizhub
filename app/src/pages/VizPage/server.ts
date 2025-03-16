@@ -85,10 +85,15 @@ VizPage.getPageData = async ({
     // If `commitId` is present, then we need to fetch the commit metadata.
     let commitMetadata: CommitMetadata | undefined;
     if (commitId) {
+      // Quick smoke test to validate the commit id
+      const isValidCommitId = commitId.length === 32;
+      if (!isValidCommitId) {
+        return null;
+      }
       const getCommitResult = await getCommit(commitId);
       if (getCommitResult.outcome === 'failure') {
-        console.log('Error when fetching commit:');
-        console.log(getCommitResult.error);
+        // console.log('Error when fetching commit:');
+        // console.log(getCommitResult.error);
         return null;
       }
       const commit: Commit = getCommitResult.value;
