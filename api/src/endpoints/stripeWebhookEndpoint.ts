@@ -4,7 +4,7 @@ import { getNewStripe, getStripe } from './getStripe';
 import { UpdateUserStripeId } from 'interactors';
 import { err, Gateways, Result } from 'gateways';
 
-const debug = true;
+const debug = false;
 
 // Critical for Stripe development - run this incantation
 // stripe listen --forward-to localhost:5173/api/stripe-webhook

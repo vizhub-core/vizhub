@@ -8,7 +8,7 @@ export { getRuntimeVersion } from './getRuntimeVersion';
 export { getUserDisplayName } from './getUserDisplayName';
 export { getBio } from './getBio';
 export { getAnyoneCanEdit } from './getAnyoneCanEdit';
-export { getVizThumbnailURL } from './getVizThumbnailURL';
+// export { getVizThumbnailURL } from './getVizThumbnailURL';
 export { absoluteURL } from './absoluteURL';
 export { iframeSnippet } from './iframeSnippet';
 export { getCreditBalance } from './getCreditBalance';

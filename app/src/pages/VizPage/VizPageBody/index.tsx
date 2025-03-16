@@ -17,7 +17,7 @@ import {
   getLicense,
   getHeight,
   getUserDisplayName,
-  getVizThumbnailURL,
+  // getVizThumbnailURL,
   FREE,
 } from 'entities';
 import { useRuntime } from '@vizhub/runtime';
@@ -48,7 +48,7 @@ import { VizPageContext } from '../VizPageContext';
 import { formatCommitTimestamp } from 'components/src/components/formatCommitTimestamp';
 
 const debug = false;
-const enableVizPageUpgradeBanner = true;
+const enableVizPageUpgradeBanner = false;
 
 export const VizPageBody = () => {
   // The currently authenticated user, if any.
@@ -280,10 +280,10 @@ export const VizPageBody = () => {
     [ownerUser],
   );
 
-  const downloadImageHref = useMemo(
-    () => getVizThumbnailURL(info.end, defaultVizWidth),
-    [info.end, defaultVizWidth],
-  );
+  // const downloadImageHref = useMemo(
+  //   () => getVizThumbnailURL(info.end, defaultVizWidth),
+  //   [info.end, defaultVizWidth],
+  // );
 
   const fullscreenHref = useMemo(
     () =>
@@ -444,7 +444,7 @@ export const VizPageBody = () => {
         onForkClick={toggleForkModal}
         onSettingsClick={toggleSettingsModal}
         onTrashClick={toggleDeleteVizConfirmationModal}
-        downloadImageHref={downloadImageHref}
+        downloadImageHref={null}
         toggleShowRevisionHistory={
           toggleShowRevisionHistory
         }

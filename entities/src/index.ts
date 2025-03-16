@@ -213,7 +213,7 @@ export {
   getUserDisplayName,
   getBio,
   getAnyoneCanEdit,
-  getVizThumbnailURL,
+  // getVizThumbnailURL,
   absoluteURL,
   iframeSnippet,
 } from './accessors';

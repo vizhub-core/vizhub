@@ -9,7 +9,7 @@ import { fakeUnsubscribeSuccessEndpoint } from './fakeUnsubscribeSuccessEndpoint
 import { stripeWebhookEndpoint } from './stripeWebhookEndpoint';
 import { createCheckoutSession } from './createCheckoutSessionEndpoint';
 import { aiAssistEndpoint } from './aiAssistEndpoint';
-import { vizThumbnailEndpoint } from './vizThumbnailEndpoint';
+// import { vizThumbnailEndpoint } from './vizThumbnailEndpoint';
 import { billingPortalSessionEndpoint } from './billingPortalSessionEndpoint';
 import { getUsersForTypeaheadEndpoint } from './getUsersForTypeaheadEndpoint';
 import { addCollaboratorEndpoint } from './addCollaboratorEndpoint';
@@ -51,7 +51,7 @@ export const endpoints: Array<Endpoint> = [
   stripeWebhookEndpoint,
   createCheckoutSession,
   aiAssistEndpoint,
-  vizThumbnailEndpoint,
+  // vizThumbnailEndpoint,
   billingPortalSessionEndpoint,
   getUsersForTypeaheadEndpoint,
   addCollaboratorEndpoint,

@@ -4,7 +4,7 @@ import { getAuthenticatedUserId } from '../parseAuth0User';
 import { Gateways, ok } from 'gateways';
 import { User } from 'entities';
 
-const debug = true;
+const debug = false;
 
 export const billingPortalSessionEndpoint = ({
   app,
