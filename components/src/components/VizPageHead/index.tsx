@@ -13,7 +13,9 @@ import { Spinner } from '../Spinner';
 import './styles.scss';
 
 const enableRevisionHistory = true;
-const enableDownloadImage = true;
+
+// TODO fix this and use Screenshot Genie
+const enableDownloadImage = false;
 const enableAPIButton = false;
 
 export const VizPageHead = ({

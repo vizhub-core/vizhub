@@ -10,8 +10,8 @@ import {
   User,
   defaultVizWidth,
   UpvoteId,
-  getVizThumbnailURL,
-  absoluteURL,
+  // getVizThumbnailURL,
+  // absoluteURL,
   Comment,
   CommitId,
   CommitMetadata,
@@ -96,6 +96,7 @@ VizPage.getPageData = async ({
         id: commitId,
         parent: commit.parent,
         timestamp: commit.timestamp,
+        authors: commit.authors,
       };
     }
 

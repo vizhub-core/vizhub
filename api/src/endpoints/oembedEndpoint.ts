@@ -5,7 +5,7 @@ import {
   VizId,
   absoluteURL,
   getHeight,
-  getVizThumbnailURL,
+  // getVizThumbnailURL,
   iframeSnippet,
   thumbnailWidth,
 } from 'entities';
@@ -141,13 +141,13 @@ export const oembedEndpoint = ({
         width: 960,
         height,
 
-        thumbnail_url: absoluteURL(
-          getVizThumbnailURL(info.end, thumbnailWidth),
-        ),
-        thumbnail_width: thumbnailWidth,
-        thumbnail_height: Math.round(
-          thumbnailWidth * (height / 960),
-        ),
+        // thumbnail_url: absoluteURL(
+        //   getVizThumbnailURL(info.end, thumbnailWidth),
+        // ),
+        // thumbnail_width: thumbnailWidth,
+        // thumbnail_height: Math.round(
+        //   thumbnailWidth * (height / 960),
+        // ),
 
         cache_age: 3600,
       });
