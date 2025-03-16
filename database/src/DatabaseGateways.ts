@@ -397,6 +397,8 @@ export const DatabaseGateways = ({
   // Count of those:
   // db.Info.count({ popularity: { $exists: true } })
 
+  const staleAgeDays = 3;
+  const staleAgeMS = 1000 * 60 * 60 * 24 * staleAgeDays;
   const getStaleInfoIds = async (batchSize) => {
     const entityName = 'Info';
     const from = toCollectionName(entityName);
@@ -404,8 +406,8 @@ export const DatabaseGateways = ({
 
     // Get info IDs where the 'popularityUpdated' field is older than 1 day
     // or nonexistent. Limited to 500 results. Sorted by priority.
-    const oneDayAgo = dateToTimestamp(
-      new Date(Date.now() - 1000 * 60 * 60 * 24),
+    const staleTime = dateToTimestamp(
+      new Date(Date.now() - staleAgeMS),
     );
 
     // Also, because sometimes vizzes created in the last 24 hours
@@ -423,7 +425,7 @@ export const DatabaseGateways = ({
             $or: [
               // Score vizzes whose popularity score
               // has not been updated in the last 1 day.
-              { popularityUpdated: { $lt: oneDayAgo } },
+              { popularityUpdated: { $lt: staleTime } },
 
               // Score vizzes that have never been scored
               { popularityUpdated: { $exists: false } },
@@ -439,7 +441,7 @@ export const DatabaseGateways = ({
               // after creation.
               {
                 $and: [
-                  { created: { $gt: oneDayAgo } },
+                  { created: { $gt: staleTime } },
                   {
                     popularityUpdated: {
                       $lt: thirtyMinutesAgo,
@@ -458,7 +460,7 @@ export const DatabaseGateways = ({
             // Figure out if it was created in the last 24 hours
             recentlyCreated: {
               $cond: {
-                if: { $gte: ['$created', oneDayAgo] },
+                if: { $gte: ['$created', staleTime] },
                 then: 1,
                 else: 0,
               },
