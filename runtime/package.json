@@ -24,6 +24,7 @@
   "dependencies": {
     "buble": "^0.20.0",
     "d3-dsv": "^3.0.1",
+    "magic-sandbox": "^2.0.2",
     "path-posix": "^1.0.0",
     "react": "^18",
     "rollup": "^4.34.8",

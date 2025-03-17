@@ -2,6 +2,7 @@ import { rollup } from './rollup.browser';
 import bubleJSXOnly from './bubleJSXOnly';
 import hypothetical from './hypothetical';
 import { getLibraries } from './getLibraries';
+import { FilesV2 } from 'entities';
 
 // if HTML parser encounter </script> it stops parsing current script
 // in order to avoid that, </script> should be split into parts.
@@ -11,7 +12,10 @@ const escapeClosingScriptTag = (code) =>
 const transformFilesToObject = (files) =>
   files
     .filter(
-      (file) => file.name.endsWith('.js'),
+      (file) =>
+        file.name.endsWith('.js') ||
+        file.name.endsWith('.jsx'),
+
       // TODO: add support for other file types
       // file.name.endsWith('.svelte') ||
       // file.name.endsWith('.jsx') ||
@@ -24,7 +28,7 @@ const transformFilesToObject = (files) =>
       return accumulator;
     }, {});
 
-export const bundle = async (files) => {
+export const bundle = async (files: FilesV2) => {
   const libraries = getLibraries(files);
 
   const outputOptions = {
@@ -34,12 +38,22 @@ export const bundle = async (files) => {
     globals: libraries,
   };
 
+  // Figure out js or jsx index
+  const indexFile = files.find(
+    (file) =>
+      file.name === 'index.js' || file.name === 'index.jsx',
+  );
+  const input = indexFile
+    ? './' + indexFile.name
+    : './index.js';
+
   const inputOptions = {
-    input: './index.js',
+    input,
     plugins: [
       hypothetical({
         files: transformFilesToObject(files),
         cwd: false,
+        impliedExtensions: ['.js', '.jsx'],
       }),
       bubleJSXOnly({
         target: {
