@@ -11,6 +11,7 @@ import { ServerSVG } from '../Icons/sam/ServerSVG';
 import { RectangleStackSVG } from '../Icons/sam/RectangleStackSVG';
 import { Spinner } from '../Spinner';
 import './styles.scss';
+import { LogoIconSVG } from '../Icons/LogoIconSVG';
 
 const enableRevisionHistory = true;
 
@@ -62,6 +63,11 @@ export const VizPageHead = ({
   return (
     <div className="vh-viz-page-head">
       <div className="side">
+        {showEditor && (
+          <a href="/">
+            <LogoIconSVG fill="white" />
+          </a>
+        )}
         <Button variant="dark" onClick={toggleShowEditor}>
           {showEditor ? (
             <ArrowLeftSVG />
@@ -73,18 +79,18 @@ export const VizPageHead = ({
           </div>
         </Button>
         <Button
-          variant="dark"
+          variant="primary"
           onClick={onEditWithAIClick}
           disabled={isEditingWithAI}
           className="plausible-event-name=Edit+With+AI"
         >
           {isEditingWithAI ? (
             <>
-              <Spinner height={20} />
-              <span>Editing with AI...</span>{' '}
+              <Spinner height={16} />
+              <span>Editing with AI...</span>
             </>
           ) : (
-            <> Edit with AI</>
+            <>Edit with AI</>
           )}
         </Button>
       </div>

@@ -11,6 +11,7 @@
 
   .side {
     display: flex;
+    align-items: center;
     padding: 0 16px 0 2px;
     @media (min-width: 1201px) {
       gap: 16px;
@@ -20,9 +21,9 @@
       font-weight: 500;
       display: flex;
       align-items: center;
-      background-color: var(--vh-color-neutral-02);
-      border: none;
       font-size: 16px;
+      height: 38px;        /* Consistent height for all buttons */
+      line-height: 1.5;    /* Consistent line height */
 
       @media (max-width: 1200px) {
         padding: var(--bs-btn-padding-y);
@@ -40,8 +41,17 @@
           display: none;
         }
       }
+      
+      /* Handle spinner alignment */
+      .spinner {
+        margin-right: 8px;
+      }
     }
-    .btn:hover {
+    .btn-dark {
+      background-color: var(--vh-color-neutral-02);
+      border: none;
+    }
+    .btn-dark:hover {
       background-color: rgba(255, 255, 255, 0.2);
     }
   }

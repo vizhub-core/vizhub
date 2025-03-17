@@ -3,6 +3,7 @@ import { useSpeechRecognition } from './useSpeechRecognition';
 import { Modal, Form, Button } from '../bootstrap';
 import { Plan, UserId } from 'entities';
 import { VizKit } from 'api/src/VizKit';
+import { Mic, MicOff } from 'lucide-react';
 
 import { AICreditBalanceText } from './AICreditBalanceText';
 import { Usage, UsageEntry } from './Usage';
@@ -188,7 +189,7 @@ export const EditWithAIModal = ({
                   size="sm"
                   onClick={toggleSpeechRecognition}
                 >
-                  {isSpeaking ? 'Stop speaking' : 'Speak'}
+                  {isSpeaking ? <MicOff size={16} /> : <Mic size={16} />}
                 </Button>
               </div>
               <Form.Control
