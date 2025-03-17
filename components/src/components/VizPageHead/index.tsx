@@ -79,18 +79,18 @@ export const VizPageHead = ({
           </div>
         </Button>
         <Button
-          variant="dark"
+          variant="primary"
           onClick={onEditWithAIClick}
           disabled={isEditingWithAI}
           className="plausible-event-name=Edit+With+AI"
         >
           {isEditingWithAI ? (
             <>
-              <Spinner height={20} />
-              <span>Editing with AI...</span>{' '}
+              <Spinner height={16} />
+              <span>Editing with AI...</span>
             </>
           ) : (
-            <> Edit with AI</>
+            <>Edit with AI</>
           )}
         </Button>
       </div>
