@@ -28,11 +28,11 @@ export const Footer = () => {
             Features
           </a>
           <a
-            href="/create-Viz"
+            href="https://screenshotgenie.com"
             target="_blank"
             rel="noreferrer"
           >
-            Create
+            Screenshot Genie
           </a>
           {/* <a href="/terms">Terms</a> */}
         </div>
@@ -84,9 +84,8 @@ export const Footer = () => {
         </div>
       </div>
       <div className="footer-copyright">
-        Copyright © 2024 Datavis Tech INC. All rights
-        reserved. VizHub is a registered trademark of
-        Datavis Tech INC.
+        Copyright © 2025 VizHub, Inc. All rights reserved.
+        VizHub is a registered trademark.
       </div>
     </div>
   );
