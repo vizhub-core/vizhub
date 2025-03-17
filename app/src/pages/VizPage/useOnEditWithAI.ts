@@ -30,7 +30,7 @@ export const useOnEditWithAI = ({
   const [isEditingWithAI, setIsEditingWithAI] =
     useState(false);
   const [modelName, setModelName] = useState(
-    'anthropic/claude-3.5-sonnet',
+    'anthropic/claude-3.7-sonnet:thinking',
   );
 
   useEffect(() => {
@@ -43,18 +43,19 @@ export const useOnEditWithAI = ({
     }
   }, []);
   const modelNameOptions = [
+    'anthropic/claude-3.7-sonnet:thinking',
     'anthropic/claude-3.7-sonnet',
     'anthropic/claude-3.5-sonnet',
-    'openai/chatgpt-4o-latest',
-    // 'openai/o1', // Shockingly expensive
-    'openai/o1-mini',
-    'openai/o3-mini-high',
+    'google/gemini-2.0-flash-001',
     'deepseek/deepseek-r1',
     'deepseek/deepseek-chat',
-    'google/gemini-2.0-flash-001',
-    'google/gemini-flash-1.5',
-    'qwen/qwq-32b',
-    'qwen/qwen-2.5-coder-32b-instruct',
+    'openai/o3-mini-high',
+    'openai/gpt-4o',
+    // 'openai/o1', // Shockingly expensive
+    // 'openai/o1-mini', // Not even that great
+    // 'google/gemini-flash-1.5',
+    // 'qwen/qwq-32b',
+    // 'qwen/qwen-2.5-coder-32b-instruct',
   ];
 
   const onEditWithAI = useCallback(
