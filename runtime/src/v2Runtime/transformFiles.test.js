@@ -10,9 +10,7 @@ describe('v2 transformFiles', () => {
     expect(
       transformFiles(primordialViz.content.files),
     ).toEqual({
-      'README.md': {
-        content: sampleReadmeText,
-      },
+      'README.md': sampleReadmeText,
     });
   });
 });

@@ -7,9 +7,9 @@
     "types": ["vite/client"],
     "module": "ESNext",
     "moduleResolution": "Bundler",
-    "declaration": true,               // Generate declaration files
-    "declarationMap": true,            // Optional: Generate source maps for declarations
-    "outDir": "dist"                   // Output directory for compiled files and declarations
+    "declaration": true, // Generate declaration files
+    "declarationMap": true, // Optional: Generate source maps for declarations
+    "outDir": "dist" // Output directory for compiled files and declarations
   },
   "include": ["src/**/*"]
 }

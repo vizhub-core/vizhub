@@ -20,7 +20,7 @@ import { missingImportError } from 'gateways/src/errors';
 describe('v3 build', () => {
   it('Should throw an error when missing files', async () => {
     // Expect build to throw an error
-    expect(async () => {
+    await expect(async () => {
       await build({
         vizId: 'test-viz',
         rollup,
@@ -330,7 +330,7 @@ describe('v3 build', () => {
 
   it('Should throw an error when a package name import is missing', async () => {
     // Expect build to throw an error
-    expect(async () => {
+    await expect(async () => {
       await build({
         vizId: 'test-viz',
         rollup,
@@ -362,7 +362,7 @@ describe('v3 build', () => {
 
   it('Should throw an error when a local import is missing', async () => {
     // Expect build to throw an error
-    expect(async () => {
+    await expect(async () => {
       await build({
         vizId: 'test-viz',
         rollup,
@@ -393,7 +393,7 @@ describe('v3 build', () => {
   });
   it('Should throw an error when a local import is missing', async () => {
     // Expect build to throw an error
-    expect(async () => {
+    await expect(async () => {
       await build({
         vizId: '7f0b69fcb754479699172d1887817027',
         rollup,
