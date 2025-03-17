@@ -64,11 +64,19 @@ export const vizResolve = ({
       // the entry point, so it should be resolved relative
       // to the importer's directory
       if (importer) {
-        const { vizId: importerVizId, fileName: importerFileName } = parseId(importer);
+        const {
+          vizId: importerVizId,
+          fileName: importerFileName,
+        } = parseId(importer);
         // Get the directory of the importing file
-        const importerDir = importerFileName.split('/').slice(0, -1).join('/');
+        const importerDir = importerFileName
+          .split('/')
+          .slice(0, -1)
+          .join('/');
         // Combine the directory with the imported file name
-        const resolvedFileName = importerDir ? `${importerDir}/${fileName}` : fileName;
+        const resolvedFileName = importerDir
+          ? `${importerDir}/${fileName}`
+          : fileName;
         return `${importerVizId}/${resolvedFileName}`;
       }
       return vizId + '/' + fileName;
