@@ -77,7 +77,9 @@ const injectDependenciesScript = (htmlTemplate, files) => {
 // Includes:
 // - bundle.js script tag
 // - dependencies script tag(s)
-export const getComputedIndexHtml = (files: FilesV2) => {
+export const getComputedIndexHtml = (
+  files: FilesV2,
+): string => {
   try {
     // Isolate the index.html file.
     const htmlTemplate = getText(files, 'index.html');
