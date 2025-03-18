@@ -14,6 +14,7 @@ import { KitchenSinkPage } from './KitchenSinkPage';
 import { CreateVizPage } from './CreateVizPage';
 import { StargazersPage } from './StargazersPage';
 import { DocumentationPage } from './DocumentationPage';
+import { CreateVizPageTest } from './CreateVizPageTest';
 
 // Note: order matters (profile page should come last)
 // Need to update `server.js` as well
@@ -33,5 +34,6 @@ export const pages = [
   ResourcesPage,
   KitchenSinkPage,
   CreateVizPage,
+  CreateVizPageTest,
   ProfilePage,
 ];

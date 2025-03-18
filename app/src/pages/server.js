@@ -14,6 +14,7 @@ import { KitchenSinkPage } from './KitchenSinkPage/server';
 import { CreateVizPage } from './CreateVizPage/server';
 import { StargazersPage } from './StargazersPage/server';
 import { DocumentationPage } from './DocumentationPage/server';
+import { CreateVizPageTest } from './CreateVizPageTest/server';
 
 // import { ExploreRedirect } from './ExploreRedirect';
 
@@ -41,5 +42,6 @@ export const pages = [
   ResourcesPage,
   KitchenSinkPage,
   CreateVizPage,
+  CreateVizPageTest,
   ProfilePage,
 ];
