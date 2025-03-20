@@ -34,7 +34,7 @@ const enableOrgPlan = false;
 // which is 19.99/month or 199.99/year
 // and includes everything in premium plus:
 // - Up to $30 in AI credits per month
-const enableProfessionalPlan = false;
+const enableProfessionalPlan = true;
 
 // The percent saved by paying annually.
 const percentSavings = Math.floor(
@@ -298,7 +298,7 @@ export const PricingPageBody = ({
                       <span style={{ fontWeight: 600 }}>
                         Starter
                       </span>
-                      , plus:
+                      , plus ...
                     </div>
                     <PremiumFeatures />
                   </div>
@@ -310,7 +310,7 @@ export const PricingPageBody = ({
                   <div className="pricing-page-plan-body">
                     <div className="plan-header">
                       <h3 className="plan-header-left">
-                        Professional
+                        Pro
                       </h3>
                       <div className="plan-header-right">
                         <h3>
@@ -324,7 +324,7 @@ export const PricingPageBody = ({
                         </h3>
                       </div>
                     </div>
-                    {currentPlan === 'professional' ? (
+                    {currentPlan === 'pro' ? (
                       <CurrentButton />
                     ) : (
                       <Button
@@ -343,7 +343,7 @@ export const PricingPageBody = ({
                         <span style={{ fontWeight: 600 }}>
                           Premium
                         </span>
-                        , plus:
+                        , plus ...
                       </div>
                       <ProFeatures />
                     </div>
@@ -351,17 +351,23 @@ export const PricingPageBody = ({
                 </div>
               )}
             </div>
-            <div className="vh-lede-01 mb-2 mt-4 vh-color-neutral-02">
-              Educators: reach out to contact@vizhub.com to
-              grant VizHub access to students in your
-              courses
-            </div>
-            <div className="vh-lede-01 mb-2 mt-2 vh-color-neutral-02">
-              Questions? Reach out on{' '}
-              <a href="https://discord.gg/wbtJ7SCtYr">
-                Discord
-              </a>
-              .
+            <div className="mt-5 d-flex gap-4 justify-content-center">
+              <div className="card p-4" style={{ maxWidth: '400px' }}>
+                <h4 className="mb-3">For Educators 🎓</h4>
+                <p className="mb-0">
+                  Want to use VizHub in your courses? Email{' '}
+                  <a href="mailto:contact@vizhub.com">contact@vizhub.com</a>
+                  {' '}to discuss student access options.
+                </p>
+              </div>
+              <div className="card p-4" style={{ maxWidth: '400px' }}>
+                <h4 className="mb-3">Need Help? 💬</h4>
+                <p className="mb-0">
+                  Join our{' '}
+                  <a href="https://discord.gg/wbtJ7SCtYr">Discord community</a>
+                  {' '}for support and discussions.
+                </p>
+              </div>
             </div>
             <div className="pricing-page-plans">
               {enableOrgPlan && (
@@ -458,7 +464,7 @@ export const PricingPageBody = ({
                         <div className="pricing-page-plan-body">
                           <div className="plan-header">
                             <h3 className="plan-header-left">
-                              Professional
+                              Pro
                             </h3>
                             <div className="plan-header-right">
                               <h3>${orgPrice}</h3>
@@ -501,7 +507,7 @@ export const PricingPageBody = ({
                               >
                                 Premium
                               </span>
-                              , but for your organization:
+                              , but for your organization ...
                             </div>
                             <OrgFeatures />
                           </div>
