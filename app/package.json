@@ -71,7 +71,7 @@
     "tailwindcss": "^4.0.14",
     "vizhub-libraries": "^1.8.0",
     "vizhub-ui": "^3.23.0",
-    "vzcode": "^1.26.0",
+    "vzcode": "^1.27.0",
     "ws": "^8.18.1",
     "xss": "^1.0.15"
   },

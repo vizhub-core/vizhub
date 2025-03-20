@@ -10,9 +10,9 @@ import { Footer } from '../Footer';
 import { GreenCheckSVG } from '../Icons/sam/GreenCheckSVG';
 import { image } from '../image';
 import { Testimonial } from '../Testimonial';
-import { HomeStarter } from '../HomeStarter';
 import { StarterFeatures } from './StarterFeatures';
 import { PremiumFeatures } from './PremiumFeatures';
+import { ProFeatures } from './ProFeatures';
 import { HighlightedFeatureProvider } from './HighlightedFeatureContext';
 import { ConsultationFeatures } from './ConsultationFeatures';
 import { OrgFeatures } from './OrgFeatures';
@@ -20,6 +20,8 @@ import './styles.scss';
 
 const premiumPriceMonthly = 1.99;
 const premiumPriceAnnually = 19.99;
+const proPriceMonthly = 19.99;
+const proPriceAnnually = 199.99;
 const orgPrice = 24;
 
 // Feature flags
@@ -27,10 +29,21 @@ const enableImages = false;
 const enableConsulting = false;
 const enableOrgPlan = false;
 
+// TODO make the pro plan section
+// This should add a new tier for professional
+// which is 19.99/month or 199.99/year
+// and includes everything in premium plus:
+// - Up to $30 in AI credits per month
+const enableProfessionalPlan = false;
+
 // The percent saved by paying annually.
 const percentSavings = Math.floor(
   (1 - premiumPriceAnnually / 12 / premiumPriceMonthly) *
     100,
+);
+
+const proPercentSavings = Math.floor(
+  (1 - proPriceAnnually / 12 / proPriceMonthly) * 100,
 );
 
 // const randomImage = (options) =>
@@ -291,6 +304,52 @@ export const PricingPageBody = ({
                   </div>
                 </div>
               </div>
+
+              {enableProfessionalPlan && (
+                <div className="pricing-page-plan">
+                  <div className="pricing-page-plan-body">
+                    <div className="plan-header">
+                      <h3 className="plan-header-left">
+                        Professional
+                      </h3>
+                      <div className="plan-header-right">
+                        <h3>
+                          $
+                          {isMonthly
+                            ? proPriceMonthly
+                            : proPriceAnnually}
+                        </h3>
+                        <h3 className="plan-header-right-faint">
+                          /{isMonthly ? 'month' : 'year'}
+                        </h3>
+                      </div>
+                    </div>
+                    {currentPlan === 'professional' ? (
+                      <CurrentButton />
+                    ) : (
+                      <Button
+                        variant="primary"
+                        className="pricing-page-plan-button"
+                        onClick={onProfessionalUpgradeClick}
+                        size="lg"
+                      >
+                        Upgrade now
+                      </Button>
+                    )}
+
+                    <div className="pricing-page-plan-features">
+                      <div className="vh-lede-01 mb-2 mt-2 vh-color-neutral-02">
+                        Everything in{' '}
+                        <span style={{ fontWeight: 600 }}>
+                          Premium
+                        </span>
+                        , plus:
+                      </div>
+                      <ProFeatures />
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
             <div className="vh-lede-01 mb-2 mt-4 vh-color-neutral-02">
               Educators: reach out to contact@vizhub.com to
