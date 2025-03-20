@@ -50,4 +50,7 @@ export type FeatureId =
   | 'learn-data-visualization-best-practices'
   | 'money-back-guarantee'
   | 'first-meeting-free'
-  | 'augment-your-engineering-team';
+  | 'augment-your-engineering-team'
+  | 'ai-credits-included'
+  | 'priority-support'
+  | 'early-access';
