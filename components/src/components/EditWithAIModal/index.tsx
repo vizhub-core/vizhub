@@ -189,7 +189,11 @@ export const EditWithAIModal = ({
                   size="sm"
                   onClick={toggleSpeechRecognition}
                 >
-                  {isSpeaking ? <MicOff size={16} /> : <Mic size={16} />}
+                  {isSpeaking ? (
+                    <MicOff size={16} />
+                  ) : (
+                    <Mic size={16} />
+                  )}
                 </Button>
               </div>
               <Form.Control

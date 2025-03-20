@@ -22,8 +22,8 @@
       display: flex;
       align-items: center;
       font-size: 16px;
-      height: 38px;        /* Consistent height for all buttons */
-      line-height: 1.5;    /* Consistent line height */
+      height: 38px; /* Consistent height for all buttons */
+      line-height: 1.5; /* Consistent line height */
 
       @media (max-width: 1200px) {
         padding: var(--bs-btn-padding-y);
@@ -41,7 +41,7 @@
           display: none;
         }
       }
-      
+
       /* Handle spinner alignment */
       .spinner {
         margin-right: 8px;

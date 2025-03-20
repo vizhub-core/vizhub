@@ -93,10 +93,50 @@ const Body = () => {
       // setCookie('showUpgradeSuccessToast', 'true', 1);
     }, [authenticatedUser, isMonthly]);
 
-  // TODO make this happen!
-  const handleProfessionalUpgradeClick = useCallback(() => {
-    console.log('Professional upgrade clicked');
-  }, []);
+  // When the user clicks "Upgrade" in the Professional card.
+  const handleProfessionalUpgradeClick =
+    useCallback(async () => {
+      // Record analytics of the click.
+      vizKit.rest.recordAnalyticsEvents(
+        'event.click.pricing.professional.upgrade',
+      );
+
+      // If the user is not logged in, make them log in first.
+      if (!authenticatedUser) {
+        console.log(
+          'TODO handle unauthenticated user - redirect to login?',
+        );
+
+        // TODO get this redirect working
+        const url = '/login?redirect=pricing';
+
+        window.location.href = url;
+
+        return;
+      }
+
+      // Create a Stripe Checkout session.
+      const createCheckoutSessionResult =
+        await vizKit.rest.createCheckoutSession({
+          userId: authenticatedUser.id,
+          isMonthly,
+          plan: 'professional', // Specify the professional plan
+        });
+      if (
+        createCheckoutSessionResult.outcome === 'failure'
+      ) {
+        console.error(
+          'Error creating checkout session',
+          createCheckoutSessionResult.error,
+        );
+        return;
+      }
+
+      // Redirect the user to the Stripe Checkout page.
+      const { sessionURL } =
+        createCheckoutSessionResult.value;
+      window.location.href = sessionURL;
+    }, [authenticatedUser, isMonthly]);
 
   const openBillingPortal = useOpenBillingPortal({
     vizKit,
