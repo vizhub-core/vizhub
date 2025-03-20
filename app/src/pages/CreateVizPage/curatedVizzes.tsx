@@ -1,58 +1,29 @@
 import { VizPath } from 'entities';
 
-const templates: Array<VizPath> = [
-  // Circles with D3
-  '3d67423b84a845019c17ca761b60b619',
-
-  // CSV Dataset Template - Penguins
-  '3ad8641ba6b844d3a78d3bcacf2e1caa',
-
-  // Responsive Scatter Plot
-  '0169b225047849b38073ab1909443f8c',
-
-  // Responsive Bar Chart
-  'a79db1c446a4432ba2596faaa8d151e3',
-
-  // Responsive Line Chart
-  '750aaaae7b7046f0a072df137a7f5c76',
-
-  // Line Chart with Multiple Lines
-  '8a17f8c0102e4b4c996be64fdb0bd30d',
-
-  // Simple World Map
-  'e3f19e09164d4a8184f85e0298672248',
-
-  // World Cities
-  '8fa016be1b024afeaf55aec9a44cef47',
-];
-
-const starters: Array<VizPath> = [
-  // // Circles with D3 (v3)
-  // '3d67423b84a845019c17ca761b60b619',
-
-  // Svelte Starter (v3)
-  '39fa26cfa7854e34934e559efbf7855b',
-
-  // Observable Plot Starter (v3)
-  'f74abcce08d24c5c80c0b7262bb98185',
-
-  // P5.js Starter (v3)
-  // '1d2b9e55dcc54d9cbd3032b7488338a5',
-
-  // React Starter
-  'c3b14112dae34ef395999cef5783324f',
-
+const starterTemplates: Array<VizPath> = [
   // HTML Starter
   '469e558ba77941aa9e1b416ea521b0aa',
+  // D3 Starter
+  '37268d9ccc02426e8f83fb8ef04d6e5c',
+  // React Starter
+  'c3b14112dae34ef395999cef5783324f',
+  // Circles with D3
+  'curran/circles-with-d3',
+  // ThreeJS Starter
+  'curran/threejs-starter',
+];
 
-  // // Hello VizHub (v2)
-  // '86a75dc8bdbe4965ba353a79d4bd44c8',
-
-  // // D3 Starter (v2)
-  // '37268d9ccc02426e8f83fb8ef04d6e5c',
-
-  // // React & D3 Starter
-  // '96c12ef980e541f8abc9b2e7e140bf33',
+const vibecodingTemplates: Array<VizPath> = [
+  // React & D3 Vibecoding Starter
+  'curran/react-d3-vibecoding-starter',
+  // Vanilla D3 Vibecoding Template
+  'curran/vanilla-d3-vibecoding-template',
+  // Clickable Circles
+  'curran/clickable-circles',
+  // 3D Cube of Spheres
+  'curran/3d-cube-of-spheres',
+  // React Tailwind Starter
+  'curran/react-tailwind-starter',
 ];
 
 const constructingVisualizations2024: Array<VizPath> = [
@@ -145,13 +116,13 @@ const constructingVisualizations2024: Array<VizPath> = [
   'https://vizhub.com/curran/interactive-sparkline',
 ];
 
-const communityTemplates: Array<VizPath> = [
-  '437b18383bf347a98756806665689ec1',
-  'd788e83f632b4158b0786304710a692e',
-  '5a7cf326924944d8971a5f8b93a8166d',
-  'ddee531e7a414d97a059d751507e0f41',
-  '7fcc84f68758417a8a1f6076410e98ab',
-];
+// const communityTemplates: Array<VizPath> = [
+//   '437b18383bf347a98756806665689ec1',
+//   'd788e83f632b4158b0786304710a692e',
+//   '5a7cf326924944d8971a5f8b93a8166d',
+//   'ddee531e7a414d97a059d751507e0f41',
+//   '7fcc84f68758417a8a1f6076410e98ab',
+// ];
 
 const mostForked: Array<VizPath> = [
   '469e558ba77941aa9e1b416ea521b0aa',
@@ -300,6 +271,20 @@ export type CuratedVizCollection = {
 
 export const curatedVizzes: Array<CuratedVizCollection> = [
   {
+    title: 'Starter Templates',
+    id: 'starter-templates',
+    description: () =>
+      'Curated starter templates that work well with AI coding.',
+    vizPaths: starterTemplates,
+  },
+  {
+    title: 'Most Forked',
+    id: 'most-forked',
+    description: () =>
+      'A collection of the most forked vizzes.',
+    vizPaths: mostForked,
+  },
+  {
     title: 'Constructing Visualizations',
     id: 'constructing-visualizations',
     description: () => (
@@ -319,44 +304,38 @@ export const curatedVizzes: Array<CuratedVizCollection> = [
     ),
     vizPaths: constructingVisualizations2024,
   },
-  {
-    title: 'Templates',
-    id: 'templates',
-    description: () => (
-      <div>
-        Curated templates for common tasks such as uploading
-        data, setting up D3, and visualizations ready to
-        fork and modify with your own data.
-      </div>
-    ),
-    vizPaths: templates,
-  },
-  {
-    title: 'Technology Starters',
-    id: 'technology-starters',
-    description: () => (
-      <div>
-        A collection of starter projects that unlock various
-        technologies.
-      </div>
-    ),
-    vizPaths: starters,
-  },
+  // {
+  //   title: 'Templates',
+  //   id: 'templates',
+  //   description: () => (
+  //     <div>
+  //       Curated templates for common tasks such as uploading
+  //       data, setting up D3, and visualizations ready to
+  //       fork and modify with your own data.
+  //     </div>
+  //   ),
+  //   vizPaths: templates,
+  // },
+  // {
+  //   title: 'Technology Starters',
+  //   id: 'technology-starters',
+  //   description: () => (
+  //     <div>
+  //       A collection of starter projects that unlock various
+  //       technologies.
+  //     </div>
+  //   ),
+  //   vizPaths: starters,
+  // },
 
-  {
-    title: 'Community Templates',
-    id: 'community-templates',
-    description: () =>
-      'A collection of templates from the community.',
-    vizPaths: communityTemplates,
-  },
-  {
-    title: 'Most Forked',
-    id: 'most-forked',
-    description: () =>
-      'A collection of the most forked projects.',
-    vizPaths: mostForked,
-  },
+  // {
+  //   title: 'Community Templates',
+  //   id: 'community-templates',
+  //   description: () =>
+  //     'A collection of templates from the community.',
+  //   vizPaths: communityTemplates,
+  // },
+
   {
     title: 'Get it Right in Black & White',
     id: 'get-it-right-in-black-and-white',
