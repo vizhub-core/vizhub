@@ -96,7 +96,6 @@ const Body = () => {
   // When the user clicks "Upgrade" in the Professional card.
   const handleProfessionalUpgradeClick =
     useCallback(async () => {
-      console.log('TODO handle this properly');
       // Record analytics of the click.
       vizKit.rest.recordAnalyticsEvents(
         'event.click.pricing.professional.upgrade',
