@@ -324,7 +324,7 @@ export const PricingPageBody = ({
                         </h3>
                       </div>
                     </div>
-                    {currentPlan === 'pro' ? (
+                    {currentPlan === 'professional' ? (
                       <CurrentButton />
                     ) : (
                       <Button
@@ -352,20 +352,30 @@ export const PricingPageBody = ({
               )}
             </div>
             <div className="mt-5 d-flex gap-4 justify-content-center">
-              <div className="card p-4" style={{ maxWidth: '400px' }}>
+              <div
+                className="card p-4"
+                style={{ maxWidth: '400px' }}
+              >
                 <h4 className="mb-3">For Educators 🎓</h4>
                 <p className="mb-0">
                   Want to use VizHub in your courses? Email{' '}
-                  <a href="mailto:contact@vizhub.com">contact@vizhub.com</a>
-                  {' '}to discuss student access options.
+                  <a href="mailto:contact@vizhub.com">
+                    contact@vizhub.com
+                  </a>{' '}
+                  to discuss student access options.
                 </p>
               </div>
-              <div className="card p-4" style={{ maxWidth: '400px' }}>
+              <div
+                className="card p-4"
+                style={{ maxWidth: '400px' }}
+              >
                 <h4 className="mb-3">Need Help? 💬</h4>
                 <p className="mb-0">
                   Join our{' '}
-                  <a href="https://discord.gg/wbtJ7SCtYr">Discord community</a>
-                  {' '}for support and discussions.
+                  <a href="https://discord.gg/wbtJ7SCtYr">
+                    Discord community
+                  </a>{' '}
+                  for support and discussions.
                 </p>
               </div>
             </div>
@@ -507,7 +517,8 @@ export const PricingPageBody = ({
                               >
                                 Premium
                               </span>
-                              , but for your organization ...
+                              , but for your organization
+                              ...
                             </div>
                             <OrgFeatures />
                           </div>

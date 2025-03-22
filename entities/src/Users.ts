@@ -76,6 +76,15 @@ export interface User {
   // creditBalance
   //  * The amount of AI credit this user has, in cents.
   creditBalance?: number;
+
+  // proCreditBalanceByMonth
+  //  * The amount of AI credit this user has per month,
+  //  * for the professional plan.
+  proCreditBalanceByMonth?: {
+    // Keys are of the form `YYYY-MM`.
+    // Values are credit balances in cents.
+    [month: string]: number;
+  };
 }
 
 // One of these is created
