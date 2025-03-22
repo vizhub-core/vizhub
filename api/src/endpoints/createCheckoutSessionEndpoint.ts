@@ -47,15 +47,24 @@ export const createCheckoutSession = ({
       const success_url = `${urlBase}/pricing`;
       const cancel_url = success_url;
 
-      const { isMonthly, isCreditTopUp } = req.body;
+      const {
+        isMonthly,
+        isCreditTopUp,
+        plan = 'premium',
+      } = req.body;
 
       const price = isCreditTopUp
         ? process.env.VIZHUB_CREDIT_TOP_UP_STRIPE_PRICE_ID
-        : isMonthly
-          ? process.env
-              .VIZHUB_PREMIUM_MONTHLY_STRIPE_PRICE_ID
-          : process.env
-              .VIZHUB_PREMIUM_ANNUAL_STRIPE_PRICE_ID;
+        : plan === 'premium'
+          ? isMonthly
+            ? process.env
+                .VIZHUB_PREMIUM_MONTHLY_STRIPE_PRICE_ID
+            : process.env
+                .VIZHUB_PREMIUM_ANNUAL_STRIPE_PRICE_ID
+          : // Otherwise, plan === 'professional'
+            isMonthly
+            ? process.env.VIZHUB_PRO_MONTHLY_STRIPE_PRICE_ID
+            : process.env.VIZHUB_PRO_ANNUAL_STRIPE_PRICE_ID;
 
       // This is the config for subscriptions
       const lineItem: Stripe.Checkout.SessionCreateParams.LineItem =

@@ -63,7 +63,8 @@
         }
 
         .pricing-page-plan {
-          flex: 1;
+          width: 33.33%;
+          min-width: 300px;
           display: flex;
           flex-direction: column;
           background-color: white;
@@ -89,15 +90,18 @@
               .plan-header-left {
                 color: var(--vh-color-neutral-02);
                 margin-bottom: 0;
+                font-size: 1.5rem;
               }
               .plan-header-right {
                 display: flex;
                 color: var(--vh-color-neutral-03);
+                font-size: 1.25rem;
               }
               .plan-header-right-faint {
                 color: var(--vh-color-neutral-04);
-                line-height: 50px;
+                line-height: 30px;
                 margin-left: 5px;
+                font-size: 1.25rem;
 
                 /* Prevents this offset from impacting the layout */
                 margin-bottom: -10px;

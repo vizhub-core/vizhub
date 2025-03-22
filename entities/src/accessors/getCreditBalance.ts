@@ -1,10 +1,14 @@
 import { User } from 'entities';
-import { STARTING_CREDITS } from '../Pricing';
+import {
+  PRO_CREDITS_PER_MONTH,
+  STARTING_CREDITS,
+} from '../Pricing';
 
-// Gets the AI Credit Balance for a user.
-export const getCreditBalance = (user?: User) =>
+export const getNonExpiringCreditBalance = (
+  user?: User,
+) => {
   // If the user is defined,
-  user
+  const nonExpiringCreditBalance = user
     ? // if the user's credit balance is undefined,
       // it means they signed up and
       user.creditBalance === undefined ||
@@ -16,3 +20,29 @@ export const getCreditBalance = (user?: User) =>
         user.creditBalance
     : // Otherwise, return 0 for non-logged-in users.
       0;
+
+  return nonExpiringCreditBalance;
+};
+
+export const getExpiringCreditBalance = (user?: User) => {
+  let expiringCreditBalance = 0;
+  if (user && user.plan === 'professional') {
+    const currentMonth = new Date()
+      .toISOString()
+      .slice(0, 7);
+    expiringCreditBalance =
+      user.proCreditBalanceByMonth?.[currentMonth] ===
+      undefined
+        ? PRO_CREDITS_PER_MONTH
+        : user.proCreditBalanceByMonth?.[currentMonth];
+  }
+  return expiringCreditBalance;
+};
+
+// Gets the AI Credit Balance for a user.
+export const getCreditBalance = (user?: User) => {
+  return (
+    getNonExpiringCreditBalance(user) +
+    getExpiringCreditBalance(user)
+  );
+};

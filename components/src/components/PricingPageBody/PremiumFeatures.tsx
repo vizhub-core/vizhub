@@ -19,7 +19,7 @@ export const PremiumFeatures = ({}) => (
       title="Edit with AI"
       id="ai-assisted-coding"
       hasBottomBorder={true}
-      startsExpanded={true}
+      startsExpanded={false}
       // learnMoreHref="https://vizhub.com/forum/t/ai-assisted-coding/952"
     >
       Leverage artificial intelligence to code faster. How

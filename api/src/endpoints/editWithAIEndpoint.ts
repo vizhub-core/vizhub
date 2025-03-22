@@ -38,8 +38,14 @@ import {
   VerifyVizAccess,
   VizAccess,
 } from 'interactors/src/verifyVizAccess';
-import { getCreditBalance } from 'entities/src/accessors';
-import { CREDIT_MARKUP } from 'entities/src/Pricing';
+import {
+  getExpiringCreditBalance,
+  getNonExpiringCreditBalance,
+} from 'entities/src/accessors';
+import {
+  CREDIT_MARKUP,
+  PRO_CREDITS_PER_MONTH,
+} from 'entities/src/Pricing';
 
 const debug = false;
 
@@ -152,16 +158,30 @@ export const editWithAIEndpoint = ({
         // *** AI Credits Logic ***
         // ************************
 
-        const creditBalance = getCreditBalance(
-          authenticatedUser,
-        );
+        const expiringCreditBalance =
+          getExpiringCreditBalance(authenticatedUser);
+
+        const nonExpiringCreditBalance =
+          getNonExpiringCreditBalance(authenticatedUser);
 
         debug &&
-          console.log('creditBalance', creditBalance);
+          console.log(
+            'expiringCreditBalance',
+            expiringCreditBalance,
+          );
+
+        debug &&
+          console.log(
+            'nonExpiringCreditBalance',
+            nonExpiringCreditBalance,
+          );
+
+        const totalCreditBalance =
+          expiringCreditBalance + nonExpiringCreditBalance;
 
         // Check if the user has enough AI credits.
         // If not, return an error.
-        if (creditBalance === 0) {
+        if (totalCreditBalance === 0) {
           return res.send(
             err(
               creditsNeededError(
@@ -440,8 +460,43 @@ export const editWithAIEndpoint = ({
             }
             const user: User = userResult.value.data;
 
-            user.creditBalance =
-              creditBalance - userCostCents;
+            const currentMonth = new Date()
+              .toISOString()
+              .slice(0, 7);
+
+            // Ensure `proCreditBalanceByMonth` is defined
+            if (!user.proCreditBalanceByMonth) {
+              user.proCreditBalanceByMonth = {};
+            }
+
+            // Ensure user.proCreditBalanceByMonth[currentMonth] is defined
+            if (
+              user.plan === 'professional' &&
+              user.proCreditBalanceByMonth[currentMonth] ===
+                undefined
+            ) {
+              user.proCreditBalanceByMonth[currentMonth] =
+                PRO_CREDITS_PER_MONTH;
+            }
+
+            // If the user has expiring credits, deduct from those first.
+            if (expiringCreditBalance > 0) {
+              if (expiringCreditBalance >= userCostCents) {
+                user.proCreditBalanceByMonth[currentMonth] =
+                  (user.proCreditBalanceByMonth[
+                    currentMonth
+                  ] || 0) - userCostCents;
+              } else {
+                const remainingUserCostCents =
+                  userCostCents - expiringCreditBalance;
+                user.proCreditBalanceByMonth[currentMonth] =
+                  0;
+                user.creditBalance -=
+                  remainingUserCostCents;
+              }
+            } else {
+              user.creditBalance -= userCostCents;
+            }
 
             // Don't let the credit balance go negative,
             // because we check for 0 exactly to trigger

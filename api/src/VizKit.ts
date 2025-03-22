@@ -12,6 +12,7 @@ import {
   APIKey,
   APIKeyId,
   AIEditMetadata,
+  Plan,
 } from 'entities';
 import { AIEditMetadataUsage } from 'entities/src/AIEditMetadata';
 import { Result, Success } from 'gateways';
@@ -87,6 +88,7 @@ export interface VizKitAPI {
 
     createCheckoutSession: (options: {
       userId: UserId;
+      plan?: Plan;
       isMonthly?: boolean;
       isCreditTopUp?: boolean;
     }) => Promise<
@@ -271,6 +273,7 @@ export const VizKit = (
         userId,
         isMonthly,
         isCreditTopUp,
+        plan,
       }) =>
         await postJSON(
           `${baseUrl}/create-checkout-session`,
@@ -278,6 +281,7 @@ export const VizKit = (
             userId,
             isMonthly,
             isCreditTopUp,
+            plan,
           },
         ),
 
