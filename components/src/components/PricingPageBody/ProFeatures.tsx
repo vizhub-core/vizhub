@@ -6,7 +6,7 @@ export const ProFeatures = ({}) => (
       title="AI Credits Included Monthly"
       id="ai-credits-included"
       hasBottomBorder={true}
-      startsExpanded={true}
+      startsExpanded={false}
     >
       Get up to $30 in AI credits each month for AI-assisted
       coding.

@@ -15,6 +15,9 @@ export const PRO: Plan = 'professional';
 // Correspones with the `User.creditBalance` field.
 export const STARTING_CREDITS: number = 200;
 
+// The number of AI credits a user gets per month on the premium plan.
+export const PRO_CREDITS_PER_MONTH: number = 3000;
+
 // The markup on AI transaction fees.
 // e.g. if the AI provider's fee is $0.02 for a given transaction,
 // then the user's AI credit will be charged $0.03

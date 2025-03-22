@@ -100,21 +100,16 @@ const Body = () => {
       vizKit.rest.recordAnalyticsEvents(
         'event.click.pricing.professional.upgrade',
       );
-
       // If the user is not logged in, make them log in first.
       if (!authenticatedUser) {
         console.log(
           'TODO handle unauthenticated user - redirect to login?',
         );
-
         // TODO get this redirect working
         const url = '/login?redirect=pricing';
-
         window.location.href = url;
-
         return;
       }
-
       // Create a Stripe Checkout session.
       const createCheckoutSessionResult =
         await vizKit.rest.createCheckoutSession({
@@ -131,7 +126,6 @@ const Body = () => {
         );
         return;
       }
-
       // Redirect the user to the Stripe Checkout page.
       const { sessionURL } =
         createCheckoutSessionResult.value;

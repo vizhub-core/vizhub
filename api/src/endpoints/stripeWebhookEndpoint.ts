@@ -1,10 +1,16 @@
 import express from 'express';
-import { FREE, User, UserId, userLock } from 'entities';
+import {
+  FREE,
+  Plan,
+  User,
+  UserId,
+  userLock,
+} from 'entities';
 import { getNewStripe, getStripe } from './getStripe';
 import { UpdateUserStripeId } from 'interactors';
 import { err, Gateways, Result } from 'gateways';
 
-const debug = false;
+const debug = true;
 
 // Critical for Stripe development - run this incantation
 // stripe listen --forward-to localhost:5173/api/stripe-webhook
@@ -128,23 +134,59 @@ export const stripeWebhookEndpoint = ({
           );
         }
 
-        const checkoutSessionCompleted = event.data.object;
-        const mode = checkoutSessionCompleted.mode;
+        const session = event.data.object;
+        const mode = session.mode;
 
-        const userId: UserId =
-          checkoutSessionCompleted.client_reference_id;
+        const userId: UserId = session.client_reference_id;
 
-        const stripeCustomerId =
-          checkoutSessionCompleted.customer;
+        const stripeCustomerId = session.customer;
 
-        if (debug) {
+        debug &&
           console.log(
             '[stripe-webhook] Processing checkout completion',
             { mode, userId, stripeCustomerId },
           );
-        }
 
         if (mode === 'subscription') {
+          // Figure out what plan the user upgraded to
+          const stripeSubscriptionId = session.subscription;
+
+          // Fetch subscription details
+          const subscription =
+            await stripe.subscriptions.retrieve(
+              stripeSubscriptionId,
+            );
+
+          const subscriptionItems = subscription.items.data;
+
+          const PLAN_MAPPING: Record<string, Plan> = {
+            [process.env
+              .VIZHUB_PREMIUM_MONTHLY_STRIPE_PRICE_ID as string]:
+              'premium',
+            [process.env
+              .VIZHUB_PREMIUM_ANNUAL_STRIPE_PRICE_ID as string]:
+              'premium',
+            [process.env
+              .VIZHUB_PRO_MONTHLY_STRIPE_PRICE_ID as string]:
+              'professional',
+            [process.env
+              .VIZHUB_PRO_ANNUAL_STRIPE_PRICE_ID as string]:
+              'professional',
+          };
+
+          let plan = 'unknown';
+          for (const item of subscriptionItems) {
+            if (PLAN_MAPPING[item.price.id]) {
+              plan = PLAN_MAPPING[item.price.id];
+              break;
+            }
+          }
+
+          debug &&
+            console.log(
+              `[stripe-webhook] User updated to plan: ${plan}`,
+            );
+
           // Handle subscription creation
           const upgradeResult = await updateUserStripeId({
             userId,
@@ -166,8 +208,7 @@ export const stripeWebhookEndpoint = ({
               '[stripe-webhook] Credit top-up completed',
               {
                 userId,
-                amount:
-                  checkoutSessionCompleted.amount_total,
+                amount: session.amount_total,
               },
             );
 
@@ -186,8 +227,7 @@ export const stripeWebhookEndpoint = ({
             const user: User = userResult.value.data;
 
             user.creditBalance =
-              user.creditBalance +
-              checkoutSessionCompleted.amount_total;
+              user.creditBalance + session.amount_total;
 
             const saveUserResult = await saveUser(user);
             if (saveUserResult.outcome === 'failure') {
