@@ -34,7 +34,7 @@ const enableOrgPlan = false;
 // which is 19.99/month or 199.99/year
 // and includes everything in premium plus:
 // - Up to $30 in AI credits per month
-const enableProfessionalPlan = true;
+const enableProfessionalPlan = false;
 
 // The percent saved by paying annually.
 const percentSavings = Math.floor(
