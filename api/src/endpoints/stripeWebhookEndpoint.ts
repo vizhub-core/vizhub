@@ -2,6 +2,8 @@ import express from 'express';
 import {
   FREE,
   Plan,
+  PREMIUM,
+  PRO,
   User,
   UserId,
   userLock,
@@ -12,15 +14,8 @@ import { err, Gateways, Result } from 'gateways';
 
 const debug = true;
 
-// Critical for Stripe development - run this incantation
-// stripe listen --forward-to localhost:5173/api/stripe-webhook
-
-// Click "Try it online" from this page to trigger Webhook
-// https://stripe.com/docs/stripe-cli
-// stripe trigger customer.subscription.created
-
-// Docs for Stripe Webhooks
-// https://stripe.com/docs/webhooks
+// Endpoint for handling Stripe webhooks.
+// (Remember to run: stripe listen --forward-to localhost:5173/api/stripe-webhook)
 export const stripeWebhookEndpoint = ({
   app,
   gateways,
@@ -40,262 +35,353 @@ export const stripeWebhookEndpoint = ({
     '/api/stripe-webhook',
     express.raw({ type: 'application/json' }),
     async (request, response) => {
-      // Verify signature to prevent spoofing
-      // See https://stripe.com/docs/webhooks#verify-official-libraries
       const sig = request.headers['stripe-signature'];
-      const endpointSecret =
+      const oldSecret =
         process.env.VIZHUB_STRIPE_WEBHOOK_SIGNING_SECRET;
-      const newEndpointSecret =
+      const newSecret =
         process.env
           .VIZHUB_NEW_STRIPE_WEBHOOK_SIGNING_SECRET;
-
-      // First we try with the old secret,
-      // then we try with the new secret.
-      // We are using the signing secret to check
-      // which stripe account we are using,
-      // during a transition period migrating
-      // from one to the other.
-      let shouldUseNewStripe = false;
       let event;
-
       let stripe;
+      let usedNewSecret = false;
 
+      // Try verifying with the old secret first.
       try {
-        if (debug) {
+        if (debug)
           console.log(
-            '[stripe-webhook] verifying signature with old secret',
+            '[stripe-webhook] Verifying with old secret...',
           );
-        }
         stripe = getStripe();
         event = stripe.webhooks.constructEvent(
           request.body,
           sig,
-          endpointSecret,
+          oldSecret,
         );
-        if (debug) {
+        if (debug)
           console.log(
-            '[stripe-webhook] successfully verified signature with old secret!',
+            '[stripe-webhook] Verified with old secret.',
           );
-        }
-      } catch (oldSecretErr) {
-        // If verification with old secret fails, try with new secret
+      } catch (oldErr) {
         try {
-          if (debug) {
+          if (debug)
             console.log(
-              '[stripe-webhook] old secret failed, trying with new secret',
-              oldSecretErr.message,
+              '[stripe-webhook] Old secret failed, trying new secret:',
+              oldErr.message,
             );
-          }
           stripe = getNewStripe();
           event = stripe.webhooks.constructEvent(
             request.body,
             sig,
-            newEndpointSecret,
+            newSecret,
           );
-
-          // If we get here, the new secret worked
-          shouldUseNewStripe = true;
-
-          if (debug) {
+          usedNewSecret = true;
+          if (debug)
             console.log(
-              '[stripe-webhook] successfully verified signature with new secret!',
+              '[stripe-webhook] Verified with new secret.',
             );
-          }
-        } catch (newSecretErr) {
-          // Both secrets failed
-          console.log(
-            'Webhook signature verification failed with both secrets:',
-            newSecretErr,
+        } catch (newErr) {
+          console.error(
+            '[stripe-webhook] Verification failed with both secrets:',
+            newErr,
           );
           return response
             .status(400)
-            .send(`Webhook Error: ${newSecretErr.message}`);
+            .send(`Webhook Error: ${newErr.message}`);
         }
       }
 
-      // console.log(JSON.stringify(event, null, 2));
       if (debug) {
         console.log(
-          '[stripe-webhook] shouldUseNewStripe:',
-          shouldUseNewStripe,
+          `[stripe-webhook] Using ${usedNewSecret ? 'new' : 'old'} Stripe instance.`,
         );
         console.log(
-          '[stripe-webhook] received event',
-          event,
+          '[stripe-webhook] Received event:',
+          event.type,
         );
-        console.log('[stripe-webhook] event:', event);
       }
 
-      // Handle completed checkout sessions (both subscriptions and one-time payments)
-      if (event.type == 'checkout.session.completed') {
-        if (debug) {
-          console.log(
-            '[stripe-webhook] received checkout.session.completed event',
-          );
-        }
+      try {
+        switch (event.type) {
+          // Handle completed Checkout Sessions
+          case 'checkout.session.completed': {
+            const session = event.data.object;
+            const mode = session.mode;
+            const userId: UserId =
+              session.client_reference_id;
+            const stripeCustomerId = session.customer;
 
-        const session = event.data.object;
-        const mode = session.mode;
+            if (debug)
+              console.log(
+                '[stripe-webhook] Checkout session completed:',
+                { mode, userId, stripeCustomerId },
+              );
 
-        const userId: UserId = session.client_reference_id;
+            if (mode === 'subscription') {
+              // For subscriptions (new or upgrades/downgrades)
+              const stripeSubscriptionId =
+                session.subscription;
+              const subscription =
+                await stripe.subscriptions.retrieve(
+                  stripeSubscriptionId,
+                );
+              const subscriptionItems =
+                subscription.items.data;
 
-        const stripeCustomerId = session.customer;
+              // Map Stripe Price IDs to our internal plans
+              const PLAN_MAPPING: Record<string, Plan> = {
+                [process.env
+                  .VIZHUB_PREMIUM_MONTHLY_STRIPE_PRICE_ID]:
+                  PREMIUM,
+                [process.env
+                  .VIZHUB_PREMIUM_ANNUAL_STRIPE_PRICE_ID]:
+                  PREMIUM,
+                [process.env
+                  .VIZHUB_PRO_MONTHLY_STRIPE_PRICE_ID]: PRO,
+                [process.env
+                  .VIZHUB_PRO_ANNUAL_STRIPE_PRICE_ID]: PRO,
+              };
 
-        debug &&
-          console.log(
-            '[stripe-webhook] Processing checkout completion',
-            { mode, userId, stripeCustomerId },
-          );
+              let plan: Plan = FREE;
+              for (const item of subscriptionItems) {
+                if (PLAN_MAPPING[item.price.id]) {
+                  plan = PLAN_MAPPING[item.price.id];
+                  break;
+                }
+              }
 
-        if (mode === 'subscription') {
-          // Figure out what plan the user upgraded to
-          const stripeSubscriptionId = session.subscription;
+              if (debug)
+                console.log(
+                  `[stripe-webhook] User ${userId} updated to plan: ${plan}`,
+                );
 
-          // Fetch subscription details
-          const subscription =
-            await stripe.subscriptions.retrieve(
-              stripeSubscriptionId,
-            );
+              const updateResult = await updateUserStripeId(
+                {
+                  userId,
+                  stripeCustomerId,
+                  plan,
+                },
+              );
+              if (updateResult.outcome === 'failure') {
+                console.error(
+                  '[stripe-webhook] Error updating subscription:',
+                  updateResult.error,
+                );
+              }
+            } else if (mode === 'payment') {
+              // Handle one-time payments (e.g. credit top-ups)
+              if (debug)
+                console.log(
+                  '[stripe-webhook] Processing credit top-up for user:',
+                  userId,
+                );
+              await lock([userLock(userId)], async () => {
+                const userResult = await getUser(userId);
+                if (userResult.outcome === 'failure') {
+                  return response.send(
+                    err(userResult.error),
+                  );
+                }
+                const user: User = userResult.value.data;
+                user.creditBalance += session.amount_total;
+                const saveResult = await saveUser(user);
+                if (saveResult.outcome === 'failure') {
+                  return response.send(
+                    err(saveResult.error),
+                  );
+                }
+                if (debug)
+                  console.log(
+                    `[stripe-webhook] Updated user ${userId} credit balance to ${user.creditBalance}`,
+                  );
+              });
+            }
+            break;
+          }
 
-          const subscriptionItems = subscription.items.data;
-
-          const PLAN_MAPPING: Record<string, Plan> = {
-            [process.env
-              .VIZHUB_PREMIUM_MONTHLY_STRIPE_PRICE_ID as string]:
-              'premium',
-            [process.env
-              .VIZHUB_PREMIUM_ANNUAL_STRIPE_PRICE_ID as string]:
-              'premium',
-            [process.env
-              .VIZHUB_PRO_MONTHLY_STRIPE_PRICE_ID as string]:
-              'professional',
-            [process.env
-              .VIZHUB_PRO_ANNUAL_STRIPE_PRICE_ID as string]:
-              'professional',
-          };
-
-          let plan = 'unknown';
-          for (const item of subscriptionItems) {
-            if (PLAN_MAPPING[item.price.id]) {
-              plan = PLAN_MAPPING[item.price.id];
+          // Handle subscription creations (if not handled via checkout)
+          case 'customer.subscription.created': {
+            const subscription = event.data.object;
+            const stripeCustomerId = subscription.customer;
+            const userIdResult: Result<UserId> =
+              await getUserIdByStripeCustomerId(
+                stripeCustomerId,
+              );
+            if (userIdResult.outcome === 'failure') {
+              console.error(
+                '[stripe-webhook] Error retrieving user ID on subscription creation:',
+                userIdResult.error,
+              );
               break;
             }
-          }
-
-          debug &&
-            console.log(
-              `[stripe-webhook] User updated to plan: ${plan}`,
-            );
-
-          // Handle subscription creation
-          const upgradeResult = await updateUserStripeId({
-            userId,
-            stripeCustomerId,
-            plan: 'premium',
-          });
-
-          if (upgradeResult.outcome === 'failure') {
-            console.log(
-              'error updating user stripe id',
-              upgradeResult.error,
-            );
-          }
-        } else if (mode === 'payment') {
-          // Handle credit top-up
-          // TODO: Implement credit addition logic here
-          debug &&
-            console.log(
-              '[stripe-webhook] Credit top-up completed',
-              {
-                userId,
-                amount: session.amount_total,
-              },
-            );
-
-          debug &&
-            console.log(
-              "[stripe-webhook] Updating user's credit balance",
-            );
-          // Charge the user for the AI edit.
-          await lock([userLock(userId)], async () => {
-            // Get a fresh copy of the user just in case
-            // it changed during the AI edit.
-            const userResult = await getUser(userId);
-            if (userResult.outcome === 'failure') {
-              return response.send(err(userResult.error));
+            const userId = userIdResult.value;
+            const subscriptionItems =
+              subscription.items.data;
+            const PLAN_MAPPING: Record<string, Plan> = {
+              [process.env
+                .VIZHUB_PREMIUM_MONTHLY_STRIPE_PRICE_ID]:
+                PREMIUM,
+              [process.env
+                .VIZHUB_PREMIUM_ANNUAL_STRIPE_PRICE_ID]:
+                PREMIUM,
+              [process.env
+                .VIZHUB_PRO_MONTHLY_STRIPE_PRICE_ID]: PRO,
+              [process.env
+                .VIZHUB_PRO_ANNUAL_STRIPE_PRICE_ID]: PRO,
+            };
+            let plan: Plan = FREE;
+            for (const item of subscriptionItems) {
+              if (PLAN_MAPPING[item.price.id]) {
+                plan = PLAN_MAPPING[item.price.id];
+                break;
+              }
             }
-            const user: User = userResult.value.data;
-
-            user.creditBalance =
-              user.creditBalance + session.amount_total;
-
-            const saveUserResult = await saveUser(user);
-            if (saveUserResult.outcome === 'failure') {
-              return response.send(
-                err(saveUserResult.error),
-              );
-            }
-
-            debug &&
+            if (debug)
               console.log(
-                "[stripe-webhook] Updated user's credit balance to " +
-                  user.creditBalance,
+                `[stripe-webhook] New subscription created for user ${userId} with plan ${plan}`,
               );
-          });
+            const updateResult = await updateUserStripeId({
+              userId,
+              stripeCustomerId,
+              plan,
+            });
+            if (updateResult.outcome === 'failure') {
+              console.error(
+                '[stripe-webhook] Error updating subscription on creation:',
+                updateResult.error,
+              );
+            }
+            break;
+          }
+
+          // Handle subscription updates (upgrades/downgrades via the Customer Portal)
+          case 'customer.subscription.updated': {
+            const subscription = event.data.object;
+            const stripeCustomerId = subscription.customer;
+            const userIdResult: Result<UserId> =
+              await getUserIdByStripeCustomerId(
+                stripeCustomerId,
+              );
+            if (userIdResult.outcome === 'failure') {
+              console.error(
+                '[stripe-webhook] Error retrieving user ID on subscription update:',
+                userIdResult.error,
+              );
+              break;
+            }
+            const userId = userIdResult.value;
+            const subscriptionItems =
+              subscription.items.data;
+            const PLAN_MAPPING: Record<string, Plan> = {
+              [process.env
+                .VIZHUB_PREMIUM_MONTHLY_STRIPE_PRICE_ID]:
+                PREMIUM,
+              [process.env
+                .VIZHUB_PREMIUM_ANNUAL_STRIPE_PRICE_ID]:
+                PREMIUM,
+              [process.env
+                .VIZHUB_PRO_MONTHLY_STRIPE_PRICE_ID]: PRO,
+              [process.env
+                .VIZHUB_PRO_ANNUAL_STRIPE_PRICE_ID]: PRO,
+            };
+            let plan: Plan = FREE;
+            for (const item of subscriptionItems) {
+              if (PLAN_MAPPING[item.price.id]) {
+                plan = PLAN_MAPPING[item.price.id];
+                break;
+              }
+            }
+            if (debug)
+              console.log(
+                `[stripe-webhook] Subscription updated for user ${userId} to plan ${plan}`,
+              );
+            const updateResult = await updateUserStripeId({
+              userId,
+              stripeCustomerId,
+              plan,
+            });
+            if (updateResult.outcome === 'failure') {
+              console.error(
+                '[stripe-webhook] Error updating subscription on update:',
+                updateResult.error,
+              );
+            }
+            break;
+          }
+
+          // Handle subscription cancellations (downgrades via Billing Portal or direct cancellation)
+          case 'customer.subscription.deleted': {
+            const subscription = event.data.object;
+            const stripeCustomerId = subscription.customer;
+            const userIdResult: Result<UserId> =
+              await getUserIdByStripeCustomerId(
+                stripeCustomerId,
+              );
+            if (userIdResult.outcome === 'failure') {
+              console.error(
+                '[stripe-webhook] Error retrieving user ID on subscription deletion:',
+                userIdResult.error,
+              );
+              break;
+            }
+            const userId = userIdResult.value;
+            if (debug)
+              console.log(
+                `[stripe-webhook] Subscription deleted for user ${userId}. Setting plan to FREE.`,
+              );
+            const updateResult = await updateUserStripeId({
+              userId,
+              stripeCustomerId,
+              plan: FREE,
+            });
+            if (updateResult.outcome === 'failure') {
+              console.error(
+                '[stripe-webhook] Error updating subscription on deletion:',
+                updateResult.error,
+              );
+            }
+            break;
+          }
+
+          // Handle invoice events (optional: to update user status or notify failures)
+          case 'invoice.payment_failed': {
+            const invoice = event.data.object;
+            if (debug)
+              console.log(
+                `[stripe-webhook] Invoice payment failed for customer ${invoice.customer}.`,
+              );
+            // You might want to update your user's status here or notify them.
+            break;
+          }
+          case 'invoice.paid': {
+            const invoice = event.data.object;
+            if (debug)
+              console.log(
+                `[stripe-webhook] Invoice paid for customer ${invoice.customer}.`,
+              );
+            // Optionally, re-activate suspended accounts if needed.
+            break;
+          }
+
+          default: {
+            if (debug)
+              console.log(
+                `[stripe-webhook] Unhandled event type: ${event.type}`,
+              );
+          }
         }
+      } catch (processingError) {
+        console.error(
+          '[stripe-webhook] Error processing event:',
+          processingError,
+        );
+        return response
+          .status(500)
+          .send(
+            `Webhook Error: ${processingError.message}`,
+          );
       }
 
-      if (event.type === 'customer.subscription.updated') {
-        if (debug) {
-          console.log(
-            '\n\n[stripe-webhook] received customer.subscription.updated event',
-          );
-          console.log(JSON.stringify(event, null, 2));
-        }
-      }
-
-      // Downgrade via Billing Portal
-      if (event.type === 'customer.subscription.deleted') {
-        if (debug) {
-          console.log(
-            '\n\n[stripe-webhook] received customer.subscription.deleted event',
-          );
-          console.log(JSON.stringify(event, null, 2));
-        }
-        const subscriptionDeleted = event.data.object;
-
-        const stripeCustomerId: string =
-          subscriptionDeleted.customer;
-
-        const userIdResult: Result<UserId> =
-          await getUserIdByStripeCustomerId(
-            stripeCustomerId,
-          );
-
-        if (userIdResult.outcome === 'failure') {
-          console.log(
-            'error getting user id',
-            userIdResult.error,
-          );
-          return;
-        }
-        const userId = userIdResult.value;
-
-        const result = await updateUserStripeId({
-          userId,
-          stripeCustomerId,
-          plan: FREE,
-        });
-
-        if (result.outcome === 'failure') {
-          console.log(
-            'error updating user stripe id',
-            result.error,
-          );
-        }
-      }
-
-      // Return a response to acknowledge receipt of the event
+      // Acknowledge receipt of the event.
       response.json({ received: true });
     },
   );
