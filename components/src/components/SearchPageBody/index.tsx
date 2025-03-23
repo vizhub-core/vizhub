@@ -22,6 +22,13 @@ export const SearchPageBody = ({
       <div className="vh-page-container">
         <div className="vh-page-header">
           <h2 className="mb-0">Search Results</h2>
+          <div
+            dangerouslySetInnerHTML={{
+              __html:
+                '<script async type="text/javascript" src="//cdn.carbonads.com/carbon.js?serve=CW7ICKQM&placement=vizhubcom&format=cover" id="_carbonads_js"></script>',
+            }}
+          />
+
           <div className="search-header-controls">
             {sortOptions ? (
               <SortControl
