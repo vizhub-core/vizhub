@@ -1,8 +1,7 @@
 export const CommentAvatar = ({ src }) => (
   <img
-    className="comment-avatar"
+    className="w-8 h-8 rounded-full object-cover"
     src={src}
-    width="32"
-    height="32"
-  ></img>
+    alt="User avatar"
+  />
 );
