@@ -163,6 +163,24 @@ export const ForkViz = (gateways: Gateways) => {
       id: newVizId,
     };
 
+    // Remove the README, since literally no one updates it anyway,
+    // and the old README in modified vizzes is often outdated
+    // and just doesn't make sense, especially the ones with the videos.
+    newContent.files = Object.keys(oldContent.files).reduce(
+      (acc, fileId) => {
+        if (oldContent.files[fileId].name === 'README.md') {
+          acc[fileId] = {
+            name: 'README.md',
+            text: '',
+          };
+        } else {
+          acc[fileId] = oldContent.files[fileId];
+        }
+        return acc;
+      },
+      {},
+    );
+
     const newCommit: Commit = {
       id: commitId,
       parent: parentCommitId,
