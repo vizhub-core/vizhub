@@ -44,6 +44,8 @@ import {
 } from 'entities/src/accessors';
 import {
   CREDIT_MARKUP,
+  PREMIUM,
+  PRO,
   PRO_CREDITS_PER_MONTH,
 } from 'entities/src/Pricing';
 
@@ -99,7 +101,10 @@ export const editWithAIEndpoint = ({
           return;
         }
         const authenticatedUser = userResult.value.data;
-        if (authenticatedUser.plan !== 'premium') {
+        if (
+          authenticatedUser.plan !== PREMIUM &&
+          authenticatedUser.plan !== PRO
+        ) {
           res.json(
             err(
               accessDeniedError(
@@ -110,19 +115,12 @@ export const editWithAIEndpoint = ({
           return;
         }
 
-        console.log(
-          "req.body.modelName: '" +
-            req.body.modelName +
-            "'",
-        );
         const {
           id,
           prompt,
           modelName = process.env
             .VIZHUB_EDIT_WITH_AI_MODEL_NAME,
         } = req.body;
-
-        console.log("Using AI model '" + modelName + "'");
 
         if (!id || !prompt) {
           res.json(

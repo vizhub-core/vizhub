@@ -19,6 +19,8 @@ import {
   getUserDisplayName,
   // getVizThumbnailURL,
   FREE,
+  PREMIUM,
+  PRO,
 } from 'entities';
 import { useRuntime } from '@vizhub/runtime';
 import {
@@ -437,7 +439,8 @@ export const VizPageBody = () => {
         showEditor={showEditor}
         setShowEditor={setShowEditor}
         userCanExport={
-          authenticatedUser?.plan === 'premium'
+          authenticatedUser?.plan === PREMIUM ||
+          authenticatedUser?.plan === PRO
         }
         exportHref={exportHref}
         onShareClick={toggleShareModal}

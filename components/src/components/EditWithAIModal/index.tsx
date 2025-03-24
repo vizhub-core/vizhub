@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import { useSpeechRecognition } from './useSpeechRecognition';
 import { Modal, Form, Button } from '../bootstrap';
-import { Plan, UserId } from 'entities';
+import { Plan, PREMIUM, PRO, UserId } from 'entities';
 import { VizKit } from 'api/src/VizKit';
 import { Mic, MicOff } from 'lucide-react';
 
@@ -163,19 +163,21 @@ export const EditWithAIModal = ({
     fetchUsageData,
   ]);
 
+  const isPremiumOrPro =
+    currentPlan === PREMIUM || currentPlan === PRO;
+
   return (
     <Modal show={show} onHide={onClose} centered>
       <Modal.Header closeButton>
         <Modal.Title>Edit with AI</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {currentPlan === 'premium' &&
-        creditBalance === 0 ? (
+        {isPremiumOrPro && creditBalance === 0 ? (
           <p>
             You need to top up your AI credit balance to use
             AI-powered editing features.
           </p>
-        ) : currentPlan === 'premium' ? (
+        ) : isPremiumOrPro ? (
           <>
             <Form.Group className="mb-3" controlId="prompt">
               <div className="d-flex align-items-center justify-content-between mb-2">
@@ -236,8 +238,7 @@ export const EditWithAIModal = ({
         )}
       </Modal.Body>
       <Modal.Footer>
-        {currentPlan === 'premium' &&
-        creditBalance === 0 ? (
+        {isPremiumOrPro && creditBalance === 0 ? (
           <div className="d-flex justify-content-between align-items-center flex-grow-1">
             <AICreditBalanceText
               creditBalance={creditBalance}
@@ -260,7 +261,7 @@ export const EditWithAIModal = ({
               </Button>
             </div>
           </div>
-        ) : currentPlan === 'premium' ? (
+        ) : isPremiumOrPro ? (
           <div className="d-flex justify-content-between align-items-center flex-grow-1">
             <AICreditBalanceText
               creditBalance={creditBalance}

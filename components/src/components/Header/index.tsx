@@ -88,6 +88,9 @@ export const Header = ({
                 <Dropdown.Item href="https://github.com/vizhub-core">
                   Open Source
                 </Dropdown.Item>
+                <Dropdown.Item href="https://github.com/vizhub-core/vizhub/issues/new">
+                  Report an issue
+                </Dropdown.Item>
                 {/* <Dropdown.Item href={createVizHref}>
                   Create Viz
                 </Dropdown.Item> */}

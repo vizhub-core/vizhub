@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
-import { FeatureId, Plan } from 'entities';
+import { FeatureId, Plan, PREMIUM, PRO } from 'entities';
 import {
   Button,
   ButtonGroup,
@@ -279,7 +279,7 @@ export const PricingPageBody = ({
                         ? ' Includes 7 day free trial.'
                         : ' Your 7 day free trial has expired.')}
                   </p> */}
-                  {currentPlan === 'premium' ? (
+                  {currentPlan === PREMIUM ? (
                     <CurrentButton />
                   ) : (
                     <Button
@@ -324,7 +324,7 @@ export const PricingPageBody = ({
                         </h3>
                       </div>
                     </div>
-                    {currentPlan === 'professional' ? (
+                    {currentPlan === PRO ? (
                       <CurrentButton />
                     ) : (
                       <Button

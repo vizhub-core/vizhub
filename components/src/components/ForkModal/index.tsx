@@ -7,7 +7,13 @@ import {
 import { Modal, Form, Button } from '../bootstrap';
 import { VisibilityControl } from '../VisibilityControl';
 import { OwnerControl } from '../OwnerControl';
-import { Plan, UserId, Visibility } from 'entities';
+import {
+  Plan,
+  PREMIUM,
+  PRO,
+  UserId,
+  Visibility,
+} from 'entities';
 import { UpgradeCallout } from '../UpgradeCallout';
 
 export const ForkModal = ({
@@ -81,6 +87,9 @@ export const ForkModal = ({
     [handleForkClick],
   );
 
+  const isPremiumOrPro =
+    currentPlan === PREMIUM || currentPlan === PRO;
+
   return show ? (
     <Modal
       show={show}
@@ -92,7 +101,7 @@ export const ForkModal = ({
         <Modal.Title>Fork</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {currentPlan === 'premium' ? (
+        {isPremiumOrPro ? (
           <>
             <Form.Group className="mb-3" controlId="title">
               <Form.Label>Title</Form.Label>
@@ -126,7 +135,7 @@ export const ForkModal = ({
         )}
       </Modal.Body>
       <Modal.Footer>
-        {currentPlan === 'premium' ? (
+        {isPremiumOrPro ? (
           <Button
             variant="primary"
             onClick={handleForkClick}
