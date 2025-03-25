@@ -271,10 +271,17 @@ export type CuratedVizCollection = {
 
 export const curatedVizzes: Array<CuratedVizCollection> = [
   {
+    title: 'Vibe Coding Templates',
+    id: 'vibecoding-templates',
+    description: () =>
+      'Curated starter templates that work well with the "Edit with AI" feature.',
+    vizPaths: vibecodingTemplates,
+  },
+
+  {
     title: 'Starter Templates',
     id: 'starter-templates',
-    description: () =>
-      'Curated starter templates that work well with AI coding.',
+    description: () => 'Minimalist starter templates.',
     vizPaths: starterTemplates,
   },
   {
