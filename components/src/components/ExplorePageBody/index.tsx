@@ -5,7 +5,7 @@ import { Footer } from '../Footer';
 import { CreateNewButton } from '../CreateNewButton';
 import './styles.scss';
 
-const enableOfficeHoursLink = false;
+const enableOfficeHoursLink = true;
 
 export const ExplorePageBody = ({
   // Viz preview list props.
@@ -34,7 +34,15 @@ export const ExplorePageBody = ({
               </span>{' '}
               Get personalized help with your data
               visualization projects and connect with the
-              community.
+              community via{' '}
+              <a
+                href="https://discord.gg/wbtJ7SCtYr"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Discord
+              </a>
+              .
             </div>
 
             <div className="d-flex">
@@ -48,7 +56,7 @@ export const ExplorePageBody = ({
                 Watch Videos
               </a>
               <a
-                href="https://www.meetup.com/d3-online/events/306630048/"
+                href="https://www.meetup.com/d3-online/events/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn btn-outline-primary btn-sm fw-bold"

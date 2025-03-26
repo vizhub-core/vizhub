@@ -364,7 +364,7 @@ export const PricingPageBody = ({
               <p className="text-gray-600">
                 Need a custom plan?{' '}
                 <a
-                  href="#"
+                  href="mailto: contact@vizhub.com"
                   className="font-semibold text-blue-600 hover:text-blue-700"
                 >
                   Contact our sales team
