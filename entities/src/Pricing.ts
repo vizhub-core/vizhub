@@ -56,4 +56,10 @@ export type FeatureId =
   | 'augment-your-engineering-team'
   | 'ai-credits-included'
   | 'priority-support'
-  | 'early-access';
+  | 'early-access'
+  // Academic features
+  | 'academic-plan'
+  | 'academic-price'
+  | 'discount-codes'
+  | 'student-limit'
+  | 'premium-duration';

@@ -50,26 +50,31 @@
 
       .pricing-page-plans {
         display: flex;
+        flex-wrap: wrap;
         gap: 30px;
         margin-top: 30px;
-        justify-content: space-between;
+        justify-content: center;
 
         a {
           text-decoration: none;
         }
 
         @media (max-width: 1200px) {
-          flex-direction: column;
+          flex-direction: row;
         }
 
         .pricing-page-plan {
-          width: 33.33%;
-          min-width: 300px;
+          width: 45%;
           display: flex;
           flex-direction: column;
           background-color: white;
           border-radius: 8px;
           box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.05);
+
+          @media (max-width: 768px) {
+            flex: 1 1 100%;
+            max-width: 100%;
+          }
 
           img.plan-spirit {
             height: 300px;

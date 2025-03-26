@@ -16,6 +16,7 @@ import { ProFeatures } from './ProFeatures';
 import { HighlightedFeatureProvider } from './HighlightedFeatureContext';
 import { ConsultationFeatures } from './ConsultationFeatures';
 import { OrgFeatures } from './OrgFeatures';
+import { AcademicFeatures } from './AcademicFeatures';
 import './styles.scss';
 
 const premiumPriceMonthly = 1.99;
@@ -29,12 +30,9 @@ const enableImages = false;
 const enableConsulting = false;
 const enableOrgPlan = false;
 
-// TODO make the pro plan section
-// This should add a new tier for professional
-// which is 19.99/month or 199.99/year
-// and includes everything in premium plus:
-// - Up to $30 in AI credits per month
 const enableProfessionalPlan = true;
+
+const enableAcademicPlan = true;
 
 // The percent saved by paying annually.
 const percentSavings = Math.floor(
@@ -190,16 +188,6 @@ export const PricingPageBody = ({
               </ButtonGroup>
             </div>
             {showJulyDiscount && currentPlan === 'free' && (
-              // <p
-              //   className="vh-lede-01"
-              //   style={{
-              //     color: 'var(--vh-color-caution-01)',
-              //   }}
-              // >
-              //   Limited time offer! Get 50% off your first
-              //   year of Premium. Use code{' '}
-              //   <strong>JULY50</strong> at checkout.
-              // </p>
               <div className="alert alert-warning mt-3">
                 <p className="mb-0">
                   Limited time offer! Get 50% off your first
@@ -230,10 +218,6 @@ export const PricingPageBody = ({
                     </div>
                   </div>
 
-                  {/* <p>
-                    Ideal for beginners, students, and
-                    hobbyist.
-                  </p> */}
                   {currentPlan === 'free' ? (
                     <CurrentButton />
                   ) : (
@@ -272,13 +256,7 @@ export const PricingPageBody = ({
                       </h3>
                     </div>
                   </div>
-                  {/* <p>
-                    Ideal for professionals.
-                    {currentPlan === FREE &&
-                      (enableFreeTrial
-                        ? ' Includes 7 day free trial.'
-                        : ' Your 7 day free trial has expired.')}
-                  </p> */}
+
                   {currentPlan === PREMIUM ? (
                     <CurrentButton />
                   ) : (
@@ -350,35 +328,65 @@ export const PricingPageBody = ({
                   </div>
                 </div>
               )}
+              {enableAcademicPlan && (
+                <div className="pricing-page-plan">
+                  <div className="pricing-page-plan-body">
+                    <div className="plan-header">
+                      <h3 className="plan-header-left">
+                        Academic
+                      </h3>
+                      <div className="plan-header-right">
+                        <h3>$199.99</h3>
+                        <h3 className="plan-header-right-faint">
+                          /semester
+                        </h3>
+                      </div>
+                    </div>
+                    <Button
+                      variant="primary"
+                      className="pricing-page-plan-button"
+                      as="a"
+                      href="https://buy.stripe.com/7sI00z4IVaTUcSI4gh"
+                      size="lg"
+                    >
+                      Get started
+                    </Button>
+
+                    <div className="pricing-page-plan-features">
+                      <AcademicFeatures />
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
+
+            <div className="mt-16 text-center">
+              <p className="text-gray-600">
+                Need a custom plan?{' '}
+                <a
+                  href="#"
+                  className="font-semibold text-blue-600 hover:text-blue-700"
+                >
+                  Contact our sales team
+                </a>
+              </p>
+            </div>
+            {/* 
             <div className="mt-5 d-flex gap-4 justify-content-center">
               <div
                 className="card p-4"
                 style={{ maxWidth: '400px' }}
               >
-                <h4 className="mb-3">For Educators 🎓</h4>
+                <h4 className="mb-3">
+                  Need a custom plan?
+                </h4>
                 <p className="mb-0">
-                  Want to use VizHub in your courses? Email{' '}
-                  <a href="mailto:contact@vizhub.com">
-                    contact@vizhub.com
-                  </a>{' '}
-                  to discuss student access options.
+                  <a href="mailto: contact@vizhub.com">
+                    Contact our sales team
+                  </a>
                 </p>
               </div>
-              <div
-                className="card p-4"
-                style={{ maxWidth: '400px' }}
-              >
-                <h4 className="mb-3">Need Help? 💬</h4>
-                <p className="mb-0">
-                  Join our{' '}
-                  <a href="https://discord.gg/wbtJ7SCtYr">
-                    Discord community
-                  </a>{' '}
-                  for support and discussions.
-                </p>
-              </div>
-            </div>
+            </div> */}
             <div className="pricing-page-plans">
               {enableOrgPlan && (
                 <div className="pricing-page-plan">
