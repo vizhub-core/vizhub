@@ -1,5 +1,5 @@
 import { Gateways, Result, Success, ok } from 'gateways';
-import { Plan, User, UserId, userLock } from 'entities';
+import { Plan, User, UserId } from 'entities';
 
 // updateUserStripeId
 // TODO rename to updateUserPlan
@@ -18,32 +18,30 @@ export const UpdateUserStripeId =
     stripeCustomerId: string;
     plan: Plan;
   }): Promise<Result<Success>> => {
-    const { saveUser, getUser, lock } = gateways;
+    const { saveUser, getUser } = gateways;
 
-    return lock([userLock(userId)], async () => {
-      const result = await getUser(userId);
+    const result = await getUser(userId);
 
-      // This user will be either an existing user or a newly created user.
-      let user: User;
+    // This user will be either an existing user or a newly created user.
+    let user: User;
 
-      // If we found one, great, use that one.
-      if (result.outcome === 'success') {
-        user = result.value.data;
+    // If we found one, great, use that one.
+    if (result.outcome === 'success') {
+      user = result.value.data;
 
-        // Update the stripeCustomerId
-        user.stripeCustomerId = stripeCustomerId;
+      // Update the stripeCustomerId
+      user.stripeCustomerId = stripeCustomerId;
 
-        // Update the plan.
-        user.plan = plan;
+      // Update the plan.
+      user.plan = plan;
 
-        // Save the updated or newly created user.
-        await saveUser(user);
-      } else {
-        // If we didn't find an existing user,
-        // return an error result.
-        return result;
-      }
+      // Save the updated or newly created user.
+      await saveUser(user);
+    } else {
+      // If we didn't find an existing user,
+      // return an error result.
+      return result;
+    }
 
-      return ok('success');
-    });
+    return ok('success');
   };

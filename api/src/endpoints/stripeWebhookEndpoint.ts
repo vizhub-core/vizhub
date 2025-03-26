@@ -6,7 +6,6 @@ import {
   PRO,
   User,
   UserId,
-  userLock,
 } from 'entities';
 import { getNewStripe, getStripe } from './getStripe';
 import { UpdateUserStripeId } from 'interactors';
@@ -23,12 +22,8 @@ export const stripeWebhookEndpoint = ({
   app: any;
   gateways: Gateways;
 }) => {
-  const {
-    getUserIdByStripeCustomerId,
-    lock,
-    getUser,
-    saveUser,
-  } = gateways;
+  const { getUserIdByStripeCustomerId, getUser, saveUser } =
+    gateways;
   const updateUserStripeId = UpdateUserStripeId(gateways);
 
   app.post(
@@ -151,7 +146,7 @@ export const stripeWebhookEndpoint = ({
 
               if (debug)
                 console.log(
-                  `[stripe-webhook] User ${userId} updated to plan: ${plan}`,
+                  `[stripe-webhook] Updating user ${userId} to plan: ${plan}`,
                 );
 
               const updateResult = await updateUserStripeId(
@@ -166,6 +161,12 @@ export const stripeWebhookEndpoint = ({
                   '[stripe-webhook] Error updating subscription:',
                   updateResult.error,
                 );
+                throw updateResult.error;
+              } else {
+                if (debug)
+                  console.log(
+                    `[stripe-webhook] Updated user ${userId} to plan: ${plan}`,
+                  );
               }
             } else if (mode === 'payment') {
               // Handle one-time payments (e.g. credit top-ups)
@@ -174,139 +175,30 @@ export const stripeWebhookEndpoint = ({
                   '[stripe-webhook] Processing credit top-up for user:',
                   userId,
                 );
-              await lock([userLock(userId)], async () => {
-                const userResult = await getUser(userId);
-                if (userResult.outcome === 'failure') {
-                  return response.send(
-                    err(userResult.error),
-                  );
-                }
-                const user: User = userResult.value.data;
-                user.creditBalance += session.amount_total;
-                const saveResult = await saveUser(user);
-                if (saveResult.outcome === 'failure') {
-                  return response.send(
-                    err(saveResult.error),
-                  );
-                }
-                if (debug)
-                  console.log(
-                    `[stripe-webhook] Updated user ${userId} credit balance to ${user.creditBalance}`,
-                  );
-              });
+              const userResult = await getUser(userId);
+              if (userResult.outcome === 'failure') {
+                return response.send(err(userResult.error));
+              }
+              const user: User = userResult.value.data;
+              user.creditBalance += session.amount_total;
+              const saveResult = await saveUser(user);
+              if (saveResult.outcome === 'failure') {
+                return response.send(err(saveResult.error));
+              }
+              if (debug)
+                console.log(
+                  `[stripe-webhook] Updated user ${userId} credit balance to ${user.creditBalance}`,
+                );
             }
             break;
           }
 
-          // Handle subscription creations (if not handled via checkout)
-          case 'customer.subscription.created': {
-            const subscription = event.data.object;
-            const stripeCustomerId = subscription.customer;
-            const userIdResult: Result<UserId> =
-              await getUserIdByStripeCustomerId(
-                stripeCustomerId,
-              );
-            if (userIdResult.outcome === 'failure') {
-              console.error(
-                '[stripe-webhook] Error retrieving user ID on subscription creation:',
-                userIdResult.error,
-              );
-              break;
-            }
-            const userId = userIdResult.value;
-            const subscriptionItems =
-              subscription.items.data;
-            const PLAN_MAPPING: Record<string, Plan> = {
-              [process.env
-                .VIZHUB_PREMIUM_MONTHLY_STRIPE_PRICE_ID]:
-                PREMIUM,
-              [process.env
-                .VIZHUB_PREMIUM_ANNUAL_STRIPE_PRICE_ID]:
-                PREMIUM,
-              [process.env
-                .VIZHUB_PRO_MONTHLY_STRIPE_PRICE_ID]: PRO,
-              [process.env
-                .VIZHUB_PRO_ANNUAL_STRIPE_PRICE_ID]: PRO,
-            };
-            let plan: Plan = FREE;
-            for (const item of subscriptionItems) {
-              if (PLAN_MAPPING[item.price.id]) {
-                plan = PLAN_MAPPING[item.price.id];
-                break;
-              }
-            }
-            if (debug)
-              console.log(
-                `[stripe-webhook] New subscription created for user ${userId} with plan ${plan}`,
-              );
-            const updateResult = await updateUserStripeId({
-              userId,
-              stripeCustomerId,
-              plan,
-            });
-            if (updateResult.outcome === 'failure') {
-              console.error(
-                '[stripe-webhook] Error updating subscription on creation:',
-                updateResult.error,
-              );
-            }
-            break;
-          }
+          // TODO Handle subscription creations (if not handled via checkout)
+          // For now, these are all done via checkout sessions.
+          // case 'customer.subscription.created': {
 
-          // Handle subscription updates (upgrades/downgrades via the Customer Portal)
-          case 'customer.subscription.updated': {
-            const subscription = event.data.object;
-            const stripeCustomerId = subscription.customer;
-            const userIdResult: Result<UserId> =
-              await getUserIdByStripeCustomerId(
-                stripeCustomerId,
-              );
-            if (userIdResult.outcome === 'failure') {
-              console.error(
-                '[stripe-webhook] Error retrieving user ID on subscription update:',
-                userIdResult.error,
-              );
-              break;
-            }
-            const userId = userIdResult.value;
-            const subscriptionItems =
-              subscription.items.data;
-            const PLAN_MAPPING: Record<string, Plan> = {
-              [process.env
-                .VIZHUB_PREMIUM_MONTHLY_STRIPE_PRICE_ID]:
-                PREMIUM,
-              [process.env
-                .VIZHUB_PREMIUM_ANNUAL_STRIPE_PRICE_ID]:
-                PREMIUM,
-              [process.env
-                .VIZHUB_PRO_MONTHLY_STRIPE_PRICE_ID]: PRO,
-              [process.env
-                .VIZHUB_PRO_ANNUAL_STRIPE_PRICE_ID]: PRO,
-            };
-            let plan: Plan = FREE;
-            for (const item of subscriptionItems) {
-              if (PLAN_MAPPING[item.price.id]) {
-                plan = PLAN_MAPPING[item.price.id];
-                break;
-              }
-            }
-            if (debug)
-              console.log(
-                `[stripe-webhook] Subscription updated for user ${userId} to plan ${plan}`,
-              );
-            const updateResult = await updateUserStripeId({
-              userId,
-              stripeCustomerId,
-              plan,
-            });
-            if (updateResult.outcome === 'failure') {
-              console.error(
-                '[stripe-webhook] Error updating subscription on update:',
-                updateResult.error,
-              );
-            }
-            break;
-          }
+          // TODO Handle subscription updates (upgrades/downgrades via the Customer Portal)
+          // case 'customer.subscription.updated': {
 
           // Handle subscription cancellations (downgrades via Billing Portal or direct cancellation)
           case 'customer.subscription.deleted': {
