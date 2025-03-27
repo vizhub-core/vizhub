@@ -1,7 +1,7 @@
 {
-  "name": "vizhub3",
-  "version": "1.0.0",
-  "description": "The proprietary VizHub SaaS product codebase.",
+  "name": "vizhub",
+  "version": "3.0.0",
+  "description": "The VizHub Web application.",
   "main": "index.js",
   "scripts": {
     "upgrade": "npm exec --workspaces -- ncu -u",
@@ -16,14 +16,18 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vizhub-core/vizhub3.git"
+    "url": "git+https://github.com/vizhub-core/vizhub.git"
   },
-  "author": "Curran Kelleher, Datavis Tech INC.",
-  "license": "UNLICENSED",
+  "author": {
+    "name": "VizHub, Inc.",
+    "email": "contact@vizhub.com",
+    "url": "https://vizhub.com"
+  },
+  "license": "AGPL-3.0-or-later",
   "bugs": {
-    "url": "https://github.com/vizhub-core/vizhub3/issues"
+    "url": "https://github.com/vizhub-core/vizhub/issues"
   },
-  "homepage": "https://github.com/vizhub-core/vizhub3#readme",
+  "homepage": "https://github.com/vizhub-core/vizhub#readme",
   "workspaces": [
     "runtime",
     "entities",
