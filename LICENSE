@@ -1,0 +1,28 @@
+GNU AFFERO GENERAL PUBLIC LICENSE
+Version 3, 19 November 2007
+
+Copyright (C) 2025 VizHub, Inc.
+
+VizHub is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+VizHub is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with VizHub. If not, see <https://www.gnu.org/licenses/>.
+
+ADDITIONAL TERMS UNDER AGPL-3.0:
+
+As stated by the AGPL license, if you use VizHub over a network and modify its source code, you must make the modified source code available to users interacting with your version over that network. Any hosted or SaaS offering derived from VizHub must provide clear notice of modifications and instructions on how users may obtain the corresponding modified source code.
+
+This requirement ensures that improvements to VizHub remain open and accessible to the broader community, fostering collaboration and innovation.
+
+For inquiries regarding alternative licensing terms or commercial agreements, please contact VizHub, Inc. at:
+
+Email: contact@vizhub.com  
+Website: [https://vizhub.com](https://vizhub.com)
