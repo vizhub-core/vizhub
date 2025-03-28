@@ -46,16 +46,12 @@ export const useOnEditWithAI = ({
     'anthropic/claude-3.7-sonnet:thinking',
     'anthropic/claude-3.7-sonnet',
     'anthropic/claude-3.5-sonnet',
-    'google/gemini-2.0-flash-001',
     'deepseek/deepseek-r1',
+    'deepseek/deepseek-chat-v3-0324',
     'deepseek/deepseek-chat',
+    'google/gemini-2.0-flash-001',
     'openai/o3-mini-high',
     'openai/gpt-4o',
-    // 'openai/o1', // Shockingly expensive
-    // 'openai/o1-mini', // Not even that great
-    // 'google/gemini-flash-1.5',
-    // 'qwen/qwq-32b',
-    // 'qwen/qwen-2.5-coder-32b-instruct',
   ];
 
   const onEditWithAI = useCallback(

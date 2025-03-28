@@ -4,6 +4,26 @@ import { UpvoteWidget } from '../UpvoteWidget';
 import { ForksWidget } from '../ForksWidget';
 import './styles.scss';
 
+function generatingImageSVGDataURL(width, height) {
+  const svg = `
+    <svg xmlns='http://www.w3.org/2000/svg' width='${width}' height='${height}'>
+      <rect width='100%' height='100%' fill='white'/>
+      <text
+        x='50%' y='50%'
+        dominant-baseline='middle'
+        text-anchor='middle'
+        font-size='10'
+        fill='gray'
+        font-family='sans-serif'
+        opacity='0.7'>
+        generating image...
+      </text>
+    </svg>
+  `.trim();
+  const encoded = encodeURIComponent(svg);
+  return `data:image/svg+xml,${encoded}`;
+}
+
 // Shows a preview of a viz.
 // See also
 // archive/vizhub-v3-false-start/src/App/VizPreview.js
