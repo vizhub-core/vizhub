@@ -38,8 +38,15 @@ export const GetThumbnailURLs = (gateways: Gateways) => {
   return async (
     commitIds: Array<CommitId>,
     width: number = thumbnailWidth,
-  ): Promise<Record<CommitId, string>> => {
+  ): Promise<{
+    thumbnailURLs: Record<CommitId, string>;
+    generateAndSaveNewImageKeys: () => Promise<void>;
+  }> => {
     // Lazily initialize the screenshotgenie client.
+    const noop = {
+      thumbnailURLs: {},
+      generateAndSaveNewImageKeys: async () => {},
+    };
     if (!screenshotgenie) {
       try {
         screenshotgenie = new ScreenshotGenie();
@@ -48,7 +55,7 @@ export const GetThumbnailURLs = (gateways: Gateways) => {
         // if the developer has not set up the
         // screenshotgenie environment variables.
         console.error(e);
-        return {};
+        return noop;
       }
     }
 
@@ -57,7 +64,7 @@ export const GetThumbnailURLs = (gateways: Gateways) => {
       await getCommitImageKeys(commitIds);
     if (commitImageKeysResult.outcome === 'failure') {
       DEBUG && console.error(commitImageKeysResult.error);
-      return {};
+      return noop;
     }
     const oldCommitImageKeys: Array<CommitImageKey> =
       commitImageKeysResult.value;
@@ -112,109 +119,115 @@ export const GetThumbnailURLs = (gateways: Gateways) => {
 
     // process.exit(0);
 
-    // For each commit that needs a new image key, create one.
-    const newCommitImageKeys: Array<CommitImageKey> = [];
-    for (const commitId of commitIdsNeedingNewImageKeys) {
-      const contentResult =
-        await getContentAtCommit(commitId);
+    const generateAndSaveNewImageKeys = async () => {
+      // For each commit that needs a new image key, create one.
+      const newCommitImageKeys: Array<CommitImageKey> = [];
+      for (const commitId of commitIdsNeedingNewImageKeys) {
+        const contentResult =
+          await getContentAtCommit(commitId);
 
-      if (contentResult.outcome === 'failure') {
-        DEBUG && console.error(contentResult.error);
-        continue;
-      }
-      const content = contentResult.value;
-
-      // console.log(
-      //   JSON.stringify(content, null, 2).substring(0, 200),
-      // );
-
-      const vizCache: VizCache = createVizCache({
-        initialContents: [content],
-        handleCacheMiss: async (vizId: VizId) => {
-          if (DEBUG) {
-            console.log(
-              '  [GetThumbnailURLs] Handling cache miss for vizId',
-              vizId,
-            );
-          }
-          const contentResult = await getContent(vizId);
-          if (contentResult.outcome === 'failure') {
-            console.log(
-              '  [GetThumbnailURLs] Error when fetching content for viz cache:',
-            );
-            console.log(contentResult.error);
-            return null;
-          }
-
-          if (DEBUG) {
-            console.log(
-              '  [GetThumbnailURLs] Fetched content for viz cache',
-            );
-            // console.log(contentResult.value.data);
-          }
-          return contentResult.value.data;
-        },
-      });
-
-      const { initialSrcdoc } = await computeSrcDoc({
-        rollup,
-        content,
-        vizCache,
-        resolveSlug,
-        getSvelteCompiler: async () => compile,
-      });
-
-      // In case of build errors, just use an empty HTML document.
-      // We can't use empty string HTML documents for the screenshotgenie
-      // API, so we use a minimal HTML document instead.
-      const html = initialSrcdoc || '<html></html>';
-
-      const imageGenerationInputs = {
-        html,
-        width: defaultVizWidth,
-        height: getHeight(content.height),
-      };
-
-      try {
-        const imageKey: ImageKey =
-          await screenshotgenie.createImageKey(
-            imageGenerationInputs,
-          );
-
-        const commitImageKey: CommitImageKey = {
-          commitId,
-          imageKey,
-        };
-        newCommitImageKeys.push(commitImageKey);
-      } catch (e) {
-        console.error(e);
-
-        // console.log('imageGenerationInputs:');
+        if (contentResult.outcome === 'failure') {
+          DEBUG && console.error(contentResult.error);
+          continue;
+        }
+        const content = contentResult.value;
 
         // console.log(
-        //   JSON.stringify(imageGenerationInputs, null, 2),
+        //   JSON.stringify(content, null, 2).substring(0, 200),
         // );
 
-        // If this errors out, we don't want to
-        // crash the whole process, so we just
-        // skip this commit.
-        continue;
-      }
-    }
+        const vizCache: VizCache = createVizCache({
+          initialContents: [content],
+          handleCacheMiss: async (vizId: VizId) => {
+            if (DEBUG) {
+              console.log(
+                '  [GetThumbnailURLs] Handling cache miss for vizId',
+                vizId,
+              );
+            }
+            const contentResult = await getContent(vizId);
+            if (contentResult.outcome === 'failure') {
+              console.log(
+                '  [GetThumbnailURLs] Error when fetching content for viz cache:',
+              );
+              console.log(contentResult.error);
+              return null;
+            }
 
-    // Save the new image keys to the DB.
-    DEBUG &&
-      console.log(
-        'saving newCommitImageKeys ',
+            if (DEBUG) {
+              console.log(
+                '  [GetThumbnailURLs] Fetched content for viz cache',
+              );
+              // console.log(contentResult.value.data);
+            }
+            return contentResult.value.data;
+          },
+        });
+
+        const { initialSrcdoc } = await computeSrcDoc({
+          rollup,
+          content,
+          vizCache,
+          resolveSlug,
+          getSvelteCompiler: async () => compile,
+        });
+
+        // In case of build errors, just use an empty HTML document.
+        // We can't use empty string HTML documents for the screenshotgenie
+        // API, so we use a minimal HTML document instead.
+        const html = initialSrcdoc || '<html></html>';
+
+        const imageGenerationInputs = {
+          html,
+          width: defaultVizWidth,
+          height: getHeight(content.height),
+        };
+
+        try {
+          const imageKey: ImageKey =
+            await screenshotgenie.createImageKey(
+              imageGenerationInputs,
+            );
+
+          const commitImageKey: CommitImageKey = {
+            commitId,
+            imageKey,
+          };
+          newCommitImageKeys.push(commitImageKey);
+        } catch (e) {
+          console.error(e);
+
+          // console.log('imageGenerationInputs:');
+
+          // console.log(
+          //   JSON.stringify(imageGenerationInputs, null, 2),
+          // );
+
+          // If this errors out, we don't want to
+          // crash the whole process, so we just
+          // skip this commit.
+          continue;
+        }
+      }
+
+      // Save the new image keys to the DB.
+      DEBUG &&
+        console.log(
+          'saving newCommitImageKeys ',
+          newCommitImageKeys,
+        );
+      await gateways.saveCommitImageKeys(
         newCommitImageKeys,
       );
-    await gateways.saveCommitImageKeys(newCommitImageKeys);
+    };
 
-    // Combine the old and new image keys.
-    const commitImageKeys: Array<CommitImageKey> = [
-      ...oldCommitImageKeys,
-      ...newCommitImageKeys,
-    ];
+    // // Combine the old and new image keys.
+    // const commitImageKeys: Array<CommitImageKey> = [
+    //   ...oldCommitImageKeys,
+    //   ...newCommitImageKeys,
+    // ];
+
+    const commitImageKeys = oldCommitImageKeys;
 
     const thumbnailURLs: Record<CommitId, string> =
       commitImageKeys.reduce((acc, commitImageKey) => {
@@ -228,6 +241,6 @@ export const GetThumbnailURLs = (gateways: Gateways) => {
 
     // console.log(JSON.stringify(thumbnailURLs, null, 2));
 
-    return thumbnailURLs;
+    return { thumbnailURLs, generateAndSaveNewImageKeys };
   };
 };
