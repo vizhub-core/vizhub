@@ -69,12 +69,17 @@ export const GetRevisionHistory = (gateways: Gateways) => {
       getRevisionHistoryCommitMetadataResult.value;
 
     // Get thumbnail URLs
-    const thumbnailURLs: Record<CommitId, string> =
+    const { thumbnailURLs, generateAndSaveNewImageKeys } =
       await getThumbnailURLs(
         commitMetadataList.map(
           (commitMetadata) => commitMetadata.id,
         ),
       );
+
+    // Kick off this process in the background.
+    // We don't await it because it's not critical to the page load.
+    // The new thumbnails will populated on next refresh.
+    generateAndSaveNewImageKeys();
 
     const revisionHistory: RevisionHistory = {
       commitMetadataList,

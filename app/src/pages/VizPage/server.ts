@@ -418,11 +418,14 @@ VizPage.getPageData = async ({
     //  * the collaborators
 
     // The unfurl image URL for the page.
-    const thumbnailURLs = await getThumbnailURLs(
-      [end],
-      defaultVizWidth,
-    );
+    const { thumbnailURLs, generateAndSaveNewImageKeys } =
+      await getThumbnailURLs([end], defaultVizWidth);
     const image = thumbnailURLs[end];
+
+    // Kick off this process in the background.
+    // We don't await it because it's not critical to the page load.
+    // The new thumbnails will populated on next refresh.
+    generateAndSaveNewImageKeys();
 
     // Figure out if the authenticated user has upvoted the viz.
     let initialIsUpvoted: boolean = false;

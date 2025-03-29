@@ -292,10 +292,15 @@ export const GetInfosAndOwners = (gateways: Gateways) => {
       );
     }
 
-    const thumbnailURLs: Record<CommitId, string> =
+    const { thumbnailURLs, generateAndSaveNewImageKeys } =
       await getThumbnailURLs(
         infoSnapshots.map((snapshot) => snapshot.data.end),
       );
+
+    // Kick off this process in the background.
+    // We don't await it because it's not critical to the page load.
+    // The new thumbnails will populated on next refresh.
+    generateAndSaveNewImageKeys();
 
     return ok({
       infoSnapshots,
