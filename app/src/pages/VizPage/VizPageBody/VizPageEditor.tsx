@@ -22,7 +22,7 @@ if (typeof window !== 'undefined') {
   typeScriptWorker = new TypeScriptWorker();
 }
 
-// const aiAssistEndpoint = '/api/ai-assist';
+const enableCopilot = false;
 
 export const VizPageEditor = ({
   showEditor,
@@ -54,7 +54,9 @@ export const VizPageEditor = ({
     contentShareDBDocPresence?.docPresence;
 
   // Custom AI copilot endpoint for VizHub.
-  const aiCopilotEndpoint = '/api/ai-copilot';
+  const aiCopilotEndpoint = enableCopilot
+    ? '/api/ai-copilot'
+    : undefined;
 
   // Propagate the initial username from VizHub's platform auth
   // into VZCode for use in presence features.
