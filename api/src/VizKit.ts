@@ -170,6 +170,15 @@ export interface VizKitAPI {
     getAIUsage: (options: {
       userId: UserId;
     }) => Promise<Result<Array<AIEditMetadataUsage>>>;
+
+    createVizFromPromptAndFile: (options: {
+      prompt: string;
+      file: File;
+    }) => Promise<
+      Result<{
+        vizId: VizId;
+      }>
+    >;
   };
 }
 
@@ -383,6 +392,18 @@ export const VizKit = (
         }),
       getAIUsage: async (options: { userId: UserId }) =>
         await postJSON(`${baseUrl}/get-ai-usage`, options),
+
+      createVizFromPromptAndFile: async (options: {
+        prompt: string;
+        file: File;
+      }) =>
+        await postJSON(
+          `${baseUrl}/create-viz-from-prompt`,
+          {
+            prompt: options.prompt,
+            file: options.file,
+          },
+        ),
     },
   };
 };

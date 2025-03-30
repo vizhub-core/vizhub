@@ -19,7 +19,9 @@ const Body = () => {
   const authenticatedUser = useContext(
     AuthenticatedUserContext,
   );
-  return <PromptPage />;
+  return (
+    <PromptPage authenticatedUser={authenticatedUser} />
+  );
 };
 
 export const AILandingPage: Page = ({ pageData }) => {

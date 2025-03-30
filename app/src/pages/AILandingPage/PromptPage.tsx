@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from 'react';
+import { VizKit } from 'api/src/VizKit';
 import { useNavigate } from 'react-router-dom';
 import {
   Upload,
@@ -7,8 +8,13 @@ import {
   Sparkles,
   FileSpreadsheet,
 } from 'lucide-react';
+import { User } from 'entities';
 
-function PromptPage() {
+function PromptPage({
+  authenticatedUser,
+}: {
+  authenticatedUser: User | null;
+}) {
   const [prompt, setPrompt] = useState('');
   const [file, setFile] = useState<File | null>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -51,11 +57,48 @@ function PromptPage() {
   );
 
   const handleSubmit = useCallback(
-    (e: React.FormEvent) => {
+    async (e: React.FormEvent) => {
       e.preventDefault();
-      navigate('/result');
+
+      console.log('User prompt:', prompt);
+      if (file) {
+        console.log('Uploaded file:', {
+          name: file.name,
+          size: file.size,
+          type: file.type,
+        });
+      }
+
+      if (!file) {
+        console.error('No file selected');
+        return;
+      }
+
+      try {
+        const vizKit = VizKit();
+        const result =
+          await vizKit.rest.createVizFromPromptAndFile({
+            prompt,
+            file,
+          });
+
+        if (result.success) {
+          // Navigate to the new visualization
+          navigate(`/viz/${result.data.vizId}`);
+        } else {
+          console.error(
+            'Failed to create visualization:',
+            result.error,
+          );
+        }
+      } catch (error) {
+        console.error(
+          'Error creating visualization:',
+          error,
+        );
+      }
     },
-    [navigate],
+    [navigate, prompt, file],
   );
 
   return (

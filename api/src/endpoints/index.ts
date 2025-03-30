@@ -31,6 +31,7 @@ import { editWithAIEndpoint } from './editWithAIEndpoint';
 import { restoreToRevisionEndpoint } from './restoreToRevisionEndpoint';
 import { aiCopilotEndpoint } from './aiCopilotEndpoint';
 import { getAIUsageEndpoint } from './getAIUsageEndpoint';
+import { createVizFromPromptEndpoint } from './createVizFromPromptEndpoint';
 import { Endpoint } from '../types';
 
 // TODO get this working in a secure way using API keys
@@ -71,6 +72,7 @@ export const endpoints: Array<Endpoint> = [
   restoreToRevisionEndpoint,
   aiCopilotEndpoint,
   getAIUsageEndpoint,
+  createVizFromPromptEndpoint,
 ];
 
 if (enableSetVizEndpoint) {
