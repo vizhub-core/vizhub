@@ -11,6 +11,8 @@ export {
   missingParameterError,
   errorCodeLabels,
   missingIndexJSError,
+  accessDeniedError,
+  creditsNeededError,
 } from './errors';
 export {
   crudEntityNames,
