@@ -1,4 +1,5 @@
 import { AboutPage } from './AboutPage';
+import { AILandingPage } from './AILandingPage/server';
 import { LandingPage } from './LandingPage/server';
 import { ProfilePage } from './ProfilePage/server';
 import { VizPage } from './VizPage/server';
@@ -22,6 +23,7 @@ import { CreateVizPageTest } from './CreateVizPageTest/server';
 // Need to update `client.js` as well
 export const pages = [
   LandingPage,
+  AILandingPage,
   AboutPage,
 
   StargazersPage,

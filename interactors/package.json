@@ -24,6 +24,7 @@
   "dependencies": {
     "decay": "^1.0.12",
     "deep-equal": "^2.2.3",
+    "editcodewithai": "^0.1.0",
     "multiscale-timeseries": "^2.0.0",
     "uuid": "^11.1.0"
   },

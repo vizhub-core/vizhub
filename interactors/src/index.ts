@@ -38,3 +38,4 @@ export { ResolveVizPaths } from './resolveVizPaths';
 export { RestoreToRevision } from './restoreToRevision';
 export { GetRevisionHistory } from './getRevisionHistory';
 export { GetThumbnailURLs } from './getThumbnailURLs';
+export { EditWithAI } from './editWithAI';
