@@ -170,6 +170,15 @@ export interface VizKitAPI {
     getAIUsage: (options: {
       userId: UserId;
     }) => Promise<Result<Array<AIEditMetadataUsage>>>;
+
+    createVizFromPromptAndFile: (options: {
+      prompt: string;
+      file: File;
+    }) => Promise<
+      Result<{
+        vizId: VizId;
+      }>
+    >;
   };
 }
 
@@ -370,8 +379,115 @@ export const VizKit = (
         id: VizId;
         prompt: string;
         modelName: string;
-      }) =>
-        await postJSON(`${baseUrl}/edit-with-ai`, options),
+        onChunk?: (chunk: string) => void;
+        onComplete?: (result: any) => void;
+        onError?: (error: any) => void;
+      }) => {
+        if (!fetch) throw new Error('fetch is not defined');
+
+        // If no streaming handlers are provided, fall back to regular JSON POST
+        if (
+          !options.onChunk &&
+          !options.onComplete &&
+          !options.onError
+        ) {
+          return await postJSON(
+            `${baseUrl}/edit-with-ai`,
+            options,
+          );
+        }
+
+        // Handle streaming response with SSE
+        const {
+          onChunk,
+          onComplete,
+          onError,
+          ...requestData
+        } = options;
+
+        try {
+          const response = await fetch(
+            `${baseUrl}/edit-with-ai`,
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(requestData),
+            },
+          );
+
+          // Set up event source from response
+          const reader = response.body.getReader();
+          const decoder = new TextDecoder();
+          let buffer = '';
+
+          // Process the stream
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+
+            // Decode and add to buffer
+            buffer += decoder.decode(value, {
+              stream: true,
+            });
+
+            // Process complete SSE messages
+            const lines = buffer.split('\n\n');
+            buffer = lines.pop() || ''; // Keep the last incomplete chunk in buffer
+
+            for (const line of lines) {
+              if (line.startsWith('data: ')) {
+                try {
+                  const data = JSON.parse(
+                    line.substring(6),
+                  );
+
+                  if (data.type === 'chunk' && onChunk) {
+                    onChunk(data.content);
+                  } else if (
+                    data.type === 'complete' &&
+                    onComplete
+                  ) {
+                    onComplete(data.result);
+                    return {
+                      outcome: 'success',
+                      value: data.result,
+                    };
+                  } else if (
+                    data.type === 'error' &&
+                    onError
+                  ) {
+                    onError(data.error);
+                    return {
+                      outcome: 'failure',
+                      error: data.error,
+                    };
+                  }
+                } catch (e) {
+                  console.error(
+                    'Error parsing SSE message:',
+                    e,
+                  ); // Keep this error log for debugging
+                }
+              }
+            }
+          }
+
+          return {
+            outcome: 'success',
+            value: { success: true },
+          };
+        } catch (error) {
+          if (onError) {
+            onError(error);
+          }
+          return {
+            outcome: 'failure',
+            error,
+          };
+        }
+      },
 
       restoreToRevision: async (
         vizId: VizId,
@@ -383,6 +499,18 @@ export const VizKit = (
         }),
       getAIUsage: async (options: { userId: UserId }) =>
         await postJSON(`${baseUrl}/get-ai-usage`, options),
+
+      createVizFromPromptAndFile: async (options: {
+        prompt: string;
+        file: File;
+      }) =>
+        await postJSON(
+          `${baseUrl}/create-viz-from-prompt`,
+          {
+            prompt: options.prompt,
+            file: options.file,
+          },
+        ),
     },
   };
 };
