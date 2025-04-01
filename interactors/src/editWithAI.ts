@@ -29,6 +29,7 @@ import {
 } from 'entities/src/Pricing';
 
 const debug = false;
+const DEBUG = false;
 const promptTemplateVersion = 1;
 
 // Get the expiring credit balance (pro credits for the current month)
@@ -51,7 +52,6 @@ export const EditWithAI = (gateways: Gateways) => {
   const {
     getInfo,
     getUser,
-    saveInfo,
     saveUser,
     lock,
     saveAIEditMetadata,
@@ -63,6 +63,7 @@ export const EditWithAI = (gateways: Gateways) => {
     modelName?: string;
     authenticatedUserId: string;
     shareDBDoc: any;
+    streamHandler?: (chunk: string) => void;
   }): Promise<
     Result<{
       success: boolean;
@@ -75,6 +76,7 @@ export const EditWithAI = (gateways: Gateways) => {
       modelName,
       authenticatedUserId,
       shareDBDoc,
+      streamHandler,
     } = options;
 
     try {
@@ -149,19 +151,43 @@ export const EditWithAI = (gateways: Gateways) => {
             baseURL:
               process.env.VIZHUB_EDIT_WITH_AI_BASE_URL,
           },
-          streaming: false,
+          streaming: true,
         });
 
-        // Invoke the model
-        const result = await chatModel.invoke(fullPrompt);
+        // Collect all chunks
+        let fullContent = '';
+        let generationId = '';
 
-        // Parse to string
+        // Stream the response and log each chunk
+        const stream = await chatModel.stream(fullPrompt);
+        for await (const chunk of stream) {
+          DEBUG && console.log('Received chunk:', chunk);
+          if (chunk.content) {
+            const chunkContent = String(chunk.content);
+            fullContent += chunkContent;
+
+            // Send chunk to client if streamHandler is provided
+            if (streamHandler) {
+              streamHandler(chunkContent);
+            }
+          }
+          // Store the generation ID from the first chunk that has it
+          if (!generationId && chunk.lc_kwargs?.id) {
+            generationId = chunk.lc_kwargs.id;
+          }
+        }
+
+        // Parse to string if needed
         const parser = new StringOutputParser();
-        const contentString = await parser.invoke(result);
+        const contentString =
+          await parser.invoke(fullContent);
+
+        DEBUG &&
+          console.log('Final content:', contentString);
 
         return {
           content: contentString,
-          generationId: result.lc_kwargs.id,
+          generationId: generationId,
         };
       };
 
