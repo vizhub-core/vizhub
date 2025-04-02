@@ -1,30 +1,40 @@
-import express from 'express';
+import multer from 'multer';
 import { ForkViz, EditWithAI } from 'interactors';
-import { Gateways, err, ok } from 'gateways';
+import { err, ok } from 'gateways';
 import { getAuthenticatedUserId } from '../parseAuth0User';
 import { VizId, dateToTimestamp } from 'entities';
 import {
   authenticationRequiredError,
   missingParameterError,
 } from 'gateways/src/errors';
+import { toCollectionName } from 'database/src/toCollectionName';
 
 // The template viz ID that we'll fork from
 const TEMPLATE_VIZ_ID: VizId =
+  // production value:
   '469e558ba77941aa9e1b416ea521b0aa';
+// development value:
+// '6dabb8a10b324a72bee8b7886bc0c5eb';
 
 export const createVizFromPromptEndpoint = ({
   app,
+  shareDBConnection,
   gateways,
-}: {
-  app: any;
-  gateways: Gateways;
 }) => {
   const forkViz = ForkViz(gateways);
   const editWithAI = EditWithAI(gateways);
 
+  // Set up multer for file uploads
+  const upload = multer({
+    storage: multer.memoryStorage(),
+    limits: {
+      fileSize: 10 * 1024 * 1024, // 10MB limit
+    },
+  });
+
   app.post(
     '/api/create-viz-from-prompt',
-    express.json(),
+    upload.single('file'),
     async (req, res) => {
       try {
         const authenticatedUserId =
@@ -34,15 +44,25 @@ export const createVizFromPromptEndpoint = ({
           return;
         }
 
-        const { prompt, file } = req.body;
+        const { prompt } = req.body;
+        const file = req.file;
         if (!prompt) {
           res.send(err(missingParameterError('prompt')));
           return;
         }
-        if (!file) {
-          res.send(err(missingParameterError('file')));
-          return;
-        }
+
+        // console.log('User prompt:', prompt);
+        // if (file) {
+        //   console.log('Uploaded file:', {
+        //     name: file.originalname,
+        //     size: file.size,
+        //     type: file.mimetype,
+        //   });
+        // }
+        // if (!file) {
+        //   res.send(err(missingParameterError('file')));
+        //   return;
+        // }
 
         // First fork the template viz
         const forkResult = await forkViz({
@@ -60,18 +80,45 @@ export const createVizFromPromptEndpoint = ({
 
         const newVizId = forkResult.value.id;
 
-        console.log('TODO implement ai edit here');
+        // Get the ShareDB document for the viz content
+        const shareDBDoc = shareDBConnection.get(
+          toCollectionName('Content'),
+          newVizId,
+        );
 
-        // // Then edit it with AI using the prompt and file
-        // const editResult = await editWithAI({
-        //   id: newVizId,
-        //   prompt: `Update this visualization using this data: ${file}\n\n${prompt}`,
-        //   modelName: process.env.VIZHUB_EDIT_WITH_AI_MODEL_NAME
-        // });
+        await new Promise<void>((resolve, reject) => {
+          shareDBDoc.subscribe((error) => {
+            if (error) {
+              console.error(
+                'shareDBDoc.subscribe error:',
+                error,
+              );
+              reject(error);
+              return;
+            }
+            resolve();
+          });
+        });
 
-        // if (editResult.outcome === 'failure') {
-        //   return res.json(err(editResult.error));
-        // }
+        // TODO add the uploaded file to the forked viz and commit it
+
+        // Then edit it with AI using the prompt and file
+        const editResult = await editWithAI({
+          id: newVizId,
+          prompt: file
+            ? `${prompt}\n\nAlso make sure to use the newly added data in ${file.originalname}`
+            : prompt,
+          modelName: 'anthropic/claude-3.7-sonnet',
+          authenticatedUserId,
+          shareDBDoc,
+          // No streaming handler needed here since we're not streaming to the client
+        });
+
+        shareDBDoc.unsubscribe();
+
+        if (editResult.outcome === 'failure') {
+          return res.json(err(editResult.error));
+        }
 
         res.send(ok({ vizId: newVizId }));
       } catch (error) {

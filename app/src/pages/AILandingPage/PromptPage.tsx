@@ -69,10 +69,10 @@ function PromptPage({
         });
       }
 
-      if (!file) {
-        console.error('No file selected');
-        return;
-      }
+      // if (!file) {
+      //   console.error('No file selected');
+      //   return;
+      // }
 
       try {
         const vizKit = VizKit();
@@ -82,9 +82,13 @@ function PromptPage({
             file,
           });
 
-        if (result.success) {
+        if (result.outcome === 'success') {
           // Navigate to the new visualization
-          navigate(`/viz/${result.data.vizId}`);
+          // navigate(
+          //   `/${authenticatedUser.userName}/${result.value.vizId}`,
+          // );
+          // TODO don't use React Router for this
+          window.location.href = `/${authenticatedUser.userName}/${result.value.vizId}`;
         } else {
           console.error(
             'Failed to create visualization:',
