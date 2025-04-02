@@ -503,14 +503,24 @@ export const VizKit = (
       createVizFromPromptAndFile: async (options: {
         prompt: string;
         file: File;
-      }) =>
-        await postJSON(
+      }) => {
+        if (!fetch) throw new Error('fetch is not defined');
+
+        // For file uploads, we need to use FormData
+        const formData = new FormData();
+        formData.append('prompt', options.prompt);
+        formData.append('file', options.file);
+
+        const response = await fetch(
           `${baseUrl}/create-viz-from-prompt`,
           {
-            prompt: options.prompt,
-            file: options.file,
+            method: 'POST',
+            body: formData,
           },
-        ),
+        );
+
+        return await response.json();
+      },
     },
   };
 };
