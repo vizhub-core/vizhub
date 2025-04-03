@@ -4,7 +4,7 @@
   "description": "The VizHub Web application.",
   "main": "index.js",
   "scripts": {
-    "upgrade": "npm exec --workspaces -- ncu -u",
+    "upgrade": "npm exec --workspaces -- ncu -x react,react-dom,@types/react,@types/react-dom,svelte,express,@types/express -u",
     "prettier": "npm run --workspaces -- prettier",
     "test": "npm run --workspaces -- test",
     "tsc": "npm run --workspaces -- tsc",
