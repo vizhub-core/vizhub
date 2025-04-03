@@ -27,17 +27,17 @@
     "magic-sandbox": "^2.1.0",
     "path-posix": "^1.0.0",
     "react": "^18",
-    "rollup": "^4.34.8",
+    "rollup": "^4.39.0",
     "svelte": "4.2.9",
     "vizhub-libraries": "^1.8.0"
   },
   "devDependencies": {
-    "@rollup/plugin-node-resolve": "^16.0.0",
+    "@rollup/plugin-node-resolve": "^16.0.1",
     "@rollup/plugin-typescript": "^12.1.2",
     "@types/d3-dsv": "^3.0.7",
-    "typescript": "^5.7.3",
-    "vite": "^6.1.1",
-    "vitest": "^3.0.7"
+    "typescript": "^5.8.2",
+    "vite": "^6.2.5",
+    "vitest": "^3.1.1"
   },
   "publishConfig": {
     "access": "public"
