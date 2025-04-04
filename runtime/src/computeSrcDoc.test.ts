@@ -4,11 +4,11 @@ import {
   createVizCache,
   VizCache,
 } from './v3Runtime/vizCache';
-import { Content } from 'entities';
 import { computeSrcDoc } from './computeSrcDoc';
+import { VizContent } from '@vizhub/viz-types';
 
 test('computeSrcDoc', async () => {
-  const content: Content = {
+  const content: VizContent = {
     id: '32748932',
     files: {
       '32748932': {

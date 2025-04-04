@@ -105,6 +105,28 @@ cd demo
 npm run populate
 ```
 
+## Self Upgrading
+
+To make yourself on the Premium plan locally, do this, replacing `myUserName` with your GitHub username:
+
+enter mongo shell
+
+```
+docker exec -it mongodb mongosh
+```
+
+within mongo shell
+
+```
+use vizhub3
+db.user.updateOne(
+  { userName: "myUserName" },         // filter
+  { $set: { plan: "premium" } }         // update
+)
+```
+
+restart dev server `npm run dev`
+
 ## Docker
 
 See also [Dockerizing a Node.js web app](https://nodejs.org/en/docs/guides/nodejs-docker-webapp)

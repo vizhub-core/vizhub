@@ -1,13 +1,12 @@
 // import { rollup } from 'rollup';
 import {
-  Content,
-  VizId,
   getRuntimeVersion,
 } from 'entities';
 import { computeSrcDocV2 } from './v2Runtime/computeSrcDocV2';
 import { computeSrcDocV3 } from './v3Runtime/computeSrcDocV3';
 import { build } from './v3Runtime/build';
 import { VizCache } from './v3Runtime/vizCache';
+import { VizContent, VizId } from '@vizhub/viz-types';
 
 const debug = false;
 export const computeSrcDoc = async ({
@@ -18,7 +17,7 @@ export const computeSrcDoc = async ({
   getSvelteCompiler,
 }: {
   rollup: any;
-  content: Content;
+  content: VizContent;
   vizCache: VizCache;
   // Resolves a slug import to a viz ID.
   resolveSlug: ({ userName, slug }) => Promise<VizId>;

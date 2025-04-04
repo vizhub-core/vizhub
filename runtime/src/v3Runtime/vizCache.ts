@@ -1,8 +1,8 @@
-import { Content, VizId } from 'entities';
+import { VizContent, VizId } from "@vizhub/viz-types";
 
 export type VizCache = {
-  get: (vizId: string) => Promise<Content>;
-  set: (content: Content) => void;
+  get: (vizId: string) => Promise<VizContent>;
+  set: (content: VizContent) => void;
   invalidate: (vizId: string) => void;
 };
 
@@ -13,19 +13,19 @@ export const createVizCache = ({
   initialContents,
   handleCacheMiss,
 }: {
-  initialContents: Array<Content>;
-  handleCacheMiss: (vizId: VizId) => Promise<Content>;
+  initialContents: Array<VizContent>;
+  handleCacheMiss: (vizId: VizId) => Promise<VizContent>;
 }): VizCache => {
   // Track the content of cached vizzes.
-  const contentMap = new Map<VizId, Content>(
+  const contentMap = new Map<VizId, VizContent>(
     initialContents.map((content) => [content.id, content]),
   );
 
   // Gets the content of a viz.
   // Returns the cached content if it exists.
   // Otherwise, calls handleCacheMiss to fetch the content.
-  const get = async (vizId: string): Promise<Content> => {
-    const cachedContent: Content | undefined =
+  const get = async (vizId: string): Promise<VizContent> => {
+    const cachedContent: VizContent | undefined =
       contentMap.get(vizId);
 
     // Cache hit
@@ -48,7 +48,7 @@ export const createVizCache = ({
   };
 
   // Updates the content of a viz in the cache.
-  const set = (content: Content) => {
+  const set = (content: VizContent) => {
     contentMap.set(content.id, content);
   };
 

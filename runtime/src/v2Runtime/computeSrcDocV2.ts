@@ -1,4 +1,4 @@
-import { Content, FilesV2, getFileText } from 'entities';
+import {  FilesV2, getFileText } from 'entities';
 import {
   FileCollection,
   magicSandbox,
@@ -7,10 +7,11 @@ import { getComputedIndexHtml } from './getComputedIndexHtml';
 import { transformFiles } from './transformFiles';
 import { bundle } from './bundle';
 import { v3FilesToV2Files } from './v3FilesToV2Files';
+import { VizContent } from '@vizhub/viz-types';
 
 // Inspired by https://github.com/vizhub-core/vizhub/blob/main/vizhub-v2/packages/presenters/src/computeSrcDoc.js
 
-export const computeSrcDocV2 = async (content: Content) => {
+export const computeSrcDocV2 = async (content: VizContent) => {
   // Migrate V3 files to V2 files.
   let filesV2: FilesV2 = v3FilesToV2Files(content.files);
 

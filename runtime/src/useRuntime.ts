@@ -6,14 +6,12 @@ import {
   useCallback,
 } from 'react';
 import {
-  Content,
-  FileId,
   SlugKey,
-  VizId,
-  generateFileId,
   getRuntimeVersion,
 } from 'entities';
 import { V3Runtime } from './v3Runtime/setupV3Runtime';
+import { VizContent, VizFileId, VizId } from '@vizhub/viz-types';
+import { generateVizFileId } from '@vizhub/viz-utils';
 
 const debug = false;
 
@@ -29,17 +27,17 @@ export const useRuntime = ({
   slugResolutionCache,
   submitContentOperation,
 }: {
-  content: Content;
+  content: VizContent;
   iframeRef: RefObject<HTMLIFrameElement>;
   srcdocErrorMessage: string | null;
   setSrcdocErrorMessage: (error: string | null) => void;
-  vizCacheContents: Record<string, Content>;
+  vizCacheContents: Record<string, VizContent>;
 
   // If this is false, there is no iframeRef.current.
   isVisual: boolean;
   slugResolutionCache: Record<SlugKey, VizId>;
   submitContentOperation: (
-    next: (content: Content) => Content,
+    next: (content: VizContent) => VizContent,
   ) => void;
 }) => {
   // This ref is used to skip the first mount.
@@ -91,7 +89,7 @@ export const useRuntime = ({
   // Handles cache misses for viz content,
   // when a viz imports from another viz.
   const getLatestContent = useCallback(
-    async (vizId: VizId): Promise<Content> => {
+    async (vizId: VizId): Promise<VizContent> => {
       // Sanity check, should never happen.
       if (!vizCacheContentsRef.current) {
         throw new Error(
@@ -176,9 +174,9 @@ export const useRuntime = ({
             name: string,
             text: string,
           ) => {
-            submitContentOperation((content: Content) => {
+            submitContentOperation((content: VizContent) => {
               // For new files, generate a fileId.
-              let fileId: FileId = generateFileId();
+              let fileId: VizFileId = generateVizFileId();
 
               // For existing files, get the fileId.
               const { files } = content;
