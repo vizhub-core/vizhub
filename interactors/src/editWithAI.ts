@@ -52,6 +52,7 @@ export const EditWithAI = (gateways: Gateways) => {
   const commitViz = CommitViz(gateways);
   const {
     getInfo,
+    saveInfo,
     getUser,
     saveUser,
     lock,
@@ -200,7 +201,7 @@ export const EditWithAI = (gateways: Gateways) => {
         apiKey: process.env.VIZHUB_EDIT_WITH_AI_API_KEY,
       });
 
-      // Commit current changes before AI edit
+      // Commit any current changes before AI edit
       await commitViz(id);
 
       // Apply AI edits
@@ -223,6 +224,35 @@ export const EditWithAI = (gateways: Gateways) => {
         { isInteracting: false },
       );
       shareDBDoc.submitOp(op2);
+
+      // Fetch the Info doc again, just in case
+      // anything changed during AI generation.
+      const latestInfoResult = await getInfo(id);
+      if (latestInfoResult.outcome === 'failure') {
+        return err(latestInfoResult.error);
+      }
+
+      const latestInfo = latestInfoResult.value.data;
+
+      // Mark the info uncommitted, so that the AI edit
+      // will trigger a new commit.
+      // TODO refactor to unify with app/src/pages/VizPage/useVizMutations.ts
+
+      const newInfo = {
+        ...latestInfo,
+        committed: false,
+
+        // Add the authenticated user to the list of commit authors
+        commitAuthors: [
+          authenticatedUserId,
+          'AI:' + modelName,
+        ],
+
+        // Update the last updated timestamp, as this is used as the
+        // timestamp for the next commit.
+        updated: dateToTimestamp(new Date()),
+      };
+      await saveInfo(newInfo);
 
       // Create new commit
       const commitVizResult = await commitViz(id);
