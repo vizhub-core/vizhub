@@ -1,4 +1,4 @@
-import { Content, PREMIUM, PRO, User } from 'entities';
+import { PREMIUM, PRO, User } from 'entities';
 import { useContext, useMemo } from 'react';
 import type { ShareDBDoc } from 'vzcode';
 import {
@@ -12,6 +12,7 @@ import PrettierWorker from 'vzcode/src/client/usePrettier/worker.ts?worker';
 import TypeScriptWorker from 'vzcode/src/client/useTypeScript/worker/index.ts?worker';
 import { customInteractRules } from './customInteractRules';
 import { VizPageContext } from '../VizPageContext';
+import { VizContent } from '@vizhub/viz-types';
 
 // Instantiate the Prettier and TypeScript workers
 // in the client, but not in SSR.
@@ -36,13 +37,13 @@ export const VizPageEditor = ({
   connected,
 }: {
   showEditor: boolean;
-  content: Content | null;
-  contentShareDBDoc: ShareDBDoc<Content>;
+  content: VizContent | null;
+  contentShareDBDoc: ShareDBDoc<VizContent>;
   contentShareDBDocPresence: any;
   srcdocErrorMessage: string | null;
   authenticatedUser: User | null;
   submitContentOperation: (
-    next: (content: Content) => Content,
+    next: (content: VizContent) => VizContent,
   ) => void;
   toggleAIAssistUpgradeNudgeModal: () => void;
   connected: boolean;

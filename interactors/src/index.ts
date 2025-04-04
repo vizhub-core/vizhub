@@ -19,7 +19,6 @@ export { GetCommitAtTimestamp } from './getCommitAtTimestamp';
 export { GetInfosAndOwners } from './getInfosAndOwners';
 export { ScoreViz } from './scoreViz';
 export { ValidateViz } from './validateViz';
-export { GetThumbnail, GetImage } from './getThumbnail';
 export {
   generateId,
   setPredictableGenerateId,

@@ -1,7 +1,7 @@
-import { VizId } from './Viz';
 import { UserId } from './Users';
 import { MergeRequestId } from './MergeRequests';
 import { Timestamp, Markdown } from './common';
+import { VizId } from '@vizhub/viz-types';
 
 // CommentId
 //  * Unique identifier string for a comment.

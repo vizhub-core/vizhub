@@ -13,15 +13,13 @@ import {
   GetInfoByIdOrSlug,
   SaveViz,
 } from 'interactors';
+import { Info, Snapshot, dateToTimestamp } from 'entities';
 import {
-  Content,
-  Files,
-  Info,
-  Snapshot,
+  VizContent,
+  VizFiles,
   VizId,
-  dateToTimestamp,
-  generateFileId,
-} from 'entities';
+} from '@vizhub/viz-types';
+import { generateVizFileId } from '@vizhub/viz-utils';
 
 const upload = multer({ storage: multer.memoryStorage() });
 
@@ -161,9 +159,9 @@ export const setVizEndpoint = ({
       const zipEntries = zip.getEntries();
 
       // TODO use the existing file IDs, use existing logic from migration
-      const files: Files = zipEntries.reduce(
+      const files: VizFiles = zipEntries.reduce(
         (acc, entry) => {
-          acc[generateFileId()] = {
+          acc[generateVizFileId()] = {
             name: entry.entryName,
             text: entry.getData().toString('utf8'),
           };
@@ -177,11 +175,11 @@ export const setVizEndpoint = ({
         return res.status(500).send(getContentResult.error);
       }
       const contentSnapshot = getContentResult.value;
-      const oldContent: Content = contentSnapshot.data;
+      const oldContent: VizContent = contentSnapshot.data;
 
       // Save the new content with isInteracting set to true
       // so that it triggers a build / hot reload.
-      const newContent: Content = {
+      const newContent: VizContent = {
         ...oldContent,
         files,
         isInteracting: true,
@@ -194,7 +192,7 @@ export const setVizEndpoint = ({
         content: newContent,
       });
 
-      const newContent2: Content = {
+      const newContent2: VizContent = {
         ...oldContent,
         files,
       };

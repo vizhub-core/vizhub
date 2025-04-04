@@ -1,5 +1,5 @@
 import { User } from '@sentry/node';
-import { Content } from 'entities';
+import { VizContent } from '@vizhub/viz-types';
 import { useEffect } from 'react';
 import { ShareDBDoc } from 'vzcode';
 
@@ -9,7 +9,7 @@ export const useMarkUncommitted = ({
   setUncommitted,
   authenticatedUser,
 }: {
-  contentShareDBDoc: ShareDBDoc<Content> | undefined;
+  contentShareDBDoc: ShareDBDoc<VizContent> | undefined;
   setUncommitted: (authenticatedUser: User | null) => void;
   authenticatedUser: User | null;
 }) => {

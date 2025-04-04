@@ -1,22 +1,17 @@
 import { Gateways, Result, err, ok } from 'gateways';
-import { Commit, User, VizId } from 'entities';
+import { Commit, User } from 'entities';
 import { GetContentAtCommit } from './getContentAtCommit';
 import equal from 'deep-equal';
 import { invariantViolationError } from 'gateways/src/errors';
+import { VizId } from '@vizhub/viz-types';
 
 // validateViz
 // * Validates a viz
 export const ValidateViz =
   (gateways: Gateways) =>
   async (id: VizId): Promise<Result<'success'>> => {
-    const {
-      getInfo,
-      getContent,
-      getCommit,
-      getUser,
-      getFolder,
-      getVizEmbedding,
-    } = gateways;
+    const { getInfo, getContent, getCommit, getUser } =
+      gateways;
     const getContentAtCommit = GetContentAtCommit(gateways);
 
     // Get the viz info and content.

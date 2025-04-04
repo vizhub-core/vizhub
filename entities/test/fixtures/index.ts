@@ -29,14 +29,12 @@ import {
   EDITOR,
   VizEmbedding,
   MigrationStatus,
-  ImageMetadata,
-  Content,
   APIKey,
   APIKeyPermission,
 } from 'entities';
 import { v3RuntimeDemoFiles } from './v3RuntimeDemoFiles';
-import { StoredImage } from '../../src/Images';
 import { APIKeyHash } from '../../src/APIKeys';
+import { VizContent } from '@vizhub/viz-types';
 
 export const ts1: Timestamp = 1638100000;
 export const ts2: Timestamp = 1638200000;
@@ -393,18 +391,7 @@ export const sampleMigrationStatus: MigrationStatus = {
 //   numVizzesMissed: 0,
 // };
 
-export const sampleImageMetadata: ImageMetadata = {
-  id: 'commit1',
-  commitId: 'commit1',
-  status: 'generated',
-  lastAccessed: ts1,
-};
-
 export { sampleImageBase64 };
-export const sampleStoredImage: StoredImage = {
-  id: 'commit1',
-  base64: sampleImageBase64,
-};
 
 // A stub similar to ShareDB snapshots.
 export const fakeSnapshot = <T>(data: T) => ({
@@ -414,7 +401,7 @@ export const fakeSnapshot = <T>(data: T) => ({
 });
 
 // Sample content for testing JS imports
-export const sampleContent: Content = {
+export const sampleContent: VizContent = {
   id: '84bddfb1cc0545f299e5083c3e71e0bb',
   files: {
     '7548392': {
@@ -435,7 +422,7 @@ export const sampleContent: Content = {
 };
 
 // Sample content for testing CSS imports
-export const sampleContentWithCSS: Content = {
+export const sampleContentWithCSS: VizContent = {
   id: 'cd52ba7f80834807b72e66ce4abac185',
   files: {
     '5473849': {
@@ -454,7 +441,7 @@ export const sampleContentWithCSS: Content = {
   title: 'Sample Content for CSS Importing',
 };
 
-export const sampleContentWithCSV: Content = {
+export const sampleContentWithCSV: VizContent = {
   id: '80341a00a13f4e87a67bf5d60be0d83f',
   files: {
     '5473849': {
@@ -476,7 +463,7 @@ export const sampleContentWithCSV: Content = {
   title: 'Sample Content for CSV Importing',
 };
 
-export const sampleContentWithCSVStrangeCharacters: Content =
+export const sampleContentWithCSVStrangeCharacters: VizContent =
   {
     id: '80341a00a13f4e87a67bf9d60be0d83f',
     files: {
@@ -503,7 +490,7 @@ export const sampleContentWithCSVStrangeCharacters: Content =
 
 // Sample content for testing JS imports
 // across vizzes by id
-export const sampleContentVizImport: Content = {
+export const sampleContentVizImport: VizContent = {
   id: 'a6014044e0c6425f911a7e128e1928a6',
   files: {
     '7548392': {
@@ -519,7 +506,7 @@ export const sampleContentVizImport: Content = {
 
 // Sample content for testing JS imports
 // across vizzes by slug
-export const sampleContentVizImportSlug: Content = {
+export const sampleContentVizImportSlug: VizContent = {
   id: '6f8aec8c3cd348d7a7d4661cc8d75c9a',
   files: {
     '7548392': {
@@ -535,7 +522,7 @@ export const sampleContentVizImportSlug: Content = {
 
 // Sample content for testing CSS imports
 // across vizzes
-export const sampleContentVizImportWithCSS: Content = {
+export const sampleContentVizImportWithCSS: VizContent = {
   id: '816040d214484b41b653bd6916a11fd9',
   files: {
     '7548392': {

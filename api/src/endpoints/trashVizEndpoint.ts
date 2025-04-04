@@ -2,7 +2,6 @@ import express from 'express';
 import {
   Timestamp,
   UserId,
-  VizId,
   dateToTimestamp,
 } from 'entities';
 import {
@@ -12,6 +11,7 @@ import {
 } from 'gateways';
 import { TrashViz } from 'interactors';
 import { getAuthenticatedUserId } from '../parseAuth0User';
+import { VizId } from '@vizhub/viz-types';
 
 // Used for debugging trashing flow.
 const debug = false;

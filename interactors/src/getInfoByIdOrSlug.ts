@@ -1,11 +1,7 @@
 import { Gateways, Result } from 'gateways';
-import {
-  VizId,
-  Snapshot,
-  Info,
-  UserId,
-  isId,
-} from 'entities';
+import { Snapshot, Info, UserId } from 'entities';
+import { VizId } from '@vizhub/viz-types';
+import { isVizId } from '@vizhub/viz-utils';
 
 // getInfoByIdOrSlug
 // * Gets a viz info and content by id or slug
@@ -18,6 +14,6 @@ export const GetInfoByIdOrSlug =
     userId: UserId;
     idOrSlug: VizId | string;
   }): Promise<Result<Snapshot<Info>>> =>
-    await (isId(idOrSlug)
+    await (isVizId(idOrSlug)
       ? getInfo(idOrSlug)
       : getInfoByUserAndSlug({ userId, slug: idOrSlug }));

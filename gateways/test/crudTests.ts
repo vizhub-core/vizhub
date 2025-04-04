@@ -20,7 +20,6 @@ import {
   sampleDeployment,
   sampleMergeRequest,
   sampleBetaProgramSignup,
-  sampleImageMetadata,
   sampleAPIKeyHash,
   sampleAPIKey,
 } from 'entities/test/fixtures';
@@ -120,10 +119,6 @@ export const sampleEntities = {
   Deployment: sampleDeployment,
   MergeRequest: sampleMergeRequest,
   BetaProgramSignup: sampleBetaProgramSignup,
-  // Embedding: sampleEmbedding,
-  // MigrationStatus: sampleMigrationStatus,
-  // MigrationBatch: sampleMigrationBatch,
-  ImageMetadata: sampleImageMetadata,
   APIKey: sampleAPIKey,
   APIKeyHash: sampleAPIKeyHash,
 };

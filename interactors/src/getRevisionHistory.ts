@@ -1,10 +1,8 @@
 import { Gateways, Result, err, ok } from 'gateways';
 import {
-  VizId,
   UserId,
   RevisionHistory,
   CommitMetadata,
-  CommitId,
 } from 'entities';
 import {
   VerifyVizAccess,
@@ -15,6 +13,7 @@ import {
   missingParameterError,
 } from 'gateways/src/errors';
 import { GetThumbnailURLs } from './getThumbnailURLs';
+import { VizId } from '@vizhub/viz-types';
 
 // getRevisionHistory
 // * Gets the revision history of a viz

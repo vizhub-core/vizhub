@@ -1,6 +1,6 @@
-import { Files } from 'entities';
+import { VizFiles } from '@vizhub/viz-types';
 
-export const v3RuntimeDemoFiles: Files = {
+export const v3RuntimeDemoFiles: VizFiles = {
   75483064: {
     name: 'package.json',
     text: `{

@@ -15,6 +15,7 @@ export const apiKeyManagementTest = () => {
       const generateAPIKeyResult = await generateAPIKey({
         owner: 'user1',
         timestamp: ts1,
+        name: 'test',
       });
 
       expect(generateAPIKeyResult.outcome).toBe('success');
