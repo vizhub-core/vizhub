@@ -5,12 +5,13 @@ import {
   useRef,
   useCallback,
 } from 'react';
-import {
-  SlugKey,
-  getRuntimeVersion,
-} from 'entities';
+import { SlugKey, getRuntimeVersion } from 'entities';
 import { V3Runtime } from './v3Runtime/setupV3Runtime';
-import { VizContent, VizFileId, VizId } from '@vizhub/viz-types';
+import {
+  VizContent,
+  VizFileId,
+  VizId,
+} from '@vizhub/viz-types';
 import { generateVizFileId } from '@vizhub/viz-utils';
 
 const debug = false;
@@ -174,35 +175,37 @@ export const useRuntime = ({
             name: string,
             text: string,
           ) => {
-            submitContentOperation((content: VizContent) => {
-              // For new files, generate a fileId.
-              let fileId: VizFileId = generateVizFileId();
+            submitContentOperation(
+              (content: VizContent) => {
+                // For new files, generate a fileId.
+                let fileId: VizFileId = generateVizFileId();
 
-              // For existing files, get the fileId.
-              const { files } = content;
-              if (files !== undefined) {
-                const fileIds = Object.keys(files);
-                const foundFileId = fileIds.find(
-                  (fileId) => files[fileId].name === name,
-                );
-                if (foundFileId) {
-                  fileId = foundFileId;
+                // For existing files, get the fileId.
+                const { files } = content;
+                if (files !== undefined) {
+                  const fileIds = Object.keys(files);
+                  const foundFileId = fileIds.find(
+                    (fileId) => files[fileId].name === name,
+                  );
+                  if (foundFileId) {
+                    fileId = foundFileId;
+                  }
                 }
-              }
 
-              return {
-                ...content,
-                files: {
-                  ...content.files,
-                  [fileId]: {
-                    name,
-                    text,
+                return {
+                  ...content,
+                  files: {
+                    ...content.files,
+                    [fileId]: {
+                      name,
+                      text,
+                    },
                   },
-                },
-                // Trigger a re-run.
-                isInteracting: true,
-              };
-            });
+                  // Trigger a re-run.
+                  isInteracting: true,
+                };
+              },
+            );
 
             // Clear the `isInteracting` property.
             setTimeout(() => {

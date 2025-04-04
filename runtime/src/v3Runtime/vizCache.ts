@@ -1,4 +1,4 @@
-import { VizContent, VizId } from "@vizhub/viz-types";
+import { VizContent, VizId } from '@vizhub/viz-types';
 
 export type VizCache = {
   get: (vizId: string) => Promise<VizContent>;
@@ -24,7 +24,9 @@ export const createVizCache = ({
   // Gets the content of a viz.
   // Returns the cached content if it exists.
   // Otherwise, calls handleCacheMiss to fetch the content.
-  const get = async (vizId: string): Promise<VizContent> => {
+  const get = async (
+    vizId: string,
+  ): Promise<VizContent> => {
     const cachedContent: VizContent | undefined =
       contentMap.get(vizId);
 

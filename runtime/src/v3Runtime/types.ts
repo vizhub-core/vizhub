@@ -1,5 +1,5 @@
 import { VizContent, VizId } from '@vizhub/viz-types';
-import {  V3PackageJson } from 'entities';
+import { V3PackageJson } from 'entities';
 
 // The result of a build.
 export type V3BuildResult = {

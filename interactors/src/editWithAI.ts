@@ -23,11 +23,11 @@ import { performAiEdit } from 'editcodewithai';
 import {
   CREDIT_MARKUP,
   PRO_CREDITS_PER_MONTH,
+  STARTING_CREDITS,
 } from 'entities/src/Pricing';
 import { VizFiles, VizId } from '@vizhub/viz-types';
 import { generateId } from './generateId';
 
-const debug = false;
 const DEBUG = false;
 const promptTemplateVersion = 1;
 
@@ -42,7 +42,9 @@ const getExpiringCreditBalance = (user: User): number => {
 const getNonExpiringCreditBalance = (
   user: User,
 ): number => {
-  return user.creditBalance || 0;
+  return user.creditBalance === undefined
+    ? STARTING_CREDITS
+    : user.creditBalance;
 };
 
 export const EditWithAI = (gateways: Gateways) => {

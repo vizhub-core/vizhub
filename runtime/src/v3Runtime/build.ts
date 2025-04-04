@@ -6,10 +6,7 @@ import {
   RollupBuild,
 } from 'rollup';
 import { V3BuildError, V3BuildResult } from './types';
-import {
-  V3PackageJson,
-  getFileText,
-} from 'entities';
+import { V3PackageJson, getFileText } from 'entities';
 import { vizResolve } from './vizResolve';
 import { VizCache } from './vizCache';
 import { vizLoad } from './vizLoad';
