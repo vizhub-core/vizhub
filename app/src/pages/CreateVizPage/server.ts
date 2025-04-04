@@ -44,11 +44,16 @@ CreateVizPage.getPageData = async ({
   if (resolvedVizIdsResult.outcome === 'failure') {
     console.log('Error when resolving vizPaths:');
     console.log(resolvedVizIdsResult.error);
-    return null;
   }
 
   const { vizIdsByPath, vizIds } =
-    resolvedVizIdsResult.value;
+    resolvedVizIdsResult.outcome === 'failure'
+      ? {
+          // Fallback for local development
+          vizIdsByPath: {},
+          vizIds: [],
+        }
+      : resolvedVizIdsResult.value;
 
   // console.log({ vizIdsByPath, vizIds });
 

@@ -85,6 +85,7 @@
     "@types/ws": "^8.18.1",
     "@vitejs/plugin-react": "^4.3.4",
     "compression": "^1.8.0",
+    "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "pm2": "^6.0.5",
     "prettier": "^3.5.3",
