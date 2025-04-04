@@ -5,7 +5,7 @@ import {
   Result,
   Success,
 } from 'gateways';
-import { VizId, CommitId, UserId, WRITE } from 'entities';
+import { CommitId, UserId, WRITE } from 'entities';
 import { SaveViz } from './saveViz';
 import { GetContentAtCommit } from './getContentAtCommit';
 import { GetViz } from './getViz';
@@ -14,6 +14,7 @@ import {
   VizAccess,
 } from './verifyVizAccess';
 import { accessDeniedError } from 'gateways/src/errors';
+import { VizId } from '@vizhub/viz-types';
 
 const DEBUG = false;
 

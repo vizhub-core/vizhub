@@ -1,5 +1,5 @@
+import { VizId } from '@vizhub/viz-types';
 import { VizKitAPI } from 'api/src/VizKit';
-import { VizId } from 'entities';
 import { useCallback, useState } from 'react';
 
 // Implements the upvoting feature on the viz page.

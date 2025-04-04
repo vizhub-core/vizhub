@@ -1,5 +1,5 @@
+import { VizId } from '@vizhub/viz-types';
 import { UserId } from './Users';
-import { VizId } from './Viz';
 import { Timestamp } from './common';
 
 // TaggingId

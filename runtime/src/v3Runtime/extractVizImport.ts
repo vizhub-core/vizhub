@@ -1,4 +1,5 @@
-import { UserName, VizId } from 'entities';
+import { VizId } from '@vizhub/viz-types';
+import { UserName } from 'entities';
 
 export type VizImport = {
   userName: UserName;

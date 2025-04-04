@@ -13,6 +13,8 @@ import WebSocketJSONStream from '@teamwork/websocket-json-stream';
 import { matchPath } from 'react-router-dom';
 import * as Sentry from '@sentry/node';
 import { createProxyMiddleware } from 'http-proxy-middleware';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const version = '3.1.0';
 

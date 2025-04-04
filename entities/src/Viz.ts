@@ -1,22 +1,9 @@
+import { VizContent, VizId } from '@vizhub/viz-types';
 import { UserId } from './Users';
 import { OrgId } from './Orgs';
 import { CommitId } from './RevisionHistory';
 import { FolderId } from './Folders';
 import { Timestamp, Visibility } from './common';
-import type {
-  FileId,
-  File,
-  Files,
-  VZCodeContent,
-} from 'vzcode';
-
-export type { FileId, File, Files };
-
-// VizId
-//  * Unique identifier string for a Viz.
-//  * Common between Info and Content for a given Viz.
-//  * This is a UUID v4 string with dashes removed (for ease of URL copying).
-export type VizId = string;
 
 // An SPDX License Identifier.
 //  * See "Identifier" column in https://spdx.org/licenses/
@@ -32,7 +19,7 @@ export type License = string;
 //    need to be accessed.
 export interface Viz {
   info: Info;
-  content: Content;
+  content: VizContent;
 }
 
 // Info
@@ -147,44 +134,6 @@ export interface Info {
   v3?: boolean;
 }
 
-// Configuration
-// * An object that can be serialized as JSON
-export type Configuration = any;
-
-// Content
-//  * Heavyweight content of a viz.
-//  * Contains the full content of all files in the viz.
-export type Content = VZCodeContent & {
-  // id
-  // * The viz that this content is associated with
-  id: VizId;
-
-  // title
-  //  * The title of the viz, same as Info.title
-  //  * Tracked here so that it can be versioned
-  //  * Restoring an old version should restore its old title
-  title?: string;
-
-  // height
-  // * The customized height of the viz in pixels
-  // * Not defined if the user has not customized it
-  // * If not defined, the default height is used,
-  //   which is specified by defaultVizHeight.
-  height?: number;
-
-  // license
-  // * The customized license associated with this viz
-  // * Not defined if the user has not customized it
-  license?: License;
-
-  // configuration
-  // * The dynamic configuration of this viz
-  // * Persistent state synchronized in real time
-  // * This can be manipulated by viz code at runtime
-  // * This can be manipulated by the visual editor as well
-  configuration?: Configuration;
-};
-
 // VizAuthorshipId
 //  * Unique identifier string for a VizAuthorship.
 export type VizAuthorshipId = string;
@@ -284,6 +233,7 @@ export const slugify = (str: string) =>
     // Trim hyphens from the end of the string
     .replace(/-+$/, '')
     // Remove all emoji
+    // @ts-ignore
     .replace(/[\u{1F600}-\u{1F64F}]/gu, '');
 
 // VizPath

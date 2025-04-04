@@ -12,7 +12,6 @@ import {
   DELETE,
   UNLISTED,
   Permission,
-  User,
 } from 'entities';
 
 // Represents the access that a user has to a viz.

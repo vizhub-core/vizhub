@@ -1,5 +1,6 @@
 import { Gateways, Result, ok } from 'gateways';
-import { VizId, Snapshot, Info, Content } from 'entities';
+import { Snapshot, Info } from 'entities';
+import { VizContent, VizId } from '@vizhub/viz-types';
 
 // getViz
 // * Gets both info and content
@@ -10,9 +11,9 @@ export const GetViz =
   ): Promise<
     Result<{
       infoSnapshot: Snapshot<Info>;
-      contentSnapshot: Snapshot<Content>;
+      contentSnapshot: Snapshot<VizContent>;
       info: Info;
-      content: Content;
+      content: VizContent;
     }>
   > => {
     const infoResult = await getInfo(id);

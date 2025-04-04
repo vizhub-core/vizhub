@@ -5,9 +5,10 @@
 // Combines functionalities of 'virtual' and 'importFromViz' plugins
 import { InputPluginOption } from 'rollup';
 import { extractVizImport } from './extractVizImport';
-import { VizId, isId } from 'entities';
 import { ResolvedVizFileId } from './types';
 import { parseId } from './parseId';
+import { VizId } from '@vizhub/viz-types';
+import { isVizId } from '@vizhub/viz-utils';
 
 const debug = false;
 
@@ -88,7 +89,7 @@ export const vizResolve = ({
     const vizImport = extractVizImport(id);
     if (vizImport) {
       let vizId: VizId;
-      if (isId(vizImport.idOrSlug)) {
+      if (isVizId(vizImport.idOrSlug)) {
         vizId = vizImport.idOrSlug;
       } else {
         if (!resolveSlug) {

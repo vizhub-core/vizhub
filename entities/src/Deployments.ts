@@ -1,4 +1,4 @@
-import { VizId } from './Viz';
+import { VizId } from '@vizhub/viz-types';
 import { CommitId } from './RevisionHistory';
 
 // DeploymentId

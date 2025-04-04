@@ -1,4 +1,5 @@
-import { Timestamp, UserId, VizId } from '.';
+import { VizId } from '@vizhub/viz-types';
+import { Timestamp, UserId } from '.';
 
 // APIKeyId
 //  * Unique identifier string for an API key.

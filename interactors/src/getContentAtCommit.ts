@@ -7,13 +7,13 @@ import {
 } from 'gateways';
 import { apply } from 'ot';
 import {
-  Content,
   Commit,
   CommitId,
   MilestoneId,
   Milestone,
 } from 'entities';
 import { generateId } from './generateId';
+import { VizContent } from '@vizhub/viz-types';
 
 const debug = false;
 
@@ -42,7 +42,7 @@ export const GetContentAtCommit =
       maxAncestorOpsSizeKB: number;
     } = defaultOptions,
   ) =>
-  async (id: CommitId): Promise<Result<Content>> => {
+  async (id: CommitId): Promise<Result<VizContent>> => {
     const {
       getCommitAncestors,
       getMilestone,
@@ -211,5 +211,5 @@ export const GetContentAtCommit =
       }
     }
 
-    return ok(content as Content);
+    return ok(content as VizContent);
   };

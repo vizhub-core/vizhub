@@ -1,7 +1,6 @@
 import { Gateways, Result, ok } from 'gateways';
 import { diff } from 'ot';
 import {
-  VizId,
   Info,
   Commit,
   infoLock,
@@ -10,6 +9,7 @@ import {
 import { generateId } from './generateId';
 import { GetViz } from './getViz';
 import { GetContentAtCommit } from './getContentAtCommit';
+import { VizId } from '@vizhub/viz-types';
 
 // const lock = async (lockIds: Array<ResourceLockId>, fn) => {
 //   await redlock.using(lockIds, 5000, fn);

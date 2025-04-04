@@ -13,10 +13,10 @@ import {
   SortId,
   User,
   UserId,
-  VizId,
 } from 'entities';
 import { VizKit } from 'api/src/VizKit';
 import { SectionSortContext } from './SectionSortContext';
+import { VizId } from '@vizhub/viz-types';
 
 export const InfosAndOwnersContext = createContext<{
   allInfoSnapshots: Array<Snapshot<Info>>;

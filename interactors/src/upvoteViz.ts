@@ -5,9 +5,10 @@ import {
   err,
   Success,
 } from 'gateways';
-import { VizId, Timestamp, UserId, Upvote } from 'entities';
+import { Timestamp, UserId, Upvote } from 'entities';
 import { generateUpvoteId } from './generateUpvoteId';
 import { invariantViolationError } from 'gateways/src/errors';
+import { VizId } from '@vizhub/viz-types';
 
 // upvoteViz
 //  * Creates a new Upvote associated with this viz

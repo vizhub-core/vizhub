@@ -51,9 +51,11 @@ const responsiveYouTube = (html) =>
 export const renderREADME = (readmeText) =>
   readmeText
     ? responsiveYouTube(
+        // @ts-ignore
         xss(marked.parse(readmeText), {
           // Allow iframes in READMEs
           whiteList: {
+            // @ts-ignore
             ...xss.whiteList,
             iframe: [
               'src',

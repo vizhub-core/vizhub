@@ -1,7 +1,7 @@
-import { VizId } from './Viz';
 import { UserId } from './Users';
 import { Timestamp } from './common';
 import { CommitId } from './RevisionHistory';
+import { VizId } from '@vizhub/viz-types';
 
 export type AIEditMetadataId = string;
 

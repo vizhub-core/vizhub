@@ -1,7 +1,8 @@
 // An identifier used to lock a resource for critical sections.
 // For vizzes, the entire viz can be locked with
 // an id of the form `viz:${vizId}`.
-import { EntityName, UserId, VizId } from '.';
+import { VizId } from '@vizhub/viz-types';
+import { EntityName, UserId } from '.';
 
 // The same pattern holds for other entities.
 export type ResourceLockId = string;

@@ -1,10 +1,5 @@
 import express from 'express';
-import {
-  Info,
-  PermissionId,
-  UserId,
-  VizId,
-} from 'entities';
+import { Info, PermissionId, UserId } from 'entities';
 import {
   Gateways,
   err,
@@ -15,6 +10,7 @@ import {
   accessDeniedError,
   authenticationRequiredError,
 } from 'gateways/src/errors';
+import { VizId } from '@vizhub/viz-types';
 
 export const removeCollaboratorEndpoint = ({
   app,

@@ -83,15 +83,9 @@ export {
 
 export type {
   Viz,
-  VizId,
   VizPath,
   Info,
-  Content,
   License,
-  Configuration,
-  FileId,
-  Files,
-  File,
   VizAuthorship,
   VizAuthorshipId,
   Upvote,
@@ -164,13 +158,7 @@ export {
 
 export type { MigrationStatus } from './Migration';
 
-export type {
-  Image,
-  ImageId,
-  ImageMetadata,
-  StoredImage,
-} from './Images';
-export { imageFromBase64, thumbnailWidth } from './Images';
+export { thumbnailWidth } from './Images';
 
 export type EntityName =
   | 'Info'
@@ -225,8 +213,6 @@ export {
   userLock,
   analyticsEventLock,
 } from './Lock';
-
-export { isId, generateId, generateFileId } from './Id';
 
 export type {
   APIKeyId,

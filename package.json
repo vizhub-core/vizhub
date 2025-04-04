@@ -31,7 +31,6 @@
   "workspaces": [
     "runtime",
     "entities",
-    "viz-types",
     "api",
     "app",
     "components",

@@ -1,7 +1,7 @@
-import { VizId } from './Viz';
 import { UserId } from './Users';
 import { FolderId } from './Folders';
 import { Timestamp } from './common';
+import { VizId } from '@vizhub/viz-types';
 
 // Role
 //  * Access levels for users

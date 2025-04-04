@@ -1,12 +1,12 @@
 import { Gateways, Result, ok, err } from 'gateways';
 import {
-  VizId,
   Info,
   infoLock,
   dateToTimestamp,
   getRuntimeVersion,
 } from 'entities';
 import { computePopularity } from './computePopularity';
+import { VizId } from '@vizhub/viz-types';
 
 // When true, backfills the runtimeVersion field.
 // This is a one-time operation and will be disabled

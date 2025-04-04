@@ -14,16 +14,16 @@ import { getUpvotesTest } from './getUpvotesTest';
 import { getInfosTest } from './getInfosTest';
 import { getUsersByIdsTest } from './getUsersByIdsTest';
 import { getInfoBySlugTest } from './getInfoBySlugTest';
-// import { embeddingsTest } from './embeddingsTest';
 import { getUsersForTypeaheadTest } from './getUsersForTypeaheadTest';
 import { getRevisionHistoryTest } from './getRevisionHistoryTest';
+import { EntityName } from 'entities';
 
 export const gatewaysTests = () => {
   describe(`CRUD`, () => {
     for (const [entityName, sampleEntity] of Object.entries(
       sampleEntities,
     )) {
-      crudTests(entityName, sampleEntity);
+      crudTests(entityName as EntityName, sampleEntity);
     }
   });
 

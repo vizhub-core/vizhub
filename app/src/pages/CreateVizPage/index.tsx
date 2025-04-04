@@ -1,4 +1,4 @@
-import { VizId, VizPath } from 'entities';
+import { VizPath } from 'entities';
 import { AuthenticatedUserProvider } from '../../contexts/AuthenticatedUserContext';
 import { Page, PageData } from '../Page';
 import { Body } from './Body';
@@ -7,6 +7,7 @@ import {
   InfosAndOwnersProvider,
 } from '../../contexts/InfosAndOwnersContext';
 import './styles.scss';
+import { VizId } from '@vizhub/viz-types';
 
 export type CreateVizPageData = PageData &
   InfosAndOwnersPageData & {

@@ -18,13 +18,16 @@ export const useSpeechRecognition = (
   const [isSpeaking, setIsSpeaking] =
     useState<boolean>(false);
   const [recognition, setRecognition] =
+    // @ts-ignore
     useState<SpeechRecognition | null>(null);
 
   // Speech recognition setup
   useEffect(() => {
     // Check if browser supports SpeechRecognition
     const SpeechRecognition =
+      // @ts-ignore
       window.SpeechRecognition ||
+      // @ts-ignore
       window.webkitSpeechRecognition;
 
     if (SpeechRecognition) {

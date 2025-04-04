@@ -1,10 +1,10 @@
 import { rollup } from '@rollup/browser';
 import { build } from './build';
 import { VizCache, createVizCache } from './vizCache';
-import { Content, VizId } from 'entities';
 import { V3BuildResult, V3WorkerMessage } from './types';
 import { svelteCompilerUrl } from './transformSvelte';
 import { computeSrcDocV3 } from './computeSrcDocV3';
+import { VizContent, VizId } from '@vizhub/viz-types';
 
 const debug = false;
 
@@ -23,7 +23,7 @@ let vizCache: VizCache = createVizCache({
   initialContents: [],
   handleCacheMiss: async (
     vizId: VizId,
-  ): Promise<Content> => {
+  ): Promise<VizContent> => {
     const message: V3WorkerMessage = {
       type: 'contentRequest',
       vizId,

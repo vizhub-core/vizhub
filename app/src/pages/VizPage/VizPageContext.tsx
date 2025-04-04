@@ -1,7 +1,6 @@
 import {
   createContext,
   useCallback,
-  useContext,
   useEffect,
   useMemo,
 } from 'react';
@@ -11,10 +10,8 @@ import { useShareDBConnectionStatus } from '../../useShareDBConnectionStatus';
 import { ShareDBDoc, useSubmitOperation } from 'vzcode';
 import {
   Comment,
-  Commit,
   CommitId,
   CommitMetadata,
-  Content,
   Info,
   RevisionHistory,
   SlugKey,
@@ -22,7 +19,6 @@ import {
   User,
   UserId,
   Visibility,
-  VizId,
   getRuntimeVersion,
 } from 'entities';
 import {
@@ -50,11 +46,12 @@ import { getVizExportHref } from '../../accessors/getVizExportHref';
 import { VizHubError } from 'gateways';
 import { useRevisionHistory } from './useRevisionHistory';
 import { useOnEditWithAI } from './useOnEditWithAI';
+import { VizContent, VizId } from '@vizhub/viz-types';
 
 export type VizPageContextValue = {
   info: Info;
-  content: Content;
-  contentShareDBDoc: ShareDBDoc<Content>;
+  content: VizContent;
+  contentShareDBDoc: ShareDBDoc<VizContent>;
   contentShareDBDocPresence: any;
   ownerUser: User;
   forkedFromInfo: Info | null;
@@ -71,10 +68,10 @@ export type VizPageContextValue = {
   canUserDeleteViz: boolean;
   setVizTitle: (title: string) => void;
   submitContentOperation: (
-    next: (content: Content) => Content,
+    next: (content: VizContent) => VizContent,
   ) => void;
   toggleDeleteVizConfirmationModal: () => void;
-  vizCacheContents: Record<string, Content>;
+  vizCacheContents: Record<string, VizContent>;
   setUncommitted: (authenticatedUser: User | null) => void;
   isUpvoted: boolean;
   handleUpvoteClick: () => void;
@@ -179,10 +176,12 @@ export const VizPageProvider = ({
     | undefined;
   let connected: boolean;
   let vizCacheShareDBDocs:
-    | Record<string, ShareDBDoc<Content>>
+    | Record<string, ShareDBDoc<VizContent>>
     | undefined;
-  let vizCacheContents: Record<string, Content> | undefined;
-  let contentShareDBDoc: ShareDBDoc<Content> | undefined;
+  let vizCacheContents:
+    | Record<string, VizContent>
+    | undefined;
+  let contentShareDBDoc: ShareDBDoc<VizContent> | undefined;
 
   // If we are loading a specific version of the viz...
   if (buildVizResult.type === 'versioned') {
@@ -216,7 +215,7 @@ export const VizPageProvider = ({
 
     // The viz cache, used for resolving imported vizzes,
     // is always kept up to date via ShareDB docs.
-    vizCacheShareDBDocs = useShareDBDocs<Content>(
+    vizCacheShareDBDocs = useShareDBDocs<VizContent>(
       vizCacheContentSnapshots,
       'Content',
     );
@@ -228,11 +227,11 @@ export const VizPageProvider = ({
     contentShareDBDoc = vizCacheShareDBDocs[info.id];
   }
 
-  let content: Content = vizCacheContents[info.id];
+  let content: VizContent = vizCacheContents[info.id];
 
   const submitContentOperation: (
-    next: (content: Content) => Content,
-  ) => void = useSubmitOperation<Content>(
+    next: (content: VizContent) => VizContent,
+  ) => void = useSubmitOperation<VizContent>(
     contentShareDBDoc,
   );
 

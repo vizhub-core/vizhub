@@ -1,5 +1,5 @@
+import { VizId } from '@vizhub/viz-types';
 import { Timestamp, UserId, Visibility } from '.';
-import { VizId } from './Viz';
 
 export type FileV2 = {
   name: string;

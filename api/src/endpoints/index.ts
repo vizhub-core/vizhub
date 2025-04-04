@@ -1,5 +1,4 @@
 import { healthCheck } from './healthCheck';
-import { privateBetaEmailSubmit } from './privateBetaEmailSubmit';
 import { recordAnalyticsEvents } from './recordAnalyticsEvents';
 import { getInfosAndOwnersEndpoint } from './getInfosAndOwnersEndpoint';
 import { forkVizEndpoint } from './forkVizEndpoint';
@@ -9,7 +8,6 @@ import { fakeUnsubscribeSuccessEndpoint } from './fakeUnsubscribeSuccessEndpoint
 import { stripeWebhookEndpoint } from './stripeWebhookEndpoint';
 import { createCheckoutSession } from './createCheckoutSessionEndpoint';
 import { aiAssistEndpoint } from './aiAssistEndpoint';
-// import { vizThumbnailEndpoint } from './vizThumbnailEndpoint';
 import { billingPortalSessionEndpoint } from './billingPortalSessionEndpoint';
 import { getUsersForTypeaheadEndpoint } from './getUsersForTypeaheadEndpoint';
 import { addCollaboratorEndpoint } from './addCollaboratorEndpoint';
@@ -34,15 +32,12 @@ import { getAIUsageEndpoint } from './getAIUsageEndpoint';
 import { createVizFromPromptEndpoint } from './createVizFromPromptEndpoint';
 import { Endpoint } from '../types';
 
-// TODO get this working in a secure way using API keys
 const enableSetVizEndpoint = true;
 
-// TODO get this working
 const enableExportVizEndpoint = true;
 
 export const endpoints: Array<Endpoint> = [
   healthCheck,
-  privateBetaEmailSubmit,
   recordAnalyticsEvents,
   getInfosAndOwnersEndpoint,
   forkVizEndpoint,
@@ -52,7 +47,6 @@ export const endpoints: Array<Endpoint> = [
   stripeWebhookEndpoint,
   createCheckoutSession,
   aiAssistEndpoint,
-  // vizThumbnailEndpoint,
   billingPortalSessionEndpoint,
   getUsersForTypeaheadEndpoint,
   addCollaboratorEndpoint,

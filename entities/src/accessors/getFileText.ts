@@ -1,9 +1,10 @@
-import { Content } from '../';
-
 // Gets the text content of a file with the given name.
+import { VizContent } from '@vizhub/viz-types';
+
 // Returns null if not found.
+// TODO consider moving this into @vizhub/viz-utils
 export const getFileText = (
-  content: Content,
+  content: VizContent | null,
   fileName: string,
 ): string | null => {
   if (content && content.files) {

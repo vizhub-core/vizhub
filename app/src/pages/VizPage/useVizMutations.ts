@@ -1,5 +1,5 @@
+import { VizContent } from '@vizhub/viz-types';
 import {
-  Content,
   Info,
   User,
   UserId,
@@ -86,7 +86,7 @@ export const useOnSettingsSave = ({
 }: {
   submitInfoOperation: (next: (info: Info) => Info) => void;
   submitContentOperation: (
-    next: (content: Content) => Content,
+    next: (content: VizContent) => VizContent,
   ) => void;
   toggleSettingsModal: () => void;
 }) =>

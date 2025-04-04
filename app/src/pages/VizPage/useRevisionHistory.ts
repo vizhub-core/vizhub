@@ -1,6 +1,6 @@
+import { VizId } from '@vizhub/viz-types';
 import { VizKitAPI } from 'api/src/VizKit';
-import { RevisionHistory, VizId } from 'entities';
-import { Result } from 'gateways';
+import { RevisionHistory } from 'entities';
 import { useEffect, useState } from 'react';
 
 export const useRevisionHistory = ({

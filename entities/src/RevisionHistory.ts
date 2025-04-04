@@ -1,4 +1,4 @@
-import { VizId, Content } from './Viz';
+import { VizContent, VizId } from '@vizhub/viz-types';
 import { UserId } from './Users';
 import { Timestamp } from './common';
 
@@ -129,5 +129,5 @@ export interface Milestone {
   //  * The Content exactly as it was at this commit
   //  * Used as a starting point for "replaying ops"
   //    to reconstruct any version of a viz.
-  content: Content;
+  content: VizContent;
 }

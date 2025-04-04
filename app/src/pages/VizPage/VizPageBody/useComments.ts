@@ -1,3 +1,4 @@
+import { generateVizId } from '@vizhub/viz-utils';
 import { VizKitAPI } from 'api/src/VizKit';
 import { CommentFormatted } from 'components/src/components/Comments';
 import {
@@ -5,15 +6,14 @@ import {
   CommentId,
   Snapshot,
   User,
-  VizId,
   dateToTimestamp,
-  generateId,
   getUserDisplayName,
 } from 'entities';
 import { useCallback, useMemo, useState } from 'react';
 import { getProfilePageHref } from '../../../accessors';
 import { getAvatarURL } from '../../../accessors/getAvatarURL';
 import { formatTimestamp } from '../../../accessors/formatTimestamp';
+import { VizId } from '@vizhub/viz-types';
 
 export const useComments = ({
   vizId,
@@ -76,7 +76,7 @@ export const useComments = ({
       if (!authenticatedUser) {
         return;
       }
-      const id = generateId();
+      const id = generateVizId();
 
       const newComment: Comment = {
         id,

@@ -13,7 +13,6 @@ import {
   getSortField,
   SortField,
   Snapshot,
-  VizId,
   Visibility,
   SectionId,
   Upvote,
@@ -21,6 +20,7 @@ import {
 } from 'entities';
 import { accessDeniedError } from 'gateways/src/errors';
 import { GetThumbnailURLs } from './getThumbnailURLs';
+import { VizId } from '@vizhub/viz-types';
 
 const debug = false;
 

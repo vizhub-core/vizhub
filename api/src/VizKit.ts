@@ -1,8 +1,7 @@
+import { VizContent, VizId } from '@vizhub/viz-types';
 import {
   SortId,
   UserId,
-  VizId,
-  Content,
   Visibility,
   SectionId,
   User,
@@ -11,7 +10,6 @@ import {
   RevisionHistory,
   APIKey,
   APIKeyId,
-  AIEditMetadata,
   Plan,
 } from 'entities';
 import { AIEditMetadataUsage } from 'entities/src/AIEditMetadata';
@@ -63,7 +61,7 @@ export interface VizKitAPI {
       // This is only populated when the user has made changes to the viz
       // but doesn't have the access permissions to actually change the original viz.
       // In this case, forking is a way for the user to save their changes.
-      content?: Content;
+      content?: VizContent;
 
       // The visibility of the forked viz
       visibility?: Visibility;
@@ -258,7 +256,7 @@ export const VizKit = (
         forkedFrom: VizId;
         owner: UserId;
         title?: string;
-        content?: Content;
+        content?: VizContent;
         visibility?: Visibility;
       }) => await postJSON(`${baseUrl}/fork-viz`, options),
 

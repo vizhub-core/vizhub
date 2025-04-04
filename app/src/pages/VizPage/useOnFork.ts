@@ -1,13 +1,9 @@
-import {
-  Content,
-  UserId,
-  Visibility,
-  VizId,
-} from 'entities';
+import { UserId, Visibility } from 'entities';
 import { useCallback } from 'react';
 import { Result } from 'gateways';
 import { setCookie } from '../cookies';
 import { VizKitAPI } from 'api/src/VizKit';
+import { VizContent, VizId } from '@vizhub/viz-types';
 
 // Useful for debugging fork flow.
 const debug = false;
@@ -23,7 +19,7 @@ export const useOnFork = ({
 }: {
   vizKit: VizKitAPI;
   id: VizId;
-  content: Content;
+  content: VizContent;
   setShareDBError: (error: any) => void;
   toggleForkModal: () => void;
 }) =>

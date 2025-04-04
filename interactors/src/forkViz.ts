@@ -7,9 +7,7 @@ import {
 } from 'gateways';
 import { diff } from 'ot';
 import {
-  VizId,
   Info,
-  Content,
   Commit,
   CommitId,
   Timestamp,
@@ -20,6 +18,7 @@ import { generateId } from './generateId';
 import { SaveViz } from './saveViz';
 import { GetContentAtCommit } from './getContentAtCommit';
 import { CommitViz } from './commitViz';
+import { VizContent, VizId } from '@vizhub/viz-types';
 
 const debug = false;
 
@@ -50,7 +49,7 @@ export const ForkViz = (gateways: Gateways) => {
     forkedFrom: VizId; // The ID of the viz being forked.
     timestamp: Timestamp; // The timestamp at which this viz is forked.
     newOwner: UserId; // The owner of the new viz.
-    content?: Content; // The content of the new viz (optional).
+    content?: VizContent; // The content of the new viz (optional).
     title?: string; // The title of the new viz (optional, defaults to old title).
     visibility?: Visibility; // The visibility of the new viz.
     forkedFromCommitId?: CommitId; // The ID of the commit being forked from (optional).
@@ -157,7 +156,7 @@ export const ForkViz = (gateways: Gateways) => {
     }
     const oldContent = oldContentResult.value;
 
-    const newContent: Content = {
+    const newContent: VizContent = {
       ...oldContent,
       ...content,
       id: newVizId,

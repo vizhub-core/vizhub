@@ -1,9 +1,6 @@
 import {
-  Content,
-  File,
   Info,
   Snapshot,
-  VizId,
   getRuntimeVersion,
   slugify,
 } from 'entities';
@@ -21,6 +18,11 @@ import {
 } from 'interactors';
 import { zipFiles } from './zipFiles';
 import { BuildVizResult } from 'interactors/src/buildViz';
+import {
+  VizContent,
+  VizFile,
+  VizId,
+} from '@vizhub/viz-types';
 
 export const exportVizEndpoint = ({
   app,
@@ -103,9 +105,9 @@ export const exportVizEndpoint = ({
       if (getContentResult.outcome === 'failure') {
         return res.send(getContentResult);
       }
-      const contentSnapshot: Snapshot<Content> =
+      const contentSnapshot: Snapshot<VizContent> =
         getContentResult.value;
-      const content: Content = contentSnapshot.data;
+      const content: VizContent = contentSnapshot.data;
       const runtimeVersion = getRuntimeVersion(content);
 
       if (runtimeVersion !== 3) {
@@ -192,7 +194,7 @@ export const exportVizEndpoint = ({
         //         - slug-for-imported-viz-2/
         //         - slug-for-imported-viz-3/
 
-        let allFiles: Array<File> = [];
+        let allFiles: Array<VizFile> = [];
 
         // For each vizCacheInfoSnapshots
         for (const [vizId, infoSnapshot] of Object.entries(
@@ -201,7 +203,7 @@ export const exportVizEndpoint = ({
           const info: Info = infoSnapshot.data;
           const contentSnapshot =
             vizCacheContentSnapshots[vizId];
-          const content: Content = contentSnapshot.data;
+          const content: VizContent = contentSnapshot.data;
 
           const directoryName = getSlug(info);
           // const fullSlug = `${userName}/${directoryName}`;
@@ -212,9 +214,9 @@ export const exportVizEndpoint = ({
           const directory = `vizhub-exports/${fullSlug}`;
 
           // Place the files in the directory.
-          const vizFiles: Array<File> = Object.values(
+          const vizFiles: Array<VizFile> = Object.values(
             content.files,
-          ).map((file: File) => ({
+          ).map((file: VizFile) => ({
             name: `${directory}/${file.name}`,
             text: file.text,
           }));

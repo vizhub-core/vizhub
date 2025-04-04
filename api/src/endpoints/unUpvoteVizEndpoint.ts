@@ -1,5 +1,4 @@
 import express from 'express';
-import { VizId } from 'entities';
 import {
   Gateways,
   err,
@@ -8,6 +7,7 @@ import {
 import { getAuthenticatedUserId } from '../parseAuth0User';
 import { authenticationRequiredError } from 'gateways/src/errors';
 import { UnUpvoteViz } from 'interactors';
+import { VizId } from '@vizhub/viz-types';
 
 export const unUpvoteVizEndpoint = ({
   app,

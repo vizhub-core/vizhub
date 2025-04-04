@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
-import { Content } from 'entities';
 import { sampleContent } from 'entities/test/fixtures';
 import { createVizCache } from './vizCache';
+import { VizContent } from '@vizhub/viz-types';
 
 describe('VizCache', () => {
   describe('VizCache - get method', () => {
@@ -61,7 +61,7 @@ describe('VizCache', () => {
         handleCacheMiss: vi.fn(),
       });
 
-      const newContent: Content = {
+      const newContent: VizContent = {
         id: 'newContent',
         files: {},
         title: 'New Content',
@@ -75,7 +75,7 @@ describe('VizCache', () => {
     });
 
     it('should update existing content in the cache', async () => {
-      const updatedContent: Content = {
+      const updatedContent: VizContent = {
         ...sampleContent,
         title: 'Updated Content Title',
       };
@@ -100,13 +100,13 @@ describe('VizCache', () => {
       });
 
       // Adding multiple contents
-      const contentA: Content = {
+      const contentA: VizContent = {
         id: 'contentA',
         files: {},
         title: 'Content A',
       };
 
-      const contentB: Content = {
+      const contentB: VizContent = {
         id: 'contentB',
         files: {},
         title: 'Content B',

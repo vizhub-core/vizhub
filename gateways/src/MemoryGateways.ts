@@ -12,7 +12,6 @@ import {
 import {
   defaultSortOrder,
   defaultSortOption,
-  VizId,
   VizEmbedding,
   CommitId,
   FolderId,
@@ -28,6 +27,7 @@ import { fakeSnapshot } from 'entities/test/fixtures';
 import { ok, err, Result } from './Result';
 import { Gateways, pageSize } from './Gateways';
 import { ascending, descending } from 'd3-array';
+import { VizId } from '@vizhub/viz-types';
 
 type Entity = { [key: string]: any };
 type EntityId = string;

@@ -1,9 +1,9 @@
-import { VizId } from './Viz';
 import { FolderId } from './Folders';
 import { UserId } from './Users';
 import { OrgId } from './Orgs';
 import { CommitId } from './RevisionHistory';
 import { Markdown } from './common';
+import { VizId } from '@vizhub/viz-types';
 
 // CollectionId
 //  * Unique identifier string for a collection.

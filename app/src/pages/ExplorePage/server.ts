@@ -33,14 +33,23 @@ ExplorePage.getPageData = async ({
   if (infosAndOwnersResult.outcome === 'failure') {
     console.log('Error when fetching infos and owners:');
     console.log(infosAndOwnersResult.error);
-    return null;
+    // return null;
   }
   const {
     infoSnapshots,
     ownerUserSnapshots,
     hasMore,
     thumbnailURLs,
-  } = infosAndOwnersResult.value;
+  } =
+    infosAndOwnersResult.outcome === 'failure'
+      ? {
+          // Fallback for local development
+          infoSnapshots: [],
+          ownerUserSnapshots: [],
+          hasMore: false,
+          thumbnailURLs: {},
+        }
+      : infosAndOwnersResult.value;
 
   const { authenticatedUserSnapshot } =
     await getAuthenticatedUser({

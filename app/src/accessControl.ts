@@ -13,7 +13,6 @@ import {
   READ,
   User,
   UserId,
-  VizId,
   WRITE,
   freeTierSizeLimitMB,
   premiumTierSizeLimitMB,
@@ -26,6 +25,7 @@ import {
   tooLargeError,
   tooLargeForFreeError,
 } from 'gateways/src/errors';
+import { VizId } from '@vizhub/viz-types';
 
 // For formatting a number of megabytes.
 // Shows one decimal place, but only if that decimal place is not zero.

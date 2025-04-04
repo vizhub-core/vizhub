@@ -2,12 +2,13 @@ import multer from 'multer';
 import { ForkViz, EditWithAI } from 'interactors';
 import { err, ok } from 'gateways';
 import { getAuthenticatedUserId } from '../parseAuth0User';
-import { VizId, dateToTimestamp } from 'entities';
+import { dateToTimestamp } from 'entities';
 import {
   authenticationRequiredError,
   missingParameterError,
 } from 'gateways/src/errors';
 import { toCollectionName } from 'database/src/toCollectionName';
+import { VizId } from '@vizhub/viz-types';
 
 // The template viz ID that we'll fork from
 const TEMPLATE_VIZ_ID: VizId =

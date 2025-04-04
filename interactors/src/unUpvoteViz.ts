@@ -5,8 +5,9 @@ import {
   err,
   Success,
 } from 'gateways';
-import { VizId, UserId } from 'entities';
+import { UserId } from 'entities';
 import { generateUpvoteId } from './generateUpvoteId';
+import { VizId } from '@vizhub/viz-types';
 
 // unUpvoteViz
 //  * Deletes an Upvote associated with this viz

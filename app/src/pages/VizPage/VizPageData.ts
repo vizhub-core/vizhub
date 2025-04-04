@@ -1,12 +1,9 @@
 import {
   Comment,
   CommitMetadata,
-  Content,
   Info,
-  SlugKey,
   Snapshot,
   User,
-  VizId,
 } from 'entities';
 import { PageData } from '../Page';
 import { BuildVizResult } from 'interactors/src/buildViz';

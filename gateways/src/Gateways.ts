@@ -1,8 +1,6 @@
 import {
-  VizId,
   Snapshot,
   Info,
-  Content,
   User,
   UserId,
   UserName,
@@ -42,29 +40,21 @@ import {
   ResourceId,
   SortField,
   SortOrder,
-  // Embedding,
-  // EmbeddingId,
   MigrationStatus,
   VizEmbedding,
-  ImageMetadata,
-  StoredImage,
-  ImageId,
   BetaProgramSignup,
   Visibility,
   ResourceLockId,
-  RevisionHistory,
   APIKey,
   AIEditMetadata,
   CommitMetadata,
 } from 'entities';
 import { Result, Success } from './Result';
 import { MigrationStatusId } from 'entities/src/Migration';
-import {
-  CommitImageKey,
-  ImageHash,
-} from 'entities/src/Images';
+import { CommitImageKey } from 'entities/src/Images';
 import { APIKeyHash, APIKeyId } from 'entities/src/APIKeys';
 import { AIEditMetadataUsage } from 'entities/src/AIEditMetadata';
+import { VizContent, VizId } from '@vizhub/viz-types';
 
 // The maximum number of Info documents to return in a single page from `getInfos()`
 // export const pageSize = 5;
@@ -98,8 +88,12 @@ export interface Gateways {
   getInfo(id: VizId): Promise<Result<Snapshot<Info>>>;
   deleteInfo(id: VizId): Promise<Result<Success>>;
 
-  saveContent(content: Content): Promise<Result<Success>>;
-  getContent(id: VizId): Promise<Result<Snapshot<Content>>>;
+  saveContent(
+    content: VizContent,
+  ): Promise<Result<Success>>;
+  getContent(
+    id: VizId,
+  ): Promise<Result<Snapshot<VizContent>>>;
   deleteContent(id: VizId): Promise<Result<Success>>;
 
   saveUser(user: User): Promise<Result<Success>>;
@@ -242,36 +236,6 @@ export interface Gateways {
     id: MigrationStatusId,
   ): Promise<Result<Success>>;
 
-  saveImageMetadata(
-    imageMetadata: ImageMetadata,
-  ): Promise<Result<Success>>;
-  getImageMetadata(
-    id: ImageId,
-  ): Promise<Result<Snapshot<ImageMetadata>>>;
-  deleteImageMetadata(
-    id: ImageId,
-  ): Promise<Result<Success>>;
-
-  saveStoredImage(
-    storedImage: StoredImage,
-  ): Promise<Result<Success>>;
-  getStoredImage(
-    id: ImageHash,
-  ): Promise<Result<StoredImage>>;
-  deleteStoredImage(
-    id: ImageHash,
-  ): Promise<Result<Success>>;
-
-  saveBetaProgramSignup(
-    betaProgramSignup: BetaProgramSignup,
-  ): Promise<Result<Success>>;
-  getBetaProgramSignup(
-    id: string,
-  ): Promise<Result<BetaProgramSignup>>;
-  deleteBetaProgramSignup(
-    id: string,
-  ): Promise<Result<Success>>;
-
   saveUser(user: User): Promise<Result<Success>>;
   getUser(id: UserId): Promise<Result<Snapshot<User>>>;
   deleteUser(id: UserId): Promise<Result<Success>>;
@@ -289,17 +253,6 @@ export interface Gateways {
   ): Promise<Result<Success>>;
   getAPIKeyHash(id: APIKeyId): Promise<Result<APIKeyHash>>;
   deleteAPIKeyHash(id: APIKeyId): Promise<Result<Success>>;
-
-  // TODO implement these backed by `pgvector` in Supabase
-  // saveEmbedding(
-  //   embedding: Embedding,
-  // ): Promise<Result<Success>>;
-  // getEmbedding(
-  //   id: EmbeddingId,
-  // ): Promise<Result<Snapshot<Embedding>>>;
-  // deleteEmbedding(
-  //   id: EmbeddingId,
-  // ): Promise<Result<Success>>;
 
   // ***************************************************************
   // ******************** Non-CRUD Operations **********************

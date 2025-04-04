@@ -4,7 +4,7 @@
 // * Always computed from the latest commit of a Viz.
 // * Needs to be updated when latest commit changes.
 
-import { VizId } from './Viz';
+import { VizId } from '@vizhub/viz-types';
 
 export interface VizEmbedding {
   vizId: VizId;
