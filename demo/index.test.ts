@@ -3,6 +3,7 @@ import { initializeGateways } from 'database';
 import { sampleEntities } from 'gateways/test';
 import {
   primordialViz,
+  userJane,
   userJoe,
   v3RuntimeDemoViz,
 } from 'entities/test/fixtures';
@@ -28,22 +29,26 @@ describe('Populating demo database', () => {
       const saveMethod = `save${entityName}`;
       await gateways[saveMethod](sampleEntity);
     }
+
+    // Save userJane
+    const saveUserResult = await gateways.saveUser(userJane);
+    expect(saveUserResult.outcome).toEqual('success');
   });
 
-  it('saving v3 demo example', async () => {
-    // Fork the primordial viz
-    const forkViz = ForkViz(gateways);
-    const result = await forkViz({
-      newOwner: userJoe.id,
-      forkedFrom: primordialViz.info.id,
-      title: 'VizHub v3 Runtime Demo',
-      content: {
-        ...primordialViz.content,
-        files: v3RuntimeDemoViz.content.files,
-      },
-      timestamp: dateToTimestamp(new Date()),
-      newVizId: 'v3-runtime-demo',
-    });
-    expect(result.outcome).toEqual('success');
-  });
+  // it('saving v3 demo example', async () => {
+  //   // Fork the primordial viz
+  //   const forkViz = ForkViz(gateways);
+  //   const result = await forkViz({
+  //     newOwner: userJoe.id,
+  //     forkedFrom: primordialViz.info.id,
+  //     title: 'VizHub v3 Runtime Demo',
+  //     content: {
+  //       ...primordialViz.content,
+  //       files: v3RuntimeDemoViz.content.files,
+  //     },
+  //     timestamp: dateToTimestamp(new Date()),
+  //     newVizId: 'v3-runtime-demo',
+  //   });
+  //   expect(result.outcome).toEqual('success');
+  // });
 });

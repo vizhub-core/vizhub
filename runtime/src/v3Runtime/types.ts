@@ -1,4 +1,5 @@
-import { Content, V3PackageJson, VizId } from 'entities';
+import { VizContent, VizId } from '@vizhub/viz-types';
+import {  V3PackageJson } from 'entities';
 
 // The result of a build.
 export type V3BuildResult = {
@@ -39,7 +40,7 @@ export type V3WorkerMessage =
   | {
       type: 'contentResponse';
       vizId: VizId;
-      content: Content;
+      content: VizContent;
     }
 
   // `buildRequest`

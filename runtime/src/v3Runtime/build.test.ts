@@ -1,5 +1,4 @@
 import { describe, it, expect } from 'vitest';
-import { missingIndexJSError } from 'gateways';
 import { compile } from 'svelte/compiler';
 import { rollup } from 'rollup';
 import { build } from './build';
@@ -14,8 +13,8 @@ import {
   sampleContentWithCSVStrangeCharacters,
   sampleContentSvelte,
 } from 'entities/test/fixtures';
-import { VizId } from 'entities';
 import { missingImportError } from 'gateways/src/errors';
+import { VizId } from '@vizhub/viz-types';
 
 describe('v3 build', () => {
   it('Should throw an error when missing files', async () => {

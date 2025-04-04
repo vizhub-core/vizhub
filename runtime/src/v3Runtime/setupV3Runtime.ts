@@ -7,9 +7,10 @@ import {
   V3WindowMessage,
   V3WorkerMessage,
 } from './types';
-import { Content, VizId, getFileText } from 'entities';
+import { getFileText } from 'entities';
 import { parseId } from './parseId';
 import { cleanRollupErrorMessage } from './cleanRollupErrorMessage';
+import { VizContent, VizId } from '@vizhub/viz-types';
 
 // Flag for debugging.
 const debug = false;
@@ -32,7 +33,7 @@ const PENDING_DIRTY = 'PENDING_DIRTY';
 
 export type V3Runtime = {
   // Performs a hot reload of a new build.
-  handleCodeChange: (content: Content) => void;
+  handleCodeChange: (content: VizContent) => void;
 
   // Performs a hot reload of a new build.
   invalidateVizCache: (changedVizIds: Array<VizId>) => void;
@@ -53,7 +54,7 @@ export const setupV3Runtime = ({
   vizId: VizId;
   iframe: HTMLIFrameElement;
   setSrcdocErrorMessage: (error: string | null) => void;
-  getLatestContent: (vizId: VizId) => Promise<Content>;
+  getLatestContent: (vizId: VizId) => Promise<VizContent>;
   resolveSlugKey: (slugKey: string) => Promise<VizId>;
   writeFile: (fileName: string, content: string) => void;
 }): V3Runtime => {

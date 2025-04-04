@@ -7,9 +7,7 @@ import {
 } from 'rollup';
 import { V3BuildError, V3BuildResult } from './types';
 import {
-  Content,
   V3PackageJson,
-  VizId,
   getFileText,
 } from 'entities';
 import { vizResolve } from './vizResolve';
@@ -23,6 +21,7 @@ import {
   missingImportError,
   rollupError,
 } from 'gateways/src/errors';
+import { VizContent, VizId } from '@vizhub/viz-types';
 
 const debug = false;
 
@@ -108,7 +107,7 @@ export const build = async ({
   let src: string | undefined;
   let pkg: V3PackageJson | undefined;
 
-  const content: Content = await vizCache.get(vizId);
+  const content: VizContent = await vizCache.get(vizId);
 
   const indexJSContent = getFileText(content, 'index.js');
   const cssFilesSet = new Set<string>();

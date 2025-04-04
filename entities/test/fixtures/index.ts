@@ -116,7 +116,7 @@ export const sampleReadmeText = [
 // Special because it's the only one not forked from another.
 export const primordialViz: Viz = {
   info: {
-    id: 'viz1',
+    id: '86a75dc8bdbe4965ba353a79d4bd44c8',
     owner: userJoe.id,
     folder: sampleFolder.id,
     title: 'Primordial Viz',
@@ -135,7 +135,7 @@ export const primordialViz: Viz = {
     upvotesCount: 2,
   },
   content: {
-    id: 'viz1',
+    id: '86a75dc8bdbe4965ba353a79d4bd44c8',
     files: {
       '7548392': {
         name: 'index.html',
