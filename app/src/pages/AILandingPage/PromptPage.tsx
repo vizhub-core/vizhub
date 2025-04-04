@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { VizKit } from 'api/src/VizKit';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '../../reactRouterExports';
 import {
   Upload,
   SendHorizontal,
