@@ -1,6 +1,5 @@
 import { useCallback, useMemo } from 'react';
-import { useSearchParams } from 'react-router-dom';
-
+import { useSearchParams } from '../../reactRouterExports';
 export const useURLState = () => {
   // Embed mode - to make the viz full screen
   // ?mode=embed

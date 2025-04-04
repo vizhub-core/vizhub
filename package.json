@@ -43,5 +43,8 @@
     "migration2",
     "migration3",
     "ot"
-  ]
+  ],
+  "devDependencies": {
+    "npm-check-updates": "^17.1.16"
+  }
 }
