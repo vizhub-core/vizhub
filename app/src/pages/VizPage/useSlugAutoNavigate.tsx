@@ -1,6 +1,9 @@
 import { Info } from 'entities';
 import { useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import {
+  useNavigate,
+  useParams,
+} from '../../reactRouterExports';
 
 // This hook is used to automatically navigate to the correct slug
 // when the slug is changed in the database.

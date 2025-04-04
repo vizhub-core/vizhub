@@ -5,7 +5,6 @@ import {
   ReactNode,
   FC,
 } from 'react';
-import { useSearchParams } from 'react-router-dom';
 import {
   SectionId,
   asSectionId,
@@ -13,6 +12,7 @@ import {
   SortId,
   asSortId,
 } from 'entities';
+import { useSearchParams } from '../reactRouterExports';
 
 // Define the context type
 interface SectionSortContextType {

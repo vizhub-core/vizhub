@@ -6,7 +6,7 @@ import {
   Route,
   Routes,
   useLocation,
-} from 'react-router-dom';
+} from './reactRouterExports';
 import { pages } from './pages/client';
 
 const debug = false;

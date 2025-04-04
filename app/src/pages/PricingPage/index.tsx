@@ -5,8 +5,8 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { useSearchParams } from 'react-router-dom';
 import { FeatureId, User } from 'entities';
+import { useSearchParams } from '../../reactRouterExports';
 import { PricingPageBody } from 'components/src/components/PricingPageBody';
 import { VizKit } from 'api/src/VizKit';
 import { SmartHeader } from '../../smartComponents/SmartHeader';

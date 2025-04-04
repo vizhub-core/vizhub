@@ -28,7 +28,7 @@
     "@types/react-dom": "^18",
     "@vitejs/plugin-react": "^4.3.4",
     "prettier": "^3.5.3",
-    "sass": "^1.86.2",
+    "sass": "^1.86.3",
     "vite": "^6.2.5"
   }
 }
