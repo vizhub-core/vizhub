@@ -1,8 +1,6 @@
 import {
   Info,
-  VizId,
   Snapshot,
-  Content,
   READ,
   WRITE,
   DELETE,
@@ -10,8 +8,6 @@ import {
   User,
   defaultVizWidth,
   UpvoteId,
-  // getVizThumbnailURL,
-  // absoluteURL,
   Comment,
   CommitId,
   CommitMetadata,
@@ -36,6 +32,7 @@ import { VizAccess } from 'interactors/src/verifyVizAccess';
 import { Result } from 'gateways';
 import { VizPageData } from './VizPageData';
 import { GetThumbnailURLs } from 'interactors/src/getThumbnailURLs';
+import { VizContent, VizId } from '@vizhub/viz-types';
 
 setJSDOM(JSDOM);
 
@@ -243,8 +240,8 @@ VizPage.getPageData = async ({
     // If we're here, then the user has read access to the viz,
     // so it's worth fetching the content.
     // Now it's a question of which version of the content we need!
-    let content: Content;
-    let contentSnapshot: Snapshot<Content> | undefined;
+    let content: VizContent;
+    let contentSnapshot: Snapshot<VizContent> | undefined;
 
     // If we are viewing the viz at a certain version,
     // then we get the content at that commit.

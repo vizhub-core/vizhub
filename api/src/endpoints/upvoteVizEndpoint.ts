@@ -1,5 +1,5 @@
 import express from 'express';
-import { VizId, dateToTimestamp } from 'entities';
+import { dateToTimestamp } from 'entities';
 import {
   Gateways,
   err,
@@ -8,6 +8,7 @@ import {
 import { getAuthenticatedUserId } from '../parseAuth0User';
 import { authenticationRequiredError } from 'gateways/src/errors';
 import { UpvoteViz } from 'interactors';
+import { VizId } from '@vizhub/viz-types';
 
 export const upvoteVizEndpoint = ({
   app,

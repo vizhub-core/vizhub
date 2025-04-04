@@ -1,13 +1,9 @@
+import { VizContent, VizId } from '@vizhub/viz-types';
 import {
-  Content,
   Info,
   Snapshot,
-  VizId,
-  absoluteURL,
   getHeight,
-  // getVizThumbnailURL,
   iframeSnippet,
-  thumbnailWidth,
 } from 'entities';
 import express from 'express';
 import {
@@ -115,7 +111,8 @@ export const oembedEndpoint = ({
       if (getContentResult.outcome === 'failure') {
         return res.send(getContentResult);
       }
-      const content: Content = getContentResult.value.data;
+      const content: VizContent =
+        getContentResult.value.data;
 
       const height = getHeight(content.height);
 

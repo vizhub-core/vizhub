@@ -14,27 +14,29 @@ const isolateMetadata = (
   id: commit.id,
   parent: commit.parent,
   timestamp: commit.timestamp,
+  authors: commit.authors,
 });
 
 export const getRevisionHistoryTest = () => {
   describe('getRevisionHistory', () => {
     it('getRevisionHistory with 3 commits', async () => {
       const gateways = await initGateways();
-      const { saveCommit, getRevisionHistory } = gateways;
+      const {
+        saveCommit,
+        getRevisionHistoryCommitMetadata,
+      } = gateways;
 
       await saveCommit(primordialCommit);
       await saveCommit(commit2);
       await saveCommit(commit3);
 
-      const result = await getRevisionHistory(
+      const result = await getRevisionHistoryCommitMetadata(
         primordialViz.info.id,
       );
       assert(result.outcome === 'success');
-      expect(result.value.commitMetadatas.length).toEqual(
-        3,
-      );
+      expect(result.value.length).toEqual(3);
 
-      expect(result.value.commitMetadatas).toEqual([
+      expect(result.value).toEqual([
         isolateMetadata(primordialCommit),
         isolateMetadata(commit2),
         isolateMetadata(commit3),

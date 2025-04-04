@@ -1,5 +1,6 @@
 import { Gateways } from 'gateways';
-import { SlugKey, VizId } from 'entities';
+import { SlugKey } from 'entities';
+import { VizId } from '@vizhub/viz-types';
 
 // resolveSlug
 // * Resolves a slug import to a viz ID.

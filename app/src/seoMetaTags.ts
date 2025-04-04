@@ -14,6 +14,11 @@ export const seoMetaTags = ({
   // Optional
   descriptionSanitized,
   image,
+}: {
+  titleSanitized: string;
+  relativeUrl: string;
+  descriptionSanitized?: string;
+  image?: string;
 }) => {
   const url = absoluteURL(relativeUrl);
   // Example of a valid oEmbed link:

@@ -1,7 +1,8 @@
 import { Gateways, Result } from 'gateways';
-import { VizId, Content, Timestamp } from 'entities';
+import { Timestamp } from 'entities';
 import { GetContentAtCommit } from './getContentAtCommit';
 import { GetCommitAtTimestamp } from './getCommitAtTimestamp';
+import { VizContent, VizId } from '@vizhub/viz-types';
 
 // https://gitlab.com/curran/vizhub-ee/-/blob/main/vizhub-ee-interactors/src/GetContentAtTimestamp.ts
 export const GetContentAtTimestamp = (
@@ -15,7 +16,7 @@ export const GetContentAtTimestamp = (
   return async (
     id: VizId,
     timestamp: Timestamp,
-  ): Promise<Result<Content>> => {
+  ): Promise<Result<VizContent>> => {
     const infoResult = await getInfo(id);
     if (infoResult.outcome === 'failure') return infoResult;
     const info = infoResult.value.data;

@@ -1,10 +1,7 @@
 import {
   CommitId,
-  Content,
   defaultVizWidth,
   getHeight,
-  Info,
-  VizId,
 } from 'entities';
 import { rollup } from 'rollup';
 import {
@@ -25,6 +22,7 @@ import {
   VizCache,
 } from '@vizhub/runtime';
 import { ResolveSlug } from './resolveSlug';
+import { VizId } from '@vizhub/viz-types';
 
 const DEBUG = false;
 

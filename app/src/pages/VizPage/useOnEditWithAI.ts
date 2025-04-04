@@ -1,7 +1,7 @@
-import { VizId } from 'entities';
 import { useCallback, useState, useEffect } from 'react';
 import { Result } from 'gateways';
 import { VizKitAPI } from 'api/src/VizKit';
+import { VizId } from '@vizhub/viz-types';
 
 const debug = false;
 const DEBUG = false;

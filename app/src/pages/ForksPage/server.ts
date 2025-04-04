@@ -4,7 +4,6 @@ import {
   Snapshot,
   SortId,
   User,
-  VizId,
   asSortId,
 } from 'entities';
 import {
@@ -19,6 +18,7 @@ import {
   ForksPageData,
   ForksPageQuery,
 } from './index';
+import { VizId } from '@vizhub/viz-types';
 
 const defaultSortId: SortId = 'mostRecent';
 

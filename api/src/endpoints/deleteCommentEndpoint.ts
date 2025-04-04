@@ -1,5 +1,5 @@
 import express from 'express';
-import { Comment, CommentId } from 'entities';
+import { CommentId } from 'entities';
 import { Gateways, err } from 'gateways';
 import { getAuthenticatedUserId } from '../parseAuth0User';
 import { authenticationRequiredError } from 'gateways/src/errors';

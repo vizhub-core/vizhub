@@ -1,9 +1,10 @@
-import { User, VizId } from 'entities';
+import { User } from 'entities';
 import { useCallback } from 'react';
 import { Result, Success } from 'gateways';
 import { setCookie } from '../cookies';
 import { VizKitAPI } from 'api/src/VizKit';
 import { getProfilePageHref } from '../../accessors';
+import { VizId } from '@vizhub/viz-types';
 
 const debug = false;
 

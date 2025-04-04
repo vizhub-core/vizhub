@@ -1,5 +1,5 @@
 import { useContext, useMemo } from 'react';
-import { VizId, VizPath } from 'entities';
+import { VizPath } from 'entities';
 import { CreateVizPageBody } from 'components';
 import { SmartHeader } from '../../smartComponents/SmartHeader';
 import { VizPreviewPresenter } from '../../smartComponents/VizPreviewPresenter';
@@ -9,6 +9,7 @@ import {
   curatedVizzes,
 } from './curatedVizzes';
 import { VizPreviewCollection } from 'components/src/components/VizPreviewCollection';
+import { VizId } from '@vizhub/viz-types';
 
 export const Body = ({ vizIdsByPath }) => {
   const {

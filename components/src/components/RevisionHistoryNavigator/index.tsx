@@ -15,7 +15,6 @@ import { zoom, zoomIdentity } from 'd3-zoom';
 import {
   CommitId,
   CommitMetadata,
-  Content,
   Info,
   RevisionHistory,
   defaultVizWidth,
@@ -23,6 +22,7 @@ import {
 import { Spinner } from '../Spinner';
 import { formatCommitTimestamp } from '../formatCommitTimestamp';
 import './styles.scss';
+import { VizContent } from '@vizhub/viz-types';
 
 // The width of the thumbnail
 const revisionThumbnailWidth = defaultVizWidth / 4;
@@ -58,7 +58,7 @@ const Body = ({
     height: number;
   };
   info: Info;
-  content: Content;
+  content: VizContent;
   getVizPageHrefForCommit: (commitId: CommitId) => string;
 }) => {
   const { width, height } = size;
@@ -298,7 +298,7 @@ export const RevisionHistoryNavigator = ({
 }: {
   revisionHistory: RevisionHistory | null;
   info: Info;
-  content: Content;
+  content: VizContent;
   getVizPageHrefForCommit: (commitId: CommitId) => string;
 }) => {
   // Measure size

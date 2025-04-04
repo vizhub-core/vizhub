@@ -1,10 +1,4 @@
-import {
-  Content,
-  Info,
-  Snapshot,
-  VizId,
-  slugify,
-} from 'entities';
+import { Info, Snapshot, slugify } from 'entities';
 import express from 'express';
 
 import {
@@ -15,6 +9,7 @@ import {
 import { accessDeniedError } from 'gateways/src/errors';
 import { GetInfoByIdOrSlug } from 'interactors';
 import { zipFiles } from './zipFiles';
+import { VizContent, VizId } from '@vizhub/viz-types';
 
 // https://github.com/vizhub-core/vizhub-legacy/blob/2a41920a083e08aa5e3729dd437c629678e71093/vizhub-v2/packages/controllers/src/apiController/visualizationAPIController/exportVisualizationController.js
 export const getVizEndpoint = ({
@@ -94,7 +89,8 @@ export const getVizEndpoint = ({
       if (getContentResult.outcome === 'failure') {
         return res.send(getContentResult);
       }
-      const content: Content = getContentResult.value.data;
+      const content: VizContent =
+        getContentResult.value.data;
 
       if (format === 'json') {
         res.setHeader('Content-Type', 'application/json');

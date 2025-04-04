@@ -1,11 +1,7 @@
 import { Gateways, Result, ok } from 'gateways';
-import {
-  isId,
-  UserName,
-  Viz,
-  VizId,
-  VizPath,
-} from 'entities';
+import { VizPath } from 'entities';
+import { VizId } from '@vizhub/viz-types';
+import { isVizId } from '@vizhub/viz-utils';
 
 export const ResolveVizPaths = (gateways: Gateways) => {
   return async ({
@@ -43,7 +39,7 @@ export const ResolveVizPaths = (gateways: Gateways) => {
         //   slug,
         // });
 
-        if (isId(slugOrId)) {
+        if (isVizId(slugOrId)) {
           // In this case slugOrId is a vizId
           const vizId: VizId = slugOrId as VizId;
           vizIds.push(vizId);

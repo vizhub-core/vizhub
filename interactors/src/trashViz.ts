@@ -6,7 +6,6 @@ import {
   err,
 } from 'gateways';
 import {
-  VizId,
   Info,
   Timestamp,
   infoLock,
@@ -18,6 +17,7 @@ import {
   VizAccess,
 } from './verifyVizAccess';
 import { accessDeniedError } from 'gateways/src/errors';
+import { VizId } from '@vizhub/viz-types';
 
 // trashViz
 //  * Moves a viz to the "trash"

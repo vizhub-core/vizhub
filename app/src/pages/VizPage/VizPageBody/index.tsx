@@ -7,7 +7,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import { SplitPaneResizeContext, FileId } from 'vzcode';
+import { SplitPaneResizeContext } from 'vzcode';
 import {
   defaultVizWidth,
   User,
@@ -48,6 +48,7 @@ import { useComments } from './useComments';
 import { getAvatarURL } from '../../../accessors/getAvatarURL';
 import { VizPageContext } from '../VizPageContext';
 import { formatCommitTimestamp } from 'components/src/components/formatCommitTimestamp';
+import { VizFileId } from '@vizhub/viz-types';
 
 const debug = false;
 const enableVizPageUpgradeBanner = false;
@@ -172,7 +173,7 @@ export const VizPageBody = () => {
   // Allow vizzes to just be documentation / articles
   // if there is only one file and that file is README.md.
   const isVisual = useMemo(() => {
-    const fileIds: Array<FileId> = Object.keys(
+    const fileIds: Array<VizFileId> = Object.keys(
       content.files,
     );
     const isSingleFile =

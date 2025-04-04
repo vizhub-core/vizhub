@@ -9,11 +9,8 @@ import {
   accessDeniedError,
 } from 'gateways';
 import {
-  VizId,
   AIEditMetadata,
   dateToTimestamp,
-  generateId,
-  Files,
   userLock,
   User,
 } from 'entities';
@@ -27,6 +24,8 @@ import {
   CREDIT_MARKUP,
   PRO_CREDITS_PER_MONTH,
 } from 'entities/src/Pricing';
+import { VizFiles, VizId } from '@vizhub/viz-types';
+import { generateId } from './generateId';
 
 const debug = false;
 const DEBUG = false;
@@ -138,7 +137,7 @@ export const EditWithAI = (gateways: Gateways) => {
       }
 
       // Get existing files
-      const files: Files = shareDBDoc.data.files;
+      const files: VizFiles = shareDBDoc.data.files;
 
       // Define LLM function
       const llmFunction = async (fullPrompt: string) => {

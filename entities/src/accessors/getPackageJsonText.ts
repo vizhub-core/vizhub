@@ -1,6 +1,6 @@
-import { Content } from 'entities';
+import { VizContent } from '@vizhub/viz-types';
 import { getFileText } from './getFileText';
 
 export const getPackageJsonText = (
-  content: Content,
+  content: VizContent,
 ): string | null => getFileText(content, 'package.json');

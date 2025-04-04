@@ -17,7 +17,6 @@ import {
   User,
   UserId,
   UserName,
-  VizId,
   dateToTimestamp,
   defaultSortField,
   defaultSortOrder,
@@ -37,6 +36,7 @@ import { toCollectionName } from './toCollectionName';
 import { pageSize as defaultPageSize } from 'gateways/src/Gateways';
 import { ShareDBDoc } from 'vzcode';
 import { CommitImageKey } from 'entities/src/Images';
+import { VizId } from '@vizhub/viz-types';
 // import { embeddingMethods } from './embeddingMethods';
 
 const debug = false;

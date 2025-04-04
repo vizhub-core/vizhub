@@ -5,7 +5,7 @@
   "main": "src/index.ts",
   "scripts": {
     "test": "vitest run",
-    "tsc": "tsc --noEmit",
+    "typecheck": "tsc --noEmit",
     "prettier": "prettier {*.*,**/*.*} --single-quote --write"
   },
   "repository": {
@@ -19,6 +19,8 @@
   },
   "homepage": "https://github.com/vizhub-core/vizhub3#readme",
   "dependencies": {
+    "@vizhub/viz-types": "^0.0.2",
+    "@vizhub/viz-utils": "^0.0.1",
     "screenshotgenie": "^0.2.0",
     "vzcode": "^1.30.1"
   },

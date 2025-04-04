@@ -3,7 +3,6 @@ import {
   Info,
   Permission,
   UserId,
-  VizId,
   dateToTimestamp,
 } from 'entities';
 import {
@@ -16,6 +15,7 @@ import {
   accessDeniedError,
   authenticationRequiredError,
 } from 'gateways/src/errors';
+import { VizId } from '@vizhub/viz-types';
 
 export const addCollaboratorEndpoint = ({
   app,

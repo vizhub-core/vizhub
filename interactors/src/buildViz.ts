@@ -2,12 +2,10 @@ import { rollup } from 'rollup';
 import { compile } from 'svelte/compiler';
 import {
   CommitMetadata,
-  Content,
   Info,
   READ,
   Snapshot,
   UserId,
-  VizId,
 } from 'entities';
 import { Gateways, Result } from 'gateways';
 import {
@@ -21,6 +19,7 @@ import {
   cleanRollupErrorMessage,
 } from '@vizhub/runtime';
 import { ResolveSlug } from './resolveSlug';
+import { VizContent, VizId } from '@vizhub/viz-types';
 
 const debug = false;
 
@@ -31,12 +30,12 @@ export type BuildVizOptions = {
 } & (
   | {
       type: 'live';
-      contentSnapshot: Snapshot<Content>;
+      contentSnapshot: Snapshot<VizContent>;
       infoSnapshot: Snapshot<Info>;
     }
   | {
       type: 'versioned';
-      contentStatic: Content;
+      contentStatic: VizContent;
       infoStatic: Info;
       commitMetadata: CommitMetadata;
     }
@@ -53,13 +52,13 @@ export type BuildVizResult = {
       vizCacheInfoSnapshots: Record<VizId, Snapshot<Info>>;
       vizCacheContentSnapshots: Record<
         VizId,
-        Snapshot<Content>
+        Snapshot<VizContent>
       >;
     }
   | {
       type: 'versioned';
       vizCacheInfosStatic: Record<VizId, Info>;
-      vizCacheContentsStatic: Record<VizId, Content>;
+      vizCacheContentsStatic: Record<VizId, VizContent>;
     }
 );
 
@@ -78,7 +77,7 @@ export const BuildViz = (gateways: Gateways) => {
   const { getInfo, getContent } = gateways;
   const verifyVizAccess = VerifyVizAccess(gateways);
 
-  let content: Content;
+  let content: VizContent;
   return async (
     buildVizOptions: BuildVizOptions,
   ): Promise<BuildVizResult> => {
@@ -96,14 +95,14 @@ export const BuildViz = (gateways: Gateways) => {
 
     let vizCacheContentSnapshots: Record<
       VizId,
-      Snapshot<Content>
+      Snapshot<VizContent>
     >;
     let vizCacheInfoSnapshots: Record<
       VizId,
       Snapshot<Info>
     >;
 
-    let vizCacheContentsStatic: Record<VizId, Content>;
+    let vizCacheContentsStatic: Record<VizId, VizContent>;
     let vizCacheInfosStatic: Record<VizId, Info>;
 
     if (type === 'live') {
@@ -194,7 +193,7 @@ export const BuildViz = (gateways: Gateways) => {
           console.log(contentResult.error);
           return null;
         }
-        const importedContentSnapshot: Snapshot<Content> =
+        const importedContentSnapshot: Snapshot<VizContent> =
           contentResult.value;
 
         if (type === 'live') {

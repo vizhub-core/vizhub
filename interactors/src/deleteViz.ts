@@ -5,22 +5,8 @@ import {
   err,
   Success,
 } from 'gateways';
-import { diff } from 'ot';
-import {
-  VizId,
-  Info,
-  Content,
-  Commit,
-  CommitId,
-  Timestamp,
-  UserId,
-  Visibility,
-  Viz,
-} from 'entities';
-import { generateId } from './generateId';
-import { SaveViz } from './saveViz';
-import { GetContentAtCommit } from './getContentAtCommit';
-import { CommitViz } from './commitViz';
+import { Info } from 'entities';
+import { VizId } from '@vizhub/viz-types';
 
 // deleteViz
 //  * Deletes a viz permanently

@@ -1,13 +1,11 @@
 import express from 'express';
 import {
   CommitId,
-  Content,
   Info,
   Timestamp,
   User,
   UserId,
   Visibility,
-  VizId,
   dateToTimestamp,
 } from 'entities';
 import {
@@ -17,6 +15,7 @@ import {
   ok,
 } from 'gateways';
 import { ForkViz } from 'interactors';
+import { VizContent, VizId } from '@vizhub/viz-types';
 
 // Used for debugging forking flow.
 const debug = false;
@@ -47,7 +46,7 @@ export const forkVizEndpoint = ({
           visibility: Visibility;
 
           // Provided only if there are unforked edits.
-          content?: Content;
+          content?: VizContent;
         } = req.body;
 
         // Validate parameters
@@ -76,7 +75,7 @@ export const forkVizEndpoint = ({
           forkedFrom: VizId; // The ID of the viz being forked.
           timestamp: Timestamp; // The timestamp at which this viz is forked.
           newOwner: UserId; // The owner of the new viz.
-          content?: Content; // The content of the new viz (optional).
+          content?: VizContent; // The content of the new viz (optional).
           title: string; // The title of the new viz.
           visibility: Visibility; // The visibility of the new viz.
           forkedFromCommitId?: CommitId; // The ID of the commit being forked from (optional).
