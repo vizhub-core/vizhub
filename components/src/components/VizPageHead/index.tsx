@@ -36,6 +36,7 @@ export const VizPageHead = ({
   downloadImageHref,
   toggleShowRevisionHistory,
   userCanExport,
+  userCanEditWithAI,
   toggleExportCodeUpgradeNudgeModal,
   onEditWithAIClick,
   isEditingWithAI,
@@ -78,21 +79,23 @@ export const VizPageHead = ({
             {showEditor ? 'Close' : 'Open'} Editor
           </div>
         </Button>
-        <Button
-          variant="primary"
-          onClick={onEditWithAIClick}
-          disabled={isEditingWithAI}
-          className="plausible-event-name=Edit+With+AI"
-        >
-          {isEditingWithAI ? (
-            <>
-              <Spinner height={16} />
-              <span>Editing with AI...</span>
-            </>
-          ) : (
-            <>Edit with AI</>
-          )}
-        </Button>
+        {userCanEditWithAI && (
+          <Button
+            variant="primary"
+            onClick={onEditWithAIClick}
+            disabled={isEditingWithAI}
+            className="plausible-event-name=Edit+With+AI"
+          >
+            {isEditingWithAI ? (
+              <>
+                <Spinner height={16} />
+                <span>Editing with AI...</span>
+              </>
+            ) : (
+              <>Edit with AI</>
+            )}
+          </Button>
+        )}
       </div>
       <div className="side">
         {enableRevisionHistory && (

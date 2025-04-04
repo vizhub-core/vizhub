@@ -443,6 +443,11 @@ export const VizPageBody = () => {
           authenticatedUser?.plan === PREMIUM ||
           authenticatedUser?.plan === PRO
         }
+        userCanEditWithAI={
+          canUserEditViz &&
+          (authenticatedUser?.plan === PREMIUM ||
+            authenticatedUser?.plan === PRO)
+        }
         exportHref={exportHref}
         onShareClick={toggleShareModal}
         onForkClick={toggleForkModal}

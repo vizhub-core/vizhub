@@ -28,14 +28,14 @@ cd components
 npm run dev
 ```
 
-### Full Stack App Development
+### Full Stack App Development / Self Hosting
 
 To develop locally, all you need is:
 
- * A local instance of MongoDB - see [Install MongoDB Community Edition on Ubuntu](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-ubuntu/#std-label-install-mdb-community-ubuntu)
- * NodeJS
+ * A local instance of MongoDB - see [Install MongoDB Community Edition on Ubuntu](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-ubuntu/#std-label-install-mdb-community-ubuntu), or use `docker compose up` with the provided `docker-compose.yml` file.
+ * NodeJS latest
 
-In the root (`vizhub3`) or in the `app` package (`vizhub3/app`), run the following to start the VizHub dev server:
+In the root (`vizhub`) or in the `app` package (`vizhub/app`), run the following to start the VizHub dev server:
 
 ```
 npm run dev
@@ -43,16 +43,10 @@ npm run dev
 
 To see what this script does, look at `package.json` in the `scripts` property.
 
-Note: you only need to run `npm run build` for a production build, not for local development.
-
-### Contribution Guidelines
-
-Please run Prettier on the code for each Pull Request.
-
- * Suggested workflow: enable VSCode Prettier extension to format the document on save
- * Alternative: run `npm run prettier` to format the code
 
 ## Environment Variables
+
+Use `.env`, see `.env.example` for reference.
 
 To enable use of MongoDB in development:
 `export VIZHUB3_MONGO_LOCAL=true`
@@ -86,19 +80,23 @@ In the "Application URIs" config inside the Auth0 UI:
 - "Application Login URI" - http://localhost:5173/login
 - "Allowed Callback URLs" - http://localhost:5173/login/callback - this is unique as per the GitHub "plugin" thing
 
-Example `.bashrc`:
+[Screenshot Genie](https://screenshotgenie.com/) API key for thumbnail generation:
 
 ```
-export VIZHUB3_MONGO_LOCAL=true
-export VIZHUB3_AUTH0_SECRET=7OsDu5GSODQStQhJ9t4ng31v2udKK08L7ZB_YDPlQchMtZQ6aBCeRIZenxp8D_f9n
-export VIZHUB3_AUTH0_BASE_URL=http://localhost:5173
-export VIZHUB3_AUTH0_CLIENT_ID=faBeeyfQBSm11XbTGT45AMTDjk9noHnJ
-export VIZHUB3_AUTH0_ISSUER_BASE_URL=dev-5yxv3gr1hihugt46.us.auth0.com
+SCREENSHOT_GENIE_API_KEY=
+```
+
+For "Edit with AI":
+
+```
+VIZHUB_EDIT_WITH_AI_MODEL_NAME=google/gemini-flash-1.5
+VIZHUB_EDIT_WITH_AI_API_KEY=
+VIZHUB_EDIT_WITH_AI_BASE_URL=https://openrouter.ai/api/v1
 ```
 
 ## Demo Database
 
-To populate your local database with sample data for development, run:
+To populate your local database with sample data for development or to seed a self-hosted instance with the "primordial viz", run:
 
 ```
 cd demo
@@ -119,38 +117,10 @@ within mongo shell
 
 ```
 use vizhub3
-db.user.updateOne(
-  { userName: "myUserName" },         // filter
-  { $set: { plan: "premium" } }         // update
-)
+db.user.updateOne({ userName: "myUserName" },{ $set: { plan: "premium" } } )
 ```
 
-restart dev server `npm run dev`
-
-## Docker
-
-See also [Dockerizing a Node.js web app](https://nodejs.org/en/docs/guides/nodejs-docker-webapp)
-
-How to use Docker to verify locally:
-
-```
-docker build -t vizhub3-app .
-docker images
-docker rmi <id>
-docker run -p 5173:5173 -d vizhub3-app
-docker ps
-docker logs <id>
-docker stop <id>
-```
-
-## Production Deployment
-
-Production deployment uses:
-
-- AWS CodePipeline, CodeBuild, Fargate
-- Continuous deployment for beta.vizhub.com based on `fargate-beta` branch
-- MongoDB Atlas
-- Auth0
+restart dev server `npm run dev` (need to restart whenever you change things in Mongo, since ShareDB caches the data in memory sometimes).
 
 ### Auth-related Errors
 
