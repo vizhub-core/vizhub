@@ -1,7 +1,5 @@
 // import { rollup } from 'rollup';
-import {
-  getRuntimeVersion,
-} from 'entities';
+import { getRuntimeVersion } from 'entities';
 import { computeSrcDocV2 } from './v2Runtime/computeSrcDocV2';
 import { computeSrcDocV3 } from './v3Runtime/computeSrcDocV3';
 import { build } from './v3Runtime/build';

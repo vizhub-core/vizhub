@@ -1,7 +1,7 @@
 import { InputPluginOption } from 'rollup';
 import { ResolvedVizFileId } from './types';
 import { parseId } from './parseId';
-import {  getFileText } from 'entities';
+import { getFileText } from 'entities';
 import { VizCache } from './vizCache';
 import { VizContent } from '@vizhub/viz-types';
 

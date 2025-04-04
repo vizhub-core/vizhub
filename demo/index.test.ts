@@ -31,7 +31,8 @@ describe('Populating demo database', () => {
     }
 
     // Save userJane
-    const saveUserResult = await gateways.saveUser(userJane);
+    const saveUserResult =
+      await gateways.saveUser(userJane);
     expect(saveUserResult.outcome).toEqual('success');
   });
 
