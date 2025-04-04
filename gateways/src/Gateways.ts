@@ -62,7 +62,7 @@ import { VizContent, VizId } from '@vizhub/viz-types';
 // Make it a multiple of 4 so that on the profile page,
 // which defaults to 4 vizzes per row, we don't have
 // a partially filled row at the end.
-export const pageSize = 4 * 20;
+export const pageSize = 4 * 40;
 // export const pageSize = 5;
 
 export interface Gateways {
