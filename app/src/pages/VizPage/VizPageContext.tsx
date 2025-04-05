@@ -341,6 +341,7 @@ export const VizPageProvider = ({
   } = useOnEditWithAI({
     vizKit,
     id: info.id,
+    contentShareDBDoc,
   });
 
   ////////////////////////////////////////////

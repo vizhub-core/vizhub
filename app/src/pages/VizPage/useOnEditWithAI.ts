@@ -1,10 +1,12 @@
 import { useCallback, useState, useEffect } from 'react';
 import { Result } from 'gateways';
 import { VizKitAPI } from 'api/src/VizKit';
-import { VizId } from '@vizhub/viz-types';
+import { VizContent, VizId } from '@vizhub/viz-types';
+import { ShareDBDoc } from 'vzcode';
 
-const debug = false;
 const DEBUG = false;
+
+const initialText = 'Kicking off AI generation...';
 
 // Create a streaming display element
 const createStreamingDisplay = () => {
@@ -22,18 +24,19 @@ const createStreamingDisplay = () => {
   display.style.position = 'fixed';
   display.style.top = '10px';
   display.style.left = '10px';
-  display.style.maxWidth = '80vw';
-  display.style.maxHeight = '40vh';
+  display.style.right = '10px';
+  display.style.bottom = '10px';
   display.style.overflow = 'auto';
   display.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
   display.style.color = '#00ff00';
   display.style.padding = '10px';
   display.style.borderRadius = '5px';
   display.style.zIndex = '9999';
-  display.style.fontSize = '12px';
-  display.style.fontFamily = 'monospace';
+  display.style.fontSize = '16pxpx';
+  display.style.fontFamily = 'var(--vzcode-font-family)';
   display.style.whiteSpace = 'pre-wrap';
   display.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.5)';
+  display.textContent = initialText;
 
   document.body.appendChild(display);
   return display;
@@ -44,7 +47,7 @@ const updateStreamingDisplay = (
   display: HTMLPreElement,
   content: string,
 ) => {
-  display.textContent += content;
+  display.textContent = content;
   // Auto-scroll to bottom
   display.scrollTop = display.scrollHeight;
 };
@@ -61,9 +64,11 @@ const RELOAD_AFTER_EDIT_WITH_AI = true;
 export const useOnEditWithAI = ({
   vizKit,
   id,
+  contentShareDBDoc,
 }: {
   vizKit: VizKitAPI;
   id: VizId;
+  contentShareDBDoc: ShareDBDoc<VizContent> | undefined;
 }): {
   onEditWithAI: (prompt: string) => void;
   isEditingWithAI: boolean;
@@ -74,7 +79,7 @@ export const useOnEditWithAI = ({
   const [isEditingWithAI, setIsEditingWithAI] =
     useState(false);
   const [modelName, setModelName] = useState(
-    'anthropic/claude-3.7-sonnet:thinking',
+    'anthropic/claude-3.7-sonnet',
   );
 
   useEffect(() => {
@@ -105,69 +110,67 @@ export const useOnEditWithAI = ({
         prompt,
         modelName,
       };
-      if (debug) {
+      DEBUG &&
         console.log(
           'Passing these into editWithAI',
           JSON.stringify(editWithAIOptions, null, 2),
         );
-      }
 
       setIsEditingWithAI(true);
 
       // Create streaming display element
       const streamingDisplay = createStreamingDisplay();
 
-      // Add handlers for streaming
-      const enhancedOptions = {
-        ...editWithAIOptions,
-        onChunk: (chunk: string) => {
-          DEBUG && console.log('Received AI chunk:', chunk);
-          updateStreamingDisplay(streamingDisplay, chunk);
-        },
-        onComplete: (result: any) => {
-          DEBUG && console.log('AI edit complete:', result);
-          // Add completion message to display
-          updateStreamingDisplay(
-            streamingDisplay,
-            '\n\n--- COMPLETE ---\n',
-          );
+      if (contentShareDBDoc) {
+        contentShareDBDoc.on('op', (op: any) => {
+          console.log('op', JSON.stringify(op, null, 2));
 
-          // Set a timeout to remove the display before reload
-          setTimeout(() => {
-            setIsEditingWithAI(false);
-            if (RELOAD_AFTER_EDIT_WITH_AI) {
-              window.location.reload();
-            }
-          }, 2000); // Give user 2 seconds to see completion
-        },
-        onError: (error: any) => {
-          console.error('AI edit error:', error);
-          // Add error message to display
-          updateStreamingDisplay(
-            streamingDisplay,
-            `\n\n--- ERROR ---\n${error}`,
-          );
-
-          // Set a timeout to remove the display
-          setTimeout(() => {
-            setIsEditingWithAI(false);
-            if (document.body.contains(streamingDisplay)) {
-              document.body.removeChild(streamingDisplay);
-            }
-          }, 5000); // Give user 5 seconds to see error
-        },
-      };
+          // useOnEditWithAI.ts:125 op [
+          //   "aiScratchpad",
+          //   {
+          //     "es": [
+          //       361,
+          //       "  const width = container.clientWidth;\n  const height = container.clientHeight;\n\n  const svg = select(container)\n    .selectAll('svg')\n    .data([1])\n    .join('svg')\n"
+          //     ]
+          //   }
+          // ]
+          if (op[0] === 'aiScratchpad') {
+            // Update the streaming display with the new content
+            updateStreamingDisplay(
+              streamingDisplay,
+              // @ts-ignore
+              contentShareDBDoc.data.aiScratchpad ||
+                initialText,
+            );
+          }
+          // // Handle the op event here
+          // const newContent = contentShareDBDoc.data;
+          // // Update the streaming display with the new content
+          // updateStreamingDisplay(
+          //   streamingDisplay,
+          //   JSON.stringify(newContent, null, 2),
+          // );
+        });
+      }
 
       const editWithAIResult: Result<'success'> =
-        await vizKit.rest.editWithAI(enhancedOptions);
+        await vizKit.rest.editWithAI(editWithAIOptions);
 
       // Handle non-streaming case (fallback)
-      if (
-        editWithAIResult.outcome === 'success' &&
-        !enhancedOptions.onComplete
-      ) {
+      if (editWithAIResult.outcome === 'success') {
         setIsEditingWithAI(false);
+        updateStreamingDisplay(
+          streamingDisplay,
+          // @ts-ignore
+          contentShareDBDoc.data.aiScratchpad +
+            '\n\nAI generation complete. Reloading...',
+        );
         if (RELOAD_AFTER_EDIT_WITH_AI) {
+          // Wait 2 seconds to show the user the result
+          // before reloading the page
+          await new Promise((resolve) =>
+            setTimeout(resolve, 2000),
+          );
           window.location.reload();
         }
       }
