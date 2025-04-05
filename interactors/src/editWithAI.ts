@@ -1,4 +1,8 @@
 import {
+  StreamingMarkdownParser,
+  StreamingParserCallbacks,
+} from 'llm-code-format';
+import {
   Gateways,
   Result,
   ok,
@@ -18,7 +22,6 @@ import { VerifyVizAccess } from './verifyVizAccess';
 import { CommitViz } from './commitViz';
 import { diff } from 'ot';
 import { ChatOpenAI } from '@langchain/openai';
-import { StringOutputParser } from '@langchain/core/output_parsers';
 import { performAiEdit } from 'editcodewithai';
 import {
   CREDIT_MARKUP,
@@ -65,7 +68,6 @@ export const EditWithAI = (gateways: Gateways) => {
     modelName?: string;
     authenticatedUserId: string;
     shareDBDoc: any;
-    streamHandler?: (chunk: string) => void;
   }): Promise<
     Result<{
       success: boolean;
@@ -78,7 +80,6 @@ export const EditWithAI = (gateways: Gateways) => {
       modelName,
       authenticatedUserId,
       shareDBDoc,
-      streamHandler,
     } = options;
 
     try {
@@ -160,6 +161,40 @@ export const EditWithAI = (gateways: Gateways) => {
         let fullContent = '';
         let generationId = '';
 
+        // Define callbacks for file name changes, code lines, and non-code lines
+        // TODO use these to update the actual viz files
+        const callbacks: StreamingParserCallbacks = {
+          // When the current file being edited chnages
+          onFileNameChange: (fileName, format) => {
+            DEBUG &&
+              console.log(
+                `File changed to: ${fileName} (${format})`,
+              );
+          },
+          // Append the line to the current file's content
+          onCodeLine: (line) => {
+            DEBUG && console.log(`Code line: ${line}`);
+          },
+          // Process non-code, non-header lines (e.g., for displaying comments)
+          onNonCodeLine: (line) => {
+            DEBUG && console.log(`Comment/text: ${line}`);
+          },
+        };
+
+        // Create a new parser instance with the callbacks
+        const parser = new StreamingMarkdownParser(
+          callbacks,
+        );
+
+        // Set up an empty scratchpad in the content doc.
+        const op = diff(shareDBDoc.data, {
+          ...shareDBDoc.data,
+          aiScratchpad: '',
+        });
+        DEBUG &&
+          console.log('Submitting op:', JSON.stringify(op));
+        shareDBDoc.submitOp(op);
+
         // Stream the response and log each chunk
         const stream = await chatModel.stream(fullPrompt);
         for await (const chunk of stream) {
@@ -168,27 +203,28 @@ export const EditWithAI = (gateways: Gateways) => {
             const chunkContent = String(chunk.content);
             fullContent += chunkContent;
 
+            shareDBDoc.submitOp(
+              diff(shareDBDoc.data, {
+                ...shareDBDoc.data,
+                aiScratchpad: fullContent,
+              }),
+            );
+
             // Send chunk to client if streamHandler is provided
-            if (streamHandler) {
-              streamHandler(chunkContent);
-            }
+            parser.processChunk(chunkContent);
           }
           // Store the generation ID from the first chunk that has it
           if (!generationId && chunk.lc_kwargs?.id) {
             generationId = chunk.lc_kwargs.id;
           }
         }
+        parser.flushRemaining();
 
         // Parse to string if needed
-        const parser = new StringOutputParser();
-        const contentString =
-          await parser.invoke(fullContent);
-
-        DEBUG &&
-          console.log('Final content:', contentString);
+        DEBUG && console.log('Final content:', fullContent);
 
         return {
-          content: contentString,
+          content: fullContent,
           generationId: generationId,
         };
       };

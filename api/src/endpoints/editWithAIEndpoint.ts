@@ -1,6 +1,6 @@
 import bodyParser from 'body-parser';
 import { getAuthenticatedUserId } from '../parseAuth0User';
-import { err } from 'gateways';
+import { err, ok } from 'gateways';
 import {
   authenticationRequiredError,
   missingParameterError,
@@ -45,8 +45,10 @@ export const editWithAIEndpoint = ({
 
         if (!id || !prompt) {
           res.json(
-            missingParameterError(
-              "Missing 'id' or 'prompt'",
+            err(
+              missingParameterError(
+                "Missing 'id' or 'prompt'",
+              ),
             ),
           );
           return;
@@ -72,40 +74,21 @@ export const editWithAIEndpoint = ({
           });
         });
 
-        // Set up streaming response
-        res.setHeader('Content-Type', 'text/event-stream');
-        res.setHeader('Cache-Control', 'no-cache');
-        res.setHeader('Connection', 'keep-alive');
-
-        // Stream handler to send chunks to the client
-        const streamHandler = (chunk) => {
-          res.write(
-            `data: ${JSON.stringify({ type: 'chunk', content: chunk })}\n\n`,
-          );
-        };
-
         const result = await editWithAI({
           id,
           prompt,
           modelName,
           authenticatedUserId,
           shareDBDoc,
-          streamHandler,
         });
 
         if (result.outcome === 'failure') {
-          res.write(
-            `data: ${JSON.stringify({ type: 'error', error: result.error })}\n\n`,
-          );
-          res.end();
+          res.json(err(result.error));
           return;
         }
 
         shareDBDoc.unsubscribe();
-        res.write(
-          `data: ${JSON.stringify({ type: 'complete', result: result.value })}\n\n`,
-        );
-        res.end();
+        res.json(ok('success'));
       } catch (error) {
         console.error('[editWithAIEndpoint] error:', error);
         res.json(err(error));
