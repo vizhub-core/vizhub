@@ -237,6 +237,14 @@ export const EditWithAI = (gateways: Gateways) => {
         apiKey: process.env.VIZHUB_EDIT_WITH_AI_API_KEY,
       });
 
+      // Clear the scratchpad.
+      shareDBDoc.submitOp(
+        diff(shareDBDoc.data, {
+          ...shareDBDoc.data,
+          aiScratchpad: undefined,
+        }),
+      );
+
       // Commit any current changes before AI edit
       await commitViz(id);
 
