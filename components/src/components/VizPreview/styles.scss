@@ -71,7 +71,8 @@
   .content-container {
     display: flex;
     flex-direction: column;
-    padding: 14px 18px;
+    //padding: 14px 18px;
+    padding: 6px 6px;
     border-top: 1px solid var(--vh-color-rule-01);
 
     /* Handle single-line titles. */
@@ -81,7 +82,11 @@
     .title {
       color: var(--vh-color-neutral-01);
       margin-bottom: 0;
-      line-height: 28px;
+      //line-height: 28px;
+      line-height: 24px;
+      font-size: 16px;
+      font-weight: 550;
+
       /* Truncate text at 2 lines. */
       /* Inspired by https://developer.mozilla.org/en-US/docs/Web/CSS/-webkit-line-clamp */
       display: -webkit-box;
@@ -102,10 +107,11 @@
   .analytics-container {
     // Slightly less on the left because of
     // the icon padding
-    padding: 8px 16px 8px 12px;
+    // padding: 8px 16px 8px 12px;
   }
   .meta-container {
-    padding: 8px 12px 8px 10px;
+    // padding: 8px 12px 8px 10px;
+    padding: 4px 8px 4px 10px;
 
     .owner {
       display: flex;
@@ -124,7 +130,8 @@
         justify-content: center;
         gap: 4px;
         margin-left: 8px;
-
+        //font-size: 16px;
+        font-size: 12px;
         .owner-name {
           color: var(--vh-color-neutral-03);
           // Truncate long names.
@@ -136,7 +143,8 @@
         .last-updated-date {
           // color: var(--vh-color-neutral-03);
           color: var(--vh-color-neutral-04);
-          font-size: 14px;
+          //font-size: 14px;
+          font-size: 12px;
         }
       }
     }
@@ -145,7 +153,8 @@
   .owner-name {
     color: var(--vh-foreground-color-light);
     font-weight: 500;
-    line-height: 16px;
+    // line-height: 16px;
+    line-height: 12px;
   }
 }
 
