@@ -5,14 +5,14 @@ import decay from 'decay';
 
 // Default gravity is 1.8
 // The higher the gravity, the more quickly scores decay.
-const gravity = 1.8;
+const gravity = 2.5;
 
 const hackerHotScore = decay.hackerHot(gravity);
 const infinityIfNaN = (number) =>
   isNaN(number) ? -Infinity : number;
 
 export const computePopularity = (info: Info): number => {
-  const { created, upvotesCount, forksCount, v3 } = info;
+  const { created, upvotesCount, forksCount } = info;
 
   // Use the midpoint between created and updated as the date for scoring.
   // const midpointDate = timestampToDate(
@@ -24,22 +24,11 @@ export const computePopularity = (info: Info): number => {
   // Compute popularity "points" by weighting
   // upvotes and forks.
 
-  // Forks are worth 1 point each.
-  // const forkPoints = forksCount || 0;
+  const forkPoints = forksCount || 0;
 
-  // Upvotes are worth 5 points each.
-  // const upvotePoints = (upvotesCount || 0) * 5;
+  const upvotePoints = upvotesCount || 0;
 
-  // V3 vizzes are worth 2 points.
-  // const v3Points = v3 ? 2 : 0;
-
-  // let points = upvotePoints + forkPoints;
-  const points = upvotesCount || 0;
-
-  // Multiplier effect for v3 vizzes.
-  // if (v3) {
-  //   points = points * 1.5;
-  // }
+  const points = 1 + upvotePoints + forkPoints / 2;
 
   const popularity = infinityIfNaN(
     hackerHotScore(points, createdDate),
