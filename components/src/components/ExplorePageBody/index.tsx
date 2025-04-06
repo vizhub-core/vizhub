@@ -32,36 +32,26 @@ export const ExplorePageBody = ({
               <span className="fw-bold">
                 📅 Join VizHub Office Hours!
               </span>{' '}
-              Get personalized help with your data
-              visualization projects and connect with the
-              community via{' '}
+              Live in{' '}
               <a
                 href="https://discord.gg/wbtJ7SCtYr"
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 Discord
-              </a>
-              .
+              </a>{' '}
+              Saturdays 1pm Eastern.
             </div>
 
             <div className="d-flex">
               <a
-                href="https://www.youtube.com/watch?v=dRBdUyUNKUw&list=PLt6yKRJektF0Mk1Mq-bnmJuY2kVtLGovk&index=1"
+                href="https://www.youtube.com/watch?v=xgVD8EYlVkI&list=PLt6yKRJektF0Mk1Mq-bnmJuY2kVtLGovk"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn btn-outline-primary btn-sm fw-bold ms-2 me-2"
               >
                 <i className="bi bi-youtube me-1"></i>
-                Watch Videos
-              </a>
-              <a
-                href="https://www.meetup.com/d3-online/events/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn btn-outline-primary btn-sm fw-bold"
-              >
-                Register Now
+                Previous Office Hours Videos
               </a>
             </div>
           </div>
