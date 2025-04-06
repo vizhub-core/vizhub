@@ -53,11 +53,14 @@ export const VizPreview = ({
         />
         <VisibilityLabel visibility={visibility} />
       </div>
-
       <div className="content-container">
         <h4 className="title">{title}</h4>
       </div>
+
+      {/* Render analytics container if there are forks or upvotes */}
+      {/*
       {(forksCount > 0 || upvotesCount > 0) && (
+        
         <div className="analytics-container">
           {forksCount > 0 && (
             <ForksWidget
@@ -74,7 +77,7 @@ export const VizPreview = ({
           )}
         </div>
       )}
-
+   */}
       <div className="meta-container">
         <div className="owner">
           <img
