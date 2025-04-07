@@ -5,7 +5,7 @@ import { Footer } from '../Footer';
 import { CreateNewButton } from '../CreateNewButton';
 import './styles.scss';
 
-const enableOfficeHoursLink = true;
+const enableOfficeHoursLink = false;
 
 export const ExplorePageBody = ({
   // Viz preview list props.
