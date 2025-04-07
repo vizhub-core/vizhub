@@ -13,8 +13,8 @@ export const StarSVGSymbol = () => (
   </svg>
 );
 
-export const StarSVG = () => (
-  <svg width="24" height="24">
+export const StarSVG = ({ width = 24 }) => (
+  <svg width={width} height={width} viewBox="0 0 24 24">
     <use xlinkHref="#star-icon" className="star-icon-use" />
   </svg>
 );
