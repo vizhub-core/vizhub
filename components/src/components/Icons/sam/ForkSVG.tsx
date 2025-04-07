@@ -24,8 +24,8 @@ export const ForkSVGSymbol = () => (
 );
 
 // For this to work, ForkSVGSymbol must be rendered once somewhere on the page.
-export const ForkSVG = () => (
-  <svg width="24" height="24">
+export const ForkSVG = ({ width = 24 }) => (
+  <svg width={width} height={width} viewBox="0 0 24 24">
     <use xlinkHref="#fork-icon" />
   </svg>
 );

@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 import { ForkSVG } from '../Icons/sam/ForkSVG';
 import { OverlayTrigger, Tooltip } from '../bootstrap';
-import './styles.scss';
 import { countFormat } from '../countFormat';
+import './styles.scss';
 
 export const ForksWidget = ({
   forksCount,
@@ -20,13 +20,13 @@ export const ForksWidget = ({
       {notClickable ? (
         <>
           <i className="icon-button">
-            <ForkSVG />
+            <ForkSVG width={20} />
           </i>
           <div className="widget-label-container icon-button">
             <strong>{forksCountFormatted}</strong>
-            <div className="widget-label">
+            {/* <div className="widget-label">
               Fork{forksCount === 1 ? '' : 's'}
-            </div>
+            </div> */}
           </div>
         </>
       ) : (

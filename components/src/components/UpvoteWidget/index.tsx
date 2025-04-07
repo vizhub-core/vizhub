@@ -18,13 +18,13 @@ export const UpvoteWidget = ({
     {notClickable ? (
       <>
         <i className="icon-button">
-          <StarSVG />
+          <StarSVG width={20} />
         </i>
         <div className="widget-label-container icon-button">
           <strong>{upvotesCount}</strong>
-          <div className="widget-label">
+          {/* <div className="widget-label">
             Star{upvotesCount === 1 ? '' : 's'}
-          </div>
+          </div> */}
         </div>
       </>
     ) : (

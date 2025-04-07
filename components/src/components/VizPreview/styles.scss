@@ -4,7 +4,7 @@
   justify-content: space-between;
   background-color: white;
   box-shadow: var(--vh-box-shadow);
-  border-radius: 26px;
+  border-radius: 20px;
   cursor: pointer;
 
   /* Aspect ratio, original thumbnail size: 230 X 120*/
@@ -69,22 +69,22 @@
     background-position: right bottom;
   }
   .content-container {
+    min-height: 48px;
     display: flex;
-    flex-direction: column;
-    //padding: 14px 18px;
-    padding: 6px 6px;
+    flex-direction: row;
+    padding: 0 14px;
     border-top: 1px solid var(--vh-color-rule-01);
 
     /* Handle single-line titles. */
     flex: 1;
-    justify-content: flex-start;
+    justify-content: space-between;
+    align-items: center;
 
     .title {
+      padding: 2px 0;
       color: var(--vh-color-neutral-01);
       margin-bottom: 0;
-      //line-height: 28px;
-      line-height: 24px;
-      font-size: 16px;
+      font-size: 14px;
       font-weight: 550;
 
       /* Truncate text at 2 lines. */
@@ -97,40 +97,41 @@
       overflow: hidden;
     }
   }
-  .analytics-container,
+  .analytics-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12px;
+  }
+
   .meta-container {
     display: flex;
     align-items: center;
     justify-content: space-between;
     border-top: 1px solid var(--vh-color-rule-01);
-  }
-  .analytics-container {
-    // Slightly less on the left because of
-    // the icon padding
-    // padding: 8px 16px 8px 12px;
-  }
-  .meta-container {
-    // padding: 8px 12px 8px 10px;
-    padding: 4px 8px 4px 10px;
+
+    display: flex;
+    padding: 8px 12px 8px 8px;
 
     .owner {
+      flex: 1;
       display: flex;
       align-items: center;
       min-width: 0;
 
       .owner-avatar-image {
-        width: 32px;
-        height: 32px;
-        border-radius: 16px;
+        width: 24px;
+        height: 24px;
+        border-radius: 12px;
         box-shadow: var(--vh-box-shadow);
       }
       .owner-meta {
+        flex: 1;
         display: flex;
-        flex-direction: column;
-        justify-content: center;
+        flex-direction: row;
+        justify-content: space-between;
         gap: 4px;
         margin-left: 8px;
-        //font-size: 16px;
         font-size: 12px;
         .owner-name {
           color: var(--vh-color-neutral-03);
@@ -143,8 +144,6 @@
         .last-updated-date {
           // color: var(--vh-color-neutral-03);
           color: var(--vh-color-neutral-04);
-          //font-size: 14px;
-          font-size: 12px;
         }
       }
     }
