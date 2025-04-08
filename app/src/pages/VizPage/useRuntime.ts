@@ -6,18 +6,17 @@ import {
   useCallback,
 } from 'react';
 import { rollup } from '@rollup/browser';
-import { SlugKey, getRuntimeVersion } from 'entities';
-import { V3Runtime } from './v3Runtime/setupV3Runtime';
+import {} from '@vizhub/viz-utils';
 import {
   VizContent,
   VizFileId,
   VizId,
 } from '@vizhub/viz-types';
-import { generateVizFileId } from '@vizhub/viz-utils';
 import {
-  buildHTML,
-  vizContentToFileCollection,
-} from '@vizhub/runtime';
+  generateVizFileId,
+  vizFilesToFileCollection,
+} from '@vizhub/viz-utils';
+import { buildHTML } from '@vizhub/runtime';
 
 const debug = false;
 
@@ -56,34 +55,38 @@ export const useRuntime = ({
     [content],
   );
 
-  const v3RuntimeRef = useRef<V3Runtime | null>(null);
+  const VizHubRuntimeRef = useRef<VizHubRuntime | null>(
+    null,
+  );
 
-  const getV3Runtime = useCallback(async () => {
-    if (v3RuntimeRef.current === null) {
-      // throw new Error('v3Runtime.current is null');
+  const getVizHubRuntime = useCallback(async () => {
+    if (VizHubRuntimeRef.current === null) {
+      // throw new Error('VizHubRuntime.current is null');
       // Poll for this to be defined.
       // const interval = setInterval(() => {
       //   if (debug) {
-      //     console.log('polling for v3Runtime.current...');
+      //     console.log('polling for VizHubRuntime.current...');
       //   }
-      //   if (v3RuntimeRef.current !== null) {
+      //   if (VizHubRuntimeRef.current !== null) {
       //     clearInterval(interval);
-      //     return v3RuntimeRef.current;
+      //     return VizHubRuntimeRef.current;
       //   }
       // }, 100);
-      return new Promise<V3Runtime>((resolve) => {
+      return new Promise<VizHubRuntime>((resolve) => {
         const interval = setInterval(() => {
           if (debug) {
-            console.log('polling for v3Runtime.current...');
+            console.log(
+              'polling for VizHubRuntime.current...',
+            );
           }
-          if (v3RuntimeRef.current !== null) {
+          if (VizHubRuntimeRef.current !== null) {
             clearInterval(interval);
-            resolve(v3RuntimeRef.current);
+            resolve(VizHubRuntimeRef.current);
           }
         }, 100);
       });
     }
-    return v3RuntimeRef.current;
+    return VizHubRuntimeRef.current;
   }, []);
 
   const vizCacheContentsRef = useRef(vizCacheContents);
@@ -162,8 +165,8 @@ export const useRuntime = ({
     }
     if (runtimeVersion === 3) {
       // Load the v3 runtime.
-      import('./v3Runtime/setupV3Runtime').then(
-        ({ setupV3Runtime }) => {
+      import('./VizHubRuntime/setupVizHubRuntime').then(
+        ({ setupVizHubRuntime }) => {
           const iframe = iframeRef.current;
 
           // Should never happen. Added to pacify TypeScript.
@@ -224,7 +227,7 @@ export const useRuntime = ({
             }, 0);
           };
 
-          v3RuntimeRef.current = setupV3Runtime({
+          VizHubRuntimeRef.current = setupVizHubRuntime({
             vizId: content.id,
             iframe,
             setSrcdocErrorMessage,
@@ -303,17 +306,17 @@ export const useRuntime = ({
     }
 
     const update = async () => {
-      const v3Runtime = await getV3Runtime();
+      const VizHubRuntime = await getVizHubRuntime();
       // Sanity check, should never happen.
-      if (v3Runtime === null) {
-        throw new Error('v3Runtime is null');
+      if (VizHubRuntime === null) {
+        throw new Error('VizHubRuntime is null');
       }
       if (isInteracting) {
         // If we are recovering from an error,
         // clear the error message, and run the code
         // totally fresh by re-computing the srcdoc.
         if (srcdocErrorMessageRef.current) {
-          v3Runtime.resetSrcdoc(changedVizIds);
+          VizHubRuntime.resetSrcdoc(changedVizIds);
           // try {
           //   const srcdoc = await computeSrcDocV3(content);
           //   if (iframeRef.current) {
@@ -325,7 +328,7 @@ export const useRuntime = ({
           // }
         } else {
           // Re-run the code with hot reloading.
-          v3Runtime.invalidateVizCache(changedVizIds);
+          VizHubRuntime.invalidateVizCache(changedVizIds);
         }
       }
     };
@@ -362,7 +365,7 @@ export const useRuntime = ({
         try {
           const srcdoc = await buildHTML({
             vizId: content.id,
-            files: vizContentToFileCollection(content),
+            files: vizFilesToFileCollection(content?.files),
             rollup,
             enableSourcemap: true,
             // vizCache,

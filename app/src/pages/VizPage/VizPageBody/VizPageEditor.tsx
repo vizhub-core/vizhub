@@ -9,7 +9,6 @@ import {
 } from 'vzcode';
 
 import PrettierWorker from 'vzcode/src/client/usePrettier/worker.ts?worker';
-import TypeScriptWorker from 'vzcode/src/client/useTypeScript/worker/index.ts?worker';
 import { customInteractRules } from './customInteractRules';
 import { VizPageContext } from '../VizPageContext';
 import { VizContent } from '@vizhub/viz-types';
@@ -17,10 +16,8 @@ import { VizContent } from '@vizhub/viz-types';
 // Instantiate the Prettier and TypeScript workers
 // in the client, but not in SSR.
 let prettierWorker: Worker | null = null;
-let typeScriptWorker: Worker | null = null;
 if (typeof window !== 'undefined') {
   prettierWorker = new PrettierWorker();
-  typeScriptWorker = new TypeScriptWorker();
 }
 
 const enableCopilot = false;
@@ -111,14 +108,6 @@ export const VizPageEditor = ({
 
   const { runtimeVersion } = useContext(VizPageContext);
 
-  // Allow globals in the linter for runtime version 2.
-  const allowGlobals = useMemo(
-    () => runtimeVersion !== 3,
-    [runtimeVersion],
-  );
-
-  // console.log('allowGlobals', allowGlobals);
-
   return (
     <VZCodeProvider
       content={content}
@@ -126,7 +115,6 @@ export const VizPageEditor = ({
       localPresence={localPresence}
       docPresence={docPresence}
       prettierWorker={prettierWorker}
-      typeScriptWorker={typeScriptWorker}
       initialUsername={initialUsername}
       codeError={srcdocErrorMessage}
       submitOperation={submitContentOperation}
@@ -138,7 +126,6 @@ export const VizPageEditor = ({
       <VZMiddle
         aiCopilotEndpoint={aiCopilotEndpoint}
         customInteractRules={customInteractRules}
-        allowGlobals={allowGlobals}
         enableAIAssist={false}
       />
       {showEditor && <VZResizer side="left" />}

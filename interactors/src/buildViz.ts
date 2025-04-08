@@ -13,7 +13,6 @@ import {
   VizAccess,
 } from './verifyVizAccess';
 import {
-  computeSrcDoc,
   VizCache,
   createVizCache,
   cleanRollupErrorMessage,

@@ -16,11 +16,7 @@ import {
   ScreenshotGenie,
 } from 'screenshotgenie';
 import { GetContentAtCommit } from './getContentAtCommit';
-import {
-  computeSrcDoc,
-  createVizCache,
-  VizCache,
-} from '@vizhub/runtime';
+import { createVizCache, VizCache } from '@vizhub/runtime';
 import { ResolveSlug } from './resolveSlug';
 import { VizId } from '@vizhub/viz-types';
 

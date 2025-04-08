@@ -1,27 +1,9 @@
 import {
-  RefObject,
-  useCallback,
   useContext,
-  useEffect,
-  useMemo,
   useRef,
-  useState,
+  useCallback,
+  useMemo,
 } from 'react';
-import { SplitPaneResizeContext } from 'vzcode';
-import {
-  defaultVizWidth,
-  User,
-  getPackageJsonText,
-  V3PackageJson,
-  getPackageJson,
-  getLicense,
-  getHeight,
-  getUserDisplayName,
-  // getVizThumbnailURL,
-  FREE,
-  PREMIUM,
-  PRO,
-} from 'entities';
 import {
   RevisionHistoryNavigator,
   VizPageHead,
@@ -29,36 +11,43 @@ import {
   VizPageVersionBanner,
   VizPageViewer,
 } from 'components';
-import { AuthenticatedUserContext } from '../../../contexts/AuthenticatedUserContext';
 import { SmartHeader } from '../../../smartComponents/SmartHeader';
-import {
-  getForksPageHref,
-  getProfilePageHref,
-  getVizPageHref,
-} from '../../../accessors';
-import { useRenderMarkdownHTML } from './useRenderMarkdownHTML';
 import { VizPageEditor } from './VizPageEditor';
-import { useMarkUncommitted } from '../useMarkUncommitted';
-import { formatTimestamp } from '../../../accessors/formatTimestamp';
-import { LogoSVG } from 'components/src/components/Icons/LogoSVG';
-import { getStargazersPageHref } from '../../../accessors/getStargazersPageHref';
-import { useBrandedEmbedNotice } from './useBrandedEmbedNotice';
-import { useComments } from './useComments';
-import { getAvatarURL } from '../../../accessors/getAvatarURL';
+import { useVizPageState } from './useVizPageState';
+import { useVizRunnerSetup } from './useVizRunnerSetup';
+import { VizPageEmbed } from './VizPageEmbed';
 import { VizPageContext } from '../VizPageContext';
 import { formatCommitTimestamp } from 'components/src/components/formatCommitTimestamp';
+import { useComments } from './useComments';
+import { useRenderMarkdownHTML } from './useRenderMarkdownHTML';
+import { useMarkUncommitted } from '../useMarkUncommitted';
+import { useBrandedEmbedNotice } from './useBrandedEmbedNotice';
+import { useRuntime } from '../useRuntime';
+import {
+  getVizPageHref,
+  getForksPageHref,
+  getProfilePageHref,
+  getStargazersPageHref,
+  getAvatarURL,
+} from '../../../accessors';
+import {
+  defaultVizWidth,
+  getPackageJsonText,
+  getPackageJson,
+  getLicense,
+  getHeight,
+  getUserDisplayName,
+  FREE,
+  PREMIUM,
+  PRO,
+} from 'entities';
+import { formatTimestamp } from '../../../accessors/formatTimestamp';
 import { VizFileId } from '@vizhub/viz-types';
-import { useRuntime } from 'src/runtime';
 
 const debug = false;
 const enableVizPageUpgradeBanner = false;
 
 export const VizPageBody = () => {
-  // The currently authenticated user, if any.
-  const authenticatedUser: User | null = useContext(
-    AuthenticatedUserContext,
-  );
-
   const {
     info,
     content,
@@ -105,11 +94,28 @@ export const VizPageBody = () => {
     isEditingWithAI,
   } = useContext(VizPageContext);
 
-  const handleRestoreToVersionClick = useCallback(() => {
-    if (commitMetadata) {
-      restoreToRevision(commitMetadata.id);
-    }
-  }, [commitMetadata, restoreToRevision]);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+
+  const {
+    isUpgradeBannerVisible,
+    handleUpgradeBannerClose,
+    isUserAuthenticated,
+    hideTopBar,
+    authenticatedUser,
+  } = useVizPageState();
+
+  const {
+    renderVizRunner,
+    srcdocErrorMessage,
+    setSrcdocErrorMessage,
+  } = useVizRunnerSetup(
+    iframeRef,
+    initialSrcdoc,
+    getHeight(content.height),
+    isEmbedMode,
+    isHideMode,
+    defaultVizWidth,
+  );
 
   const {
     commentsFormatted,
@@ -123,211 +129,27 @@ export const VizPageBody = () => {
     vizKit,
   });
 
-  // Marks the viz as uncommitted and adds the
-  // authenticated user to the list of commit authors.
+  const renderMarkdownHTML = useRenderMarkdownHTML(
+    initialReadmeHTML,
+  );
+
   useMarkUncommitted({
     contentShareDBDoc,
     setUncommitted,
     authenticatedUser,
   });
 
-  if (debug) {
-    // Log the info object for debugging the commit authors.
-    console.log('[VizPageBody] Info:');
-    console.log(JSON.stringify(info, null, 2));
-  }
-
-  // A function that renders markdown to HTML.
-  // This supports server-rendering of markdown.
-  const renderMarkdownHTML = useRenderMarkdownHTML(
-    initialReadmeHTML,
-  );
-
-  // The license to display for this viz.
-  const packageJsonText: string | null = useMemo(
-    () => getPackageJsonText(content),
-    [content],
-  );
-  const packageJson: V3PackageJson | null = useMemo(
-    () => getPackageJson(packageJsonText),
-    [packageJsonText],
-  );
-  const license = useMemo(
-    () => getLicense(packageJson),
-    [packageJson],
-  );
-
-  // The height of the viz, in pixels, falling back to default.
-  const vizHeight = useMemo(
-    () => getHeight(content.height),
-    [content.height],
-  );
-
-  // The ref to the viz runner iframe.
-  const iframeRef: RefObject<HTMLIFrameElement> =
-    useRef<HTMLIFrameElement>(null);
-
-  const [srcdocErrorMessage, setSrcdocErrorMessage] =
-    useState<string | null>(initialSrcdocError);
-
-  // Allow vizzes to just be documentation / articles
-  // if there is only one file and that file is README.md.
-  const isVisual = useMemo(() => {
-    const fileIds: Array<VizFileId> = Object.keys(
-      content.files,
-    );
-    const isSingleFile =
-      Object.keys(content.files).length === 1;
-    const isReadme =
-      content.files[fileIds[0]]?.name === 'README.md';
-    return !(isSingleFile && isReadme);
-  }, [content]);
-
-  // Set up the runtime environment.
   useRuntime({
     content,
     iframeRef,
     srcdocErrorMessage,
     setSrcdocErrorMessage,
     vizCacheContents,
-    isVisual,
+    isVisual: !isSingleReadmeFile(content.files),
     slugResolutionCache,
     submitContentOperation,
   });
 
-  // Render the viz runner iframe.
-  const renderVizRunner = useCallback(
-    (iframeScale?: number) =>
-      isHideMode ? null : (
-        <iframe
-          ref={iframeRef}
-          srcDoc={initialSrcdoc}
-          {...(isEmbedMode
-            ? {
-                style: {
-                  position: 'absolute',
-                  width: '100vw',
-                  height: '100vh',
-                },
-              }
-            : {
-                width: defaultVizWidth,
-                height: vizHeight,
-                style: {
-                  transform: `scale(${iframeScale})`,
-                },
-              })}
-          // These values for `sandbox` and `allow` are based on
-          // codesandbox.io as of 2024-07-05
-          // Update: this did not fix the issue with the iframe not sending messages, reverting
-          // sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts allow-downloads allow-pointer-lock"
-          // allow="accelerometer; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; clipboard-write;"
-        />
-      ),
-    [initialSrcdoc, vizHeight, isEmbedMode, isHideMode],
-  );
-
-  // Disable pointer events when split pane is being dragged.
-  // Otherwise, they do interfere with dragging the split pane.
-  // Inspired by https://github.com/vizhub-core/vizhub/blob/01cadfb78a2611df32f981b1fd8136b70447de9e/vizhub-v2/packages/neoFrontend/src/pages/VizPage/VizRunnerContext/index.js#L15
-  const { isDraggingLeft, isDraggingRight } = useContext(
-    SplitPaneResizeContext,
-  );
-  useEffect(() => {
-    if (!iframeRef.current) return;
-    const isDragging = isDraggingLeft || isDraggingRight;
-    iframeRef.current.style['pointer-events'] = isDragging
-      ? 'none'
-      : 'all';
-  }, [isDraggingLeft, isDraggingRight]);
-
-  // The formatted created date.
-  const createdDateFormatted = useMemo(
-    () => formatTimestamp(info.created),
-    [info.created],
-  );
-
-  // The formatted updated date.
-  const updatedDateFormatted = useMemo(
-    () => formatTimestamp(info.updated),
-    [info.updated],
-  );
-
-  // The display name of the author.
-  const authorDisplayName = useMemo(
-    () => getUserDisplayName(ownerUser),
-    [ownerUser],
-  );
-
-  // The href to the forked-from viz.
-  const forkedFromVizHref = useMemo(
-    () =>
-      forkedFromInfo
-        ? getVizPageHref({
-            ownerUser: forkedFromOwnerUser,
-            info: forkedFromInfo,
-          })
-        : null,
-    [forkedFromInfo, forkedFromOwnerUser],
-  );
-
-  // The href to the forks page.
-  const forksPageHref = useMemo(
-    () => getForksPageHref(ownerUser, info),
-    [ownerUser, info],
-  );
-
-  // The href to the owner's profile page.
-  const ownerUserHref = useMemo(
-    () => getProfilePageHref(ownerUser),
-    [ownerUser],
-  );
-
-  // const downloadImageHref = useMemo(
-  //   () => getVizThumbnailURL(info.end, defaultVizWidth),
-  //   [info.end, defaultVizWidth],
-  // );
-
-  const fullscreenHref = useMemo(
-    () =>
-      getVizPageHref({
-        ownerUser,
-        info,
-        embedMode: true,
-      }),
-    [ownerUser, info],
-  );
-
-  const stargazersHref = useMemo(
-    () => getStargazersPageHref(ownerUser, info),
-    [fullscreenHref],
-  );
-
-  const [
-    isUpgradeBannerVisible,
-    setIsUpgradeBannerVisible,
-  ] = useState(
-    // Only shoe the banner if:
-    // - the user is authenticated
-    // - the user is on the free plan
-    // - the viz is public
-    // - the viz is their own
-    authenticatedUser?.plan === FREE &&
-      info.visibility === 'public' &&
-      info.owner === authenticatedUser?.id,
-  );
-
-  const handleUpgradeBannerClose = useCallback(() => {
-    setIsUpgradeBannerVisible(false);
-  }, []);
-
-  const isUserAuthenticated = !!authenticatedUser;
-
-  // Should we show the viz embed branded?
-  // If the URL param is set, definitely show it.
-  // Otherwise, show it if:
-  // - The owner is on the free plan AND
-  // - The owner is not the authenticated user
   const isEmbedBranded = useMemo(
     () =>
       isEmbedBrandedURLParam ||
@@ -342,85 +164,81 @@ export const VizPageBody = () => {
     isEmbedBranded,
   });
 
-  const authenticatedUserAvatarURL = useMemo(
-    () =>
-      authenticatedUser && getAvatarURL(authenticatedUser),
-    [authenticatedUser],
-  );
+  const handleRestoreToVersionClick = useCallback(() => {
+    if (commitMetadata) {
+      restoreToRevision(commitMetadata.id);
+    }
+  }, [commitMetadata, restoreToRevision]);
 
-  const getVizPageHrefForCommit = useCallback(
-    (commitId: string) =>
-      getVizPageHref({
-        ownerUser,
-        info,
-        commitId,
-      }),
-    [ownerUser, info],
-  );
+  const vizPageViewerProps = {
+    vizTitle: info.title,
+    enableEditingTitle: canUserEditViz,
+    setVizTitle,
+    vizHeight: getHeight(content.height),
+    defaultVizWidth,
+    renderVizRunner,
+    renderMarkdownHTML,
+    authorDisplayName: getUserDisplayName(ownerUser),
+    authorAvatarURL: ownerUser.picture,
+    createdDateFormatted: formatTimestamp(info.created),
+    updatedDateFormatted: formatTimestamp(info.updated),
+    forkedFromVizTitle: forkedFromInfo?.title || null,
+    forkedFromVizHref: forkedFromInfo
+      ? getVizPageHref({
+          ownerUser: forkedFromOwnerUser,
+          info: forkedFromInfo,
+        })
+      : null,
+    forksCount: info.forksCount,
+    forksPageHref: getForksPageHref(ownerUser, info),
+    ownerUserHref: getProfilePageHref(ownerUser),
+    upvotesCount: info.upvotesCount,
+    license: getLicense(
+      getPackageJson(getPackageJsonText(content)),
+    ),
+    visibility: info.visibility,
+    isVisual: !isSingleReadmeFile(content.files),
+    isUpvoted,
+    handleUpvoteClick,
+    fullscreenHref: getVizPageHref({
+      ownerUser,
+      info,
+      embedMode: true,
+    }),
+    stargazersHref: getStargazersPageHref(ownerUser, info),
+    onForkClick: toggleForkModal,
+    isUserAuthenticated,
+    commentsFormatted,
+    handleCommentSubmit,
+    authenticatedUserAvatarURL: authenticatedUser
+      ? getAvatarURL(authenticatedUser)
+      : null,
+    handleCommentDelete,
+  };
 
-  // Hide the top bar when the editor is open or a file is open
-  // AND the user is logged in.
-  const hideTopBar = useMemo(
-    () => authenticatedUser && (showEditor || isFileOpen),
-    [showEditor, isFileOpen, authenticatedUser],
-  );
+  if (isEmbedMode) {
+    return (
+      <VizPageEmbed
+        renderVizRunner={renderVizRunner}
+        isEmbedBranded={isEmbedBranded}
+        ownerUser={ownerUser}
+        info={info}
+      />
+    );
+  }
 
-  // const authenticatedUser: User = useContext(
-  //   AuthenticatedUserContext,
-  // );
-
-  // const handleExportCodeClick = useCallback(() => {
-  //   vizKit.rest.recordAnalyticsEvents(
-  //     `event.click.export-code.viz.owner:${ownerUser.id}.viz:${info.id}`,
-  //   );
-  //   if (authenticatedUser?.plan === PREMIUM) {
-  //     // Trigger a download of the .zip file.
-  //     const exportHref = getVizExportHref({
-  //       ownerUser,
-  //       info,
-  //     });
-  //     // Simulate the user clicking on a link
-  //     // that will download the file.
-  //     const link = document.createElement('a');
-  //     link.setAttribute('href', exportHref);
-  //     link.setAttribute('download', info.title);
-  //     document.body.appendChild(link);
-  //     link.click();
-  //     document.body.removeChild(link);
-  //   } else {
-  //     toggleExportCodeUpgradeNudgeModal();
-  //   }
-  // }, [authenticatedUser, ownerUser, info]);
-
-  return isEmbedMode ? (
-    <>
-      {renderVizRunner()}
-      {isEmbedBranded && (
-        <a
-          href={getVizPageHref({
-            ownerUser,
-            info,
-            absolute: true,
-          })}
-          style={{
-            position: 'fixed',
-            bottom: '10px',
-            right: '10px',
-          }}
-        >
-          <LogoSVG />
-        </a>
-      )}
-    </>
-  ) : (
+  return (
     <div className="vh-page">
       {!hideTopBar && <SmartHeader />}
+
       {showRevisionHistory && (
         <RevisionHistoryNavigator
           revisionHistory={revisionHistory}
           info={info}
           content={content}
-          getVizPageHrefForCommit={getVizPageHrefForCommit}
+          getVizPageHrefForCommit={(commitId: string) =>
+            getVizPageHref({ ownerUser, info, commitId })
+          }
         />
       )}
 
@@ -463,6 +281,7 @@ export const VizPageBody = () => {
         onEditWithAIClick={toggleEditWithAIModal}
         isEditingWithAI={isEditingWithAI}
       />
+
       {enableVizPageUpgradeBanner &&
         isUpgradeBannerVisible &&
         !commitMetadata && (
@@ -470,6 +289,7 @@ export const VizPageBody = () => {
             onClose={handleUpgradeBannerClose}
           />
         )}
+
       {commitMetadata && (
         <VizPageVersionBanner
           commitTimestampFormatted={formatCommitTimestamp(
@@ -481,6 +301,7 @@ export const VizPageBody = () => {
           showRestoreButton={!!authenticatedUser}
         />
       )}
+
       <div className="vh-viz-page-body">
         <VizPageEditor
           showEditor={showEditor}
@@ -497,51 +318,26 @@ export const VizPageBody = () => {
           }
           connected={connected}
         />
-        {isHideMode ? null : (
+
+        {!isHideMode && (
           <div
-            className={`right${
-              showEditor ? ' editor-open' : ''
-            }`}
+            className={`right${showEditor ? ' editor-open' : ''}`}
           >
-            <VizPageViewer
-              vizTitle={info.title}
-              enableEditingTitle={canUserEditViz}
-              setVizTitle={setVizTitle}
-              vizHeight={vizHeight}
-              defaultVizWidth={defaultVizWidth}
-              renderVizRunner={renderVizRunner}
-              renderMarkdownHTML={renderMarkdownHTML}
-              authorDisplayName={authorDisplayName}
-              authorAvatarURL={ownerUser.picture}
-              createdDateFormatted={createdDateFormatted}
-              updatedDateFormatted={updatedDateFormatted}
-              forkedFromVizTitle={
-                forkedFromInfo ? forkedFromInfo.title : null
-              }
-              forkedFromVizHref={forkedFromVizHref}
-              forksCount={info.forksCount}
-              forksPageHref={forksPageHref}
-              ownerUserHref={ownerUserHref}
-              upvotesCount={info.upvotesCount}
-              license={license}
-              visibility={info.visibility}
-              isVisual={isVisual}
-              isUpvoted={isUpvoted}
-              handleUpvoteClick={handleUpvoteClick}
-              fullscreenHref={fullscreenHref}
-              stargazersHref={stargazersHref}
-              onForkClick={toggleForkModal}
-              isUserAuthenticated={isUserAuthenticated}
-              commentsFormatted={commentsFormatted}
-              handleCommentSubmit={handleCommentSubmit}
-              authenticatedUserAvatarURL={
-                authenticatedUserAvatarURL
-              }
-              handleCommentDelete={handleCommentDelete}
-            />
+            <VizPageViewer {...vizPageViewerProps} />
           </div>
         )}
       </div>
     </div>
+  );
+};
+
+// Helper function to determine if viz only contains a single README.md file
+const isSingleReadmeFile = (
+  files: Record<VizFileId, any>,
+) => {
+  const fileIds = Object.keys(files);
+  return (
+    fileIds.length === 1 &&
+    files[fileIds[0]]?.name === 'README.md'
   );
 };
