@@ -29,7 +29,6 @@
   },
   "homepage": "https://github.com/vizhub-core/vizhub#readme",
   "workspaces": [
-    "runtime",
     "entities",
     "api",
     "app",
@@ -45,5 +44,8 @@
   ],
   "devDependencies": {
     "npm-check-updates": "^17.1.16"
+  },
+  "dependencies": {
+    "@valtown/codemirror-ts": "^2.3.1"
   }
 }

@@ -22,12 +22,11 @@
   },
   "homepage": "https://github.com/vizhub-core/vizhub3#readme",
   "dependencies": {
-    "@vizhub/viz-types": "^0.0.2",
-    "@vizhub/viz-utils": "^0.0.1",
+    "@vizhub/viz-types": "^0.1.0",
+    "@vizhub/viz-utils": "^0.1.0",
     "decay": "^1.0.12",
     "deep-equal": "^2.2.3",
-    "editcodewithai": "^0.1.0",
-    "llm-code-format": "^1.0.2",
+    "editcodewithai": "^1.0.0",
     "multiscale-timeseries": "^2.0.0",
     "uuid": "^11.1.0"
   },
@@ -36,7 +35,7 @@
     "@types/node": "^22.14.0",
     "concurrently": "^9.1.2",
     "prettier": "^3.5.3",
-    "typescript": "^5.8.2",
+    "typescript": "^5.8.3",
     "vitest": "^3.1.1"
   }
 }

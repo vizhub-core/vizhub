@@ -5,6 +5,7 @@ import {
   useRef,
   useCallback,
 } from 'react';
+import { rollup } from '@rollup/browser';
 import { SlugKey, getRuntimeVersion } from 'entities';
 import { V3Runtime } from './v3Runtime/setupV3Runtime';
 import {
@@ -13,6 +14,10 @@ import {
   VizId,
 } from '@vizhub/viz-types';
 import { generateVizFileId } from '@vizhub/viz-utils';
+import {
+  buildHTML,
+  vizContentToFileCollection,
+} from '@vizhub/runtime';
 
 const debug = false;
 
@@ -353,14 +358,17 @@ export const useRuntime = ({
         // @ts-ignore
         globalThis.process = {};
 
-        // Lazy load computeSrcDoc because it's a large chunk.
-        const { computeSrcDocV2 } = await import(
-          './v2Runtime/computeSrcDocV2'
-        );
-
         // console.log(computeSrcDoc);
         try {
-          const srcdoc = await computeSrcDocV2(content);
+          const srcdoc = await buildHTML({
+            vizId: content.id,
+            files: vizContentToFileCollection(content),
+            rollup,
+            enableSourcemap: true,
+            // vizCache,
+            // slugCache,
+            // getSvelteCompiler,
+          });
           if (iframeRef.current) {
             iframeRef.current.srcdoc = srcdoc;
           }

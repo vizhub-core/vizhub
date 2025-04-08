@@ -22,7 +22,6 @@ import {
   PREMIUM,
   PRO,
 } from 'entities';
-import { useRuntime } from '@vizhub/runtime';
 import {
   RevisionHistoryNavigator,
   VizPageHead,
@@ -49,6 +48,7 @@ import { getAvatarURL } from '../../../accessors/getAvatarURL';
 import { VizPageContext } from '../VizPageContext';
 import { formatCommitTimestamp } from 'components/src/components/formatCommitTimestamp';
 import { VizFileId } from '@vizhub/viz-types';
+import { useRuntime } from 'src/runtime';
 
 const debug = false;
 const enableVizPageUpgradeBanner = false;
