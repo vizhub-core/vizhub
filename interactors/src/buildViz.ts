@@ -226,6 +226,7 @@ export const BuildViz = (gateways: Gateways) => {
     let initialSrcdoc, initialSrcdocError;
     try {
       initialSrcdoc = await buildHTML({
+        vizId: id,
         rollup,
         getSvelteCompiler: async () =>
           compile as unknown as SvelteCompiler,

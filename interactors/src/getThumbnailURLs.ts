@@ -165,8 +165,9 @@ export const GetThumbnailURLs = (gateways: Gateways) => {
         });
 
         const initialSrcdoc = await buildHTML({
+          vizId: content.id,
           rollup,
-          files: vizFilesToFileCollection(content?.files),
+          // files: vizFilesToFileCollection(content?.files),
           vizCache,
           slugCache,
           getSvelteCompiler: async () =>
