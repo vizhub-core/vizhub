@@ -23,7 +23,7 @@
   "dependencies": {
     "@sesamecare-oss/redlock": "^1.4.0",
     "@supabase/supabase-js": "^2.49.4",
-    "@vizhub/viz-types": "^0.0.2",
+    "@vizhub/viz-types": "^0.1.0",
     "d3-array": "^3.2.4",
     "ioredis": "^5.6.0",
     "mongodb": "^6.15.0",

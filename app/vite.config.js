@@ -1,7 +1,6 @@
 // Inspired by https://github.com/vitejs/vite-plugin-react/blob/main/playground/ssr-react/vite.config.js
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import path from 'path';
 import tailwindcss from '@tailwindcss/vite';
 // import { visualizer } from 'rollup-plugin-visualizer';
 
@@ -16,11 +15,6 @@ export default defineConfig({
     // so the app uses the latest source
     // rather than the built package.
     alias: {
-      '@vizhub/runtime': path.resolve(
-        __dirname,
-        '../runtime/src',
-      ),
-
       /**
        * @uiw/* packages are not compatible with ESM, as they do not import with `.js` extension.
        * We're using source in TypeScript instead.

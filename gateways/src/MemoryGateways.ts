@@ -28,6 +28,7 @@ import { ok, err, Result } from './Result';
 import { Gateways, pageSize } from './Gateways';
 import { ascending, descending } from 'd3-array';
 import { VizId } from '@vizhub/viz-types';
+import { CommitImageKey } from 'entities/src/Images';
 
 type Entity = { [key: string]: any };
 type EntityId = string;
@@ -412,18 +413,6 @@ export const MemoryGateways = (): Gateways => {
   }) => {
     const info = Object.values(documents.Info).find(
       (info: Info) => {
-        console.log(
-          'checking info ',
-          JSON.stringify(info, null, 2),
-        );
-        console.log(
-          'info.slug === slug ',
-          info.slug === slug,
-        );
-        console.log(
-          'info.owner === userId ',
-          info.owner === userId,
-        );
         return info.slug === slug && info.owner === userId;
       },
     );
@@ -492,6 +481,15 @@ export const MemoryGateways = (): Gateways => {
     getInfoByUserAndSlug,
     // @ts-ignore
     getRevisionHistory,
+
+    getCommitImageKeys: async (
+      commitIds: Array<CommitId>,
+    ): Promise<Result<Array<CommitImageKey>>> => {
+      return ok([]);
+    },
+
+    // @ts-ignore
+    saveCommitImageKeys: noop,
   };
 
   // Packages up save, get, and delete
