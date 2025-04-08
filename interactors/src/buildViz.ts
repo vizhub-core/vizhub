@@ -13,12 +13,15 @@ import {
   VizAccess,
 } from './verifyVizAccess';
 import {
+  SvelteCompiler,
   VizCache,
-  createVizCache,
+  buildHTML,
   cleanRollupErrorMessage,
+  createVizCache,
 } from '@vizhub/runtime';
 import { ResolveSlug } from './resolveSlug';
 import { VizContent, VizId } from '@vizhub/viz-types';
+import { vizFilesToFileCollection } from '@vizhub/viz-utils';
 
 const debug = false;
 
@@ -87,7 +90,7 @@ export const BuildViz = (gateways: Gateways) => {
     // Keys are of the form `${userName}/${slug}`.
     const slugResolutionCache: Record<string, VizId> = {};
 
-    const resolveSlug = ResolveSlug(
+    const slugCache = ResolveSlug(
       gateways,
       slugResolutionCache,
     );
@@ -220,14 +223,20 @@ export const BuildViz = (gateways: Gateways) => {
 
     // Compute srcdoc for iframe.
     // TODO cache it per commit.
-    let { initialSrcdoc, initialSrcdocError } =
-      await computeSrcDoc({
+    let initialSrcdoc, initialSrcdocError;
+    try {
+      initialSrcdoc = await buildHTML({
         rollup,
-        getSvelteCompiler: async () => compile,
-        content,
+        getSvelteCompiler: async () =>
+          compile as unknown as SvelteCompiler,
+        files: vizFilesToFileCollection(content?.files),
         vizCache,
-        resolveSlug,
+        slugCache,
       });
+    } catch (error) {
+      console.log('Error when building HTML:', error);
+      initialSrcdocError = (error as Error).message;
+    }
 
     // Clean up the error message to make it more user-friendly.
     if (initialSrcdocError) {

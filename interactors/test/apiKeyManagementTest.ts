@@ -32,10 +32,6 @@ export const apiKeyManagementTest = () => {
         },
         apiKeyString: '103104',
       });
-
-      console.log(
-        JSON.stringify(generateAPIKeyResult, null, 2),
-      );
     });
   });
   // Create API Key, success case

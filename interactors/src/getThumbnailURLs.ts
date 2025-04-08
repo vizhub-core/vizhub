@@ -5,6 +5,12 @@ import {
 } from 'entities';
 import { rollup } from 'rollup';
 import {
+  buildHTML,
+  createVizCache,
+  SvelteCompiler,
+  VizCache,
+} from '@vizhub/runtime';
+import {
   CommitImageKey,
   thumbnailWidth,
 } from 'entities/src/Images';
@@ -16,9 +22,9 @@ import {
   ScreenshotGenie,
 } from 'screenshotgenie';
 import { GetContentAtCommit } from './getContentAtCommit';
-import { createVizCache, VizCache } from '@vizhub/runtime';
 import { ResolveSlug } from './resolveSlug';
 import { VizId } from '@vizhub/viz-types';
+import { vizFilesToFileCollection } from '@vizhub/viz-utils';
 
 const DEBUG = false;
 
@@ -27,7 +33,7 @@ let screenshotgenie: ScreenshotGenie;
 export const GetThumbnailURLs = (gateways: Gateways) => {
   const { getCommitImageKeys, getContent } = gateways;
   const getContentAtCommit = GetContentAtCommit(gateways);
-  const resolveSlug = ResolveSlug(gateways);
+  const slugCache = ResolveSlug(gateways);
 
   return async (
     commitIds: Array<CommitId>,
@@ -158,12 +164,13 @@ export const GetThumbnailURLs = (gateways: Gateways) => {
           },
         });
 
-        const { initialSrcdoc } = await computeSrcDoc({
+        const initialSrcdoc = await buildHTML({
           rollup,
-          content,
+          files: vizFilesToFileCollection(content?.files),
           vizCache,
-          resolveSlug,
-          getSvelteCompiler: async () => compile,
+          slugCache,
+          getSvelteCompiler: async () =>
+            compile as unknown as SvelteCompiler,
         });
 
         // In case of build errors, just use an empty HTML document.

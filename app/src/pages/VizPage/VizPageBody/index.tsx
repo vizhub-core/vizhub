@@ -22,7 +22,6 @@ import { useComments } from './useComments';
 import { useRenderMarkdownHTML } from './useRenderMarkdownHTML';
 import { useMarkUncommitted } from '../useMarkUncommitted';
 import { useBrandedEmbedNotice } from './useBrandedEmbedNotice';
-import { useRuntime } from '../useRuntime';
 import {
   getVizPageHref,
   getForksPageHref,
@@ -43,6 +42,7 @@ import {
 } from 'entities';
 import { formatTimestamp } from '../../../accessors/formatTimestamp';
 import { VizFileId } from '@vizhub/viz-types';
+import { useRuntime } from '../runtime/useRuntime';
 
 const debug = false;
 const enableVizPageUpgradeBanner = false;
