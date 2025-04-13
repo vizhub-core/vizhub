@@ -13,8 +13,6 @@ import {
   CommitMetadata,
   Commit,
 } from 'entities';
-import { JSDOM } from 'jsdom';
-import { setJSDOM } from '@vizhub/runtime';
 import {
   BuildViz,
   CommitViz,
@@ -33,8 +31,6 @@ import { Result } from 'gateways';
 import { VizPageData } from './VizPageData';
 import { GetThumbnailURLs } from 'interactors/src/getThumbnailURLs';
 import { VizContent, VizId } from '@vizhub/viz-types';
-
-setJSDOM(JSDOM);
 
 const debug = false;
 
