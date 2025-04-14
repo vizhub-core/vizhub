@@ -1,5 +1,9 @@
 import { describe, it, expect, assert } from 'vitest';
-import { Info, defaultSortOption } from 'entities';
+import {
+  Info,
+  SectionId,
+  defaultSortOption,
+} from 'entities';
 import {
   fakeSnapshot,
   primordialViz,
@@ -28,6 +32,7 @@ export const getInfosAndOwnersTest = () => {
         hasMore: false,
         infoSnapshots: [fakeSnapshot(primordialViz.info)],
         ownerUserSnapshots: [fakeSnapshot(userJoe)],
+        thumbnailURLs: {},
       });
     });
 
@@ -48,6 +53,7 @@ export const getInfosAndOwnersTest = () => {
         hasMore: false,
         infoSnapshots: [fakeSnapshot(primordialViz.info)],
         ownerUserSnapshots: [],
+        thumbnailURLs: {},
       });
     });
 
@@ -70,7 +76,7 @@ export const getInfosAndOwnersTest = () => {
       const result = await getInfosAndOwners({
         noNeedToFetchUsers: [],
         sortId: defaultSortOption.id,
-        sectionId: 'shared',
+        sectionId: SectionId.Shared,
         pageNumber: 0,
       });
       assert(result.outcome === 'success');
@@ -78,6 +84,7 @@ export const getInfosAndOwnersTest = () => {
         hasMore: false,
         infoSnapshots: [],
         ownerUserSnapshots: [],
+        thumbnailURLs: {},
       });
     });
 
@@ -112,7 +119,7 @@ export const getInfosAndOwnersTest = () => {
         owner: userJoe.id,
         noNeedToFetchUsers: [],
         sortId: defaultSortOption.id,
-        sectionId: 'shared',
+        sectionId: SectionId.Shared,
         pageNumber: 0,
       });
       if (result.outcome === 'failure') {
@@ -123,6 +130,7 @@ export const getInfosAndOwnersTest = () => {
         hasMore: false,
         infoSnapshots: [fakeSnapshot(sharedInfo)],
         ownerUserSnapshots: [fakeSnapshot(userJane)],
+        thumbnailURLs: {},
       });
     });
   });

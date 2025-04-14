@@ -8,9 +8,6 @@
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "baseUrl": ".",
-    "paths": {
-      "@vizhub/runtime": ["../runtime/src"]
-    },
     "lib": ["es2022", "dom"]
   },
   "include": ["src/**/*"],

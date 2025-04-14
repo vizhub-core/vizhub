@@ -4,10 +4,10 @@ import { GenerateAPIKey } from '../src';
 import { ts1 } from 'entities/test/fixtures';
 
 export const apiKeyManagementTest = () => {
-  describe('commitViz', async () => {
+  describe('apiKeyManagement', async () => {
     // This is a no-op case.
     // It should do nothing and return "success".
-    it('commitViz, committed case', async () => {
+    it('generateAPIKey', async () => {
       const gateways = await initGateways();
 
       const generateAPIKey = GenerateAPIKey(gateways);
@@ -23,6 +23,7 @@ export const apiKeyManagementTest = () => {
       expect(generateAPIKeyResult.value).toEqual({
         apiKey: {
           id: '102',
+          name: 'test',
           owner: 'user1',
           created: ts1,
           status: 'active',
@@ -31,10 +32,6 @@ export const apiKeyManagementTest = () => {
         },
         apiKeyString: '103104',
       });
-
-      console.log(
-        JSON.stringify(generateAPIKeyResult, null, 2),
-      );
     });
   });
   // Create API Key, success case

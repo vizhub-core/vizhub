@@ -85,6 +85,14 @@ export const forkVizTest = () => {
       };
       const expectedContent = {
         ...primordialViz.content,
+        files: {
+          ...primordialViz.content.files,
+          // Clear out the README.md
+          9693462: {
+            ...primordialViz.content.files['9693462'],
+            text: '',
+          },
+        },
         id: newVizId,
       };
       assert(result.outcome === 'success');
@@ -331,6 +339,11 @@ export const forkVizTest = () => {
             // Simulates the user changing this text before forking.
             text: '<body>Hello Changed World</body>',
           },
+          // Clear out the README.md
+          9693462: {
+            ...primordialViz.content.files['9693462'],
+            text: '',
+          },
         },
         title,
       };
@@ -366,6 +379,7 @@ export const forkVizTest = () => {
 
       const expectedContent = {
         ...primordialViz.content,
+
         ...content, // New
         id: newVizId,
       };
