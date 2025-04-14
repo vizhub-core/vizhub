@@ -1,1 +1,1 @@
-export const discordLink = 'https://discord.gg/wbtJ7SCtYr';
+export const discordLink = 'https://discord.gg/Pn6VY99ba4';

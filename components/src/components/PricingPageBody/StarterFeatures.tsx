@@ -1,3 +1,4 @@
+import { discordLink } from '../discordLink';
 import { Feature } from './Feature';
 
 export const StarterFeatures = () => {
@@ -10,17 +11,16 @@ export const StarterFeatures = () => {
       >
         Find compelling open source visualizations.
       </Feature>
-      {/* <Feature
+      <Feature
         title="Community Access"
         id="community-access"
         hasBottomBorder={true}
       >
-        Join our{' '}
-        <a href="https://discord.gg/wbtJ7SCtYr">Discord</a>{' '}
+        Join the <a href={discordLink}>VizHub Discord</a>{' '}
         and <a href="https://vizhub.com/forum/">Forum</a> to
         connect with our community. Ask for help or any
         time!
-      </Feature> */}
+      </Feature>
       <Feature
         title="Free Courses"
         id="free-courses"
