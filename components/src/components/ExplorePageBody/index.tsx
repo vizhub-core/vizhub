@@ -4,6 +4,7 @@ import { More } from '../More';
 import { Footer } from '../Footer';
 import { CreateNewButton } from '../CreateNewButton';
 import './styles.scss';
+import { discordLink } from '../discordLink';
 
 const enableOfficeHoursLink = false;
 
@@ -34,7 +35,7 @@ export const ExplorePageBody = ({
               </span>{' '}
               Live in{' '}
               <a
-                href="https://discord.gg/wbtJ7SCtYr"
+                href={discordLink}
                 target="_blank"
                 rel="noopener noreferrer"
               >

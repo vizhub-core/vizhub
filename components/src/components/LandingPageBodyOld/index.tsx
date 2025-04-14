@@ -4,6 +4,7 @@ import { LogoSVG } from '../Icons/LogoSVG';
 import { FacebookSVG } from '../Icons/FacebookSVG';
 import { TwitterSVG } from '../Icons/TwitterSVG';
 import './styles.scss';
+import { discordLink } from '../discordLink';
 const Hero = () => (
   <div
     className="hero"
@@ -165,9 +166,7 @@ const Footer = () => (
             <a href="https://vizhub.com/forum/">Forum</a>
           </li>
           <li>
-            <a href="https://discord.gg/wbtJ7SCtYr">
-              Discord
-            </a>
+            <a href={discordLink}>Discord</a>
           </li>
           <li>
             <a href="https://vizhub.com/">Contact</a>
