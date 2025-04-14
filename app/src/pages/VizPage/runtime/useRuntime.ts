@@ -266,9 +266,11 @@ export const useRuntime = ({
       //   runtime.invalidateVizCache(changedVizIds);
       // }
       // }
-      runtime.handleCodeChange(
-        vizFilesToFileCollection(content.files),
-      );
+      if (isInteracting) {
+        runtime.handleCodeChange(
+          vizFilesToFileCollection(content.files),
+        );
+      }
     };
     update();
   }, [vizCacheContents]);

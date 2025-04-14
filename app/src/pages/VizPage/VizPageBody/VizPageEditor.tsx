@@ -106,8 +106,6 @@ export const VizPageEditor = ({
       }
     }, [canUserUseAIAssist]);
 
-  const { runtimeVersion } = useContext(VizPageContext);
-
   return (
     <VZCodeProvider
       content={content}
