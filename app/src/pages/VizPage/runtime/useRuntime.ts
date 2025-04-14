@@ -9,6 +9,7 @@ import { createRuntime } from '@vizhub/runtime';
 import type { VizHubRuntime } from '@vizhub/runtime';
 import BuildWorker from './buildWorker?worker';
 import { SlugKey } from 'entities';
+import { vizFilesToFileCollection } from '@vizhub/viz-utils';
 
 const debug = false;
 
@@ -205,7 +206,6 @@ export const useRuntime = ({
       return;
     }
 
-    console.log('HERE');
     // Find the imported vizzes that have changed.
     const changedVizIds = Object.keys(
       vizCacheContents,
@@ -246,26 +246,29 @@ export const useRuntime = ({
       if (runtime === null) {
         throw new Error('VizHubRuntime is null');
       }
-      if (isInteracting) {
-        // If we are recovering from an error,
-        // clear the error message, and run the code
-        // totally fresh by re-computing the srcdoc.
-        if (srcdocErrorMessageRef.current) {
-          runtime.resetSrcdoc(changedVizIds);
-          // try {
-          //   const srcdoc = await computeSrcDocV3(content);
-          //   if (iframeRef.current) {
-          //     iframeRef.current.srcdoc = srcdoc;
-          //   }
-          // } catch (error) {
-          //   console.error(error);
-          //   setSrcdocErrorMessage(error.message);
-          // }
-        } else {
-          // Re-run the code with hot reloading.
-          runtime.invalidateVizCache(changedVizIds);
-        }
-      }
+      // if (isInteracting) {
+      // If we are recovering from an error,
+      // clear the error message, and run the code
+      // totally fresh by re-computing the srcdoc.
+      // if (srcdocErrorMessageRef.current) {
+      //   runtime.resetSrcdoc(changedVizIds);
+      // try {
+      //   const srcdoc = await computeSrcDocV3(content);
+      //   if (iframeRef.current) {
+      //     iframeRef.current.srcdoc = srcdoc;
+      //   }
+      // } catch (error) {
+      //   console.error(error);
+      //   setSrcdocErrorMessage(error.message);
+      // }
+      // } else {
+      //   // Re-run the code with hot reloading.
+      //   runtime.invalidateVizCache(changedVizIds);
+      // }
+      // }
+      runtime.handleCodeChange(
+        vizFilesToFileCollection(content.files),
+      );
     };
     update();
   }, [vizCacheContents]);
