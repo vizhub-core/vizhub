@@ -267,7 +267,7 @@ export const useRuntime = ({
       // }
       // }
       if (isInteracting) {
-        runtime.handleCodeChange(
+        runtime.reload(
           vizFilesToFileCollection(content.files),
         );
       }
