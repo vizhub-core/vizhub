@@ -98,6 +98,7 @@ export const useOnEditWithAI = ({
     }
   }, []);
   const modelNameOptions = [
+    'openai/gpt-4.1',
     'google/gemini-2.5-pro-preview-03-25',
     'x-ai/grok-3-beta',
     'anthropic/claude-3.7-sonnet',
