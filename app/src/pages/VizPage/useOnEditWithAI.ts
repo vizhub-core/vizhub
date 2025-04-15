@@ -98,7 +98,8 @@ export const useOnEditWithAI = ({
     }
   }, []);
   const modelNameOptions = [
-    'anthropic/claude-3.7-sonnet:thinking',
+    'google/gemini-2.5-pro-preview-03-25',
+    'x-ai/grok-3-beta',
     'anthropic/claude-3.7-sonnet',
     'anthropic/claude-3.5-sonnet',
     'deepseek/deepseek-r1',
