@@ -15,13 +15,14 @@ import {
 import {
   SvelteCompiler,
   VizCache,
-  buildHTML,
+  build,
   cleanRollupErrorMessage,
   createVizCache,
 } from '@vizhub/runtime';
 import { ResolveSlug } from './resolveSlug';
 import { VizContent, VizId } from '@vizhub/viz-types';
 import { vizFilesToFileCollection } from '@vizhub/viz-utils';
+import { BuildResult } from '@vizhub/runtime/dist/build/types';
 
 const debug = false;
 
@@ -224,8 +225,9 @@ export const BuildViz = (gateways: Gateways) => {
     // Compute srcdoc for iframe.
     // TODO cache it per commit.
     let initialSrcdoc, initialSrcdocError;
+
     try {
-      initialSrcdoc = await buildHTML({
+      const buildResult: BuildResult = await build({
         vizId: id,
         rollup,
         getSvelteCompiler: async () =>
@@ -234,6 +236,7 @@ export const BuildViz = (gateways: Gateways) => {
         vizCache,
         slugCache,
       });
+      initialSrcdoc = buildResult.html;
     } catch (error) {
       console.log('Error when building HTML:', error);
       initialSrcdocError = (error as Error).message;

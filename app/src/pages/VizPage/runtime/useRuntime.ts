@@ -191,11 +191,6 @@ export const useRuntime = ({
   }, [srcdocErrorMessage]);
 
   useEffect(() => {
-    console.log(
-      'vizCacheContents updated',
-      vizCacheContents,
-    );
-
     // Don't run on first render.
     if (initialMount.current === true) {
       return;
@@ -267,9 +262,10 @@ export const useRuntime = ({
       // }
       // }
       if (isInteracting) {
-        runtime.reload(
-          vizFilesToFileCollection(content.files),
-        );
+        runtime.run({
+          files: vizFilesToFileCollection(content.files),
+          enableHotReloading: true,
+        });
       }
     };
     update();
