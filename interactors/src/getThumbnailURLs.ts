@@ -5,7 +5,7 @@ import {
 } from 'entities';
 import { rollup } from 'rollup';
 import {
-  buildHTML,
+  build,
   createVizCache,
   SvelteCompiler,
   VizCache,
@@ -25,6 +25,7 @@ import { GetContentAtCommit } from './getContentAtCommit';
 import { ResolveSlug } from './resolveSlug';
 import { VizId } from '@vizhub/viz-types';
 import { vizFilesToFileCollection } from '@vizhub/viz-utils';
+import type { BuildResult } from '@vizhub/runtime';
 
 const DEBUG = false;
 
@@ -164,15 +165,24 @@ export const GetThumbnailURLs = (gateways: Gateways) => {
           },
         });
 
-        const initialSrcdoc = await buildHTML({
-          vizId: content.id,
-          rollup,
-          // files: vizFilesToFileCollection(content?.files),
-          vizCache,
-          slugCache,
-          getSvelteCompiler: async () =>
-            compile as unknown as SvelteCompiler,
-        });
+        let initialSrcdoc;
+
+        try {
+          const buildResult: BuildResult = await build({
+            vizId: content.id,
+            rollup,
+            files: vizFilesToFileCollection(content?.files),
+            vizCache,
+            slugCache,
+            getSvelteCompiler: async () =>
+              compile as unknown as SvelteCompiler,
+          });
+          initialSrcdoc = buildResult.html;
+        } catch (e) {
+          // Fail silently if the build fails.
+          // Sometimes vizzes are broken and we don't want to
+          // crash the whole process.
+        }
 
         // In case of build errors, just use an empty HTML document.
         // We can't use empty string HTML documents for the screenshotgenie

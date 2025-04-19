@@ -162,7 +162,6 @@ export const useRuntime = ({
     //   }, 0);
     // };
 
-    console.log('Calling createRuntime');
     const worker = new BuildWorker();
     runtimeRef.current = createRuntime({
       iframe,
@@ -175,7 +174,6 @@ export const useRuntime = ({
       // resolveSlugKey,
       // writeFile,
     });
-    console.log('Called createRuntime');
     // slugResolutionCache
   }, [isVisual]);
 

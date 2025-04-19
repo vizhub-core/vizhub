@@ -238,7 +238,7 @@ export const BuildViz = (gateways: Gateways) => {
       });
       initialSrcdoc = buildResult.html;
     } catch (error) {
-      console.log('Error when building HTML:', error);
+      // console.log('Error when building HTML:', error);
       initialSrcdocError = (error as Error).message;
     }
 
