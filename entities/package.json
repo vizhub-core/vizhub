@@ -20,13 +20,13 @@
   "homepage": "https://github.com/vizhub-core/vizhub3#readme",
   "dependencies": {
     "@vizhub/viz-types": "^0.1.0",
-    "@vizhub/viz-utils": "^1.0.1",
+    "@vizhub/viz-utils": "^1.1.0",
     "screenshotgenie": "^0.2.0",
     "vzcode": "^1.31.0"
   },
   "devDependencies": {
     "prettier": "^3.5.3",
     "typescript": "^5.8.3",
-    "vitest": "^3.1.1"
+    "vitest": "^3.1.2"
   }
 }

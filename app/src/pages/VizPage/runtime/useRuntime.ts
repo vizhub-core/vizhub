@@ -11,7 +11,7 @@ import BuildWorker from './buildWorker?worker';
 import { SlugKey } from 'entities';
 import { vizFilesToFileCollection } from '@vizhub/viz-utils';
 
-const debug = false;
+const DEBUG = false;
 
 // Sets up either the v2 or v3 runtime environment.
 // Meant to support dynamic switching between the two.
@@ -48,11 +48,10 @@ export const useRuntime = ({
     if (runtimeRef.current === null) {
       return new Promise<VizHubRuntime>((resolve) => {
         const interval = setInterval(() => {
-          if (debug) {
+          DEBUG &&
             console.log(
               'polling for VizHubRuntime.current...',
             );
-          }
           if (runtimeRef.current !== null) {
             clearInterval(interval);
             resolve(runtimeRef.current);
@@ -168,9 +167,8 @@ export const useRuntime = ({
       setBuildErrorMessage: setSrcdocErrorMessage,
       worker,
       // vizId: content.id,
-      // iframe,
       // setSrcdocErrorMessage,
-      // getLatestContent,
+      getLatestContent,
       // resolveSlugKey,
       // writeFile,
     });
@@ -188,6 +186,9 @@ export const useRuntime = ({
     srcdocErrorMessageRef.current = srcdocErrorMessage;
   }, [srcdocErrorMessage]);
 
+  // This effect runs when the vizCacheContents changes.
+  // Its purpose is to check if any of the imported vizzes
+  // have changed, and if so, to re-run the code.
   useEffect(() => {
     // Don't run on first render.
     if (initialMount.current === true) {
@@ -210,18 +211,17 @@ export const useRuntime = ({
     });
     previousVizCacheContents.current = vizCacheContents;
 
-    if (debug) {
+    DEBUG &&
       console.log(
         '[useRuntime] changedVizIds',
         changedVizIds,
       );
-    }
 
     if (changedVizIds.length === 0) {
       return;
     }
 
-    // // See if any of the vizzes we import from are interacting.
+    // See if any of the vizzes we import from are interacting.
     let isInteracting = false;
     for (const vizId of changedVizIds) {
       if (vizCacheContents[vizId].isInteracting) {
@@ -229,9 +229,7 @@ export const useRuntime = ({
         break;
       }
     }
-    if (debug) {
-      console.log('isInteracting', isInteracting);
-    }
+    DEBUG && console.log('isInteracting', isInteracting);
 
     const update = async () => {
       const runtime = await getVizHubRuntime();
@@ -239,27 +237,9 @@ export const useRuntime = ({
       if (runtime === null) {
         throw new Error('VizHubRuntime is null');
       }
-      // if (isInteracting) {
-      // If we are recovering from an error,
-      // clear the error message, and run the code
-      // totally fresh by re-computing the srcdoc.
-      // if (srcdocErrorMessageRef.current) {
-      //   runtime.resetSrcdoc(changedVizIds);
-      // try {
-      //   const srcdoc = await computeSrcDocV3(content);
-      //   if (iframeRef.current) {
-      //     iframeRef.current.srcdoc = srcdoc;
-      //   }
-      // } catch (error) {
-      //   console.error(error);
-      //   setSrcdocErrorMessage(error.message);
-      // }
-      // } else {
-      //   // Re-run the code with hot reloading.
-      //   runtime.invalidateVizCache(changedVizIds);
-      // }
-      // }
+
       if (isInteracting) {
+        runtime.invalidateVizCache(changedVizIds);
         runtime.run({
           files: vizFilesToFileCollection(content.files),
           enableHotReloading: true,

@@ -44,7 +44,6 @@ import { formatTimestamp } from '../../../accessors/formatTimestamp';
 import { VizFileId } from '@vizhub/viz-types';
 import { useRuntime } from '../runtime/useRuntime';
 
-const debug = false;
 const enableVizPageUpgradeBanner = false;
 
 export const VizPageBody = () => {
