@@ -16,7 +16,7 @@ import { createProxyMiddleware } from 'http-proxy-middleware';
 import dotenv from 'dotenv';
 dotenv.config();
 
-const version = '3.1.0';
+const version = '4.0.0';
 
 // Generate a random server ID for debugging scaling.
 const serverId = Math.random().toString(36).slice(2);

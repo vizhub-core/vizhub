@@ -5,7 +5,7 @@ import tailwindcss from '@tailwindcss/vite';
 // import { visualizer } from 'rollup-plugin-visualizer';
 
 // Set to true if you are using npm link for the @vizhub/runtime package
-const isRuntimeLinked = true;
+const isRuntimeLinked = false;
 
 export default defineConfig({
   plugins: [
