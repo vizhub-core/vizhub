@@ -1,9 +1,11 @@
 // Inspired by https://github.com/vitejs/vite-plugin-react/blob/main/playground/ssr-react/vite.config.js
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import path from 'path';
 import tailwindcss from '@tailwindcss/vite';
 // import { visualizer } from 'rollup-plugin-visualizer';
+
+// Set to true if you are using npm link for the @vizhub/runtime package
+const isRuntimeLinked = false;
 
 export default defineConfig({
   plugins: [
@@ -16,11 +18,6 @@ export default defineConfig({
     // so the app uses the latest source
     // rather than the built package.
     alias: {
-      '@vizhub/runtime': path.resolve(
-        __dirname,
-        '../runtime/src',
-      ),
-
       /**
        * @uiw/* packages are not compatible with ESM, as they do not import with `.js` extension.
        * We're using source in TypeScript instead.
@@ -66,7 +63,10 @@ export default defineConfig({
       '@rollup/browser',
 
       // Always use the latest source for runtime package
-      '@vizhub/runtime',
+      // '@vizhub/runtime',
+      // isRuntimeLinked?
+      //   '@vizhub/runtime'
+      ...(isRuntimeLinked ? ['@vizhub/runtime'] : []),
 
       // Using `npm link` with VZCode
       // Steps:
@@ -84,6 +84,18 @@ export default defineConfig({
       jsx: 'automatic',
     },
   },
+  // Solve the issue of
+  // The request url "/home/curran/repos/vizhub-runtime/node_modules/@rollup/browser/dist/es/bindings_wasm_bg.wasm" is outside of Vite serving allow list.
+
+  ...(isRuntimeLinked
+    ? {
+        server: {
+          fs: {
+            allow: ['../..'],
+          },
+        },
+      }
+    : {}),
   // Fix CSS warnings
   css: {
     preprocessorOptions: {

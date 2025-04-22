@@ -20,7 +20,8 @@ export const validateVizTest = () => {
       );
       assert(result.outcome === 'failure');
       expect(result.error.message).toEqual(
-        'Resource (Info) not found with id: viz1',
+        'Resource (Info) not found with id: ' +
+          primordialViz.info.id,
       );
     });
 
@@ -34,7 +35,8 @@ export const validateVizTest = () => {
       );
       assert(result.outcome === 'failure');
       expect(result.error.message).toEqual(
-        'Resource (Content) not found with id: viz1',
+        'Resource (Content) not found with id: ' +
+          primordialViz.info.id,
       );
     });
 

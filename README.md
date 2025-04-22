@@ -4,14 +4,14 @@ This repository contains the VizHub platform source code, which is currently dep
 
 Tour of the app:
 
- * https://vizhub.com/explore - Explore user generated content
-![image](https://github.com/user-attachments/assets/297ac688-88ab-42f1-b04c-47e66ac9d153)
- * https://vizhub.com/curran - An example Profile Page
-![image](https://github.com/user-attachments/assets/17a0794d-3f05-46b1-bd4e-e2076a055c39)
- * https://vizhub.com/curran/circles-with-d3 - An example Viz Page
-![image](https://github.com/user-attachments/assets/5bacc288-c407-4a64-8d50-ec0895a62ee6)
- * https://vizhub.com/curran/circles-with-d3?edit=files&file=index.js - The Viz Page with editor open ([VZCode](https://github.com/vizhub-core/vzcode)), which lets you edit code in the browser
-![image](https://github.com/user-attachments/assets/033f129e-cd6f-4dec-92f8-e5359d8875cf)
+- https://vizhub.com/explore - Explore user generated content
+  ![image](https://github.com/user-attachments/assets/297ac688-88ab-42f1-b04c-47e66ac9d153)
+- https://vizhub.com/curran - An example Profile Page
+  ![image](https://github.com/user-attachments/assets/17a0794d-3f05-46b1-bd4e-e2076a055c39)
+- https://vizhub.com/curran/circles-with-d3 - An example Viz Page
+  ![image](https://github.com/user-attachments/assets/5bacc288-c407-4a64-8d50-ec0895a62ee6)
+- https://vizhub.com/curran/circles-with-d3?edit=files&file=index.js - The Viz Page with editor open ([VZCode](https://github.com/vizhub-core/vzcode)), which lets you edit code in the browser
+  ![image](https://github.com/user-attachments/assets/033f129e-cd6f-4dec-92f8-e5359d8875cf)
 
 All code changes are synchronized in real time to remote collaborators. You can use "interactive widgets" using Alt+drag on numbers for truly instant feedback (~60FPS hot reloading for simple examples).
 
@@ -32,8 +32,12 @@ npm run dev
 
 To develop locally, all you need is:
 
- * A local instance of MongoDB - see [Install MongoDB Community Edition on Ubuntu](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-ubuntu/#std-label-install-mdb-community-ubuntu), or use `docker compose up` with the provided `docker-compose.yml` file.
- * NodeJS latest
+- A local instance of MongoDB - see [Install MongoDB Community Edition on Ubuntu](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-ubuntu/#std-label-install-mdb-community-ubuntu), or use `docker compose up` with the provided `docker-compose.yml` file.
+- NodeJS latest
+
+```
+docker compose up
+```
 
 In the root (`vizhub`) or in the `app` package (`vizhub/app`), run the following to start the VizHub dev server:
 
@@ -42,7 +46,6 @@ npm run dev
 ```
 
 To see what this script does, look at `package.json` in the `scripts` property.
-
 
 ## Environment Variables
 

@@ -11,7 +11,7 @@ import { getNewStripe, getStripe } from './getStripe';
 import { UpdateUserStripeId } from 'interactors';
 import { err, Gateways, Result } from 'gateways';
 
-const debug = true;
+const debug = false;
 
 // Endpoint for handling Stripe webhooks.
 // (Remember to run: stripe listen --forward-to localhost:5173/api/stripe-webhook)

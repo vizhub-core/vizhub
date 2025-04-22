@@ -21,10 +21,6 @@ export const commitVizTest = () => {
     it('commitViz, committed case', async () => {
       const gateways = await initGateways();
 
-      console.log(
-        'commitVizTest: gateways.type',
-        gateways.type,
-      );
       const saveViz = SaveViz(gateways);
       const commitViz = CommitViz(gateways);
 
@@ -101,7 +97,7 @@ export const commitVizTest = () => {
       expect(getCommitResult.value).toEqual({
         id: '100',
         parent: 'commit1',
-        viz: 'viz1',
+        viz: primordialViz.info.id,
         authors: ['47895473289547832938754'],
         timestamp: 1638300000,
         ops: [
