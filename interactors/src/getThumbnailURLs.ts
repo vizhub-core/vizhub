@@ -5,6 +5,12 @@ import {
 } from 'entities';
 import { rollup } from 'rollup';
 import {
+  build,
+  createVizCache,
+  SvelteCompiler,
+  VizCache,
+} from '@vizhub/runtime';
+import {
   CommitImageKey,
   thumbnailWidth,
 } from 'entities/src/Images';
@@ -16,13 +22,10 @@ import {
   ScreenshotGenie,
 } from 'screenshotgenie';
 import { GetContentAtCommit } from './getContentAtCommit';
-import {
-  computeSrcDoc,
-  createVizCache,
-  VizCache,
-} from '@vizhub/runtime';
 import { ResolveSlug } from './resolveSlug';
 import { VizId } from '@vizhub/viz-types';
+import { vizFilesToFileCollection } from '@vizhub/viz-utils';
+import type { BuildResult } from '@vizhub/runtime';
 
 const DEBUG = false;
 
@@ -31,7 +34,7 @@ let screenshotgenie: ScreenshotGenie;
 export const GetThumbnailURLs = (gateways: Gateways) => {
   const { getCommitImageKeys, getContent } = gateways;
   const getContentAtCommit = GetContentAtCommit(gateways);
-  const resolveSlug = ResolveSlug(gateways);
+  const slugCache = ResolveSlug(gateways);
 
   return async (
     commitIds: Array<CommitId>,
@@ -162,13 +165,24 @@ export const GetThumbnailURLs = (gateways: Gateways) => {
           },
         });
 
-        const { initialSrcdoc } = await computeSrcDoc({
-          rollup,
-          content,
-          vizCache,
-          resolveSlug,
-          getSvelteCompiler: async () => compile,
-        });
+        let initialSrcdoc;
+
+        try {
+          const buildResult: BuildResult = await build({
+            vizId: content.id,
+            rollup,
+            files: vizFilesToFileCollection(content?.files),
+            vizCache,
+            slugCache,
+            getSvelteCompiler: async () =>
+              compile as unknown as SvelteCompiler,
+          });
+          initialSrcdoc = buildResult.html;
+        } catch (e) {
+          // Fail silently if the build fails.
+          // Sometimes vizzes are broken and we don't want to
+          // crash the whole process.
+        }
 
         // In case of build errors, just use an empty HTML document.
         // We can't use empty string HTML documents for the screenshotgenie

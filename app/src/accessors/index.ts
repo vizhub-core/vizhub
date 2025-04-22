@@ -3,3 +3,5 @@
 export { getForksPageHref } from './getForksPageHref';
 export { getProfilePageHref } from './getProfilePageHref';
 export { getVizPageHref } from './getVizPageHref';
+export { getStargazersPageHref } from './getStargazersPageHref';
+export { getAvatarURL } from './getAvatarURL';

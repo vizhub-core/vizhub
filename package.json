@@ -1,7 +1,7 @@
 {
   "name": "vizhub",
-  "version": "3.0.0",
-  "description": "The VizHub Web application.",
+  "version": "4.0.0",
+  "description": "Create interactive visualizations with AI.",
   "main": "index.js",
   "scripts": {
     "upgrade": "npm exec --workspaces -- ncu -x react,react-dom,@types/react,@types/react-dom,svelte,express,@types/express -u",
@@ -29,7 +29,6 @@
   },
   "homepage": "https://github.com/vizhub-core/vizhub#readme",
   "workspaces": [
-    "runtime",
     "entities",
     "api",
     "app",
