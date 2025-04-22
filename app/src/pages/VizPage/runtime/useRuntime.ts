@@ -272,7 +272,7 @@ export const useRuntime = ({
         runtime.run({
           vizId: content.id,
           files: vizFilesToFileCollection(content.files),
-          enableHotReloading: true,
+          enableHotReloading: false,
         });
       }
     };
