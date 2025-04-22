@@ -67,6 +67,27 @@ const LOCAL_STORAGE_MODEL_KEY =
 //  - Dynamically fetch the latest revision history
 const RELOAD_AFTER_EDIT_WITH_AI = true;
 
+const modelNameOptions = [
+  'anthropic/claude-3.7-sonnet:thinking',
+  'anthropic/claude-3.7-sonnet',
+  'anthropic/claude-3.5-sonnet',
+  'deepseek/deepseek-r1',
+  'deepseek/deepseek-r1-distill-qwen-32b',
+  'deepseek/deepseek-chat-v3-0324',
+  'deepseek/deepseek-chat',
+  'google/gemini-2.5-pro-preview-03-25',
+  'google/gemini-2.5-flash-preview:thinking',
+  'google/gemini-2.5-flash-preview',
+  'google/gemini-2.0-flash-001',
+  'openai/gpt-4.1',
+  'openai/gpt-4o',
+  'openai/o4-mini',
+  'openai/o4-mini-high',
+  'openai/o3-mini-high',
+  'openai/o3-mini',
+  'x-ai/grok-3-beta',
+];
+
 export const useOnEditWithAI = ({
   vizKit,
   id,
@@ -97,19 +118,6 @@ export const useOnEditWithAI = ({
       setModelName(savedModel);
     }
   }, []);
-  const modelNameOptions = [
-    'openai/gpt-4.1',
-    'google/gemini-2.5-pro-preview-03-25',
-    'x-ai/grok-3-beta',
-    'anthropic/claude-3.7-sonnet',
-    'anthropic/claude-3.5-sonnet',
-    'deepseek/deepseek-r1',
-    'deepseek/deepseek-chat-v3-0324',
-    'deepseek/deepseek-chat',
-    'google/gemini-2.0-flash-001',
-    'openai/o3-mini-high',
-    'openai/gpt-4o',
-  ];
 
   const onEditWithAI = useCallback(
     async (prompt: string) => {
