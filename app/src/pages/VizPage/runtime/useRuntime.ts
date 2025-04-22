@@ -4,12 +4,19 @@ import {
   useEffect,
   useRef,
 } from 'react';
-import { VizContent, VizId } from '@vizhub/viz-types';
+import {
+  VizContent,
+  VizFileId,
+  VizId,
+} from '@vizhub/viz-types';
 import { createRuntime } from '@vizhub/runtime';
 import type { VizHubRuntime } from '@vizhub/runtime';
 import BuildWorker from './buildWorker?worker';
 import { SlugKey } from 'entities';
-import { vizFilesToFileCollection } from '@vizhub/viz-utils';
+import {
+  generateVizFileId,
+  vizFilesToFileCollection,
+} from '@vizhub/viz-utils';
 
 const DEBUG = false;
 
@@ -98,6 +105,31 @@ export const useRuntime = ({
     [],
   );
 
+  // Resolves a slug key to a viz ID.
+  // e.g. "@user-name/slug" -> "9165527ac31441578a4626417b5327b6"
+  const resolveSlugKey = useCallback(
+    async (slugKey: SlugKey): Promise<VizId | null> => {
+      console.log(
+        'slugResolutionCache',
+        slugResolutionCache,
+      );
+      // Check if the slugKey is already in the cache.
+      const cachedVizId = slugResolutionCache[slugKey];
+      if (cachedVizId) {
+        return cachedVizId;
+      }
+
+      // If not, return null.
+      // TODO make this happen by:
+      // * falling back to the server in cache misses
+      // * using a new API endpoint that returns the viz ID from slug
+      // * Ingesting the snapshot and incorporating it into the vizCacheContents
+      // * Current behavior: refresh the page to get newly imported vizzes
+      return null;
+    },
+    [slugResolutionCache],
+  );
+
   useEffect(() => {
     // If the viz is not visual (README.md only), then
     // we don't need to set up the v3 runtime.
@@ -117,62 +149,59 @@ export const useRuntime = ({
       throw new Error('content.id is not defined');
     }
 
-    // // Writes the content of a file.
-    // const writeFile = (name: string, text: string) => {
-    //   submitContentOperation((content: VizContent) => {
-    //     // For new files, generate a fileId.
-    //     let fileId: VizFileId = generateVizFileId();
+    // Writes the content of a file.
+    const writeFile = (name: string, text: string) => {
+      submitContentOperation((content: VizContent) => {
+        // For new files, generate a fileId.
+        let fileId: VizFileId = generateVizFileId();
 
-    //     // For existing files, get the fileId.
-    //     const { files } = content;
-    //     if (files !== undefined) {
-    //       const fileIds = Object.keys(files);
-    //       const foundFileId = fileIds.find(
-    //         (fileId) => files[fileId].name === name,
-    //       );
-    //       if (foundFileId) {
-    //         fileId = foundFileId;
-    //       }
-    //     }
+        // For existing files, get the fileId.
+        const { files } = content;
+        if (files !== undefined) {
+          const fileIds = Object.keys(files);
+          const foundFileId = fileIds.find(
+            (fileId) => files[fileId].name === name,
+          );
+          if (foundFileId) {
+            fileId = foundFileId;
+          }
+        }
 
-    //     return {
-    //       ...content,
-    //       files: {
-    //         ...content.files,
-    //         [fileId]: {
-    //           name,
-    //           text,
-    //         },
-    //       },
-    //       // Trigger a re-run.
-    //       isInteracting: true,
-    //     };
-    //   });
+        return {
+          ...content,
+          files: {
+            ...content.files,
+            [fileId]: {
+              name,
+              text,
+            },
+          },
+          // Trigger a re-run.
+          isInteracting: true,
+        };
+      });
 
-    //   // Clear the `isInteracting` property.
-    //   setTimeout(() => {
-    //     // This somewhat cryptic logic
-    //     // deletes the `isInteracting` property
-    //     // from the document.
-    //     submitContentOperation(
-    //       ({ isInteracting, ...newDocument }) =>
-    //         newDocument,
-    //     );
-    //   }, 0);
-    // };
+      // Clear the `isInteracting` property.
+      setTimeout(() => {
+        // This somewhat cryptic logic
+        // deletes the `isInteracting` property
+        // from the document.
+        submitContentOperation(
+          ({ isInteracting, ...newDocument }) =>
+            newDocument,
+        );
+      }, 0);
+    };
 
     const worker = new BuildWorker();
     runtimeRef.current = createRuntime({
       iframe,
       setBuildErrorMessage: setSrcdocErrorMessage,
       worker,
-      // vizId: content.id,
-      // setSrcdocErrorMessage,
       getLatestContent,
-      // resolveSlugKey,
-      // writeFile,
+      resolveSlugKey,
+      writeFile,
     });
-    // slugResolutionCache
   }, [isVisual]);
 
   // Send updates of imported vizzes to the V3 runtime.
@@ -241,13 +270,14 @@ export const useRuntime = ({
       if (isInteracting) {
         runtime.invalidateVizCache(changedVizIds);
         runtime.run({
+          vizId: content.id,
           files: vizFilesToFileCollection(content.files),
           enableHotReloading: true,
         });
       }
     };
     update();
-  }, [vizCacheContents]);
+  }, [vizCacheContents, content.id]);
 
   // Track the initial mount.
   useEffect(() => {
