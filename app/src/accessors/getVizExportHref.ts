@@ -1,3 +1,4 @@
+import { runtimeVersion } from '@vizhub/runtime';
 import { Info, User, absoluteURL } from 'entities';
 
 // Gets the href for a viz export as zip.
@@ -9,11 +10,11 @@ export const getVizExportHref = ({
 }: {
   ownerUser: User;
   info: Info;
-  runtimeVersion: number;
+  runtimeVersion: runtimeVersion;
   absolute?: boolean;
 }) =>
   `${absolute ? absoluteURL('') : ''}/api/${
-    runtimeVersion === 3
+    runtimeVersion === 'v3'
       ? // For v3 vizzes, we use the vite endpoint
         // which includes imported vizzes and yields a
         // runnable vite project.
