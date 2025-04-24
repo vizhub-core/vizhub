@@ -22,7 +22,10 @@ import {
 import { ResolveSlug } from './resolveSlug';
 import { VizContent, VizId } from '@vizhub/viz-types';
 import { vizFilesToFileCollection } from '@vizhub/viz-utils';
-import { BuildResult } from '@vizhub/runtime/dist/build/types';
+import type {
+  BuildResult,
+  runtimeVersion,
+} from '@vizhub/runtime';
 
 const debug = false;
 

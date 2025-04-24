@@ -45,6 +45,7 @@ export const VizPageViewer = ({
   handleCommentSubmit,
   authenticatedUserAvatarURL,
   handleCommentDelete,
+  runtimeVersion,
 }) => {
   // This SVG element is used only for its dynamic resizing behavior.
   // It's invisible, nothing is rendered into it.
@@ -200,6 +201,18 @@ export const VizPageViewer = ({
                 </a>
               </div>
             )}
+            <div>
+              <span className="runtime-version">
+                uses{' '}
+                <a
+                  href={`https://github.com/vizhub-core/vizhub-runtime#${runtimeVersion}-runtime`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {runtimeVersion} runtime
+                </a>
+              </span>
+            </div>
           </div>
         </div>
         <div className="vh-markdown-body vh-rendered-readme">
