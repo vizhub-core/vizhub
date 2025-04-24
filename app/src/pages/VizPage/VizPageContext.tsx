@@ -19,7 +19,6 @@ import {
   User,
   UserId,
   Visibility,
-  getRuntimeVersion,
 } from 'entities';
 import {
   useData,
@@ -47,6 +46,11 @@ import { VizHubError } from 'gateways';
 import { useRevisionHistory } from './useRevisionHistory';
 import { useOnEditWithAI } from './useOnEditWithAI';
 import { VizContent, VizId } from '@vizhub/viz-types';
+import {
+  determineRuntimeVersion,
+  runtimeVersion,
+} from '@vizhub/runtime';
+import { vizFilesToFileCollection } from '@vizhub/viz-utils';
 
 export type VizPageContextValue = {
   info: Info;
@@ -119,7 +123,7 @@ export type VizPageContextValue = {
   // null signifies that the data is still loading.
   revisionHistory: RevisionHistory | null;
   commitMetadata?: CommitMetadata;
-  runtimeVersion: number;
+  runtimeVersion: runtimeVersion;
 
   toggleEditWithAIModal: () => void;
   showEditWithAIModal: boolean;
@@ -403,7 +407,13 @@ export const VizPageProvider = ({
     id: info.id,
   });
 
-  const runtimeVersion = getRuntimeVersion(content);
+  const runtimeVersion = useMemo(
+    () =>
+      determineRuntimeVersion(
+        vizFilesToFileCollection(content?.files),
+      ),
+    [content?.files],
+  );
 
   const exportHref = useMemo(
     () =>

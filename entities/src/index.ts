@@ -197,7 +197,6 @@ export {
   getLicense,
   getPackageJsonText,
   getPackageJson,
-  getRuntimeVersion,
   getUserDisplayName,
   getBio,
   getAnyoneCanEdit,

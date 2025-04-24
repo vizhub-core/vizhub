@@ -91,6 +91,7 @@ export const VizPageBody = () => {
     toggleExportCodeUpgradeNudgeModal,
     toggleEditWithAIModal,
     isEditingWithAI,
+    runtimeVersion,
   } = useContext(VizPageContext);
 
   const iframeRef = useRef<HTMLIFrameElement>(null);
@@ -213,6 +214,7 @@ export const VizPageBody = () => {
       ? getAvatarURL(authenticatedUser)
       : null,
     handleCommentDelete,
+    runtimeVersion,
   };
 
   if (isEmbedMode) {

@@ -1,9 +1,10 @@
 import {
-  Info,
-  Snapshot,
-  getRuntimeVersion,
-  slugify,
-} from 'entities';
+  VizContent,
+  VizFile,
+  VizId,
+} from '@vizhub/viz-types';
+import { determineRuntimeVersion } from '@vizhub/runtime';
+import { Info, Snapshot, slugify } from 'entities';
 import express from 'express';
 import {
   Gateways,
@@ -18,11 +19,7 @@ import {
 } from 'interactors';
 import { zipFiles } from './zipFiles';
 import { BuildVizResult } from 'interactors/src/buildViz';
-import {
-  VizContent,
-  VizFile,
-  VizId,
-} from '@vizhub/viz-types';
+import { vizFilesToFileCollection } from '@vizhub/viz-utils';
 
 export const exportVizEndpoint = ({
   app,
@@ -108,9 +105,11 @@ export const exportVizEndpoint = ({
       const contentSnapshot: Snapshot<VizContent> =
         getContentResult.value;
       const content: VizContent = contentSnapshot.data;
-      const runtimeVersion = getRuntimeVersion(content);
+      const runtimeVersion = determineRuntimeVersion(
+        vizFilesToFileCollection(content?.files),
+      );
 
-      if (runtimeVersion !== 3) {
+      if (runtimeVersion !== 'v3') {
         return res.send(
           err(
             accessDeniedError(

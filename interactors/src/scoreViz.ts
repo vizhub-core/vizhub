@@ -1,12 +1,9 @@
-import { Gateways, Result, ok, err } from 'gateways';
-import {
-  Info,
-  infoLock,
-  dateToTimestamp,
-  getRuntimeVersion,
-} from 'entities';
-import { computePopularity } from './computePopularity';
 import { VizId } from '@vizhub/viz-types';
+import { determineRuntimeVersion } from '@vizhub/runtime';
+import { Gateways, Result, ok, err } from 'gateways';
+import { Info, infoLock, dateToTimestamp } from 'entities';
+import { computePopularity } from './computePopularity';
+import { vizFilesToFileCollection } from '@vizhub/viz-utils';
 
 // When true, backfills the runtimeVersion field.
 // This is a one-time operation and will be disabled
@@ -55,9 +52,12 @@ export const ScoreViz = (gateways: Gateways) => {
           return err(getContentResult.error);
         }
         const content = getContentResult.value.data;
-        const runtimeVersion = getRuntimeVersion(content);
+        const runtimeVersion = determineRuntimeVersion(
+          vizFilesToFileCollection(content?.files),
+        );
+
         // console.log('runtimeVersion', runtimeVersion);
-        if (runtimeVersion === 3) {
+        if (runtimeVersion === 'v3') {
           newInfo.v3 = true;
         }
       }

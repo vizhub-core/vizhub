@@ -1,15 +1,12 @@
 import { Gateways, Result, ok } from 'gateways';
 import { diff } from 'ot';
-import {
-  Info,
-  Commit,
-  infoLock,
-  getRuntimeVersion,
-} from 'entities';
+import { Info, Commit, infoLock } from 'entities';
 import { generateId } from './generateId';
 import { GetViz } from './getViz';
 import { GetContentAtCommit } from './getContentAtCommit';
 import { VizId } from '@vizhub/viz-types';
+import { determineRuntimeVersion } from '@vizhub/runtime';
+import { vizFilesToFileCollection } from '@vizhub/viz-utils';
 
 // const lock = async (lockIds: Array<ResourceLockId>, fn) => {
 //   await redlock.using(lockIds, 5000, fn);
@@ -79,8 +76,10 @@ export const CommitViz = (gateways: Gateways) => {
       };
 
       // Mark V3 vizzes as such.
-      const runtimeVersion = getRuntimeVersion(content);
-      if (runtimeVersion === 3) {
+      const runtimeVersion = determineRuntimeVersion(
+        vizFilesToFileCollection(content?.files),
+      );
+      if (runtimeVersion === 'v3') {
         newInfo.v3 = true;
       } else {
         delete newInfo.v3;
