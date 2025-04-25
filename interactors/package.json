@@ -28,7 +28,8 @@
     "deep-equal": "^2.2.3",
     "editcodewithai": "^1.1.0",
     "multiscale-timeseries": "^2.0.0",
-    "uuid": "^11.1.0"
+    "uuid": "^11.1.0",
+    "svelte": "4.2.9"
   },
   "devDependencies": {
     "@types/deep-equal": "^1.0.4",
