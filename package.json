@@ -43,6 +43,6 @@
     "ot"
   ],
   "devDependencies": {
-    "npm-check-updates": "^17.1.16"
+    "npm-check-updates": "^18.0.1"
   }
 }
