@@ -102,7 +102,7 @@ export const LandingPageBody = ({
                 </ul>
               </div>
               <div style={{ display: 'flex', gap: '8px' }}>
-                <Button href="/explore" size="lg">
+                <Button href="/" size="lg">
                   Explore VizHub
                 </Button>
                 <Button
