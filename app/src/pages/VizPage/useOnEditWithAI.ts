@@ -68,6 +68,7 @@ const LOCAL_STORAGE_MODEL_KEY =
 const RELOAD_AFTER_EDIT_WITH_AI = true;
 
 const modelNameOptions = [
+  'anthropic/claude-sonnet-4',
   'anthropic/claude-3.7-sonnet:thinking',
   'anthropic/claude-3.7-sonnet',
   'anthropic/claude-3.5-sonnet',
