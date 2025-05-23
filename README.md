@@ -106,7 +106,7 @@ cd demo
 npm run populate
 ```
 
-## Self Upgrading
+## Testing Premium Features
 
 To make yourself on the Premium plan locally, do this, replacing `myUserName` with your GitHub username:
 
