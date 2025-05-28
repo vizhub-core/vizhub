@@ -6,6 +6,10 @@ import { authenticationRequiredError } from 'gateways/src/errors';
 import { sesClient } from '../libs/sesClient';
 import { formatTimestamp } from '../../../app/src/accessors/formatTimestamp';
 import { SendEmailCommand } from '@aws-sdk/client-sesv2';
+import { renderToString } from 'react-dom/server';
+import { CommentBody } from '../../../components/src/components/Comments/CommentBody'
+import React from 'react';
+import Markdown from 'react-markdown';
 
 export const addCommentEndpoint = ({
   app,
@@ -49,10 +53,48 @@ export const addCommentEndpoint = ({
             Text: {
               Data: `Hi ${vizAuthor.userName},\n${commentAuthor.userName} commented, \"${markdownText}\" on your Viz, ${vizInfo.title}.`, // required
             },
-            // Html: {
-            //   Data: "STRING_VALUE", // required
-            //   Charset: "STRING_VALUE",
-            // },
+            Html: {
+              Data: `<!DOCTYPE html>
+
+<html>
+
+
+<body style="background-color: #f6eee3;">
+
+    <div class="vh-comment" style="display: flex;
+            justify-content: space-between;">
+        <div class="comment-top">
+            <div class="comment-top-side" style="display: flex;
+            align-items: center;
+            gap: 12px;"><a class="comment-author" style="display: flex;
+            align-items: center;
+            gap: 16px;
+            font-weight: 600;
+            color: var(--vh-color-neutral-01);
+            text-decoration: none;" href="${commentAuthor.website}" target="_blank" rel="noreferrer"><img
+                        class="w-8 h-8 rounded-full object-cover" src="${commentAuthor.picture}" alt="User avatar" style="width:2rem;height:2rem;">
+                    <div>${commentAuthor.userName}</div>
+                </a>commented on<div class="comment-date" style="
+            color: #576786;
+                ">${formattedDate}</div>
+            </div>
+            <div class="comment-top-side">
+            </div>
+            <div class="comment-bottom">
+                <div class="vh-markdown-body" style="padding-top: 8px;
+    padding-bottom: 30px;
+    color: #1f2022;padding-top: 20px;
+            line-height: 1.5;">
+                    ${markdownHTML}
+                </div>
+            </div>
+        </div>
+
+</body>
+
+
+</html>`, // required
+            },
           },
         },
       },
@@ -127,7 +169,7 @@ export const addCommentEndpoint = ({
             commenter,
             vizOwner,
             formattedDate,
-            null,
+            renderToString(<Markdown>{comment.markdown}</Markdown>),
             comment.markdown,
             vizInfo,
           );
