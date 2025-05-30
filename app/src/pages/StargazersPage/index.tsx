@@ -2,7 +2,7 @@ import { Info, Timestamp, User } from 'entities';
 import { AuthenticatedUserProvider } from '../../contexts/AuthenticatedUserContext';
 import { Page, PageData } from '../Page';
 import { Body } from './Body';
-import { getVizPageHref } from '../../accessors';
+import { getVizPageHref } from 'entities/src/accessors';
 import { formatTimestamp } from '../../accessors/formatTimestamp';
 import { Stargazer } from 'components';
 

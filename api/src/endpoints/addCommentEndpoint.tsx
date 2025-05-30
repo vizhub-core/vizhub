@@ -7,9 +7,9 @@ import { sesClient } from '../libs/sesClient';
 import { formatTimestamp } from '../../../app/src/accessors/formatTimestamp';
 import { SendEmailCommand } from '@aws-sdk/client-sesv2';
 import { renderToString } from 'react-dom/server';
-import { CommentBody } from '../../../components/src/components/Comments/CommentBody'
 import React from 'react';
 import Markdown from 'react-markdown';
+import { getVizPageHref } from 'entities/src/accessors';
 
 export const addCommentEndpoint = ({
   app,
@@ -20,7 +20,7 @@ export const addCommentEndpoint = ({
 }) => {
   const { saveComment, getUser, getInfo } = gateways;
 
-  let sendCommentEmail = async (
+  const sendCommentEmail = async (
     commentAuthor: User,
     vizAuthor: User,
     formattedDate: string,
@@ -28,6 +28,12 @@ export const addCommentEndpoint = ({
     markdownText: string,
     vizInfo: Info,
   ) => {
+    const linkToViz = getVizPageHref({
+      ownerUser: vizAuthor,
+      info: vizInfo,
+      absolute: true,
+    });
+
     const input = {
       // SendEmailRequest
       FromEmailAddress: process.env.FROM_EMAIL,
@@ -51,7 +57,7 @@ export const addCommentEndpoint = ({
           Body: {
             // Body
             Text: {
-              Data: `Hi ${vizAuthor.userName},\n${commentAuthor.userName} commented, \"${markdownText}\" on your Viz, ${vizInfo.title}.`, // required
+              Data: `Hi ${vizAuthor.userName},\n${commentAuthor.userName} commented, \"${markdownText}\" on your Viz, ${vizInfo.title}.\nLink: ${linkToViz}`, // required
             },
             Html: {
               Data: `<!DOCTYPE html>
@@ -60,7 +66,7 @@ export const addCommentEndpoint = ({
 
 
 <body style="background-color: #f6eee3;">
-
+<h1>Your Viz, <a href="${linkToViz}">${vizInfo.title}</a> has recieved a comment!</h1>
     <div class="vh-comment" style="display: flex;
             justify-content: space-between;">
         <div class="comment-top">
@@ -169,7 +175,9 @@ export const addCommentEndpoint = ({
             commenter,
             vizOwner,
             formattedDate,
-            renderToString(<Markdown>{comment.markdown}</Markdown>),
+            renderToString(
+              <Markdown>{comment.markdown}</Markdown>,
+            ),
             comment.markdown,
             vizInfo,
           );
