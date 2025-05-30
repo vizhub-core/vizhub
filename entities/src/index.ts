@@ -189,7 +189,8 @@ export type EntityName =
   | 'APIKey'
   | 'APIKeyHash'
   | 'AIEditMetadata'
-  | 'CommitImageKey';
+  | 'CommitImageKey'
+  | 'Notification';
 
 export {
   getFileText,
