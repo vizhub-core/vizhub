@@ -9,7 +9,7 @@ import { ForksPageBody } from 'components';
 import { SmartHeader } from '../../smartComponents/SmartHeader';
 import { VizPreviewPresenter } from '../../smartComponents/VizPreviewPresenter';
 import { InfosAndOwnersContext } from '../../contexts/InfosAndOwnersContext';
-import { getVizPageHref } from '../../accessors';
+import { getVizPageHref } from 'entities/src/accessors';
 import { SectionSortContext } from '../../contexts/SectionSortContext';
 
 export const Body = ({
