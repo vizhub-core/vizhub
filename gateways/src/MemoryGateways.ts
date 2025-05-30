@@ -66,6 +66,7 @@ export const crudEntityNames: Array<EntityName> = [
   'APIKey',
   'APIKeyHash',
   'AIEditMetadata',
+  'Notification',
 ];
 
 // These entities are stored directly in Mongo,
