@@ -28,6 +28,17 @@ export const addCommentEndpoint = ({
     markdownText: string,
     vizInfo: Info,
   ) => {
+    // Check if required environment variables are defined
+    if (
+      !process.env.FROM_EMAIL ||
+      !process.env.FROM_EMAIL_ARN
+    ) {
+      console.warn(
+        'Email environment variables not configured. Skipping email notification.',
+      );
+      return;
+    }
+
     const linkToViz = getVizPageHref({
       ownerUser: vizAuthor,
       info: vizInfo,
@@ -106,8 +117,16 @@ export const addCommentEndpoint = ({
       },
     };
 
-    const emailCommand = new SendEmailCommand(input);
-    const response = await sesClient.send(emailCommand);
+    try {
+      const emailCommand = new SendEmailCommand(input);
+      const response = await sesClient.send(emailCommand);
+    } catch (error) {
+      console.error(
+        'Failed to send comment notification email:',
+        error,
+      );
+      // Don't throw the error to prevent server crash
+    }
   };
 
   app.post(
