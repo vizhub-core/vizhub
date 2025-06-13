@@ -11,6 +11,7 @@ import {
   APIKey,
   APIKeyId,
   Plan,
+  VizNotification
 } from 'entities';
 import { AIEditMetadataUsage } from 'entities/src/AIEditMetadata';
 import { Result, Success } from 'gateways';
@@ -177,6 +178,11 @@ export interface VizKitAPI {
         vizId: VizId;
       }>
     >;
+
+    getNotifications: (options: {
+      userId: UserId;
+      onlyUnread: boolean;
+    }) => Promise<Result<VizNotification[]>>;
   };
 }
 
@@ -415,6 +421,15 @@ export const VizKit = (
 
         return await response.json();
       },
+
+      getNotifications: async (options: {
+        userId: UserId;
+        onlyUnread: boolean;
+      }) =>
+        await postJSON(
+          `${baseUrl}/get-notifications`,
+          options,
+        ),
     },
   };
 };

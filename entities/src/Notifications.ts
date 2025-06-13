@@ -1,5 +1,5 @@
 import { VizId } from '@vizhub/viz-types';
-import { Timestamp, UserId } from '.';
+import { MergeRequestId, Timestamp, UserId } from '.';
 
 // NotificationId
 //  * Unique identifier string for a notification.
@@ -15,6 +15,7 @@ export enum VizNotificationType {
   CommentOnYourViz = 'commentOnYourViz',
   // CommentOnWatchedViz = 'commentOnWatchedViz',
   Mention = 'mention',
+  CommentOnYourMergeRequest = 'commentOnYourMergeRequest',
 }
 
 // Notification
@@ -32,7 +33,7 @@ export interface VizNotification {
   user: UserId;
 
   // The Viz associated with the notification.
-  viz: VizId;
+  resource: VizId | MergeRequestId;
 
   // The timestamp when the notification was created.
   created: Timestamp;

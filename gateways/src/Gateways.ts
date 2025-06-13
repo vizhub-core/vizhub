@@ -55,6 +55,10 @@ import { CommitImageKey } from 'entities/src/Images';
 import { APIKeyHash, APIKeyId } from 'entities/src/APIKeys';
 import { AIEditMetadataUsage } from 'entities/src/AIEditMetadata';
 import { VizContent, VizId } from '@vizhub/viz-types';
+import {
+  VizNotification,
+  VizNotificationId,
+} from 'entities/src/Notifications';
 
 // The maximum number of Info documents to return in a single page from `getInfos()`
 // export const pageSize = 5;
@@ -121,6 +125,16 @@ export interface Gateways {
     id: CommentId,
   ): Promise<Result<Snapshot<Comment>>>;
   deleteComment(id: CommentId): Promise<Result<Success>>;
+
+  saveNotification(
+    notification: VizNotification,
+  ): Promise<Result<Success>>;
+  getNotification(
+    id: VizNotificationId,
+  ): Promise<Result<Snapshot<VizNotification>>>;
+  deleteNotification(
+    id: VizNotificationId,
+  ): Promise<Result<Success>>;
 
   saveMention(mention: Mention): Promise<Result<Success>>;
   getMention(

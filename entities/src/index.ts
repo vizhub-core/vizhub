@@ -222,7 +222,7 @@ export type {
 export { APIKeyPermission } from './APIKeys';
 
 export type {
-  NotificationId,
-  NotificationType,
-  Notification,
+  VizNotificationId,
+  VizNotification,
 } from './Notifications';
+export { VizNotificationType } from './Notifications';

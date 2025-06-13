@@ -7,7 +7,7 @@ export const args = {
   vizTitle: 'vizTitle',
   vizHref: 'vizHref',
   hasBeenRead: true,
-  markAsRead: ()=>{}
+  markAsRead: () => {},
 };
 
 const Story = () => {
