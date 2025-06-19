@@ -69,10 +69,10 @@ export const NotificationsModal = ({
                           ].author
                         ]
                       }
-                      commenterProfileHref={`/${
+                      commenterProfileHref={`/${notificationsResult.commentAuthors[
                         notificationsResult.comments[
                           notification.commentId
-                        ]?.author
+                        ]?.author]
                       }`}
                       vizTitle={
                         notificationsResult.resourceTitles[
