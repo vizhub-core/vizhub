@@ -555,4 +555,8 @@ export interface Gateways {
   getAIEditMetadataForUser(
     userId: UserId,
   ): Promise<Result<Array<AIEditMetadataUsage>>>;
+
+  getNotificationsByUserId(
+    userId: UserId,
+  ): Promise<Result<Array<VizNotification>>>;
 }

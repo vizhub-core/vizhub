@@ -85,6 +85,10 @@ export interface User {
     // Values are credit balances in cents.
     [month: string]: number;
   };
+
+  //How many unread notifications the user has
+  //This is not present until a user receives a notification
+  unreadNotificationCount?: number;
 }
 
 // One of these is created

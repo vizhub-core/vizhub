@@ -25,7 +25,7 @@ export const Header = ({
   createVizHref,
   onVizHubClick,
   pricingHref,
-  notificationsHref,
+  onNotificationsClick,
   showBillingLink,
   onBillingClick,
   initialSearchQuery,
@@ -38,7 +38,7 @@ export const Header = ({
   createVizHref: string;
   onVizHubClick: () => void;
   pricingHref: string;
-  notificationsHref: string;
+  onNotificationsClick: () => void;
   showBillingLink?: boolean;
   onBillingClick: () => void;
   initialSearchQuery?: string;
@@ -68,7 +68,7 @@ export const Header = ({
 
           {/* <Nav.Link href={discordLink}>Discord</Nav.Link> */}
           {authenticatedUserAvatarURL ? (
-            <Nav.Link href={notificationsHref}>
+            <Button onClick={onNotificationsClick}>
               Notifications
               {userHasNotifications ? (
                 <svg
@@ -88,7 +88,7 @@ export const Header = ({
               ) : (
                 <></>
               )}
-            </Nav.Link>
+            </Button>
           ) : (
             <></>
           )}

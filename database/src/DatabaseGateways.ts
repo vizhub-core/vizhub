@@ -1080,6 +1080,23 @@ export const DatabaseGateways = ({
     return ok(result);
   };
 
+  const getNotificationsByUserId = async (userId: UserId) =>
+    new Promise((resolve) => {
+      const entityName = 'Notification';
+      //TODO: consider adding limit for how many notifications are returned.
+      const query = shareDBConnection.createFetchQuery(
+        toCollectionName(entityName),
+        { user: userId },
+        (error, results) => {
+          query.destroy();
+          if (error) return resolve(err(error));
+          resolve(
+            ok(results.map((doc) => doc.toSnapshot())),
+          );
+        },
+      );
+    });
+
   let databaseGateways = {
     type: 'DatabaseGateways',
     getForks,
@@ -1107,6 +1124,7 @@ export const DatabaseGateways = ({
     getCommitImageKeys,
     saveCommitImageKeys,
     getAIEditMetadataForUser,
+    getNotificationsByUserId,
   };
 
   for (const entityName of crudEntityNames) {

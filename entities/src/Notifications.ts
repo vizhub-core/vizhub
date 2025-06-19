@@ -1,5 +1,12 @@
 import { VizId } from '@vizhub/viz-types';
-import { MergeRequestId, Timestamp, UserId } from '.';
+import {
+  CommentId,
+  MergeRequestId,
+  Timestamp,
+  User,
+  UserId,
+  Comment,
+} from '.';
 
 // NotificationId
 //  * Unique identifier string for a notification.
@@ -40,4 +47,15 @@ export interface VizNotification {
 
   // Indicates whether the notification has been read by the user.
   read: boolean;
+
+  // The id of the comment that caused the notification to be created
+  commentId?: CommentId;
 }
+
+export type VizNotificationRequestResult = {
+  notifications: Array<VizNotification>;
+  comments: Map<CommentId, Comment>;
+  commentAuthors: Map<CommentId, string>;
+  commentAuthorImages: Map<CommentId, string>;
+  resourceTitles: Map<VizNotificationId, string>;
+};

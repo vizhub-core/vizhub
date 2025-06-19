@@ -3,6 +3,9 @@ import { Header } from 'components';
 import { AuthenticatedUserContext } from '../contexts/AuthenticatedUserContext';
 import { useOpenBillingPortal } from '../pages/useOpenBillingPortal';
 import { VizKit } from 'api/src/VizKit';
+import { VizPageContext } from '../pages/VizPage/VizPageContext';
+import { useToggleState } from '../pages/VizPage/useToggleState';
+import { HeaderModals } from './HeaderModals';
 
 const vizKit = VizKit();
 
@@ -19,6 +22,9 @@ export const SmartHeader = ({
   const authenticatedUser = useContext(
     AuthenticatedUserContext,
   );
+
+  const [showNotificationsModal, toggleNotificationsModal] =
+    useToggleState(false);
 
   const openBillingPortal = useOpenBillingPortal({
     vizKit,
@@ -42,19 +48,27 @@ export const SmartHeader = ({
   }, [authenticatedUser]);
 
   return (
-    <Header
-      loginHref={`/login`}
-      logoutHref={'/logout'}
-      pricingHref={'/pricing'}
-      createVizHref={'/create-viz'}
-      profileHref={`/${authenticatedUser?.userName}`}
-      authenticatedUserAvatarURL={
-        authenticatedUser?.picture
-      }
-      onVizHubClick={handleVizHubClick}
-      showBillingLink={showBillingLink}
-      onBillingClick={handleBillingClick}
-      initialSearchQuery={initialSearchQuery}
-    />
+    <>
+      <Header
+        loginHref={`/login`}
+        logoutHref={'/logout'}
+        pricingHref={'/pricing'}
+        createVizHref={'/create-viz'}
+        profileHref={`/${authenticatedUser?.userName}`}
+        authenticatedUserAvatarURL={
+          authenticatedUser?.picture
+        }
+        onVizHubClick={handleVizHubClick}
+        showBillingLink={showBillingLink}
+        onBillingClick={handleBillingClick}
+        initialSearchQuery={initialSearchQuery}
+        userHasNotifications={false}
+        onNotificationsClick={toggleNotificationsModal}
+      />
+      <HeaderModals
+        showNotificationsModal={showNotificationsModal}
+        toggleShowNotifications={toggleNotificationsModal}
+      />
+    </>
   );
 };

@@ -99,6 +99,7 @@ export const addCommentEndpoint = ({
           resource: comment.resource,
           created: comment.created,
           read: false,
+          commentId: comment.id,
         };
         const saveNotificationResult =
           await saveNotification(notification);
