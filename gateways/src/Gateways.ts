@@ -558,5 +558,5 @@ export interface Gateways {
 
   getNotificationsByUserId(
     userId: UserId,
-  ): Promise<Result<Array<VizNotification>>>;
+  ): Promise<Result<Array<Snapshot<VizNotification>>>>;
 }

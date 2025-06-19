@@ -1087,6 +1087,7 @@ export const DatabaseGateways = ({
       const query = shareDBConnection.createFetchQuery(
         toCollectionName(entityName),
         { user: userId },
+        {},
         (error, results) => {
           query.destroy();
           if (error) return resolve(err(error));

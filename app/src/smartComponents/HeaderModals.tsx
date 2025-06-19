@@ -10,6 +10,7 @@ import {
 import {
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
 } from 'react';
@@ -18,6 +19,11 @@ import { getCreditBalance } from 'entities/src/accessors';
 import { AuthenticatedUserContext } from '../contexts/AuthenticatedUserContext';
 import { VizId } from '@vizhub/viz-types';
 import { VizKit } from 'api/src/VizKit';
+import { VizNotificationRequestResult } from 'entities/src/Notifications';
+import {
+  getProfilePageHref,
+  getVizPageHref,
+} from 'src/accessors';
 
 const vizKit = VizKit();
 
@@ -33,31 +39,40 @@ export const HeaderModals = ({
     AuthenticatedUserContext,
   );
 
-  const {
-    notifications,
-    comments,
-    commentAuthors,
-    resourceTitles,
-  } = useMemo(() => {
+  const [notificationsResult, setNotificationsResult]: [
+    VizNotificationRequestResult,
+    (result: VizNotificationRequestResult) => void,
+  ] = useState(undefined);
+
+  useEffect(() => {
     if (!showNotificationsModal) {
-      return {
-        notifications: [],
-        comments: undefined,
-        commentAuthors: undefined,
-        resourceTitles: undefined,
-      };
+      return;
+    } else {
+      load();
     }
 
-    const notifications = vizKit.rest.getNotifications({
-      userId: authenticatedUser.id,
-    });
+    async function load() {
+      const result = await vizKit.rest.getNotifications({
+        userId: authenticatedUser.id,
+      });
 
-    return {
-      notifications: [],
-      comments: undefined,
-      commentAuthors: undefined,
-      resourceTitles: undefined,
-    };
+      console.log(result);
+
+      if (result.outcome === 'failure') {
+        return;
+      }
+
+      console.log(result);
+
+      setNotificationsResult({
+        notifications: result.value.notifications,
+        comments: result.value.comments,
+        commentAuthors: result.value.commentAuthors,
+        commentAuthorImages:
+          result.value.commentAuthorImages,
+        resourceTitles: result.value.resourceTitles,
+      });
+    }
   }, [showNotificationsModal]);
 
   return (
@@ -69,20 +84,11 @@ export const HeaderModals = ({
           onDismissNotification={function (): void {
             throw new Error('Function not implemented.');
           }}
-          notifications={[]}
-          comments={undefined}
-          commentAuthors={undefined}
-          resourceTitles={undefined}
+          notificationsResult={notificationsResult}
           onClose={toggleShowNotifications}
-          getProfilePageHref={function (
-            UserId: UserId,
-          ): string {
-            throw new Error('Function not implemented.');
+          getVizHref={function (vizId, ownerUserName) {
+            return `/${ownerUserName}/${vizId}`;
           }}
-          getVizHref={function (vizId: VizId): string {
-            throw new Error('Function not implemented.');
-          }}
-          commentAuthorsImages={undefined}
         ></NotificationsModal>
       ) : (
         <></>

@@ -54,8 +54,8 @@ export interface VizNotification {
 
 export type VizNotificationRequestResult = {
   notifications: Array<VizNotification>;
-  comments: Map<CommentId, Comment>;
-  commentAuthors: Map<CommentId, string>;
-  commentAuthorImages: Map<CommentId, string>;
-  resourceTitles: Map<VizNotificationId, string>;
+  comments: { [key: CommentId]: Comment };
+  commentAuthors: { [key: UserId]: string };
+  commentAuthorImages: { [key: UserId]: string };
+  resourceTitles: { [key: VizId]: string };
 };

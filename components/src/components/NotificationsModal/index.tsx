@@ -10,6 +10,7 @@ import {
 import { CommentNotificationRow } from '../CommentNotificationRow';
 import { Modal, ModalHeader } from 'react-bootstrap';
 import { VizId } from '@vizhub/viz-types';
+import { VizNotificationRequestResult } from 'entities/src/Notifications';
 
 //TODO: Create story for notifications modal
 
@@ -17,65 +18,89 @@ export const NotificationsModal = ({
   show,
   onMarkAsReads,
   onDismissNotification,
-  notifications,
-  comments,
-  commentAuthors,
-  commentAuthorsImages,
-  resourceTitles,
+  notificationsResult,
   onClose,
-  getProfilePageHref,
   getVizHref,
 }: {
   show: boolean;
   onMarkAsReads: Array<() => void>;
   onDismissNotification: () => void;
-  notifications: Array<VizNotification>;
-  comments: Map<CommentId, Comment>;
-  commentAuthors: Map<CommentId, string>;
-  commentAuthorsImages: Map<CommentId, string>;
-  resourceTitles: Map<VizNotificationId, string>;
+  notificationsResult: VizNotificationRequestResult;
   onClose: () => void;
-  getProfilePageHref: (UserId: UserId) => string;
-  getVizHref: (vizId: VizId) => string;
+  getVizHref: (
+    vizId: VizId,
+    ownerUserName: string,
+  ) => string;
 }) => {
   return show ? (
     <Modal show={show} onHide={onClose} animation={false}>
       <Modal.Header closeButton>
         <Modal.Title>Notifications</Modal.Title>
         <Modal.Body>
-          {notifications.map((notification, index) => {
-            switch (notification.type) {
-              case 'commentOnYourViz':
-                return (
-                  <CommentNotificationRow
-                    commenterUserAvatarURL={commentAuthorsImages.get(
-                      notification.commentId,
-                    )}
-                    commenterUsername={commentAuthors.get(
-                      notification.commentId,
-                    )}
-                    commenterProfileHref={getProfilePageHref(
-                      comments.get(notification.commentId)
-                        .author,
-                    )}
-                    vizTitle={resourceTitles.get(
-                      notification.id,
-                    )}
-                    vizHref={getVizHref(
-                      notification.resource,
-                    )}
-                    commentMarkdown={
-                      comments.get(notification.commentId)
-                        .markdown
-                    }
-                    hasBeenRead={notification.read}
-                    markAsRead={onMarkAsReads[index]}
-                  ></CommentNotificationRow>
-                );
-              default:
-                break;
-            }
-          })}
+          {notificationsResult?.notifications.map(
+            (notification, index) => {
+              switch (notification.type) {
+                case 'commentOnYourViz':
+                  //This if statement will not be needed in production, it exists to mitigate an issue I caused locally
+                  //in which there are notifications of type 'commentOnYourViz' that lack a commentId.
+                  //TODO: remove if statement
+                  if (
+                    notificationsResult.comments[
+                      notification.commentId
+                    ] === undefined
+                  ) {
+                    break;
+                  }
+                  return (
+                    <CommentNotificationRow
+                      key={notification.id}
+                      commenterUserAvatarURL={
+                        notificationsResult
+                          .commentAuthorImages[
+                          notificationsResult.comments[
+                            notification.commentId
+                          ]?.author
+                        ]
+                      }
+                      commenterUsername={
+                        notificationsResult.commentAuthors[
+                          notificationsResult.comments[
+                            notification.commentId
+                          ].author
+                        ]
+                      }
+                      commenterProfileHref={`/${
+                        notificationsResult.comments[
+                          notification.commentId
+                        ]?.author
+                      }`}
+                      vizTitle={
+                        notificationsResult.resourceTitles[
+                          notification.resource
+                        ]
+                      }
+                      vizHref={getVizHref(
+                        notification.resource,
+                        notificationsResult.commentAuthors[
+                          notificationsResult.comments[
+                            notification.commentId
+                          ].author
+                        ],
+                      )}
+                      commentMarkdown={
+                        notificationsResult.comments[
+                          notification.commentId
+                        ]?.markdown
+                      }
+                      hasBeenRead={notification.read}
+                      markAsRead={onMarkAsReads[index]}
+                    ></CommentNotificationRow>
+                  );
+                default:
+                  break;
+              }
+            },
+          )}
         </Modal.Body>
       </Modal.Header>
     </Modal>
