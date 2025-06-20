@@ -25,9 +25,11 @@ export const Header = ({
   createVizHref,
   onVizHubClick,
   pricingHref,
+  onNotificationsClick,
   showBillingLink,
   onBillingClick,
   initialSearchQuery,
+  userHasNotifications,
 }: {
   authenticatedUserAvatarURL: string;
   loginHref: string;
@@ -36,9 +38,11 @@ export const Header = ({
   createVizHref: string;
   onVizHubClick: () => void;
   pricingHref: string;
+  onNotificationsClick: () => void;
   showBillingLink?: boolean;
   onBillingClick: () => void;
   initialSearchQuery?: string;
+  userHasNotifications: boolean;
 }) => (
   <Navbar className="vh-navbar" variant="dark" expand="md">
     <Container fluid>
@@ -63,6 +67,31 @@ export const Header = ({
           {/* <Nav.Link href="/features">Features</Nav.Link> */}
 
           {/* <Nav.Link href={discordLink}>Discord</Nav.Link> */}
+          {authenticatedUserAvatarURL ? (
+            <Button onClick={onNotificationsClick}>
+              Notifications
+              {userHasNotifications ? (
+                <svg
+                  width={10}
+                  height={20}
+                  viewBox="0 0 100 250"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="notificaton-indicator"
+                >
+                  <circle
+                    cx="50"
+                    cy="50"
+                    r="50"
+                    fill="#ADD8E6"
+                  />
+                </svg>
+              ) : (
+                <></>
+              )}
+            </Button>
+          ) : (
+            <></>
+          )}
 
           {enableResources && (
             <Dropdown align="end">

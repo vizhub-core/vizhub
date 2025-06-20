@@ -189,7 +189,8 @@ export type EntityName =
   | 'APIKey'
   | 'APIKeyHash'
   | 'AIEditMetadata'
-  | 'CommitImageKey';
+  | 'CommitImageKey'
+  | 'Notification';
 
 export {
   getFileText,
@@ -221,7 +222,7 @@ export type {
 export { APIKeyPermission } from './APIKeys';
 
 export type {
-  NotificationId,
-  NotificationType,
-  Notification,
+  VizNotificationId,
+  VizNotification,
 } from './Notifications';
+export { VizNotificationType } from './Notifications';

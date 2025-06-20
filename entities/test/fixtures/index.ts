@@ -584,3 +584,17 @@ export const sampleAPIKeyHash: APIKeyHash = {
   id: 'apiKey1',
   hash: 'hashed-api-key',
 };
+
+// We named it `VizNotification` to avoid confusion with
+// the browser's `Notification` API types.
+export const sampleNotification: VizNotification = {
+  id: 'notification1',
+  // TODO fill this out
+  type: 'viz-comment',
+  // type: 'viz-comment-mention',
+  // type: 'viz-upvote',
+
+  // type: 'comment-on-viz',
+  // type: 'comment-on-viz',
+  // type: 'comment-on-viz',
+};
