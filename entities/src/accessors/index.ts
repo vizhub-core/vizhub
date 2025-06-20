@@ -16,3 +16,4 @@ export {
   getNonExpiringCreditBalance,
 } from './getCreditBalance';
 export { formatCreditBalance } from './formatCreditBalance';
+export { getVizPageHref } from './getVizPageHref';
