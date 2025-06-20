@@ -61,9 +61,9 @@ export const getNotificationsEndpoint = ({
         console.log('Starting Notif get');
 
         const notifications =
-          getNotificationsByUserIdResult.value.map(
-            (snapshot) => snapshot.data,
-          );
+          getNotificationsByUserIdResult.value
+            .map((snapshot) => snapshot.data)
+            .filter((notification) => !notification.read);
 
         const commentsPromises = notifications.map(
           async (notification) =>

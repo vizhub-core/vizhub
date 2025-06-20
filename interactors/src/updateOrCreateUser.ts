@@ -42,6 +42,13 @@ export const UpdateOrCreateUser =
         user.displayName = displayName;
         user.primaryEmail = email;
         user.picture = picture;
+
+        if (
+          user.numUnreadNotifications === null ||
+          user.numUnreadNotifications === undefined
+        ) {
+          user.numUnreadNotifications = 0;
+        }
       } else {
         // If we didn't find an existing user,
         // create a brand new one.
@@ -53,6 +60,7 @@ export const UpdateOrCreateUser =
           displayName,
           picture,
           plan: 'free',
+          numUnreadNotifications: 0,
         };
       }
 

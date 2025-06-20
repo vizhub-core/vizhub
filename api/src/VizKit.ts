@@ -11,10 +11,12 @@ import {
   APIKey,
   APIKeyId,
   Plan,
-  VizNotification,
 } from 'entities';
 import { AIEditMetadataUsage } from 'entities/src/AIEditMetadata';
-import { VizNotificationRequestResult } from 'entities/src/Notifications';
+import {
+  VizNotificationId,
+  VizNotificationRequestResult,
+} from 'entities/src/Notifications';
 import { Result, Success } from 'gateways';
 import { InfosAndOwners } from 'interactors/src/getInfosAndOwners';
 
@@ -183,6 +185,10 @@ export interface VizKitAPI {
     getNotifications: (options: {
       userId: UserId;
     }) => Promise<Result<VizNotificationRequestResult>>;
+
+    markNotificationAsRead: (options: {
+      notificationId: VizNotificationId;
+    }) => Promise<Result<Success>>;
   };
 }
 
@@ -427,6 +433,14 @@ export const VizKit = (
       }) =>
         await postJSON(
           `${baseUrl}/get-notifications`,
+          options,
+        ),
+
+      markNotificationAsRead: async (options: {
+        notificationId: VizNotificationId;
+      }) =>
+        await postJSON(
+          `${baseUrl}/mark-notification-as-read`,
           options,
         ),
     },

@@ -1,4 +1,4 @@
-import { Row, Col } from '../bootstrap';
+import { Row, Col, Button } from '../bootstrap';
 import './styles.scss';
 
 export const CommentNotificationRow = ({
@@ -50,7 +50,7 @@ export const CommentNotificationRow = ({
           </div>
         </Col>
         <Col className="col-md-auto">
-          <button onClick={markAsRead}>Mark as read</button>
+          <Button onClick={markAsRead}>Mark as read</Button>
         </Col>
       </Row>
     </div>

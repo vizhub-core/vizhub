@@ -47,6 +47,12 @@ export const SmartHeader = ({
     );
   }, [authenticatedUser]);
 
+  const userHasNotifications = useMemo(() => {
+    return (
+      (authenticatedUser?.numUnreadNotifications ?? 0) > 0
+    );
+  }, [authenticatedUser]);
+
   return (
     <>
       <Header
@@ -62,7 +68,7 @@ export const SmartHeader = ({
         showBillingLink={showBillingLink}
         onBillingClick={handleBillingClick}
         initialSearchQuery={initialSearchQuery}
-        userHasNotifications={false}
+        userHasNotifications={userHasNotifications}
         onNotificationsClick={toggleNotificationsModal}
       />
       <HeaderModals

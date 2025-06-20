@@ -32,6 +32,7 @@ import { getAIUsageEndpoint } from './getAIUsageEndpoint';
 import { createVizFromPromptEndpoint } from './createVizFromPromptEndpoint';
 import { Endpoint } from '../types';
 import { getNotificationsEndpoint } from './getNotificationsEndpoint';
+import { markNotificationAsReadEndpoint } from './markNotificationAsReadEndpoint';
 
 const enableSetVizEndpoint = true;
 
@@ -69,6 +70,7 @@ export const endpoints: Array<Endpoint> = [
   getAIUsageEndpoint,
   createVizFromPromptEndpoint,
   getNotificationsEndpoint,
+  markNotificationAsReadEndpoint,
 ];
 
 if (enableSetVizEndpoint) {

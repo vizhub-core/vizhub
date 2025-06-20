@@ -848,6 +848,20 @@ export const DatabaseGateways = ({
     -1,
   );
 
+  const incrementUserUnreadNotificationsCount = shareDBAdd(
+    'User',
+    toCollectionName('User'),
+    'numUnreadNotifications',
+    1,
+  );
+
+  const decrementUserUnreadNotificationsCount = shareDBAdd(
+    'User',
+    toCollectionName('User'),
+    'numUnreadNotifications',
+    -1,
+  );
+
   // From v2
   // const pageSize = 10;
 
@@ -1106,6 +1120,8 @@ export const DatabaseGateways = ({
     decrementForksCount,
     incrementUpvotesCount,
     decrementUpvotesCount,
+    incrementUserUnreadNotificationsCount,
+    decrementUserUnreadNotificationsCount,
     getCommitAncestors,
     getFolderAncestors,
     getUserByUserName,

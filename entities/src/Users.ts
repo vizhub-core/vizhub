@@ -87,8 +87,7 @@ export interface User {
   };
 
   //How many unread notifications the user has
-  //This is not present until a user receives a notification
-  unreadNotificationCount?: number;
+  numUnreadNotifications?: number;
 }
 
 // One of these is created

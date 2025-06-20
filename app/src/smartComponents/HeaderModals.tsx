@@ -44,6 +44,8 @@ export const HeaderModals = ({
     (result: VizNotificationRequestResult) => void,
   ] = useState(undefined);
 
+  const [onmarkAsReads, setOnMarkAsReads] = useState([]);
+
   useEffect(() => {
     if (!showNotificationsModal) {
       return;
@@ -64,6 +66,16 @@ export const HeaderModals = ({
 
       console.log(result);
 
+      setOnMarkAsReads(
+        result.value.notifications.map(
+          (notification) => async () => {
+            await vizKit.rest.markNotificationAsRead({
+              notificationId: notification.id,
+            });
+          },
+        ),
+      );
+
       setNotificationsResult({
         notifications: result.value.notifications,
         comments: result.value.comments,
@@ -80,10 +92,7 @@ export const HeaderModals = ({
       {showNotificationsModal ? (
         <NotificationsModal
           show={showNotificationsModal}
-          onMarkAsReads={[]}
-          onDismissNotification={function (): void {
-            throw new Error('Function not implemented.');
-          }}
+          onMarkAsReads={onmarkAsReads}
           notificationsResult={notificationsResult}
           onClose={toggleShowNotifications}
           getVizHref={function (vizId, ownerUserName) {

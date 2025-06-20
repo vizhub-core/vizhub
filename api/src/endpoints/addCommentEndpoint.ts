@@ -24,6 +24,7 @@ export const addCommentEndpoint = ({
     saveNotification,
     getInfo,
     getMergeRequest,
+    incrementUserUnreadNotificationsCount,
   } = gateways;
   app.post(
     '/api/add-comment',
@@ -104,7 +105,17 @@ export const addCommentEndpoint = ({
         const saveNotificationResult =
           await saveNotification(notification);
 
-        res.send(saveNotificationResult);
+        if (saveNotificationResult.outcome === 'failure') {
+          res.send(saveNotificationResult);
+          return;
+        }
+
+        const incrementResult =
+          incrementUserUnreadNotificationsCount(
+            recipientUserId,
+          );
+
+        res.send(incrementResult);
       }
     },
   );

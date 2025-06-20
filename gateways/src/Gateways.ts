@@ -283,6 +283,13 @@ export interface Gateways {
     id: VizId,
   ): Promise<Result<Success>>;
 
+  incrementUserUnreadNotificationsCount(
+    id: UserId,
+  ): Promise<Result<Success>>;
+  decrementUserUnreadNotificationsCount(
+    id: UserId,
+  ): Promise<Result<Success>>;
+
   // getCommitAncestors
   //
   // Gets all commits from the primordial commit up to the given commit.

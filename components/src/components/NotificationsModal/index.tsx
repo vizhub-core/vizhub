@@ -17,14 +17,12 @@ import { VizNotificationRequestResult } from 'entities/src/Notifications';
 export const NotificationsModal = ({
   show,
   onMarkAsReads,
-  onDismissNotification,
   notificationsResult,
   onClose,
   getVizHref,
 }: {
   show: boolean;
   onMarkAsReads: Array<() => void>;
-  onDismissNotification: () => void;
   notificationsResult: VizNotificationRequestResult;
   onClose: () => void;
   getVizHref: (
@@ -69,10 +67,12 @@ export const NotificationsModal = ({
                           ].author
                         ]
                       }
-                      commenterProfileHref={`/${notificationsResult.commentAuthors[
-                        notificationsResult.comments[
-                          notification.commentId
-                        ]?.author]
+                      commenterProfileHref={`/${
+                        notificationsResult.commentAuthors[
+                          notificationsResult.comments[
+                            notification.commentId
+                          ]?.author
+                        ]
                       }`}
                       vizTitle={
                         notificationsResult.resourceTitles[
