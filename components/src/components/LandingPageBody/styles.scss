@@ -85,6 +85,71 @@
 
         .vh-lede-01 {
           max-width: 760px;
+
+          .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+
+            .feature-highlight {
+              display: flex;
+              gap: 1rem;
+              padding: 1.5rem;
+              background: rgba(74, 144, 226, 0.05);
+              border-radius: 12px;
+              border-left: 4px solid #4a90e2;
+
+              .feature-icon {
+                font-size: 2rem;
+                flex-shrink: 0;
+              }
+
+              div {
+                flex: 1;
+
+                strong {
+                  display: block;
+                  margin-bottom: 0.5rem;
+                  color: #2c3e50;
+                }
+
+                p {
+                  margin: 0;
+                  font-size: 0.95rem;
+                  line-height: 1.5;
+                  color: #5a6c7d;
+                }
+              }
+            }
+          }
+
+          .social-proof {
+            text-align: center;
+            margin-top: 2rem;
+            padding: 1rem;
+            background: linear-gradient(90deg, #f8f9fa, #e9ecef, #f8f9fa);
+            border-radius: 8px;
+
+            p {
+              margin: 0;
+              font-size: 1.1rem;
+            }
+          }
+        }
+
+        .social-proof-hero {
+          margin-top: 2rem;
+          padding: 1rem;
+          background: rgba(255, 255, 255, 0.1);
+          border-radius: 8px;
+          text-align: center;
+
+          p {
+            margin: 0;
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.9);
+          }
         }
       }
       .white-background-section.blurb-and-testimonial {

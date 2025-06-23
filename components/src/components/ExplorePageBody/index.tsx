@@ -23,6 +23,59 @@ export const ExplorePageBody = ({
 }) => {
   return (
     <div className="vh-page vh-explore-page">
+      <div
+        className="hero-section ai-hero"
+        id="ai-hero-section"
+      >
+        <div className="particles-background"></div>
+        <div className="hero-content">
+          <div className="hero-text">
+            <div className="badge-container">
+              <span className="new-feature-badge">New</span>
+            </div>
+            <h1>
+              Visualize Data with{' '}
+              <span className="ai-highlight">
+                Generative AI Power
+              </span>
+            </h1>
+            <p>
+              Transform your ideas into interactive
+              visualizations using simple natural language
+              prompts. VizHub's "Edit with AI" feature edits
+              your code instantly using the latest LLMs.
+            </p>
+            <div className="feature-list">
+              <div className="feature-item">
+                <i className="bi bi-lightning-fill"></i>
+                <span>Rapid prototyping & scaffolding</span>
+              </div>
+              <div className="feature-item">
+                <i className="bi bi-arrow-repeat"></i>
+                <span>
+                  Incremental iteration & refactoring
+                </span>
+              </div>
+              <div className="feature-item">
+                <i className="bi bi-database"></i>
+                <span>
+                  Data parsing & processing automation
+                </span>
+              </div>
+            </div>
+            <div className="hero-buttons">
+              <a
+                href="/features"
+                className="btn btn-outline-light"
+              >
+                <i className="bi bi-info-circle me-2"></i>
+                Learn More
+              </a>
+              <CreateNewButton />
+            </div>
+          </div>
+        </div>
+      </div>
       <div className="vh-page-container">
         {enableOfficeHoursLink && (
           <div

@@ -203,6 +203,7 @@ export const EditWithAI = (gateways: Gateways) => {
             const chunkContent = String(chunk.content);
             fullContent += chunkContent;
 
+            // TODO consider why this would lead to an op-related bug
             shareDBDoc.submitOp(
               diff(shareDBDoc.data, {
                 ...shareDBDoc.data,
