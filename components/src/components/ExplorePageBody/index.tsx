@@ -66,7 +66,7 @@ export const ExplorePageBody = ({
             <div className="hero-buttons">
               <a
                 href="/features"
-                className="btn btn-outline-light"
+                className="btn btn-outline-light btn-lg"
               >
                 <i className="bi bi-info-circle me-2"></i>
                 Learn More
@@ -74,6 +74,18 @@ export const ExplorePageBody = ({
               <CreateNewButton />
             </div>
           </div>
+        </div>
+        <div className="hero-video">
+          <iframe
+            width="560"
+            height="315"
+            src="https://www.youtube-nocookie.com/embed/wd6BnelMO9g?si=aJz_9SRg4vKt-pdN"
+            title="YouTube video player"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerPolicy="strict-origin-when-cross-origin"
+            allowFullScreen
+          ></iframe>
         </div>
       </div>
       <div className="vh-page-container">

@@ -16,7 +16,7 @@
 .hero-section {
   background: linear-gradient(135deg, #0f172a, #1e293b);
   color: white;
-  padding: 8rem 2rem;
+  padding: 4rem 2rem;
   margin-bottom: 2rem;
   width: 100%;
   min-height: 600px;
@@ -67,17 +67,30 @@
   }
 
   .hero-content {
-    max-width: 820px;
+    max-width: 1200px;
     margin: 0 auto;
     display: flex;
-    flex-direction: column;
     align-items: center;
-    text-align: center;
+    justify-content: space-between;
     position: relative;
     z-index: 2;
 
+    @media (max-width: 992px) {
+      flex-direction: column;
+      text-align: center;
+    }
+
     .hero-text {
-      width: 100%;
+      flex: 1;
+      max-width: 800px;
+      padding-right: 3rem;
+      text-align: center;
+
+      @media (max-width: 992px) {
+        padding-right: 0;
+        margin-bottom: 2rem;
+        text-align: center;
+      }
 
       .badge-container {
         margin-bottom: 1rem;
@@ -251,199 +264,20 @@
       }
     }
 
-    .hero-image {
+    .hero-video {
       flex: 1;
-      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
 
-      .ai-illustration {
-        max-width: 550px;
-        margin: 0 auto;
-        position: relative;
+      @media (max-width: 992px) {
+        margin-top: 2rem;
+      }
 
-        .floating-chart {
-          position: absolute;
-          top: -30px;
-          right: -40px;
-          width: 180px;
-          height: 120px;
-          background: linear-gradient(
-            135deg,
-            #4a90e2,
-            #5a6bff
-          );
-          border-radius: 8px;
-          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-          transform: rotate(10deg);
-          z-index: 1;
-          animation: float 6s ease-in-out infinite;
-
-          &:before {
-            content: '';
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            right: 20px;
-            height: 60px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 4px;
-          }
-
-          &:after {
-            content: '';
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            width: 70%;
-            height: 10px;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 4px;
-          }
-        }
-
-        .code-window {
-          background-color: #0d1117;
-          border-radius: 12px;
-          box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-          overflow: hidden;
-          transform: perspective(1000px) rotateY(-5deg)
-            rotateX(5deg);
-          transition: all 0.3s ease;
-          position: relative;
-          z-index: 2;
-
-          &:hover {
-            transform: perspective(1000px) rotateY(-2deg)
-              rotateX(2deg) translateY(-5px);
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
-          }
-
-          .code-dots {
-            background-color: #161b22;
-            padding: 12px 15px;
-            display: flex;
-            gap: 8px;
-            align-items: center;
-
-            span {
-              display: inline-block;
-              width: 12px;
-              height: 12px;
-              border-radius: 50%;
-
-              &:nth-child(1) {
-                background-color: #ff5f56;
-              }
-
-              &:nth-child(2) {
-                background-color: #ffbd2e;
-              }
-
-              &:nth-child(3) {
-                background-color: #27c93f;
-              }
-            }
-          }
-
-          .code-header {
-            background-color: #161b22;
-            padding: 0 15px 12px;
-            border-bottom: 1px solid #30363d;
-
-            .code-title {
-              font-size: 0.9rem;
-              color: #8b949e;
-              font-family: monospace;
-            }
-          }
-
-          .code-content {
-            padding: 20px;
-            min-height: 240px;
-            font-family: monospace;
-            color: #e6edf3;
-            font-size: 0.9rem;
-
-            .prompt-line {
-              display: flex;
-              margin-bottom: 15px;
-
-              .prompt-symbol {
-                color: #4a90e2;
-                margin-right: 10px;
-                font-weight: bold;
-              }
-
-              .prompt-text {
-                color: #e6edf3;
-              }
-            }
-
-            .response-line {
-              color: #8b949e;
-              margin-bottom: 8px;
-              padding-left: 20px;
-              position: relative;
-
-              &:before {
-                content: '\3E';
-                position: absolute;
-                left: 0;
-                color: #6e7681;
-              }
-
-              &.success {
-                color: #3fb950;
-                margin-bottom: 15px;
-              }
-            }
-
-            .typing-effect {
-              color: #4a90e2;
-              border-right: 2px solid #4a90e2;
-              animation:
-                typing 3s steps(30) infinite,
-                blink 0.5s step-end infinite alternate;
-              white-space: nowrap;
-              overflow: hidden;
-              padding-left: 20px;
-              position: relative;
-
-              &:before {
-                content: '\3E';
-                position: absolute;
-                left: 0;
-                color: #6e7681;
-              }
-            }
-
-            @keyframes typing {
-              from {
-                width: 0;
-              }
-              to {
-                width: 100%;
-              }
-            }
-
-            @keyframes blink {
-              50% {
-                border-color: transparent;
-              }
-            }
-
-            @keyframes float {
-              0% {
-                transform: rotate(10deg) translateY(0px);
-              }
-              50% {
-                transform: rotate(10deg) translateY(-15px);
-              }
-              100% {
-                transform: rotate(10deg) translateY(0px);
-              }
-            }
-          }
-        }
+      iframe {
+        max-width: 100%;
+        border-radius: 12px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
       }
     }
   }
