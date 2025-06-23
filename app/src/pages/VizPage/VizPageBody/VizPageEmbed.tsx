@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { LogoSVG } from 'components/src/components/Icons/LogoSVG';
-import { getVizPageHref } from '../../../accessors';
+import { getVizPageHref } from 'entities/src/accessors';
 
 interface VizPageEmbedProps {
   renderVizRunner: () => JSX.Element | null;

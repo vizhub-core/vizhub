@@ -44,5 +44,8 @@
   ],
   "devDependencies": {
     "npm-check-updates": "^17.1.16"
+  },
+  "dependencies": {
+    "@aws-sdk/client-sesv2": "^3.817.0"
   }
 }

@@ -23,7 +23,7 @@ import {
   useState,
 } from 'react';
 import { AuthenticatedUserContext } from '../../contexts/AuthenticatedUserContext';
-import { getVizPageHref } from '../../accessors';
+import { getVizPageHref } from 'entities/src/accessors';
 import { useOnTrashViz } from './useOnTrashViz';
 import { useValidateSlug } from './useValidateSlug';
 import { VizPageContext } from './VizPageContext';

@@ -4,7 +4,7 @@ import './styles.scss';
 
 export const CreateNewButton = ({
   href = '/create-viz',
-  label = 'Create viz',
+  label = 'Create visualization',
   onClick = undefined,
 }) => (
   <Button

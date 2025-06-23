@@ -23,12 +23,14 @@ import { useRenderMarkdownHTML } from './useRenderMarkdownHTML';
 import { useMarkUncommitted } from '../useMarkUncommitted';
 import { useBrandedEmbedNotice } from './useBrandedEmbedNotice';
 import {
-  getVizPageHref,
   getForksPageHref,
   getProfilePageHref,
   getStargazersPageHref,
   getAvatarURL,
 } from '../../../accessors';
+
+import { getVizPageHref } from 'entities/src/accessors';
+
 import {
   defaultVizWidth,
   getPackageJsonText,
