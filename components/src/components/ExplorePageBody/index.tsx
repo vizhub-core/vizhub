@@ -23,60 +23,93 @@ export const ExplorePageBody = ({
 }) => {
   return (
     <div className="vh-page vh-explore-page">
-      <div className="hero-section ai-hero" id="ai-hero-section">
+      <div
+        className="hero-section ai-hero"
+        id="ai-hero-section"
+      >
         <div className="particles-background"></div>
         <div className="hero-content">
           <div className="hero-text">
             <div className="badge-container">
               <span className="new-feature-badge">New</span>
             </div>
-            <h1>Visualize Data with <span className="ai-highlight">AI Power</span></h1>
-            <p>Transform your ideas into interactive visualizations using simple natural language prompts. VizHub AI analyzes your data, suggests optimal chart types, and generates D3.js code instantly.</p>
+            <h1>
+              Visualize Data with{' '}
+              <span className="ai-highlight">
+                Generative AI Power
+              </span>
+            </h1>
+            <p>
+              Transform your ideas into interactive
+              visualizations using simple natural language
+              prompts. VizHub's "Edit with AI" feature edits
+              your code instantly using the latest LLMs.
+            </p>
             <div className="feature-list">
               <div className="feature-item">
                 <i className="bi bi-lightning-fill"></i>
-                <span>Generate code in seconds</span>
+                <span>Rapid prototyping & scaffolding</span>
               </div>
               <div className="feature-item">
-                <i className="bi bi-graph-up"></i>
-                <span>Smart data analysis</span>
+                <i className="bi bi-arrow-repeat"></i>
+                <span>
+                  Incremental iteration & refactoring
+                </span>
               </div>
               <div className="feature-item">
-                <i className="bi bi-brush"></i>
-                <span>Customizable designs</span>
+                <i className="bi bi-database"></i>
+                <span>
+                  Data parsing & processing automation
+                </span>
               </div>
             </div>
             <div className="hero-buttons">
-              <CreateNewButton className="hero-create-button" buttonText="Create with AI" icon="bi-magic">
-                <span className="button-content">
-                  <i className="bi bi-magic me-2"></i>
-                  Create with AI
-                </span>
-              </CreateNewButton>
-              <a href="#ai-hero-section" className="btn btn-outline-light">
+              <a
+                href="/features"
+                className="btn btn-outline-light"
+              >
                 <i className="bi bi-info-circle me-2"></i>
                 Learn More
               </a>
+              <CreateNewButton />
             </div>
           </div>
           <div className="hero-image">
             <div className="ai-illustration">
               <div className="code-window">
                 <div className="code-dots">
-                  <span></span><span></span><span></span>
+                  <span></span>
+                  <span></span>
+                  <span></span>
                 </div>
                 <div className="code-header">
-                  <span className="code-title">AI Visualization Generator</span>
+                  <span className="code-title">
+                    AI Visualization Generator
+                  </span>
                 </div>
                 <div className="code-content">
                   <div className="prompt-line">
-                    <span className="prompt-symbol">&gt;</span>
-                    <span className="prompt-text">Create a bar chart showing sales by region</span>
+                    <span className="prompt-symbol">
+                      &gt;
+                    </span>
+                    <span className="prompt-text">
+                      Create a bar chart showing sales by
+                      region
+                    </span>
                   </div>
-                  <div className="response-line">Analyzing data structure...</div>
-                  <div className="response-line">Identifying optimal visualization...</div>
-                  <div className="response-line success">✓ Generated D3.js bar chart with 5 regions</div>
-                  <div className="typing-effect">Applying custom color scheme...</div>
+                  <div className="response-line">
+                    Analyzing data structure...
+                  </div>
+                  <div className="response-line">
+                    Identifying optimal visualization...
+                  </div>
+                  <div className="response-line success">
+                    ✓ Generated D3.js bar chart with 5
+                    regions
+                  </div>
+                  <div className="typing-effect">
+                    Applying custom color scheme...
+                  </div>
                 </div>
               </div>
               <div className="floating-chart"></div>
