@@ -74,47 +74,6 @@ export const ExplorePageBody = ({
               <CreateNewButton />
             </div>
           </div>
-          <div className="hero-image">
-            <div className="ai-illustration">
-              <div className="code-window">
-                <div className="code-dots">
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                </div>
-                <div className="code-header">
-                  <span className="code-title">
-                    AI Visualization Generator
-                  </span>
-                </div>
-                <div className="code-content">
-                  <div className="prompt-line">
-                    <span className="prompt-symbol">
-                      &gt;
-                    </span>
-                    <span className="prompt-text">
-                      Create a bar chart showing sales by
-                      region
-                    </span>
-                  </div>
-                  <div className="response-line">
-                    Analyzing data structure...
-                  </div>
-                  <div className="response-line">
-                    Identifying optimal visualization...
-                  </div>
-                  <div className="response-line success">
-                    ✓ Generated D3.js bar chart with 5
-                    regions
-                  </div>
-                  <div className="typing-effect">
-                    Applying custom color scheme...
-                  </div>
-                </div>
-              </div>
-              <div className="floating-chart"></div>
-            </div>
-          </div>
         </div>
       </div>
       <div className="vh-page-container">

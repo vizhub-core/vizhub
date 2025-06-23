@@ -1,14 +1,10 @@
 import { Footer } from '../Footer';
 import { HomeStarter } from '../HomeStarter';
-import { Testimonial } from '../Testimonial';
-// import { Testimonial } from '../Testimonial';
 import { Button } from '../bootstrap';
-import { discordLink } from '../discordLink';
 import { image } from '../image';
 import './styles.scss';
 
 const enableFooter = true;
-const enablePublicRoadmap = false;
 const headerBackgroundSrc = image('landing-header-bkg');
 
 export const LandingPageBody = ({
@@ -23,107 +19,83 @@ export const LandingPageBody = ({
         src={headerBackgroundSrc}
       />
       <div className="landing-page-body">
-        {/* <div className="landing-page-content">
-          <HomeStarter /> 
-          {/* <div className="landing-page-tagline">
-            {true
-              ? 'Accelerate Dataviz Delivery'
-              : '50% off for 3 months! Use code EARLYADOPTER (ends Feb 15)'}
-          </div>
-          <h1 className="landing-page-headline">
-            Interactive Data Visualizations Fast
-          </h1>
-          <Button
-            variant="secondary"
-            size="lg"
-            href="/login"
-          >
-            Get Started
-          </Button>
-
-          <iframe
-            style={{
-              marginTop: '70px',
-              borderRadius: '24px',
-              maxWidth: '100%',
-            }}
-            width={560 * 2}
-            height={315 * 2}
-            src="https://www.youtube-nocookie.com/embed/47mjSVQEoAg?si=yf1cala_ZzF3rGpS"
-            title="YouTube video player"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowFullScreen
-          ></iframe> }
-        </div> */}
-        <div className="features-container">
-          <div className="white-background-section blurb-and-testimonial">
-            <div className="landing-page-content">
-              <h1 className="section-heading">
-                Welcome to VizHub!
-              </h1>
-              <div className="vh-lede-01 mb-3">
-                <p>
-                  VizHub is your{' '}
-                  <strong>AI‑first workspace</strong> for
-                  designing, coding, and sharing interactive
-                  data visualizations. Trusted by
-                  developers, researchers, educators, and
-                  creative teams, VizHub combines an AI
-                  pair‑programmer, real‑time collaboration,
-                  and blazing‑fast hot reloading so you can
-                  focus on insight—not infrastructure. Free
-                  for public projects, with flexible plans
-                  for professionals and teams.
-                </p>
-                <p>
-                  <strong>
-                    What makes VizHub different?
-                  </strong>
-                </p>
-                <ul>
-                  <li>
-                    <strong>Edit with AI</strong> –
-                    Generate, refactor, or explain code
-                    in‑place. Works with D3, React, Svelte,
-                    P5, and vanilla JS.
-                  </li>
-                  <li>
-                    <strong>Hot Reloading</strong> –
-                    Preserve application state while your
-                    visualization updates instantly.
-                  </li>
-                  <li>
-                    <strong>Live Collaboration</strong> –
-                    Invite teammates and watch code and
-                    visuals update together.
-                  </li>
-                  <li>
-                    <strong>Private Vizzes</strong> – Keep
-                    work‑in‑progress or proprietary data
-                    secure.
-                  </li>
-                  <li>
-                    <strong>White‑Label Embeds</strong> –
-                    Drop vizzes into any site without VizHub
-                    branding.
-                  </li>
-                </ul>
+        <div className="hero-section ai-hero">
+          <div className="particles-background"></div>
+          <div className="hero-content">
+            <div className="hero-text">
+              <div className="badge-container">
+                <span className="new-feature-badge">
+                  Code data viz at the speed of thought
+                </span>
               </div>
-              <div style={{ display: 'flex', gap: '8px' }}>
-                <Button href="/" size="lg">
-                  Explore VizHub
+              <h1>
+                The Future of{' '}
+                <span className="ai-highlight">
+                  Data Visualization
+                </span>{' '}
+                is Here
+              </h1>
+              <p className="hero-description">
+                Stop wrestling with complex toolchains and
+                endless setup. VizHub is the AI-powered
+                workspace that transforms how you create
+                interactive data visualizations. From
+                concept to publication in minutes, not days.
+                Join the community that's redefining data
+                storytelling with cutting-edge AI
+                assistance, real-time collaboration, and
+                instant hot reloading.
+              </p>
+              <div className="feature-list">
+                <div className="feature-item">
+                  <i className="bi bi-robot"></i>
+                  <span>AI Code Generation</span>
+                </div>
+                <div className="feature-item">
+                  <i className="bi bi-people-fill"></i>
+                  <span>Real-time Collaboration</span>
+                </div>
+                <div className="feature-item">
+                  <i className="bi bi-shield-lock"></i>
+                  <span>Private Projects</span>
+                </div>
+                <div className="feature-item">
+                  <i className="bi bi-code-square"></i>
+                  <span>White-label Embeds</span>
+                </div>
+              </div>
+              <div className="hero-buttons">
+                <Button
+                  href="/create-viz"
+                  size="lg"
+                  className="hero-create-button"
+                >
+                  <span className="button-content">
+                    <i className="bi bi-play-fill me-2"></i>
+                    Get Started
+                  </span>
+                </Button>
+                <Button
+                  href="/explore"
+                  variant="outline-light"
+                  size="lg"
+                >
+                  <i className="bi bi-collection me-2"></i>
+                  Explore Examples
                 </Button>
                 <Button
                   href="/pricing"
+                  variant="outline-light"
                   size="lg"
-                  variant="secondary"
                 >
+                  <i className="bi bi-credit-card me-2"></i>
                   See Plans
                 </Button>
               </div>
             </div>
           </div>
+        </div>
+        <div className="features-container">
           <div
             className="feature-section"
             id="ai-assisted-coding"
