@@ -448,3 +448,206 @@
     }
   }
 }
+
+.showcase-section {
+  width: 100%;
+  padding: 4rem 2rem;
+  background-color: #f8f9fa;
+  
+  .showcase-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    
+    .showcase-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+      
+      h2 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        color: #1a1a2e;
+      }
+      
+      p {
+        font-size: 1.2rem;
+        color: #666;
+        max-width: 700px;
+        margin: 0 auto;
+      }
+    }
+    
+    .featured-viz-embed {
+      background-color: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      margin-bottom: 3rem;
+      display: flex;
+      flex-direction: column;
+      
+      @media (min-width: 992px) {
+        flex-direction: row;
+        height: 500px;
+      }
+      
+      .viz-iframe {
+        border: none;
+        width: 100%;
+        height: 400px;
+        
+        @media (min-width: 992px) {
+          width: 65%;
+          height: 100%;
+        }
+      }
+      
+      .featured-viz-info {
+        padding: 2rem;
+        display: flex;
+        flex-direction: column;
+        
+        @media (min-width: 992px) {
+          width: 35%;
+          justify-content: center;
+        }
+        
+        h3 {
+          font-size: 1.8rem;
+          margin-bottom: 1rem;
+          color: #1a1a2e;
+        }
+        
+        p {
+          font-size: 1rem;
+          color: #666;
+          margin-bottom: 1.5rem;
+          line-height: 1.6;
+        }
+        
+        .viz-tags {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.5rem;
+          margin-bottom: 1.5rem;
+          
+          .viz-tag {
+            background-color: #e9f2ff;
+            color: #4a90e2;
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 500;
+          }
+        }
+      }
+    }
+    
+    .more-examples-heading {
+      text-align: center;
+      margin-bottom: 2rem;
+      font-size: 1.8rem;
+      color: #1a1a2e;
+    }
+    
+    .showcase-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+      
+      @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+      }
+      
+      .showcase-item {
+        background-color: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        
+        &:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+          
+          .showcase-overlay {
+            opacity: 1;
+          }
+        }
+        
+        .showcase-preview {
+          position: relative;
+          height: 200px;
+          overflow: hidden;
+          
+          .showcase-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          }
+          
+          .showcase-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+          }
+        }
+        
+        .showcase-info {
+          padding: 1.5rem;
+          
+          h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: #1a1a2e;
+          }
+          
+          p {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 1rem;
+          }
+          
+          .showcase-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            
+            .showcase-tag {
+              background-color: #f0f0f0;
+              color: #555;
+              padding: 0.3rem 0.8rem;
+              border-radius: 50px;
+              font-size: 0.8rem;
+              font-weight: 500;
+            }
+          }
+        }
+      }
+    }
+    
+    .showcase-cta {
+      text-align: center;
+      
+      .btn-outline-primary {
+        padding: 0.8rem 2rem;
+        border-radius: 50px;
+        font-weight: 600;
+        border-width: 2px;
+        transition: all 0.3s ease;
+        
+        &:hover {
+          transform: translateY(-2px);
+        }
+      }
+    }
+  }
+}
