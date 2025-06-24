@@ -302,7 +302,7 @@ export const LandingPageBody = ({
           <div className="feature-section">
             <div className="feature-section-content">
               <div className="feature-section-copy">
-                <h3>Search Open Source Examples</h3>
+                <h3>Open Source Examples</h3>
                 <p>
                   Looking for a jumping-off point? VizHub's
                   curated library of open-source examples
