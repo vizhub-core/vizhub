@@ -31,6 +31,8 @@ import { aiCopilotEndpoint } from './aiCopilotEndpoint';
 import { getAIUsageEndpoint } from './getAIUsageEndpoint';
 import { createVizFromPromptEndpoint } from './createVizFromPromptEndpoint';
 import { Endpoint } from '../types';
+import { getNotificationsEndpoint } from './getNotificationsEndpoint';
+import { markNotificationAsReadEndpoint } from './markNotificationAsReadEndpoint';
 
 const enableSetVizEndpoint = true;
 
@@ -67,6 +69,8 @@ export const endpoints: Array<Endpoint> = [
   aiCopilotEndpoint,
   getAIUsageEndpoint,
   createVizFromPromptEndpoint,
+  getNotificationsEndpoint,
+  markNotificationAsReadEndpoint,
 ];
 
 if (enableSetVizEndpoint) {
