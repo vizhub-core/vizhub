@@ -1,8 +1,17 @@
 import express from 'express';
-import { Comment, Info, User, VizNotification, VizNotificationType } from 'entities';
+import {
+  Comment,
+  Info,
+  User,
+  VizNotification,
+  VizNotificationType,
+} from 'entities';
 import { Gateways, err } from 'gateways';
 import { getAuthenticatedUserId } from '../parseAuth0User';
-import { authenticationRequiredError, VizHubErrorCode } from 'gateways/src/errors';
+import {
+  authenticationRequiredError,
+  VizHubErrorCode,
+} from 'gateways/src/errors';
 import { sesClient } from '../libs/sesClient';
 import { formatTimestamp } from '../../../app/src/accessors/formatTimestamp';
 import { SendEmailCommand } from '@aws-sdk/client-sesv2';
@@ -10,7 +19,7 @@ import { renderToString } from 'react-dom/server';
 import Markdown from 'react-markdown';
 import { getVizPageHref } from 'entities/src/accessors';
 import { generateVizId } from '@vizhub/viz-utils';
-
+import React from 'react';
 
 export const addCommentEndpoint = ({
   app,
@@ -19,7 +28,14 @@ export const addCommentEndpoint = ({
   app: any;
   gateways: Gateways;
 }) => {
-  const { saveComment, getUser, getInfo, saveNotification, getMergeRequest, incrementUserUnreadNotificationsCount} = gateways;
+  const {
+    saveComment,
+    getUser,
+    getInfo,
+    saveNotification,
+    getMergeRequest,
+    incrementUserUnreadNotificationsCount,
+  } = gateways;
 
   const sendCommentEmail = async (
     commentAuthor: User,
@@ -203,7 +219,7 @@ export const addCommentEndpoint = ({
           );
         }
 
-if (saveCommentResult.outcome == 'failure') {
+        if (saveCommentResult.outcome == 'failure') {
           res.send(saveCommentResult);
           return;
         }

@@ -20,10 +20,7 @@ import { AuthenticatedUserContext } from '../contexts/AuthenticatedUserContext';
 import { VizId } from '@vizhub/viz-types';
 import { VizKit } from 'api/src/VizKit';
 import { VizNotificationRequestResult } from 'entities/src/Notifications';
-import {
-  getProfilePageHref,
-  getVizPageHref,
-} from 'src/accessors';
+import { getProfilePageHref } from 'src/accessors';
 
 const vizKit = VizKit();
 
@@ -95,8 +92,12 @@ export const HeaderModals = ({
           onMarkAsReads={onmarkAsReads}
           notificationsResult={notificationsResult}
           onClose={toggleShowNotifications}
-          getVizHref={function (vizId, ownerUserName) {
-            return `/${ownerUserName}/${vizId}`;
+          getVizHref={function (
+            vizId,
+            ownerUserName,
+            commentID,
+          ) {
+            return `/${ownerUserName}/${vizId}#${commentID}`;
           }}
         ></NotificationsModal>
       ) : (

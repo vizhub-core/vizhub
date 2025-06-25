@@ -28,6 +28,7 @@ export const NotificationsModal = ({
   getVizHref: (
     vizId: VizId,
     ownerUserName: string,
+    commentId: CommentId,
   ) => string;
 }) => {
   return show ? (
@@ -86,6 +87,7 @@ export const NotificationsModal = ({
                             notification.commentId
                           ].author
                         ],
+                        notification.commentId,
                       )}
                       commentMarkdown={
                         notificationsResult.comments[
