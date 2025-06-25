@@ -45,8 +45,6 @@ export const getNotificationsEndpoint = ({
           return;
         }
 
-        console.log('pre notif get');
-
         const getNotificationsByUserIdResult =
           await getNotificationsByUserId(userId);
 
@@ -57,8 +55,6 @@ export const getNotificationsEndpoint = ({
           res.send(getNotificationsByUserIdResult);
           return;
         }
-
-        console.log('Starting Notif get');
 
         const notifications =
           getNotificationsByUserIdResult.value
@@ -164,8 +160,6 @@ export const getNotificationsEndpoint = ({
                 Object.fromEntries(resourceTitles),
             },
           };
-
-        console.log(result);
 
         res.send(result);
       }

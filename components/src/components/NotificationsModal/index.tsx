@@ -22,7 +22,7 @@ export const NotificationsModal = ({
   getVizHref,
 }: {
   show: boolean;
-  onMarkAsReads: Array<() => void>;
+  onMarkAsReads: Map<string, () => Promise<void>>;
   notificationsResult: VizNotificationRequestResult;
   onClose: () => void;
   getVizHref: (
@@ -36,8 +36,9 @@ export const NotificationsModal = ({
       <Modal.Header closeButton>
         <Modal.Title>Notifications</Modal.Title>
         <Modal.Body>
-          {notificationsResult?.notifications.map(
-            (notification, index) => {
+          {notificationsResult?.notifications
+            .filter((notification) => !notification.read)
+            .map((notification, index) => {
               switch (notification.type) {
                 case 'commentOnYourViz':
                   //This if statement will not be needed in production, it exists to mitigate an issue I caused locally
@@ -95,14 +96,15 @@ export const NotificationsModal = ({
                         ]?.markdown
                       }
                       hasBeenRead={notification.read}
-                      markAsRead={onMarkAsReads[index]}
+                      markAsRead={onMarkAsReads.get(
+                        notification.id,
+                      )}
                     ></CommentNotificationRow>
                   );
                 default:
                   break;
               }
-            },
-          )}
+            })}
         </Modal.Body>
       </Modal.Header>
     </Modal>

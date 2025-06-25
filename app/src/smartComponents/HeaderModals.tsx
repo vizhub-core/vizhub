@@ -19,7 +19,10 @@ import { getCreditBalance } from 'entities/src/accessors';
 import { AuthenticatedUserContext } from '../contexts/AuthenticatedUserContext';
 import { VizId } from '@vizhub/viz-types';
 import { VizKit } from 'api/src/VizKit';
-import { VizNotificationRequestResult } from 'entities/src/Notifications';
+import {
+  VizNotificationId,
+  VizNotificationRequestResult,
+} from 'entities';
 import { getProfilePageHref } from 'src/accessors';
 
 const vizKit = VizKit();
@@ -41,7 +44,9 @@ export const HeaderModals = ({
     (result: VizNotificationRequestResult) => void,
   ] = useState(undefined);
 
-  const [onmarkAsReads, setOnMarkAsReads] = useState([]);
+  const [onmarkAsReads, setOnMarkAsReads] = useState(
+    new Map<string, () => Promise<void>>(),
+  );
 
   useEffect(() => {
     if (!showNotificationsModal) {
@@ -55,21 +60,23 @@ export const HeaderModals = ({
         userId: authenticatedUser.id,
       });
 
-      console.log(result);
-
       if (result.outcome === 'failure') {
         return;
       }
 
-      console.log(result);
-
       setOnMarkAsReads(
-        result.value.notifications.map(
-          (notification) => async () => {
-            await vizKit.rest.markNotificationAsRead({
-              notificationId: notification.id,
+        result.value.notifications.reduce(
+          (map, notification) => {
+            map.set(notification.id, async () => {
+              notification.read = true;
+
+              await vizKit.rest.markNotificationAsRead({
+                notificationId: notification.id,
+              });
             });
+            return map;
           },
+          new Map<string, () => Promise<void>>(),
         ),
       );
 
