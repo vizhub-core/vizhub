@@ -848,6 +848,20 @@ export const DatabaseGateways = ({
     -1,
   );
 
+  const incrementUserUnreadNotificationsCount = shareDBAdd(
+    'User',
+    toCollectionName('User'),
+    'numUnreadNotifications',
+    1,
+  );
+
+  const decrementUserUnreadNotificationsCount = shareDBAdd(
+    'User',
+    toCollectionName('User'),
+    'numUnreadNotifications',
+    -1,
+  );
+
   // From v2
   // const pageSize = 10;
 
@@ -1080,6 +1094,24 @@ export const DatabaseGateways = ({
     return ok(result);
   };
 
+  const getNotificationsByUserId = async (userId: UserId) =>
+    new Promise((resolve) => {
+      const entityName = 'Notification';
+      //TODO: consider adding limit for how many notifications are returned.
+      const query = shareDBConnection.createFetchQuery(
+        toCollectionName(entityName),
+        { user: userId },
+        {},
+        (error, results) => {
+          query.destroy();
+          if (error) return resolve(err(error));
+          resolve(
+            ok(results.map((doc) => doc.toSnapshot())),
+          );
+        },
+      );
+    });
+
   let databaseGateways = {
     type: 'DatabaseGateways',
     getForks,
@@ -1088,6 +1120,8 @@ export const DatabaseGateways = ({
     decrementForksCount,
     incrementUpvotesCount,
     decrementUpvotesCount,
+    incrementUserUnreadNotificationsCount,
+    decrementUserUnreadNotificationsCount,
     getCommitAncestors,
     getFolderAncestors,
     getUserByUserName,
@@ -1107,6 +1141,7 @@ export const DatabaseGateways = ({
     getCommitImageKeys,
     saveCommitImageKeys,
     getAIEditMetadataForUser,
+    getNotificationsByUserId,
   };
 
   for (const entityName of crudEntityNames) {

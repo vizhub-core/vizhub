@@ -1,15 +1,25 @@
 import express from 'express';
-import { Comment, Info, User } from 'entities';
+import {
+  Comment,
+  Info,
+  User,
+  VizNotification,
+  VizNotificationType,
+} from 'entities';
 import { Gateways, err } from 'gateways';
 import { getAuthenticatedUserId } from '../parseAuth0User';
-import { authenticationRequiredError } from 'gateways/src/errors';
+import {
+  authenticationRequiredError,
+  VizHubErrorCode,
+} from 'gateways/src/errors';
 import { sesClient } from '../libs/sesClient';
 import { formatTimestamp } from '../../../app/src/accessors/formatTimestamp';
 import { SendEmailCommand } from '@aws-sdk/client-sesv2';
 import { renderToString } from 'react-dom/server';
-import React from 'react';
 import Markdown from 'react-markdown';
 import { getVizPageHref } from 'entities/src/accessors';
+import { generateVizId } from '@vizhub/viz-utils';
+import React from 'react';
 
 export const addCommentEndpoint = ({
   app,
@@ -18,7 +28,14 @@ export const addCommentEndpoint = ({
   app: any;
   gateways: Gateways;
 }) => {
-  const { saveComment, getUser, getInfo } = gateways;
+  const {
+    saveComment,
+    getUser,
+    getInfo,
+    saveNotification,
+    getMergeRequest,
+    incrementUserUnreadNotificationsCount,
+  } = gateways;
 
   const sendCommentEmail = async (
     commentAuthor: User,
@@ -202,7 +219,68 @@ export const addCommentEndpoint = ({
           );
         }
 
-        res.send(saveCommentResult);
+        if (saveCommentResult.outcome == 'failure') {
+          res.send(saveCommentResult);
+          return;
+        }
+
+        const id = generateVizId();
+        const getInfoResult = await getInfo(
+          comment.resource,
+        );
+
+        //TODO verify that this works on comments that are for merge requests
+
+        let recipientUserId = '';
+        let notificationType: VizNotificationType =
+          VizNotificationType.CommentOnYourViz;
+
+        if (getInfoResult.outcome == 'failure') {
+          if (
+            getInfoResult.error.code ==
+            VizHubErrorCode.resourceNotFound
+          ) {
+            const getMergeRequestResult =
+              await getMergeRequest(comment.resource);
+            if (
+              getMergeRequestResult.outcome == 'failure'
+            ) {
+              res.send(getMergeRequestResult);
+              return;
+            }
+            recipientUserId =
+              getMergeRequestResult.value.data.author;
+          } else {
+            res.send(getInfoResult);
+            return;
+          }
+        } else {
+          recipientUserId = getInfoResult.value.data.owner;
+        }
+
+        const notification: VizNotification = {
+          id: id,
+          type: notificationType,
+          user: recipientUserId,
+          resource: comment.resource,
+          created: comment.created,
+          read: false,
+          commentId: comment.id,
+        };
+        const saveNotificationResult =
+          await saveNotification(notification);
+
+        if (saveNotificationResult.outcome === 'failure') {
+          res.send(saveNotificationResult);
+          return;
+        }
+
+        const incrementResult =
+          incrementUserUnreadNotificationsCount(
+            recipientUserId,
+          );
+
+        res.send(incrementResult);
       }
     },
   );

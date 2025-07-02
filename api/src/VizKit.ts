@@ -13,6 +13,10 @@ import {
   Plan,
 } from 'entities';
 import { AIEditMetadataUsage } from 'entities/src/AIEditMetadata';
+import {
+  VizNotificationId,
+  VizNotificationRequestResult,
+} from 'entities/src/Notifications';
 import { Result, Success } from 'gateways';
 import { InfosAndOwners } from 'interactors/src/getInfosAndOwners';
 
@@ -177,6 +181,14 @@ export interface VizKitAPI {
         vizId: VizId;
       }>
     >;
+
+    getNotifications: (options: {
+      userId: UserId;
+    }) => Promise<Result<VizNotificationRequestResult>>;
+
+    markNotificationAsRead: (options: {
+      notificationId: VizNotificationId;
+    }) => Promise<Result<Success>>;
   };
 }
 
@@ -415,6 +427,22 @@ export const VizKit = (
 
         return await response.json();
       },
+
+      getNotifications: async (options: {
+        userId: UserId;
+      }) =>
+        await postJSON(
+          `${baseUrl}/get-notifications`,
+          options,
+        ),
+
+      markNotificationAsRead: async (options: {
+        notificationId: VizNotificationId;
+      }) =>
+        await postJSON(
+          `${baseUrl}/mark-notification-as-read`,
+          options,
+        ),
     },
   };
 };

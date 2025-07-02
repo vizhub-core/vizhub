@@ -31,7 +31,7 @@ export const CommentBody = ({
   }, [handleCommentDelete, id]);
 
   return (
-    <div className="vh-comment">
+    <div className="vh-comment" id={id}>
       <div className="comment-top">
         <div className="comment-top-side">
           <a
