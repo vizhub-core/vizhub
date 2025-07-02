@@ -33,4 +33,5 @@ export { DocumentationPageBody } from './components/DocumentationPageBody';
 export { VisibilityLabel } from './components/VisibilityLabel';
 export { SvelteAndD3PageBody } from './components/SvelteAndD3PageBody';
 export { EditWithAIModal } from './components/EditWithAIModal';
+export { NotificationsModal } from './components/NotificationsModal';
 import './components/index.scss';

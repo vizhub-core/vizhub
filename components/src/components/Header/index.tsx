@@ -25,9 +25,11 @@ export const Header = ({
   createVizHref,
   onVizHubClick,
   pricingHref,
+  onNotificationsClick,
   showBillingLink,
   onBillingClick,
   initialSearchQuery,
+  userHasNotifications,
 }: {
   authenticatedUserAvatarURL: string;
   loginHref: string;
@@ -36,9 +38,11 @@ export const Header = ({
   createVizHref: string;
   onVizHubClick: () => void;
   pricingHref: string;
+  onNotificationsClick: () => void;
   showBillingLink?: boolean;
   onBillingClick: () => void;
   initialSearchQuery?: string;
+  userHasNotifications: boolean;
 }) => (
   <Navbar className="vh-navbar" variant="dark" expand="md">
     <Container fluid>
@@ -63,6 +67,31 @@ export const Header = ({
           {/* <Nav.Link href="/features">Features</Nav.Link> */}
 
           {/* <Nav.Link href={discordLink}>Discord</Nav.Link> */}
+          {authenticatedUserAvatarURL ? (
+            <Button onClick={onNotificationsClick}>
+              Notifications
+              {userHasNotifications ? (
+                <svg
+                  width={10}
+                  height={20}
+                  viewBox="0 0 100 250"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="notificaton-indicator"
+                >
+                  <circle
+                    cx="50"
+                    cy="50"
+                    r="50"
+                    fill="#ADD8E6"
+                  />
+                </svg>
+              ) : (
+                <></>
+              )}
+            </Button>
+          ) : (
+            <></>
+          )}
 
           {enableResources && (
             <Dropdown align="end">
@@ -97,6 +126,38 @@ export const Header = ({
               </Dropdown.Menu>
             </Dropdown>
           )}
+
+          <Dropdown align="end">
+            <Dropdown.Toggle
+              variant="dark"
+              id="dropdown-contact"
+            >
+              Contact
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              <Dropdown.Item href="mailto:support@vizhub.com">
+                <i className="bi bi-envelope me-2"></i>
+                Email Support
+              </Dropdown.Item>
+              <Dropdown.Item href={discordLink}>
+                <i className="bi bi-discord me-2"></i>
+                Discord Community
+              </Dropdown.Item>
+              {/* TODO make this work: <Dropdown.Item href="/contact">
+                <i className="bi bi-chat-dots me-2"></i>
+                Contact Form
+              </Dropdown.Item> */}
+              <Dropdown.Divider />
+              <Dropdown.Item href="https://twitter.com/vizhub">
+                <i className="bi bi-twitter me-2"></i>
+                Twitter
+              </Dropdown.Item>
+              <Dropdown.Item href="https://github.com/vizhub-core">
+                <i className="bi bi-github me-2"></i>
+                GitHub
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
 
           {/* <Nav.Link href={createVizHref}>Create</Nav.Link> */}
           {enableHelpSVG && (

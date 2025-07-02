@@ -55,6 +55,10 @@ import { CommitImageKey } from 'entities/src/Images';
 import { APIKeyHash, APIKeyId } from 'entities/src/APIKeys';
 import { AIEditMetadataUsage } from 'entities/src/AIEditMetadata';
 import { VizContent, VizId } from '@vizhub/viz-types';
+import {
+  VizNotification,
+  VizNotificationId,
+} from 'entities/src/Notifications';
 
 // The maximum number of Info documents to return in a single page from `getInfos()`
 // export const pageSize = 5;
@@ -121,6 +125,16 @@ export interface Gateways {
     id: CommentId,
   ): Promise<Result<Snapshot<Comment>>>;
   deleteComment(id: CommentId): Promise<Result<Success>>;
+
+  saveNotification(
+    notification: VizNotification,
+  ): Promise<Result<Success>>;
+  getNotification(
+    id: VizNotificationId,
+  ): Promise<Result<Snapshot<VizNotification>>>;
+  deleteNotification(
+    id: VizNotificationId,
+  ): Promise<Result<Success>>;
 
   saveMention(mention: Mention): Promise<Result<Success>>;
   getMention(
@@ -267,6 +281,13 @@ export interface Gateways {
   ): Promise<Result<Success>>;
   decrementUpvotesCount(
     id: VizId,
+  ): Promise<Result<Success>>;
+
+  incrementUserUnreadNotificationsCount(
+    id: UserId,
+  ): Promise<Result<Success>>;
+  decrementUserUnreadNotificationsCount(
+    id: UserId,
   ): Promise<Result<Success>>;
 
   // getCommitAncestors
@@ -541,4 +562,8 @@ export interface Gateways {
   getAIEditMetadataForUser(
     userId: UserId,
   ): Promise<Result<Array<AIEditMetadataUsage>>>;
+
+  getNotificationsByUserId(
+    userId: UserId,
+  ): Promise<Result<Array<Snapshot<VizNotification>>>>;
 }
