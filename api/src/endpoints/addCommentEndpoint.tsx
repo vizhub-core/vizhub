@@ -7,7 +7,6 @@ import { sesClient } from '../libs/sesClient';
 import { formatTimestamp } from '../../../app/src/accessors/formatTimestamp';
 import { SendEmailCommand } from '@aws-sdk/client-sesv2';
 import { renderToString } from 'react-dom/server';
-import React from 'react';
 import Markdown from 'react-markdown';
 import { getVizPageHref } from 'entities/src/accessors';
 
