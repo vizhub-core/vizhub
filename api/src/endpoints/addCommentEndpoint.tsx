@@ -19,7 +19,6 @@ import { renderToString } from 'react-dom/server';
 import Markdown from 'react-markdown';
 import { getVizPageHref } from 'entities/src/accessors';
 import { generateVizId } from '@vizhub/viz-utils';
-import React from 'react';
 
 export const addCommentEndpoint = ({
   app,
