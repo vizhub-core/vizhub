@@ -7,7 +7,7 @@
     "test": "vitest run",
     "coverage": "vitest run --coverage",
     "typecheck": "tsc --noEmit",
-    "prettier": "prettier {*.*,**/*.*} --single-quote --write",
+    "prettier": "prettier {*.*,**/*.*} --write",
     "dev": "node server.js",
     "build": "npm run build:client && npm run build:server",
     "build:client": "vite build --outDir dist/client",
