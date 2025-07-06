@@ -12,6 +12,14 @@ export const StarterFeatures = () => {
         Find compelling open source visualizations.
       </Feature>
       <Feature
+        title="Fork & Modify Vizzes"
+        id="public-vizzes"
+        hasBottomBorder={true}
+        // startsExpanded={true}
+      >
+        Create your own works right in your browser.
+      </Feature>
+      <Feature
         title="Community Access"
         id="community-access"
         hasBottomBorder={true}
