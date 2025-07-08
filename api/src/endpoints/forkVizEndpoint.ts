@@ -39,6 +39,7 @@ export const forkVizEndpoint = ({
           title,
           visibility,
           content,
+          commitId
         }: {
           forkedFrom: VizId;
           owner: UserId;
@@ -47,6 +48,8 @@ export const forkVizEndpoint = ({
 
           // Provided only if there are unforked edits.
           content?: VizContent;
+          
+          commitId: CommitId;
         } = req.body;
 
         // Validate parameters
@@ -87,6 +90,7 @@ export const forkVizEndpoint = ({
           content,
           title,
           visibility,
+          forkedFromCommitId:commitId
         };
 
         if (debug) {

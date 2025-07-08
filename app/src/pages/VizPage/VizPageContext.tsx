@@ -102,10 +102,12 @@ export type VizPageContextValue = {
     owner,
     title,
     visibility,
+    commitId
   }: {
     owner: UserId;
     title: string;
     visibility: Visibility;
+    commitId: CommitId;
   }) => void;
   showSettingsModal: boolean;
   showShareModal: boolean;
