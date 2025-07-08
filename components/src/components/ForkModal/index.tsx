@@ -26,7 +26,7 @@ export const ForkModal = ({
   initialOwner,
   possibleOwners,
   currentPlan,
-  commitId
+  commitId,
 }: {
   show: boolean;
   onClose: () => void;
@@ -34,12 +34,12 @@ export const ForkModal = ({
     title,
     visibility,
     owner,
-    commitId
+    commitId,
   }: {
     title: string;
     visibility: string;
     owner: string;
-    commitId: CommitId
+    commitId: CommitId;
   }) => void;
   initialTitle: string;
   initialVisibility: Visibility;
@@ -49,7 +49,7 @@ export const ForkModal = ({
     label: string;
   }>;
   currentPlan: Plan;
-  commitId:  CommitId
+  commitId: CommitId;
 }) => {
   const [title, setTitle] = useState<string>(initialTitle);
   const [visibility, setVisibility] = useState<Visibility>(
@@ -65,7 +65,7 @@ export const ForkModal = ({
   );
 
   const handleForkClick = useCallback(() => {
-    onFork({ title, visibility, owner,commitId });
+    onFork({ title, visibility, owner, commitId });
   }, [title, visibility, owner, onFork]);
 
   const inputRef = useRef(null);

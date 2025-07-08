@@ -29,7 +29,7 @@ export const useOnFork = ({
       title,
       visibility,
       preserveREADME,
-      commitId
+      commitId,
     }: {
       // These values come from the fork modal
       owner: UserId;
@@ -44,7 +44,7 @@ export const useOnFork = ({
         title,
         visibility,
         preserveREADME,
-        commitId
+        commitId,
       };
       if (debug) {
         console.log(

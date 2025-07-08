@@ -58,7 +58,7 @@ export const VizPageModals = () => {
     modelName,
     setModelName,
     modelNameOptions,
-    commitMetadata
+    commitMetadata,
   } = useContext(VizPageContext);
 
   // The currently authenticated user, if any.

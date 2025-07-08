@@ -39,7 +39,7 @@ export const forkVizEndpoint = ({
           title,
           visibility,
           content,
-          commitId
+          commitId,
         }: {
           forkedFrom: VizId;
           owner: UserId;
@@ -48,7 +48,7 @@ export const forkVizEndpoint = ({
 
           // Provided only if there are unforked edits.
           content?: VizContent;
-          
+
           commitId: CommitId;
         } = req.body;
 
@@ -90,7 +90,7 @@ export const forkVizEndpoint = ({
           content,
           title,
           visibility,
-          forkedFromCommitId:commitId
+          forkedFromCommitId: commitId,
         };
 
         if (debug) {

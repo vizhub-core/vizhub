@@ -102,7 +102,7 @@ export type VizPageContextValue = {
     owner,
     title,
     visibility,
-    commitId
+    commitId,
   }: {
     owner: UserId;
     title: string;
