@@ -8,14 +8,6 @@ import { CREDIT_MARKUP } from 'entities/src/Pricing';
 export const PremiumFeatures = ({}) => (
   <>
     <Feature
-      title="Fork & Modify Vizzes"
-      id="public-vizzes"
-      hasBottomBorder={true}
-      // startsExpanded={true}
-    >
-      Create your own works right in your browser.
-    </Feature>
-    <Feature
       title="Edit with AI"
       id="ai-assisted-coding"
       hasBottomBorder={true}

@@ -92,9 +92,6 @@ export const ForkModal = ({
     [handleForkClick],
   );
 
-  const isPremiumOrPro =
-    currentPlan === PREMIUM || currentPlan === PRO;
-
   return show ? (
     <Modal
       show={show}
@@ -106,57 +103,35 @@ export const ForkModal = ({
         <Modal.Title>Fork</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {isPremiumOrPro ? (
-          <>
-            <Form.Group className="mb-3" controlId="title">
-              <Form.Label>Title</Form.Label>
-              <Form.Control
-                type="text"
-                value={title}
-                onChange={handleTitleChange}
-                ref={inputRef}
-              />
-              <Form.Text className="text-muted">
-                Choose a title for your viz
-              </Form.Text>
-            </Form.Group>
-            <VisibilityControl
-              visibility={visibility}
-              setVisibility={setVisibility}
-              currentPlan={currentPlan}
+        <>
+          <Form.Group className="mb-3" controlId="title">
+            <Form.Label>Title</Form.Label>
+            <Form.Control
+              type="text"
+              value={title}
+              onChange={handleTitleChange}
+              ref={inputRef}
             />
-            <OwnerControl
-              owner={owner}
-              setOwner={setOwner}
-              possibleOwners={possibleOwners}
-            />
-          </>
-        ) : (
-          <p>
-            Forking is available with VizHub Premium.
-            Upgrade now for only $1.99/mo or $19.99/year to
-            unlock the ability to fork & modify vizzes.
-          </p>
-        )}
+            <Form.Text className="text-muted">
+              Choose a title for your viz
+            </Form.Text>
+          </Form.Group>
+          <VisibilityControl
+            visibility={visibility}
+            setVisibility={setVisibility}
+            currentPlan={currentPlan}
+          />
+          <OwnerControl
+            owner={owner}
+            setOwner={setOwner}
+            possibleOwners={possibleOwners}
+          />
+        </>
       </Modal.Body>
       <Modal.Footer>
-        {isPremiumOrPro ? (
-          <Button
-            variant="primary"
-            onClick={handleForkClick}
-          >
-            Fork
-          </Button>
-        ) : (
-          <Button
-            variant="primary"
-            href={`/pricing?feature=public-vizzes`}
-            target="_blank"
-            rel="noreferrer"
-          >
-            Upgrade Now
-          </Button>
-        )}
+        <Button variant="primary" onClick={handleForkClick}>
+          Fork
+        </Button>
       </Modal.Footer>
     </Modal>
   ) : null;
