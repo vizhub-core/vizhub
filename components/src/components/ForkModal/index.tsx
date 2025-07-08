@@ -8,6 +8,7 @@ import { Modal, Form, Button } from '../bootstrap';
 import { VisibilityControl } from '../VisibilityControl';
 import { OwnerControl } from '../OwnerControl';
 import {
+  CommitId,
   Plan,
   PREMIUM,
   PRO,
@@ -25,6 +26,7 @@ export const ForkModal = ({
   initialOwner,
   possibleOwners,
   currentPlan,
+  commitId
 }: {
   show: boolean;
   onClose: () => void;
@@ -32,10 +34,12 @@ export const ForkModal = ({
     title,
     visibility,
     owner,
+    commitId
   }: {
     title: string;
     visibility: string;
     owner: string;
+    commitId: CommitId
   }) => void;
   initialTitle: string;
   initialVisibility: Visibility;
@@ -45,6 +49,7 @@ export const ForkModal = ({
     label: string;
   }>;
   currentPlan: Plan;
+  commitId:  CommitId
 }) => {
   const [title, setTitle] = useState<string>(initialTitle);
   const [visibility, setVisibility] = useState<Visibility>(
@@ -60,7 +65,7 @@ export const ForkModal = ({
   );
 
   const handleForkClick = useCallback(() => {
-    onFork({ title, visibility, owner });
+    onFork({ title, visibility, owner,commitId });
   }, [title, visibility, owner, onFork]);
 
   const inputRef = useRef(null);

@@ -58,6 +58,7 @@ export const VizPageModals = () => {
     modelName,
     setModelName,
     modelNameOptions,
+    commitMetadata
   } = useContext(VizPageContext);
 
   // The currently authenticated user, if any.
@@ -217,6 +218,7 @@ export const VizPageModals = () => {
           onClose={toggleForkModal}
           onFork={onFork}
           currentPlan={authenticatedUser?.plan}
+          commitId={commitMetadata.id}
         />
       )}
       {showSettingsModal && (

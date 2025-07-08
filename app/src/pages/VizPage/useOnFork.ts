@@ -1,4 +1,4 @@
-import { UserId, Visibility } from 'entities';
+import { CommitId, UserId, Visibility } from 'entities';
 import { useCallback } from 'react';
 import { Result } from 'gateways';
 import { setCookie } from '../cookies';
@@ -29,12 +29,14 @@ export const useOnFork = ({
       title,
       visibility,
       preserveREADME,
+      commitId
     }: {
       // These values come from the fork modal
       owner: UserId;
       title: string;
       visibility: Visibility;
       preserveREADME?: boolean;
+      commitId: CommitId;
     }) => {
       const forkVizOptions = {
         forkedFrom: id,
@@ -42,6 +44,7 @@ export const useOnFork = ({
         title,
         visibility,
         preserveREADME,
+        commitId
       };
       if (debug) {
         console.log(
