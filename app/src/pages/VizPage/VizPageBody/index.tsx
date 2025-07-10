@@ -246,9 +246,7 @@ export const VizPageBody = () => {
       )}
 
       <VizPageHead
-        showForkButton={
-          isUserAuthenticated && !commitMetadata
-        }
+        showForkButton={isUserAuthenticated}
         showSettingsButton={
           canUserEditViz && !commitMetadata
         }

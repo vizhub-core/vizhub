@@ -22,19 +22,19 @@
   "homepage": "https://github.com/vizhub-core/vizhub3#readme",
   "dependencies": {
     "@sesamecare-oss/redlock": "^1.4.0",
-    "@supabase/supabase-js": "^2.49.4",
+    "@supabase/supabase-js": "^2.50.5",
     "@vizhub/viz-types": "^0.1.0",
     "d3-array": "^3.2.4",
     "ioredis": "^5.6.1",
-    "mongodb": "^6.16.0",
+    "mongodb": "^6.17.0",
     "mongodb-legacy": "^6.1.3",
-    "redis": "^5.0.1",
+    "redis": "^5.6.0",
     "sharedb-mongo": "^5.0.0",
-    "sharedb-redis-pubsub": "^5.0.1",
+    "sharedb-redis-pubsub": "^5.1.0",
     "uuid": "^11.1.0"
   },
   "devDependencies": {
-    "prettier": "^3.5.3",
-    "vitest": "^3.1.3"
+    "prettier": "^3.6.2",
+    "vitest": "^3.2.4"
   }
 }

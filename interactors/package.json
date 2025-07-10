@@ -25,20 +25,20 @@
     "@vizhub/viz-types": "^0.1.0",
     "@vizhub/viz-utils": "^1.1.0",
     "code-red": "^1.0.4",
-    "css-tree": "^2.3.1",
+    "css-tree": "^3.1.0",
     "decay": "^1.0.12",
     "deep-equal": "^2.2.3",
-    "editcodewithai": "^1.1.0",
+    "editcodewithai": "^2.0.0",
     "multiscale-timeseries": "^2.0.0",
     "svelte": "4.2.9",
     "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@types/deep-equal": "^1.0.4",
-    "@types/node": "^22.15.16",
-    "concurrently": "^9.1.2",
-    "prettier": "^3.5.3",
+    "@types/node": "^24.0.13",
+    "concurrently": "^9.2.0",
+    "prettier": "^3.6.2",
     "typescript": "^5.8.3",
-    "vitest": "^3.1.3"
+    "vitest": "^3.2.4"
   }
 }
