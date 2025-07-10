@@ -1,5 +1,5 @@
 .vh-navbar.navbar {
-  background-color: var(--vh-color-neutral-01);
+  background-color: #1E1E2F;
   padding: 16px 8px;
 
   @media (max-width: 1200px) {
@@ -19,6 +19,7 @@
     font-weight: 500;
     border-radius: 4px;
   }
+
   .nav-link:hover {
     background-color: rgba(255, 255, 255, 0.2);
   }

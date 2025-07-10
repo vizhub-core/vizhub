@@ -96,8 +96,10 @@ export const Header = ({
           {enableResources && (
             <Dropdown align="end">
               <Dropdown.Toggle
-                variant="dark"
+                as={Nav.Link} // Renders as a Nav.Link
                 id="dropdown-resources"
+                // variant="dark" is removed here
+                className="resources-dropdown-toggle" // Custom class for styling
               >
                 Resources
               </Dropdown.Toggle>
@@ -129,8 +131,10 @@ export const Header = ({
 
           <Dropdown align="end">
             <Dropdown.Toggle
-              variant="dark"
+              as={Nav.Link} // Render as a Nav.Link
               id="dropdown-contact"
+              // variant="dark" is removed here
+              className="contact-dropdown-toggle" // Custom class for styling
             >
               Contact
             </Dropdown.Toggle>
