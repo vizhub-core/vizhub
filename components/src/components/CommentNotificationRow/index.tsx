@@ -1,5 +1,4 @@
 import { Row, Col, Button } from '../bootstrap';
-import './styles.scss';
 
 export const CommentNotificationRow = ({
   commenterUserAvatarURL,
@@ -21,36 +20,52 @@ export const CommentNotificationRow = ({
 }) => {
   return (
     <div
-      className="comment-notification-row"
-      data-read={hasBeenRead}
+      className={`p-3 border-bottom ${
+        !hasBeenRead
+          ? 'border-start border-primary border-4'
+          : ''
+      }`}
     >
-      <Row>
-        <Col className="col-md-auto">
-          <div className="center-image-container">
-            <a href={commenterProfileHref}>
-              <img
-                src={commenterUserAvatarURL}
-                width="32"
-                height="32"
-                className="rounded-circle"
-              ></img>
-            </a>
-          </div>
+      <Row className="align-items-center">
+        <Col xs="auto">
+          <a href={commenterProfileHref}>
+            <img
+              src={commenterUserAvatarURL}
+              width="40"
+              height="40"
+              className="rounded-circle"
+            />
+          </a>
         </Col>
         <Col>
-          <div className="centered-text-container">
-            <p>
-              {' '}
-              {commenterUsername} commented on your viz,{' '}
-              <a href={vizHref} onClick={markAsRead}>
-                {vizTitle}
-              </a>
-              .
-            </p>
-          </div>
+          <p className="mb-0">
+            <a
+              href={commenterProfileHref}
+              className="fw-bold text-dark text-decoration-none"
+            >
+              {commenterUsername}
+            </a>{' '}
+            commented on your viz,{' '}
+            <a
+              href={vizHref}
+              onClick={markAsRead}
+              className="fw-bold text-dark text-decoration-none"
+            >
+              {vizTitle}
+            </a>
+            .
+          </p>
         </Col>
-        <Col className="col-md-auto">
-          <Button onClick={markAsRead}>Mark as read</Button>
+        <Col xs="auto">
+          {!hasBeenRead && (
+            <Button
+              variant="light"
+              size="sm"
+              onClick={markAsRead}
+            >
+              Mark as read
+            </Button>
+          )}
         </Col>
       </Row>
     </div>
