@@ -19,13 +19,7 @@ export const CommentNotificationRow = ({
   markAsRead: () => void;
 }) => {
   return (
-    <div
-      className={`p-3 border-bottom ${
-        !hasBeenRead
-          ? 'border-start border-primary border-4'
-          : ''
-      }`}
-    >
+    <div className="p-3 mb-2">
       <Row className="align-items-center">
         <Col xs="auto">
           <a href={commenterProfileHref}>
@@ -59,7 +53,7 @@ export const CommentNotificationRow = ({
         <Col xs="auto">
           {!hasBeenRead && (
             <Button
-              variant="light"
+              variant="secondary"
               size="sm"
               onClick={markAsRead}
             >

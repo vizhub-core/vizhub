@@ -1,12 +1,4 @@
-import {
-  CommentId,
-  User,
-  UserId,
-  VizNotification,
-  VizNotificationId,
-  VizNotificationType,
-  Comment,
-} from 'entities';
+import { CommentId } from 'entities';
 import { CommentNotificationRow } from '../CommentNotificationRow';
 import { Modal, Badge } from 'react-bootstrap';
 import { VizId } from '@vizhub/viz-types';
