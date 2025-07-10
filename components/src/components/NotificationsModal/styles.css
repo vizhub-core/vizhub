@@ -1,0 +1,105 @@
+/* Modal container styling */
+.notifications-modal .modal-content {
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  border: none;
+  overflow: hidden;
+}
+
+/* Modal header styling */
+.notifications-modal .modal-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #eaedf0;
+  padding: 18px 24px;
+  display: flex;
+  align-items: center;
+}
+
+.notifications-modal .modal-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #2d3748;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+/* Modal body styling */
+.notifications-modal .modal-body {
+  padding: 0;
+  max-height: 75vh;
+  overflow-y: auto;
+  background-color: #ffffff;
+}
+
+.notifications-body {
+  padding: 0 !important;
+}
+
+/* Empty state styling */
+.no-notifications {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 60px 24px;
+  color: #718096;
+  text-align: center;
+}
+
+.no-notifications p {
+  font-size: 16px;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Close button styling */
+.notifications-modal .close {
+  opacity: 0.6;
+  transition: all 0.2s ease;
+  font-size: 24px;
+  padding: 0;
+  margin: -8px -8px -8px auto;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.notifications-modal .close:hover {
+  opacity: 1;
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Notification item styling */
+.notifications-modal .notification-row {
+  border-bottom: 1px solid #eaedf0;
+  transition: background-color 0.15s ease;
+}
+
+.notifications-modal .notification-row:hover {
+  background-color: #f8f9fa;
+}
+
+.notifications-modal .notification-row:last-child {
+  border-bottom: none;
+}
+
+/* Scrollbar styling */
+.notifications-modal .modal-body::-webkit-scrollbar {
+  width: 8px;
+}
+
+.notifications-modal .modal-body::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.notifications-modal .modal-body::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.notifications-modal .modal-body::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}

@@ -12,7 +12,6 @@ import { Modal, ModalHeader } from 'react-bootstrap';
 import { VizId } from '@vizhub/viz-types';
 import { VizNotificationRequestResult } from 'entities/src/Notifications';
 
-//TODO: Create story for notifications modal
 
 export const NotificationsModal = ({
   show,
@@ -31,14 +30,29 @@ export const NotificationsModal = ({
     commentId: CommentId,
   ) => string;
 }) => {
+  const unreadNotifications =
+    notificationsResult?.notifications.filter(
+      (notification) => !notification.read,
+    );
+
   return show ? (
-    <Modal show={show} onHide={onClose} animation={false}>
+    <Modal
+      show={show}
+      onHide={onClose}
+      animation={false}
+      className="notifications-modal"
+    >
       <Modal.Header closeButton>
         <Modal.Title>Notifications</Modal.Title>
-        <Modal.Body>
-          {notificationsResult?.notifications
-            .filter((notification) => !notification.read)
-            .map((notification, index) => {
+      </Modal.Header>
+      <Modal.Body className="notifications-body">
+        {unreadNotifications?.length === 0 ? (
+          <div className="no-notifications">
+            <p>You have no unread notifications</p>
+          </div>
+        ) : (
+          unreadNotifications?.map(
+            (notification, index) => {
               switch (notification.type) {
                 case 'commentOnYourViz':
                   //This if statement will not be needed in production, it exists to mitigate an issue I caused locally
@@ -104,9 +118,10 @@ export const NotificationsModal = ({
                 default:
                   break;
               }
-            })}
-        </Modal.Body>
-      </Modal.Header>
+            },
+          )
+        )}
+      </Modal.Body>
     </Modal>
   ) : null;
 };
