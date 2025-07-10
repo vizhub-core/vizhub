@@ -3,7 +3,9 @@
 }
 
 div.comment-notification-row {
-  border-style: solid;
+  border-style: none;
+  border-width: 0;
+
   background-color: aliceblue;
 
   div.row > {

@@ -8,10 +8,10 @@ import {
   Comment,
 } from 'entities';
 import { CommentNotificationRow } from '../CommentNotificationRow';
-import { Modal, ModalHeader } from 'react-bootstrap';
+import { Modal, ModalHeader, Badge } from 'react-bootstrap';
 import { VizId } from '@vizhub/viz-types';
 import { VizNotificationRequestResult } from 'entities/src/Notifications';
-
+import './styles.css';
 
 export const NotificationsModal = ({
   show,
@@ -39,16 +39,35 @@ export const NotificationsModal = ({
     <Modal
       show={show}
       onHide={onClose}
-      animation={false}
+      animation={true}
       className="notifications-modal"
     >
-      <Modal.Header closeButton>
-        <Modal.Title>Notifications</Modal.Title>
+      <Modal.Header
+        closeButton
+        className="border-b border-gray-200 bg-gray-50"
+      >
+        <Modal.Title className="text-xl font-semibold text-gray-800 flex items-center">
+          Notifications
+          {unreadNotifications &&
+            unreadNotifications.length > 0 && (
+              <Badge
+                bg="primary"
+                pill
+                className="ml-2 bg-blue-500 text-white text-xs py-1 px-2"
+              >
+                {unreadNotifications.length}
+              </Badge>
+            )}
+        </Modal.Title>
       </Modal.Header>
-      <Modal.Body className="notifications-body">
+      <Modal.Body className="p-0 max-h-[70vh] overflow-y-auto">
         {unreadNotifications?.length === 0 ? (
-          <div className="no-notifications">
-            <p>You have no unread notifications</p>
+          <div className="empty-state">
+            <div className="empty-state-icon">🔔</div>
+            <p className="empty-state-text">
+              You don't have any unread notifications at the
+              moment
+            </p>
           </div>
         ) : (
           unreadNotifications?.map(
@@ -66,54 +85,64 @@ export const NotificationsModal = ({
                     break;
                   }
                   return (
-                    <CommentNotificationRow
+                    <div
                       key={notification.id}
-                      commenterUserAvatarURL={
-                        notificationsResult
-                          .commentAuthorImages[
+                      className="notification-item"
+                      data-type={notification.type}
+                      data-read={notification.read}
+                    >
+                      <CommentNotificationRow
+                        commenterUserAvatarURL={
+                          notificationsResult
+                            .commentAuthorImages[
+                            notificationsResult.comments[
+                              notification.commentId
+                            ]?.author
+                          ]
+                        }
+                        commenterUsername={
+                          notificationsResult
+                            .commentAuthors[
+                            notificationsResult.comments[
+                              notification.commentId
+                            ].author
+                          ]
+                        }
+                        commenterProfileHref={`/${
+                          notificationsResult
+                            .commentAuthors[
+                            notificationsResult.comments[
+                              notification.commentId
+                            ]?.author
+                          ]
+                        }`}
+                        vizTitle={
+                          notificationsResult
+                            .resourceTitles[
+                            notification.resource
+                          ]
+                        }
+                        vizHref={getVizHref(
+                          notification.resource,
+                          notificationsResult
+                            .commentAuthors[
+                            notificationsResult.comments[
+                              notification.commentId
+                            ].author
+                          ],
+                          notification.commentId,
+                        )}
+                        commentMarkdown={
                           notificationsResult.comments[
                             notification.commentId
-                          ]?.author
-                        ]
-                      }
-                      commenterUsername={
-                        notificationsResult.commentAuthors[
-                          notificationsResult.comments[
-                            notification.commentId
-                          ].author
-                        ]
-                      }
-                      commenterProfileHref={`/${
-                        notificationsResult.commentAuthors[
-                          notificationsResult.comments[
-                            notification.commentId
-                          ]?.author
-                        ]
-                      }`}
-                      vizTitle={
-                        notificationsResult.resourceTitles[
-                          notification.resource
-                        ]
-                      }
-                      vizHref={getVizHref(
-                        notification.resource,
-                        notificationsResult.commentAuthors[
-                          notificationsResult.comments[
-                            notification.commentId
-                          ].author
-                        ],
-                        notification.commentId,
-                      )}
-                      commentMarkdown={
-                        notificationsResult.comments[
-                          notification.commentId
-                        ]?.markdown
-                      }
-                      hasBeenRead={notification.read}
-                      markAsRead={onMarkAsReads.get(
-                        notification.id,
-                      )}
-                    ></CommentNotificationRow>
+                          ]?.markdown
+                        }
+                        hasBeenRead={notification.read}
+                        markAsRead={onMarkAsReads.get(
+                          notification.id,
+                        )}
+                      />
+                    </div>
                   );
                 default:
                   break;

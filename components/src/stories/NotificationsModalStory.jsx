@@ -74,14 +74,31 @@ const Story = () => {
   
   return (
     <div className="layout-centered">
-      <NotificationsModal
-        show={show}
-        onClose={() => {
-          setShow(false);
-          setTimeout(() => setShow(true), 1500); // Reopen after 1.5s for demo purposes
-        }}
-        {...args}
-      />
+      <div style={{ width: '100%', maxWidth: '800px' }}>
+        <button 
+          className="btn btn-primary mb-4"
+          onClick={() => setShow(true)}
+          style={{
+            padding: '10px 20px',
+            borderRadius: '8px',
+            backgroundColor: '#4299e1',
+            color: 'white',
+            border: 'none',
+            fontWeight: '600',
+            cursor: 'pointer'
+          }}
+        >
+          Open Notifications
+        </button>
+        
+        <NotificationsModal
+          show={show}
+          onClose={() => {
+            setShow(false);
+          }}
+          {...args}
+        />
+      </div>
     </div>
   );
 };

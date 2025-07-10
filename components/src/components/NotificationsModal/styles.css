@@ -1,105 +1,237 @@
-/* Modal container styling */
+/* Modal styling */
+.notifications-modal .modal-dialog {
+  max-width: 600px;
+  margin: 1.75rem auto;
+  width: 95%;
+}
+
 .notifications-modal .modal-content {
-  border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  border-radius: 1rem;
   border: none;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   overflow: hidden;
+  background-color: #ffffff;
 }
 
 /* Modal header styling */
 .notifications-modal .modal-header {
-  background-color: #f8f9fa;
-  border-bottom: 1px solid #eaedf0;
-  padding: 18px 24px;
+  padding: 1.5rem 2rem;
+  background-color: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
   display: flex;
   align-items: center;
 }
 
 .notifications-modal .modal-title {
-  font-size: 20px;
+  font-size: 1.375rem;
   font-weight: 700;
-  color: #2d3748;
-  margin: 0;
-  letter-spacing: -0.01em;
+  color: #0f172a;
+  letter-spacing: -0.025em;
+  position: relative;
 }
 
-/* Modal body styling */
-.notifications-modal .modal-body {
-  padding: 0;
-  max-height: 75vh;
-  overflow-y: auto;
-  background-color: #ffffff;
+.notifications-modal .modal-title::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 40px;
+  height: 3px;
+  background-color: #3b82f6;
+  border-radius: 3px;
 }
 
-.notifications-body {
-  padding: 0 !important;
-}
-
-/* Empty state styling */
-.no-notifications {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 60px 24px;
-  color: #718096;
-  text-align: center;
-}
-
-.no-notifications p {
-  font-size: 16px;
-  margin: 0;
-  line-height: 1.5;
-}
-
-/* Close button styling */
-.notifications-modal .close {
+.notifications-modal .btn-close {
+  font-size: 1.25rem;
+  padding: 0.5rem;
+  margin: -0.5rem -0.5rem -0.5rem auto;
   opacity: 0.6;
-  transition: all 0.2s ease;
-  font-size: 24px;
-  padding: 0;
-  margin: -8px -8px -8px auto;
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
+  transition: opacity 0.15s ease-in-out;
 }
 
-.notifications-modal .close:hover {
+.notifications-modal .btn-close:hover {
   opacity: 1;
   background-color: rgba(0, 0, 0, 0.05);
 }
 
+/* Badge styling */
+.notifications-modal .badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: transparent;
+  /* Transparent background */
+  border: 1px solid #94a3b8;
+  /* Light gray border */
+  color: #64748b;
+  /* Muted text color */
+
+  font-weight: 500;
+  padding: 0.25rem 0.6rem;
+  /* Slightly adjusted padding */
+  font-size: 0.875rem;
+  border-radius: 9999px;
+  margin-left: 0.5rem;
+  /* Remove box-shadow for a flatter look */
+  box-shadow: none;
+}
+
+
+/* Mark as read button styling */
+.notifications-modal button[aria-label="Mark as read"] {
+
+  background-color: #ef4444 !important;
+  border-color: #ef4444 !important;
+  color: white !important;
+  font-weight: 600;
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.375rem;
+  transition: all 0.2s;
+  font-size: 0.875rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.notifications-modal button[aria-label="Mark as read"]:hover {
+  background-color: #dc2626 !important;
+  border-color: #dc2626 !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.notifications-modal button[aria-label="Mark as read"]:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+/* Avatar styling */
+.notifications-modal img.avatar {
+  border-radius: 9999px;
+  border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+}
+
+/* Empty state styling */
+.notifications-modal .empty-state {
+  padding: 4rem 2rem;
+  background-color: #f8fafc;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.notifications-modal .empty-state-icon {
+  font-size: 3rem;
+  margin-bottom: 1.25rem;
+  color: #94a3b8;
+  background-color: #f1f5f9;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.notifications-modal .empty-state-text {
+  color: #64748b;
+  font-size: 1.125rem;
+  font-weight: 500;
+  max-width: 250px;
+  line-height: 1.5;
+}
+
 /* Notification item styling */
-.notifications-modal .notification-row {
-  border-bottom: 1px solid #eaedf0;
-  transition: background-color 0.15s ease;
+.notifications-modal .notification-item {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid #e2e8f0;
+  transition: all 0.2s ease;
+  position: relative;
 }
 
-.notifications-modal .notification-row:hover {
-  background-color: #f8f9fa;
+.notifications-modal .notification-item:hover {
+  background-color: #f1f5f9;
+  transform: translateY(-1px);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  z-index: 1;
 }
 
-.notifications-modal .notification-row:last-child {
+.notifications-modal .notification-item:active {
+  transform: translateY(0);
+}
+
+.notifications-modal .notification-item:last-child {
   border-bottom: none;
 }
 
-/* Scrollbar styling */
-.notifications-modal .modal-body::-webkit-scrollbar {
-  width: 8px;
+/* Unread notification indicator */
+.notifications-modal .notification-item[data-read="false"]::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 4px;
+  background-color: #3b82f6;
+  border-radius: 0 2px 2px 0;
 }
 
-.notifications-modal .modal-body::-webkit-scrollbar-track {
-  background: #f1f1f1;
+/* Comment content styling */
+.notifications-modal .comment-content {
+  margin-top: 0.75rem;
+  padding: 0.75rem 1rem;
+  background-color: #f3f4f6;
+  border-radius: 0.5rem;
+  border-left: 3px solid #d1d5db;
+  font-style: italic;
+  color: #4b5563;
+  font-size: 0.9375rem;
+  line-height: 1.5;
 }
 
-.notifications-modal .modal-body::-webkit-scrollbar-thumb {
-  background: #c1c1c1;
-  border-radius: 4px;
+/* Username and viz title styling */
+.notifications-modal .username {
+  font-weight: 600;
+  color: #1f2937;
+  text-decoration: none;
 }
 
-.notifications-modal .modal-body::-webkit-scrollbar-thumb:hover {
-  background: #a8a8a8;
+.notifications-modal .username:hover {
+  text-decoration: underline;
+  color: #3b82f6;
+}
+
+.notifications-modal .viz-title {
+  font-weight: 500;
+  color: #4b5563;
+  text-decoration: none;
+}
+
+.notifications-modal .viz-title:hover {
+  text-decoration: underline;
+  color: #3b82f6;
+}
+
+/* Animation for notifications */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.notifications-modal .modal-body>div {
+  animation: fadeIn 0.3s ease-out forwards;
 }
