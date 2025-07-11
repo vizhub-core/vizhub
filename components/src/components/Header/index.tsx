@@ -49,7 +49,6 @@ export const Header = ({
     <Container fluid>
       <Navbar.Brand
         className="vh-brand-logo"
-        style={{ cursor: 'pointer' }}
         onClick={onVizHubClick}
       >
         <LogoSVG height={32} />
@@ -151,21 +150,27 @@ export const Header = ({
             </Nav.Link>
           )}
           {authenticatedUserAvatarURL ? (
-            <Button
+            <div
               onClick={onNotificationsClick}
-              variant="link" // Keeps the style consistent with other navbar elements
-              className="position-relative p-2" // Use Bootstrap's position and padding classes
+              className="vh-notifications-button"
               aria-label="View notifications"
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  onNotificationsClick();
+                }
+              }}
             >
               <NotificationSVG />
               {userHasNotifications ? (
-                <span className="position-absolute top-10 start-80 translate-middle p-1 bg-danger border border-light rounded-circle">
+                <span className="vh-notification-badge">
                   <span className="visually-hidden">
                     New notifications
                   </span>
                 </span>
               ) : null}
-            </Button>
+            </div>
           ) : null}
           {authenticatedUserAvatarURL ? (
             <Dropdown align="end">
@@ -176,9 +181,7 @@ export const Header = ({
               >
                 <img
                   src={authenticatedUserAvatarURL}
-                  width="32"
-                  height="32"
-                  className="rounded-circle"
+                  className="vh-avatar-image"
                 ></img>
               </Dropdown.Toggle>
               <Dropdown.Menu>
