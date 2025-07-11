@@ -8,7 +8,7 @@ import { CREDIT_MARKUP } from 'entities/src/Pricing';
 export const PremiumFeatures = ({}) => (
   <>
     <Feature
-      title="Edit with AI"
+      title="Premium AI"
       id="ai-assisted-coding"
       hasBottomBorder={true}
       startsExpanded={false}

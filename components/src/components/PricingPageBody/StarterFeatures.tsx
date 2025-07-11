@@ -5,6 +5,24 @@ export const StarterFeatures = () => {
   return (
     <>
       <Feature
+        title="Free AI"
+        id="limited-ai-edits"
+        hasBottomBorder={true}
+        startsExpanded={true}
+        learnMoreHref="/features#ai-assisted-coding"
+      >
+        Leverage artificial intelligence to code faster with
+        limited access:
+        <ul className="mt-2">
+          <li>
+            <strong>Get $1 in AI Credits</strong> each month
+          </li>
+          <li>
+            <strong>Limited to low-cost models</strong> only
+          </li>
+        </ul>
+      </Feature>
+      <Feature
         title="Search Public Vizzes"
         id="search"
         hasBottomBorder={true}
@@ -18,22 +36,6 @@ export const StarterFeatures = () => {
         // startsExpanded={true}
       >
         Create your own works right in your browser.
-      </Feature>
-      <Feature
-        title="Edit with AI (limited models)"
-        id="limited-ai-edits"
-        hasBottomBorder={true}
-      >
-        Leverage artificial intelligence to code faster with
-        limited access:
-        <ul className="mt-2">
-          <li>
-            <strong>Get $1 in AI Credits</strong> each month
-          </li>
-          <li>
-            <strong>Limited to low-cost models</strong> only
-          </li>
-        </ul>
       </Feature>
       <Feature
         title="Community Access"
