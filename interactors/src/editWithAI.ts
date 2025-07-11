@@ -31,7 +31,7 @@ import {
 import { VizFiles, VizId } from '@vizhub/viz-types';
 import { generateId } from './generateId';
 
-const DEBUG = false;
+const DEBUG = true;
 const promptTemplateVersion = 1;
 
 // Get the expiring credit balance (pro credits for the current month)
@@ -153,6 +153,10 @@ export const EditWithAI = (gateways: Gateways) => {
             apiKey: process.env.VIZHUB_EDIT_WITH_AI_API_KEY,
             baseURL:
               process.env.VIZHUB_EDIT_WITH_AI_BASE_URL,
+            defaultHeaders: {
+              'HTTP-Referer': 'https://vizhub.com',
+              'X-Title': 'VizHub',
+            },
           },
           streaming: true,
         });
