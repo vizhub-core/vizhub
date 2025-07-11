@@ -9,7 +9,7 @@ import { discordLink } from '../discordLink';
 import { HelpSVG } from '../Icons/HelpSVG';
 import { LogoSVG } from '../Icons/LogoSVG';
 import { SearchBox } from '../SearchBox';
-import NotificationSVG from '../Icons/NotificationSVG';
+import { NotificationSVG } from '../Icons/NotificationSVG';
 import './styles.css';
 
 // Feature flag to enable/disable help icon
