@@ -69,24 +69,14 @@ const RELOAD_AFTER_EDIT_WITH_AI = true;
 
 const modelNameOptions = [
   'anthropic/claude-sonnet-4',
-  'anthropic/claude-3.7-sonnet:thinking',
   'anthropic/claude-3.7-sonnet',
-  'anthropic/claude-3.5-sonnet',
-  'deepseek/deepseek-r1',
-  'deepseek/deepseek-r1-distill-qwen-32b',
   'deepseek/deepseek-chat-v3-0324',
-  'deepseek/deepseek-chat',
-  'google/gemini-2.5-pro-preview-03-25',
-  'google/gemini-2.5-flash-preview:thinking',
-  'google/gemini-2.5-flash-preview',
-  'google/gemini-2.0-flash-001',
+  'google/gemini-2.5-pro',
+  'google/gemini-2.5-flash',
+  'x-ai/grok-3',
+  'x-ai/grok-4',
   'openai/gpt-4.1',
-  'openai/gpt-4o',
-  'openai/o4-mini',
-  'openai/o4-mini-high',
-  'openai/o3-mini-high',
-  'openai/o3-mini',
-  'x-ai/grok-3-beta',
+  'openai/gpt-4o-2024-08-06',
 ];
 
 export const useOnEditWithAI = ({
@@ -107,7 +97,7 @@ export const useOnEditWithAI = ({
   const [isEditingWithAI, setIsEditingWithAI] =
     useState(false);
   const [modelName, setModelName] = useState(
-    'anthropic/claude-3.7-sonnet',
+    modelNameOptions[0],
   );
 
   useEffect(() => {
