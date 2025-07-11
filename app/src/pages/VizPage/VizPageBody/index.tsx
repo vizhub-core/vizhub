@@ -262,11 +262,7 @@ export const VizPageBody = () => {
           authenticatedUser?.plan === PREMIUM ||
           authenticatedUser?.plan === PRO
         }
-        userCanEditWithAI={
-          canUserEditViz &&
-          (authenticatedUser?.plan === PREMIUM ||
-            authenticatedUser?.plan === PRO)
-        }
+        userCanEditWithAI={canUserEditViz}
         exportHref={exportHref}
         onShareClick={toggleShareModal}
         onForkClick={toggleForkModal}
