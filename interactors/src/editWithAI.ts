@@ -26,20 +26,19 @@ import { performAiEdit } from 'editcodewithai';
 import {
   CREDIT_MARKUP,
   PRO_CREDITS_PER_MONTH,
+  FREE_CREDITS_PER_MONTH,
+  PREMIUM_CREDITS_PER_MONTH,
   STARTING_CREDITS,
+  FREE,
+  PREMIUM,
+  PRO,
 } from 'entities/src/Pricing';
 import { VizFiles, VizId } from '@vizhub/viz-types';
 import { generateId } from './generateId';
+import { getExpiringCreditBalance } from 'entities/src/accessors';
 
 const DEBUG = false;
 const promptTemplateVersion = 1;
-
-// Get the expiring credit balance (pro credits for the current month)
-const getExpiringCreditBalance = (user: User): number => {
-  if (user.plan !== 'professional') return 0;
-  const currentMonth = new Date().toISOString().slice(0, 7);
-  return user.proCreditBalanceByMonth?.[currentMonth] || 0;
-};
 
 // Get the non-expiring credit balance (purchased credits)
 const getNonExpiringCreditBalance = (
@@ -83,7 +82,22 @@ export const EditWithAI = (gateways: Gateways) => {
     } = options;
 
     try {
+      DEBUG &&
+        console.log(
+          '[EditWithAI] Starting AI edit process',
+          {
+            id,
+            prompt: prompt.substring(0, 100) + '...',
+            modelName,
+            authenticatedUserId,
+          },
+        );
+
       // Get the info to verify access
+      DEBUG &&
+        console.log(
+          '[EditWithAI] Step 1: Getting viz info for access verification',
+        );
       const infoResult = await getInfo(id);
       if (infoResult.outcome === 'failure') {
         return err(infoResult.error);
@@ -91,6 +105,10 @@ export const EditWithAI = (gateways: Gateways) => {
       const info = infoResult.value.data;
 
       // Verify write access to this viz
+      DEBUG &&
+        console.log(
+          '[EditWithAI] Step 2: Verifying write access to viz',
+        );
       const vizAccessResult = await verifyVizAccess({
         authenticatedUserId,
         info,
@@ -108,6 +126,10 @@ export const EditWithAI = (gateways: Gateways) => {
       }
 
       // Get user and check plan/credits
+      DEBUG &&
+        console.log(
+          '[EditWithAI] Step 3: Getting user data and checking credits',
+        );
       const userResult = await getUser(authenticatedUserId);
       if (userResult.outcome === 'failure') {
         return err(userResult.error);
@@ -121,6 +143,13 @@ export const EditWithAI = (gateways: Gateways) => {
       const totalCreditBalance =
         expiringCreditBalance + nonExpiringCreditBalance;
 
+      DEBUG &&
+        console.log('[EditWithAI] Credit balance check', {
+          expiringCreditBalance,
+          nonExpiringCreditBalance,
+          totalCreditBalance,
+        });
+
       if (totalCreditBalance === 0) {
         return err(
           creditsNeededError(
@@ -130,9 +159,17 @@ export const EditWithAI = (gateways: Gateways) => {
       }
 
       // Get existing files
+      DEBUG &&
+        console.log(
+          '[EditWithAI] Step 4: Getting existing files from ShareDB doc',
+        );
       const files: VizFiles = shareDBDoc.data.files;
 
       // Define LLM function
+      DEBUG &&
+        console.log(
+          '[EditWithAI] Step 5: Setting up LLM function and streaming parser',
+        );
       const llmFunction = async (fullPrompt: string) => {
         const chatModel = new ChatOpenAI({
           modelName:
@@ -236,12 +273,21 @@ export const EditWithAI = (gateways: Gateways) => {
       };
 
       // Perform AI edit
+      DEBUG &&
+        console.log(
+          '[EditWithAI] Step 6: Performing AI edit with LLM',
+        );
       const editResult = await performAiEdit({
         prompt,
         files,
         llmFunction,
         apiKey: process.env.VIZHUB_EDIT_WITH_AI_API_KEY,
       });
+
+      DEBUG &&
+        console.log(
+          '[EditWithAI] Step 7: AI edit completed, clearing scratchpad',
+        );
 
       // Clear the scratchpad.
       shareDBDoc.submitOp(
@@ -253,9 +299,17 @@ export const EditWithAI = (gateways: Gateways) => {
       );
 
       // Commit any current changes before AI edit
+      DEBUG &&
+        console.log(
+          '[EditWithAI] Step 8: Committing any existing changes before applying AI edits',
+        );
       await commitViz(id);
 
       // Apply AI edits
+      DEBUG &&
+        console.log(
+          '[EditWithAI] Step 9: Applying AI edits to ShareDB doc',
+        );
       const op1 = diff(shareDBDoc.data, {
         ...shareDBDoc.data,
         files: editResult.changedFiles,
@@ -278,6 +332,10 @@ export const EditWithAI = (gateways: Gateways) => {
 
       // Fetch the Info doc again, just in case
       // anything changed during AI generation.
+      DEBUG &&
+        console.log(
+          '[EditWithAI] Step 10: Fetching latest info doc and marking as uncommitted',
+        );
       const latestInfoResult = await getInfo(id);
       if (latestInfoResult.outcome === 'failure') {
         return err(latestInfoResult.error);
@@ -306,12 +364,20 @@ export const EditWithAI = (gateways: Gateways) => {
       await saveInfo(newInfo);
 
       // Create new commit
+      DEBUG &&
+        console.log(
+          '[EditWithAI] Step 11: Creating new commit with AI changes',
+        );
       const commitVizResult = await commitViz(id);
       if (commitVizResult.outcome === 'failure') {
         return err(commitVizResult.error);
       }
 
       // Process costs and credits
+      DEBUG &&
+        console.log(
+          '[EditWithAI] Step 12: Processing costs and updating user credits',
+        );
       const {
         upstreamCostCents,
         provider,
@@ -322,6 +388,14 @@ export const EditWithAI = (gateways: Gateways) => {
       const userCostCents = Math.ceil(
         upstreamCostCents * CREDIT_MARKUP,
       );
+
+      DEBUG &&
+        console.log('[EditWithAI] Cost calculation', {
+          upstreamCostCents,
+          userCostCents,
+          inputTokens,
+          outputTokens,
+        });
 
       let updatedCreditBalance: number;
       await lock(
@@ -345,6 +419,10 @@ export const EditWithAI = (gateways: Gateways) => {
       );
 
       // Save metadata
+      DEBUG &&
+        console.log(
+          '[EditWithAI] Step 13: Saving AI edit metadata',
+        );
       const aiEditMetadata: AIEditMetadata = {
         id: generateId(),
         openRouterGenerationId:
@@ -367,6 +445,12 @@ export const EditWithAI = (gateways: Gateways) => {
       };
 
       await saveAIEditMetadata(aiEditMetadata);
+
+      DEBUG &&
+        console.log(
+          '[EditWithAI] Step 14: AI edit process completed successfully',
+          { updatedCreditBalance },
+        );
 
       return ok({
         success: true,
@@ -391,27 +475,85 @@ async function updateUserCredits(
 ) {
   const currentMonth = new Date().toISOString().slice(0, 7);
 
+  // Initialize credit balance objects if they don't exist
+  if (!user.freeCreditBalanceByMonth) {
+    user.freeCreditBalanceByMonth = {};
+  }
+  if (!user.premiumCreditBalanceByMonth) {
+    user.premiumCreditBalanceByMonth = {};
+  }
   if (!user.proCreditBalanceByMonth) {
     user.proCreditBalanceByMonth = {};
   }
 
+  // Set up monthly credits for each plan type if not already set
   if (
-    user.plan === 'professional' &&
+    user.plan === FREE &&
+    user.freeCreditBalanceByMonth[currentMonth] ===
+      undefined
+  ) {
+    user.freeCreditBalanceByMonth[currentMonth] =
+      FREE_CREDITS_PER_MONTH;
+  }
+
+  if (
+    user.plan === PREMIUM &&
+    user.premiumCreditBalanceByMonth[currentMonth] ===
+      undefined
+  ) {
+    user.premiumCreditBalanceByMonth[currentMonth] =
+      PREMIUM_CREDITS_PER_MONTH;
+  }
+
+  if (
+    user.plan === PRO &&
     user.proCreditBalanceByMonth[currentMonth] === undefined
   ) {
     user.proCreditBalanceByMonth[currentMonth] =
       PRO_CREDITS_PER_MONTH;
   }
 
+  // Deduct credits from expiring balance first, then from non-expiring balance
   if (expiringCreditBalance > 0) {
     if (expiringCreditBalance >= userCostCents) {
-      user.proCreditBalanceByMonth[currentMonth] =
-        (user.proCreditBalanceByMonth[currentMonth] || 0) -
-        userCostCents;
+      // Deduct from the appropriate plan's monthly credits
+      switch (user.plan) {
+        case FREE:
+          user.freeCreditBalanceByMonth[currentMonth] =
+            (user.freeCreditBalanceByMonth[currentMonth] ||
+              0) - userCostCents;
+          break;
+        case PREMIUM:
+          user.premiumCreditBalanceByMonth[currentMonth] =
+            (user.premiumCreditBalanceByMonth[
+              currentMonth
+            ] || 0) - userCostCents;
+          break;
+        case PRO:
+          user.proCreditBalanceByMonth[currentMonth] =
+            (user.proCreditBalanceByMonth[currentMonth] ||
+              0) - userCostCents;
+          break;
+      }
     } else {
       const remainingUserCostCents =
         userCostCents - expiringCreditBalance;
-      user.proCreditBalanceByMonth[currentMonth] = 0;
+
+      // Zero out the monthly credits for the current plan
+      switch (user.plan) {
+        case FREE:
+          user.freeCreditBalanceByMonth[currentMonth] = 0;
+          break;
+        case PREMIUM:
+          user.premiumCreditBalanceByMonth[currentMonth] =
+            0;
+          break;
+        case PRO:
+          user.proCreditBalanceByMonth[currentMonth] = 0;
+          break;
+      }
+
+      // Deduct remaining from non-expiring balance
       user.creditBalance -= remainingUserCostCents;
     }
   } else {
