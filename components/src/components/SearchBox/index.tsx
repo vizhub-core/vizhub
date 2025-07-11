@@ -60,17 +60,6 @@ export const SearchBox = ({
           value={searchQuery}
           onChange={handleInputChange}
         />
-        {searchQuery && (
-          <Button
-            variant="link"
-            className="clear-button"
-            onClick={handleClear}
-            type="button"
-            aria-label="Clear search"
-          >
-            ×
-          </Button>
-        )}
       </InputGroup>
     </Form>
   );

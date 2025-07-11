@@ -11,7 +11,7 @@
   border-radius: 20px;
   overflow: hidden;
   transition: all 0.2s ease;
-  
+
   &:focus-within {
     box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
   }
@@ -37,11 +37,11 @@
   color: white !important;
   border-radius: 20px !important;
   height: 38px;
-  
+
   &::placeholder {
-    color: rgba(255, 255, 255, 0.6);
+    color: rgba(255, 255, 255, 0.6) !important;
   }
-  
+
   &:focus {
     background-color: rgba(255, 255, 255, 0.15) !important;
     border-color: rgba(255, 255, 255, 0.3) !important;
@@ -59,7 +59,7 @@
   font-size: 1.5rem;
   line-height: 1;
   padding: 0 0.5rem !important;
-  
+
   &:hover {
     color: white !important;
   }
@@ -81,15 +81,15 @@
   padding: 0 !important;
   background-color: transparent;
   border-color: transparent;
-  
+
   &:hover:not(:disabled) {
     background-color: rgba(255, 255, 255, 0.2);
   }
-  
+
   &:disabled {
     opacity: 0.5;
   }
-  
+
   svg {
     width: 16px;
     height: 16px;

@@ -9,8 +9,6 @@ import { discordLink } from '../discordLink';
 import { HelpSVG } from '../Icons/HelpSVG';
 import { LogoSVG } from '../Icons/LogoSVG';
 import { SearchBox } from '../SearchBox';
-import { NotificationSVG } from '../Icons/NotificationSVG';
-import { SearchSVG } from '../Icons/sam/SearchSVG';
 
 import './styles.css';
 
