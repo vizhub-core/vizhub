@@ -46,20 +46,44 @@ export const SearchBox = ({
   }, []);
 
   return (
-    <Form className="search-form" onSubmit={handleSubmit}>
-      <InputGroup className="search-box-container">
-        <div className="search-icon-wrapper">
+    <Form
+      className="w-100"
+      style={{ maxWidth: '400px' }}
+      onSubmit={handleSubmit}
+    >
+      <InputGroup className="position-relative rounded-pill">
+        <span
+          className="position-absolute top-50 start-0 translate-middle-y ps-3 text-white-50"
+          style={{ zIndex: 5, pointerEvents: 'none' }}
+        >
           <SearchSVG />
-        </div>
+        </span>
         <FormControl
           ref={inputRef}
-          className="thin-border-search-box no-glow"
+          className="rounded-pill border-light bg-white bg-opacity-10 text-white ps-5"
+          style={{
+            height: '38px',
+            border: '1px solid rgba(255, 255, 255, 0.2)',
+            boxShadow: 'none',
+            paddingRight: searchQuery ? '3rem' : '1rem',
+          }}
           aria-label="Search"
           type="search"
           placeholder="Search visualizations..."
           value={searchQuery}
           onChange={handleInputChange}
         />
+        {searchQuery && (
+          <Button
+            variant="link"
+            className="position-absolute top-50 end-0 translate-middle-y text-white-50 p-0 me-3 clear-button"
+            style={{ zIndex: 5 }}
+            onClick={handleClear}
+            aria-label="Clear search"
+          >
+            ×
+          </Button>
+        )}
       </InputGroup>
     </Form>
   );
