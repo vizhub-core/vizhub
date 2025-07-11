@@ -9,6 +9,7 @@ import { discordLink } from '../discordLink';
 import { HelpSVG } from '../Icons/HelpSVG';
 import { LogoSVG } from '../Icons/LogoSVG';
 import { SearchBox } from '../SearchBox';
+import NotificationSVG from '../Icons/NotificationSVG';
 import './styles.css';
 
 // Feature flag to enable/disable help icon
@@ -68,30 +69,22 @@ export const Header = ({
 
           {/* <Nav.Link href={discordLink}>Discord</Nav.Link> */}
           {authenticatedUserAvatarURL ? (
-            <Button onClick={onNotificationsClick}>
-              Notifications
+            <Button
+              onClick={onNotificationsClick}
+              variant="light" // Keeps the style consistent with other navbar elements
+              className="position-relative p-2" // Use Bootstrap's position and padding classes
+              aria-label="View notifications"
+            >
+              <NotificationSVG />
               {userHasNotifications ? (
-                <svg
-                  width={10}
-                  height={20}
-                  viewBox="0 0 100 250"
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="notificaton-indicator"
-                >
-                  <circle
-                    cx="50"
-                    cy="50"
-                    r="50"
-                    fill="#ADD8E6"
-                  />
-                </svg>
-              ) : (
-                <></>
-              )}
+                <span className="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
+                  <span className="visually-hidden">
+                    New notifications
+                  </span>
+                </span>
+              ) : null}
             </Button>
-          ) : (
-            <></>
-          )}
+          ) : null}
 
           {enableResources && (
             <Dropdown align="end">
