@@ -1,6 +1,12 @@
-import { useCallback, useState } from 'react';
-import { Button, Form, FormControl } from '../bootstrap';
+import { useCallback, useState, useRef } from 'react';
+import {
+  Button,
+  Form,
+  FormControl,
+  InputGroup,
+} from '../bootstrap';
 import { SearchSVG } from '../Icons/sam/SearchSVG';
+import './styles.scss';
 
 export const SearchBox = ({
   initialSearchQuery,
@@ -11,6 +17,7 @@ export const SearchBox = ({
   const [searchQuery, setSearchQuery] = useState(
     initialSearchQuery || '',
   );
+  const inputRef = useRef<HTMLInputElement>(null);
 
   // Handler to update state with input changes
   const handleInputChange = (
@@ -23,25 +30,48 @@ export const SearchBox = ({
   const handleSubmit = useCallback(
     (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
-      window.location.href = `/search?query=${encodeURIComponent(searchQuery)}`;
+      if (searchQuery.trim()) {
+        window.location.href = `/search?query=${encodeURIComponent(searchQuery.trim())}`;
+      }
     },
     [searchQuery],
   );
 
-  return (
-    <Form className="d-flex" onSubmit={handleSubmit}>
-      <FormControl
-        className="form-control thin-border-search-box no-glow"
-        aria-label="Search"
-        type="search"
-        placeholder="Search"
-        value={searchQuery} // Bind input value to state
-        onChange={handleInputChange} // Update state on input change
-      />
+  // Clear the search input
+  const handleClear = useCallback(() => {
+    setSearchQuery('');
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
 
-      <Button variant="link" type="submit">
-        <SearchSVG />
-      </Button>
+  return (
+    <Form className="search-form" onSubmit={handleSubmit}>
+      <InputGroup className="search-box-container">
+        <div className="search-icon-wrapper">
+          <SearchSVG />
+        </div>
+        <FormControl
+          ref={inputRef}
+          className="thin-border-search-box no-glow"
+          aria-label="Search"
+          type="search"
+          placeholder="Search visualizations..."
+          value={searchQuery}
+          onChange={handleInputChange}
+        />
+        {searchQuery && (
+          <Button
+            variant="link"
+            className="clear-button"
+            onClick={handleClear}
+            type="button"
+            aria-label="Clear search"
+          >
+            ×
+          </Button>
+        )}
+      </InputGroup>
     </Form>
   );
 };

@@ -1,0 +1,104 @@
+/* Search form container */
+.search-form {
+  width: 100%;
+  max-width: 400px;
+}
+
+/* The container for the search box and icon */
+.search-box-container {
+  position: relative;
+  width: 100%;
+  border-radius: 20px;
+  overflow: hidden;
+  transition: all 0.2s ease;
+  
+  &:focus-within {
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+  }
+}
+
+/* Wrapper to position the icon */
+.search-icon-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 0.75rem;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: rgba(255, 255, 255, 0.8);
+  z-index: 5;
+}
+
+/* Add padding to your existing search box class to make space for the icon */
+.thin-border-search-box {
+  padding-left: 2.5rem !important;
+  padding-right: 2.5rem !important;
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  color: white !important;
+  border-radius: 20px !important;
+  height: 38px;
+  
+  &::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+  }
+  
+  &:focus {
+    background-color: rgba(255, 255, 255, 0.15) !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+  }
+}
+
+/* Clear button styling */
+.clear-button {
+  position: absolute;
+  right: 3.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 5;
+  color: rgba(255, 255, 255, 0.7) !important;
+  font-size: 1.5rem;
+  line-height: 1;
+  padding: 0 0.5rem !important;
+  
+  &:hover {
+    color: white !important;
+  }
+}
+
+/* Search button styling */
+.search-button {
+  position: absolute;
+  right: 0.25rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 5;
+  border-radius: 50% !important;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 !important;
+  background-color: transparent;
+  border-color: transparent;
+  
+  &:hover:not(:disabled) {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+  
+  &:disabled {
+    opacity: 0.5;
+  }
+  
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+/* Media queries for responsive design */
+@media (max-width: 768px) {
+  .search-form {
+    max-width: 100%;
+  }
+}
