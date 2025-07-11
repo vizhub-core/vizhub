@@ -39,10 +39,6 @@
     box-shadow: none;
   }
 
-  .dropdown {
-    padding-left: 12px;
-  }
-
   .dropdown-toggle::after {
     display: inline-block;
     margin-left: 8px;
@@ -59,5 +55,34 @@
     &:focus {
       border-color: white;
     }
+  }
+
+  .vh-brand-logo {
+    cursor: pointer;
+  }
+
+  .vh-notifications-button {
+    position: relative;
+    padding: 0.5rem;
+    cursor: pointer;
+    color: white;
+    opacity: 0.9;
+  }
+
+  .vh-notification-badge {
+    position: absolute;
+    top: 30%;
+    left: 65%;
+    transform: translate(-50%, -50%);
+    padding: 0.3rem;
+    background-color: var(--bs-primary);
+    border: 1px solid white;
+    border-radius: 50%;
+  }
+
+  .vh-avatar-image {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
   }
 }
