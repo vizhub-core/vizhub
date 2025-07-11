@@ -20,6 +20,13 @@ export const StarterFeatures = () => {
         Create your own works right in your browser.
       </Feature>
       <Feature
+        title="Edit with AI (limited models)"
+        id="limited-ai-edits"
+        hasBottomBorder={true}
+      >
+        Only low-cost models are enabled.
+      </Feature>
+      <Feature
         title="Community Access"
         id="community-access"
         hasBottomBorder={true}

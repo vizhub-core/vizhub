@@ -18,8 +18,13 @@ export const PremiumFeatures = ({}) => (
       it works:
       <ul className="mt-2">
         <li>
-          <strong>Get $2 in AI Credits</strong> with VizHub
-          Premium (once at signup)
+          "Edit with AI" performs holistic code
+          modifications across multiple files based on your
+          prompt.
+        </li>
+        <li>
+          <strong>Get $2 in AI Credits</strong> once at
+          signup
         </li>
         <li>
           <strong>Top up any time</strong> when you need
@@ -36,17 +41,6 @@ export const PremiumFeatures = ({}) => (
         <li>
           Each request cost is{' '}
           <strong>rounded up to the nearest cent</strong>
-        </li>
-        <li>
-          "Edit with AI" uses{' '}
-          <strong>Claude 3.7 Sonnet</strong>
-        </li>
-        <li>
-          AI Completions (ghost text) use{' '}
-          <strong>Gemini Flash 2.0</strong>
-        </li>
-        <li>
-          AI Completions are free: no AI credits deducted
         </li>
       </ul>
     </Feature>
