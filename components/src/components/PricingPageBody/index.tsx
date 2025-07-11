@@ -145,15 +145,10 @@ export const PricingPageBody = ({
       highlightedFeature={highlightedFeature}
     >
       <div className="vh-page vh-pricing-page">
-        <img
-          className="header-background"
-          src={headerBackgroundSrc}
-          alt="header"
-        />
         <div className="pricing-page-body">
           <div className="pricing-page-content">
             <div className="pricing-page-header">
-              <h1>VizHub Plans</h1>
+              <h1>Choose a Plan</h1>
 
               <ButtonGroup aria-label="Billing Cadences">
                 <Button
