@@ -68,23 +68,7 @@ export const Header = ({
           {/* <Nav.Link href="/features">Features</Nav.Link> */}
 
           {/* <Nav.Link href={discordLink}>Discord</Nav.Link> */}
-          {authenticatedUserAvatarURL ? (
-            <Button
-              onClick={onNotificationsClick}
-              variant="link" // Keeps the style consistent with other navbar elements
-              className="position-relative p-2" // Use Bootstrap's position and padding classes
-              aria-label="View notifications"
-            >
-              <NotificationSVG />
-              {userHasNotifications ? (
-                <span className="position-absolute top-10 start-80 translate-middle p-1 bg-danger border border-light rounded-circle">
-                  <span className="visually-hidden">
-                    New notifications
-                  </span>
-                </span>
-              ) : null}
-            </Button>
-          ) : null}
+
           {enableResources && (
             <Dropdown align="end">
               <Dropdown.Toggle
@@ -166,7 +150,23 @@ export const Header = ({
               <HelpSVG />
             </Nav.Link>
           )}
-
+          {authenticatedUserAvatarURL ? (
+            <Button
+              onClick={onNotificationsClick}
+              variant="link" // Keeps the style consistent with other navbar elements
+              className="position-relative p-2" // Use Bootstrap's position and padding classes
+              aria-label="View notifications"
+            >
+              <NotificationSVG />
+              {userHasNotifications ? (
+                <span className="position-absolute top-10 start-80 translate-middle p-1 bg-danger border border-light rounded-circle">
+                  <span className="visually-hidden">
+                    New notifications
+                  </span>
+                </span>
+              ) : null}
+            </Button>
+          ) : null}
           {authenticatedUserAvatarURL ? (
             <Dropdown align="end">
               <Dropdown.Toggle
