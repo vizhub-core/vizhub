@@ -22,6 +22,8 @@
   },
   "homepage": "https://github.com/vizhub-core/vizhub3#readme",
   "dependencies": {
+    "@langchain/core": "^0.3.62",
+    "@langchain/openai": "^0.5.18",
     "@vizhub/viz-types": "^0.1.0",
     "@vizhub/viz-utils": "^1.1.0",
     "code-red": "^1.0.4",

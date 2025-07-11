@@ -141,7 +141,7 @@ export const useOnEditWithAI = ({
           //     ]
           //   }
           // ]
-          if (op[0] === 'aiScratchpad') {
+          if (op && op[0] === 'aiScratchpad') {
             if (op[1].es) {
               // Update the streaming display with the new content
               updateStreamingDisplay(
