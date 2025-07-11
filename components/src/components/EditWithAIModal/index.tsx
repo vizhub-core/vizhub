@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import { useSpeechRecognition } from './useSpeechRecognition';
 import { Modal, Form, Button } from '../bootstrap';
-import { Plan, PREMIUM, PRO, UserId } from 'entities';
+import { FREE, Plan, PREMIUM, PRO, UserId } from 'entities';
 import { VizKit } from 'api/src/VizKit';
 import { Mic, MicOff } from 'lucide-react';
 
@@ -20,6 +20,7 @@ export const EditWithAIModal = ({
   modelName,
   setModelName,
   modelNameOptions,
+  modelNameOptionsFree,
 }: {
   show: boolean;
   onClose: () => void;
@@ -30,6 +31,7 @@ export const EditWithAIModal = ({
   modelName: string;
   setModelName: (modelName: string) => void;
   modelNameOptions: string[];
+  modelNameOptionsFree?: string[];
 }) => {
   const [prompt, setPrompt] = useState<string>('');
   const [showUsage, setShowUsage] =
@@ -166,18 +168,20 @@ export const EditWithAIModal = ({
   const isPremiumOrPro =
     currentPlan === PREMIUM || currentPlan === PRO;
 
+  const isFreePlan = currentPlan === FREE;
+
   return (
     <Modal show={show} onHide={onClose} centered>
       <Modal.Header closeButton>
         <Modal.Title>Edit with AI</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {isPremiumOrPro && creditBalance === 0 ? (
+        {creditBalance === 0 ? (
           <p>
             You need to top up your AI credit balance to use
             AI-powered editing features.
           </p>
-        ) : isPremiumOrPro ? (
+        ) : (
           <>
             <Form.Group className="mb-3" controlId="prompt">
               <div className="d-flex align-items-center justify-content-between mb-2">
@@ -221,20 +225,26 @@ export const EditWithAIModal = ({
                 aria-label="Select AI model"
               >
                 {modelNameOptions.map((option) => (
-                  <option key={option} value={option}>
+                  <option
+                    key={option}
+                    value={option}
+                    disabled={
+                      isFreePlan &&
+                      !modelNameOptionsFree.includes(option)
+                    }
+                  >
                     {option}
                   </option>
                 ))}
               </Form.Select>
+              {isFreePlan && (
+                <Form.Text className="text-muted mt-2">
+                  <a href="/pricing">Upgrade</a> to access
+                  all models.
+                </Form.Text>
+              )}
             </Form.Group>
           </>
-        ) : (
-          <p>
-            AI-powered code editing is available with VizHub
-            Premium. Upgrade now for only $1.99/mo or
-            $19.99/year to unlock AI assistance and many
-            other features.
-          </p>
         )}
       </Modal.Body>
       <Modal.Footer>
@@ -261,7 +271,7 @@ export const EditWithAIModal = ({
               </Button>
             </div>
           </div>
-        ) : isPremiumOrPro ? (
+        ) : (
           <div className="d-flex justify-content-between align-items-center flex-grow-1">
             <AICreditBalanceText
               creditBalance={creditBalance}
@@ -281,15 +291,6 @@ export const EditWithAIModal = ({
               </Button>
             </div>
           </div>
-        ) : (
-          <Button
-            variant="primary"
-            href={`/pricing?feature=ai-editing`}
-            target="_blank"
-            rel="noreferrer"
-          >
-            Upgrade Now
-          </Button>
         )}
         <Usage
           showUsage={showUsage}
