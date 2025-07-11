@@ -360,12 +360,12 @@ export const PricingPageBody = ({
               )}
             </div>
 
-            <div className="mt-16 text-center">
-              <p className="text-gray-600">
+            <div className="mt-5 text-center">
+              <p className="text-muted">
                 Need a custom plan?{' '}
                 <a
                   href="mailto: contact@vizhub.com"
-                  className="font-semibold text-blue-600 hover:text-blue-700"
+                  className="fw-semibold text-primary"
                 >
                   Contact our sales team
                 </a>
