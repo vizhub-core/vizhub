@@ -28,7 +28,11 @@ import { useOnTrashViz } from './useOnTrashViz';
 import { useValidateSlug } from './useValidateSlug';
 import { VizPageContext } from './VizPageContext';
 import { STARTING_CREDITS } from 'entities/src/Pricing';
-import { getCreditBalance } from 'entities/src/accessors';
+import {
+  getCreditBalance,
+  getExpiringCreditBalance,
+  getNonExpiringCreditBalance,
+} from 'entities/src/accessors';
 
 export const VizPageModals = () => {
   const {
@@ -293,9 +297,7 @@ export const VizPageModals = () => {
           onClose={toggleEditWithAIModal}
           currentPlan={authenticatedUser?.plan || FREE}
           onSubmit={onEditWithAI}
-          creditBalance={getCreditBalance(
-            authenticatedUser,
-          )}
+          authenticatedUser={authenticatedUser}
           userId={authenticatedUser?.id}
           modelName={modelName}
           setModelName={setModelName}
