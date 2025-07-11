@@ -31,7 +31,7 @@ import {
 import { VizFiles, VizId } from '@vizhub/viz-types';
 import { generateId } from './generateId';
 
-const DEBUG = true;
+const DEBUG = false;
 const promptTemplateVersion = 1;
 
 // Get the expiring credit balance (pro credits for the current month)
@@ -114,17 +114,6 @@ export const EditWithAI = (gateways: Gateways) => {
       }
       const user = userResult.value.data;
 
-      if (
-        user.plan !== 'premium' &&
-        user.plan !== 'professional'
-      ) {
-        return err(
-          accessDeniedError(
-            'Only Premium users can use AI Assist',
-          ),
-        );
-      }
-
       const expiringCreditBalance =
         getExpiringCreditBalance(user);
       const nonExpiringCreditBalance =
@@ -174,6 +163,16 @@ export const EditWithAI = (gateways: Gateways) => {
               console.log(
                 `File changed to: ${fileName} (${format})`,
               );
+            const op = diff(shareDBDoc.data, {
+              ...shareDBDoc.data,
+              aiStatus: 'Editing ' + fileName,
+            });
+            DEBUG &&
+              console.log(
+                'Submitting op:',
+                JSON.stringify(op),
+              );
+            shareDBDoc.submitOp(op);
           },
           // Append the line to the current file's content
           onCodeLine: (line) => {
@@ -194,6 +193,7 @@ export const EditWithAI = (gateways: Gateways) => {
         const op = diff(shareDBDoc.data, {
           ...shareDBDoc.data,
           aiScratchpad: '',
+          aiStatus: 'Editing with AI...',
         });
         DEBUG &&
           console.log('Submitting op:', JSON.stringify(op));
@@ -207,7 +207,8 @@ export const EditWithAI = (gateways: Gateways) => {
             const chunkContent = String(chunk.content);
             fullContent += chunkContent;
 
-            // TODO consider why this would lead to an op-related bug
+            // TODO don't allow multiple parallel AI edits
+            // to even happen at the same time.
             shareDBDoc.submitOp(
               diff(shareDBDoc.data, {
                 ...shareDBDoc.data,
@@ -247,6 +248,7 @@ export const EditWithAI = (gateways: Gateways) => {
         diff(shareDBDoc.data, {
           ...shareDBDoc.data,
           aiScratchpad: undefined,
+          aiStatus: 'Done editing with AI.',
         }),
       );
 
