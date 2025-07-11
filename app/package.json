@@ -28,10 +28,8 @@
   },
   "homepage": "https://github.com/vizhub-core/vizhub3#readme",
   "dependencies": {
-    "@langchain/core": "^0.3.62",
-    "@langchain/openai": "^0.5.18",
     "@rollup/browser": "^4.44.2",
-    "@sentry/node": "^9.37.0",
+    "@sentry/node": "^9.38.0",
     "@tailwindcss/vite": "^4.1.11",
     "@teamwork/websocket-json-stream": "^2.0.0",
     "@types/react-router-dom": "^5.3.3",

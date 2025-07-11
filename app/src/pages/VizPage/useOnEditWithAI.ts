@@ -6,7 +6,7 @@ import { ShareDBDoc } from 'vzcode';
 
 const DEBUG = false;
 
-const initialText = 'Kicking off AI generation...';
+const initialText = 'Editing with AI...';
 
 // Create a streaming display element
 const createStreamingDisplay = () => {
@@ -65,28 +65,18 @@ const LOCAL_STORAGE_MODEL_KEY =
 // TODO refactor things so we don't need to do a hard reload here
 //  - Trigger a full run of the code
 //  - Dynamically fetch the latest revision history
-const RELOAD_AFTER_EDIT_WITH_AI = true;
+const RELOAD_AFTER_EDIT_WITH_AI = false;
 
 const modelNameOptions = [
   'anthropic/claude-sonnet-4',
-  'anthropic/claude-3.7-sonnet:thinking',
   'anthropic/claude-3.7-sonnet',
-  'anthropic/claude-3.5-sonnet',
-  'deepseek/deepseek-r1',
-  'deepseek/deepseek-r1-distill-qwen-32b',
   'deepseek/deepseek-chat-v3-0324',
-  'deepseek/deepseek-chat',
-  'google/gemini-2.5-pro-preview-03-25',
-  'google/gemini-2.5-flash-preview:thinking',
-  'google/gemini-2.5-flash-preview',
-  'google/gemini-2.0-flash-001',
+  'google/gemini-2.5-pro',
+  'google/gemini-2.5-flash',
+  'x-ai/grok-3',
+  'x-ai/grok-4',
   'openai/gpt-4.1',
-  'openai/gpt-4o',
-  'openai/o4-mini',
-  'openai/o4-mini-high',
-  'openai/o3-mini-high',
-  'openai/o3-mini',
-  'x-ai/grok-3-beta',
+  'openai/gpt-4o-2024-08-06',
 ];
 
 export const useOnEditWithAI = ({
@@ -107,7 +97,7 @@ export const useOnEditWithAI = ({
   const [isEditingWithAI, setIsEditingWithAI] =
     useState(false);
   const [modelName, setModelName] = useState(
-    'anthropic/claude-3.7-sonnet',
+    modelNameOptions[0],
   );
 
   useEffect(() => {
@@ -142,16 +132,7 @@ export const useOnEditWithAI = ({
         contentShareDBDoc.on('op', (op: any) => {
           // console.log('op', JSON.stringify(op, null, 2));
 
-          // useOnEditWithAI.ts:125 op [
-          //   "aiScratchpad",
-          //   {
-          //     "es": [
-          //       361,
-          //       "  const width = container.clientWidth;\n  const height = container.clientHeight;\n\n  const svg = select(container)\n    .selectAll('svg')\n    .data([1])\n    .join('svg')\n"
-          //     ]
-          //   }
-          // ]
-          if (op[0] === 'aiScratchpad') {
+          if (op && op[0] === 'aiScratchpad') {
             if (op[1].es) {
               // Update the streaming display with the new content
               updateStreamingDisplay(
@@ -172,13 +153,6 @@ export const useOnEditWithAI = ({
               }
             }
           }
-          // // Handle the op event here
-          // const newContent = contentShareDBDoc.data;
-          // // Update the streaming display with the new content
-          // updateStreamingDisplay(
-          //   streamingDisplay,
-          //   JSON.stringify(newContent, null, 2),
-          // );
         });
       }
 
@@ -188,12 +162,16 @@ export const useOnEditWithAI = ({
       // Handle non-streaming case (fallback)
       if (editWithAIResult.outcome === 'success') {
         setIsEditingWithAI(false);
-        updateStreamingDisplay(
-          streamingDisplay,
-          // @ts-ignore
-          contentShareDBDoc.data.aiScratchpad +
-            '\n\nAI generation complete. Reloading...',
-        );
+
+        // Delete the streaming display
+        if (
+          streamingDisplay &&
+          streamingDisplay.parentNode
+        ) {
+          streamingDisplay.parentNode.removeChild(
+            streamingDisplay,
+          );
+        }
       }
 
       if (editWithAIResult.outcome === 'failure') {

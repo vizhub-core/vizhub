@@ -218,7 +218,7 @@ export const VizPageModals = () => {
           onClose={toggleForkModal}
           onFork={onFork}
           currentPlan={authenticatedUser?.plan}
-          commitId={commitMetadata.id}
+          commitId={commitMetadata?.id}
         />
       )}
       {showSettingsModal && (
