@@ -2,23 +2,31 @@ import { formatCreditBalance } from 'entities/src/accessors';
 import { useCallback, useMemo } from 'react';
 
 export const AICreditBalanceText = ({
-  creditBalance,
+  expiringCreditBalance,
+  nonExpiringCreditBalance,
   showTopUpText,
   onTopUpClick,
   showUsageText,
   onUsageClick,
   showUsage,
 }: {
-  creditBalance?: number;
+  expiringCreditBalance?: number;
+  nonExpiringCreditBalance?: number;
   showTopUpText?: boolean;
   onTopUpClick?: () => void;
   showUsageText?: boolean;
   onUsageClick?: () => void;
   showUsage?: boolean;
 }) => {
-  const formattedCreditBalance = useMemo(
-    () => formatCreditBalance(creditBalance),
-    [creditBalance],
+  const formattedExpiringCreditBalance = useMemo(
+    () => formatCreditBalance(expiringCreditBalance || 0),
+    [expiringCreditBalance],
+  );
+
+  const formattedNonExpiringCreditBalance = useMemo(
+    () =>
+      formatCreditBalance(nonExpiringCreditBalance || 0),
+    [nonExpiringCreditBalance],
   );
 
   const handleTopUpClick = useCallback(
@@ -40,8 +48,14 @@ export const AICreditBalanceText = ({
   return (
     <div className="d-flex flex-column">
       <div className="text-muted form-text">
-        AI Credit Balance: {formattedCreditBalance}
+        Monthly Credits: {formattedExpiringCreditBalance}
       </div>
+      {(nonExpiringCreditBalance || 0) > 0 && (
+        <div className="text-muted form-text">
+          Purchased Credits:{' '}
+          {formattedNonExpiringCreditBalance}
+        </div>
+      )}
       <div className="d-flex">
         {showTopUpText && (
           <div

@@ -4,6 +4,10 @@ import { Modal, Form, Button } from '../bootstrap';
 import { FREE, Plan, PREMIUM, PRO, UserId } from 'entities';
 import { VizKit } from 'api/src/VizKit';
 import { Mic, MicOff } from 'lucide-react';
+import {
+  getExpiringCreditBalance,
+  getNonExpiringCreditBalance,
+} from 'entities/src/accessors';
 
 import { AICreditBalanceText } from './AICreditBalanceText';
 import { Usage, UsageEntry } from './Usage';
@@ -14,7 +18,7 @@ export const EditWithAIModal = ({
   show,
   onClose,
   onSubmit,
-  creditBalance,
+  authenticatedUser,
   currentPlan,
   userId,
   modelName,
@@ -25,7 +29,7 @@ export const EditWithAIModal = ({
   show: boolean;
   onClose: () => void;
   onSubmit: (prompt: string) => void;
-  creditBalance?: number;
+  authenticatedUser?: any;
   currentPlan: Plan;
   userId?: UserId;
   modelName: string;
@@ -170,13 +174,21 @@ export const EditWithAIModal = ({
 
   const isFreePlan = currentPlan === FREE;
 
+  const expiringCreditBalance = getExpiringCreditBalance(
+    authenticatedUser,
+  );
+  const nonExpiringCreditBalance =
+    getNonExpiringCreditBalance(authenticatedUser);
+  const totalCreditBalance =
+    expiringCreditBalance + nonExpiringCreditBalance;
+
   return (
     <Modal show={show} onHide={onClose} centered>
       <Modal.Header closeButton>
         <Modal.Title>Edit with AI</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {creditBalance === 0 ? (
+        {totalCreditBalance === 0 ? (
           <p>
             You need to top up your AI credit balance to use
             AI-powered editing features.
@@ -248,10 +260,13 @@ export const EditWithAIModal = ({
         )}
       </Modal.Body>
       <Modal.Footer>
-        {isPremiumOrPro && creditBalance === 0 ? (
+        {isPremiumOrPro && totalCreditBalance === 0 ? (
           <div className="d-flex justify-content-between align-items-center flex-grow-1">
             <AICreditBalanceText
-              creditBalance={creditBalance}
+              expiringCreditBalance={expiringCreditBalance}
+              nonExpiringCreditBalance={
+                nonExpiringCreditBalance
+              }
               showUsageText={true}
               onUsageClick={handleToggleUsage}
             />
@@ -274,7 +289,10 @@ export const EditWithAIModal = ({
         ) : (
           <div className="d-flex justify-content-between align-items-center flex-grow-1">
             <AICreditBalanceText
-              creditBalance={creditBalance}
+              expiringCreditBalance={expiringCreditBalance}
+              nonExpiringCreditBalance={
+                nonExpiringCreditBalance
+              }
               showTopUpText={true}
               onTopUpClick={handleTopUpClick}
               showUsageText={true}

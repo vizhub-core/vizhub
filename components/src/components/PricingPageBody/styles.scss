@@ -1,16 +1,18 @@
 .vh-pricing-page {
   overflow: auto;
   position: relative;
-
-  img.header-background {
-    position: absolute;
-    width: 100%;
-    height: 315px;
-    object-fit: cover;
-  }
+  background: linear-gradient(
+    135deg,
+    #0f1419 0%,
+    #1a1a2e 25%,
+    #16213e 50%,
+    #0f3460 75%,
+    #1a1a2e 100%
+  );
+  min-height: 100vh;
 
   .pricing-page-body {
-    position: absolute;
+    position: relative;
     width: 100%;
 
     display: flex;
@@ -45,6 +47,8 @@
         h1 {
           color: white;
           margin-bottom: 0;
+          text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+          font-weight: 700;
         }
       }
 
@@ -67,9 +71,31 @@
           width: 45%;
           display: flex;
           flex-direction: column;
-          background-color: white;
-          border-radius: 8px;
-          box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.05);
+          background: linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.95) 0%,
+            rgba(255, 255, 255, 0.9) 100%
+          );
+          border-radius: 16px;
+          box-shadow:
+            0 8px 32px rgba(0, 0, 0, 0.2),
+            0 4px 16px rgba(0, 123, 255, 0.1);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          backdrop-filter: blur(10px);
+          transition: all 0.3s ease;
+          position: relative;
+          overflow: hidden;
+
+          &:hover {
+            box-shadow:
+              0 16px 48px rgba(0, 0, 0, 0.25),
+              0 8px 24px rgba(0, 123, 255, 0.2);
+            background: linear-gradient(
+              135deg,
+              rgba(255, 255, 255, 0.98) 0%,
+              rgba(255, 255, 255, 0.95) 100%
+            );
+          }
 
           @media (max-width: 768px) {
             flex: 1 1 100%;
@@ -79,43 +105,76 @@
           img.plan-spirit {
             height: 300px;
             object-fit: cover;
-            border-top-right-radius: inherit;
-            border-top-left-radius: inherit;
+            border-top-right-radius: 12px;
+            border-top-left-radius: 12px;
           }
 
           .pricing-page-plan-body {
-            padding: 30px;
+            padding: 32px;
             display: flex;
             flex-direction: column;
+            position: relative;
 
             .plan-header {
               display: flex;
               justify-content: space-between;
+              margin-bottom: 24px;
 
               .plan-header-left {
-                color: var(--vh-color-neutral-02);
+                color: #1a1a2e;
                 margin-bottom: 0;
-                font-size: 1.5rem;
+                font-size: 1.75rem;
+                font-weight: 700;
+                text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
               }
               .plan-header-right {
                 display: flex;
-                color: var(--vh-color-neutral-03);
-                font-size: 1.25rem;
+                color: #0f3460;
+                font-size: 1.5rem;
+                font-weight: 600;
               }
               .plan-header-right-faint {
-                color: var(--vh-color-neutral-04);
-                line-height: 30px;
-                margin-left: 5px;
-                font-size: 1.25rem;
-
-                /* Prevents this offset from impacting the layout */
+                color: #6c757d;
+                line-height: 36px;
+                margin-left: 8px;
+                font-size: 1rem;
+                font-weight: 400;
                 margin-bottom: -10px;
               }
             }
 
             .pricing-page-plan-button {
-              margin: 20px 0;
-              font-weight: 500;
+              margin: 24px 0;
+              font-weight: 600;
+              border-radius: 12px;
+              padding: 14px 24px;
+              font-size: 1.1rem;
+              transition: all 0.3s ease;
+              border: 2px solid transparent;
+              text-transform: none;
+              letter-spacing: 0.5px;
+
+              &.btn-primary {
+                background: linear-gradient(
+                  135deg,
+                  #007bff,
+                  #0056b3
+                );
+                border-color: transparent;
+                box-shadow: 0 4px 12px
+                  rgba(0, 123, 255, 0.3);
+
+                &:hover {
+                  background: linear-gradient(
+                    135deg,
+                    #0056b3,
+                    #004085
+                  );
+                  transform: translateY(-2px);
+                  box-shadow: 0 6px 20px
+                    rgba(0, 123, 255, 0.4);
+                }
+              }
             }
 
             .pricing-page-plan-button.btn-success {
@@ -124,59 +183,161 @@
               align-items: center;
               pointer-events: none;
               gap: 8px;
+              background: linear-gradient(
+                135deg,
+                #28a745,
+                #20c997
+              );
+              border-color: transparent;
+              box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+              color: white;
             }
 
             p {
-              color: var(--vh-color-neutral-03);
+              color: #495057;
               margin-bottom: 0px;
+              line-height: 1.6;
             }
 
             .feature {
               display: flex;
               flex-direction: column;
-              padding: 8px 0;
+              padding: 0;
+              transition: all 0.2s ease;
 
               .feature-header {
                 display: flex;
                 justify-content: space-between;
                 cursor: pointer;
+                padding: 8px 12px;
+                border-radius: 8px;
+                transition: all 0.2s ease;
 
                 .feature-title {
-                  font-weight: bold;
+                  font-weight: 600;
                   display: flex;
                   align-items: center;
-                  gap: 8px;
+                  gap: 10px;
+                  color: #1a1a2e;
+                  font-size: 1rem;
                 }
 
                 .feature-toggle {
-                  padding: 6px;
-                  border-radius: 4px;
+                  padding: 8px;
+                  border-radius: 6px;
                   display: flex;
+                  transition: all 0.2s ease;
+                  color: #6c757d;
+                }
+
+                &:hover {
+                  background: linear-gradient(
+                    135deg,
+                    rgba(0, 123, 255, 0.08),
+                    rgba(0, 123, 255, 0.04)
+                  );
+
+                  .feature-toggle {
+                    background: rgba(0, 123, 255, 0.1);
+                    color: #007bff;
+                  }
                 }
               }
               .feature-description {
-                color: var(--vh-color-neutral-03);
-                // margin-bottom: 6px;
+                color: #495057;
+                margin-top: 8px;
+                margin-bottom: 8px;
+                margin-left: 32px;
+                line-height: 1.6;
+
+                ul {
+                  margin-top: 8px;
+                  padding-left: 20px;
+
+                  li {
+                    margin-bottom: 4px;
+                    color: #6c757d;
+                  }
+                }
               }
               .feature-learn-more-link {
                 font-weight: 500;
                 text-align: right;
-              }
-              .feature-header:hover .feature-toggle {
-                background-color: var(--vh-color-action-03);
+                color: #007bff;
+                text-decoration: none;
+                margin-top: 8px;
+
+                &:hover {
+                  color: #0056b3;
+                  text-decoration: underline;
+                }
               }
             }
 
             .feature.light-bottom-border {
-              border-bottom: 1px solid
-                var(--vh-color-rule-01);
+              border-bottom: 1px solid rgba(0, 0, 0, 0.1);
             }
             .feature.heavy-bottom-border {
-              border-bottom: 3px solid
-                var(--vh-color-neutral-04);
+              border-bottom: 2px solid
+                rgba(0, 123, 255, 0.2);
             }
           }
         }
+      }
+    }
+  }
+}
+
+// Enhanced button group styling
+.pricing-page-header .btn-group {
+  .btn {
+    padding: 12px 24px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+  }
+
+  .btn:first-child {
+    margin-right: 0;
+  }
+}
+
+// Alert styling improvements
+.alert-warning {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 193, 7, 0.15),
+    rgba(255, 193, 7, 0.08)
+  );
+  border: 1px solid rgba(255, 193, 7, 0.3);
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  color: white;
+
+  p {
+    color: white !important;
+    margin-bottom: 0;
+  }
+
+  strong {
+    color: #ffc107;
+  }
+}
+
+// Custom plan contact section
+.mt-5.text-center {
+  p {
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-size: 1.1rem;
+
+    a {
+      color: #007bff;
+      text-decoration: none;
+      font-weight: 600;
+
+      &:hover {
+        color: #0056b3;
+        text-decoration: underline;
       }
     }
   }

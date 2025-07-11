@@ -77,6 +77,24 @@ export interface User {
   //  * The amount of AI credit this user has, in cents.
   creditBalance?: number;
 
+  // freeCreditBalanceByMonth
+  //  * The amount of AI credit this user has per month,
+  //  * for the free plan.
+  freeCreditBalanceByMonth?: {
+    // Keys are of the form `YYYY-MM`.
+    // Values are credit balances in cents.
+    [month: string]: number;
+  };
+
+  // premiumCreditBalanceByMonth
+  //  * The amount of AI credit this user has per month,
+  //  * for the premium plan.
+  premiumCreditBalanceByMonth?: {
+    // Keys are of the form `YYYY-MM`.
+    // Values are credit balances in cents.
+    [month: string]: number;
+  };
+
   // proCreditBalanceByMonth
   //  * The amount of AI credit this user has per month,
   //  * for the professional plan.

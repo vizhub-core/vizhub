@@ -145,15 +145,10 @@ export const PricingPageBody = ({
       highlightedFeature={highlightedFeature}
     >
       <div className="vh-page vh-pricing-page">
-        <img
-          className="header-background"
-          src={headerBackgroundSrc}
-          alt="header"
-        />
         <div className="pricing-page-body">
           <div className="pricing-page-content">
             <div className="pricing-page-header">
-              <h1>VizHub Plans</h1>
+              <h1>Choose a Plan</h1>
 
               <ButtonGroup aria-label="Billing Cadences">
                 <Button
@@ -360,12 +355,12 @@ export const PricingPageBody = ({
               )}
             </div>
 
-            <div className="mt-16 text-center">
-              <p className="text-gray-600">
+            <div className="mt-5 text-center">
+              <p className="text-muted">
                 Need a custom plan?{' '}
                 <a
                   href="mailto: contact@vizhub.com"
-                  className="font-semibold text-blue-600 hover:text-blue-700"
+                  className="fw-semibold text-primary"
                 >
                   Contact our sales team
                 </a>

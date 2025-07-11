@@ -9,6 +9,7 @@ import { discordLink } from '../discordLink';
 import { HelpSVG } from '../Icons/HelpSVG';
 import { LogoSVG } from '../Icons/LogoSVG';
 import { SearchBox } from '../SearchBox';
+import { NotificationSVG } from '../Icons/NotificationSVG';
 import './styles.css';
 
 // Feature flag to enable/disable help icon
@@ -48,7 +49,6 @@ export const Header = ({
     <Container fluid>
       <Navbar.Brand
         className="vh-brand-logo"
-        style={{ cursor: 'pointer' }}
         onClick={onVizHubClick}
       >
         <LogoSVG height={32} />
@@ -67,31 +67,6 @@ export const Header = ({
           {/* <Nav.Link href="/features">Features</Nav.Link> */}
 
           {/* <Nav.Link href={discordLink}>Discord</Nav.Link> */}
-          {authenticatedUserAvatarURL ? (
-            <Button onClick={onNotificationsClick}>
-              Notifications
-              {userHasNotifications ? (
-                <svg
-                  width={10}
-                  height={20}
-                  viewBox="0 0 100 250"
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="notificaton-indicator"
-                >
-                  <circle
-                    cx="50"
-                    cy="50"
-                    r="50"
-                    fill="#ADD8E6"
-                  />
-                </svg>
-              ) : (
-                <></>
-              )}
-            </Button>
-          ) : (
-            <></>
-          )}
 
           {enableResources && (
             <Dropdown align="end">
@@ -174,7 +149,29 @@ export const Header = ({
               <HelpSVG />
             </Nav.Link>
           )}
-
+          {authenticatedUserAvatarURL ? (
+            <div
+              onClick={onNotificationsClick}
+              className="vh-notifications-button"
+              aria-label="View notifications"
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  onNotificationsClick();
+                }
+              }}
+            >
+              <NotificationSVG />
+              {userHasNotifications ? (
+                <span className="vh-notification-badge">
+                  <span className="visually-hidden">
+                    New notifications
+                  </span>
+                </span>
+              ) : null}
+            </div>
+          ) : null}
           {authenticatedUserAvatarURL ? (
             <Dropdown align="end">
               <Dropdown.Toggle
@@ -184,9 +181,7 @@ export const Header = ({
               >
                 <img
                   src={authenticatedUserAvatarURL}
-                  width="32"
-                  height="32"
-                  className="rounded-circle"
+                  className="vh-avatar-image"
                 ></img>
               </Dropdown.Toggle>
               <Dropdown.Menu>

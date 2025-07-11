@@ -1,7 +1,12 @@
 import { User } from 'entities';
 import {
   PRO_CREDITS_PER_MONTH,
+  FREE_CREDITS_PER_MONTH,
+  PREMIUM_CREDITS_PER_MONTH,
   STARTING_CREDITS,
+  FREE,
+  PREMIUM,
+  PRO,
 } from '../Pricing';
 
 export const getNonExpiringCreditBalance = (
@@ -26,15 +31,31 @@ export const getNonExpiringCreditBalance = (
 
 export const getExpiringCreditBalance = (user?: User) => {
   let expiringCreditBalance = 0;
-  if (user && user.plan === 'professional') {
+  if (user) {
     const currentMonth = new Date()
       .toISOString()
       .slice(0, 7);
-    expiringCreditBalance =
-      user.proCreditBalanceByMonth?.[currentMonth] ===
-      undefined
-        ? PRO_CREDITS_PER_MONTH
-        : user.proCreditBalanceByMonth?.[currentMonth];
+
+    switch (user.plan) {
+      case FREE:
+        expiringCreditBalance =
+          user.freeCreditBalanceByMonth?.[currentMonth] ??
+          FREE_CREDITS_PER_MONTH;
+        break;
+      case PREMIUM:
+        expiringCreditBalance =
+          user.premiumCreditBalanceByMonth?.[
+            currentMonth
+          ] ?? PREMIUM_CREDITS_PER_MONTH;
+        break;
+      case PRO:
+        expiringCreditBalance =
+          user.proCreditBalanceByMonth?.[currentMonth] ??
+          PRO_CREDITS_PER_MONTH;
+        break;
+      default:
+        expiringCreditBalance = 0;
+    }
   }
   return expiringCreditBalance;
 };

@@ -332,7 +332,7 @@ export const VizPageBody = () => {
 const isSingleReadmeFile = (
   files: Record<VizFileId, any>,
 ) => {
-  const fileIds = Object.keys(files);
+  const fileIds = files ? Object.keys(files) : [];
   return (
     fileIds.length === 1 &&
     files[fileIds[0]]?.name === 'README.md'
