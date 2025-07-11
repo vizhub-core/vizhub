@@ -9,6 +9,7 @@ import { discordLink } from '../discordLink';
 import { HelpSVG } from '../Icons/HelpSVG';
 import { LogoSVG } from '../Icons/LogoSVG';
 import { SearchBox } from '../SearchBox';
+import { NotificationSVG } from '../Icons/NotificationSVG';
 import './styles.css';
 
 // Feature flag to enable/disable help icon
@@ -67,31 +68,6 @@ export const Header = ({
           {/* <Nav.Link href="/features">Features</Nav.Link> */}
 
           {/* <Nav.Link href={discordLink}>Discord</Nav.Link> */}
-          {authenticatedUserAvatarURL ? (
-            <Button onClick={onNotificationsClick}>
-              Notifications
-              {userHasNotifications ? (
-                <svg
-                  width={10}
-                  height={20}
-                  viewBox="0 0 100 250"
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="notificaton-indicator"
-                >
-                  <circle
-                    cx="50"
-                    cy="50"
-                    r="50"
-                    fill="#ADD8E6"
-                  />
-                </svg>
-              ) : (
-                <></>
-              )}
-            </Button>
-          ) : (
-            <></>
-          )}
 
           {enableResources && (
             <Dropdown align="end">
@@ -174,7 +150,23 @@ export const Header = ({
               <HelpSVG />
             </Nav.Link>
           )}
-
+          {authenticatedUserAvatarURL ? (
+            <Button
+              onClick={onNotificationsClick}
+              variant="link" // Keeps the style consistent with other navbar elements
+              className="position-relative p-2" // Use Bootstrap's position and padding classes
+              aria-label="View notifications"
+            >
+              <NotificationSVG />
+              {userHasNotifications ? (
+                <span className="position-absolute top-10 start-80 translate-middle p-1 bg-danger border border-light rounded-circle">
+                  <span className="visually-hidden">
+                    New notifications
+                  </span>
+                </span>
+              ) : null}
+            </Button>
+          ) : null}
           {authenticatedUserAvatarURL ? (
             <Dropdown align="end">
               <Dropdown.Toggle
