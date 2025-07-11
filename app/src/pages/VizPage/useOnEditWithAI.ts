@@ -79,25 +79,36 @@ const modelNameOptions = [
   'openai/gpt-4o-2024-08-06',
 ];
 
+const modelNameOptionsFree = [
+  'deepseek/deepseek-chat-v3-0324',
+  'google/gemini-2.5-flash',
+];
+
+const defaultModelPremium = 'anthropic/claude-sonnet-4';
+const defaultModelFree = 'deepseek/deepseek-chat-v3-0324';
+
 export const useOnEditWithAI = ({
   vizKit,
   id,
   contentShareDBDoc,
+  isFreePlan,
 }: {
   vizKit: VizKitAPI;
   id: VizId;
   contentShareDBDoc: ShareDBDoc<VizContent> | undefined;
+  isFreePlan: boolean;
 }): {
   onEditWithAI: (prompt: string) => void;
   isEditingWithAI: boolean;
   modelName: string;
   setModelName: (modelName: string) => void;
   modelNameOptions: string[];
+  modelNameOptionsFree: string[];
 } => {
   const [isEditingWithAI, setIsEditingWithAI] =
     useState(false);
   const [modelName, setModelName] = useState(
-    modelNameOptions[0],
+    isFreePlan ? defaultModelFree : defaultModelPremium,
   );
 
   useEffect(() => {
@@ -190,6 +201,7 @@ export const useOnEditWithAI = ({
     isEditingWithAI,
     modelName,
     modelNameOptions,
+    modelNameOptionsFree,
     setModelName: (newModelName: string) => {
       if (typeof window !== 'undefined') {
         localStorage.setItem(

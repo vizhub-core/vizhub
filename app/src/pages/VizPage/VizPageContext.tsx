@@ -12,6 +12,7 @@ import {
   Comment,
   CommitId,
   CommitMetadata,
+  FREE,
   Info,
   RevisionHistory,
   SlugKey,
@@ -135,6 +136,7 @@ export type VizPageContextValue = {
   modelName: string;
   setModelName: (modelName: string) => void;
   modelNameOptions: string[];
+  modelNameOptionsFree: string[];
 };
 
 export const VizPageContext =
@@ -343,10 +345,12 @@ export const VizPageProvider = ({
     modelName,
     setModelName,
     modelNameOptions,
+    modelNameOptionsFree,
   } = useOnEditWithAI({
     vizKit,
     id: info.id,
     contentShareDBDoc,
+    isFreePlan: ownerUser.plan === FREE,
   });
 
   ////////////////////////////////////////////
@@ -490,6 +494,7 @@ export const VizPageProvider = ({
     modelName,
     setModelName,
     modelNameOptions,
+    modelNameOptionsFree,
   };
 
   return (

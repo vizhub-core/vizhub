@@ -58,6 +58,7 @@ export const VizPageModals = () => {
     modelName,
     setModelName,
     modelNameOptions,
+    modelNameOptionsFree,
     commitMetadata,
   } = useContext(VizPageContext);
 
@@ -299,6 +300,7 @@ export const VizPageModals = () => {
           modelName={modelName}
           setModelName={setModelName}
           modelNameOptions={modelNameOptions}
+          modelNameOptionsFree={modelNameOptionsFree}
         />
       )}
     </>
