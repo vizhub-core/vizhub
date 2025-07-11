@@ -24,7 +24,16 @@ export const StarterFeatures = () => {
         id="limited-ai-edits"
         hasBottomBorder={true}
       >
-        Only low-cost models are enabled.
+        Leverage artificial intelligence to code faster with
+        limited access:
+        <ul className="mt-2">
+          <li>
+            <strong>Get $1 in AI Credits</strong> each month
+          </li>
+          <li>
+            <strong>Limited to low-cost models</strong> only
+          </li>
+        </ul>
       </Feature>
       <Feature
         title="Community Access"

@@ -13,7 +13,7 @@ export const PRO: Plan = 'professional';
 
 // The number of AI credits a user starts with (in cents).
 // Correspones with the `User.creditBalance` field.
-export const STARTING_CREDITS: number = 200;
+export const STARTING_CREDITS: number = 0;
 
 // The number of AI credits a user gets per month on the premium plan.
 export const PRO_CREDITS_PER_MONTH: number = 3000;

@@ -23,8 +23,7 @@ export const PremiumFeatures = ({}) => (
           prompt.
         </li>
         <li>
-          <strong>Get $2 in AI Credits</strong> once at
-          signup
+          <strong>Get $5 in AI Credits</strong> each month
         </li>
         <li>
           <strong>Top up any time</strong> when you need
