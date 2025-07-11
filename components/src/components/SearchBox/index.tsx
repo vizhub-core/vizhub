@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react';
 import { Button, Form, FormControl } from '../bootstrap';
+import { SearchSVG } from '../Icons/sam/SearchSVG';
 
 export const SearchBox = ({
   initialSearchQuery,
@@ -30,13 +31,16 @@ export const SearchBox = ({
   return (
     <Form className="d-flex" onSubmit={handleSubmit}>
       <FormControl
-        className="vh-search-box me-2"
+        className="form-control thin-border-search-box no-glow"
         aria-label="Search"
+        type="search"
+        placeholder="Search"
         value={searchQuery} // Bind input value to state
         onChange={handleInputChange} // Update state on input change
       />
-      <Button variant="outline-light" type="submit">
-        Search
+
+      <Button variant="link" type="submit">
+        <SearchSVG />
       </Button>
     </Form>
   );
