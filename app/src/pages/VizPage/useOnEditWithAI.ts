@@ -8,50 +8,6 @@ const DEBUG = false;
 
 const initialText = 'Editing with AI...';
 
-// Create a streaming display element
-const createStreamingDisplay = () => {
-  // Remove any existing display
-  const existingDisplay = document.getElementById(
-    'ai-streaming-display',
-  );
-  if (existingDisplay) {
-    document.body.removeChild(existingDisplay);
-  }
-
-  // Create new display
-  const display = document.createElement('pre');
-  display.id = 'ai-streaming-display';
-  display.style.position = 'fixed';
-  display.style.top = '10px';
-  display.style.left = '10px';
-  // display.style.right = '10px';
-  display.style.bottom = '10px';
-  display.style.overflow = 'auto';
-  display.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
-  display.style.color = '#00ff00';
-  display.style.padding = '10px';
-  display.style.borderRadius = '5px';
-  display.style.zIndex = '9999';
-  display.style.fontSize = '16pxpx';
-  display.style.fontFamily = 'var(--vzcode-font-family)';
-  display.style.whiteSpace = 'pre-wrap';
-  display.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.5)';
-  display.textContent = initialText;
-
-  document.body.appendChild(display);
-  return display;
-};
-
-// Update the streaming display with new content
-const updateStreamingDisplay = (
-  display: HTMLPreElement,
-  content: string,
-) => {
-  display.textContent = content;
-  // Auto-scroll to bottom
-  display.scrollTop = display.scrollHeight;
-};
-
 // Formatted as YYYY-MM-DD
 const todaysDate = new Date().toISOString().split('T')[0];
 // Reset the key daily, so we can change the default,
@@ -104,12 +60,18 @@ export const useOnEditWithAI = ({
   setModelName: (modelName: string) => void;
   modelNameOptions: string[];
   modelNameOptionsFree: string[];
+  aiStreamingContent: string;
+  showAIStreaming: boolean;
 } => {
   const [isEditingWithAI, setIsEditingWithAI] =
     useState(false);
   const [modelName, setModelName] = useState(
     isFreePlan ? defaultModelFree : defaultModelPremium,
   );
+  
+  // Add new state for streaming display
+  const [aiStreamingContent, setAIStreamingContent] = useState('');
+  const [showAIStreaming, setShowAIStreaming] = useState(false);
 
   useEffect(() => {
     // Only access localStorage in the client
@@ -120,6 +82,39 @@ export const useOnEditWithAI = ({
       setModelName(savedModel);
     }
   }, []);
+
+  // Listen to ShareDB operations
+  useEffect(() => {
+    if (!contentShareDBDoc) return;
+
+    const handleOp = (op: any) => {
+      if (op && op[0] === 'aiScratchpad') {
+        if (op[1].es) {
+          // Update streaming content
+          setAIStreamingContent(
+            // @ts-ignore
+            contentShareDBDoc.data.aiScratchpad || initialText
+          );
+        } else if (op[1].r) {
+          // Final result - hide streaming display
+          setShowAIStreaming(false);
+          setAIStreamingContent('');
+          
+          if (RELOAD_AFTER_EDIT_WITH_AI) {
+            setTimeout(() => {
+              window.location.reload();
+            }, 2000);
+          }
+        }
+      }
+    };
+
+    contentShareDBDoc.on('op', handleOp);
+    
+    return () => {
+      contentShareDBDoc.off('op', handleOp);
+    };
+  }, [contentShareDBDoc]);
 
   const onEditWithAI = useCallback(
     async (prompt: string) => {
@@ -135,37 +130,8 @@ export const useOnEditWithAI = ({
         );
 
       setIsEditingWithAI(true);
-
-      // Create streaming display element
-      const streamingDisplay = createStreamingDisplay();
-
-      if (contentShareDBDoc) {
-        contentShareDBDoc.on('op', (op: any) => {
-          // console.log('op', JSON.stringify(op, null, 2));
-
-          if (op && op[0] === 'aiScratchpad') {
-            if (op[1].es) {
-              // Update the streaming display with the new content
-              updateStreamingDisplay(
-                streamingDisplay,
-                // @ts-ignore
-                contentShareDBDoc.data.aiScratchpad ||
-                  initialText,
-              );
-            } else if (op[1].r) {
-              // This is the final result
-
-              if (RELOAD_AFTER_EDIT_WITH_AI) {
-                // Wait 2 seconds
-                setTimeout(() => {
-                  // Reload the page
-                  window.location.reload();
-                }, 2000);
-              }
-            }
-          }
-        });
-      }
+      setShowAIStreaming(true);
+      setAIStreamingContent(initialText);
 
       const editWithAIResult: Result<'success'> =
         await vizKit.rest.editWithAI(editWithAIOptions);
@@ -173,20 +139,12 @@ export const useOnEditWithAI = ({
       // Handle non-streaming case (fallback)
       if (editWithAIResult.outcome === 'success') {
         setIsEditingWithAI(false);
-
-        // Delete the streaming display
-        if (
-          streamingDisplay &&
-          streamingDisplay.parentNode
-        ) {
-          streamingDisplay.parentNode.removeChild(
-            streamingDisplay,
-          );
-        }
       }
 
       if (editWithAIResult.outcome === 'failure') {
         setIsEditingWithAI(false);
+        setShowAIStreaming(false);
+        setAIStreamingContent('');
         DEBUG &&
           console.log(
             'Failed to edit with AI: ',
@@ -211,5 +169,7 @@ export const useOnEditWithAI = ({
       }
       setModelName(newModelName);
     },
+    aiStreamingContent,
+    showAIStreaming,
   };
 };
