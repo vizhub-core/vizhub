@@ -58,4 +58,6 @@ export type VizNotificationRequestResult = {
   commentAuthors: { [key: UserId]: string };
   commentAuthorImages: { [key: UserId]: string };
   resourceTitles: { [key: VizId]: string };
+  resourceOwnerUsernames: { [key: UserId]: string };
+  resourceOwners: { [key: VizId]: UserId };
 };
