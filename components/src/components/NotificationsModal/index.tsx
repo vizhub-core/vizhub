@@ -105,10 +105,13 @@ export const NotificationsModal = ({
                     }
                     vizHref={getVizHref(
                       notification.resource,
-                      notificationsResult.commentAuthors[
-                        notificationsResult.comments[
-                          notification.commentId
-                        ].author
+                      notificationsResult
+                        .resourceOwnerUsernames[
+                        notificationsResult.resourceOwners[
+                          notificationsResult.comments[
+                            notification.commentId
+                          ].resource
+                        ]
                       ],
                       notification.commentId,
                     )}
