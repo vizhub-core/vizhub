@@ -87,6 +87,9 @@ export const HeaderModals = ({
         commentAuthorImages:
           result.value.commentAuthorImages,
         resourceTitles: result.value.resourceTitles,
+        resourceOwnerUsernames:
+          result.value.resourceOwnerUsernames,
+        resourceOwners: result.value.resourceOwners,
       });
     }
   }, [showNotificationsModal]);
