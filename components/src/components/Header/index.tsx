@@ -62,7 +62,6 @@ export const Header = ({
           />
         </Nav>
         <Nav className="align-items-md-center">
-          <Nav.Link href={pricingHref}>Pricing</Nav.Link>
           {/* <Nav.Link href="/explore">Explore</Nav.Link> */}
           {/* <Nav.Link href="/features">Features</Nav.Link> */}
 
@@ -138,6 +137,7 @@ export const Header = ({
             </Dropdown.Menu>
           </Dropdown>
 
+          <Nav.Link href={pricingHref}>Pricing</Nav.Link>
           {/* <Nav.Link href={createVizHref}>Create</Nav.Link> */}
           {enableHelpSVG && (
             <Nav.Link
