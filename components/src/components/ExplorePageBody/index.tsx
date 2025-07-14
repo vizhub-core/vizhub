@@ -5,6 +5,7 @@ import { Footer } from '../Footer';
 import { CreateNewButton } from '../CreateNewButton';
 import './styles.scss';
 import { discordLink } from '../discordLink';
+import { useState } from 'react';
 
 const enableOfficeHoursLink = false;
 
@@ -21,6 +22,20 @@ export const ExplorePageBody = ({
   hasMore,
   children = null,
 }) => {
+  const [aiPrompt, setAiPrompt] = useState('');
+
+  const handleCreateWithAI = () => {
+    if (aiPrompt.trim()) {
+      // Navigate to create new viz with the AI prompt
+      window.location.href = `/create?prompt=${encodeURIComponent(aiPrompt.trim())}`;
+    }
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleCreateWithAI();
+    }
+  };
   return (
     <div className="vh-page vh-explore-page">
       <div
@@ -76,6 +91,42 @@ export const ExplorePageBody = ({
               referrerPolicy="strict-origin-when-cross-origin"
               allowFullScreen
             ></iframe>
+          </div>
+        </div>
+      </div>
+      <div className="ai-create-section">
+        <div className="container">
+          <div className="row justify-content-center">
+            <div className="col-lg-8">
+              <div className="ai-prompt-card">
+                <h3 className="text-center mb-3">
+                  <i className="bi bi-magic me-2"></i>
+                  Create with AI
+                </h3>
+                <p className="text-center text-muted mb-4">
+                  Describe what you want to visualize and let AI create it for you
+                </p>
+                <div className="input-group input-group-lg">
+                  <input
+                    type="text"
+                    className="form-control ai-prompt-input"
+                    placeholder="Describe what you want to visualize... (e.g., 'Create a bar chart of sales data by region')"
+                    value={aiPrompt}
+                    onChange={(e) => setAiPrompt(e.target.value)}
+                    onKeyPress={handleKeyPress}
+                  />
+                  <button
+                    className="btn btn-primary"
+                    type="button"
+                    onClick={handleCreateWithAI}
+                    disabled={!aiPrompt.trim()}
+                  >
+                    <i className="bi bi-magic me-2"></i>
+                    Create with AI
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
