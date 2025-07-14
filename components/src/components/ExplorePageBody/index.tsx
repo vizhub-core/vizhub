@@ -47,11 +47,11 @@ export const ExplorePageBody = ({
               </div>
               <div className="feature-item">
                 <i className="bi bi-arrow-repeat"></i>
-                <span>Unlimited Trials</span>
+                <span>Various LLMs</span>
               </div>
               <div className="feature-item">
                 <i className="bi bi-database"></i>
-                <span>Best Visualizations</span>
+                <span>Revision History</span>
               </div>
             </div>
             <div className="hero-buttons">
