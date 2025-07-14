@@ -80,6 +80,9 @@ export const Header = ({
                 Resources
               </Dropdown.Toggle>
               <Dropdown.Menu>
+                <Dropdown.Item href="/getting-started">
+                  Getting Started
+                </Dropdown.Item>
                 <Dropdown.Item href="/features">
                   Features
                 </Dropdown.Item>
