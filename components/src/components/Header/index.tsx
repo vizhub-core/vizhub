@@ -118,15 +118,15 @@ export const Header = ({
                 <i className="bi bi-envelope me-2"></i>
                 Email Support
               </Dropdown.Item>
-              <Dropdown.Item href={discordLink}>
-                <i className="bi bi-discord me-2"></i>
-                Discord Community
-              </Dropdown.Item>
               {/* TODO make this work: <Dropdown.Item href="/contact">
                 <i className="bi bi-chat-dots me-2"></i>
                 Contact Form
               </Dropdown.Item> */}
               <Dropdown.Divider />
+              <Dropdown.Item href={discordLink}>
+                <i className="bi bi-discord me-2"></i>
+                Discord Community
+              </Dropdown.Item>
               <Dropdown.Item href="https://twitter.com/vizhub">
                 <i className="bi bi-twitter me-2"></i>
                 Twitter
