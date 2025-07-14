@@ -8,6 +8,7 @@ import {
 import { discordLink } from '../discordLink';
 import { HelpSVG } from '../Icons/HelpSVG';
 import { LogoSVG } from '../Icons/LogoSVG';
+import { PlusSVG } from '../Icons/PlusSVG';
 import { SearchBox } from '../SearchBox';
 import { NotificationSVG } from '../Icons/NotificationSVG';
 import './styles.css';
@@ -138,6 +139,14 @@ export const Header = ({
             </Dropdown.Menu>
           </Dropdown>
 
+          <Nav.Link 
+            href={createVizHref}
+            className="vh-create-button"
+            title="Create Visualization"
+          >
+            <PlusSVG />
+          </Nav.Link>
+          
           {/* <Nav.Link href={createVizHref}>Create</Nav.Link> */}
           {enableHelpSVG && (
             <Nav.Link
