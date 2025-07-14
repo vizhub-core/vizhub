@@ -82,15 +82,15 @@ export const Header = ({
                 <Dropdown.Item href="/features">
                   Features
                 </Dropdown.Item>
+                <Dropdown.Item href="/documentation">
+                  Documentation
+                </Dropdown.Item>
                 <Dropdown.Item href={discordLink}>
                   Discord
                 </Dropdown.Item>
                 <Dropdown.Item href="/forum">
                   Forum
                 </Dropdown.Item>
-                {/* <Dropdown.Item href="/documentation">
-                  Documentation
-                </Dropdown.Item> */}
                 <Dropdown.Item href="https://github.com/vizhub-core">
                   Open Source
                 </Dropdown.Item>
