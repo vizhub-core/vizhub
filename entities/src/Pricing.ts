@@ -68,4 +68,5 @@ export type FeatureId =
   | 'academic-price'
   | 'discount-codes'
   | 'student-limit'
-  | 'premium-duration';
+  | 'premium-duration'
+  | 'limited-ai-edits';

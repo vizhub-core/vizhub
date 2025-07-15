@@ -1,4 +1,4 @@
-import { discordLink } from '../discordLink';
+import { discordLink } from '../links';
 import { Feature } from './Feature';
 
 export const StarterFeatures = () => {

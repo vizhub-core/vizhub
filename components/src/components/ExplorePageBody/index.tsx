@@ -4,7 +4,7 @@ import { More } from '../More';
 import { Footer } from '../Footer';
 import { CreateNewButton } from '../CreateNewButton';
 import './styles.scss';
-import { discordLink } from '../discordLink';
+import { discordLink } from '../links';
 
 const enableOfficeHoursLink = false;
 

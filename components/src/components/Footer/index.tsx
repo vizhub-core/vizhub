@@ -1,6 +1,5 @@
 import { LogoSVG } from '../Icons/LogoSVG';
-import { FacebookSVG } from '../Icons/FacebookSVG';
-import { discordLink } from '../discordLink';
+import { discordLink } from '../links';
 import './styles.scss';
 
 // TODO enable this once styling is worked out

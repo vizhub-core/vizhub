@@ -1,5 +1,5 @@
 import { Button } from '../bootstrap';
-import { discordLink } from '../discordLink';
+import { discordLink } from '../links';
 import './styles.scss';
 
 const enableCreateVizButton = true;
