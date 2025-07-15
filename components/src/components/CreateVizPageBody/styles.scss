@@ -71,7 +71,7 @@
     display: grid;
     grid-template-columns: repeat(
       auto-fill,
-      minmax(320px, 1fr)
+      minmax(300px, 1fr)
     );
     gap: 28px;
   }
@@ -99,7 +99,7 @@
     flex-direction: column;
     gap: 48px;
     padding: 48px 0;
-    max-width: 1200px;
+    max-width: 1600px;
     margin: 0 auto;
 
     .create-viz-header {
