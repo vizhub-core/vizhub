@@ -5,7 +5,6 @@ import {
   Dropdown,
   Button,
 } from '../bootstrap';
-import { discordLink } from '../discordLink';
 import { HelpSVG } from '../Icons/HelpSVG';
 import { LogoSVG } from '../Icons/LogoSVG';
 import { PlusSVG } from '../Icons/PlusSVG';
@@ -13,6 +12,7 @@ import { SearchBox } from '../SearchBox';
 import { NotificationSVG } from '../Icons/NotificationSVG';
 import { LanguageSelector } from '../LanguageSelector';
 import './styles.css';
+import { discordLink, youtubeLink } from '../links';
 
 // Feature flag to enable/disable help icon
 const enableHelpSVG = false;
@@ -80,19 +80,23 @@ export const Header = ({
                 Resources
               </Dropdown.Toggle>
               <Dropdown.Menu>
-                <Dropdown.Item href="/getting-started">
+                {/* <Dropdown.Item href="/getting-started">
                   Getting Started
-                </Dropdown.Item>
+                </Dropdown.Item> */}
                 <Dropdown.Item href="/features">
                   Features
                 </Dropdown.Item>
-                <Dropdown.Item href="/docs">
+                {/* <Dropdown.Item href="/docs">
                   Documentation
+                </Dropdown.Item>
                 <Dropdown.Item href="/blog">
                   Blog
-                </Dropdown.Item>
+                </Dropdown.Item> */}
                 <Dropdown.Item href={discordLink}>
                   Discord
+                </Dropdown.Item>
+                <Dropdown.Item href={youtubeLink}>
+                  YouTube
                 </Dropdown.Item>
                 <Dropdown.Item href="/forum">
                   Forum
