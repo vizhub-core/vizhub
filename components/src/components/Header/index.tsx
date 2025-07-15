@@ -8,8 +8,10 @@ import {
 import { discordLink } from '../discordLink';
 import { HelpSVG } from '../Icons/HelpSVG';
 import { LogoSVG } from '../Icons/LogoSVG';
+import { PlusSVG } from '../Icons/PlusSVG';
 import { SearchBox } from '../SearchBox';
 import { NotificationSVG } from '../Icons/NotificationSVG';
+import { LanguageSelector } from '../LanguageSelector';
 import './styles.css';
 
 // Feature flag to enable/disable help icon
@@ -62,7 +64,6 @@ export const Header = ({
           />
         </Nav>
         <Nav className="align-items-md-center">
-          <Nav.Link href={pricingHref}>Pricing</Nav.Link>
           {/* <Nav.Link href="/explore">Explore</Nav.Link> */}
           {/* <Nav.Link href="/features">Features</Nav.Link> */}
 
@@ -79,11 +80,16 @@ export const Header = ({
                 Resources
               </Dropdown.Toggle>
               <Dropdown.Menu>
+                <Dropdown.Item href="/getting-started">
+                  Getting Started
+                </Dropdown.Item>
                 <Dropdown.Item href="/features">
                   Features
                 </Dropdown.Item>
-                <Dropdown.Item href="/documentation">
+                <Dropdown.Item href="/docs">
                   Documentation
+                <Dropdown.Item href="/blog">
+                  Blog
                 </Dropdown.Item>
                 <Dropdown.Item href={discordLink}>
                   Discord
@@ -118,15 +124,15 @@ export const Header = ({
                 <i className="bi bi-envelope me-2"></i>
                 Email Support
               </Dropdown.Item>
-              <Dropdown.Item href={discordLink}>
-                <i className="bi bi-discord me-2"></i>
-                Discord Community
-              </Dropdown.Item>
               {/* TODO make this work: <Dropdown.Item href="/contact">
                 <i className="bi bi-chat-dots me-2"></i>
                 Contact Form
               </Dropdown.Item> */}
               <Dropdown.Divider />
+              <Dropdown.Item href={discordLink}>
+                <i className="bi bi-discord me-2"></i>
+                Discord Community
+              </Dropdown.Item>
               <Dropdown.Item href="https://twitter.com/vizhub">
                 <i className="bi bi-twitter me-2"></i>
                 Twitter
@@ -138,6 +144,14 @@ export const Header = ({
             </Dropdown.Menu>
           </Dropdown>
 
+          <Nav.Link href={pricingHref}>Pricing</Nav.Link>
+          <Nav.Link
+            href={createVizHref}
+            className="vh-create-button"
+            title="Create Visualization"
+          >
+            <PlusSVG />
+          </Nav.Link>
           {/* <Nav.Link href={createVizHref}>Create</Nav.Link> */}
           {enableHelpSVG && (
             <Nav.Link
@@ -149,6 +163,7 @@ export const Header = ({
               <HelpSVG />
             </Nav.Link>
           )}
+          <LanguageSelector />
           {authenticatedUserAvatarURL ? (
             <div
               onClick={onNotificationsClick}
