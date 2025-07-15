@@ -11,6 +11,7 @@ import { LogoSVG } from '../Icons/LogoSVG';
 import { PlusSVG } from '../Icons/PlusSVG';
 import { SearchBox } from '../SearchBox';
 import { NotificationSVG } from '../Icons/NotificationSVG';
+import { LanguageSelector } from '../LanguageSelector';
 import './styles.css';
 
 // Feature flag to enable/disable help icon
@@ -164,6 +165,7 @@ export const Header = ({
               <HelpSVG />
             </Nav.Link>
           )}
+          <LanguageSelector />
           {authenticatedUserAvatarURL ? (
             <div
               onClick={onNotificationsClick}
