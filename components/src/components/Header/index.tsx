@@ -64,7 +64,6 @@ export const Header = ({
           />
         </Nav>
         <Nav className="align-items-md-center">
-          <Nav.Link href={pricingHref}>Pricing</Nav.Link>
           {/* <Nav.Link href="/explore">Explore</Nav.Link> */}
           {/* <Nav.Link href="/features">Features</Nav.Link> */}
 
@@ -87,6 +86,8 @@ export const Header = ({
                 <Dropdown.Item href="/features">
                   Features
                 </Dropdown.Item>
+                <Dropdown.Item href="/docs">
+                  Documentation
                 <Dropdown.Item href="/blog">
                   Blog
                 </Dropdown.Item>
@@ -96,9 +97,6 @@ export const Header = ({
                 <Dropdown.Item href="/forum">
                   Forum
                 </Dropdown.Item>
-                {/* <Dropdown.Item href="/documentation">
-                  Documentation
-                </Dropdown.Item> */}
                 <Dropdown.Item href="https://github.com/vizhub-core">
                   Open Source
                 </Dropdown.Item>
@@ -126,10 +124,10 @@ export const Header = ({
                 <i className="bi bi-envelope me-2"></i>
                 Email Support
               </Dropdown.Item>
-              {/* TODO make this work: <Dropdown.Item href="/contact">
+              <Dropdown.Item href="/contact">
                 <i className="bi bi-chat-dots me-2"></i>
                 Contact Form
-              </Dropdown.Item> */}
+              </Dropdown.Item>
               <Dropdown.Divider />
               <Dropdown.Item href={discordLink}>
                 <i className="bi bi-discord me-2"></i>
@@ -146,6 +144,7 @@ export const Header = ({
             </Dropdown.Menu>
           </Dropdown>
 
+          <Nav.Link href={pricingHref}>Pricing</Nav.Link>
           <Nav.Link
             href={createVizHref}
             className="vh-create-button"
@@ -153,7 +152,6 @@ export const Header = ({
           >
             <PlusSVG />
           </Nav.Link>
-
           {/* <Nav.Link href={createVizHref}>Create</Nav.Link> */}
           {enableHelpSVG && (
             <Nav.Link
