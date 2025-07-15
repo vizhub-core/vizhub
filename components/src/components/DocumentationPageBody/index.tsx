@@ -1,9 +1,8 @@
 import { Footer } from '../Footer';
 import { HomeStarter } from '../HomeStarter';
-import { Testimonial } from '../Testimonial';
 import { Button } from '../bootstrap';
-import { discordLink } from '../discordLink';
 import { image } from '../image';
+import { discordLink } from '../links';
 import './styles.scss';
 
 const enableFooter = true;

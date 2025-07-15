@@ -21,15 +21,9 @@ export const CreateVizPageBody = ({
               provides a foundation you can customize.
             </p>
           </div>
-          <div className="header-decoration"></div>
         </div>
 
-        <div className="viz-preview-section">
-          <h2>Templates</h2>
-          <div className="templates-container">
-            {renderVizPreviews()}
-          </div>
-        </div>
+        {renderVizPreviews()}
       </div>
       <Footer />
     </div>
