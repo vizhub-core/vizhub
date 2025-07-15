@@ -145,6 +145,31 @@
     cursor: pointer;
   }
 
+  .vh-create-button {
+    position: relative;
+    padding: 0.75rem;
+    cursor: pointer;
+    color: white;
+    opacity: 0.9;
+    border-radius: 8px;
+    transition: all 0.2s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    margin-right: 8px;
+  }
+
+  .vh-create-button:hover {
+    opacity: 1;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+  }
+
+  .vh-create-button:active {
+    transform: translateY(0);
+  }
+
   .vh-notifications-button {
     position: relative;
     padding: 0.75rem;

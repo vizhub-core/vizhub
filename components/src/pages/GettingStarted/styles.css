@@ -1,0 +1,124 @@
+.getting-started-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-title {
+  color: #007bff;
+  margin-bottom: 1.5rem;
+  position: relative;
+  padding-bottom: 0.5rem;
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 50px;
+  height: 3px;
+  background: linear-gradient(90deg, #007bff, #0056b3);
+  border-radius: 3px;
+}
+
+.step-card {
+  border-radius: 12px;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+  border: none;
+  overflow: hidden;
+}
+
+.step-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+}
+
+.step-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #007bff, #0056b3);
+  color: white;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.feature-list {
+  padding-left: 1.5rem;
+}
+
+.feature-list li {
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.feature-list li::before {
+  content: '✓';
+  color: #28a745;
+  font-weight: bold;
+  display: inline-block;
+  width: 1.5rem;
+  margin-left: -1.5rem;
+}
+
+.resource-card {
+  border-radius: 12px;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+  border: none;
+}
+
+.resource-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+}
+
+.resource-link {
+  display: inline-block;
+  margin-top: 1rem;
+  color: #007bff;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.resource-link:hover {
+  color: #0056b3;
+  text-decoration: underline;
+}
+
+.faq-item {
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.faq-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.faq-item h4 {
+  color: #16213e;
+  margin-bottom: 0.75rem;
+}
+
+@media (max-width: 768px) {
+  .step-number {
+    width: 35px;
+    height: 35px;
+    font-size: 1.25rem;
+  }
+
+  .section-title {
+    font-size: 1.5rem;
+  }
+}

@@ -12,10 +12,13 @@ export const CreateVizPageBody = ({
           <div className="header-content">
             <h1>Create Visualization</h1>
             <div className="vh-lede-01">
-              Start by <span className="emphasized">forking</span> a template
+              Start by{' '}
+              <span className="emphasized">forking</span> a
+              template
             </div>
             <p className="create-viz-description">
-              Select a template that fits your needs. Each provides a foundation you can customize.
+              Select a template that fits your needs. Each
+              provides a foundation you can customize.
             </p>
           </div>
           <div className="header-decoration"></div>

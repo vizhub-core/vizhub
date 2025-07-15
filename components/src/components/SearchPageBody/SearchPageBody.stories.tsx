@@ -13,22 +13,27 @@ export default meta;
 type Story = StoryObj<typeof SearchPageBody>;
 
 // Mock data for visualization previews
-const mockVizPreviews = Array(12).fill(null).map((_, i) => (
-  <div key={i} style={{
-    width: '100%',
-    height: '200px',
-    background: `hsl(${i * 30}, 70%, 80%)`,
-    borderRadius: '8px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontSize: '18px',
-    fontWeight: 'bold',
-    color: '#333'
-  }}>
-    Visualization {i + 1}
-  </div>
-));
+const mockVizPreviews = Array(12)
+  .fill(null)
+  .map((_, i) => (
+    <div
+      key={i}
+      style={{
+        width: '100%',
+        height: '200px',
+        background: `hsl(${i * 30}, 70%, 80%)`,
+        borderRadius: '8px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontSize: '18px',
+        fontWeight: 'bold',
+        color: '#333',
+      }}
+    >
+      Visualization {i + 1}
+    </div>
+  ));
 
 export const Default: Story = {
   args: {
@@ -40,7 +45,7 @@ export const Default: Story = {
     sortOptions: [
       { id: 'recent', label: 'Most Recent' },
       { id: 'popular', label: 'Most Popular' },
-      { id: 'trending', label: 'Trending' }
+      { id: 'trending', label: 'Trending' },
     ],
     hasMore: true,
     searchQuery: '',
