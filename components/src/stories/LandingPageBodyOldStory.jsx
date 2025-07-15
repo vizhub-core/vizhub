@@ -9,7 +9,7 @@ const Story = () => {
       <div className="layout-fullscreen">
         <div className="vh-page">
           <HeaderTop />
-          <Header 
+          <Header
             authenticatedUserAvatarURL=""
             loginHref="/login"
             logoutHref="/logout"

@@ -1,4 +1,9 @@
-import React, { createContext, useState, useContext, ReactNode } from 'react';
+import React, {
+  createContext,
+  useState,
+  useContext,
+  ReactNode,
+} from 'react';
 import { translations } from './translations';
 
 type Language = {
@@ -22,7 +27,11 @@ export const languages: Language[] = [
   { code: 'hi', name: 'हिन्दी (Hindi)', flag: '🇮🇳' },
   { code: 'ar', name: 'العربية (Arabic)', flag: '🇸🇦' },
   { code: 'bn', name: 'বাংলা (Bengali)', flag: '🇧🇩' },
-  { code: 'pt', name: 'Português (Portuguese)', flag: '🇧🇷' },
+  {
+    code: 'pt',
+    name: 'Português (Portuguese)',
+    flag: '🇧🇷',
+  },
   { code: 'ru', name: 'Русский (Russian)', flag: '🇷🇺' },
   { code: 'ja', name: '日本語 (Japanese)', flag: '🇯🇵' },
   { code: 'pa', name: 'ਪੰਜਾਬੀ (Punjabi)', flag: '🇮🇳' },
@@ -35,19 +44,29 @@ export const languages: Language[] = [
   { code: 'ko', name: '한국어 (Korean)', flag: '🇰🇷' },
 ];
 
-const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
+const LanguageContext = createContext<
+  LanguageContextType | undefined
+>(undefined);
 
-export const LanguageProvider = ({ children }: { children: ReactNode }) => {
+export const LanguageProvider = ({
+  children,
+}: {
+  children: ReactNode;
+}) => {
   // Set English as the default language
-  const [currentLanguage, setCurrentLanguage] = useState<Language>(languages[0]);
+  const [currentLanguage, setCurrentLanguage] =
+    useState<Language>(languages[0]);
 
   const setLanguage = (language: Language) => {
     setCurrentLanguage(language);
     // Here you would implement the actual language change logic
     // For example, using i18n library
     document.documentElement.lang = language.code;
-    localStorage.setItem('preferredLanguage', language.code);
-    
+    localStorage.setItem(
+      'preferredLanguage',
+      language.code,
+    );
+
     // Show a visual notification when language changes
     const notification = document.createElement('div');
     notification.textContent = `Language changed to ${language.name}`;
@@ -58,18 +77,19 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     notification.style.color = 'white';
     notification.style.padding = '10px 20px';
     notification.style.borderRadius = '8px';
-    notification.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.2)';
+    notification.style.boxShadow =
+      '0 4px 12px rgba(0, 0, 0, 0.2)';
     notification.style.zIndex = '9999';
     notification.style.opacity = '0';
     notification.style.transition = 'opacity 0.3s ease';
-    
+
     document.body.appendChild(notification);
-    
+
     // Fade in
     setTimeout(() => {
       notification.style.opacity = '1';
     }, 10);
-    
+
     // Remove after 3 seconds
     setTimeout(() => {
       notification.style.opacity = '0';
@@ -77,18 +97,27 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
         document.body.removeChild(notification);
       }, 300);
     }, 3000);
-    
+
     console.log(`Language changed to ${language.name}`);
   };
 
   // Translation function
   const t = (key: string) => {
-    const langTranslations = translations[currentLanguage.code as keyof typeof translations] || translations.en;
-    return (langTranslations as any)[key] || (translations.en as any)[key] || key;
+    const langTranslations =
+      translations[
+        currentLanguage.code as keyof typeof translations
+      ] || translations.en;
+    return (
+      (langTranslations as any)[key] ||
+      (translations.en as any)[key] ||
+      key
+    );
   };
 
   return (
-    <LanguageContext.Provider value={{ currentLanguage, setLanguage, languages, t }}>
+    <LanguageContext.Provider
+      value={{ currentLanguage, setLanguage, languages, t }}
+    >
       {children}
     </LanguageContext.Provider>
   );
@@ -101,8 +130,9 @@ export const useLanguage = () => {
     // This helps prevent crashes when the provider isn't available
     return {
       currentLanguage: languages[0],
-      setLanguage: () => console.warn('LanguageProvider not found'),
-      languages
+      setLanguage: () =>
+        console.warn('LanguageProvider not found'),
+      languages,
     };
   }
   return context;

@@ -1,6 +1,10 @@
 import React from 'react';
 
-export const PlusSVG = ({ height = 24 }: { height?: number }) => (
+export const PlusSVG = ({
+  height = 24,
+}: {
+  height?: number;
+}) => (
   <svg
     width={height}
     height={height}

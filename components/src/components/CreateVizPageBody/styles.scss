@@ -14,14 +14,14 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
-  
+
   h2 {
     color: var(--vh-color-neutral-02);
     margin-bottom: 24px;
     font-size: 1.5rem;
     position: relative;
     display: inline-block;
-    
+
     &:after {
       content: '';
       position: absolute;
@@ -33,17 +33,17 @@
       border-radius: 3px;
     }
   }
-  
+
   .vh-lede-01 {
     color: var(--vh-color-neutral-01);
     font-size: 1.3rem;
     margin-bottom: 16px;
-    
+
     .emphasized {
       font-weight: 600;
       color: var(--vh-color-primary, #0066cc);
       position: relative;
-      
+
       &:after {
         content: '';
         position: absolute;
@@ -56,7 +56,7 @@
       }
     }
   }
-  
+
   .create-viz-description {
     color: var(--vh-color-neutral-01);
     max-width: 600px;
@@ -65,11 +65,14 @@
     font-size: 1rem;
     opacity: 0.85;
   }
-  
+
   .viz-preview-collection {
     margin-top: 24px;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    grid-template-columns: repeat(
+      auto-fill,
+      minmax(320px, 1fr)
+    );
     gap: 28px;
   }
 
@@ -82,8 +85,10 @@
     border-radius: 12px;
     padding: 32px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease;
+
     &:hover {
       box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
     }
@@ -96,23 +101,28 @@
     padding: 48px 0;
     max-width: 1200px;
     margin: 0 auto;
-    
+
     .create-viz-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding-bottom: 24px;
-      border-bottom: 1px solid var(--vh-color-border, #e0e0e0);
+      border-bottom: 1px solid
+        var(--vh-color-border, #e0e0e0);
       position: relative;
-      
+
       .header-content {
         max-width: 70%;
       }
-      
+
       .header-decoration {
         width: 180px;
         height: 180px;
-        background: radial-gradient(circle, rgba(0, 102, 204, 0.1) 0%, rgba(0, 102, 204, 0) 70%);
+        background: radial-gradient(
+          circle,
+          rgba(0, 102, 204, 0.1) 0%,
+          rgba(0, 102, 204, 0) 70%
+        );
         border-radius: 50%;
         position: absolute;
         right: 0;
@@ -121,29 +131,35 @@
       }
     }
   }
-  
+
   @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
-  
+
   @media (max-width: 768px) {
     .create-viz-header {
       flex-direction: column !important;
-      
+
       .header-content {
         max-width: 100% !important;
       }
-      
+
       .header-decoration {
         display: none;
       }
     }
-    
+
     h1 {
       font-size: 2rem !important;
     }
-    
+
     .viz-preview-section {
       padding: 24px !important;
     }

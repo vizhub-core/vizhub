@@ -146,14 +146,14 @@ export const Header = ({
             </Dropdown.Menu>
           </Dropdown>
 
-          <Nav.Link 
+          <Nav.Link
             href={createVizHref}
             className="vh-create-button"
             title="Create Visualization"
           >
             <PlusSVG />
           </Nav.Link>
-          
+
           {/* <Nav.Link href={createVizHref}>Create</Nav.Link> */}
           {enableHelpSVG && (
             <Nav.Link

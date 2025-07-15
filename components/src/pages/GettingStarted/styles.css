@@ -23,7 +23,9 @@
 
 .step-card {
   border-radius: 12px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
   border: none;
   overflow: hidden;
 }
@@ -67,7 +69,9 @@
 
 .resource-card {
   border-radius: 12px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
   border: none;
 }
 
@@ -113,7 +117,7 @@
     height: 35px;
     font-size: 1.25rem;
   }
-  
+
   .section-title {
     font-size: 1.5rem;
   }
