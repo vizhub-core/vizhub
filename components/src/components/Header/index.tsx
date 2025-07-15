@@ -121,10 +121,10 @@ export const Header = ({
                 <i className="bi bi-discord me-2"></i>
                 Discord Community
               </Dropdown.Item>
-              {/* TODO make this work: <Dropdown.Item href="/contact">
+              <Dropdown.Item href="/contact">
                 <i className="bi bi-chat-dots me-2"></i>
                 Contact Form
-              </Dropdown.Item> */}
+              </Dropdown.Item>
               <Dropdown.Divider />
               <Dropdown.Item href="https://twitter.com/vizhub">
                 <i className="bi bi-twitter me-2"></i>
