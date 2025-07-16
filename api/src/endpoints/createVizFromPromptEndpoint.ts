@@ -109,7 +109,7 @@ export const createVizFromPromptEndpoint = ({
           prompt: file
             ? `${prompt}\n\nAlso make sure to use the newly added data in ${file.originalname}`
             : prompt,
-          modelName: 'anthropic/claude-3.7-sonnet',
+          modelName: 'anthropic/claude-sonnet-4',
           authenticatedUserId,
           shareDBDoc,
           // No streaming handler needed here since we're not streaming to the client

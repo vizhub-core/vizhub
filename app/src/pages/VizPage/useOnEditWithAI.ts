@@ -68,9 +68,12 @@ const LOCAL_STORAGE_MODEL_KEY =
 const RELOAD_AFTER_EDIT_WITH_AI = false;
 
 const modelNameOptions = [
+  'moonshotai/kimi-k2',
   'anthropic/claude-sonnet-4',
   'anthropic/claude-3.7-sonnet',
+  'anthropic/claude-3.5-sonnet',
   'deepseek/deepseek-chat-v3-0324',
+  'deepseek/deepseek-r1-0528',
   'google/gemini-2.5-pro',
   'google/gemini-2.5-flash',
   'x-ai/grok-3',
@@ -79,13 +82,10 @@ const modelNameOptions = [
   'openai/gpt-4o-2024-08-06',
 ];
 
-const modelNameOptionsFree = [
-  'deepseek/deepseek-chat-v3-0324',
-  'google/gemini-2.5-flash',
-];
+const modelNameOptionsFree = modelNameOptions;
 
 const defaultModelPremium = 'anthropic/claude-sonnet-4';
-const defaultModelFree = 'deepseek/deepseek-chat-v3-0324';
+const defaultModelFree = 'anthropic/claude-sonnet-4';
 
 export const useOnEditWithAI = ({
   vizKit,
