@@ -62,6 +62,7 @@ export const NotificationsModal = ({
         ) : (
           unreadNotifications?.map((notification) => {
             switch (notification.type) {
+              case 'mention':
               case 'commentOnYourViz':
                 //This if statement will not be needed in production, it exists to mitigate an issue I caused locally
                 //in which there are notifications of type 'commentOnYourViz' that lack a commentId.
@@ -105,10 +106,13 @@ export const NotificationsModal = ({
                     }
                     vizHref={getVizHref(
                       notification.resource,
-                      notificationsResult.commentAuthors[
-                        notificationsResult.comments[
-                          notification.commentId
-                        ].author
+                      notificationsResult
+                        .resourceOwnerUsernames[
+                        notificationsResult.resourceOwners[
+                          notificationsResult.comments[
+                            notification.commentId
+                          ].resource
+                        ]
                       ],
                       notification.commentId,
                     )}
@@ -121,6 +125,7 @@ export const NotificationsModal = ({
                     markAsRead={onMarkAsReads.get(
                       notification.id,
                     )}
+                    notificationType={notification.type}
                   />
                 );
               default:

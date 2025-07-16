@@ -4,7 +4,7 @@ import { LogoSVG } from '../Icons/LogoSVG';
 import { FacebookSVG } from '../Icons/FacebookSVG';
 import { TwitterSVG } from '../Icons/TwitterSVG';
 import './styles.scss';
-import { discordLink } from '../discordLink';
+import { discordLink } from '../links';
 const Hero = () => (
   <div
     className="hero"

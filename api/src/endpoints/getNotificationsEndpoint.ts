@@ -66,7 +66,7 @@ export const getNotificationsEndpoint = ({
             await getComment(notification.commentId),
         );
 
-        const resourceTitlesPromises = notifications.map(
+        const resourcePromises = notifications.map(
           async (notification) =>
             await getInfo(notification.resource),
         );
@@ -129,7 +129,7 @@ export const getNotificationsEndpoint = ({
           }, new Map<UserId, string>());
 
         const resourceTitles = (
-          await Promise.allSettled(resourceTitlesPromises)
+          await Promise.allSettled(resourcePromises)
         )
           .filter(
             (promiseResult) =>
@@ -145,6 +145,56 @@ export const getNotificationsEndpoint = ({
             return map;
           }, new Map<VizId, string>());
 
+        const resourceOwners = (
+          await Promise.allSettled(resourcePromises)
+        )
+          .filter(
+            (promiseResult) =>
+              promiseResult.status === 'fulfilled',
+          )
+          .map((promiseResult) => promiseResult.value)
+          .filter((result) => result.outcome === 'success')
+          .reduce((map, result) => {
+            map.set(
+              result.value.data.id,
+              result.value.data.owner,
+            );
+            return map;
+          }, new Map<VizId, string>());
+
+        const resourceAuthorUsernamesPromises = (
+          await Promise.allSettled(resourcePromises)
+        )
+          .filter(
+            (promiseResult) =>
+              promiseResult.status === 'fulfilled',
+          )
+          .map((promiseResult) => promiseResult.value)
+          .filter((result) => result.outcome === 'success')
+          .map(
+            async (result) =>
+              await getUser(result.value.data.owner),
+          );
+
+        const resourceOwnerUsernames = (
+          await Promise.allSettled(
+            resourceAuthorUsernamesPromises,
+          )
+        )
+          .filter(
+            (promiseResult) =>
+              promiseResult.status === 'fulfilled',
+          )
+          .map((promiseResult) => promiseResult.value)
+          .filter((result) => result.outcome === 'success')
+          .reduce((map, result) => {
+            map.set(
+              result.value.data.id,
+              result.value.data.userName,
+            );
+            return map;
+          }, new Map<UserId, string>());
+
         const result: Result<VizNotificationRequestResult> =
           {
             outcome: 'success',
@@ -158,6 +208,11 @@ export const getNotificationsEndpoint = ({
               ),
               resourceTitles:
                 Object.fromEntries(resourceTitles),
+              resourceOwnerUsernames: Object.fromEntries(
+                resourceOwnerUsernames,
+              ),
+              resourceOwners:
+                Object.fromEntries(resourceOwners),
             },
           };
 

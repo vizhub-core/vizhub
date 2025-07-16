@@ -1,3 +1,4 @@
+import { VizNotificationType } from 'entities';
 import { Row, Col, Button } from '../bootstrap';
 
 export const CommentNotificationRow = ({
@@ -8,6 +9,7 @@ export const CommentNotificationRow = ({
   vizHref,
   hasBeenRead,
   markAsRead,
+  notificationType,
 }: {
   commenterUserAvatarURL: string;
   commenterUsername: string;
@@ -17,6 +19,7 @@ export const CommentNotificationRow = ({
   commentMarkdown: string;
   hasBeenRead: boolean;
   markAsRead: () => void;
+  notificationType: VizNotificationType;
 }) => {
   return (
     <div className="p-3 mb-2">
@@ -39,7 +42,13 @@ export const CommentNotificationRow = ({
             >
               {commenterUsername}
             </a>{' '}
-            commented on your viz,{' '}
+            {notificationType ==
+            VizNotificationType.CommentOnYourViz
+              ? 'commented on your viz,'
+              : ''}
+            {notificationType == VizNotificationType.Mention
+              ? 'mentioned you on the viz'
+              : ''}{' '}
             <a
               href={vizHref}
               onClick={markAsRead}

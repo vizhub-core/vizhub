@@ -249,12 +249,12 @@ export const EditWithAIModal = ({
                   </option>
                 ))}
               </Form.Select>
-              {isFreePlan && (
+              {/* {isFreePlan && (
                 <Form.Text className="text-muted mt-2">
                   <a href="/pricing">Upgrade</a> to access
                   all models.
                 </Form.Text>
-              )}
+              )} */}
             </Form.Group>
           </>
         )}

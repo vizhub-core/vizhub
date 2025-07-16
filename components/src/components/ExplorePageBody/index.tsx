@@ -4,7 +4,7 @@ import { More } from '../More';
 import { Footer } from '../Footer';
 import { CreateNewButton } from '../CreateNewButton';
 import './styles.scss';
-import { discordLink } from '../discordLink';
+import { discordLink } from '../links';
 
 const enableOfficeHoursLink = false;
 
@@ -39,53 +39,44 @@ export const ExplorePageBody = ({
                 Generative AI Power
               </span>
             </h1>
-            <p>
-              Transform your ideas into interactive
-              visualizations using simple natural language
-              prompts. VizHub's "Edit with AI" feature edits
-              your code instantly using the latest LLMs.
-            </p>
+            <p>Transform Thoughts into Visualizations</p>
             <div className="feature-list">
               <div className="feature-item">
                 <i className="bi bi-lightning-fill"></i>
-                <span>Rapid prototyping & scaffolding</span>
+                <span>Instant Results</span>
               </div>
               <div className="feature-item">
                 <i className="bi bi-arrow-repeat"></i>
-                <span>
-                  Incremental iteration & refactoring
-                </span>
+                <span>Various LLMs</span>
               </div>
               <div className="feature-item">
                 <i className="bi bi-database"></i>
-                <span>
-                  Data parsing & processing automation
-                </span>
+                <span>Revision History</span>
               </div>
             </div>
             <div className="hero-buttons">
+              <CreateNewButton />
               <a
                 href="/features"
-                className="btn btn-outline-light btn-lg"
+                className="hero-buttons-link btn btn-secondary"
               >
                 <i className="bi bi-info-circle me-2"></i>
                 Learn More
               </a>
-              <CreateNewButton />
             </div>
           </div>
-        </div>
-        <div className="hero-video">
-          <iframe
-            width="560"
-            height="315"
-            src="https://www.youtube-nocookie.com/embed/wd6BnelMO9g?si=aJz_9SRg4vKt-pdN"
-            title="YouTube video player"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            referrerPolicy="strict-origin-when-cross-origin"
-            allowFullScreen
-          ></iframe>
+          <div className="hero-video">
+            <iframe
+              width="560"
+              height="315"
+              src="https://www.youtube-nocookie.com/embed/wd6BnelMO9g?si=aJz_9SRg4vKt-pdN"
+              title="YouTube video player"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerPolicy="strict-origin-when-cross-origin"
+              allowFullScreen
+            ></iframe>
+          </div>
         </div>
       </div>
       <div className="vh-page-container">

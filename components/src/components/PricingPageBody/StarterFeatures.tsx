@@ -1,4 +1,4 @@
-import { discordLink } from '../discordLink';
+import { discordLink } from '../links';
 import { Feature } from './Feature';
 
 export const StarterFeatures = () => {
@@ -11,14 +11,14 @@ export const StarterFeatures = () => {
         startsExpanded={true}
         learnMoreHref="/features#ai-assisted-coding"
       >
-        Leverage artificial intelligence to code faster with
-        limited access:
+        Leverage artificial intelligence to code faster:
         <ul className="mt-2">
           <li>
             <strong>Get $1 in AI Credits</strong> each month
           </li>
           <li>
-            <strong>Limited to low-cost models</strong> only
+            <strong>Access to all AI models</strong>{' '}
+            including Claude 4
           </li>
         </ul>
       </Feature>
