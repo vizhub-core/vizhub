@@ -97,6 +97,7 @@ export const VizPageBody = () => {
     runtimeVersion,
     aiStreamingContent,
     showAIStreaming,
+    aiStatus,
   } = useContext(VizPageContext);
 
   const iframeRef = useRef<HTMLIFrameElement>(null);
@@ -331,6 +332,7 @@ export const VizPageBody = () => {
       <AIStreamingDisplay
         content={aiStreamingContent}
         isVisible={showAIStreaming}
+        status={aiStatus}
       />
     </div>
   );

@@ -139,6 +139,7 @@ export type VizPageContextValue = {
   modelNameOptionsFree: string[];
   aiStreamingContent: string;
   showAIStreaming: boolean;
+  aiStatus: string;
 };
 
 export const VizPageContext =
@@ -350,10 +351,11 @@ export const VizPageProvider = ({
     modelNameOptionsFree,
     aiStreamingContent,
     showAIStreaming,
+    aiStatus,
   } = useOnEditWithAI({
     vizKit,
     id: info.id,
-    contentShareDBDoc,
+    content,
     isFreePlan: ownerUser.plan === FREE,
   });
 
@@ -501,6 +503,7 @@ export const VizPageProvider = ({
     modelNameOptionsFree,
     aiStreamingContent,
     showAIStreaming,
+    aiStatus,
   };
 
   return (

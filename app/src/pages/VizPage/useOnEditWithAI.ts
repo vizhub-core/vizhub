@@ -2,7 +2,6 @@ import { useCallback, useState, useEffect } from 'react';
 import { Result } from 'gateways';
 import { VizKitAPI } from 'api/src/VizKit';
 import { VizContent, VizId } from '@vizhub/viz-types';
-import { ShareDBDoc } from 'vzcode';
 
 const DEBUG = false;
 
@@ -46,12 +45,12 @@ const defaultModelFree = 'anthropic/claude-sonnet-4';
 export const useOnEditWithAI = ({
   vizKit,
   id,
-  contentShareDBDoc,
+  content,
   isFreePlan,
 }: {
   vizKit: VizKitAPI;
   id: VizId;
-  contentShareDBDoc: ShareDBDoc<VizContent> | undefined;
+  content?: VizContent;
   isFreePlan: boolean;
 }): {
   onEditWithAI: (prompt: string) => void;
@@ -62,6 +61,7 @@ export const useOnEditWithAI = ({
   modelNameOptionsFree: string[];
   aiStreamingContent: string;
   showAIStreaming: boolean;
+  aiStatus: string;
 } => {
   const [isEditingWithAI, setIsEditingWithAI] =
     useState(false);
@@ -74,6 +74,7 @@ export const useOnEditWithAI = ({
     useState('');
   const [showAIStreaming, setShowAIStreaming] =
     useState(false);
+  const [aiStatus, setAIStatus] = useState('');
 
   useEffect(() => {
     // Only access localStorage in the client
@@ -85,67 +86,34 @@ export const useOnEditWithAI = ({
     }
   }, []);
 
-  // Listen to ShareDB operations
+  // Listen to content changes to update AI streaming state
   useEffect(() => {
-    if (!contentShareDBDoc) return;
+    const aiScratchpad = (content as any)?.aiScratchpad;
+    const currentAiStatus = (content as any)?.aiStatus;
 
-    const handleOp = (op: any) => {
-      // Update op:
-      // [
-      //   'aiScratchpad',
-      //   {
-      //     es: [2390, '.\n\nThese changes will transform'],
-      //   },
-      // ];
-      // Completion op:
-      // [
-      //   [
-      //     "aiScratchpad",
-      //     {
-      //       "r": "I'll help make the visualization...
-      //     }
-      //   ]
-      // ];
+    // When streaming starts and is in progress
+    if (aiScratchpad) {
+      setAIStreamingContent(aiScratchpad || initialText);
+      setShowAIStreaming(true);
+    }
 
-      // Handle update op
-      if (op && op[0] === 'aiScratchpad') {
-        const currentAiScratchpad =
-          // @ts-ignore
-          contentShareDBDoc.data.aiScratchpad;
+    // Always keep the status updated from content.
+    setAIStatus(currentAiStatus || '');
 
-        // AI editing in progress - update streaming content
-        setAIStreamingContent(
-          currentAiScratchpad || initialText,
-        );
-        setShowAIStreaming(true);
+    // When streaming ends
+    if (!aiScratchpad && showAIStreaming) {
+      setShowAIStreaming(false);
+      setAIStreamingContent('');
+      setIsEditingWithAI(false);
+      setAIStatus(''); // Clear status on completion, to match old behavior.
+
+      if (RELOAD_AFTER_EDIT_WITH_AI) {
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       }
-
-      // Handle completion op
-      if (
-        op &&
-        Array.isArray(op) &&
-        op[0][0] === 'aiScratchpad' &&
-        op[0][1].r
-      ) {
-        // AI editing completed - hide streaming display
-        setShowAIStreaming(false);
-        setAIStreamingContent('');
-        setIsEditingWithAI(false);
-
-        if (RELOAD_AFTER_EDIT_WITH_AI) {
-          setTimeout(() => {
-            window.location.reload();
-          }, 2000);
-        }
-      }
-    };
-
-    contentShareDBDoc.on('op', handleOp);
-
-    return () => {
-      contentShareDBDoc.off('op', handleOp);
-    };
-  }, [contentShareDBDoc]);
+    }
+  }, [content, showAIStreaming]);
 
   const onEditWithAI = useCallback(
     async (prompt: string) => {
@@ -202,5 +170,6 @@ export const useOnEditWithAI = ({
     },
     aiStreamingContent,
     showAIStreaming,
+    aiStatus,
   };
 };

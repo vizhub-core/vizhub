@@ -232,6 +232,7 @@ export const EditWithAI = (gateways: Gateways) => {
           aiScratchpad: '',
           aiStatus: 'Editing with AI...',
         });
+
         DEBUG &&
           console.log('Submitting op:', JSON.stringify(op));
 
@@ -291,17 +292,6 @@ export const EditWithAI = (gateways: Gateways) => {
             '[EditWithAI] Step 7: AI edit completed, clearing scratchpad',
           );
 
-        console.log(
-          JSON.stringify(
-            diff(shareDBDoc.data, {
-              ...shareDBDoc.data,
-              aiScratchpad: undefined,
-              aiStatus: 'Done editing with AI.',
-            }),
-            null,
-            2,
-          ),
-        );
         // Clear the scratchpad.
         shareDBDoc.submitOp(
           diff(shareDBDoc.data, {
