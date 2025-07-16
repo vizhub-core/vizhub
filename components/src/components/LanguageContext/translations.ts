@@ -24,6 +24,17 @@ export const translations = {
     'landing.ai.description':
       'Ship code at lightning speed. Just click Edit with AI, and watch the LLM stream production-ready JavaScript, HTML, and CSS directly into your editor. Great for rapid prototyping and iteration. Keep your creative flow uninterrupted. Available with VizHub Premium.',
     'landing.ai.cta': 'See Plans',
+    // Explore page translations
+    'explore.hero.badge': 'New',
+    'explore.hero.title.before': 'Visualize Data with',
+    'explore.hero.title.highlight': 'Generative AI Power',
+    'explore.hero.description':
+      'Transform Thoughts into Visualizations',
+    'explore.feature.instant': 'Instant Results',
+    'explore.feature.llms': 'Various LLMs',
+    'explore.feature.history': 'Revision History',
+    'explore.button.learn-more': 'Learn More',
+    'explore.page.title': 'Explore',
   },
   zh: {
     greeting: '你好！欢迎来到 VizHub。',
@@ -45,6 +56,16 @@ export const translations = {
     'landing.ai.description':
       '以闪电般的速度发布代码。只需点击"使用AI编辑"，即可观看LLM将生产就绪的JavaScript、HTML和CSS直接流式传输到您的编辑器中。非常适合快速原型设计和迭代。保持您的创作流程不被中断。VizHub Premium提供。',
     'landing.ai.cta': '查看计划',
+    // Explore page translations
+    'explore.hero.badge': '新',
+    'explore.hero.title.before': '使用',
+    'explore.hero.title.highlight': '生成式AI力量',
+    'explore.hero.description': '将思想转化为可视化',
+    'explore.feature.instant': '即时结果',
+    'explore.feature.llms': '各种LLM',
+    'explore.feature.history': '修订历史',
+    'explore.button.learn-more': '了解更多',
+    'explore.page.title': '探索',
   },
   es: {
     greeting: '¡Hola! Bienvenido a VizHub.',
@@ -70,6 +91,18 @@ export const translations = {
     'landing.ai.description':
       'Envía código a velocidad relámpago. Solo haz clic en "Editar con IA" y observa cómo el LLM transmite JavaScript, HTML y CSS listos para producción directamente a tu editor. Excelente para prototipado rápido e iteración. Mantén tu flujo creativo sin interrupciones. Disponible con VizHub Premium.',
     'landing.ai.cta': 'Ver Planes',
+    // Explore page translations
+    'explore.hero.badge': 'Nuevo',
+    'explore.hero.title.before': 'Visualiza Datos con',
+    'explore.hero.title.highlight':
+      'Poder de IA Generativa',
+    'explore.hero.description':
+      'Transforma Pensamientos en Visualizaciones',
+    'explore.feature.instant': 'Resultados Instantáneos',
+    'explore.feature.llms': 'Varios LLM',
+    'explore.feature.history': 'Historial de Revisiones',
+    'explore.button.learn-more': 'Saber Más',
+    'explore.page.title': 'Explorar',
   },
   hi: {
     greeting: 'नमस्ते! VizHub में आपका स्वागत है।',
@@ -94,6 +127,17 @@ export const translations = {
     'landing.ai.description':
       'बिजली की गति से कोड भेजें। बस "AI के साथ संपादित करें" पर क्लिक करें, और देखें कि कैसे LLM उत्पादन-तैयार JavaScript, HTML और CSS को सीधे आपके एडिटर में स्ट्रीम करता है। तेज़ी से प्रोटोटाइपिंग और पुनरावृत्ति के लिए बेहतरीन। अपने रचनात्मक प्रवाह को बाधित न होने दें। VizHub Premium के साथ उपलब्ध।',
     'landing.ai.cta': 'योजनाएं देखें',
+    // Explore page translations
+    'explore.hero.badge': 'नया',
+    'explore.hero.title.before': 'डेटा को विज़ुअलाइज़ करें',
+    'explore.hero.title.highlight': 'जेनेरेटिव AI शक्ति',
+    'explore.hero.description':
+      'विचारों को विज़ुअलाइज़ेशन में बदलें',
+    'explore.feature.instant': 'तुरंत परिणाम',
+    'explore.feature.llms': 'विभिन्न LLM',
+    'explore.feature.history': 'संशोधन इतिहास',
+    'explore.button.learn-more': 'और जानें',
+    'explore.page.title': 'अन्वेषण करें',
   },
   ar: {
     greeting: 'مرحبًا! مرحبًا بك في VizHub.',
@@ -117,6 +161,17 @@ export const translations = {
     'landing.ai.description':
       'أرسل الكود بسرعة البرق. فقط انقر على "تحرير بالذكاء الاصطناعي" وشاهد كيف يبث LLM JavaScript و HTML و CSS الجاهزة للإنتاج مباشرة في محررك. رائع للنماذج الأولية السريعة والتكرار. حافظ على تدفقك الإبداعي دون انقطاع. متوفر مع VizHub Premium.',
     'landing.ai.cta': 'شاهد الخطط',
+    // Explore page translations
+    'explore.hero.badge': 'جديد',
+    'explore.hero.title.before': 'تصور البيانات بـ',
+    'explore.hero.title.highlight':
+      'قوة الذكاء الاصطناعي التوليدي',
+    'explore.hero.description': 'حول الأفكار إلى تصورات',
+    'explore.feature.instant': 'نتائج فورية',
+    'explore.feature.llms': 'نماذج لغوية متنوعة',
+    'explore.feature.history': 'تاريخ المراجعات',
+    'explore.button.learn-more': 'تعلم المزيد',
+    'explore.page.title': 'استكشف',
   },
   bn: {
     greeting: 'হ্যালো! VizHub এ আপনাকে স্বাগতম।',
@@ -141,6 +196,17 @@ export const translations = {
     'landing.ai.description':
       'বিদ্যুৎ গতিতে কোড পাঠান। শুধু "AI দিয়ে সম্পাদনা করুন" এ ক্লিক করুন এবং দেখুন কিভাবে LLM উৎপাদন-প্রস্তুত JavaScript, HTML এবং CSS সরাসরি আপনার সম্পাদকে স্ট্রিম করে। দ্রুত প্রোটোটাইপিং এবং পুনরাবৃত্তির জন্য দুর্দান্ত। আপনার সৃজনশীল প্রবাহ নিরবচ্ছিন্ন রাখুন। VizHub Premium এর সাথে উপলব্ধ।',
     'landing.ai.cta': 'পরিকল্পনা দেখুন',
+    // Explore page translations
+    'explore.hero.badge': 'নতুন',
+    'explore.hero.title.before': 'ডেটা ভিজ্যুয়ালাইজ করুন',
+    'explore.hero.title.highlight': 'জেনেরেটিভ AI শক্তি',
+    'explore.hero.description':
+      'চিন্তাভাবনাকে ভিজ্যুয়ালাইজেশনে রূপান্তর করুন',
+    'explore.feature.instant': 'তাৎক্ষণিক ফলাফল',
+    'explore.feature.llms': 'বিভিন্ন LLM',
+    'explore.feature.history': 'সংশোধনের ইতিহাস',
+    'explore.button.learn-more': 'আরও জানুন',
+    'explore.page.title': 'অন্বেষণ',
   },
   pt: {
     greeting: 'Olá! Bem-vindo ao VizHub.',
@@ -166,6 +232,18 @@ export const translations = {
     'landing.ai.description':
       'Envie código na velocidade da luz. Apenas clique em "Editar com IA" e veja como o LLM transmite JavaScript, HTML e CSS prontos para produção diretamente no seu editor. Ótimo para prototipagem rápida e iteração. Mantenha seu fluxo criativo ininterrupto. Disponível com VizHub Premium.',
     'landing.ai.cta': 'Ver Planos',
+    // Explore page translations
+    'explore.hero.badge': 'Novo',
+    'explore.hero.title.before': 'Visualize Dados com',
+    'explore.hero.title.highlight':
+      'Poder de IA Generativa',
+    'explore.hero.description':
+      'Transforme Pensamentos em Visualizações',
+    'explore.feature.instant': 'Resultados Instantâneos',
+    'explore.feature.llms': 'Vários LLMs',
+    'explore.feature.history': 'Histórico de Revisões',
+    'explore.button.learn-more': 'Saiba Mais',
+    'explore.page.title': 'Explorar',
   },
   ru: {
     greeting: 'Привет! Добро пожаловать в VizHub.',
@@ -191,6 +269,18 @@ export const translations = {
     'landing.ai.description':
       'Отправляйте код со скоростью света. Просто нажмите "Редактировать с ИИ" и посмотрите, как LLM передает готовый к производству JavaScript, HTML и CSS прямо в ваш редактор. Отлично подходит для быстрого прототипирования и итерации. Поддерживайте свой творческий поток непрерывным. Доступно с VizHub Premium.',
     'landing.ai.cta': 'Посмотреть Планы',
+    // Explore page translations
+    'explore.hero.badge': 'Новое',
+    'explore.hero.title.before': 'Визуализируйте Данные с',
+    'explore.hero.title.highlight':
+      'Силой Генеративного ИИ',
+    'explore.hero.description':
+      'Превратите Мысли в Визуализации',
+    'explore.feature.instant': 'Мгновенные Результаты',
+    'explore.feature.llms': 'Различные LLM',
+    'explore.feature.history': 'История Версий',
+    'explore.button.learn-more': 'Узнать Больше',
+    'explore.page.title': 'Исследовать',
   },
   ja: {
     greeting: 'こんにちは！VizHubへようこそ。',
@@ -216,6 +306,16 @@ export const translations = {
     'landing.ai.description':
       '稲妻の速さでコードを送信。「AIで編集」をクリックするだけで、LLMが本番準備完了のJavaScript、HTML、CSSを直接エディターにストリーミングする様子を見ることができます。迅速なプロトタイピングと反復に最適。創造的なフローを中断させません。VizHub Premiumで利用可能。',
     'landing.ai.cta': 'プランを見る',
+    // Explore page translations
+    'explore.hero.badge': '新機能',
+    'explore.hero.title.before': 'データを可視化する',
+    'explore.hero.title.highlight': '生成AI の力',
+    'explore.hero.description': '思考を可視化に変換',
+    'explore.feature.instant': '即座の結果',
+    'explore.feature.llms': '様々なLLM',
+    'explore.feature.history': 'リビジョン履歴',
+    'explore.button.learn-more': '詳しく学ぶ',
+    'explore.page.title': '探索',
   },
   pa: {
     greeting: 'ਸਤ ਸ੍ਰੀ ਅਕਾਲ! VizHub ਵਿੱਚ ਤੁਹਾਡਾ ਸਵਾਗਤ ਹੈ।',
@@ -240,6 +340,17 @@ export const translations = {
     'landing.ai.description':
       'ਬਿਜਲੀ ਦੀ ਗਤੀ ਨਾਲ ਕੋਡ ਭੇਜੋ। ਬੱਸ "AI ਨਾਲ ਸੰਪਾਦਿਤ ਕਰੋ" ਤੇ ਕਲਿੱਕ ਕਰੋ ਅਤੇ ਦੇਖੋ ਕਿ LLM ਪ੍ਰੋਡਕਸ਼ਨ-ਰੈਡੀ JavaScript, HTML, ਅਤੇ CSS ਨੂੰ ਸਿੱਧਾ ਤੁਹਾਡੇ ਐਡੀਟਰ ਵਿੱਚ ਸਟ੍ਰੀਮ ਕਰਦਾ ਹੈ। ਤੇਜ਼ ਪ੍ਰੋਟੋਟਾਈਪਿੰਗ ਅਤੇ ਦੁਹਰਾਓ ਲਈ ਸ਼ਾਨਦਾਰ। ਆਪਣੇ ਸਿਰਜਨਾਤਮਕ ਪ੍ਰਵਾਹ ਨੂੰ ਬਿਨਾਂ ਰੁਕਾਵਟ ਰੱਖੋ। VizHub Premium ਨਾਲ ਉਪਲਬਧ।',
     'landing.ai.cta': 'ਯੋਜਨਾਵਾਂ ਦੇਖੋ',
+    // Explore page translations
+    'explore.hero.badge': 'ਨਵਾਂ',
+    'explore.hero.title.before': 'ਡਾਟਾ ਨੂੰ ਵਿਜ਼ੂਅਲਾਈਜ਼ ਕਰੋ',
+    'explore.hero.title.highlight': 'ਜਨਰੇਟਿਵ AI ਸ਼ਕਤੀ',
+    'explore.hero.description':
+      'ਵਿਚਾਰਾਂ ਨੂੰ ਵਿਜ਼ੂਅਲਾਈਜ਼ੇਸ਼ਨ ਵਿੱਚ ਬਦਲੋ',
+    'explore.feature.instant': 'ਤੁਰੰਤ ਨਤੀਜੇ',
+    'explore.feature.llms': 'ਵੱਖ-ਵੱਖ LLM',
+    'explore.feature.history': 'ਸੰਸ਼ੋਧਨ ਇਤਿਹਾਸ',
+    'explore.button.learn-more': 'ਹੋਰ ਜਾਣੋ',
+    'explore.page.title': 'ਖੋਜ',
   },
   // Need to add the remaining languages
   id: {
@@ -265,6 +376,18 @@ export const translations = {
     'landing.ai.description':
       'Kirim kode dengan kecepatan kilat. Cukup klik "Edit dengan AI" dan saksikan LLM mengalirkan JavaScript, HTML, dan CSS siap produksi langsung ke editor Anda. Bagus untuk prototyping cepat dan iterasi. Jaga alur kreatif Anda tidak terganggu. Tersedia dengan VizHub Premium.',
     'landing.ai.cta': 'Lihat Paket',
+    // Explore page translations
+    'explore.hero.badge': 'Baru',
+    'explore.hero.title.before':
+      'Visualisasikan Data dengan',
+    'explore.hero.title.highlight': 'Kekuatan AI Generatif',
+    'explore.hero.description':
+      'Ubah Pemikiran menjadi Visualisasi',
+    'explore.feature.instant': 'Hasil Instan',
+    'explore.feature.llms': 'Berbagai LLM',
+    'explore.feature.history': 'Riwayat Revisi',
+    'explore.button.learn-more': 'Pelajari Lebih Lanjut',
+    'explore.page.title': 'Jelajahi',
   },
   ur: {
     greeting: 'ہیلو! VizHub میں خوش آمدید۔',
@@ -289,6 +412,17 @@ export const translations = {
     'landing.ai.description':
       'بجلی کی رفتار سے کوڈ بھیجیں۔ صرف "AI کے ساتھ ایڈٹ کریں" پر کلک کریں اور دیکھیں کہ LLM کیسے پروڈکشن ریڈی JavaScript, HTML, اور CSS کو براہ راست آپ کے ایڈیٹر میں سٹریم کرتا ہے۔ تیز پروٹوٹائپنگ اور تکرار کے لیے بہترین۔ اپنے تخلیقی بہاؤ کو بلا رکاوٹ رکھیں۔ VizHub Premium کے ساتھ دستیاب۔',
     'landing.ai.cta': 'پلانز دیکھیں',
+    // Explore page translations
+    'explore.hero.badge': 'نیا',
+    'explore.hero.title.before': 'ڈیٹا کو ویژولائز کریں',
+    'explore.hero.title.highlight': 'جینیریٹو AI کی طاقت',
+    'explore.hero.description':
+      'خیالات کو ویژولائزیشن میں تبدیل کریں',
+    'explore.feature.instant': 'فوری نتائج',
+    'explore.feature.llms': 'مختلف LLM',
+    'explore.feature.history': 'نظرثانی کی تاریخ',
+    'explore.button.learn-more': 'مزید جانیں',
+    'explore.page.title': 'دریافت کریں',
   },
   mr: {
     greeting: 'नमस्कार! VizHub वर आपले स्वागत आहे.',
@@ -313,6 +447,17 @@ export const translations = {
     'landing.ai.description':
       'विजेच्या वेगाने कोड पाठवा. फक्त "AI सह संपादित करा" वर क्लिक करा आणि LLM कसे प्रोडक्शन-रेडी JavaScript, HTML आणि CSS थेट तुमच्या एडिटरमध्ये स्ट्रीम करते ते पहा. जलद प्रोटोटाइपिंग आणि पुनरावृत्तीसाठी उत्तम. तुमचा सर्जनशील प्रवाह अव्यावहत ठेवा. VizHub Premium सह उपलब्ध.',
     'landing.ai.cta': 'प्लान पहा',
+    // Explore page translations
+    'explore.hero.badge': 'नवीन',
+    'explore.hero.title.before': 'डेटा व्हिज्युअलायझ करा',
+    'explore.hero.title.highlight': 'जेनेरेटिव्ह AI शक्ती',
+    'explore.hero.description':
+      'विचारांना व्हिज्युअलायझेशनमध्ये रूपांतरित करा',
+    'explore.feature.instant': 'तत्काळ परिणाम',
+    'explore.feature.llms': 'विविध LLM',
+    'explore.feature.history': 'पुनरावलोकन इतिहास',
+    'explore.button.learn-more': 'अधिक जाणून घ्या',
+    'explore.page.title': 'अन्वेषण',
   },
   fr: {
     greeting: 'Bonjour! Bienvenue sur VizHub.',
@@ -339,6 +484,19 @@ export const translations = {
     'landing.ai.description':
       "Expédiez du code à la vitesse de l'éclair. Cliquez simplement sur \"Éditer avec l'IA\" et regardez le LLM diffuser du JavaScript, HTML et CSS prêts pour la production directement dans votre éditeur. Parfait pour le prototypage rapide et l'itération. Gardez votre flux créatif ininterrompu. Disponible avec VizHub Premium.",
     'landing.ai.cta': 'Voir les Plans',
+    // Explore page translations
+    'explore.hero.badge': 'Nouveau',
+    'explore.hero.title.before':
+      'Visualisez les Données avec',
+    'explore.hero.title.highlight':
+      "la Puissance de l'IA Générative",
+    'explore.hero.description':
+      'Transformez les Pensées en Visualisations',
+    'explore.feature.instant': 'Résultats Instantanés',
+    'explore.feature.llms': 'Divers LLM',
+    'explore.feature.history': 'Historique des Révisions',
+    'explore.button.learn-more': 'En Savoir Plus',
+    'explore.page.title': 'Explorer',
   },
   de: {
     greeting: 'Hallo! Willkommen bei VizHub.',
@@ -364,6 +522,18 @@ export const translations = {
     'landing.ai.description':
       'Versenden Sie Code in Blitzgeschwindigkeit. Klicken Sie einfach auf "Mit KI bearbeiten" und sehen Sie zu, wie das LLM produktionsreifes JavaScript, HTML und CSS direkt in Ihren Editor streamt. Großartig für schnelle Prototyperstellung und Iteration. Halten Sie Ihren kreativen Fluss ununterbrochen. Verfügbar mit VizHub Premium.',
     'landing.ai.cta': 'Pläne ansehen',
+    // Explore page translations
+    'explore.hero.badge': 'Neu',
+    'explore.hero.title.before':
+      'Visualisieren Sie Daten mit',
+    'explore.hero.title.highlight': 'Generativer KI-Kraft',
+    'explore.hero.description':
+      'Verwandeln Sie Gedanken in Visualisierungen',
+    'explore.feature.instant': 'Sofortige Ergebnisse',
+    'explore.feature.llms': 'Verschiedene LLMs',
+    'explore.feature.history': 'Revisionsgeschichte',
+    'explore.button.learn-more': 'Mehr erfahren',
+    'explore.page.title': 'Erkunden',
   },
   ko: {
     greeting: '안녕하세요! VizHub에 오신 것을 환영합니다.',
@@ -388,5 +558,15 @@ export const translations = {
     'landing.ai.description':
       '번개처럼 빠른 속도로 코드를 전송하세요. "AI로 편집"을 클릭하기만 하면 LLM이 프로덕션 준비가 완료된 JavaScript, HTML, CSS를 편집기에 직접 스트리밍하는 것을 볼 수 있습니다. 빠른 프로토타이핑과 반복에 적합합니다. 창의적 흐름을 중단시키지 마세요. VizHub Premium에서 사용 가능.',
     'landing.ai.cta': '플랜 보기',
+    // Explore page translations
+    'explore.hero.badge': '새로운',
+    'explore.hero.title.before': '데이터를 시각화하세요',
+    'explore.hero.title.highlight': '생성 AI 파워',
+    'explore.hero.description': '생각을 시각화로 변환',
+    'explore.feature.instant': '즉시 결과',
+    'explore.feature.llms': '다양한 LLM',
+    'explore.feature.history': '수정 기록',
+    'explore.button.learn-more': '더 알아보기',
+    'explore.page.title': '탐색',
   },
 };

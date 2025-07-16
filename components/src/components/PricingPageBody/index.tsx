@@ -19,11 +19,11 @@ import { OrgFeatures } from './OrgFeatures';
 import { AcademicFeatures } from './AcademicFeatures';
 import './styles.scss';
 
-const premiumPriceMonthly = 1.99;
-const premiumPriceAnnually = 19.99;
-const proPriceMonthly = 19.99;
-const proPriceAnnually = 199.99;
-const orgPrice = 24;
+const premiumPriceMonthly = 5;
+const premiumPriceAnnually = 50;
+const proPriceMonthly = 20;
+const proPriceAnnually = 200;
+const orgPrice = 30;
 
 // Feature flags
 const enableImages = false;
