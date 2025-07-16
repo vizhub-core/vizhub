@@ -68,10 +68,12 @@ export const useOnEditWithAI = ({
   const [modelName, setModelName] = useState(
     isFreePlan ? defaultModelFree : defaultModelPremium,
   );
-  
+
   // Add new state for streaming display
-  const [aiStreamingContent, setAIStreamingContent] = useState('');
-  const [showAIStreaming, setShowAIStreaming] = useState(false);
+  const [aiStreamingContent, setAIStreamingContent] =
+    useState('');
+  const [showAIStreaming, setShowAIStreaming] =
+    useState(false);
 
   useEffect(() => {
     // Only access localStorage in the client
@@ -88,29 +90,58 @@ export const useOnEditWithAI = ({
     if (!contentShareDBDoc) return;
 
     const handleOp = (op: any) => {
+      // Update op:
+      // [
+      //   'aiScratchpad',
+      //   {
+      //     es: [2390, '.\n\nThese changes will transform'],
+      //   },
+      // ];
+      // Completion op:
+      // [
+      //   [
+      //     "aiScratchpad",
+      //     {
+      //       "r": "I'll help make the visualization...
+      //     }
+      //   ]
+      // ];
+
+      // Handle update op
       if (op && op[0] === 'aiScratchpad') {
-        if (op[1].es) {
-          // Update streaming content
-          setAIStreamingContent(
-            // @ts-ignore
-            contentShareDBDoc.data.aiScratchpad || initialText
-          );
-        } else if (op[1].r) {
-          // Final result - hide streaming display
-          setShowAIStreaming(false);
-          setAIStreamingContent('');
-          
-          if (RELOAD_AFTER_EDIT_WITH_AI) {
-            setTimeout(() => {
-              window.location.reload();
-            }, 2000);
-          }
+        const currentAiScratchpad =
+          // @ts-ignore
+          contentShareDBDoc.data.aiScratchpad;
+
+        // AI editing in progress - update streaming content
+        setAIStreamingContent(
+          currentAiScratchpad || initialText,
+        );
+        setShowAIStreaming(true);
+      }
+
+      // Handle completion op
+      if (
+        op &&
+        Array.isArray(op) &&
+        op[0][0] === 'aiScratchpad' &&
+        op[0][1].r
+      ) {
+        // AI editing completed - hide streaming display
+        setShowAIStreaming(false);
+        setAIStreamingContent('');
+        setIsEditingWithAI(false);
+
+        if (RELOAD_AFTER_EDIT_WITH_AI) {
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000);
         }
       }
     };
 
     contentShareDBDoc.on('op', handleOp);
-    
+
     return () => {
       contentShareDBDoc.off('op', handleOp);
     };

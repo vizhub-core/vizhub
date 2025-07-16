@@ -234,6 +234,7 @@ export const EditWithAI = (gateways: Gateways) => {
         });
         DEBUG &&
           console.log('Submitting op:', JSON.stringify(op));
+
         shareDBDoc.submitOp(op);
 
         // Stream the response and log each chunk
@@ -277,185 +278,218 @@ export const EditWithAI = (gateways: Gateways) => {
         console.log(
           '[EditWithAI] Step 6: Performing AI edit with LLM',
         );
-      const editResult = await performAiEdit({
-        prompt,
-        files,
-        llmFunction,
-        apiKey: process.env.VIZHUB_EDIT_WITH_AI_API_KEY,
-      });
-
-      DEBUG &&
-        console.log(
-          '[EditWithAI] Step 7: AI edit completed, clearing scratchpad',
-        );
-
-      // Clear the scratchpad.
-      shareDBDoc.submitOp(
-        diff(shareDBDoc.data, {
-          ...shareDBDoc.data,
-          aiScratchpad: undefined,
-          aiStatus: 'Done editing with AI.',
-        }),
-      );
-
-      // Commit any current changes before AI edit
-      DEBUG &&
-        console.log(
-          '[EditWithAI] Step 8: Committing any existing changes before applying AI edits',
-        );
-      await commitViz(id);
-
-      // Apply AI edits
-      DEBUG &&
-        console.log(
-          '[EditWithAI] Step 9: Applying AI edits to ShareDB doc',
-        );
-      const op1 = diff(shareDBDoc.data, {
-        ...shareDBDoc.data,
-        files: editResult.changedFiles,
-        isInteracting: true,
-      });
-
-      shareDBDoc.submitOp(op1);
-
-      // Wait for propagation
-      await new Promise((resolve) =>
-        setTimeout(resolve, 100),
-      );
-
-      // Unset isInteracting
-      const op2 = diff(
-        { isInteracting: true },
-        { isInteracting: false },
-      );
-      shareDBDoc.submitOp(op2);
-
-      // Fetch the Info doc again, just in case
-      // anything changed during AI generation.
-      DEBUG &&
-        console.log(
-          '[EditWithAI] Step 10: Fetching latest info doc and marking as uncommitted',
-        );
-      const latestInfoResult = await getInfo(id);
-      if (latestInfoResult.outcome === 'failure') {
-        return err(latestInfoResult.error);
-      }
-
-      const latestInfo = latestInfoResult.value.data;
-
-      // Mark the info uncommitted, so that the AI edit
-      // will trigger a new commit.
-      // TODO refactor to unify with app/src/pages/VizPage/useVizMutations.ts
-
-      const newInfo = {
-        ...latestInfo,
-        committed: false,
-
-        // Add the authenticated user to the list of commit authors
-        commitAuthors: [
-          authenticatedUserId,
-          'AI:' + modelName,
-        ],
-
-        // Update the last updated timestamp, as this is used as the
-        // timestamp for the next commit.
-        updated: dateToTimestamp(new Date()),
-      };
-      await saveInfo(newInfo);
-
-      // Create new commit
-      DEBUG &&
-        console.log(
-          '[EditWithAI] Step 11: Creating new commit with AI changes',
-        );
-      const commitVizResult = await commitViz(id);
-      if (commitVizResult.outcome === 'failure') {
-        return err(commitVizResult.error);
-      }
-
-      // Process costs and credits
-      DEBUG &&
-        console.log(
-          '[EditWithAI] Step 12: Processing costs and updating user credits',
-        );
-      const {
-        upstreamCostCents,
-        provider,
-        inputTokens,
-        outputTokens,
-      } = editResult;
-
-      const userCostCents = Math.ceil(
-        upstreamCostCents * CREDIT_MARKUP,
-      );
-
-      DEBUG &&
-        console.log('[EditWithAI] Cost calculation', {
-          upstreamCostCents,
-          userCostCents,
-          inputTokens,
-          outputTokens,
+      try {
+        const editResult = await performAiEdit({
+          prompt,
+          files,
+          llmFunction,
+          apiKey: process.env.VIZHUB_EDIT_WITH_AI_API_KEY,
         });
 
-      let updatedCreditBalance: number;
-      await lock(
-        [userLock(authenticatedUserId)],
-        async () => {
-          const freshUserResult = await getUser(
+        DEBUG &&
+          console.log(
+            '[EditWithAI] Step 7: AI edit completed, clearing scratchpad',
+          );
+
+        console.log(
+          JSON.stringify(
+            diff(shareDBDoc.data, {
+              ...shareDBDoc.data,
+              aiScratchpad: undefined,
+              aiStatus: 'Done editing with AI.',
+            }),
+            null,
+            2,
+          ),
+        );
+        // Clear the scratchpad.
+        shareDBDoc.submitOp(
+          diff(shareDBDoc.data, {
+            ...shareDBDoc.data,
+            aiScratchpad: undefined,
+            aiStatus: 'Done editing with AI.',
+          }),
+        );
+
+        // Commit any current changes before AI edit
+        DEBUG &&
+          console.log(
+            '[EditWithAI] Step 8: Committing any existing changes before applying AI edits',
+          );
+        await commitViz(id);
+
+        // Apply AI edits
+        DEBUG &&
+          console.log(
+            '[EditWithAI] Step 9: Applying AI edits to ShareDB doc',
+          );
+        const op1 = diff(shareDBDoc.data, {
+          ...shareDBDoc.data,
+          files: editResult.changedFiles,
+          isInteracting: true,
+        });
+
+        shareDBDoc.submitOp(op1);
+
+        // Wait for propagation
+        await new Promise((resolve) =>
+          setTimeout(resolve, 100),
+        );
+
+        // Unset isInteracting
+        const op2 = diff(
+          { isInteracting: true },
+          { isInteracting: false },
+        );
+        shareDBDoc.submitOp(op2);
+
+        // Fetch the Info doc again, just in case
+        // anything changed during AI generation.
+        DEBUG &&
+          console.log(
+            '[EditWithAI] Step 10: Fetching latest info doc and marking as uncommitted',
+          );
+        const latestInfoResult = await getInfo(id);
+        if (latestInfoResult.outcome === 'failure') {
+          return err(latestInfoResult.error);
+        }
+
+        const latestInfo = latestInfoResult.value.data;
+
+        // Mark the info uncommitted, so that the AI edit
+        // will trigger a new commit.
+        // TODO refactor to unify with app/src/pages/VizPage/useVizMutations.ts
+
+        const newInfo = {
+          ...latestInfo,
+          committed: false,
+
+          // Add the authenticated user to the list of commit authors
+          commitAuthors: [
             authenticatedUserId,
+            'AI:' + modelName,
+          ],
+
+          // Update the last updated timestamp, as this is used as the
+          // timestamp for the next commit.
+          updated: dateToTimestamp(new Date()),
+        };
+        await saveInfo(newInfo);
+
+        // Create new commit
+        DEBUG &&
+          console.log(
+            '[EditWithAI] Step 11: Creating new commit with AI changes',
           );
-          if (freshUserResult.outcome === 'failure') {
-            return err(freshUserResult.error);
-          }
-          const freshUser: User =
-            freshUserResult.value.data;
-          updatedCreditBalance = await updateUserCredits(
-            freshUser,
+        const commitVizResult = await commitViz(id);
+        if (commitVizResult.outcome === 'failure') {
+          return err(commitVizResult.error);
+        }
+
+        // Process costs and credits
+        DEBUG &&
+          console.log(
+            '[EditWithAI] Step 12: Processing costs and updating user credits',
+          );
+
+        const {
+          upstreamCostCents,
+          provider,
+          inputTokens,
+          outputTokens,
+        } = editResult;
+
+        const userCostCents = Math.ceil(
+          upstreamCostCents * CREDIT_MARKUP,
+        );
+
+        DEBUG &&
+          console.log('[EditWithAI] Cost calculation', {
+            upstreamCostCents,
             userCostCents,
-            expiringCreditBalance,
+            inputTokens,
+            outputTokens,
+          });
+
+        let updatedCreditBalance: number;
+        await lock(
+          [userLock(authenticatedUserId)],
+          async () => {
+            const freshUserResult = await getUser(
+              authenticatedUserId,
+            );
+            if (freshUserResult.outcome === 'failure') {
+              return err(freshUserResult.error);
+            }
+            const freshUser: User =
+              freshUserResult.value.data;
+            updatedCreditBalance = await updateUserCredits(
+              freshUser,
+              userCostCents,
+              expiringCreditBalance,
+            );
+            await saveUser(freshUser);
+          },
+        );
+
+        // Save metadata
+        DEBUG &&
+          console.log(
+            '[EditWithAI] Step 13: Saving AI edit metadata',
           );
-          await saveUser(freshUser);
-        },
-      );
+        const aiEditMetadata: AIEditMetadata = {
+          id: generateId(),
+          openRouterGenerationId:
+            editResult.openRouterGenerationId,
+          timestamp: dateToTimestamp(new Date()),
+          user: authenticatedUserId,
+          viz: id,
+          commit: commitVizResult.value.end,
+          upstreamCostCents,
+          userCostCents,
+          updatedCreditBalance,
+          model:
+            modelName ||
+            process.env.VIZHUB_EDIT_WITH_AI_MODEL_NAME,
+          provider,
+          inputTokens,
+          outputTokens,
+          userPrompt: prompt,
+          promptTemplateVersion,
+        };
 
-      // Save metadata
-      DEBUG &&
-        console.log(
-          '[EditWithAI] Step 13: Saving AI edit metadata',
+        await saveAIEditMetadata(aiEditMetadata);
+
+        DEBUG &&
+          console.log(
+            '[EditWithAI] Step 14: AI edit process completed successfully',
+            { updatedCreditBalance },
+          );
+
+        return ok({
+          success: true,
+          updatedCreditBalance,
+        });
+      } catch (error) {
+        console.error(
+          '[EditWithAI] Error during AI streaming:',
+          error,
         );
-      const aiEditMetadata: AIEditMetadata = {
-        id: generateId(),
-        openRouterGenerationId:
-          editResult.openRouterGenerationId,
-        timestamp: dateToTimestamp(new Date()),
-        user: authenticatedUserId,
-        viz: id,
-        commit: commitVizResult.value.end,
-        upstreamCostCents,
-        userCostCents,
-        updatedCreditBalance,
-        model:
-          modelName ||
-          process.env.VIZHUB_EDIT_WITH_AI_MODEL_NAME,
-        provider,
-        inputTokens,
-        outputTokens,
-        userPrompt: prompt,
-        promptTemplateVersion,
-      };
-
-      await saveAIEditMetadata(aiEditMetadata);
-
-      DEBUG &&
-        console.log(
-          '[EditWithAI] Step 14: AI edit process completed successfully',
-          { updatedCreditBalance },
+        // Clear the scratchpad on error
+        shareDBDoc.submitOp(
+          diff(shareDBDoc.data, {
+            ...shareDBDoc.data,
+            aiScratchpad: undefined,
+            aiStatus: 'Error during AI edit',
+          }),
         );
-
-      return ok({
-        success: true,
-        updatedCreditBalance,
-      });
+        return err(
+          new VizHubError(
+            error.message || 'Unknown error',
+            VizHubErrorCode.invariantViolation,
+          ),
+        );
+      }
     } catch (error) {
       console.error('[EditWithAI] error:', error);
       return err(

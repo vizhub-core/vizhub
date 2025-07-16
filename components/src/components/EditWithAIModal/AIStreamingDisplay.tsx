@@ -5,16 +5,17 @@ interface AIStreamingDisplayProps {
   isVisible: boolean;
 }
 
-export const AIStreamingDisplay = ({ 
-  content, 
-  isVisible 
+export const AIStreamingDisplay = ({
+  content,
+  isVisible,
 }: AIStreamingDisplayProps) => {
   const displayRef = useRef<HTMLPreElement>(null);
 
   // Auto-scroll to bottom when content updates
   useEffect(() => {
     if (displayRef.current) {
-      displayRef.current.scrollTop = displayRef.current.scrollHeight;
+      displayRef.current.scrollTop =
+        displayRef.current.scrollHeight;
     }
   }, [content]);
 
