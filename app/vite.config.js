@@ -23,6 +23,16 @@ export default defineConfig({
        * We're using source in TypeScript instead.
        */
 
+      // Add alias for API module
+      'api/src/VizKit': '../api/src/VizKit',
+      'api/src': '../api/src',
+      
+      // Add alias for components module
+      'components': '../components/src',
+      
+      // Add alias for entities module
+      'entities': '../entities/src',
+      
       '@uiw/codemirror-theme-okaidia':
         '@uiw/codemirror-theme-okaidia/src/index.ts',
       '@uiw/codemirror-theme-abcdef':
@@ -42,6 +52,9 @@ export default defineConfig({
       '@uiw/codemirror-themes':
         '@uiw/codemirror-themes/src/index.tsx',
     },
+  },
+  ssr: {
+    noExternal: ['api', 'components', 'entities'],
   },
   // Support Rollup v4
   // See https://github.com/curran/rollup-v4-browser-vite-demo/
