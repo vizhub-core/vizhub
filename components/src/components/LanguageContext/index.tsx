@@ -133,6 +133,7 @@ export const useLanguage = () => {
       setLanguage: () =>
         console.warn('LanguageProvider not found'),
       languages,
+      t: (key: string) => key, // Return the key as fallback
     };
   }
   return context;
