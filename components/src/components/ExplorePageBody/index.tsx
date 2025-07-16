@@ -3,6 +3,7 @@ import { VizPreviewCollection } from '../VizPreviewCollection';
 import { More } from '../More';
 import { Footer } from '../Footer';
 import { CreateNewButton } from '../CreateNewButton';
+import { useLanguage } from '../LanguageContext';
 import './styles.scss';
 import { discordLink } from '../links';
 
@@ -21,6 +22,8 @@ export const ExplorePageBody = ({
   hasMore,
   children = null,
 }) => {
+  const { t } = useLanguage();
+
   return (
     <div className="vh-page vh-explore-page">
       <div
@@ -31,27 +34,29 @@ export const ExplorePageBody = ({
         <div className="hero-content">
           <div className="hero-text">
             <div className="badge-container">
-              <span className="new-feature-badge">New</span>
+              <span className="new-feature-badge">
+                {t('explore.hero.badge')}
+              </span>
             </div>
             <h1>
-              Visualize Data with{' '}
+              {t('explore.hero.title.before')}{' '}
               <span className="ai-highlight">
-                Generative AI Power
+                {t('explore.hero.title.highlight')}
               </span>
             </h1>
-            <p>Transform Thoughts into Visualizations</p>
+            <p>{t('explore.hero.description')}</p>
             <div className="feature-list">
               <div className="feature-item">
                 <i className="bi bi-lightning-fill"></i>
-                <span>Instant Results</span>
+                <span>{t('explore.feature.instant')}</span>
               </div>
               <div className="feature-item">
                 <i className="bi bi-arrow-repeat"></i>
-                <span>Various LLMs</span>
+                <span>{t('explore.feature.llms')}</span>
               </div>
               <div className="feature-item">
                 <i className="bi bi-database"></i>
-                <span>Revision History</span>
+                <span>{t('explore.feature.history')}</span>
               </div>
             </div>
             <div className="hero-buttons">
@@ -61,7 +66,7 @@ export const ExplorePageBody = ({
                 className="hero-buttons-link btn btn-secondary"
               >
                 <i className="bi bi-info-circle me-2"></i>
-                Learn More
+                {t('explore.button.learn-more')}
               </a>
             </div>
           </div>
@@ -115,7 +120,7 @@ export const ExplorePageBody = ({
         )}
         {children}
         <div className="vh-page-header">
-          <h2 className="mb-0">Explore</h2>
+          <h2 className="mb-0">{t('explore.page.title')}</h2>
           <div className="explore-header-controls">
             {sortOptions ? (
               <SortControl
