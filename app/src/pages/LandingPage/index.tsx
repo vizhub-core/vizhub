@@ -1,5 +1,5 @@
 import { useEffect, useContext } from 'react';
-import { LandingPageBody } from 'components';
+import { LandingPageBodyI18n } from 'components';
 import { VizKit } from 'api/src/VizKit';
 import { SmartHeader } from '../../smartComponents/SmartHeader';
 import {
@@ -20,7 +20,7 @@ const Body = () => {
     AuthenticatedUserContext,
   );
   return (
-    <LandingPageBody
+    <LandingPageBodyI18n
       isUserAuthenticated={authenticatedUser ? true : false}
     />
   );

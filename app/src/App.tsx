@@ -7,6 +7,7 @@ import {
   Routes,
   useLocation,
 } from './reactRouterExports';
+import { LanguageProvider } from 'components';
 import { pages } from './pages/client';
 
 const debug = false;
@@ -29,23 +30,24 @@ export const App = ({ pageData }) => {
   }
 
   return (
-    <Routes>
-      {pages.map((Page) => (
-        <Fragment key={Page.path}>
-          <Route
-            path={Page.path}
-            element={<Page pageData={pageData} />}
-          />
-          {Page.path2 && (
+    <LanguageProvider>
+      <Routes>
+        {pages.map((Page) => (
+          <Fragment key={Page.path}>
             <Route
-              path={Page.path2}
+              path={Page.path}
               element={<Page pageData={pageData} />}
             />
-          )}
-        </Fragment>
-      ))}
+            {Page.path2 && (
+              <Route
+                path={Page.path2}
+                element={<Page pageData={pageData} />}
+              />
+            )}
+          </Fragment>
+        ))}
 
-      {/*
+        {/*
                     <Route path="/404" component={NotFoundPage} />
                     <Route
                       path="/authenticated/:provider"
@@ -80,6 +82,7 @@ export const App = ({ pageData }) => {
                     <Route path="/:userName/account" component={AccountPage} />
                     <Route component={NotFoundPage} />
 	  */}
-    </Routes>
+      </Routes>
+    </LanguageProvider>
   );
 };
