@@ -31,9 +31,7 @@ export const LandingPageBodyI18n = ({
                   {t('landing.hero.badge')}
                 </span>
               </div>
-              <h1>
-                {t('landing.hero.title')}
-              </h1>
+              <h1>{t('landing.hero.title')}</h1>
               <p className="hero-description">
                 {t('landing.hero.description')}
               </p>
@@ -44,11 +42,15 @@ export const LandingPageBodyI18n = ({
                 </div>
                 <div className="feature-item">
                   <i className="bi bi-people-fill"></i>
-                  <span>{t('landing.feature.collaboration')}</span>
+                  <span>
+                    {t('landing.feature.collaboration')}
+                  </span>
                 </div>
                 <div className="feature-item">
                   <i className="bi bi-shield-lock"></i>
-                  <span>{t('landing.feature.private')}</span>
+                  <span>
+                    {t('landing.feature.private')}
+                  </span>
                 </div>
                 <div className="feature-item">
                   <i className="bi bi-code-square"></i>
@@ -94,9 +96,7 @@ export const LandingPageBodyI18n = ({
             <div className="feature-section-content brand-background">
               <div className="feature-section-copy">
                 <h3>{t('landing.ai.title')}</h3>
-                <p>
-                  {t('landing.ai.description')}
-                </p>
+                <p>{t('landing.ai.description')}</p>
 
                 <Button
                   href="/pricing?feature=ai-assisted-coding"
