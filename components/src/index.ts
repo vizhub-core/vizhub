@@ -34,4 +34,6 @@ export { VisibilityLabel } from './components/VisibilityLabel';
 export { SvelteAndD3PageBody } from './components/SvelteAndD3PageBody';
 export { EditWithAIModal } from './components/EditWithAIModal';
 export { NotificationsModal } from './components/NotificationsModal';
+export { LanguageProvider } from './components/LanguageContext';
+export { LandingPageBodyI18n } from './components/LandingPageBodyI18n';
 import './components/index.scss';
