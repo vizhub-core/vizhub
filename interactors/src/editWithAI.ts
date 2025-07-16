@@ -218,6 +218,16 @@ export const EditWithAI = (gateways: Gateways) => {
           // Process non-code, non-header lines (e.g., for displaying comments)
           onNonCodeLine: (line) => {
             DEBUG && console.log(`Comment/text: ${line}`);
+            // const op = diff(shareDBDoc.data, {
+            //   ...shareDBDoc.data,
+            //   aiStatus: 'Thinking...',
+            // });
+            // DEBUG &&
+            //   console.log(
+            //     'Submitting op:',
+            //     JSON.stringify(op),
+            //   );
+            // shareDBDoc.submitOp(op);
           },
         };
 
@@ -227,16 +237,16 @@ export const EditWithAI = (gateways: Gateways) => {
         );
 
         // Set up an empty scratchpad in the content doc.
-        const op = diff(shareDBDoc.data, {
-          ...shareDBDoc.data,
-          aiScratchpad: '',
-          aiStatus: 'Editing with AI...',
-        });
+        // const op = diff(shareDBDoc.data, {
+        //   ...shareDBDoc.data,
+        //   aiScratchpad: '',
+        //   aiStatus: 'Editing with AI...',
+        // });
 
-        DEBUG &&
-          console.log('Submitting op:', JSON.stringify(op));
+        // DEBUG &&
+        //   console.log('Submitting op:', JSON.stringify(op));
 
-        shareDBDoc.submitOp(op);
+        // shareDBDoc.submitOp(op);
 
         // Stream the response and log each chunk
         const stream = await chatModel.stream(fullPrompt);

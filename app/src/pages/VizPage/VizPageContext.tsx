@@ -356,6 +356,7 @@ export const VizPageProvider = ({
     vizKit,
     id: info.id,
     content,
+    contentShareDBDoc,
     isFreePlan: ownerUser.plan === FREE,
   });
 
