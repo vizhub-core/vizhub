@@ -120,7 +120,9 @@ export const ExplorePageBody = ({
         )}
         {children}
         <div className="vh-page-header">
-          <h2 className="mb-0">{t('explore.page.title')}</h2>
+          <h2 className="mb-0">
+            {t('explore.page.title')}
+          </h2>
           <div className="explore-header-controls">
             {sortOptions ? (
               <SortControl

@@ -28,7 +28,8 @@ export const translations = {
     'explore.hero.badge': 'New',
     'explore.hero.title.before': 'Visualize Data with',
     'explore.hero.title.highlight': 'Generative AI Power',
-    'explore.hero.description': 'Transform Thoughts into Visualizations',
+    'explore.hero.description':
+      'Transform Thoughts into Visualizations',
     'explore.feature.instant': 'Instant Results',
     'explore.feature.llms': 'Various LLMs',
     'explore.feature.history': 'Revision History',
@@ -93,8 +94,10 @@ export const translations = {
     // Explore page translations
     'explore.hero.badge': 'Nuevo',
     'explore.hero.title.before': 'Visualiza Datos con',
-    'explore.hero.title.highlight': 'Poder de IA Generativa',
-    'explore.hero.description': 'Transforma Pensamientos en Visualizaciones',
+    'explore.hero.title.highlight':
+      'Poder de IA Generativa',
+    'explore.hero.description':
+      'Transforma Pensamientos en Visualizaciones',
     'explore.feature.instant': 'Resultados Instantáneos',
     'explore.feature.llms': 'Varios LLM',
     'explore.feature.history': 'Historial de Revisiones',
@@ -128,7 +131,8 @@ export const translations = {
     'explore.hero.badge': 'नया',
     'explore.hero.title.before': 'डेटा को विज़ुअलाइज़ करें',
     'explore.hero.title.highlight': 'जेनेरेटिव AI शक्ति',
-    'explore.hero.description': 'विचारों को विज़ुअलाइज़ेशन में बदलें',
+    'explore.hero.description':
+      'विचारों को विज़ुअलाइज़ेशन में बदलें',
     'explore.feature.instant': 'तुरंत परिणाम',
     'explore.feature.llms': 'विभिन्न LLM',
     'explore.feature.history': 'संशोधन इतिहास',
@@ -160,7 +164,8 @@ export const translations = {
     // Explore page translations
     'explore.hero.badge': 'جديد',
     'explore.hero.title.before': 'تصور البيانات بـ',
-    'explore.hero.title.highlight': 'قوة الذكاء الاصطناعي التوليدي',
+    'explore.hero.title.highlight':
+      'قوة الذكاء الاصطناعي التوليدي',
     'explore.hero.description': 'حول الأفكار إلى تصورات',
     'explore.feature.instant': 'نتائج فورية',
     'explore.feature.llms': 'نماذج لغوية متنوعة',
@@ -195,7 +200,8 @@ export const translations = {
     'explore.hero.badge': 'নতুন',
     'explore.hero.title.before': 'ডেটা ভিজ্যুয়ালাইজ করুন',
     'explore.hero.title.highlight': 'জেনেরেটিভ AI শক্তি',
-    'explore.hero.description': 'চিন্তাভাবনাকে ভিজ্যুয়ালাইজেশনে রূপান্তর করুন',
+    'explore.hero.description':
+      'চিন্তাভাবনাকে ভিজ্যুয়ালাইজেশনে রূপান্তর করুন',
     'explore.feature.instant': 'তাৎক্ষণিক ফলাফল',
     'explore.feature.llms': 'বিভিন্ন LLM',
     'explore.feature.history': 'সংশোধনের ইতিহাস',
@@ -229,8 +235,10 @@ export const translations = {
     // Explore page translations
     'explore.hero.badge': 'Novo',
     'explore.hero.title.before': 'Visualize Dados com',
-    'explore.hero.title.highlight': 'Poder de IA Generativa',
-    'explore.hero.description': 'Transforme Pensamentos em Visualizações',
+    'explore.hero.title.highlight':
+      'Poder de IA Generativa',
+    'explore.hero.description':
+      'Transforme Pensamentos em Visualizações',
     'explore.feature.instant': 'Resultados Instantâneos',
     'explore.feature.llms': 'Vários LLMs',
     'explore.feature.history': 'Histórico de Revisões',
@@ -264,8 +272,10 @@ export const translations = {
     // Explore page translations
     'explore.hero.badge': 'Новое',
     'explore.hero.title.before': 'Визуализируйте Данные с',
-    'explore.hero.title.highlight': 'Силой Генеративного ИИ',
-    'explore.hero.description': 'Превратите Мысли в Визуализации',
+    'explore.hero.title.highlight':
+      'Силой Генеративного ИИ',
+    'explore.hero.description':
+      'Превратите Мысли в Визуализации',
     'explore.feature.instant': 'Мгновенные Результаты',
     'explore.feature.llms': 'Различные LLM',
     'explore.feature.history': 'История Версий',
@@ -334,7 +344,8 @@ export const translations = {
     'explore.hero.badge': 'ਨਵਾਂ',
     'explore.hero.title.before': 'ਡਾਟਾ ਨੂੰ ਵਿਜ਼ੂਅਲਾਈਜ਼ ਕਰੋ',
     'explore.hero.title.highlight': 'ਜਨਰੇਟਿਵ AI ਸ਼ਕਤੀ',
-    'explore.hero.description': 'ਵਿਚਾਰਾਂ ਨੂੰ ਵਿਜ਼ੂਅਲਾਈਜ਼ੇਸ਼ਨ ਵਿੱਚ ਬਦਲੋ',
+    'explore.hero.description':
+      'ਵਿਚਾਰਾਂ ਨੂੰ ਵਿਜ਼ੂਅਲਾਈਜ਼ੇਸ਼ਨ ਵਿੱਚ ਬਦਲੋ',
     'explore.feature.instant': 'ਤੁਰੰਤ ਨਤੀਜੇ',
     'explore.feature.llms': 'ਵੱਖ-ਵੱਖ LLM',
     'explore.feature.history': 'ਸੰਸ਼ੋਧਨ ਇਤਿਹਾਸ',
@@ -367,9 +378,11 @@ export const translations = {
     'landing.ai.cta': 'Lihat Paket',
     // Explore page translations
     'explore.hero.badge': 'Baru',
-    'explore.hero.title.before': 'Visualisasikan Data dengan',
+    'explore.hero.title.before':
+      'Visualisasikan Data dengan',
     'explore.hero.title.highlight': 'Kekuatan AI Generatif',
-    'explore.hero.description': 'Ubah Pemikiran menjadi Visualisasi',
+    'explore.hero.description':
+      'Ubah Pemikiran menjadi Visualisasi',
     'explore.feature.instant': 'Hasil Instan',
     'explore.feature.llms': 'Berbagai LLM',
     'explore.feature.history': 'Riwayat Revisi',
@@ -403,7 +416,8 @@ export const translations = {
     'explore.hero.badge': 'نیا',
     'explore.hero.title.before': 'ڈیٹا کو ویژولائز کریں',
     'explore.hero.title.highlight': 'جینیریٹو AI کی طاقت',
-    'explore.hero.description': 'خیالات کو ویژولائزیشن میں تبدیل کریں',
+    'explore.hero.description':
+      'خیالات کو ویژولائزیشن میں تبدیل کریں',
     'explore.feature.instant': 'فوری نتائج',
     'explore.feature.llms': 'مختلف LLM',
     'explore.feature.history': 'نظرثانی کی تاریخ',
@@ -437,7 +451,8 @@ export const translations = {
     'explore.hero.badge': 'नवीन',
     'explore.hero.title.before': 'डेटा व्हिज्युअलायझ करा',
     'explore.hero.title.highlight': 'जेनेरेटिव्ह AI शक्ती',
-    'explore.hero.description': 'विचारांना व्हिज्युअलायझेशनमध्ये रूपांतरित करा',
+    'explore.hero.description':
+      'विचारांना व्हिज्युअलायझेशनमध्ये रूपांतरित करा',
     'explore.feature.instant': 'तत्काळ परिणाम',
     'explore.feature.llms': 'विविध LLM',
     'explore.feature.history': 'पुनरावलोकन इतिहास',
@@ -471,9 +486,12 @@ export const translations = {
     'landing.ai.cta': 'Voir les Plans',
     // Explore page translations
     'explore.hero.badge': 'Nouveau',
-    'explore.hero.title.before': 'Visualisez les Données avec',
-    'explore.hero.title.highlight': 'la Puissance de l\'IA Générative',
-    'explore.hero.description': 'Transformez les Pensées en Visualisations',
+    'explore.hero.title.before':
+      'Visualisez les Données avec',
+    'explore.hero.title.highlight':
+      "la Puissance de l'IA Générative",
+    'explore.hero.description':
+      'Transformez les Pensées en Visualisations',
     'explore.feature.instant': 'Résultats Instantanés',
     'explore.feature.llms': 'Divers LLM',
     'explore.feature.history': 'Historique des Révisions',
@@ -506,9 +524,11 @@ export const translations = {
     'landing.ai.cta': 'Pläne ansehen',
     // Explore page translations
     'explore.hero.badge': 'Neu',
-    'explore.hero.title.before': 'Visualisieren Sie Daten mit',
+    'explore.hero.title.before':
+      'Visualisieren Sie Daten mit',
     'explore.hero.title.highlight': 'Generativer KI-Kraft',
-    'explore.hero.description': 'Verwandeln Sie Gedanken in Visualisierungen',
+    'explore.hero.description':
+      'Verwandeln Sie Gedanken in Visualisierungen',
     'explore.feature.instant': 'Sofortige Ergebnisse',
     'explore.feature.llms': 'Verschiedene LLMs',
     'explore.feature.history': 'Revisionsgeschichte',
