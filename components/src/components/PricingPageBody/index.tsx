@@ -30,9 +30,9 @@ const enableImages = false;
 const enableConsulting = false;
 const enableOrgPlan = false;
 
-const enableProfessionalPlan = true;
+const enableProfessionalPlan = false;
 
-const enableAcademicPlan = true;
+const enableAcademicPlan = false;
 
 // The percent saved by paying annually.
 const percentSavings = Math.floor(
