@@ -52,7 +52,11 @@
 }
 
 .sidebar-help-box {
-  background: linear-gradient(135deg, rgba(0, 123, 255, 0.1), rgba(0, 123, 255, 0.05));
+  background: linear-gradient(
+    135deg,
+    rgba(0, 123, 255, 0.1),
+    rgba(0, 123, 255, 0.05)
+  );
   border-radius: 8px;
   margin-top: 20px;
 }
@@ -115,7 +119,9 @@
 
 .code-block code {
   color: #212529;
-  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-family:
+    'SFMono-Regular', Consolas, 'Liberation Mono', Menlo,
+    monospace;
   font-size: 0.9rem;
 }
 
@@ -185,7 +191,9 @@
 
 .method-name {
   color: #0f3460;
-  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-family:
+    'SFMono-Regular', Consolas, 'Liberation Mono', Menlo,
+    monospace;
   font-weight: 600;
   margin-bottom: 15px;
 }
@@ -204,7 +212,9 @@
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
   height: 100%;
 }
 
@@ -255,7 +265,9 @@
   background-color: #f8f9fa;
   border-radius: 12px;
   overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .tutorial-item:hover {
@@ -353,11 +365,11 @@
     position: static;
     margin-bottom: 30px;
   }
-  
+
   .tutorial-item {
     flex-direction: column;
   }
-  
+
   .tutorial-number {
     width: 100%;
     padding: 10px;
