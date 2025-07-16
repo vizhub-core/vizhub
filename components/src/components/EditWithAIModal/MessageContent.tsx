@@ -12,7 +12,7 @@ export const MessageContent = ({
   if (!markdown) return null;
 
   return (
-    <div>
+    <div style={{ color: 'inherit' }}>
       <Markdown remarkPlugins={[remarkGfm]}>
         {markdown}
       </Markdown>
