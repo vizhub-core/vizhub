@@ -62,6 +62,7 @@ export const NotificationsModal = ({
         ) : (
           unreadNotifications?.map((notification) => {
             switch (notification.type) {
+              case 'mention':
               case 'commentOnYourViz':
                 //This if statement will not be needed in production, it exists to mitigate an issue I caused locally
                 //in which there are notifications of type 'commentOnYourViz' that lack a commentId.
@@ -124,6 +125,7 @@ export const NotificationsModal = ({
                     markAsRead={onMarkAsReads.get(
                       notification.id,
                     )}
+                    notificationType={notification.type}
                   />
                 );
               default:

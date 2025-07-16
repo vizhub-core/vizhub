@@ -75,14 +75,16 @@
   color: #495057;
 }
 
-.form-control, .form-select {
+.form-control,
+.form-select {
   padding: 12px;
   border-radius: 8px;
   border: 1px solid #ced4da;
   transition: all 0.3s ease;
 }
 
-.form-control:focus, .form-select:focus {
+.form-control:focus,
+.form-select:focus {
   border-color: #007bff;
   box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
 }
@@ -130,7 +132,9 @@
   padding: 25px;
   margin-bottom: 20px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .faq-item:hover {
@@ -160,11 +164,14 @@
 
 /* Responsive Adjustments */
 @media (max-width: 768px) {
-  .contact-info-col, .contact-form-col {
+  .contact-info-col,
+  .contact-form-col {
     padding: 0;
   }
-  
-  .contact-info-content, .contact-form-content, .thank-you-message {
+
+  .contact-info-content,
+  .contact-form-content,
+  .thank-you-message {
     padding: 30px;
   }
 }

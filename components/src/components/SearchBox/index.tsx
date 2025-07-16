@@ -47,7 +47,7 @@ export const SearchBox = ({
 
   return (
     <Form
-      className="w-100"
+      className="w-100 search-box"
       style={{ maxWidth: '400px' }}
       onSubmit={handleSubmit}
     >

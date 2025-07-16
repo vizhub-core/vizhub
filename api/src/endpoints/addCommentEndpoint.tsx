@@ -34,6 +34,7 @@ export const addCommentEndpoint = ({
     saveNotification,
     getMergeRequest,
     incrementUserUnreadNotificationsCount,
+    getUserByUserName,
   } = gateways;
 
   const sendCommentEmail = async (
@@ -278,6 +279,40 @@ export const addCommentEndpoint = ({
           incrementUserUnreadNotificationsCount(
             recipientUserId,
           );
+
+        //Create notifications for mentions
+
+        const mentionsRegex = RegExp(
+          '@([a-zA-Z\d](?:[a-zA-Z\d]|-(?=[a-zA-Z\d]))*)',
+          'g',
+        );
+
+        const foundUsernames = [
+          ...comment.markdown.matchAll(mentionsRegex),
+        ];
+
+        for (const match of foundUsernames) {
+          const userResult = await getUserByUserName(
+            match[1],
+          );
+          if (userResult.outcome == 'success') {
+            const mentionNofificationId = generateVizId();
+
+            const mentionNotification: VizNotification = {
+              id: mentionNofificationId,
+              type: VizNotificationType.Mention,
+              user: userResult.value.data.id,
+              resource: comment.resource,
+              created: comment.created,
+              read: false,
+              commentId: comment.id,
+            };
+            await saveNotification(mentionNotification);
+            await incrementUserUnreadNotificationsCount(
+              userResult.value.data.id,
+            );
+          }
+        }
 
         res.send(incrementResult);
       }
