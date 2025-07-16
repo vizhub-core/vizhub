@@ -291,7 +291,7 @@ export const addCommentEndpoint = ({
           ...comment.markdown.matchAll(mentionsRegex),
         ];
 
-        foundUsernames.forEach(async (match) => {
+        for (const match of foundUsernames) {
           const userResult = await getUserByUserName(
             match[1],
           );
@@ -307,14 +307,12 @@ export const addCommentEndpoint = ({
               read: false,
               commentId: comment.id,
             };
-            const saveMentionNotificationResult =
-              await saveNotification(mentionNotification);
-            const mentionIncrementResult =
-              incrementUserUnreadNotificationsCount(
-                userResult.value.data.id,
-              );
+            await saveNotification(mentionNotification);
+            await incrementUserUnreadNotificationsCount(
+              userResult.value.data.id,
+            );
           }
-        });
+        }
 
         res.send(incrementResult);
       }
