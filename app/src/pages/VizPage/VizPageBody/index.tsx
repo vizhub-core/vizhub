@@ -11,6 +11,7 @@ import {
   VizPageVersionBanner,
   VizPageViewer,
 } from 'components';
+import { AIStreamingDisplay } from 'components/src/components/EditWithAIModal/AIStreamingDisplay';
 import { SmartHeader } from '../../../smartComponents/SmartHeader';
 import { VizPageEditor } from './VizPageEditor';
 import { useVizPageState } from './useVizPageState';
@@ -94,6 +95,9 @@ export const VizPageBody = () => {
     toggleEditWithAIModal,
     isEditingWithAI,
     runtimeVersion,
+    aiStreamingContent,
+    showAIStreaming,
+    aiStatus,
   } = useContext(VizPageContext);
 
   const iframeRef = useRef<HTMLIFrameElement>(null);
@@ -324,6 +328,12 @@ export const VizPageBody = () => {
           </div>
         )}
       </div>
+
+      <AIStreamingDisplay
+        content={aiStreamingContent}
+        isVisible={showAIStreaming}
+        status={aiStatus}
+      />
     </div>
   );
 };

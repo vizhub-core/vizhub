@@ -22,7 +22,6 @@ export default defineConfig({
        * @uiw/* packages are not compatible with ESM, as they do not import with `.js` extension.
        * We're using source in TypeScript instead.
        */
-
       '@uiw/codemirror-theme-okaidia':
         '@uiw/codemirror-theme-okaidia/src/index.ts',
       '@uiw/codemirror-theme-abcdef':
