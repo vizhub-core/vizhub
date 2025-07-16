@@ -37,7 +37,7 @@ export const AcademicFeatures = ({}) => (
       hasBottomBorder={false}
     >
       Students get 5 months of VizHub Premium with the
-      discount code ($1.33/mo compared to $1.99/mo).
+      discount code ($1.33/mo compared to $5/mo).
     </Feature>
   </>
 );
