@@ -258,12 +258,17 @@ export const GetThumbnailURLs = (gateways: Gateways) => {
         acc[commitImageKey.commitId] =
           screenshotgenie.getImageUrl(
             commitImageKey.imageKey,
+            defaultVizWidth,
           );
         return acc;
       }, {});
 
     // console.log(JSON.stringify(thumbnailURLs, null, 2));
 
-    return { thumbnailURLs, fullResolutionURLs, generateAndSaveNewImageKeys };
+    return {
+      thumbnailURLs,
+      fullResolutionURLs,
+      generateAndSaveNewImageKeys,
+    };
   };
 };
