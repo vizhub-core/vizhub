@@ -1,18 +1,23 @@
 import { PlusSVG } from '../Icons/sam/PlusSVG';
 import { Button } from '../bootstrap';
+import { useLanguage } from '../LanguageContext';
 import './styles.scss';
 
 export const CreateNewButton = ({
   href = '/create-viz',
-  label = 'Create visualization',
+  label = undefined,
   onClick = undefined,
-}) => (
-  <Button
-    className="create-new-button"
-    href={href}
-    onClick={onClick}
-  >
-    <PlusSVG />
-    {label}
-  </Button>
-);
+}) => {
+  const { t } = useLanguage();
+
+  return (
+    <Button
+      className="create-new-button"
+      href={href}
+      onClick={onClick}
+    >
+      <PlusSVG />
+      {label || t('create.button.label')}
+    </Button>
+  );
+};

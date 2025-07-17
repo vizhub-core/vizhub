@@ -44,6 +44,7 @@ export const translations = {
     'create.page.choose.template':
       'Choose a template to get started with your visualization',
     'create.page.custom.template': 'Custom Template',
+    'create.button.label': 'Create visualization',
   },
   zh: {
     greeting: '你好！欢迎来到 VizHub。',
@@ -84,6 +85,7 @@ export const translations = {
     'create.page.choose.template':
       '选择一个模板开始您的可视化',
     'create.page.custom.template': '自定义模板',
+    'create.button.label': '创建可视化',
   },
   es: {
     greeting: '¡Hola! Bienvenido a VizHub.',
@@ -132,6 +134,7 @@ export const translations = {
       'Elige una plantilla para comenzar con tu visualización',
     'create.page.custom.template':
       'Plantilla Personalizada',
+    'create.button.label': 'Crear visualización',
   },
   hi: {
     greeting: 'नमस्ते! VizHub में आपका स्वागत है।',
@@ -177,6 +180,7 @@ export const translations = {
     'create.page.choose.template':
       'अपने विज़ुअलाइज़ेशन के साथ शुरू करने के लिए एक टेम्प्लेट चुनें',
     'create.page.custom.template': 'कस्टम टेम्प्लेट',
+    'create.button.label': 'विज़ुअलाइज़ेशन बनाएं',
   },
   ar: {
     greeting: 'مرحبًا! مرحبًا بك في VizHub.',
@@ -220,6 +224,7 @@ export const translations = {
     'create.page.choose.template':
       'اختر قالباً للبدء في التصور الخاص بك',
     'create.page.custom.template': 'قالب مخصص',
+    'create.button.label': 'إنشاء التصور',
   },
   bn: {
     greeting: 'হ্যালো! VizHub এ আপনাকে স্বাগতম।',
@@ -264,6 +269,7 @@ export const translations = {
     'create.page.choose.template':
       'আপনার ভিজ্যুয়ালাইজেশন শুরু করতে একটি টেমপ্লেট বেছে নিন',
     'create.page.custom.template': 'কাস্টম টেমপ্লেট',
+    'create.button.label': 'ভিজ্যুয়ালাইজেশন তৈরি করুন',
   },
   pt: {
     greeting: 'Olá! Bem-vindo ao VizHub.',
@@ -310,6 +316,7 @@ export const translations = {
     'create.page.choose.template':
       'Escolha um modelo para começar com sua visualização',
     'create.page.custom.template': 'Modelo Personalizado',
+    'create.button.label': 'Criar visualização',
   },
   ru: {
     greeting: 'Привет! Добро пожаловать в VizHub.',
@@ -357,6 +364,7 @@ export const translations = {
       'Выберите шаблон для начала работы с вашей визуализацией',
     'create.page.custom.template':
       'Пользовательский Шаблон',
+    'create.button.label': 'Создать визуализацию',
   },
   ja: {
     greeting: 'こんにちは！VizHubへようこそ。',
@@ -402,6 +410,7 @@ export const translations = {
     'create.page.choose.template':
       'ビジュアライゼーションを始めるためのテンプレートを選択',
     'create.page.custom.template': 'カスタムテンプレート',
+    'create.button.label': 'ビジュアライゼーションを作成',
   },
   pa: {
     greeting: 'ਸਤ ਸ੍ਰੀ ਅਕਾਲ! VizHub ਵਿੱਚ ਤੁਹਾਡਾ ਸਵਾਗਤ ਹੈ।',
@@ -446,6 +455,7 @@ export const translations = {
     'create.page.choose.template':
       'ਆਪਣੇ ਵਿਜ਼ੂਅਲਾਈਜ਼ੇਸ਼ਨ ਨਾਲ ਸ਼ੁਰੂ ਕਰਨ ਲਈ ਇੱਕ ਟੈਂਪਲੇਟ ਚੁਣੋ',
     'create.page.custom.template': 'ਕਸਟਮ ਟੈਂਪਲੇਟ',
+    'create.button.label': 'ਵਿਜ਼ੂਅਲਾਈਜ਼ੇਸ਼ਨ ਬਣਾਓ',
   },
   // Need to add the remaining languages
   id: {
@@ -493,6 +503,7 @@ export const translations = {
     'create.page.choose.template':
       'Pilih template untuk memulai visualisasi Anda',
     'create.page.custom.template': 'Template Kustom',
+    'create.button.label': 'Buat visualisasi',
   },
   ur: {
     greeting: 'ہیلو! VizHub میں خوش آمدید۔',
@@ -537,6 +548,7 @@ export const translations = {
     'create.page.choose.template':
       'اپنی ویژولائزیشن شروع کرنے کے لیے ٹیمپلیٹ منتخب کریں',
     'create.page.custom.template': 'کسٹم ٹیمپلیٹ',
+    'create.button.label': 'ویژولائزیشن بنائیں',
   },
   mr: {
     greeting: 'नमस्कार! VizHub वर आपले स्वागत आहे.',
@@ -581,6 +593,7 @@ export const translations = {
     'create.page.choose.template':
       'तुमच्या व्हिज्युअलायझेशनसह सुरुवात करण्यासाठी टेम्प्लेट निवडा',
     'create.page.custom.template': 'सानुकूल टेम्प्लेट',
+    'create.button.label': 'व्हिज्युअलायझेशन तयार करा',
   },
   fr: {
     greeting: 'Bonjour! Bienvenue sur VizHub.',
@@ -630,6 +643,7 @@ export const translations = {
     'create.page.choose.template':
       'Choisissez un modèle pour commencer votre visualisation',
     'create.page.custom.template': 'Modèle Personnalisé',
+    'create.button.label': 'Créer une visualisation',
   },
   de: {
     greeting: 'Hallo! Willkommen bei VizHub.',
@@ -678,6 +692,7 @@ export const translations = {
       'Wählen Sie eine Vorlage, um mit Ihrer Visualisierung zu beginnen',
     'create.page.custom.template':
       'Benutzerdefinierte Vorlage',
+    'create.button.label': 'Visualisierung erstellen',
   },
   ko: {
     greeting: '안녕하세요! VizHub에 오신 것을 환영합니다.',
@@ -721,5 +736,6 @@ export const translations = {
     'create.page.choose.template':
       '시각화를 시작할 템플릿을 선택하세요',
     'create.page.custom.template': '사용자 정의 템플릿',
+    'create.button.label': '시각화 만들기',
   },
 };
