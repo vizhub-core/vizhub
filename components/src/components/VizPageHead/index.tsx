@@ -107,17 +107,19 @@ export const VizPageHead = ({
             <div className="btn-text">Revision History</div>
           </Button>
         )}
-        {enableDownloadImage && showImageButton && downloadImageHref && (
-          <Button
-            as="a"
-            variant="dark"
-            href={downloadImageHref}
-            download
-          >
-            <ImageSVG />
-            <div className="btn-text">Export Image</div>
-          </Button>
-        )}
+        {enableDownloadImage &&
+          showImageButton &&
+          downloadImageHref && (
+            <Button
+              as="a"
+              variant="dark"
+              href={downloadImageHref}
+              download
+            >
+              <ImageSVG />
+              <div className="btn-text">Export Image</div>
+            </Button>
+          )}
         {showExportButton && (
           <Button
             variant="dark"
