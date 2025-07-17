@@ -106,6 +106,15 @@ export interface User {
 
   //How many unread notifications the user has
   numUnreadNotifications?: number;
+
+  // exportCountByMonth
+  //  * The number of other users' vizzes this user has exported per month,
+  //  * for tracking free plan limits.
+  exportCountByMonth?: {
+    // Keys are of the form `YYYY-MM`.
+    // Values are export counts.
+    [month: string]: number;
+  };
 }
 
 // One of these is created

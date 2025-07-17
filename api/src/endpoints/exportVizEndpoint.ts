@@ -16,10 +16,14 @@ import {
   BuildViz,
   GetInfoByIdOrSlug,
   RecordAnalyticsEvents,
+  CheckExportLimit,
+  IncrementExportCount,
+  GetAPIKeyOwner,
 } from 'interactors';
 import { zipFiles } from './zipFiles';
 import { BuildVizResult } from 'interactors/src/buildViz';
 import { vizFilesToFileCollection } from '@vizhub/viz-utils';
+import { getAuthenticatedUserId } from '../parseAuth0User';
 
 export const exportVizEndpoint = ({
   app,
@@ -33,6 +37,9 @@ export const exportVizEndpoint = ({
   const buildViz = BuildViz(gateways);
   const recordAnalyticsEvents =
     RecordAnalyticsEvents(gateways);
+  const checkExportLimit = CheckExportLimit(gateways);
+  const incrementExportCount = IncrementExportCount(gateways);
+  const getAPIKeyOwner = GetAPIKeyOwner(gateways);
 
   app.get(
     '/api/export-viz/:userName/:vizIdOrSlug/:format',
@@ -119,11 +126,36 @@ export const exportVizEndpoint = ({
         );
       }
 
-      // TODO: Get the authenticated user ID from the request
-      // based on the API key being used.
-      // Setting this to undefined for now, which should
-      // support public vizzes.
-      const authenticatedUserId = undefined;
+      // Get the authenticated user ID from the request
+      // Either from web session or API key
+      let authenticatedUserId = undefined;
+
+      // Try to get authenticated user from web session first
+      const webAuthUserId = getAuthenticatedUserId(req);
+      if (webAuthUserId) {
+        authenticatedUserId = webAuthUserId;
+      } else {
+        // Try to get authenticated user from API key
+        const apiKeyString: string | undefined = req.headers.authorization;
+        if (apiKeyString) {
+          const apiKeyOwnerResult = await getAPIKeyOwner(apiKeyString);
+          if (apiKeyOwnerResult.outcome === 'success') {
+            authenticatedUserId = apiKeyOwnerResult.value;
+          }
+        }
+      }
+
+      // Check export limits for authenticated users
+      if (authenticatedUserId) {
+        const exportLimitResult = await checkExportLimit({
+          userId: authenticatedUserId,
+          vizOwnerId: userId,
+        });
+
+        if (exportLimitResult.outcome === 'failure') {
+          return res.send(err(exportLimitResult.error));
+        }
+      }
 
       // Build the viz, to get the imported vizzes!
       const buildVizResult: BuildVizResult = await buildViz(
@@ -298,6 +330,14 @@ export const exportVizEndpoint = ({
         await recordAnalyticsEvents({
           eventId: `event.exportViz`,
         });
+
+        // Increment export count for authenticated users
+        if (authenticatedUserId) {
+          await incrementExportCount({
+            userId: authenticatedUserId,
+            vizOwnerId: userId,
+          });
+        }
       }
     },
   );

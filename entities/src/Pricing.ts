@@ -24,6 +24,9 @@ export const FREE_CREDITS_PER_MONTH: number = 100;
 // The number of AI credits a user gets per month on the premium plan.
 export const PREMIUM_CREDITS_PER_MONTH: number = 5000;
 
+// The number of exports of other users' vizzes allowed per month on the free plan.
+export const FREE_EXPORTS_PER_MONTH: number = 5;
+
 // The markup on AI transaction fees.
 // e.g. if the AI provider's fee is $0.02 for a given transaction,
 // then the user's AI credit will be charged $0.03
