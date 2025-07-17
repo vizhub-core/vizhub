@@ -41,6 +41,7 @@ export const SettingsModal = ({
   userName,
   enableURLChange = false,
   validateSlug,
+  nonPublicVizCount,
 }: {
   show: boolean;
   onClose: () => void;
@@ -69,6 +70,7 @@ export const SettingsModal = ({
   validateSlug: (
     slug: string,
   ) => Promise<'valid' | 'invalid'>;
+  nonPublicVizCount?: number;
 }) => {
   // Local state for the title
   const [title, setTitle] = useState(initialTitle);
@@ -198,6 +200,8 @@ export const SettingsModal = ({
           visibility={visibility}
           setVisibility={setVisibility}
           currentPlan={currentPlan}
+          nonPublicVizCount={nonPublicVizCount}
+          currentVizVisibility={initialVisibility}
         />
         {enableURLChange && (
           <Form.Group

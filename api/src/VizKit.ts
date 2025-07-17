@@ -189,6 +189,10 @@ export interface VizKitAPI {
     markNotificationAsRead: (options: {
       notificationId: VizNotificationId;
     }) => Promise<Result<Success>>;
+
+    getNonPublicVizCount: () => Promise<
+      Result<{ count: number }>
+    >;
   };
 }
 
@@ -442,6 +446,11 @@ export const VizKit = (
         await postJSON(
           `${baseUrl}/mark-notification-as-read`,
           options,
+        ),
+
+      getNonPublicVizCount: async () =>
+        await postJSON(
+          `${baseUrl}/get-non-public-viz-count`,
         ),
     },
   };

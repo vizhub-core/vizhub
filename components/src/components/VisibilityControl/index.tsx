@@ -22,10 +22,14 @@ export const VisibilityControl = ({
   visibility,
   setVisibility,
   currentPlan,
+  nonPublicVizCount,
+  currentVizVisibility,
 }: {
   visibility: Visibility;
   setVisibility: (visibility: Visibility) => void;
   currentPlan: Plan;
+  nonPublicVizCount?: number;
+  currentVizVisibility?: Visibility;
 }) => {
   const [showUpgradeCallout, setShowUpgradeCallout] =
     useState(false);
@@ -35,19 +39,38 @@ export const VisibilityControl = ({
       const newVisibility = event.target
         .value as Visibility;
 
-      // If the user is on the free plan and clicks the private option,
-      // show the upgrade callout.
+      // Check if user is on free plan and trying to select private/unlisted
       if (
         currentPlan === 'free' &&
         (newVisibility === 'private' ||
           newVisibility === 'unlisted')
       ) {
-        setShowUpgradeCallout(true);
+        // Check if this would exceed the quota
+        const isChangingToNonPublic =
+          currentVizVisibility === 'public' &&
+          (newVisibility === 'private' ||
+            newVisibility === 'unlisted');
+
+        const wouldExceedQuota =
+          isChangingToNonPublic &&
+          nonPublicVizCount !== undefined &&
+          nonPublicVizCount >= 3;
+
+        if (wouldExceedQuota) {
+          setShowUpgradeCallout(true);
+        } else {
+          setVisibility(newVisibility);
+        }
       } else {
         setVisibility(newVisibility);
       }
     },
-    [currentPlan],
+    [
+      currentPlan,
+      nonPublicVizCount,
+      currentVizVisibility,
+      setVisibility,
+    ],
   );
 
   return (
@@ -76,6 +99,17 @@ export const VisibilityControl = ({
       </div>
       <Form.Text className="text-muted">
         {visibilities[visibility]}
+        {currentPlan === 'free' &&
+          nonPublicVizCount !== undefined &&
+          (visibility === 'private' ||
+            visibility === 'unlisted') && (
+            <div className="mt-1">
+              <small>
+                You have used {nonPublicVizCount} of 3 free
+                private/unlisted vizzes.
+              </small>
+            </div>
+          )}
       </Form.Text>
       {showUpgradeCallout && (
         <UpgradeCallout
