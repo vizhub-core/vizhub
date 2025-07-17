@@ -10,7 +10,7 @@ import {
   StarSVGSymbol,
 } from '../Icons/sam/StarSVG';
 import { SectionId, SortId } from 'entities';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { SidebarSection } from './SidebarSection';
 import { UpgradeCallout } from '../UpgradeCallout';
 import { CreateNewButton } from '../CreateNewButton';
@@ -165,6 +165,24 @@ export const ProfilePageBody = ({
     [sectionId],
   );
 
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedBio, setEditedBio] = useState(bio);
+
+  const handleEditBio = () => {
+    setIsEditing(true);
+  };
+
+  const handleSaveBio = () => {
+    // In a real implementation, you would save the bio to the backend here
+    setIsEditing(false);
+    // For now, we're just updating the local state
+  };
+
+  const handleCancelEdit = () => {
+    setIsEditing(false);
+    setEditedBio(bio);
+  };
+
   return (
     <div className="vh-page vh-profile-page">
       {/*
@@ -175,17 +193,35 @@ export const ProfilePageBody = ({
       <StarSVGSymbol />
       <div className="profile-body vh-page-container">
         <div className="profile-sidebar">
-          <div>
-            <img className="profile-avatar" src={picture} />
+          <div className="profile-info">
+            <img className="profile-avatar" src={picture} alt={`${displayName}'s avatar`} />
             <h3 className="profile-name">{displayName}</h3>
-            <div className="vh-lede-01">@{userName}</div>
+            <div className="vh-lede-01 username">@{userName}</div>
           </div>
-          <div>
-            <div>{bio}</div>
-            {enableEditBio && (
-              <div className="vh-base-02 edit-bio">
-                Edit Bio
+          <div className="profile-bio">
+            {isEditing ? (
+              <div className="bio-edit-container">
+                <textarea 
+                  className="bio-textarea"
+                  value={editedBio}
+                  onChange={(e) => setEditedBio(e.target.value)}
+                  rows={4}
+                  placeholder="Tell us about yourself..."
+                />
+                <div className="bio-edit-actions">
+                  <button className="bio-save-btn" onClick={handleSaveBio}>Save</button>
+                  <button className="bio-cancel-btn" onClick={handleCancelEdit}>Cancel</button>
+                </div>
               </div>
+            ) : (
+              <>
+                <div className="bio-content">{bio || "No bio yet"}</div>
+                {enableEditBio && isViewingOwnProfile && (
+                  <button className="vh-base-02 edit-bio" onClick={handleEditBio}>
+                    {bio ? "Edit Bio" : "Add Bio"}
+                  </button>
+                )}
+              </>
             )}
           </div>
           <div className="profile-sidebar-sections">
@@ -209,7 +245,7 @@ export const ProfilePageBody = ({
             currentPlan === 'free' &&
             sectionId === 'public' && <HomeStarter />} */}
           <div className="profile-header">
-            <h2>{profileHeader}</h2>
+            <h2 className="section-title">{profileHeader}</h2>
             <div className="profile-header-controls">
               {sectionId === SectionId.ApiKeys ? (
                 showCreateAPIKeyButton ? (
