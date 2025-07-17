@@ -35,6 +35,15 @@ export const translations = {
     'explore.feature.history': 'Revision History',
     'explore.button.learn-more': 'Learn More',
     'explore.page.title': 'Explore',
+    // Create visualization page translations
+    'create.page.title': 'Create Visualization',
+    'create.page.subtitle': 'Start by forking a template',
+    'create.page.description':
+      'Select a template that fits your needs. Each provides a foundation you can customize.',
+    'create.page.subtitle.emphasized': 'forking',
+    'create.page.choose.template':
+      'Choose a template to get started with your visualization',
+    'create.page.custom.template': 'Custom Template',
   },
   zh: {
     greeting: '你好！欢迎来到 VizHub。',
@@ -66,6 +75,15 @@ export const translations = {
     'explore.feature.history': '修订历史',
     'explore.button.learn-more': '了解更多',
     'explore.page.title': '探索',
+    // Create visualization page translations
+    'create.page.title': '创建可视化',
+    'create.page.subtitle': '从分叉模板开始',
+    'create.page.description':
+      '选择适合您需求的模板。每个模板都提供了您可以自定义的基础。',
+    'create.page.subtitle.emphasized': '分叉',
+    'create.page.choose.template':
+      '选择一个模板开始您的可视化',
+    'create.page.custom.template': '自定义模板',
   },
   es: {
     greeting: '¡Hola! Bienvenido a VizHub.',
@@ -103,6 +121,17 @@ export const translations = {
     'explore.feature.history': 'Historial de Revisiones',
     'explore.button.learn-more': 'Saber Más',
     'explore.page.title': 'Explorar',
+    // Create visualization page translations
+    'create.page.title': 'Crear Visualización',
+    'create.page.subtitle':
+      'Comienza bifurcando una plantilla',
+    'create.page.description':
+      'Selecciona una plantilla que se adapte a tus necesidades. Cada una proporciona una base que puedes personalizar.',
+    'create.page.subtitle.emphasized': 'bifurcando',
+    'create.page.choose.template':
+      'Elige una plantilla para comenzar con tu visualización',
+    'create.page.custom.template':
+      'Plantilla Personalizada',
   },
   hi: {
     greeting: 'नमस्ते! VizHub में आपका स्वागत है।',
@@ -138,6 +167,16 @@ export const translations = {
     'explore.feature.history': 'संशोधन इतिहास',
     'explore.button.learn-more': 'और जानें',
     'explore.page.title': 'अन्वेषण करें',
+    // Create visualization page translations
+    'create.page.title': 'विज़ुअलाइज़ेशन बनाएं',
+    'create.page.subtitle':
+      'टेम्प्लेट फोर्क करके शुरू करें',
+    'create.page.description':
+      'अपनी आवश्यकताओं के अनुकूल टेम्प्लेट चुनें। प्रत्येक एक आधार प्रदान करता है जिसे आप अनुकूलित कर सकते हैं।',
+    'create.page.subtitle.emphasized': 'फोर्क',
+    'create.page.choose.template':
+      'अपने विज़ुअलाइज़ेशन के साथ शुरू करने के लिए एक टेम्प्लेट चुनें',
+    'create.page.custom.template': 'कस्टम टेम्प्लेट',
   },
   ar: {
     greeting: 'مرحبًا! مرحبًا بك في VizHub.',
@@ -172,6 +211,15 @@ export const translations = {
     'explore.feature.history': 'تاريخ المراجعات',
     'explore.button.learn-more': 'تعلم المزيد',
     'explore.page.title': 'استكشف',
+    // Create visualization page translations
+    'create.page.title': 'إنشاء التصور',
+    'create.page.subtitle': 'ابدأ بتفريع قالب',
+    'create.page.description':
+      'اختر قالباً يناسب احتياجاتك. كل قالب يوفر أساساً يمكنك تخصيصه.',
+    'create.page.subtitle.emphasized': 'تفريع',
+    'create.page.choose.template':
+      'اختر قالباً للبدء في التصور الخاص بك',
+    'create.page.custom.template': 'قالب مخصص',
   },
   bn: {
     greeting: 'হ্যালো! VizHub এ আপনাকে স্বাগতম।',
@@ -207,6 +255,15 @@ export const translations = {
     'explore.feature.history': 'সংশোধনের ইতিহাস',
     'explore.button.learn-more': 'আরও জানুন',
     'explore.page.title': 'অন্বেষণ',
+    // Create visualization page translations
+    'create.page.title': 'ভিজ্যুয়ালাইজেশন তৈরি করুন',
+    'create.page.subtitle': 'টেমপ্লেট ফর্ক করে শুরু করুন',
+    'create.page.description':
+      'আপনার প্রয়োজন অনুযায়ী একটি টেমপ্লেট নির্বাচন করুন। প্রতিটি একটি ভিত্তি প্রদান করে যা আপনি কাস্টমাইজ করতে পারেন।',
+    'create.page.subtitle.emphasized': 'ফর্ক',
+    'create.page.choose.template':
+      'আপনার ভিজ্যুয়ালাইজেশন শুরু করতে একটি টেমপ্লেট বেছে নিন',
+    'create.page.custom.template': 'কাস্টম টেমপ্লেট',
   },
   pt: {
     greeting: 'Olá! Bem-vindo ao VizHub.',
@@ -244,6 +301,15 @@ export const translations = {
     'explore.feature.history': 'Histórico de Revisões',
     'explore.button.learn-more': 'Saiba Mais',
     'explore.page.title': 'Explorar',
+    // Create visualization page translations
+    'create.page.title': 'Criar Visualização',
+    'create.page.subtitle': 'Comece bifurcando um modelo',
+    'create.page.description':
+      'Selecione um modelo que atenda às suas necessidades. Cada um fornece uma base que você pode personalizar.',
+    'create.page.subtitle.emphasized': 'bifurcando',
+    'create.page.choose.template':
+      'Escolha um modelo para começar com sua visualização',
+    'create.page.custom.template': 'Modelo Personalizado',
   },
   ru: {
     greeting: 'Привет! Добро пожаловать в VizHub.',
@@ -281,6 +347,16 @@ export const translations = {
     'explore.feature.history': 'История Версий',
     'explore.button.learn-more': 'Узнать Больше',
     'explore.page.title': 'Исследовать',
+    // Create visualization page translations
+    'create.page.title': 'Создать Визуализацию',
+    'create.page.subtitle': 'Начните с форка шаблона',
+    'create.page.description':
+      'Выберите шаблон, который соответствует вашим потребностям. Каждый предоставляет основу, которую вы можете настроить.',
+    'create.page.subtitle.emphasized': 'форка',
+    'create.page.choose.template':
+      'Выберите шаблон для начала работы с вашей визуализацией',
+    'create.page.custom.template':
+      'Пользовательский Шаблон',
   },
   ja: {
     greeting: 'こんにちは！VizHubへようこそ。',
@@ -316,6 +392,16 @@ export const translations = {
     'explore.feature.history': 'リビジョン履歴',
     'explore.button.learn-more': '詳しく学ぶ',
     'explore.page.title': '探索',
+    // Create visualization page translations
+    'create.page.title': 'ビジュアライゼーションを作成',
+    'create.page.subtitle':
+      'テンプレートをフォークして開始',
+    'create.page.description':
+      'ニーズに合ったテンプレートを選択してください。それぞれがカスタマイズ可能な基盤を提供します。',
+    'create.page.subtitle.emphasized': 'フォーク',
+    'create.page.choose.template':
+      'ビジュアライゼーションを始めるためのテンプレートを選択',
+    'create.page.custom.template': 'カスタムテンプレート',
   },
   pa: {
     greeting: 'ਸਤ ਸ੍ਰੀ ਅਕਾਲ! VizHub ਵਿੱਚ ਤੁਹਾਡਾ ਸਵਾਗਤ ਹੈ।',
@@ -351,6 +437,15 @@ export const translations = {
     'explore.feature.history': 'ਸੰਸ਼ੋਧਨ ਇਤਿਹਾਸ',
     'explore.button.learn-more': 'ਹੋਰ ਜਾਣੋ',
     'explore.page.title': 'ਖੋਜ',
+    // Create visualization page translations
+    'create.page.title': 'ਵਿਜ਼ੂਅਲਾਈਜ਼ੇਸ਼ਨ ਬਣਾਓ',
+    'create.page.subtitle': 'ਟੈਂਪਲੇਟ ਫੋਰਕ ਕਰਕੇ ਸ਼ੁਰੂ ਕਰੋ',
+    'create.page.description':
+      'ਆਪਣੀਆਂ ਲੋੜਾਂ ਦੇ ਅਨੁਕੂਲ ਟੈਂਪਲੇਟ ਚੁਣੋ। ਹਰ ਇੱਕ ਇੱਕ ਬੁਨਿਆਦ ਪ੍ਰਦਾਨ ਕਰਦਾ ਹੈ ਜਿਸ ਨੂੰ ਤੁਸੀਂ ਅਨੁਕੂਲਿਤ ਕਰ ਸਕਦੇ ਹੋ।',
+    'create.page.subtitle.emphasized': 'ਫੋਰਕ',
+    'create.page.choose.template':
+      'ਆਪਣੇ ਵਿਜ਼ੂਅਲਾਈਜ਼ੇਸ਼ਨ ਨਾਲ ਸ਼ੁਰੂ ਕਰਨ ਲਈ ਇੱਕ ਟੈਂਪਲੇਟ ਚੁਣੋ',
+    'create.page.custom.template': 'ਕਸਟਮ ਟੈਂਪਲੇਟ',
   },
   // Need to add the remaining languages
   id: {
@@ -388,6 +483,16 @@ export const translations = {
     'explore.feature.history': 'Riwayat Revisi',
     'explore.button.learn-more': 'Pelajari Lebih Lanjut',
     'explore.page.title': 'Jelajahi',
+    // Create visualization page translations
+    'create.page.title': 'Buat Visualisasi',
+    'create.page.subtitle':
+      'Mulai dengan mem-fork template',
+    'create.page.description':
+      'Pilih template yang sesuai dengan kebutuhan Anda. Setiap template menyediakan fondasi yang dapat Anda kustomisasi.',
+    'create.page.subtitle.emphasized': 'mem-fork',
+    'create.page.choose.template':
+      'Pilih template untuk memulai visualisasi Anda',
+    'create.page.custom.template': 'Template Kustom',
   },
   ur: {
     greeting: 'ہیلو! VizHub میں خوش آمدید۔',
@@ -423,6 +528,15 @@ export const translations = {
     'explore.feature.history': 'نظرثانی کی تاریخ',
     'explore.button.learn-more': 'مزید جانیں',
     'explore.page.title': 'دریافت کریں',
+    // Create visualization page translations
+    'create.page.title': 'ویژولائزیشن بنائیں',
+    'create.page.subtitle': 'ٹیمپلیٹ فورک کرکے شروع کریں',
+    'create.page.description':
+      'اپنی ضروریات کے مطابق ٹیمپلیٹ منتخب کریں۔ ہر ایک ایک بنیاد فراہم کرتا ہے جسے آپ اپنی مرضی کے مطابق بنا سکتے ہیں۔',
+    'create.page.subtitle.emphasized': 'فورک',
+    'create.page.choose.template':
+      'اپنی ویژولائزیشن شروع کرنے کے لیے ٹیمپلیٹ منتخب کریں',
+    'create.page.custom.template': 'کسٹم ٹیمپلیٹ',
   },
   mr: {
     greeting: 'नमस्कार! VizHub वर आपले स्वागत आहे.',
@@ -458,6 +572,15 @@ export const translations = {
     'explore.feature.history': 'पुनरावलोकन इतिहास',
     'explore.button.learn-more': 'अधिक जाणून घ्या',
     'explore.page.title': 'अन्वेषण',
+    // Create visualization page translations
+    'create.page.title': 'व्हिज्युअलायझेशन तयार करा',
+    'create.page.subtitle': 'टेम्प्लेट फोर्क करून सुरू करा',
+    'create.page.description':
+      'तुमच्या गरजांना अनुकूल असलेले टेम्प्लेट निवडा. प्रत्येक एक पाया प्रदान करते जे तुम्ही सानुकूलित करू शकता.',
+    'create.page.subtitle.emphasized': 'फोर्क',
+    'create.page.choose.template':
+      'तुमच्या व्हिज्युअलायझेशनसह सुरुवात करण्यासाठी टेम्प्लेट निवडा',
+    'create.page.custom.template': 'सानुकूल टेम्प्लेट',
   },
   fr: {
     greeting: 'Bonjour! Bienvenue sur VizHub.',
@@ -497,6 +620,16 @@ export const translations = {
     'explore.feature.history': 'Historique des Révisions',
     'explore.button.learn-more': 'En Savoir Plus',
     'explore.page.title': 'Explorer',
+    // Create visualization page translations
+    'create.page.title': 'Créer une Visualisation',
+    'create.page.subtitle':
+      'Commencez par bifurquer un modèle',
+    'create.page.description':
+      'Sélectionnez un modèle qui correspond à vos besoins. Chacun fournit une base que vous pouvez personnaliser.',
+    'create.page.subtitle.emphasized': 'bifurquer',
+    'create.page.choose.template':
+      'Choisissez un modèle pour commencer votre visualisation',
+    'create.page.custom.template': 'Modèle Personnalisé',
   },
   de: {
     greeting: 'Hallo! Willkommen bei VizHub.',
@@ -534,6 +667,17 @@ export const translations = {
     'explore.feature.history': 'Revisionsgeschichte',
     'explore.button.learn-more': 'Mehr erfahren',
     'explore.page.title': 'Erkunden',
+    // Create visualization page translations
+    'create.page.title': 'Visualisierung Erstellen',
+    'create.page.subtitle':
+      'Beginnen Sie mit dem Forken einer Vorlage',
+    'create.page.description':
+      'Wählen Sie eine Vorlage, die Ihren Bedürfnissen entspricht. Jede bietet eine Grundlage, die Sie anpassen können.',
+    'create.page.subtitle.emphasized': 'Forken',
+    'create.page.choose.template':
+      'Wählen Sie eine Vorlage, um mit Ihrer Visualisierung zu beginnen',
+    'create.page.custom.template':
+      'Benutzerdefinierte Vorlage',
   },
   ko: {
     greeting: '안녕하세요! VizHub에 오신 것을 환영합니다.',
@@ -568,5 +712,14 @@ export const translations = {
     'explore.feature.history': '수정 기록',
     'explore.button.learn-more': '더 알아보기',
     'explore.page.title': '탐색',
+    // Create visualization page translations
+    'create.page.title': '시각화 만들기',
+    'create.page.subtitle': '템플릿을 포크하여 시작',
+    'create.page.description':
+      '필요에 맞는 템플릿을 선택하세요. 각각은 사용자 정의할 수 있는 기반을 제공합니다.',
+    'create.page.subtitle.emphasized': '포크',
+    'create.page.choose.template':
+      '시각화를 시작할 템플릿을 선택하세요',
+    'create.page.custom.template': '사용자 정의 템플릿',
   },
 };

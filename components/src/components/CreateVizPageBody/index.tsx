@@ -1,24 +1,43 @@
 import { Footer } from '../Footer';
+import { useLanguage } from '../LanguageContext';
 import './styles.scss';
 
 export const CreateVizPageBody = ({
   // Viz preview list props.
   renderVizPreviews,
 }) => {
+  const { t } = useLanguage();
+
   return (
     <div className="vh-page vh-create-viz-page">
       <div className="create-viz-content vh-page-container">
         <div className="create-viz-header">
           <div className="header-content">
-            <h1>Create Visualization</h1>
+            <h1>{t('create.page.title')}</h1>
             <div className="vh-lede-01">
-              Start by{' '}
-              <span className="emphasized">forking</span> a
-              template
+              {t('create.page.subtitle')
+                .split(' ')
+                .map((word, index, array) => {
+                  if (
+                    word ===
+                    t('create.page.subtitle.emphasized')
+                  ) {
+                    return (
+                      <span
+                        key={index}
+                        className="emphasized"
+                      >
+                        {word}
+                      </span>
+                    );
+                  }
+                  return index === array.length - 1
+                    ? word
+                    : word + ' ';
+                })}
             </div>
             <p className="create-viz-description">
-              Select a template that fits your needs. Each
-              provides a foundation you can customize.
+              {t('create.page.description')}
             </p>
           </div>
         </div>
