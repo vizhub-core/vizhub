@@ -26,6 +26,7 @@ import { getFileText } from 'entities/src/accessors/getFileText';
 import { VizPage } from './index';
 import { renderREADME } from './renderREADME';
 import { getAuthenticatedUser } from '../getAuthenticatedUser';
+import { getVizKeywords } from '../../seoUtils';
 import { VizAccess } from 'interactors/src/verifyVizAccess';
 import { Result } from 'gateways';
 import { VizPageData } from './VizPageData';
@@ -477,6 +478,9 @@ VizPage.getPageData = async ({
     // Score stale vizzes (small batch).
     scoreStaleVizzes();
 
+    // Extract keywords from README.md for SEO
+    const keywords = getVizKeywords(content);
+
     // Compose the data for the page.
     const vizPageData: VizPageData = {
       ownerUserSnapshot,
@@ -495,6 +499,7 @@ VizPage.getPageData = async ({
       buildVizResult,
       downloadImageHref,
       disableAnalytics,
+      keywords,
     };
 
     // If we are viewing a versioned page,
