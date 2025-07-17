@@ -21,6 +21,7 @@ import { validateVizTest } from './validateVizTest';
 import { deleteVizTest } from './deleteVizTest';
 import { getInfoByIdOrSlugTest } from './getInfoByIdOrSlugTest';
 import { apiKeyManagementTest } from './apiKeyManagementTest';
+import { emojiDiffTest } from './emojiDiffTest';
 
 export const interactorsTests = () => {
   describe('Interactors', () => {
@@ -43,5 +44,7 @@ export const interactorsTests = () => {
     getInfoByIdOrSlugTest();
 
     apiKeyManagementTest();
+
+    emojiDiffTest();
   });
 };
