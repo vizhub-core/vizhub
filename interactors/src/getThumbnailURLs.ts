@@ -264,6 +264,10 @@ export const GetThumbnailURLs = (gateways: Gateways) => {
 
     // console.log(JSON.stringify(thumbnailURLs, null, 2));
 
-    return { thumbnailURLs, fullResolutionURLs, generateAndSaveNewImageKeys };
+    return {
+      thumbnailURLs,
+      fullResolutionURLs,
+      generateAndSaveNewImageKeys,
+    };
   };
 };

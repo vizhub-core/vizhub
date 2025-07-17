@@ -6,7 +6,7 @@ describe('Emoji handling in OT diff', () => {
   it('should handle simple emoji in text diff', () => {
     const before = { content: 'Hello world' };
     const after = { content: 'Hello world 🌈' };
-    
+
     // This should not throw an error
     expect(() => {
       const op = diff(before, after);
@@ -17,14 +17,15 @@ describe('Emoji handling in OT diff', () => {
     // This mimics the scenario in editWithAI.ts where aiScratchpad contains emoji
     const before = {
       files: { 'index.html': { text: '<html></html>' } },
-      aiScratchpad: 'Initial content'
+      aiScratchpad: 'Initial content',
     };
-    
+
     const after = {
       files: { 'index.html': { text: '<html></html>' } },
-      aiScratchpad: 'Initial content with emoji 🌈 in response'
+      aiScratchpad:
+        'Initial content with emoji 🌈 in response',
     };
-    
+
     // This should not throw an error
     expect(() => {
       const op = diff(before, after);
@@ -38,11 +39,11 @@ describe('Emoji handling in OT diff', () => {
       '❤️', // Emoji with variation selector
       '🏳️‍🌈', // Complex compound emoji
     ];
-    
-    emojis.forEach(emoji => {
+
+    emojis.forEach((emoji) => {
       const before = { text: 'Start' };
       const after = { text: `Start ${emoji}` };
-      
+
       expect(() => {
         const op = diff(before, after);
       }, `Should handle emoji: ${emoji}`).not.toThrow();
@@ -52,41 +53,52 @@ describe('Emoji handling in OT diff', () => {
   it('should correctly compute diff for emoji content', () => {
     const before = { message: 'Hello' };
     const after = { message: 'Hello 🎉' };
-    
+
     const op = diff(before, after);
-    
+
     // Verify the operation is valid (not empty)
     expect(op).toBeDefined();
-    expect(Array.isArray(op) ? op.length > 0 : Object.keys(op).length > 0).toBe(true);
+    expect(
+      Array.isArray(op)
+        ? op.length > 0
+        : Object.keys(op).length > 0,
+    ).toBe(true);
   });
 
   it('should handle round-trip diff and apply with emojis', () => {
     // Test that emoji content can be diffed and applied correctly
-    const original = { 
+    const original = {
       aiScratchpad: 'Building a rainbow component',
-      files: { 'index.html': { text: '<div>Hello</div>' } }
+      files: { 'index.html': { text: '<div>Hello</div>' } },
     };
-    
-    const modified = { 
-      aiScratchpad: 'Building a rainbow component 🌈 with colors',
-      files: { 'index.html': { text: '<div>Hello</div>' } }
+
+    const modified = {
+      aiScratchpad:
+        'Building a rainbow component 🌈 with colors',
+      files: { 'index.html': { text: '<div>Hello</div>' } },
     };
-    
+
     const op = diff(original, modified);
     const result = apply(original, op);
-    
-    expect(result.aiScratchpad).toBe('Building a rainbow component 🌈 with colors');
+
+    expect(result.aiScratchpad).toBe(
+      'Building a rainbow component 🌈 with colors',
+    );
   });
 
   it('should handle emoji content without errors', () => {
     // Test that emoji content can be properly diffed and applied
     const before = { aiScratchpad: 'Creating a component' };
-    const after = { aiScratchpad: 'Creating a component 🌈 with emojis' };
-    
+    const after = {
+      aiScratchpad: 'Creating a component 🌈 with emojis',
+    };
+
     const op = diff(before, after);
     const result = apply(before, op);
-    
-    expect(result.aiScratchpad).toBe('Creating a component 🌈 with emojis');
+
+    expect(result.aiScratchpad).toBe(
+      'Creating a component 🌈 with emojis',
+    );
   });
 
   it('should handle specific problematic emoji sequences', () => {
@@ -97,11 +109,11 @@ describe('Emoji handling in OT diff', () => {
       '🧑🏽‍💻', // Person with skin tone + ZWJ + computer
       '🤷🏻‍♀️', // Person shrugging with skin tone and gender
     ];
-    
-    problematicEmojis.forEach(emoji => {
+
+    problematicEmojis.forEach((emoji) => {
       const before = { content: 'Test: ' };
       const after = { content: `Test: ${emoji}` };
-      
+
       expect(() => {
         const op = diff(before, after);
         const result = apply(before, op);

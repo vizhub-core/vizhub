@@ -47,6 +47,7 @@ export const expectedUser: User = {
   displayName: options.displayName,
   picture: options.picture,
   plan: 'free',
+  numUnreadNotifications: 0,
 };
 
 export const updateOrCreateUserTest = () => {
@@ -114,7 +115,7 @@ export const updateOrCreateUserTest = () => {
         displayName: 'Schmurran Schmellemer',
         picture:
           'https://avatars.poopinyourpants.com/u/68416?v=4',
-        plan: 'pro',
+        plan: 'professional',
       };
       await saveUser(existingUser);
 
@@ -134,7 +135,7 @@ export const updateOrCreateUserTest = () => {
       assert(getUserResult2.outcome === 'success');
       expect(getUserResult2.value.data).toEqual({
         ...expectedUser,
-        plan: 'pro',
+        plan: 'professional',
       });
     });
 
