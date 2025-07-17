@@ -191,6 +191,14 @@ export const EditWithAI = (gateways: Gateways) => {
         let fullContent = '';
         let generationId = '';
 
+        // Track the expected state locally to avoid race conditions with ShareDB
+        let expectedAiScratchpad =
+          shareDBDoc.data.aiScratchpad || '';
+
+        // Throttle scratchpad updates to avoid "op too long" errors
+        let lastUpdateTime = 0;
+        const UPDATE_THROTTLE_MS = 100; // Update at most every 100ms
+
         // Define callbacks for file name changes, code lines, and non-code lines
         // TODO use these to update the actual viz files
         const callbacks: StreamingParserCallbacks = {
@@ -258,12 +266,34 @@ export const EditWithAI = (gateways: Gateways) => {
 
             // TODO don't allow multiple parallel AI edits
             // to even happen at the same time.
-            shareDBDoc.submitOp(
-              diff(shareDBDoc.data, {
+
+            // Throttle updates to prevent "op too long" errors
+            const now = Date.now();
+            const shouldUpdate =
+              now - lastUpdateTime >= UPDATE_THROTTLE_MS;
+
+            if (shouldUpdate) {
+              // Use expected state to avoid race conditions with ShareDB operations
+              const currentExpectedState = {
+                ...shareDBDoc.data,
+                aiScratchpad: expectedAiScratchpad,
+              };
+
+              const newExpectedState = {
                 ...shareDBDoc.data,
                 aiScratchpad: fullContent,
-              }),
-            );
+              };
+
+              const op = diff(
+                currentExpectedState,
+                newExpectedState,
+              );
+              shareDBDoc.submitOp(op);
+
+              // Update our expected state and timestamp
+              expectedAiScratchpad = fullContent;
+              lastUpdateTime = now;
+            }
 
             // Send chunk to client if streamHandler is provided
             parser.processChunk(chunkContent);
@@ -274,6 +304,25 @@ export const EditWithAI = (gateways: Gateways) => {
           }
         }
         parser.flushRemaining();
+
+        // Submit final update if there's pending content
+        if (expectedAiScratchpad !== fullContent) {
+          const currentExpectedState = {
+            ...shareDBDoc.data,
+            aiScratchpad: expectedAiScratchpad,
+          };
+
+          const newExpectedState = {
+            ...shareDBDoc.data,
+            aiScratchpad: fullContent,
+          };
+
+          const op = diff(
+            currentExpectedState,
+            newExpectedState,
+          );
+          shareDBDoc.submitOp(op);
+        }
 
         // Parse to string if needed
         DEBUG && console.log('Final content:', fullContent);

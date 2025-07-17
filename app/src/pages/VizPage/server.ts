@@ -412,8 +412,11 @@ VizPage.getPageData = async ({
     //  * the collaborators
 
     // The unfurl image URL for the page.
-    const { thumbnailURLs, fullResolutionURLs, generateAndSaveNewImageKeys } =
-      await getThumbnailURLs([end], defaultVizWidth);
+    const {
+      thumbnailURLs,
+      fullResolutionURLs,
+      generateAndSaveNewImageKeys,
+    } = await getThumbnailURLs([end], defaultVizWidth);
     const image = thumbnailURLs[end];
     const downloadImageHref = fullResolutionURLs[end];
 
