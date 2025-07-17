@@ -21,6 +21,7 @@ export type VizPageData = PageData & {
   initialComments: Array<Snapshot<Comment>>;
   initialCommentAuthors: Array<Snapshot<User>>;
   buildVizResult: BuildVizResult;
+  downloadImageHref?: string;
 
   // If commitMetadata is defined,
   // we are viewing a specific version of the viz.
