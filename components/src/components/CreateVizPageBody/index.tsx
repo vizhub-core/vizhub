@@ -23,11 +23,13 @@ export const CreateVizPageBody = ({
                     t('create.page.subtitle.emphasized')
                   ) {
                     return (
-                      <span
-                        key={index}
-                        className="emphasized"
-                      >
-                        {word}
+                      <span key={index}>
+                        <span className="emphasized">
+                          {word}
+                        </span>
+                        {index === array.length - 1
+                          ? ''
+                          : ' '}
                       </span>
                     );
                   }
