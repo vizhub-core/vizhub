@@ -69,4 +69,6 @@ export type FeatureId =
   | 'discount-codes'
   | 'student-limit'
   | 'premium-duration'
-  | 'limited-ai-edits';
+  | 'limited-ai-edits'
+  | 'limited-non-public-vizzes'
+  | 'unlimited-non-public-vizzes';

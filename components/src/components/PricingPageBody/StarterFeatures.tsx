@@ -38,6 +38,13 @@ export const StarterFeatures = () => {
         Create your own works right in your browser.
       </Feature>
       <Feature
+        title="Limited Non-Public Vizzes"
+        id="limited-non-public-vizzes"
+        hasBottomBorder={true}
+      >
+        Create up to 3 private or unlisted vizzes.
+      </Feature>
+      <Feature
         title="Community Access"
         id="community-access"
         hasBottomBorder={true}

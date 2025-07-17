@@ -97,8 +97,6 @@ export const LanguageProvider = ({
         document.body.removeChild(notification);
       }, 300);
     }, 3000);
-
-    console.log(`Language changed to ${language.name}`);
   };
 
   // Translation function

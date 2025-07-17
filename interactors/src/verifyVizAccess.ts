@@ -74,8 +74,9 @@ export const VerifyVizAccess = (gateways: Gateways) => {
             vizAccess[action] =
               authenticatedUserId === info.owner;
           } else if (action === WRITE) {
-            //  * Don't allow the owner to edit it
-            vizAccess[action] = false;
+            //  * Allow the owner to edit it
+            vizAccess[action] =
+              authenticatedUserId === info.owner;
           } else if (action === DELETE) {
             //  * Allow the owner to delete it
             vizAccess[action] =

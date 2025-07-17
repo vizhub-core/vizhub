@@ -27,6 +27,7 @@ export const ForkModal = ({
   possibleOwners,
   currentPlan,
   commitId,
+  nonPublicVizCount,
 }: {
   show: boolean;
   onClose: () => void;
@@ -50,6 +51,7 @@ export const ForkModal = ({
   }>;
   currentPlan: Plan;
   commitId: CommitId;
+  nonPublicVizCount?: number;
 }) => {
   const [title, setTitle] = useState<string>(initialTitle);
   const [visibility, setVisibility] = useState<Visibility>(
@@ -120,6 +122,8 @@ export const ForkModal = ({
             visibility={visibility}
             setVisibility={setVisibility}
             currentPlan={currentPlan}
+            nonPublicVizCount={nonPublicVizCount}
+            currentVizVisibility={initialVisibility}
           />
           <OwnerControl
             owner={owner}

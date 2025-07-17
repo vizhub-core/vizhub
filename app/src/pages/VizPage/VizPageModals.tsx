@@ -21,6 +21,7 @@ import {
   useContext,
   useMemo,
   useState,
+  useEffect,
 } from 'react';
 import { AuthenticatedUserContext } from '../../contexts/AuthenticatedUserContext';
 import { getVizPageHref } from 'entities/src/accessors';
@@ -116,6 +117,10 @@ export const VizPageModals = () => {
   const [brandedOption, setBrandedOption] =
     useState('branded');
 
+  // State for tracking non-public viz count for free users
+  const [nonPublicVizCount, setNonPublicVizCount] =
+    useState<number | undefined>(undefined);
+
   const embedSnippetToCopy = useMemo(
     () =>
       iframeSnippet({
@@ -204,6 +209,55 @@ export const VizPageModals = () => {
     owner: info.owner,
   });
 
+  // Fetch non-public viz count for free users when modals are opened
+  useEffect(() => {
+    const shouldFetchCount =
+      authenticatedUser?.plan === FREE &&
+      (showForkModal || showSettingsModal) &&
+      nonPublicVizCount === undefined;
+
+    if (shouldFetchCount) {
+      const fetchNonPublicVizCount = async () => {
+        try {
+          const result =
+            await vizKit.rest.getNonPublicVizCount();
+          if (result.outcome === 'success') {
+            setNonPublicVizCount(result.value.count);
+          } else {
+            console.error(
+              'Failed to fetch non-public viz count:',
+              result.error,
+            );
+          }
+        } catch (error) {
+          console.error(
+            'Error fetching non-public viz count:',
+            error,
+          );
+        }
+      };
+
+      fetchNonPublicVizCount();
+    }
+  }, [
+    authenticatedUser?.plan,
+    showForkModal,
+    showSettingsModal,
+    nonPublicVizCount,
+    vizKit,
+  ]);
+
+  // Reset the count when modals close so it gets refetched next time
+  useEffect(() => {
+    if (
+      !showForkModal &&
+      !showSettingsModal &&
+      nonPublicVizCount !== undefined
+    ) {
+      setNonPublicVizCount(undefined);
+    }
+  }, [showForkModal, showSettingsModal, nonPublicVizCount]);
+
   return (
     <>
       {showForkModal && (
@@ -224,6 +278,7 @@ export const VizPageModals = () => {
           onFork={onFork}
           currentPlan={authenticatedUser?.plan}
           commitId={commitMetadata?.id}
+          nonPublicVizCount={nonPublicVizCount}
         />
       )}
       {showSettingsModal && (
@@ -241,6 +296,7 @@ export const VizPageModals = () => {
           userName={authenticatedUser?.userName}
           initialSlug={info.slug || info.id}
           validateSlug={validateSlug}
+          nonPublicVizCount={nonPublicVizCount}
         />
       )}
       {showShareModal && (

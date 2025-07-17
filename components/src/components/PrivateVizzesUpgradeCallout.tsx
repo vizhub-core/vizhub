@@ -1,5 +1,15 @@
-export const PrivateVizzesUpgradeCallout = () => (
+export const PrivateVizzesUpgradeCallout = ({
+  reachedLimit,
+}: {
+  reachedLimit: boolean;
+}) => (
   <>
+    {reachedLimit && (
+      <>
+        You have reached the limit of 3 non-public vizzes
+        allowed on the free plan.{' '}
+      </>
+    )}
     With VizHub Premium, you can make an unlimited number of
     your vizzes <strong>private</strong> or{' '}
     <strong>unlisted</strong>. These features are perfect
