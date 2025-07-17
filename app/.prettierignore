@@ -7,3 +7,4 @@
 .gitignore
 dist
 rollup.browser.js
+public/robots.txt

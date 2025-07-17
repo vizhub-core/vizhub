@@ -1,0 +1,21 @@
+# VizHub robots.txt
+# Allow all search engines to crawl the site
+
+User-agent: *
+Allow: /
+
+# Block crawling of sensitive or unnecessary areas
+Disallow: /api/
+Disallow: /auth/
+Disallow: /account/
+Disallow: /*.json$
+Disallow: /*?*
+
+# Allow specific API endpoints that should be crawlable
+Allow: /api/oembed
+
+# Sitemap location
+Sitemap: https://vizhub.com/sitemap.xml
+
+# Crawl delay to be respectful of server resources
+Crawl-delay: 1
