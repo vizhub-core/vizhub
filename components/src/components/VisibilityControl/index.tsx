@@ -104,10 +104,8 @@ export const VisibilityControl = ({
           (visibility === 'private' ||
             visibility === 'unlisted') && (
             <div className="mt-1">
-              <small>
-                You have used {nonPublicVizCount} of 3 free
-                private/unlisted vizzes.
-              </small>
+              You have used {nonPublicVizCount} of 3 free
+              private/unlisted vizzes.
             </div>
           )}
       </Form.Text>
@@ -118,7 +116,9 @@ export const VisibilityControl = ({
           isVertical={true}
           topMargin={true}
         >
-          <PrivateVizzesUpgradeCallout />
+          <PrivateVizzesUpgradeCallout
+            reachedLimit={true}
+          />
         </UpgradeCallout>
       )}
     </Form.Group>

@@ -13,7 +13,7 @@ export const getNonPublicVizCountEndpoint = ({
   const { getInfos } = gateways;
 
   app.post(
-    '/api/get-non-public-viz-count/',
+    '/api/get-non-public-viz-count',
     bodyParser.json(),
     async (req, res) => {
       try {

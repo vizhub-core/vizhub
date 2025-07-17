@@ -223,7 +223,7 @@ export const VizKit = (
   // because it's easy to send JSON data that way.
   const postJSON = async (
     url: string,
-    data: { [key: string]: any } | null = null,
+    data: { [key: string]: any } = {},
   ) => {
     if (!fetch) throw new Error('fetch is not defined');
     const response = await fetch(url, {
