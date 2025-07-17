@@ -254,3 +254,14 @@
     border-color: #0056b3;
   }
 }
+.ai-badge {
+  background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-right: 5px;
+  vertical-align: middle;
+  display: inline-block;
+}
