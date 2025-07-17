@@ -8,6 +8,10 @@
   padding: 20px 16px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1100;
+  backdrop-filter: blur(10px);
 
   @media (max-width: 1200px) {
     padding: 12px 8px;
