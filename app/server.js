@@ -405,6 +405,7 @@ async function createServer(
         pageData.description,
       );
       const image = pageData.image;
+      const keywords = pageData.keywords || [];
       const disableAnalytics = pageData.disableAnalytics;
 
       // Functions are used as the second argument to `replace()`
@@ -420,6 +421,7 @@ async function createServer(
               descriptionSanitized,
               relativeUrl: originalUrl,
               image,
+              keywords,
             }) + (disableAnalytics ? '' : analyticsScript),
         )
         .replace(/<!--app-html-->/, () => render(pageData))

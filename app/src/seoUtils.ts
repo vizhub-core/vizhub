@@ -253,3 +253,80 @@ export const validateMetaContent = (
       return true;
   }
 };
+
+// Strip markdown syntax from text for keyword extraction
+export const stripMarkdownSyntax = (
+  markdown: string,
+): string => {
+  if (!markdown) return '';
+
+  return (
+    markdown
+      // Remove code blocks (```code```)
+      .replace(/```[\s\S]*?```/g, ' ')
+      // Remove inline code (`code`)
+      .replace(/`([^`]+)`/g, '$1')
+      // Remove headers (# ## ### etc.)
+      .replace(/^#{1,6}\s+/gm, '')
+      // Remove links [text](url) -> text
+      .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+      // Remove reference links [text][ref]
+      .replace(/\[([^\]]+)\]\[[^\]]*\]/g, '$1')
+      // Remove images ![alt](url)
+      .replace(/!\[([^\]]*)\]\([^)]+\)/g, '$1')
+      // Remove emphasis **bold** and *italic*
+      .replace(/\*\*([^*]+)\*\*/g, '$1')
+      .replace(/\*([^*]+)\*/g, '$1')
+      .replace(/__([^_]+)__/g, '$1')
+      .replace(/_([^_]+)_/g, '$1')
+      // Remove strikethrough ~~text~~
+      .replace(/~~([^~]+)~~/g, '$1')
+      // Remove horizontal rules
+      .replace(/^[-*_]{3,}$/gm, '')
+      // Remove blockquotes
+      .replace(/^>\s*/gm, '')
+      // Remove list markers
+      .replace(/^[\s]*[-*+]\s+/gm, '')
+      .replace(/^[\s]*\d+\.\s+/gm, '')
+      // Remove HTML tags
+      .replace(/<[^>]*>/g, ' ')
+      // Clean up extra whitespace
+      .replace(/\s+/g, ' ')
+      .trim()
+  );
+};
+
+// Extract keywords from markdown content
+export const extractKeywordsFromMarkdown = (
+  markdown: string,
+  maxKeywords: number = 10,
+): string[] => {
+  if (!markdown) return [];
+
+  // Strip markdown syntax first
+  const cleanText = stripMarkdownSyntax(markdown);
+
+  // Use existing keyword extraction on cleaned text
+  return extractKeywords(cleanText, maxKeywords);
+};
+
+// Get keywords from viz content by extracting from README.md
+export const getVizKeywords = (
+  content: any, // VizContent type from viz-types
+  maxKeywords: number = 10,
+): string[] => {
+  if (!content || !content.files) return [];
+
+  // Find README.md file
+  for (const fileId of Object.keys(content.files)) {
+    const file = content.files[fileId];
+    if (file.name === 'README.md' && file.text) {
+      return extractKeywordsFromMarkdown(
+        file.text,
+        maxKeywords,
+      );
+    }
+  }
+
+  return [];
+};

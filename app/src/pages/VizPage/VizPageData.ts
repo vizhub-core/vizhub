@@ -37,4 +37,7 @@ export type VizPageData = PageData & {
   // True to disable Analytics on this page.
   // Used for embed page.
   disableAnalytics?: boolean;
+
+  // Keywords extracted from README.md for SEO
+  keywords?: string[];
 };

@@ -165,6 +165,9 @@ import {
   generateMetaDescription,
   extractKeywords,
   generateBreadcrumbs,
+  getVizKeywords,
+  stripMarkdownSyntax,
+  extractKeywordsFromMarkdown,
 } from './seoUtils';
 
 // Sanitize text for meta tags
@@ -202,6 +205,27 @@ const breadcrumbs = generateBreadcrumbs(
 //   { name: 'Viz', url: '/user/john/viz' },
 //   { name: 'Sales Chart', url: '/user/john/viz/sales-chart' }
 // ]
+
+// Extract keywords from viz README.md content
+const vizKeywords = getVizKeywords(vizContent, 5);
+// Automatically extracts keywords from README.md file
+
+// Strip markdown syntax for clean text processing
+const cleanText = stripMarkdownSyntax(`
+# My Visualization
+This shows **interactive** charts with [D3.js](https://d3js.org)
+\`\`\`javascript
+console.log('code');
+\`\`\`
+`);
+// Result: "My Visualization This shows interactive charts with D3.js"
+
+// Extract keywords from markdown content
+const markdownKeywords = extractKeywordsFromMarkdown(
+  '# Data Visualization\nInteractive charts using D3.js and JavaScript',
+  5,
+);
+// Result: ['data', 'visualization', 'interactive', 'charts', 'javascript']
 ```
 
 ## Integration with Server-Side Rendering
