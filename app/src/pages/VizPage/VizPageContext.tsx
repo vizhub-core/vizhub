@@ -92,6 +92,7 @@ export type VizPageContextValue = {
   connected: boolean;
   // handleExportCodeClick: () => void;
   exportHref: string;
+  downloadImageHref?: string;
   shareDBError: VizHubError | null;
   setShareDBError: (error: VizHubError) => void;
   dismissShareDBError: () => void;
@@ -170,6 +171,7 @@ export const VizPageProvider = ({
     initialCommentAuthors,
     buildVizResult,
     commitMetadata,
+    downloadImageHref,
   } = pageData;
 
   const {
@@ -480,6 +482,7 @@ export const VizPageProvider = ({
     setVizTitle,
     submitContentOperation,
     exportHref,
+    downloadImageHref,
     handleForkLinkClick,
     shareDBError,
     setShareDBError,

@@ -61,6 +61,7 @@ export const VizPageBody = () => {
     showEditor,
     setShowEditor,
     exportHref,
+    downloadImageHref,
     toggleForkModal,
     initialReadmeHTML,
     toggleSettingsModal,
@@ -272,7 +273,7 @@ export const VizPageBody = () => {
         onForkClick={toggleForkModal}
         onSettingsClick={toggleSettingsModal}
         onTrashClick={toggleDeleteVizConfirmationModal}
-        downloadImageHref={null}
+        downloadImageHref={downloadImageHref}
         toggleShowRevisionHistory={
           toggleShowRevisionHistory
         }

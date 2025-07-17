@@ -8,8 +8,14 @@ export { api } from 'api';
 export { initializeGateways } from 'database';
 export { authentication } from './authentication';
 export * as accessControl from './accessControl';
-export { seoMetaTags } from './seoMetaTags';
+export {
+  seoMetaTags,
+  seoMetaTagsLegacy,
+} from './seoMetaTags';
 export { escapeProperly } from './escapeProperly';
+export * as structuredData from './structuredData';
+export * as sitemapGenerator from './sitemapGenerator';
+export * as seoUtils from './seoUtils';
 
 export const render = (pageData) =>
   renderToString(

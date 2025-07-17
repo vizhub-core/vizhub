@@ -41,11 +41,13 @@ export const GetThumbnailURLs = (gateways: Gateways) => {
     width: number = thumbnailWidth,
   ): Promise<{
     thumbnailURLs: Record<CommitId, string>;
+    fullResolutionURLs: Record<CommitId, string>;
     generateAndSaveNewImageKeys: () => Promise<void>;
   }> => {
     // Lazily initialize the screenshotgenie client.
     const noop = {
       thumbnailURLs: {},
+      fullResolutionURLs: {},
       generateAndSaveNewImageKeys: async () => {},
     };
     if (!screenshotgenie) {
@@ -251,8 +253,17 @@ export const GetThumbnailURLs = (gateways: Gateways) => {
         return acc;
       }, {});
 
+    const fullResolutionURLs: Record<CommitId, string> =
+      commitImageKeys.reduce((acc, commitImageKey) => {
+        acc[commitImageKey.commitId] =
+          screenshotgenie.getImageUrl(
+            commitImageKey.imageKey,
+          );
+        return acc;
+      }, {});
+
     // console.log(JSON.stringify(thumbnailURLs, null, 2));
 
-    return { thumbnailURLs, generateAndSaveNewImageKeys };
+    return { thumbnailURLs, fullResolutionURLs, generateAndSaveNewImageKeys };
   };
 };

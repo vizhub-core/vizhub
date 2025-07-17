@@ -4,8 +4,8 @@ import { More } from '../More';
 import { Footer } from '../Footer';
 import { CreateNewButton } from '../CreateNewButton';
 import { useLanguage } from '../LanguageContext';
-import './styles.scss';
 import { discordLink } from '../links';
+import './styles.scss';
 
 const enableOfficeHoursLink = false;
 

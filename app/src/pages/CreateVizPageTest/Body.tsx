@@ -1,4 +1,5 @@
 import { SmartHeader } from '../../smartComponents/SmartHeader';
+import { useLanguage } from '../../../../components/src/components/LanguageContext';
 
 import React from 'react';
 import {
@@ -17,6 +18,8 @@ interface Template {
 }
 
 const VisualizationTemplates: React.FC = () => {
+  const { t } = useLanguage();
+
   const templates: Template[] = [
     {
       id: 'html',
@@ -59,15 +62,14 @@ const VisualizationTemplates: React.FC = () => {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-gray-900">
-                Create Visualization
+                {t('create.page.title')}
               </h1>
               <p className="mt-1 text-sm text-gray-500">
-                Choose a template to get started with your
-                visualization
+                {t('create.page.choose.template')}
               </p>
             </div>
             <button className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
-              Custom Template
+              {t('create.page.custom.template')}
             </button>
           </div>
         </div>

@@ -21,6 +21,7 @@ export type VizPageData = PageData & {
   initialComments: Array<Snapshot<Comment>>;
   initialCommentAuthors: Array<Snapshot<User>>;
   buildVizResult: BuildVizResult;
+  downloadImageHref?: string;
 
   // If commitMetadata is defined,
   // we are viewing a specific version of the viz.
@@ -37,4 +38,7 @@ export type VizPageData = PageData & {
   // True to disable Analytics on this page.
   // Used for embed page.
   disableAnalytics?: boolean;
+
+  // Keywords extracted from README.md for SEO
+  keywords?: string[];
 };

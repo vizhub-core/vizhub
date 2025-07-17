@@ -26,6 +26,7 @@ import { getFileText } from 'entities/src/accessors/getFileText';
 import { VizPage } from './index';
 import { renderREADME } from './renderREADME';
 import { getAuthenticatedUser } from '../getAuthenticatedUser';
+import { getVizKeywords } from '../../seoUtils';
 import { VizAccess } from 'interactors/src/verifyVizAccess';
 import { Result } from 'gateways';
 import { VizPageData } from './VizPageData';
@@ -411,9 +412,10 @@ VizPage.getPageData = async ({
     //  * the collaborators
 
     // The unfurl image URL for the page.
-    const { thumbnailURLs, generateAndSaveNewImageKeys } =
+    const { thumbnailURLs, fullResolutionURLs, generateAndSaveNewImageKeys } =
       await getThumbnailURLs([end], defaultVizWidth);
     const image = thumbnailURLs[end];
+    const downloadImageHref = fullResolutionURLs[end];
 
     // Kick off this process in the background.
     // We don't await it because it's not critical to the page load.
@@ -476,6 +478,9 @@ VizPage.getPageData = async ({
     // Score stale vizzes (small batch).
     scoreStaleVizzes();
 
+    // Extract keywords from README.md for SEO
+    const keywords = getVizKeywords(content);
+
     // Compose the data for the page.
     const vizPageData: VizPageData = {
       ownerUserSnapshot,
@@ -492,7 +497,9 @@ VizPage.getPageData = async ({
       initialComments,
       initialCommentAuthors,
       buildVizResult,
+      downloadImageHref,
       disableAnalytics,
+      keywords,
     };
 
     // If we are viewing a versioned page,

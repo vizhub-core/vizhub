@@ -13,7 +13,10 @@ import { SectionId, SortId } from 'entities';
 import { useMemo } from 'react';
 import { SidebarSection } from './SidebarSection';
 import { UpgradeCallout } from '../UpgradeCallout';
-import { CreateNewButton } from '../CreateNewButton';
+import {
+  CreateNewButton,
+  CREATE_API_KEY,
+} from '../CreateNewButton';
 import { ServerSVG } from '../Icons/sam/ServerSVG';
 import { BellSVG } from '../Icons/sam/BellSVG';
 import { PrivateVizzesUpgradeCallout } from '../PrivateVizzesUpgradeCallout';
@@ -215,7 +218,7 @@ export const ProfilePageBody = ({
                 showCreateAPIKeyButton ? (
                   <CreateNewButton
                     href={null}
-                    label="Create API key"
+                    buttonType={CREATE_API_KEY}
                     onClick={handleCreateAPIKeyClick}
                   />
                 ) : null
