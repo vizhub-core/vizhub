@@ -78,15 +78,16 @@ export const PremiumFeatures = ({}) => (
       .
     </Feature>
     <Feature
-      title="Private & Unlisted Vizzes"
-      id="private-vizzes"
+      title="Unlimited Non-Public Vizzes"
+      id="unlimited-non-public-vizzes"
       hasBottomBorder={true}
       learnMoreHref={
         'https://vizhub.com/forum/t/making-vizzes-private/977'
       }
       // startsExpanded={true}
     >
-      Make your work private. Invite specific collaborators.
+      Make an unlimited number of your vizzes private or
+      unlisted. Invite specific collaborators.
     </Feature>
     <Feature
       title="White Label Embedding"

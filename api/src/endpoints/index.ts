@@ -33,6 +33,7 @@ import { createVizFromPromptEndpoint } from './createVizFromPromptEndpoint';
 import { Endpoint } from '../types';
 import { getNotificationsEndpoint } from './getNotificationsEndpoint';
 import { markNotificationAsReadEndpoint } from './markNotificationAsReadEndpoint';
+import { getNonPublicVizCountEndpoint } from './getNonPublicVizCountEndpoint';
 
 const enableSetVizEndpoint = true;
 
@@ -71,6 +72,7 @@ export const endpoints: Array<Endpoint> = [
   createVizFromPromptEndpoint,
   getNotificationsEndpoint,
   markNotificationAsReadEndpoint,
+  getNonPublicVizCountEndpoint,
 ];
 
 if (enableSetVizEndpoint) {
