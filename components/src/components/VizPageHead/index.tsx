@@ -40,6 +40,7 @@ export const VizPageHead = ({
   toggleExportCodeUpgradeNudgeModal,
   onEditWithAIClick,
   isEditingWithAI,
+  onExportClick,
 }) => {
   const toggleShowEditor = useCallback(
     () => setShowEditor(!showEditor),
@@ -53,12 +54,18 @@ export const VizPageHead = ({
         MouseEvent
       >,
     ) => {
-      if (!userCanExport) {
+      // Call the parent's export click handler first (if provided)
+      if (onExportClick) {
+        onExportClick(event);
+      }
+      
+      // If event wasn't prevented and user still can't export, show upgrade modal
+      if (!event.defaultPrevented && !userCanExport) {
         event.preventDefault();
         toggleExportCodeUpgradeNudgeModal();
       }
     },
-    [userCanExport, toggleExportCodeUpgradeNudgeModal],
+    [userCanExport, toggleExportCodeUpgradeNudgeModal, onExportClick],
   );
 
   return (

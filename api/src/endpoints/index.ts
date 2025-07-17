@@ -34,6 +34,7 @@ import { Endpoint } from '../types';
 import { getNotificationsEndpoint } from './getNotificationsEndpoint';
 import { markNotificationAsReadEndpoint } from './markNotificationAsReadEndpoint';
 import { getNonPublicVizCountEndpoint } from './getNonPublicVizCountEndpoint';
+import { getExportLimitEndpoint } from './getExportLimitEndpoint';
 
 const enableSetVizEndpoint = true;
 
@@ -73,6 +74,7 @@ export const endpoints: Array<Endpoint> = [
   getNotificationsEndpoint,
   markNotificationAsReadEndpoint,
   getNonPublicVizCountEndpoint,
+  getExportLimitEndpoint,
 ];
 
 if (enableSetVizEndpoint) {
