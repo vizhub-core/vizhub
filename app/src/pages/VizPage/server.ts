@@ -411,9 +411,10 @@ VizPage.getPageData = async ({
     //  * the collaborators
 
     // The unfurl image URL for the page.
-    const { thumbnailURLs, generateAndSaveNewImageKeys } =
+    const { thumbnailURLs, fullResolutionURLs, generateAndSaveNewImageKeys } =
       await getThumbnailURLs([end], defaultVizWidth);
     const image = thumbnailURLs[end];
+    const downloadImageHref = fullResolutionURLs[end];
 
     // Kick off this process in the background.
     // We don't await it because it's not critical to the page load.
@@ -492,6 +493,7 @@ VizPage.getPageData = async ({
       initialComments,
       initialCommentAuthors,
       buildVizResult,
+      downloadImageHref,
       disableAnalytics,
     };
 

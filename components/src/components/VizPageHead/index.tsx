@@ -16,7 +16,7 @@ import { LogoIconSVG } from '../Icons/LogoIconSVG';
 const enableRevisionHistory = true;
 
 // TODO fix this and use Screenshot Genie
-const enableDownloadImage = false;
+const enableDownloadImage = true;
 const enableAPIButton = false;
 
 export const VizPageHead = ({
@@ -107,7 +107,7 @@ export const VizPageHead = ({
             <div className="btn-text">Revision History</div>
           </Button>
         )}
-        {enableDownloadImage && showImageButton && (
+        {enableDownloadImage && showImageButton && downloadImageHref && (
           <Button
             as="a"
             variant="dark"
