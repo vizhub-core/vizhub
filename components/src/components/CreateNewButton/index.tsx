@@ -28,7 +28,7 @@ export const CreateNewButton = ({
         return t('create.button.api-key.label');
       case CREATE_VIZ:
       default:
-        return t('create.button.label');
+        return t('create.button.viz.label');
     }
   };
 

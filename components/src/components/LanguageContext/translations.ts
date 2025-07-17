@@ -44,7 +44,8 @@ export const translations = {
     'create.page.choose.template':
       'Choose a template to get started with your visualization',
     'create.page.custom.template': 'Custom Template',
-    'create.button.label': 'Create visualization',
+    'create.button.viz.label': 'Create visualization',
+    'create.button.api-key.label': 'Create API Key',
   },
   zh: {
     greeting: '你好！欢迎来到 VizHub。',
@@ -85,7 +86,8 @@ export const translations = {
     'create.page.choose.template':
       '选择一个模板开始您的可视化',
     'create.page.custom.template': '自定义模板',
-    'create.button.label': '创建可视化',
+    'create.button.viz.label': '创建可视化',
+    'create.button.api-key.label': '创建API密钥',
   },
   es: {
     greeting: '¡Hola! Bienvenido a VizHub.',
@@ -134,7 +136,8 @@ export const translations = {
       'Elige una plantilla para comenzar con tu visualización',
     'create.page.custom.template':
       'Plantilla Personalizada',
-    'create.button.label': 'Crear visualización',
+    'create.button.viz.label': 'Crear visualización',
+    'create.button.api-key.label': 'Crear clave API',
   },
   hi: {
     greeting: 'नमस्ते! VizHub में आपका स्वागत है।',
@@ -180,7 +183,8 @@ export const translations = {
     'create.page.choose.template':
       'अपने विज़ुअलाइज़ेशन के साथ शुरू करने के लिए एक टेम्प्लेट चुनें',
     'create.page.custom.template': 'कस्टम टेम्प्लेट',
-    'create.button.label': 'विज़ुअलाइज़ेशन बनाएं',
+    'create.button.viz.label': 'विज़ुअलाइज़ेशन बनाएं',
+    'create.button.api-key.label': 'API कुंजी बनाएं',
   },
   ar: {
     greeting: 'مرحبًا! مرحبًا بك في VizHub.',
@@ -224,7 +228,8 @@ export const translations = {
     'create.page.choose.template':
       'اختر قالباً للبدء في التصور الخاص بك',
     'create.page.custom.template': 'قالب مخصص',
-    'create.button.label': 'إنشاء التصور',
+    'create.button.viz.label': 'إنشاء التصور',
+    'create.button.api-key.label': 'إنشاء مفتاح API',
   },
   bn: {
     greeting: 'হ্যালো! VizHub এ আপনাকে স্বাগতম।',
@@ -269,7 +274,8 @@ export const translations = {
     'create.page.choose.template':
       'আপনার ভিজ্যুয়ালাইজেশন শুরু করতে একটি টেমপ্লেট বেছে নিন',
     'create.page.custom.template': 'কাস্টম টেমপ্লেট',
-    'create.button.label': 'ভিজ্যুয়ালাইজেশন তৈরি করুন',
+    'create.button.viz.label': 'ভিজ্যুয়ালাইজেশন তৈরি করুন',
+    'create.button.api-key.label': 'API কী তৈরি করুন',
   },
   pt: {
     greeting: 'Olá! Bem-vindo ao VizHub.',
@@ -316,7 +322,8 @@ export const translations = {
     'create.page.choose.template':
       'Escolha um modelo para começar com sua visualização',
     'create.page.custom.template': 'Modelo Personalizado',
-    'create.button.label': 'Criar visualização',
+    'create.button.viz.label': 'Criar visualização',
+    'create.button.api-key.label': 'Criar chave API',
   },
   ru: {
     greeting: 'Привет! Добро пожаловать в VizHub.',
@@ -364,7 +371,8 @@ export const translations = {
       'Выберите шаблон для начала работы с вашей визуализацией',
     'create.page.custom.template':
       'Пользовательский Шаблон',
-    'create.button.label': 'Создать визуализацию',
+    'create.button.viz.label': 'Создать визуализацию',
+    'create.button.api-key.label': 'Создать API ключ',
   },
   ja: {
     greeting: 'こんにちは！VizHubへようこそ。',
@@ -410,7 +418,9 @@ export const translations = {
     'create.page.choose.template':
       'ビジュアライゼーションを始めるためのテンプレートを選択',
     'create.page.custom.template': 'カスタムテンプレート',
-    'create.button.label': 'ビジュアライゼーションを作成',
+    'create.button.viz.label':
+      'ビジュアライゼーションを作成',
+    'create.button.api-key.label': 'APIキーを作成',
   },
   pa: {
     greeting: 'ਸਤ ਸ੍ਰੀ ਅਕਾਲ! VizHub ਵਿੱਚ ਤੁਹਾਡਾ ਸਵਾਗਤ ਹੈ।',
@@ -455,7 +465,8 @@ export const translations = {
     'create.page.choose.template':
       'ਆਪਣੇ ਵਿਜ਼ੂਅਲਾਈਜ਼ੇਸ਼ਨ ਨਾਲ ਸ਼ੁਰੂ ਕਰਨ ਲਈ ਇੱਕ ਟੈਂਪਲੇਟ ਚੁਣੋ',
     'create.page.custom.template': 'ਕਸਟਮ ਟੈਂਪਲੇਟ',
-    'create.button.label': 'ਵਿਜ਼ੂਅਲਾਈਜ਼ੇਸ਼ਨ ਬਣਾਓ',
+    'create.button.viz.label': 'ਵਿਜ਼ੂਅਲਾਈਜ਼ੇਸ਼ਨ ਬਣਾਓ',
+    'create.button.api-key.label': 'API ਕੁੰਜੀ ਬਣਾਓ',
   },
   // Need to add the remaining languages
   id: {
@@ -503,7 +514,8 @@ export const translations = {
     'create.page.choose.template':
       'Pilih template untuk memulai visualisasi Anda',
     'create.page.custom.template': 'Template Kustom',
-    'create.button.label': 'Buat visualisasi',
+    'create.button.viz.label': 'Buat visualisasi',
+    'create.button.api-key.label': 'Buat kunci API',
   },
   ur: {
     greeting: 'ہیلو! VizHub میں خوش آمدید۔',
@@ -548,7 +560,8 @@ export const translations = {
     'create.page.choose.template':
       'اپنی ویژولائزیشن شروع کرنے کے لیے ٹیمپلیٹ منتخب کریں',
     'create.page.custom.template': 'کسٹم ٹیمپلیٹ',
-    'create.button.label': 'ویژولائزیشن بنائیں',
+    'create.button.viz.label': 'ویژولائزیشن بنائیں',
+    'create.button.api-key.label': 'API کلید بنائیں',
   },
   mr: {
     greeting: 'नमस्कार! VizHub वर आपले स्वागत आहे.',
@@ -593,7 +606,8 @@ export const translations = {
     'create.page.choose.template':
       'तुमच्या व्हिज्युअलायझेशनसह सुरुवात करण्यासाठी टेम्प्लेट निवडा',
     'create.page.custom.template': 'सानुकूल टेम्प्लेट',
-    'create.button.label': 'व्हिज्युअलायझेशन तयार करा',
+    'create.button.viz.label': 'व्हिज्युअलायझेशन तयार करा',
+    'create.button.api-key.label': 'API की तयार करा',
   },
   fr: {
     greeting: 'Bonjour! Bienvenue sur VizHub.',
@@ -643,7 +657,8 @@ export const translations = {
     'create.page.choose.template':
       'Choisissez un modèle pour commencer votre visualisation',
     'create.page.custom.template': 'Modèle Personnalisé',
-    'create.button.label': 'Créer une visualisation',
+    'create.button.viz.label': 'Créer une visualisation',
+    'create.button.api-key.label': 'Créer une clé API',
   },
   de: {
     greeting: 'Hallo! Willkommen bei VizHub.',
@@ -692,7 +707,9 @@ export const translations = {
       'Wählen Sie eine Vorlage, um mit Ihrer Visualisierung zu beginnen',
     'create.page.custom.template':
       'Benutzerdefinierte Vorlage',
-    'create.button.label': 'Visualisierung erstellen',
+    'create.button.viz.label': 'Visualisierung erstellen',
+    'create.button.api-key.label':
+      'API-Schlüssel erstellen',
   },
   ko: {
     greeting: '안녕하세요! VizHub에 오신 것을 환영합니다.',
@@ -736,6 +753,7 @@ export const translations = {
     'create.page.choose.template':
       '시각화를 시작할 템플릿을 선택하세요',
     'create.page.custom.template': '사용자 정의 템플릿',
-    'create.button.label': '시각화 만들기',
+    'create.button.viz.label': '시각화 만들기',
+    'create.button.api-key.label': 'API 키 만들기',
   },
 };
