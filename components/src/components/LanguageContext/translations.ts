@@ -29,7 +29,7 @@ export const translations = {
     'explore.hero.title.before': 'Visualize Data with',
     'explore.hero.title.highlight': 'Generative AI Power',
     'explore.hero.description':
-      'Transform Thoughts into Visualizations',
+      'Transform Ideas into Visualizations',
     'explore.feature.instant': 'Instant Results',
     'explore.feature.llms': 'Various LLMs',
     'explore.feature.history': 'Revision History',
