@@ -13,7 +13,7 @@
     "prettier": "prettier {*.*,**/*.*} --write"
   },
   "dependencies": {
-    "@vizhub/viz-types": "^0.1.0",
+    "@vizhub/viz-types": "^0.2.0",
     "d3-format": "^3.1.0",
     "d3-time-format": "^4.1.0",
     "react": "^18",
@@ -27,9 +27,9 @@
   "devDependencies": {
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "@vitejs/plugin-react": "^4.6.0",
+    "@vitejs/plugin-react": "^4.7.0",
     "prettier": "^3.6.2",
     "sass": "^1.89.2",
-    "vite": "^7.0.4"
+    "vite": "^7.0.5"
   }
 }
