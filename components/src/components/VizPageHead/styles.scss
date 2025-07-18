@@ -56,3 +56,109 @@
     }
   }
 }
+.vh-viz-page-head {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 25px;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  color: white;
+  height: 100%;
+  width: 280px;
+  position: fixed;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  box-shadow: -5px 0 25px rgba(0, 0, 0, 0.25);
+  z-index: 1000;
+  overflow-y: auto;
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+
+  .logo-link {
+    margin-bottom: 20px;
+    padding: 10px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      transform: scale(1.05);
+    }
+  }
+
+  .side {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
+    width: 100%;
+    
+    &:first-child {
+      margin-bottom: 40px;
+      padding-bottom: 30px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+  }
+
+  .btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 18px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    width: 100%;
+    justify-content: flex-start;
+    border: none;
+
+    svg {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+    }
+
+    &:hover {
+      transform: translateX(-5px);
+      background-color: rgba(255, 255, 255, 0.15);
+    }
+
+    &:active {
+      transform: translateX(-2px);
+    }
+    
+    &.btn-primary {
+      background: linear-gradient(135deg, #007bff, #0056b3);
+      box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+      
+      &:hover {
+        box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+        transform: translateY(-2px) translateX(-3px);
+      }
+      
+      &:active {
+        transform: translateY(0) translateX(-1px);
+      }
+    }
+    
+    &.btn-dark {
+      background-color: rgba(255, 255, 255, 0.1);
+      
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+      }
+    }
+  }
+
+  .btn-text {
+    white-space: nowrap;
+  }
+}
+
+/* Add space for the sidebar on the main content */
+.vh-viz-page-content {
+  margin-right: 280px;
+  transition: margin-right 0.3s ease;
+}

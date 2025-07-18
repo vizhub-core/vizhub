@@ -65,7 +65,7 @@ export const VizPageHead = ({
     <div className="vh-viz-page-head">
       <div className="side">
         {showEditor && (
-          <a href="/">
+          <a href="/" className="logo-link">
             <LogoIconSVG fill="white" />
           </a>
         )}
