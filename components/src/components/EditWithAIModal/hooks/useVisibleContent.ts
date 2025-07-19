@@ -1,12 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 
 export const useVisibleContent = (fullContent: string) => {
-  const [visibleContent, setVisibleContent] = useState("");
-  const [isVisibleContentFinished, setIsVisibleContentFinished] = useState(false);
+  const [visibleContent, setVisibleContent] = useState('');
+  const [
+    isVisibleContentFinished,
+    setIsVisibleContentFinished,
+  ] = useState(false);
 
   useEffect(() => {
     if (fullContent.length === 0) {
-      setVisibleContent("");
+      setVisibleContent('');
       setIsVisibleContentFinished(false);
       return;
     }
