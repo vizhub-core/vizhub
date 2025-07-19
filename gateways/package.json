@@ -23,7 +23,7 @@
   "homepage": "https://github.com/vizhub-core/vizhub3#readme",
   "dependencies": {
     "@types/d3-array": "^3.2.1",
-    "@vizhub/viz-types": "^0.2.0",
+    "@vizhub/viz-types": "^0.3.0",
     "d3-array": "^3.2.4"
   },
   "devDependencies": {

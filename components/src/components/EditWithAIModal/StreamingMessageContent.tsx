@@ -1,6 +1,6 @@
-import { MessageContent } from "./MessageContent";
-import { useVisibleContent } from "./hooks/useVisibleContent";
-import { ReactNode } from "react";
+import { MessageContent } from './MessageContent';
+import { useVisibleContent } from './hooks/useVisibleContent';
+import { ReactNode } from 'react';
 
 export const StreamingMessageContent = ({
   markdown,
