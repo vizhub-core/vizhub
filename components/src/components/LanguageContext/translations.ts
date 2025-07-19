@@ -26,14 +26,14 @@ export const translations = {
     'landing.ai.cta': 'See Plans',
     // Explore page translations
     'explore.hero.badge': 'New',
-    'explore.hero.title.before': 'Visualize Data with',
-    'explore.hero.title.highlight': 'Generative AI Power',
-    'explore.hero.description':
-      'Transform Ideas into Visualizations',
+    'explore.hero.title.before': 'Visualize Anything',
+    'explore.hero.title.highlight':
+      ' Powered by Generative AI',
+    'explore.hero.description': `Unleash the next generation of data visualization. VizHub AI lets you describe your vision, generates instant results with various LLMs, and offers full revision history for endless refinement. It's a new era of creation.`,
     'explore.feature.instant': 'Instant Results',
     'explore.feature.llms': 'Various LLMs',
     'explore.feature.history': 'Revision History',
-    'explore.button.learn-more': 'Learn More',
+    'explore.button.learn-more': 'Create Your First AI Viz',
     'explore.page.title': 'Explore',
     // Create visualization page translations
     'create.page.title': 'Create Visualization',
