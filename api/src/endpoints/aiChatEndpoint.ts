@@ -17,7 +17,7 @@ import {
 import { userLock, User } from 'entities';
 import { getExpiringCreditBalance } from 'entities/src/accessors';
 
-const debug = false;
+const DEBUG = false;
 
 // Get the non-expiring credit balance (purchased credits)
 const getNonExpiringCreditBalance = (
@@ -151,7 +151,7 @@ export const aiChatEndpoint = ({
     '/api/ai-chat/',
     bodyParser.json(),
     async (req, res) => {
-      if (debug)
+      DEBUG &&
         console.log('[aiChatEndpoint] req.body:', req.body);
 
       const { vizId, content, chatId } = req.body;
@@ -162,27 +162,38 @@ export const aiChatEndpoint = ({
       const authenticatedUserId =
         getAuthenticatedUserId(req);
 
+      DEBUG &&
+        console.log(
+          '[aiChatEndpoint] authenticatedUserId:',
+          authenticatedUserId,
+        );
+
       if (!authenticatedUserId) {
+        DEBUG &&
+          console.log(
+            '[aiChatEndpoint] No authenticated user ID, returning auth error',
+          );
         res.json(err(authenticationRequiredError()));
         return;
       }
 
+      DEBUG &&
+        console.log(
+          '[aiChatEndpoint] Getting user data for:',
+          authenticatedUserId,
+        );
+
       const userResult = await getUser(authenticatedUserId);
       if (userResult.outcome === 'failure') {
+        DEBUG &&
+          console.log(
+            '[aiChatEndpoint] Failed to get user:',
+            userResult.error,
+          );
         res.json(err(userResult.error));
         return;
       }
       const authenticatedUser = userResult.value.data;
-      if (authenticatedUser.plan !== 'premium') {
-        res.json(
-          err(
-            accessDeniedError(
-              'Only Premium users can use AI Chat. Please upgrade your plan.',
-            ),
-          ),
-        );
-        return;
-      }
 
       // Check user credits before proceeding
       const expiringCreditBalance =
@@ -192,7 +203,18 @@ export const aiChatEndpoint = ({
       const totalCreditBalance =
         expiringCreditBalance + nonExpiringCreditBalance;
 
+      DEBUG &&
+        console.log('[aiChatEndpoint] Credit balances:', {
+          expiringCreditBalance,
+          nonExpiringCreditBalance,
+          totalCreditBalance,
+        });
+
       if (totalCreditBalance === 0) {
+        DEBUG &&
+          console.log(
+            '[aiChatEndpoint] No credits available',
+          );
         res.json(
           err(
             creditsNeededError(
@@ -210,6 +232,12 @@ export const aiChatEndpoint = ({
         vizId,
       );
 
+      DEBUG &&
+        console.log(
+          '[aiChatEndpoint] Got ShareDB document for vizId:',
+          vizId,
+        );
+
       // Subscribe to updates from the ShareDB document.
       await new Promise<void>((resolve, reject) => {
         shareDBDoc.subscribe((error) => {
@@ -221,6 +249,10 @@ export const aiChatEndpoint = ({
             reject(error);
             return;
           }
+          DEBUG &&
+            console.log(
+              '[aiChatEndpoint] Successfully subscribed to ShareDB document',
+            );
           resolve();
         });
       });
@@ -237,7 +269,7 @@ export const aiChatEndpoint = ({
             upstreamCostCents * CREDIT_MARKUP,
           );
 
-          if (debug) {
+          DEBUG &&
             console.log(
               '[aiChatEndpoint] Credit deduction',
               {
@@ -247,7 +279,6 @@ export const aiChatEndpoint = ({
                 outputTokens,
               },
             );
-          }
 
           // Update user credits with locking
           await lock(
@@ -276,25 +307,62 @@ export const aiChatEndpoint = ({
         };
 
         // Create the handler with the ShareDB document and credit deduction callback
+        DEBUG &&
+          console.log(
+            '[aiChatEndpoint] Creating AI chat handler',
+          );
+
         const handler = handleAIChatMessage(shareDBDoc, {
           onCreditDeduction,
         });
 
+        DEBUG &&
+          console.log(
+            '[aiChatEndpoint] Invoking AI chat handler',
+          );
+
         // Invoke the handler with the request and response
         await handler(req, res);
+
+        DEBUG &&
+          console.log(
+            '[aiChatEndpoint] AI chat handler completed successfully',
+          );
+
+        DEBUG &&
+          console.log(
+            '[aiChatEndpoint] Recording analytics event',
+          );
 
         await recordAnalyticsEvents({
           eventId: `event.aiChat.${authenticatedUserId}`,
         });
+
+        DEBUG &&
+          console.log(
+            '[aiChatEndpoint] Analytics event recorded successfully',
+          );
       } catch (error) {
-        console.error('aiChatEndpoint error:', error);
+        console.error('[aiChatEndpoint] ERROR:', error);
+        console.error(
+          '[aiChatEndpoint] Error stack:',
+          error.stack,
+        );
         res.status(500).send({
           message: 'Internal Server Error',
           error: error.message,
         });
       } finally {
+        DEBUG &&
+          console.log(
+            '[aiChatEndpoint] Unsubscribing from ShareDB document',
+          );
         // Unsubscribe from updates to the ShareDB document.
         shareDBDoc.unsubscribe();
+        DEBUG &&
+          console.log(
+            '[aiChatEndpoint] Request processing complete',
+          );
       }
     },
   );
