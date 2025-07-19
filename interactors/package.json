@@ -22,9 +22,9 @@
   },
   "homepage": "https://github.com/vizhub-core/vizhub3#readme",
   "dependencies": {
-    "@langchain/core": "^0.3.65",
+    "@langchain/core": "^0.3.66",
     "@langchain/openai": "^0.6.2",
-    "@vizhub/viz-types": "^0.2.0",
+    "@vizhub/viz-types": "^0.3.0",
     "@vizhub/viz-utils": "^1.3.0",
     "code-red": "^1.0.4",
     "css-tree": "^3.1.0",
@@ -37,7 +37,7 @@
   },
   "devDependencies": {
     "@types/deep-equal": "^1.0.4",
-    "@types/node": "^24.0.14",
+    "@types/node": "^24.0.15",
     "concurrently": "^9.2.0",
     "prettier": "^3.6.2",
     "typescript": "^5.8.3",

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { StreamingMessageContent } from './StreamingMessageContent';
 
 interface AIStreamingDisplayProps {
   content: string;
@@ -11,7 +12,7 @@ export const AIStreamingDisplay = ({
   isVisible,
   status,
 }: AIStreamingDisplayProps) => {
-  const displayRef = useRef<HTMLPreElement>(null);
+  const displayRef = useRef<HTMLDivElement>(null);
   const [isAutoScrolling, setIsAutoScrolling] =
     useState(true);
 
@@ -79,7 +80,7 @@ export const AIStreamingDisplay = ({
           {status}
         </div>
       )}
-      <pre
+      <div
         ref={displayRef}
         onScroll={handleScroll}
         style={{
@@ -87,15 +88,13 @@ export const AIStreamingDisplay = ({
           overflow: 'auto',
           color: '#00ff00',
           padding: '10px',
-          margin: 0,
           fontSize: '16px',
           fontFamily: 'var(--vzcode-font-family)',
-          whiteSpace: 'pre-wrap',
           backgroundColor: 'transparent',
         }}
       >
-        {content}
-      </pre>
+        <StreamingMessageContent markdown={content} />
+      </div>
     </div>
   );
 };

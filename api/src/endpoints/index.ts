@@ -28,6 +28,7 @@ import { revokeAPIKeyEndpoint } from './revokeAPIKeyEndpoint';
 import { editWithAIEndpoint } from './editWithAIEndpoint';
 import { restoreToRevisionEndpoint } from './restoreToRevisionEndpoint';
 import { aiCopilotEndpoint } from './aiCopilotEndpoint';
+import { aiChatEndpoint } from './aiChatEndpoint';
 import { getAIUsageEndpoint } from './getAIUsageEndpoint';
 import { createVizFromPromptEndpoint } from './createVizFromPromptEndpoint';
 import { Endpoint } from '../types';
@@ -68,6 +69,7 @@ export const endpoints: Array<Endpoint> = [
   editWithAIEndpoint,
   restoreToRevisionEndpoint,
   aiCopilotEndpoint,
+  aiChatEndpoint,
   getAIUsageEndpoint,
   createVizFromPromptEndpoint,
   getNotificationsEndpoint,
