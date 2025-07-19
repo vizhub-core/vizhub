@@ -106,6 +106,21 @@ export const VizPageEditor = ({
       }
     }, [canUserUseAIAssist]);
 
+  const { info } = useContext(VizPageContext);
+
+  // AI Chat configuration for VizHub
+  const aiChatEndpoint = '/api/ai-chat/';
+  const aiChatOptions = {
+    vizId: info.id,
+  };
+
+  // Simple ESLint source that returns empty diagnostics
+  // TODO make this work.
+  // Define as useESLint hook in VZCode.
+  // import { useESLint } from 'vzcode/src/client/useESLint';
+  // const esLintSource = useESLint();
+  const esLintSource = async () => [];
+
   return (
     <VZCodeProvider
       content={content}
@@ -117,6 +132,8 @@ export const VizPageEditor = ({
       codeError={srcdocErrorMessage}
       submitOperation={submitContentOperation}
       connected={connected}
+      aiChatEndpoint={aiChatEndpoint}
+      aiChatOptions={aiChatOptions}
     >
       {showEditor ? (
         <VZLeft enableUsernameField={false} />
@@ -125,6 +142,7 @@ export const VizPageEditor = ({
         aiCopilotEndpoint={aiCopilotEndpoint}
         customInteractRules={customInteractRules}
         enableAIAssist={false}
+        esLintSource={esLintSource}
       />
       {showEditor && <VZResizer side="left" />}
       <VZResizer
