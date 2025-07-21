@@ -125,6 +125,90 @@ export const LandingPageBodyI18n = ({
               </div>
             </div>
           </div>
+          
+          <div className="feature-section" id="learning">
+            <div className="feature-section-content">
+              <div className="feature-section-copy">
+                <h3>{t('landing.learning.title')}</h3>
+                <p>{t('landing.learning.description')}</p>
+                
+                <Button
+                  href="/explore"
+                  size="lg"
+                >
+                  {t('landing.learning.cta')}
+                </Button>
+              </div>
+              <div className="feature-section-image">
+                <img
+                  src={image('explore-thumbnails')}
+                  alt="Learning resources and tutorials"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="feature-section" id="collaboration">
+            <div className="feature-section-content brand-background">
+              <div className="feature-section-copy">
+                <h3>{t('landing.collaboration.title')}</h3>
+                <p>{t('landing.collaboration.description')}</p>
+                
+                <Button
+                  href="https://vizhub.com/forum/t/real-time-collaborators/976"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  size="lg"
+                >
+                  {t('landing.collaboration.cta')}
+                </Button>
+              </div>
+              <div className="feature-section-image">
+                <img
+                  src={image('real-time-collaboration')}
+                  alt="Real-time collaboration"
+                />
+                <div className="collaboration-demo-video-overlay">
+                  <video autoPlay loop muted>
+                    <source
+                      src={image(
+                        'hot-reloading-collaboration-demo',
+                        'mp4',
+                      )}
+                      type="video/mp4"
+                    />
+                    Your browser does not support the video
+                    tag.
+                  </video>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="feature-section" id="community">
+            <div className="feature-section-content">
+              <div className="feature-section-copy">
+                <h3>{t('landing.community.title')}</h3>
+                <p>{t('landing.community.description')}</p>
+                
+                <Button
+                  href="https://vizhub.com/forum/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  size="lg"
+                >
+                  {t('landing.community.cta')}
+                </Button>
+              </div>
+              <div className="feature-section-image">
+                <img
+                  src={image('explore-thumbnails')}
+                  alt="Community examples and projects"
+                />
+              </div>
+            </div>
+          </div>
+
           <HomeStarter />
         </div>
         {enableFooter && <Footer />}
