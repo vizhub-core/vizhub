@@ -34,6 +34,22 @@
         color: var(--vh-color-neutral-02);
       }
 
+      .profile-username-section {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .profile-premium-badge {
+        display: flex;
+        align-items: center;
+        
+        svg {
+          width: 20px;
+          height: 20px;
+        }
+      }
+
       .edit-bio {
         margin-top: 16px;
         color: var(--vh-color-action-01);

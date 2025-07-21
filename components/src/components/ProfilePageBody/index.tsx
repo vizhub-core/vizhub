@@ -9,7 +9,7 @@ import {
   StarSVG,
   StarSVGSymbol,
 } from '../Icons/sam/StarSVG';
-import { SectionId, SortId } from 'entities';
+import { SectionId, SortId, Plan } from 'entities';
 import { useMemo } from 'react';
 import { SidebarSection } from './SidebarSection';
 import { UpgradeCallout } from '../UpgradeCallout';
@@ -23,6 +23,7 @@ import { PrivateVizzesUpgradeCallout } from '../PrivateVizzesUpgradeCallout';
 import { ForkSVGSymbol } from '../Icons/sam/ForkSVG';
 import './styles.scss';
 import { UnlistedSVG } from '../Icons/sam/UnlistedSVG';
+import { PlanBrandPremiumSVG } from '../Icons/sam/PlanBrandPremiumSVG';
 
 const enableEditBio = false;
 const enableCreateVizButton = true;
@@ -59,6 +60,7 @@ export const ProfilePageBody = ({
   picture,
   bio,
   isViewingOwnProfile,
+  plan,
 
   // Sort control props.
   sortId,
@@ -82,6 +84,7 @@ export const ProfilePageBody = ({
   picture: string;
   bio: string;
   isViewingOwnProfile: boolean;
+  plan: Plan;
 
   // Sort control props.
   sortId: SortId;
@@ -181,7 +184,14 @@ export const ProfilePageBody = ({
           <div>
             <img className="profile-avatar" src={picture} />
             <h3 className="profile-name">{displayName}</h3>
-            <div className="vh-lede-01">@{userName}</div>
+            <div className="profile-username-section">
+              <div className="vh-lede-01">@{userName}</div>
+              {plan === 'premium' && (
+                <div className="profile-premium-badge">
+                  <PlanBrandPremiumSVG />
+                </div>
+              )}
+            </div>
           </div>
           <div>
             <div>{bio}</div>
