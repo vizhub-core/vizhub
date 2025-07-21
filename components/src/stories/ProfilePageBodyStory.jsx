@@ -13,7 +13,7 @@ export const args = {
   },
   picture:
     'https://avatars.githubusercontent.com/u/98681?v=4',
-  currentPlan: 'free',
+  plan: 'free',
   handleCreateAPIKeyClick: () => {
     console.log('Clicked create API Key');
   },

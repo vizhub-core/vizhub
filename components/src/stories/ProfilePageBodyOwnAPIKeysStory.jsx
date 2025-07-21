@@ -7,7 +7,7 @@ import {
 const args = {
   ...profilePageBodyArgs,
   isViewingOwnProfile: true,
-  currentPlan: 'premium',
+  plan: 'premium',
 };
 
 const Story = () => {

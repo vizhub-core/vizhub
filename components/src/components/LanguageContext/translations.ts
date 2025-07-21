@@ -24,6 +24,20 @@ export const translations = {
     'landing.ai.description':
       'Ship code at lightning speed. Just click Edit with AI, and watch the LLM stream production-ready JavaScript, HTML, and CSS directly into your editor. Great for rapid prototyping and iteration. Keep your creative flow uninterrupted. Available with VizHub Premium.',
     'landing.ai.cta': 'See Plans',
+    // Additional landing page features from old version
+    'landing.learning.title': 'Learn by Doing',
+    'landing.learning.description':
+      'Harness the power of interactive tutorials, courses, and livecoding sessions, tailored for all levels.',
+    'landing.learning.cta': 'Start Learning',
+    'landing.collaboration.title':
+      'Collaborate in Real-Time',
+    'landing.collaboration.description':
+      'Bid farewell to disjointed workflows. Dive into synchronized coding, designing, and reviewing, all under one roof.',
+    'landing.collaboration.cta': 'Collaborate',
+    'landing.community.title': 'Join the Community',
+    'landing.community.description':
+      'Engage with passionate creators, educators, and enthusiasts. Exchange ideas, seek feedback, and grow together.',
+    'landing.community.cta': 'Join Now',
     // Explore page translations
     'explore.hero.badge': 'New',
     'explore.hero.title.before': 'Visualize Data with',
@@ -67,6 +81,19 @@ export const translations = {
     'landing.ai.description':
       '以闪电般的速度发布代码。只需点击"使用AI编辑"，即可观看LLM将生产就绪的JavaScript、HTML和CSS直接流式传输到您的编辑器中。非常适合快速原型设计和迭代。保持您的创作流程不被中断。VizHub Premium提供。',
     'landing.ai.cta': '查看计划',
+    // Additional landing page features from old version
+    'landing.learning.title': '边做边学',
+    'landing.learning.description':
+      '利用交互式教程、课程和实时编程会话的力量，为所有级别量身定制。',
+    'landing.learning.cta': '开始学习',
+    'landing.collaboration.title': '实时协作',
+    'landing.collaboration.description':
+      '告别不连贯的工作流程。深入同步编码、设计和审查，全部在一个屋檐下。',
+    'landing.collaboration.cta': '开始协作',
+    'landing.community.title': '加入社区',
+    'landing.community.description':
+      '与充满激情的创作者、教育工作者和爱好者互动。交流想法，寻求反馈，共同成长。',
+    'landing.community.cta': '立即加入',
     // Explore page translations
     'explore.hero.badge': '新',
     'explore.hero.title.before': '使用',
@@ -113,6 +140,20 @@ export const translations = {
     'landing.ai.description':
       'Envía código a velocidad relámpago. Solo haz clic en "Editar con IA" y observa cómo el LLM transmite JavaScript, HTML y CSS listos para producción directamente a tu editor. Excelente para prototipado rápido e iteración. Mantén tu flujo creativo sin interrupciones. Disponible con VizHub Premium.',
     'landing.ai.cta': 'Ver Planes',
+    // Additional landing page features from old version
+    'landing.learning.title': 'Aprende Haciendo',
+    'landing.learning.description':
+      'Aprovecha el poder de tutoriales interactivos, cursos y sesiones de codificación en vivo, adaptados para todos los niveles.',
+    'landing.learning.cta': 'Comenzar a Aprender',
+    'landing.collaboration.title':
+      'Colabora en Tiempo Real',
+    'landing.collaboration.description':
+      'Despídete de flujos de trabajo desconectados. Sumérgete en la codificación, diseño y revisión sincronizados, todo bajo un mismo techo.',
+    'landing.collaboration.cta': 'Colaborar',
+    'landing.community.title': 'Únete a la Comunidad',
+    'landing.community.description':
+      'Interactúa con creadores, educadores y entusiastas apasionados. Intercambia ideas, busca retroalimentación y crece juntos.',
+    'landing.community.cta': 'Únete Ahora',
     // Explore page translations
     'explore.hero.badge': 'Nuevo',
     'explore.hero.title.before': 'Visualiza Datos con',
@@ -162,6 +203,20 @@ export const translations = {
     'landing.ai.description':
       'बिजली की गति से कोड भेजें। बस "AI के साथ संपादित करें" पर क्लिक करें, और देखें कि कैसे LLM उत्पादन-तैयार JavaScript, HTML और CSS को सीधे आपके एडिटर में स्ट्रीम करता है। तेज़ी से प्रोटोटाइपिंग और पुनरावृत्ति के लिए बेहतरीन। अपने रचनात्मक प्रवाह को बाधित न होने दें। VizHub Premium के साथ उपलब्ध।',
     'landing.ai.cta': 'योजनाएं देखें',
+    // Additional landing page features from old version
+    'landing.learning.title': 'करके सीखें',
+    'landing.learning.description':
+      'सभी स्तरों के लिए तैयार इंटरैक्टिव ट्यूटोरियल, कोर्स और लाइव कोडिंग सेशन की शक्ति का उपयोग करें।',
+    'landing.learning.cta': 'सीखना शुरू करें',
+    'landing.collaboration.title':
+      'रीयल-टाइम में सहयोग करें',
+    'landing.collaboration.description':
+      'अव्यवस्थित वर्कफ़्लो को अलविदा कहें। एक ही छत के नीचे सिंक्रोनाइज़्ड कोडिंग, डिज़ाइनिंग और रिव्यूइंग में गोता लगाएं।',
+    'landing.collaboration.cta': 'सहयोग करें',
+    'landing.community.title': 'समुदाय में शामिल हों',
+    'landing.community.description':
+      'भावुक निर्माताओं, शिक्षकों और उत्साही लोगों के साथ जुड़ें। विचारों का आदान-प्रदान करें, फीडबैक लें और एक साथ बढ़ें।',
+    'landing.community.cta': 'अभी शामिल हों',
     // Explore page translations
     'explore.hero.badge': 'नया',
     'explore.hero.title.before': 'डेटा को विज़ुअलाइज़ करें',
@@ -208,6 +263,19 @@ export const translations = {
     'landing.ai.description':
       'أرسل الكود بسرعة البرق. فقط انقر على "تحرير بالذكاء الاصطناعي" وشاهد كيف يبث LLM JavaScript و HTML و CSS الجاهزة للإنتاج مباشرة في محررك. رائع للنماذج الأولية السريعة والتكرار. حافظ على تدفقك الإبداعي دون انقطاع. متوفر مع VizHub Premium.',
     'landing.ai.cta': 'شاهد الخطط',
+    // Additional landing page features from old version
+    'landing.learning.title': 'تعلم بالممارسة',
+    'landing.learning.description':
+      'استفد من قوة الدروس التفاعلية والدورات وجلسات البرمجة المباشرة، المصممة لجميع المستويات.',
+    'landing.learning.cta': 'ابدأ التعلم',
+    'landing.collaboration.title': 'تعاون في الوقت الفعلي',
+    'landing.collaboration.description':
+      'ودع سير العمل المنفصل. انغمس في البرمجة والتصميم والمراجعة المتزامنة، كلها تحت سقف واحد.',
+    'landing.collaboration.cta': 'تعاون',
+    'landing.community.title': 'انضم إلى المجتمع',
+    'landing.community.description':
+      'تفاعل مع المبدعين والمعلمين والمتحمسين الشغوفين. تبادل الأفكار، واطلب التعليقات، وانمُ معًا.',
+    'landing.community.cta': 'انضم الآن',
     // Explore page translations
     'explore.hero.badge': 'جديد',
     'explore.hero.title.before': 'تصور البيانات بـ',
@@ -634,6 +702,20 @@ export const translations = {
     'landing.ai.description':
       "Expédiez du code à la vitesse de l'éclair. Cliquez simplement sur \"Éditer avec l'IA\" et regardez le LLM diffuser du JavaScript, HTML et CSS prêts pour la production directement dans votre éditeur. Parfait pour le prototypage rapide et l'itération. Gardez votre flux créatif ininterrompu. Disponible avec VizHub Premium.",
     'landing.ai.cta': 'Voir les Plans',
+    // Additional landing page features from old version
+    'landing.learning.title': 'Apprendre en Faisant',
+    'landing.learning.description':
+      'Exploitez la puissance des tutoriels interactifs, des cours et des sessions de codage en direct, adaptés à tous les niveaux.',
+    'landing.learning.cta': 'Commencer à Apprendre',
+    'landing.collaboration.title':
+      'Collaborer en Temps Réel',
+    'landing.collaboration.description':
+      'Dites adieu aux flux de travail désorganisés. Plongez dans le codage, la conception et la révision synchronisés, le tout sous un même toit.',
+    'landing.collaboration.cta': 'Collaborer',
+    'landing.community.title': 'Rejoindre la Communauté',
+    'landing.community.description':
+      'Engagez-vous avec des créateurs, des éducateurs et des passionnés. Échangez des idées, cherchez des commentaires et grandissez ensemble.',
+    'landing.community.cta': 'Rejoindre Maintenant',
     // Explore page translations
     'explore.hero.badge': 'Nouveau',
     'explore.hero.title.before':
@@ -684,6 +766,20 @@ export const translations = {
     'landing.ai.description':
       'Versenden Sie Code in Blitzgeschwindigkeit. Klicken Sie einfach auf "Mit KI bearbeiten" und sehen Sie zu, wie das LLM produktionsreifes JavaScript, HTML und CSS direkt in Ihren Editor streamt. Großartig für schnelle Prototyperstellung und Iteration. Halten Sie Ihren kreativen Fluss ununterbrochen. Verfügbar mit VizHub Premium.',
     'landing.ai.cta': 'Pläne ansehen',
+    // Additional landing page features from old version
+    'landing.learning.title': 'Lernen durch Tun',
+    'landing.learning.description':
+      'Nutzen Sie die Kraft interaktiver Tutorials, Kurse und Live-Coding-Sessions, die für alle Ebenen maßgeschneidert sind.',
+    'landing.learning.cta': 'Lernen beginnen',
+    'landing.collaboration.title':
+      'Echtzeit-Zusammenarbeit',
+    'landing.collaboration.description':
+      'Verabschieden Sie sich von unzusammenhängenden Arbeitsabläufen. Tauchen Sie ein in synchronisierte Codierung, Design und Überprüfung, alles unter einem Dach.',
+    'landing.collaboration.cta': 'Zusammenarbeiten',
+    'landing.community.title': 'Der Gemeinschaft beitreten',
+    'landing.community.description':
+      'Interagieren Sie mit leidenschaftlichen Schöpfern, Pädagogen und Enthusiasten. Tauschen Sie Ideen aus, suchen Sie Feedback und wachsen Sie gemeinsam.',
+    'landing.community.cta': 'Jetzt beitreten',
     // Explore page translations
     'explore.hero.badge': 'Neu',
     'explore.hero.title.before':

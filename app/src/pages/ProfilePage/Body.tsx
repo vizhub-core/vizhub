@@ -237,6 +237,7 @@ export const Body = ({
         userName={userName}
         bio={bio}
         picture={picture}
+        plan={profileUser.plan}
         sortId={sortId}
         setSortId={setSortId}
         sortOptions={sortOptions}

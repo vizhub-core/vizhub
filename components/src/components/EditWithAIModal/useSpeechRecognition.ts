@@ -20,6 +20,8 @@ export const useSpeechRecognition = (
   const [recognition, setRecognition] =
     // @ts-ignore
     useState<SpeechRecognition | null>(null);
+  const [finalTranscript, setFinalTranscript] =
+    useState<string>('');
 
   // Speech recognition setup
   useEffect(() => {
@@ -36,26 +38,25 @@ export const useSpeechRecognition = (
       recognitionInstance.interimResults = true;
 
       recognitionInstance.onresult = (event) => {
-        const transcript = Array.from(event.results)
-          .map((result) => result[0].transcript)
-          .join('');
+        let finalText = '';
+        let interimText = '';
 
-        onTranscriptChange((prev: string) => {
-          // For interim results, replace the last sentence
-          // For final results, append to existing text
-          const isInterim =
-            event.results[event.results.length - 1]
-              .isFinal === false;
-          if (isInterim && prev.includes('.')) {
-            const lastSentenceIndex = prev.lastIndexOf('.');
-            return (
-              prev.substring(0, lastSentenceIndex + 1) +
-              ' ' +
-              transcript
-            );
+        // Process all results to separate final and interim text
+        for (let i = 0; i < event.results.length; i++) {
+          const result = event.results[i];
+          if (result.isFinal) {
+            finalText += result[0].transcript;
+          } else {
+            interimText += result[0].transcript;
           }
-          return transcript;
-        });
+        }
+
+        // Update our final transcript state
+        setFinalTranscript(finalText);
+
+        // Combine final and interim text and update the prompt
+        const fullTranscript = finalText + interimText;
+        onTranscriptChange(fullTranscript);
       };
 
       recognitionInstance.onerror = (event) => {
@@ -68,6 +69,8 @@ export const useSpeechRecognition = (
 
       recognitionInstance.onend = () => {
         setIsSpeaking(false);
+        // Reset final transcript when recognition ends
+        setFinalTranscript('');
       };
 
       setRecognition(recognitionInstance);
@@ -92,6 +95,8 @@ export const useSpeechRecognition = (
       recognition.stop();
       setIsSpeaking(false);
     } else {
+      // Reset final transcript when starting new recognition
+      setFinalTranscript('');
       recognition.start();
       setIsSpeaking(true);
     }
@@ -101,6 +106,8 @@ export const useSpeechRecognition = (
     if (recognition && isSpeaking) {
       recognition.stop();
       setIsSpeaking(false);
+      // Reset final transcript when manually stopping
+      setFinalTranscript('');
     }
   }, [isSpeaking, recognition]);
 
