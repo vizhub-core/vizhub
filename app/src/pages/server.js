@@ -1,6 +1,6 @@
 import { AboutPage } from './AboutPage';
 import { AILandingPage } from './AILandingPage/server';
-import { LandingPage } from './LandingPage/server';
+import { FeaturesPage } from './FeaturesPage/server';
 import { ProfilePage } from './ProfilePage/server';
 import { VizPage } from './VizPage/server';
 import { BetaConfirmPage } from './BetaConfirmPage';
@@ -22,7 +22,7 @@ import { CreateVizPageTest } from './CreateVizPageTest/server';
 // Note: order matters (profile page should come last)
 // Need to update `client.js` as well
 export const pages = [
-  LandingPage,
+  FeaturesPage,
   AILandingPage,
   AboutPage,
 
