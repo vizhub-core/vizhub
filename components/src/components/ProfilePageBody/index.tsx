@@ -182,15 +182,20 @@ export const ProfilePageBody = ({
       <div className="profile-body vh-page-container">
         <div className="profile-sidebar">
           <div>
-            <img className="profile-avatar" src={picture} />
-            <h3 className="profile-name">{displayName}</h3>
-            <div className="profile-username-section">
-              <div className="vh-lede-01">@{userName}</div>
+            <div className="profile-avatar-container">
+              <img
+                className="profile-avatar"
+                src={picture}
+              />
               {plan === 'premium' && (
                 <div className="profile-premium-badge">
                   <PlanBrandPremiumSVG />
                 </div>
               )}
+            </div>
+            <h3 className="profile-name">{displayName}</h3>
+            <div className="profile-username-section">
+              <div className="vh-lede-01">@{userName}</div>
             </div>
           </div>
           <div>

@@ -19,15 +19,35 @@
       gap: 30px;
       flex: 0 0 300px;
 
+      .profile-avatar-container {
+        position: relative;
+        display: inline-block;
+        margin-bottom: 20px;
+      }
+
       .profile-avatar {
         width: 164px;
         height: 164px;
         border-radius: 50%;
-        margin-bottom: 20px;
         box-shadow: var(--vh-box-shadow);
 
         /* In case of transparent background */
         background-color: white;
+      }
+
+      .profile-premium-badge {
+        position: absolute;
+        bottom: 5%;
+        right: 5%;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        svg circle {
+          stroke: rgba(0, 0, 0, 0.195);
+          paint-order: stroke;
+        }
       }
 
       .profile-name {
@@ -38,16 +58,6 @@
         display: flex;
         align-items: center;
         gap: 8px;
-      }
-
-      .profile-premium-badge {
-        display: flex;
-        align-items: center;
-        
-        svg {
-          width: 20px;
-          height: 20px;
-        }
       }
 
       .edit-bio {
