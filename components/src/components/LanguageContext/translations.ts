@@ -29,7 +29,8 @@ export const translations = {
     'landing.learning.description':
       'Harness the power of interactive tutorials, courses, and livecoding sessions, tailored for all levels.',
     'landing.learning.cta': 'Start Learning',
-    'landing.collaboration.title': 'Collaborate in Real-Time',
+    'landing.collaboration.title':
+      'Collaborate in Real-Time',
     'landing.collaboration.description':
       'Bid farewell to disjointed workflows. Dive into synchronized coding, designing, and reviewing, all under one roof.',
     'landing.collaboration.cta': 'Collaborate',
@@ -144,7 +145,8 @@ export const translations = {
     'landing.learning.description':
       'Aprovecha el poder de tutoriales interactivos, cursos y sesiones de codificación en vivo, adaptados para todos los niveles.',
     'landing.learning.cta': 'Comenzar a Aprender',
-    'landing.collaboration.title': 'Colabora en Tiempo Real',
+    'landing.collaboration.title':
+      'Colabora en Tiempo Real',
     'landing.collaboration.description':
       'Despídete de flujos de trabajo desconectados. Sumérgete en la codificación, diseño y revisión sincronizados, todo bajo un mismo techo.',
     'landing.collaboration.cta': 'Colaborar',
@@ -206,7 +208,8 @@ export const translations = {
     'landing.learning.description':
       'सभी स्तरों के लिए तैयार इंटरैक्टिव ट्यूटोरियल, कोर्स और लाइव कोडिंग सेशन की शक्ति का उपयोग करें।',
     'landing.learning.cta': 'सीखना शुरू करें',
-    'landing.collaboration.title': 'रीयल-टाइम में सहयोग करें',
+    'landing.collaboration.title':
+      'रीयल-टाइम में सहयोग करें',
     'landing.collaboration.description':
       'अव्यवस्थित वर्कफ़्लो को अलविदा कहें। एक ही छत के नीचे सिंक्रोनाइज़्ड कोडिंग, डिज़ाइनिंग और रिव्यूइंग में गोता लगाएं।',
     'landing.collaboration.cta': 'सहयोग करें',
@@ -704,7 +707,8 @@ export const translations = {
     'landing.learning.description':
       'Exploitez la puissance des tutoriels interactifs, des cours et des sessions de codage en direct, adaptés à tous les niveaux.',
     'landing.learning.cta': 'Commencer à Apprendre',
-    'landing.collaboration.title': 'Collaborer en Temps Réel',
+    'landing.collaboration.title':
+      'Collaborer en Temps Réel',
     'landing.collaboration.description':
       'Dites adieu aux flux de travail désorganisés. Plongez dans le codage, la conception et la révision synchronisés, le tout sous un même toit.',
     'landing.collaboration.cta': 'Collaborer',
@@ -767,7 +771,8 @@ export const translations = {
     'landing.learning.description':
       'Nutzen Sie die Kraft interaktiver Tutorials, Kurse und Live-Coding-Sessions, die für alle Ebenen maßgeschneidert sind.',
     'landing.learning.cta': 'Lernen beginnen',
-    'landing.collaboration.title': 'Echtzeit-Zusammenarbeit',
+    'landing.collaboration.title':
+      'Echtzeit-Zusammenarbeit',
     'landing.collaboration.description':
       'Verabschieden Sie sich von unzusammenhängenden Arbeitsabläufen. Tauchen Sie ein in synchronisierte Codierung, Design und Überprüfung, alles unter einem Dach.',
     'landing.collaboration.cta': 'Zusammenarbeiten',
