@@ -43,10 +43,16 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        text-decoration: none;
+        cursor: pointer;
 
         svg circle {
           stroke: rgba(0, 0, 0, 0.195);
           paint-order: stroke;
+        }
+
+        &:hover svg circle {
+          stroke: rgba(0, 0, 0, 0.3);
         }
       }
 

@@ -24,6 +24,7 @@ import { ForkSVGSymbol } from '../Icons/sam/ForkSVG';
 import './styles.scss';
 import { UnlistedSVG } from '../Icons/sam/UnlistedSVG';
 import { PlanBrandPremiumSVG } from '../Icons/sam/PlanBrandPremiumSVG';
+import { OverlayTrigger, Tooltip } from '../bootstrap';
 
 const enableEditBio = false;
 const enableCreateVizButton = true;
@@ -188,9 +189,21 @@ export const ProfilePageBody = ({
                 src={picture}
               />
               {plan === 'premium' && (
-                <div className="profile-premium-badge">
-                  <PlanBrandPremiumSVG />
-                </div>
+                <OverlayTrigger
+                  placement="top"
+                  overlay={
+                    <Tooltip id="premium-badge-tooltip">
+                      Plan: Premium
+                    </Tooltip>
+                  }
+                >
+                  <a
+                    href="/pricing"
+                    className="profile-premium-badge"
+                  >
+                    <PlanBrandPremiumSVG />
+                  </a>
+                </OverlayTrigger>
               )}
             </div>
             <h3 className="profile-name">{displayName}</h3>
