@@ -5,7 +5,6 @@ import { toCollectionName } from 'database/src/toCollectionName';
 import { getAuthenticatedUserId } from '../parseAuth0User';
 import { err } from 'gateways';
 import {
-  accessDeniedError,
   authenticationRequiredError,
   creditsNeededError,
 } from 'gateways/src/errors';
@@ -312,7 +311,26 @@ export const aiChatEndpoint = ({
             '[aiChatEndpoint] Creating AI chat handler',
           );
 
-        const handler = handleAIChatMessage(shareDBDoc, {
+        // Set up presence for VizBot following the same pattern as useShareDB.ts
+        const docPresence =
+          shareDBConnection.getDocPresence(
+            toCollectionName(entityName),
+            vizId,
+          );
+
+        // Create local presence for VizBot with a unique ID
+        const generateVizBotId = () => {
+          const timestamp = Date.now().toString(36);
+          return `vizbot-${timestamp}`;
+        };
+
+        const localPresence = docPresence.create(
+          generateVizBotId(),
+        );
+
+        const handler = handleAIChatMessage({
+          shareDBDoc,
+          localPresence,
           onCreditDeduction,
         });
 
