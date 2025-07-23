@@ -324,13 +324,10 @@ export const aiChatEndpoint = ({
           return `vizbot-${timestamp}`;
         };
 
-        const localPresence = docPresence.create(
-          generateVizBotId(),
-        );
-
         const handler = handleAIChatMessage({
           shareDBDoc,
-          localPresence,
+          createVizBotLocalPresence: () =>
+            docPresence.create(generateVizBotId()),
           onCreditDeduction,
         });
 
