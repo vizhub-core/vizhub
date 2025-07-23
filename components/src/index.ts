@@ -30,6 +30,7 @@ export { copyToClipboard } from './components/copyToClipboard';
 export { APIKeysList } from './components/APIKeysList';
 export { DeleteAPIKeyConfirmationModal } from './components/DeleteAPIKeyConfirmationModal';
 export { DocumentationPageBody } from './components/DocumentationPageBody';
+export { Documentation } from './pages/Documentation';
 export { VisibilityLabel } from './components/VisibilityLabel';
 export { SvelteAndD3PageBody } from './components/SvelteAndD3PageBody';
 export { EditWithAIModal } from './components/EditWithAIModal';
