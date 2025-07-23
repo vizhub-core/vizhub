@@ -1,8 +1,5 @@
 import { getAuthenticatedUser } from '../getAuthenticatedUser';
-import {
-  DocsPage,
-  DocsPageData,
-} from './index';
+import { DocsPage, DocsPageData } from './index';
 
 DocsPage.getPageData = async ({
   gateways,
