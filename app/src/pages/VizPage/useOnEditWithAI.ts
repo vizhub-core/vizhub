@@ -25,6 +25,7 @@ const LOCAL_STORAGE_MODEL_KEY =
 const RELOAD_AFTER_EDIT_WITH_AI = false;
 
 const modelNameOptions = [
+  'qwen/qwen3-coder',
   'moonshotai/kimi-k2',
   'anthropic/claude-sonnet-4',
   'anthropic/claude-3.7-sonnet',

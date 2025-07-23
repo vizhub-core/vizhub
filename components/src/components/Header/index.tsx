@@ -86,10 +86,10 @@ export const Header = ({
                 <Dropdown.Item href="/features">
                   Features
                 </Dropdown.Item>
-                {/* <Dropdown.Item href="/docs">
+                <Dropdown.Item href="/docs">
                   Documentation
                 </Dropdown.Item>
-                <Dropdown.Item href="/blog">
+                {/* <Dropdown.Item href="/blog">
                   Blog
                 </Dropdown.Item> */}
                 <Dropdown.Item href={discordLink}>

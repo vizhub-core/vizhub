@@ -202,8 +202,8 @@ export const EditWithAI = (gateways: Gateways) => {
         // Define callbacks for file name changes, code lines, and non-code lines
         // TODO use these to update the actual viz files
         const callbacks: StreamingParserCallbacks = {
-          // When the current file being edited chnages
-          onFileNameChange: (fileName, format) => {
+          // When the current file being edited changes
+          onFileNameChange: async (fileName, format) => {
             DEBUG &&
               console.log(
                 `File changed to: ${fileName} (${format})`,
@@ -220,11 +220,11 @@ export const EditWithAI = (gateways: Gateways) => {
             shareDBDoc.submitOp(op);
           },
           // Append the line to the current file's content
-          onCodeLine: (line) => {
+          onCodeLine: async (line) => {
             DEBUG && console.log(`Code line: ${line}`);
           },
           // Process non-code, non-header lines (e.g., for displaying comments)
-          onNonCodeLine: (line) => {
+          onNonCodeLine: async (line) => {
             DEBUG && console.log(`Comment/text: ${line}`);
             // const op = diff(shareDBDoc.data, {
             //   ...shareDBDoc.data,
@@ -296,14 +296,14 @@ export const EditWithAI = (gateways: Gateways) => {
             }
 
             // Send chunk to client if streamHandler is provided
-            parser.processChunk(chunkContent);
+            await parser.processChunk(chunkContent);
           }
           // Store the generation ID from the first chunk that has it
           if (!generationId && chunk.lc_kwargs?.id) {
             generationId = chunk.lc_kwargs.id;
           }
         }
-        parser.flushRemaining();
+        await parser.flushRemaining();
 
         // Submit final update if there's pending content
         if (expectedAiScratchpad !== fullContent) {

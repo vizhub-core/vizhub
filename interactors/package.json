@@ -30,7 +30,8 @@
     "css-tree": "^3.1.0",
     "decay": "^1.0.12",
     "deep-equal": "^2.2.3",
-    "editcodewithai": "^2.2.0",
+    "editcodewithai": "^2.3.0",
+    "llm-code-format": "^3.0.0",
     "multiscale-timeseries": "^2.0.0",
     "svelte": "4.2.9",
     "uuid": "^11.1.0"

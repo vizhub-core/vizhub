@@ -15,6 +15,7 @@ import { KitchenSinkPage } from './KitchenSinkPage';
 import { CreateVizPage } from './CreateVizPage';
 import { StargazersPage } from './StargazersPage';
 import { DocumentationPage } from './DocumentationPage';
+import { DocsPage } from './DocsPage';
 import { CreateVizPageTest } from './CreateVizPageTest';
 
 // Note: order matters (profile page should come last)
@@ -30,6 +31,7 @@ export const pages = [
   SandboxPage,
   ExplorePage,
   DocumentationPage,
+  DocsPage,
   PricingPage,
   AccountPage,
   SearchPage,
