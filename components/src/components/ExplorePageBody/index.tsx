@@ -72,8 +72,8 @@ export const ExplorePageBody = ({
           </div>
           <div className="hero-video">
             <iframe
-              width="520"
-              height="293"
+              width="560"
+              height="315"
               src="https://www.youtube-nocookie.com/embed/wd6BnelMO9g?si=aJz_9SRg4vKt-pdN&autoplay=1&mute=1&rel=0"
               title="YouTube video player"
               frameBorder="0"

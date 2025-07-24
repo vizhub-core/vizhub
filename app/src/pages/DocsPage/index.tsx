@@ -1,5 +1,5 @@
 import { useEffect, useContext } from 'react';
-import { LandingPageBodyI18n } from 'components';
+import { Documentation } from 'components';
 import { VizKit } from 'api/src/VizKit';
 import { SmartHeader } from '../../smartComponents/SmartHeader';
 import {
@@ -10,7 +10,7 @@ import { Page, PageData } from '../Page';
 
 const vizKit = VizKit();
 
-export type LandingPageData = PageData & {
+export type DocsPageData = PageData & {
   description: string;
   image: string;
 };
@@ -19,21 +19,14 @@ const Body = () => {
   const authenticatedUser = useContext(
     AuthenticatedUserContext,
   );
-  return (
-    <LandingPageBodyI18n
-      isUserAuthenticated={authenticatedUser ? true : false}
-    />
-  );
+  return <Documentation />;
 };
 
-// Decoupled navigation from interaction, to support
-// testing the UI in isolation, for example in Storybook.
-// Inspired by https://github.com/vitejs/vite-plugin-react/blob/main/playground/ssr-react/src/pages/Home.jsx
-export const LandingPage: Page = ({ pageData }) => {
+export const DocsPage: Page = ({ pageData }) => {
   // Send an analytics event to track this page view.
   useEffect(() => {
     vizKit.rest.recordAnalyticsEvents(
-      'event.pageview.landing',
+      'event.pageview.docs',
     );
   }, []);
 
@@ -51,5 +44,4 @@ export const LandingPage: Page = ({ pageData }) => {
   );
 };
 
-LandingPage.path = '/features';
-// LandingPage.path = '/';
+DocsPage.path = '/docs';

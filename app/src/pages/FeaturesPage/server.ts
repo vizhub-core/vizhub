@@ -1,10 +1,10 @@
 import { getAuthenticatedUser } from '../getAuthenticatedUser';
-import { LandingPage, LandingPageData } from './index';
+import { FeaturesPage, FeaturesPageData } from './index';
 
-LandingPage.getPageData = async ({
+FeaturesPage.getPageData = async ({
   gateways,
   auth0User,
-}): Promise<LandingPageData> => {
+}): Promise<FeaturesPageData> => {
   const { authenticatedUserSnapshot } =
     await getAuthenticatedUser({
       gateways,
@@ -22,7 +22,7 @@ LandingPage.getPageData = async ({
   //   return { redirect };
   // }
 
-  const pageData: LandingPageData = {
+  const pageData: FeaturesPageData = {
     title: `VizHub`,
     description:
       'Collaborative data visualization platform for the Web',
@@ -34,4 +34,4 @@ LandingPage.getPageData = async ({
   return pageData;
 };
 
-export { LandingPage };
+export { FeaturesPage };

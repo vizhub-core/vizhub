@@ -1,6 +1,6 @@
 import { AboutPage } from './AboutPage';
 import { AILandingPage } from './AILandingPage/server';
-import { LandingPage } from './LandingPage/server';
+import { FeaturesPage } from './FeaturesPage/server';
 import { ProfilePage } from './ProfilePage/server';
 import { VizPage } from './VizPage/server';
 import { BetaConfirmPage } from './BetaConfirmPage';
@@ -15,6 +15,7 @@ import { KitchenSinkPage } from './KitchenSinkPage/server';
 import { CreateVizPage } from './CreateVizPage/server';
 import { StargazersPage } from './StargazersPage/server';
 import { DocumentationPage } from './DocumentationPage/server';
+import { DocsPage } from './DocsPage/server';
 import { CreateVizPageTest } from './CreateVizPageTest/server';
 
 // import { ExploreRedirect } from './ExploreRedirect';
@@ -22,7 +23,7 @@ import { CreateVizPageTest } from './CreateVizPageTest/server';
 // Note: order matters (profile page should come last)
 // Need to update `client.js` as well
 export const pages = [
-  LandingPage,
+  FeaturesPage,
   AILandingPage,
   AboutPage,
 
@@ -38,6 +39,7 @@ export const pages = [
   ExplorePage,
   // ExploreRedirect,
   DocumentationPage,
+  DocsPage,
   PricingPage,
   AccountPage,
   SearchPage,
