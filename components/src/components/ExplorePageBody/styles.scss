@@ -35,7 +35,12 @@
   }
 }
 .hero-section {
-  background: linear-gradient(135deg, #0f172a, #1e293b, #0f172a);
+  background: linear-gradient(
+    135deg,
+    #0f172a,
+    #1e293b,
+    #0f172a
+  );
   background-size: 200% 200%;
   animation: gradientAnimation 15s ease infinite;
   color: white;
@@ -99,11 +104,10 @@
     max-width: 1200px;
     margin: 0 auto;
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: space-between;
     position: relative;
     z-index: 2;
-    gap: 200px;
 
     @media (max-width: 992px) {
       flex-direction: column;
@@ -112,10 +116,9 @@
 
     .hero-text {
       flex: 1;
-      max-width: 480px;
-      margin-left: -50px;
-      text-align: left;
-      padding-top: 2rem;
+      max-width: 800px;
+      padding-right: 3rem;
+      text-align: center;
 
       @media (max-width: 992px) {
         padding-right: 0;
@@ -188,7 +191,7 @@
       }
 
       .hero-description {
-        text-align: left;
+        text-align: center;
       }
 
       .feature-list {
@@ -196,7 +199,7 @@
         flex-wrap: wrap;
         gap: 1rem;
         margin-bottom: 2rem;
-        justify-content: flex-start;
+        justify-content: center;
 
         .feature-item {
           display: flex;
@@ -223,7 +226,7 @@
       display: flex;
       flex-wrap: wrap;
       gap: 1rem;
-      justify-content: flex-start;
+      justify-content: center;
 
       .hero-create-button {
         background: linear-gradient(
@@ -312,8 +315,10 @@
         max-width: 100%;
         border-radius: 12px;
         box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        
+        transition:
+          transform 0.3s ease,
+          box-shadow 0.3s ease;
+
         &:hover {
           transform: scale(1.02);
           box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
