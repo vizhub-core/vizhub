@@ -12,9 +12,9 @@ export const initializeMongoDB = async ({
   env,
   mongoLocalURI = 'mongodb://localhost:27017/vizhub3',
 }) => {
-  const { MongoClient, ServerApiVersion } = await import(
-    'mongodb-legacy'
-  );
+  const mongoModule = await import('mongodb-legacy');
+  const { MongoClient, ServerApiVersion } =
+    mongoModule.default || mongoModule;
 
   const timeout = setTimeout(() => {
     console.log(
