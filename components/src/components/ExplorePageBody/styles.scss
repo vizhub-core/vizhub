@@ -302,14 +302,7 @@
       flex: 1;
       display: flex;
       justify-content: center;
-      align-items: flex-start;
-      max-width: 520px;
-      padding-top: 4rem;
-      padding-left: 101px;
-
-      @media (max-width: 992px) {
-        margin-top: 2rem;
-      }
+      align-items: center;
 
       iframe {
         max-width: 100%;
