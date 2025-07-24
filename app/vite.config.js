@@ -55,6 +55,7 @@ export default defineConfig({
       '@uiw/codemirror-theme-nord',
       '@uiw/codemirror-theme-xcode',
       '@uiw/codemirror-themes',
+      'mongodb-legacy',
     ],
     exclude: [
       // Exclude Rollup v4 from being bundled,

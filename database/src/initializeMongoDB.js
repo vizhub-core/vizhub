@@ -6,14 +6,16 @@
 // See:
 //   https://share.github.io/sharedb/getting-started
 //   https://github.com/share/sharedb-mongo
-import MongoLegacy from 'mongodb-legacy';
-const { MongoClient, ServerApiVersion } = MongoLegacy;
 
 export const initializeMongoDB = async ({
   isProd,
   env,
   mongoLocalURI = 'mongodb://localhost:27017/vizhub3',
 }) => {
+  const mongoModule = await import('mongodb-legacy');
+  const { MongoClient, ServerApiVersion } =
+    mongoModule.default || mongoModule;
+
   const timeout = setTimeout(() => {
     console.log(
       '\nHaving trouble connecting to the MongoDB database...',
