@@ -40,7 +40,15 @@ const env = process.env;
 // gtag('config', 'G-5BVJNTEF9V');
 
 const analyticsScript = `
-  <script defer data-domain="vizhub.com" src="https://plausible.io/js/script.tagged-events.js"></script>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HSRS3C5MC1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    
+    gtag('config', 'G-HSRS3C5MC1');
+  </script>
 `;
 
 // TODO better 404 page
