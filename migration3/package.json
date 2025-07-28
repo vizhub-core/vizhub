@@ -22,7 +22,7 @@
   "devDependencies": {
     "@types/d3-time": "^3.0.4",
     "@types/uuid": "^10.0.0",
-    "vite": "^7.0.5",
+    "vite": "^7.0.6",
     "vitest": "^3.2.4"
   },
   "dependencies": {
