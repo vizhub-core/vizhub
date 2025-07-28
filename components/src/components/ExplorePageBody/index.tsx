@@ -68,6 +68,13 @@ export const ExplorePageBody = ({
                 <i className="bi bi-info-circle me-2"></i>
                 {t('explore.button.learn-more')}
               </a>
+              <a
+                href="#getting-started-section"
+                className="btn btn-outline-light"
+              >
+                <i className="bi bi-rocket-takeoff me-2"></i>
+                {t('explore.button.getting-started', 'Getting Started')}
+              </a>
             </div>
           </div>
           <div className="hero-video">
@@ -119,6 +126,43 @@ export const ExplorePageBody = ({
           </div>
         )}
         {children}
+        
+        <div className="getting-started-section" id="getting-started-section">
+          <h2>{t('explore.gettingStarted.title', 'Getting Started')}</h2>
+          <div className="getting-started-cards">
+            <div className="getting-started-card">
+              <div className="card-icon">
+                <i className="bi bi-pencil-square"></i>
+              </div>
+              <h3>{t('explore.gettingStarted.create.title', 'Create')}</h3>
+              <p>{t('explore.gettingStarted.create.description', 'Start a new visualization from scratch or use AI to help you.')}</p>
+              <CreateNewButton className="card-button" />
+            </div>
+            <div className="getting-started-card">
+              <div className="card-icon">
+                <i className="bi bi-book"></i>
+              </div>
+              <h3>{t('explore.gettingStarted.learn.title', 'Learn')}</h3>
+              <p>{t('explore.gettingStarted.learn.description', 'Check out tutorials and documentation to master data visualization.')}</p>
+              <a href="/docs" className="btn btn-outline-primary card-button">
+                <i className="bi bi-journal-text me-2"></i>
+                {t('explore.gettingStarted.learn.button', 'View Docs')}
+              </a>
+            </div>
+            <div className="getting-started-card">
+              <div className="card-icon">
+                <i className="bi bi-people"></i>
+              </div>
+              <h3>{t('explore.gettingStarted.community.title', 'Join Community')}</h3>
+              <p>{t('explore.gettingStarted.community.description', 'Connect with other visualization creators and get help.')}</p>
+              <a href={discordLink} target="_blank" rel="noopener noreferrer" className="btn btn-outline-primary card-button">
+                <i className="bi bi-discord me-2"></i>
+                {t('explore.gettingStarted.community.button', 'Join Discord')}
+              </a>
+            </div>
+          </div>
+        </div>
+        
         <div className="vh-page-header">
           <h2 className="mb-0">
             {t('explore.page.title')}

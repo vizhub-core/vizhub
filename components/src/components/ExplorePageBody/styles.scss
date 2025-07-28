@@ -12,6 +12,84 @@
     // width: 100%;
     // max-width: 1200px;
   }
+  
+  .getting-started-section {
+    width: 100%;
+    max-width: 1200px;
+    margin: 2rem 0 3rem;
+    padding: 0 1rem;
+    
+    h2 {
+      text-align: center;
+      margin-bottom: 2rem;
+      font-weight: 700;
+    }
+    
+    .getting-started-cards {
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      
+      @media (min-width: 992px) {
+        flex-wrap: nowrap;
+      }
+      
+      .getting-started-card {
+        background: white;
+        border-radius: 12px;
+        padding: 2rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        flex: 1;
+        min-width: 280px;
+        max-width: 350px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        
+        &:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+        }
+        
+        .card-icon {
+          width: 70px;
+          height: 70px;
+          border-radius: 50%;
+          background: linear-gradient(135deg, #4a90e2, #5a6bff);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-bottom: 1.5rem;
+          
+          i {
+            font-size: 1.8rem;
+            color: white;
+          }
+        }
+        
+        h3 {
+          font-size: 1.4rem;
+          font-weight: 600;
+          margin-bottom: 1rem;
+        }
+        
+        p {
+          color: #64748b;
+          margin-bottom: 1.5rem;
+          flex-grow: 1;
+        }
+        
+        .card-button {
+          width: 100%;
+          padding: 0.6rem 1rem;
+          border-radius: 8px;
+        }
+      }
+    }
+  }
 }
 
 @keyframes gradientAnimation {
