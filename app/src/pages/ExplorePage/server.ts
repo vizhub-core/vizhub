@@ -67,7 +67,7 @@ ExplorePage.getPageData = async ({
     sortId,
     hasMore,
     image:
-      'https://vizhub-images.s3.amazonaws.com/home-unfurl.webp',
+      'https://vizhub-images.s3.amazonaws.com/home-unfurl-2.jpeg',
     thumbnailURLs,
   };
 };
