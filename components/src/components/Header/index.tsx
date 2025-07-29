@@ -148,6 +148,7 @@ export const Header = ({
             </Dropdown.Menu>
           </Dropdown>
 
+          <Nav.Link href="/vizbot">VizBot</Nav.Link>
           <Nav.Link href={pricingHref}>Pricing</Nav.Link>
           <Nav.Link
             href={createVizHref}
