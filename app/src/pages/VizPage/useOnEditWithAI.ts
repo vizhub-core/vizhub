@@ -38,6 +38,7 @@ const modelNameOptions = [
   'x-ai/grok-4',
   'openai/gpt-4.1',
   'openai/gpt-4o-2024-08-06',
+  'z-ai/glm-4.5',
 ];
 
 const modelNameOptionsFree = modelNameOptions;
