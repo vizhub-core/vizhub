@@ -60,14 +60,14 @@ ExplorePage.getPageData = async ({
   return {
     title: `VizHub`,
     description:
-      'AI-powered data visualization and creative coding',
+      'AI powered data visualization tool: create visualizations instantly',
     authenticatedUserSnapshot,
     infoSnapshots,
     ownerUserSnapshots,
     sortId,
     hasMore,
     image:
-      'https://vizhub-images.s3.amazonaws.com/home-unfurl.webp',
+      'https://vizhub-images.s3.amazonaws.com/home-unfurl-2.jpeg',
     thumbnailURLs,
   };
 };
