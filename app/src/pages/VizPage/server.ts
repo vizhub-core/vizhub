@@ -12,6 +12,7 @@ import {
   CommitId,
   CommitMetadata,
   Commit,
+  AnalyticsEvent,
 } from 'entities';
 import {
   BuildViz,
@@ -54,6 +55,7 @@ VizPage.getPageData = async ({
     getUpvote,
     deleteInfo,
     getCommit,
+    getAnalyticsEvent,
   } = gateways;
   const verifyVizAccess = VerifyVizAccess(gateways);
   const commitViz = CommitViz(gateways);
@@ -481,6 +483,14 @@ VizPage.getPageData = async ({
     // Score stale vizzes (small batch).
     scoreStaleVizzes();
 
+    // Fetch analytics data for viz views
+    let analyticsEventSnapshot: Snapshot<AnalyticsEvent> | null = null;
+    const analyticsEventId = `event.pageview.viz.owner:${owner}.viz:${id}`;
+    const analyticsEventResult = await getAnalyticsEvent(analyticsEventId);
+    if (analyticsEventResult.outcome === 'success') {
+      analyticsEventSnapshot = analyticsEventResult.value;
+    }
+
     // Extract keywords from README.md for SEO
     const keywords = getVizKeywords(content);
 
@@ -503,6 +513,7 @@ VizPage.getPageData = async ({
       downloadImageHref,
       disableAnalytics,
       keywords,
+      analyticsEventSnapshot,
     };
 
     // If we are viewing a versioned page,
