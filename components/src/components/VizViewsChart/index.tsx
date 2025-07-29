@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
-import { AnalyticsEvent } from 'entities';
 
 interface VizViewsChartProps {
-  analyticsEvent: AnalyticsEvent | null;
+  analyticsEvent: any | null;
 }
 
 export const VizViewsChart = ({ analyticsEvent }: VizViewsChartProps) => {
@@ -25,7 +24,7 @@ export const VizViewsChart = ({ analyticsEvent }: VizViewsChartProps) => {
       
       // Calculate total views from the last 30 days
       const timeseries = analyticsEvent.intervals?.days || {};
-      const total = Object.values(timeseries).reduce((sum: number, count: any) => sum + (count || 0), 0);
+      const total: number = Object.values(timeseries).reduce((sum: number, count: unknown) => sum + (Number(count) || 0), 0);
       setTotalViews(total);
     }
   }, [analyticsEvent, vizModule]);
