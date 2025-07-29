@@ -215,6 +215,18 @@ export const VizPageViewer = ({
             </div>
           </div>
         </div>
+        
+        {!isUserAuthenticated && (
+          <div className="vh-carbon-ads">
+            <div
+              dangerouslySetInnerHTML={{
+                __html:
+                  '<script async type="text/javascript" src="//cdn.carbonads.com/carbon.js?serve=CW7ICKQM&placement=vizhubcom&format=cover" id="_carbonads_js"></script>',
+              }}
+            />
+          </div>
+        )}
+        
         <div className="vh-markdown-body vh-rendered-readme">
           {renderMarkdownHTML()}
         </div>

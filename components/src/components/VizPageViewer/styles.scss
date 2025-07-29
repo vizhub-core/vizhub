@@ -142,6 +142,12 @@
         }
       }
     }
+    .vh-carbon-ads {
+      padding: var(--vh-padding-lots) 0px;
+      display: flex;
+      justify-content: center;
+      border-bottom: 1px solid var(--vh-rule-color);
+    }
     .vh-rendered-readme {
       font-size: 18px;
     }

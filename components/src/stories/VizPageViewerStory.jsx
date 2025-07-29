@@ -34,6 +34,7 @@ export const args = {
   upvotesCount: 25,
   license: 'MIT',
   enableEditingTitle: true,
+  isUserAuthenticated: true,
   commentsFormatted: Array(5)
     .fill({
       authorDisplayName: 'Author Name',
