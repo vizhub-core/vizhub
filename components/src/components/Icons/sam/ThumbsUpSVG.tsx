@@ -15,6 +15,9 @@ export const ThumbsUpSVGSymbol = () => (
 
 export const ThumbsUpSVG = ({ width = 24 }) => (
   <svg width={width} height={width} viewBox="0 0 24 24">
-    <use xlinkHref="#thumbs-up-icon" className="thumbs-up-icon-use" />
+    <use
+      xlinkHref="#thumbs-up-icon"
+      className="thumbs-up-icon-use"
+    />
   </svg>
 );

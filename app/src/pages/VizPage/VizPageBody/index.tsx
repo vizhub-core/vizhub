@@ -175,11 +175,15 @@ export const VizPageBody = () => {
   });
 
   // Export limit state management
-  const [exportLimitData, setExportLimitData] = useState(null);
-  const [exportLimitLoading, setExportLimitLoading] = useState(false);
+  const [exportLimitData, setExportLimitData] =
+    useState(null);
+  const [exportLimitLoading, setExportLimitLoading] =
+    useState(false);
 
   // Check if this is another user's viz
-  const isOtherUsersViz = authenticatedUser && authenticatedUser.id !== ownerUser.id;
+  const isOtherUsersViz =
+    authenticatedUser &&
+    authenticatedUser.id !== ownerUser.id;
 
   // Fetch export limit data for authenticated free users trying to export other users' vizzes
   useEffect(() => {
@@ -191,61 +195,84 @@ export const VizPageBody = () => {
       !exportLimitLoading
     ) {
       setExportLimitLoading(true);
-      vizKit.rest.getExportLimit()
+      vizKit.rest
+        .getExportLimit()
         .then((result) => {
           if (result.outcome === 'success') {
             setExportLimitData(result.value);
           }
         })
         .catch((error) => {
-          console.error('Error fetching export limit:', error);
+          console.error(
+            'Error fetching export limit:',
+            error,
+          );
         })
         .finally(() => {
           setExportLimitLoading(false);
         });
     }
-  }, [authenticatedUser, ownerUser.id, exportLimitData, exportLimitLoading, vizKit, isOtherUsersViz]);
+  }, [
+    authenticatedUser,
+    ownerUser.id,
+    exportLimitData,
+    exportLimitLoading,
+    vizKit,
+    isOtherUsersViz,
+  ]);
 
   // Determine if user can export
   const userCanExport = useMemo(() => {
     // Not authenticated - cannot export
     if (!authenticatedUser) return false;
-    
+
     // Premium/Pro users can always export
-    if (authenticatedUser.plan === PREMIUM || authenticatedUser.plan === PRO) {
+    if (
+      authenticatedUser.plan === PREMIUM ||
+      authenticatedUser.plan === PRO
+    ) {
       return true;
     }
-    
+
     // Free users exporting their own viz - allowed
     if (!isOtherUsersViz) {
       return true;
     }
-    
+
     // Free users exporting other's viz - check limit
     if (exportLimitData) {
       return exportLimitData.remainingExports > 0;
     }
-    
+
     // If data is loading, assume they can't export to be safe
     return false;
   }, [authenticatedUser, isOtherUsersViz, exportLimitData]);
 
   // Handle export click for free users
-  const handleExportClick = useCallback((event) => {
-    // If user can export, let the normal flow continue
-    if (userCanExport) return;
-    
-    // If it's a free user trying to export another user's viz with no remaining exports,
-    // prevent default and show upgrade modal
-    if (
-      authenticatedUser?.plan === FREE &&
-      isOtherUsersViz &&
-      exportLimitData?.remainingExports === 0
-    ) {
-      event.preventDefault();
-      toggleExportCodeUpgradeNudgeModal();
-    }
-  }, [userCanExport, authenticatedUser, isOtherUsersViz, exportLimitData, toggleExportCodeUpgradeNudgeModal]);
+  const handleExportClick = useCallback(
+    (event) => {
+      // If user can export, let the normal flow continue
+      if (userCanExport) return;
+
+      // If it's a free user trying to export another user's viz with no remaining exports,
+      // prevent default and show upgrade modal
+      if (
+        authenticatedUser?.plan === FREE &&
+        isOtherUsersViz &&
+        exportLimitData?.remainingExports === 0
+      ) {
+        event.preventDefault();
+        toggleExportCodeUpgradeNudgeModal();
+      }
+    },
+    [
+      userCanExport,
+      authenticatedUser,
+      isOtherUsersViz,
+      exportLimitData,
+      toggleExportCodeUpgradeNudgeModal,
+    ],
+  );
 
   const handleRestoreToVersionClick = useCallback(() => {
     if (commitMetadata) {
@@ -291,7 +318,8 @@ export const VizPageBody = () => {
     stargazersHref: getStargazersPageHref(ownerUser, info),
     onForkClick: toggleForkModal,
     isUserAuthenticated,
-    shouldShowAds: !isUserAuthenticated && ownerUser.plan === FREE,
+    shouldShowAds:
+      !isUserAuthenticated && ownerUser.plan === FREE,
     commentsFormatted,
     handleCommentSubmit,
     authenticatedUserAvatarURL: authenticatedUser
