@@ -4,7 +4,11 @@ import {
   useRef,
   useState,
 } from 'react';
-import { UpvoteWidget, VisibilityLabel } from 'components';
+import {
+  UpvoteWidget,
+  VisibilityLabel,
+  VizViewsChart,
+} from 'components';
 import { ForkSVGSymbol } from '../Icons/sam/ForkSVG';
 import { EditSVG } from '../Icons/EditSVG';
 import { ForksWidget } from '../ForksWidget';
@@ -13,6 +17,8 @@ import { FullScreenSVG } from '../Icons/sam/FullScreenSVG';
 import { StarSVGSymbol } from '../Icons/sam/StarSVG';
 import { Comments } from '../Comments';
 import './styles.scss';
+
+const enableVizViewsChart = true;
 
 export const VizPageViewer = ({
   vizTitle,
@@ -47,6 +53,7 @@ export const VizPageViewer = ({
   authenticatedUserAvatarURL,
   handleCommentDelete,
   runtimeVersion,
+  analyticsEventSnapshot,
 }) => {
   // This SVG element is used only for its dynamic resizing behavior.
   // It's invisible, nothing is rendered into it.
@@ -202,6 +209,15 @@ export const VizPageViewer = ({
                 </a>
               </div>
             )}
+
+            {enableVizViewsChart && (
+              <VizViewsChart
+                analyticsEvent={
+                  analyticsEventSnapshot?.data || null
+                }
+              />
+            )}
+
             <div>
               <span className="runtime-version">
                 uses{' '}
@@ -216,7 +232,6 @@ export const VizPageViewer = ({
             </div>
           </div>
         </div>
-        
         {shouldShowAds && (
           <div className="vh-carbon-ads">
             <div
@@ -227,7 +242,7 @@ export const VizPageViewer = ({
             />
           </div>
         )}
-        
+
         <div className="vh-markdown-body vh-rendered-readme">
           {renderMarkdownHTML()}
         </div>

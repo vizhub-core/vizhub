@@ -101,6 +101,7 @@ export const VizPageBody = () => {
     aiStreamingContent,
     showAIStreaming,
     aiStatus,
+    analyticsEventSnapshot,
   } = useContext(VizPageContext);
 
   const iframeRef = useRef<HTMLIFrameElement>(null);
@@ -298,6 +299,7 @@ export const VizPageBody = () => {
       : null,
     handleCommentDelete,
     runtimeVersion,
+    analyticsEventSnapshot,
   };
 
   if (isEmbedMode) {
