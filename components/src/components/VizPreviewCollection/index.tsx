@@ -1,5 +1,5 @@
 import { ForkSVGSymbol } from '../Icons/sam/ForkSVG';
-import { StarSVGSymbol } from '../Icons/sam/StarSVG';
+import { ThumbsUpSVGSymbol } from '../Icons/sam/ThumbsUpSVG';
 import './styles.scss';
 
 export const VizPreviewCollection = ({
@@ -11,7 +11,7 @@ export const VizPreviewCollection = ({
     {includeSymbols && (
       <>
         <ForkSVGSymbol />
-        <StarSVGSymbol />
+        <ThumbsUpSVGSymbol />
       </>
     )}
 

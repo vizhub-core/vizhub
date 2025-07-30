@@ -20,6 +20,7 @@ import {
   User,
   UserId,
   Visibility,
+  AnalyticsEvent,
 } from 'entities';
 import {
   useData,
@@ -88,6 +89,7 @@ export type VizPageContextValue = {
   isFileOpen: boolean;
   initialComments: Array<Snapshot<Comment>>;
   initialCommentAuthors: Array<Snapshot<User>>;
+  analyticsEventSnapshot: Snapshot<AnalyticsEvent> | null;
   vizKit: VizKitAPI;
   connected: boolean;
   // handleExportCodeClick: () => void;
@@ -172,6 +174,7 @@ export const VizPageProvider = ({
     buildVizResult,
     commitMetadata,
     downloadImageHref,
+    analyticsEventSnapshot,
   } = pageData;
 
   const {
@@ -454,6 +457,7 @@ export const VizPageProvider = ({
     slugResolutionCache,
     initialComments,
     initialCommentAuthors,
+    analyticsEventSnapshot,
     connected,
     content,
     contentShareDBDoc,

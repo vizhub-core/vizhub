@@ -8,6 +8,7 @@ export { ExplorePageBody } from './components/ExplorePageBody';
 export { SearchPageBody } from './components/SearchPageBody';
 export { ForksPageBody } from './components/ForksPageBody';
 export { VizPageViewer } from './components/VizPageViewer';
+export { VizViewsChart } from './components/VizViewsChart';
 export { UpvoteWidget } from './components/UpvoteWidget';
 export { ResourcesPageBody } from './components/ResourcesPageBody';
 export { SettingsModal } from './components/SettingsModal';

@@ -2,7 +2,11 @@ import express from 'express';
 import { Gateways, err } from 'gateways';
 import { getAuthenticatedUserId } from '../parseAuth0User';
 import { authenticationRequiredError } from 'gateways/src/errors';
-import { FREE, FREE_EXPORTS_PER_MONTH, User } from 'entities';
+import {
+  FREE,
+  FREE_EXPORTS_PER_MONTH,
+  User,
+} from 'entities';
 
 export const getExportLimitEndpoint = ({
   app,
@@ -18,7 +22,8 @@ export const getExportLimitEndpoint = ({
     express.json(),
     async (req, res) => {
       // Get authenticated user
-      const authenticatedUserId = getAuthenticatedUserId(req);
+      const authenticatedUserId =
+        getAuthenticatedUserId(req);
       if (!authenticatedUserId) {
         res.json(err(authenticationRequiredError()));
         return;
@@ -49,9 +54,15 @@ export const getExportLimitEndpoint = ({
       }
 
       // For free plan users, calculate remaining exports
-      const currentMonth = new Date().toISOString().slice(0, 7); // YYYY-MM format
-      const currentMonthExports = user.exportCountByMonth?.[currentMonth] || 0;
-      const remainingExports = Math.max(0, FREE_EXPORTS_PER_MONTH - currentMonthExports);
+      const currentMonth = new Date()
+        .toISOString()
+        .slice(0, 7); // YYYY-MM format
+      const currentMonthExports =
+        user.exportCountByMonth?.[currentMonth] || 0;
+      const remainingExports = Math.max(
+        0,
+        FREE_EXPORTS_PER_MONTH - currentMonthExports,
+      );
 
       res.json({
         outcome: 'success',

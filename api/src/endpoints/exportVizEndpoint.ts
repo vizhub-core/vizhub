@@ -38,7 +38,8 @@ export const exportVizEndpoint = ({
   const recordAnalyticsEvents =
     RecordAnalyticsEvents(gateways);
   const checkExportLimit = CheckExportLimit(gateways);
-  const incrementExportCount = IncrementExportCount(gateways);
+  const incrementExportCount =
+    IncrementExportCount(gateways);
   const getAPIKeyOwner = GetAPIKeyOwner(gateways);
 
   app.get(
@@ -136,9 +137,11 @@ export const exportVizEndpoint = ({
         authenticatedUserId = webAuthUserId;
       } else {
         // Try to get authenticated user from API key
-        const apiKeyString: string | undefined = req.headers.authorization;
+        const apiKeyString: string | undefined =
+          req.headers.authorization;
         if (apiKeyString) {
-          const apiKeyOwnerResult = await getAPIKeyOwner(apiKeyString);
+          const apiKeyOwnerResult =
+            await getAPIKeyOwner(apiKeyString);
           if (apiKeyOwnerResult.outcome === 'success') {
             authenticatedUserId = apiKeyOwnerResult.value;
           }

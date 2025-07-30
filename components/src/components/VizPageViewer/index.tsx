@@ -4,15 +4,21 @@ import {
   useRef,
   useState,
 } from 'react';
-import { UpvoteWidget, VisibilityLabel } from 'components';
+import {
+  UpvoteWidget,
+  VisibilityLabel,
+  VizViewsChart,
+} from 'components';
 import { ForkSVGSymbol } from '../Icons/sam/ForkSVG';
 import { EditSVG } from '../Icons/EditSVG';
 import { ForksWidget } from '../ForksWidget';
 import { OverlayTrigger, Tooltip } from '../bootstrap';
 import { FullScreenSVG } from '../Icons/sam/FullScreenSVG';
-import { StarSVGSymbol } from '../Icons/sam/StarSVG';
+import { ThumbsUpSVGSymbol } from '../Icons/sam/ThumbsUpSVG';
 import { Comments } from '../Comments';
 import './styles.scss';
+
+const enableVizViewsChart = true;
 
 export const VizPageViewer = ({
   vizTitle,
@@ -41,11 +47,13 @@ export const VizPageViewer = ({
   stargazersHref,
   onForkClick,
   isUserAuthenticated,
+  shouldShowAds,
   commentsFormatted,
   handleCommentSubmit,
   authenticatedUserAvatarURL,
   handleCommentDelete,
   runtimeVersion,
+  analyticsEventSnapshot,
 }) => {
   // This SVG element is used only for its dynamic resizing behavior.
   // It's invisible, nothing is rendered into it.
@@ -97,7 +105,7 @@ export const VizPageViewer = ({
   return (
     <div className="vh-viz-page-viewer">
       <ForkSVGSymbol />
-      <StarSVGSymbol />
+      <ThumbsUpSVGSymbol />
       <div className="viewer-content">
         {isVisual && (
           <div className="viz-frame">
@@ -201,6 +209,15 @@ export const VizPageViewer = ({
                 </a>
               </div>
             )}
+
+            {enableVizViewsChart && (
+              <VizViewsChart
+                analyticsEvent={
+                  analyticsEventSnapshot?.data || null
+                }
+              />
+            )}
+
             <div>
               <span className="runtime-version">
                 uses{' '}
@@ -215,8 +232,7 @@ export const VizPageViewer = ({
             </div>
           </div>
         </div>
-        
-        {!isUserAuthenticated && (
+        {shouldShowAds && (
           <div className="vh-carbon-ads">
             <div
               dangerouslySetInnerHTML={{
@@ -226,7 +242,7 @@ export const VizPageViewer = ({
             />
           </div>
         )}
-        
+
         <div className="vh-markdown-body vh-rendered-readme">
           {renderMarkdownHTML()}
         </div>

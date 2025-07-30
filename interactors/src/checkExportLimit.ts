@@ -1,5 +1,11 @@
 import { Result, Success, ok, err } from 'gateways';
-import { User, UserId, userLock, FREE, FREE_EXPORTS_PER_MONTH } from 'entities';
+import {
+  User,
+  UserId,
+  userLock,
+  FREE,
+  FREE_EXPORTS_PER_MONTH,
+} from 'entities';
 
 // CheckExportLimit
 //
@@ -12,7 +18,9 @@ export const CheckExportLimit =
   async (options: {
     userId: UserId;
     vizOwnerId: UserId;
-  }): Promise<Result<Success | { remainingExports: number }>> => {
+  }): Promise<
+    Result<Success | { remainingExports: number }>
+  > => {
     const { userId, vizOwnerId } = options;
     const { getUser } = gateways;
 
@@ -34,8 +42,11 @@ export const CheckExportLimit =
     }
 
     // Check current month's export count for free plan users
-    const currentMonth = new Date().toISOString().slice(0, 7); // YYYY-MM format
-    const currentMonthExports = user.exportCountByMonth?.[currentMonth] || 0;
+    const currentMonth = new Date()
+      .toISOString()
+      .slice(0, 7); // YYYY-MM format
+    const currentMonthExports =
+      user.exportCountByMonth?.[currentMonth] || 0;
 
     if (currentMonthExports >= FREE_EXPORTS_PER_MONTH) {
       return err({
@@ -44,7 +55,10 @@ export const CheckExportLimit =
       });
     }
 
-    return ok({ remainingExports: FREE_EXPORTS_PER_MONTH - currentMonthExports });
+    return ok({
+      remainingExports:
+        FREE_EXPORTS_PER_MONTH - currentMonthExports,
+    });
   };
 
 // IncrementExportCount
@@ -79,11 +93,14 @@ export const IncrementExportCount =
       }
 
       // Increment export count for current month
-      const currentMonth = new Date().toISOString().slice(0, 7); // YYYY-MM format
+      const currentMonth = new Date()
+        .toISOString()
+        .slice(0, 7); // YYYY-MM format
       if (!user.exportCountByMonth) {
         user.exportCountByMonth = {};
       }
-      user.exportCountByMonth[currentMonth] = (user.exportCountByMonth[currentMonth] || 0) + 1;
+      user.exportCountByMonth[currentMonth] =
+        (user.exportCountByMonth[currentMonth] || 0) + 1;
 
       await saveUser(user);
       return ok('success');

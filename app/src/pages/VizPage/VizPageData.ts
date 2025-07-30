@@ -4,6 +4,7 @@ import {
   Info,
   Snapshot,
   User,
+  AnalyticsEvent,
 } from 'entities';
 import { PageData } from '../Page';
 import { BuildVizResult } from 'interactors/src/buildViz';
@@ -22,6 +23,7 @@ export type VizPageData = PageData & {
   initialCommentAuthors: Array<Snapshot<User>>;
   buildVizResult: BuildVizResult;
   downloadImageHref?: string;
+  analyticsEventSnapshot?: Snapshot<AnalyticsEvent> | null;
 
   // If commitMetadata is defined,
   // we are viewing a specific version of the viz.
