@@ -18,7 +18,7 @@ import { StarSVGSymbol } from '../Icons/sam/StarSVG';
 import { Comments } from '../Comments';
 import './styles.scss';
 
-const enableVizViewsChart = false;
+const enableVizViewsChart = true;
 
 export const VizPageViewer = ({
   vizTitle,

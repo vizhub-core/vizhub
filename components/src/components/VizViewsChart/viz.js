@@ -4,17 +4,16 @@ import { utcDay } from 'd3-time';
 import { utcFormat } from 'd3-time-format';
 import { scaleBand, scaleLinear } from 'd3-scale';
 import { max } from 'd3-array';
-import { axisBottom } from 'd3-axis';
 
 // Smaller dimensions for the viz page
-const width = 400;
-const height = 100;
-const margin = { top: 10, right: 20, bottom: 30, left: 30 };
+const width = 300;
+const height = 30;
+const margin = { top: 0, right: 0, bottom: 0, left: 0 };
 
 const recordKey = 'days';
 const d3TimeInterval = utcDay;
 const format = utcFormat('%Y-%m-%d');
-const formatTick = utcFormat('%-m/%-d');
+const formatTooltip = utcFormat('%B %-d, %Y');
 
 // The number of days shown
 const maxEntries = 30;
@@ -58,15 +57,6 @@ export const viz = (node, { analyticsEvent }) => {
     .join('g')
     .attr('class', 'x-axis')
     .attr('transform', `translate(0,${height - bottom})`)
-    .call(
-      axisBottom(xScale)
-        .tickFormat((d, i) =>
-          // Show every 7th tick for cleaner look
-          i % 7 === 0 ? formatTick(d) : '',
-        )
-        .tickSize(3)
-        .tickPadding(5),
-    )
     .call((selection) => {
       selection.select('.domain').remove();
       selection
@@ -79,7 +69,7 @@ export const viz = (node, { analyticsEvent }) => {
     });
 
   const t = transition().duration(500);
-  svg
+  const rects = svg
     .selectAll('rect')
     .data(data)
     .join(
@@ -104,6 +94,14 @@ export const viz = (node, { analyticsEvent }) => {
     )
     .attr('x', (d) => xScale(xValue(d)))
     .attr('width', xScale.bandwidth())
-    .attr('fill', '#6B7280')
-    .attr('rx', 1); // Slightly rounded corners
+    .attr('fill', '#6B7280');
+
+  // Add tooltips
+  rects
+    .selectAll('title')
+    .data((d) => [d])
+    .join('title')
+    .text(
+      (d) => `${formatTooltip(d.date)}: ${d.count} views`,
+    );
 };
