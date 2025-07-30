@@ -290,6 +290,7 @@ export const VizPageBody = () => {
     stargazersHref: getStargazersPageHref(ownerUser, info),
     onForkClick: toggleForkModal,
     isUserAuthenticated,
+    shouldShowAds: !isUserAuthenticated && ownerUser.plan === FREE,
     commentsFormatted,
     handleCommentSubmit,
     authenticatedUserAvatarURL: authenticatedUser

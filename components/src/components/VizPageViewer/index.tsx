@@ -41,6 +41,7 @@ export const VizPageViewer = ({
   stargazersHref,
   onForkClick,
   isUserAuthenticated,
+  shouldShowAds,
   commentsFormatted,
   handleCommentSubmit,
   authenticatedUserAvatarURL,
@@ -216,7 +217,7 @@ export const VizPageViewer = ({
           </div>
         </div>
         
-        {!isUserAuthenticated && (
+        {shouldShowAds && (
           <div className="vh-carbon-ads">
             <div
               dangerouslySetInnerHTML={{
