@@ -198,6 +198,13 @@ export const VizPageViewer = ({
             <h4>{authorDisplayName}</h4>
           </a>
           <div className="meta-info-right">
+            {enableVizViewsChart && (
+              <VizViewsChart
+                analyticsEvent={
+                  analyticsEventSnapshot?.data || null
+                }
+              />
+            )}
             <div>Last edited {updatedDateFormatted}</div>
             <div>Created on {createdDateFormatted}</div>
 
@@ -208,14 +215,6 @@ export const VizPageViewer = ({
                   {forkedFromVizTitle}
                 </a>
               </div>
-            )}
-
-            {enableVizViewsChart && (
-              <VizViewsChart
-                analyticsEvent={
-                  analyticsEventSnapshot?.data || null
-                }
-              />
             )}
 
             <div>
