@@ -74,7 +74,12 @@ export type {
 
 export type { Plan, FeatureId } from './Pricing';
 
-export { FREE, PREMIUM, PRO } from './Pricing';
+export {
+  FREE,
+  PREMIUM,
+  PRO,
+  FREE_EXPORTS_PER_MONTH,
+} from './Pricing';
 
 export {
   freeTierSizeLimitMB,
