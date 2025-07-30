@@ -44,7 +44,7 @@ export const VizViewsChart = ({
   return (
     <div className="viz-views-chart">
       <div className="viz-views-summary">
-        {totalViews} views in last 30 days
+        {totalViews} views in last 90 days
       </div>
       <svg ref={svgRef} className="viz-views-chart-svg" />
     </div>

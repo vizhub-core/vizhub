@@ -6,8 +6,8 @@ import { scaleBand, scaleLinear } from 'd3-scale';
 import { max } from 'd3-array';
 
 // Smaller dimensions for the viz page
-const width = 300;
-const height = 30;
+const width = 200;
+const height = 20;
 const margin = { top: 0, right: 0, bottom: 0, left: 0 };
 
 const recordKey = 'days';
@@ -16,7 +16,7 @@ const format = utcFormat('%Y-%m-%d');
 const formatTooltip = utcFormat('%B %-d, %Y');
 
 // The number of days shown
-const maxEntries = 30;
+const maxEntries = 90;
 
 export const viz = (node, { analyticsEvent }) => {
   const svg = select(node)
