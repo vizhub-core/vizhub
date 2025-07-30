@@ -4,3 +4,11 @@
   font-weight: 500;
   text-align: right;
 }
+
+rect.weekend-bg {
+  fill: rgba(0, 0, 0, 0.05);
+}
+
+rect.interaction-surface:hover {
+  fill: rgba(0, 0, 0, 0.2); /* Darker color on hover */
+}
