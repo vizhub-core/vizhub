@@ -69,8 +69,13 @@ export const viz = (node, { analyticsEvent }) => {
     )
     .call((selection) => {
       selection.select('.domain').remove();
-      selection.selectAll('.tick line').attr('stroke', '#ddd');
-      selection.selectAll('.tick text').attr('fill', '#666').style('font-size', '10px');
+      selection
+        .selectAll('.tick line')
+        .attr('stroke', '#ddd');
+      selection
+        .selectAll('.tick text')
+        .attr('fill', '#666')
+        .style('font-size', '10px');
     });
 
   const t = transition().duration(500);

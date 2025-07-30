@@ -1,10 +1,15 @@
+import { AnalyticsEvent } from 'entities';
 import { useEffect, useRef, useState } from 'react';
 
+import './styles.scss';
+
 interface VizViewsChartProps {
-  analyticsEvent: any | null;
+  analyticsEvent: AnalyticsEvent | null;
 }
 
-export const VizViewsChart = ({ analyticsEvent }: VizViewsChartProps) => {
+export const VizViewsChart = ({
+  analyticsEvent,
+}: VizViewsChartProps) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const [vizModule, setVizModule] = useState<any>(null);
   const [totalViews, setTotalViews] = useState(0);
@@ -13,7 +18,7 @@ export const VizViewsChart = ({ analyticsEvent }: VizViewsChartProps) => {
   // so the D3 dependencies are not in the main JS bundle.
   useEffect(() => {
     const fetchViz = async () => {
-      setVizModule(await import('./viz'));
+      setVizModule(await import('./viz.js'));
     };
     fetchViz();
   }, []);
@@ -21,30 +26,27 @@ export const VizViewsChart = ({ analyticsEvent }: VizViewsChartProps) => {
   useEffect(() => {
     if (analyticsEvent && vizModule && svgRef.current) {
       vizModule.viz(svgRef.current, { analyticsEvent });
-      
+
       // Calculate total views from the last 30 days
-      const timeseries = analyticsEvent.intervals?.days || {};
-      const total: number = Object.values(timeseries).reduce((sum: number, count: unknown) => sum + (Number(count) || 0), 0);
+      const timeseries =
+        analyticsEvent.intervals?.days || {};
+      const total: number = Object.values(
+        timeseries,
+      ).reduce(
+        (sum: number, count: unknown) =>
+          sum + (Number(count) || 0),
+        0,
+      );
       setTotalViews(total);
     }
   }, [analyticsEvent, vizModule]);
-
-  // Don't render if no analytics data
-  if (!analyticsEvent || totalViews === 0) {
-    return null;
-  }
 
   return (
     <div className="viz-views-chart">
       <div className="viz-views-summary">
         {totalViews} views in last 30 days
       </div>
-      {vizModule && (
-        <svg 
-          ref={svgRef}
-          className="viz-views-chart-svg"
-        />
-      )}
+      <svg ref={svgRef} className="viz-views-chart-svg" />
     </div>
   );
 };
