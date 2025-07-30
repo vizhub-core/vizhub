@@ -6,9 +6,9 @@ import { PrivateSVG } from '../Icons/sam/PrivateSVG';
 import { OrganizationsSVG } from '../Icons/sam/OrganizationsSVG';
 import { SharedSVG } from '../Icons/sam/SharedSVG';
 import {
-  StarSVG,
-  StarSVGSymbol,
-} from '../Icons/sam/StarSVG';
+  ThumbsUpSVG,
+  ThumbsUpSVGSymbol,
+} from '../Icons/sam/ThumbsUpSVG';
 import { SectionId, SortId, Plan } from 'entities';
 import { useMemo } from 'react';
 import { SidebarSection } from './SidebarSection';
@@ -127,10 +127,10 @@ export const ProfilePageBody = ({
         },
         {
           id: SectionId.Starred,
-          SVGComponent: StarSVG,
+          SVGComponent: ThumbsUpSVG,
           label: isViewingOwnProfile
-            ? 'My starred vizzes'
-            : 'Starred vizzes',
+            ? 'My liked vizzes'
+            : 'Liked vizzes',
         },
         {
           id: SectionId.Shared,
@@ -179,7 +179,7 @@ export const ProfilePageBody = ({
        * because the star icon is used in the sidebar.
        */}
       <ForkSVGSymbol />
-      <StarSVGSymbol />
+      <ThumbsUpSVGSymbol />
       <div className="profile-body vh-page-container">
         <div className="profile-sidebar">
           <div>

@@ -1,4 +1,4 @@
-import { StarSVG } from '../Icons/sam/StarSVG';
+import { ThumbsUpSVG } from '../Icons/sam/ThumbsUpSVG';
 import { OverlayTrigger, Tooltip } from '../bootstrap';
 import './styles.scss';
 
@@ -18,7 +18,7 @@ export const UpvoteWidget = ({
     {notClickable ? (
       <>
         <i className="icon-button">
-          <StarSVG width={20} />
+          <ThumbsUpSVG width={20} />
         </i>
         <div className="widget-label-container icon-button">
           <strong>{upvotesCount}</strong>
@@ -34,8 +34,8 @@ export const UpvoteWidget = ({
           overlay={
             <Tooltip id="full-screen-icon-tooltip">
               {isUserAuthenticated
-                ? `${isUpvoted ? 'Un-star' : 'Star'} this viz`
-                : 'Log in to star this viz'}
+                ? `${isUpvoted ? 'Remove thumbs up' : 'Thumbs up'} this viz`
+                : 'Log in to like this viz'}
             </Tooltip>
           }
         >
@@ -48,14 +48,14 @@ export const UpvoteWidget = ({
                 : 'not-allowed',
             }}
           >
-            <StarSVG />
+            <ThumbsUpSVG />
           </i>
         </OverlayTrigger>
         <OverlayTrigger
           placement="top"
           overlay={
             <Tooltip id="full-screen-icon-tooltip">
-              View Stargazers
+              View who liked this
             </Tooltip>
           }
         >
@@ -67,7 +67,7 @@ export const UpvoteWidget = ({
           >
             <strong>{upvotesCount}</strong>
             <div className="widget-label">
-              Star{upvotesCount === 1 ? '' : 's'}
+              Like{upvotesCount === 1 ? '' : 's'}
             </div>
           </a>
         </OverlayTrigger>

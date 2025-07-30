@@ -3,7 +3,7 @@ import { ForkSVG } from '../components/Icons/ForkSVG';
 import { ShareSVG } from '../components/Icons/ShareSVG';
 import { ChevronSVG } from '../components/Icons/ChevronSVG';
 import { DownloadSVG } from '../components/Icons/DownloadSVG';
-import { StarSVG } from '../components/Icons/StarSVG';
+import { ThumbsUpSVG } from '../components/Icons/sam/ThumbsUpSVG';
 import { SettingsSVG } from '../components/Icons/SettingsSVG';
 import { VisibilityPrivateSVG } from '../components/Icons/VisibilityPrivateSVG';
 import { VisibilityUnlistedSVG } from '../components/Icons/VisibilityUnlistedSVG';
@@ -51,7 +51,7 @@ const v3icons = [
   ({ height }) => <ChevronSVG height={height} up />,
   ({ height }) => <ChevronSVG height={height} down />,
   DownloadSVG,
-  StarSVG,
+  ThumbsUpSVG,
   SettingsSVG,
   VisibilityPrivateSVG,
   VisibilityUnlistedSVG,

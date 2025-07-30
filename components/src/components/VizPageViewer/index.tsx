@@ -14,7 +14,7 @@ import { EditSVG } from '../Icons/EditSVG';
 import { ForksWidget } from '../ForksWidget';
 import { OverlayTrigger, Tooltip } from '../bootstrap';
 import { FullScreenSVG } from '../Icons/sam/FullScreenSVG';
-import { StarSVGSymbol } from '../Icons/sam/StarSVG';
+import { ThumbsUpSVGSymbol } from '../Icons/sam/ThumbsUpSVG';
 import { Comments } from '../Comments';
 import './styles.scss';
 
@@ -105,7 +105,7 @@ export const VizPageViewer = ({
   return (
     <div className="vh-viz-page-viewer">
       <ForkSVGSymbol />
-      <StarSVGSymbol />
+      <ThumbsUpSVGSymbol />
       <div className="viewer-content">
         {isVisual && (
           <div className="viz-frame">
