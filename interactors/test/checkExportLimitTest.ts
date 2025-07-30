@@ -1,7 +1,15 @@
 import { describe, it, expect, assert } from 'vitest';
 import { initGateways } from 'gateways/test';
-import { CheckExportLimit, IncrementExportCount } from '../src';
-import { User, FREE, PREMIUM, FREE_EXPORTS_PER_MONTH } from 'entities';
+import {
+  CheckExportLimit,
+  IncrementExportCount,
+} from '../src';
+import {
+  User,
+  FREE,
+  PREMIUM,
+  FREE_EXPORTS_PER_MONTH,
+} from 'entities';
 
 const freeUser: User = {
   id: 'free-user-123',
@@ -82,7 +90,9 @@ export const checkExportLimitTest = () => {
       });
 
       assert(result.outcome === 'success');
-      expect(result.value).toEqual({ remainingExports: FREE_EXPORTS_PER_MONTH });
+      expect(result.value).toEqual({
+        remainingExports: FREE_EXPORTS_PER_MONTH,
+      });
     });
 
     it('should deny free user export when limit exceeded', async () => {
@@ -90,7 +100,9 @@ export const checkExportLimitTest = () => {
       const { saveUser } = gateways;
       const checkExportLimit = CheckExportLimit(gateways);
 
-      const currentMonth = new Date().toISOString().slice(0, 7);
+      const currentMonth = new Date()
+        .toISOString()
+        .slice(0, 7);
       const freeUserAtLimit: User = {
         ...freeUser,
         exportCountByMonth: {
@@ -108,7 +120,9 @@ export const checkExportLimitTest = () => {
 
       assert(result.outcome === 'failure');
       expect(result.error.name).toBe('ExportLimitExceeded');
-      expect(result.error.message).toContain('Free plan users can export up to 5');
+      expect(result.error.message).toContain(
+        'Free plan users can export up to 5',
+      );
     });
   });
 
@@ -116,7 +130,8 @@ export const checkExportLimitTest = () => {
     it('should not increment count for own viz exports', async () => {
       const gateways = await initGateways();
       const { saveUser, getUser } = gateways;
-      const incrementExportCount = IncrementExportCount(gateways);
+      const incrementExportCount =
+        IncrementExportCount(gateways);
 
       await saveUser(freeUser);
 
@@ -131,13 +146,16 @@ export const checkExportLimitTest = () => {
       const getUserResult = await getUser(freeUser.id);
       assert(getUserResult.outcome === 'success');
       const updatedUser = getUserResult.value.data;
-      expect(updatedUser.exportCountByMonth).toBeUndefined();
+      expect(
+        updatedUser.exportCountByMonth,
+      ).toBeUndefined();
     });
 
     it('should not increment count for premium users', async () => {
       const gateways = await initGateways();
       const { saveUser, getUser } = gateways;
-      const incrementExportCount = IncrementExportCount(gateways);
+      const incrementExportCount =
+        IncrementExportCount(gateways);
 
       await saveUser(premiumUser);
       await saveUser(vizOwner);
@@ -153,13 +171,16 @@ export const checkExportLimitTest = () => {
       const getUserResult = await getUser(premiumUser.id);
       assert(getUserResult.outcome === 'success');
       const updatedUser = getUserResult.value.data;
-      expect(updatedUser.exportCountByMonth).toBeUndefined();
+      expect(
+        updatedUser.exportCountByMonth,
+      ).toBeUndefined();
     });
 
     it('should increment count for free user exporting others vizzes', async () => {
       const gateways = await initGateways();
       const { saveUser, getUser } = gateways;
-      const incrementExportCount = IncrementExportCount(gateways);
+      const incrementExportCount =
+        IncrementExportCount(gateways);
 
       await saveUser(freeUser);
       await saveUser(vizOwner);
@@ -175,14 +196,19 @@ export const checkExportLimitTest = () => {
       const getUserResult = await getUser(freeUser.id);
       assert(getUserResult.outcome === 'success');
       const updatedUser = getUserResult.value.data;
-      const currentMonth = new Date().toISOString().slice(0, 7);
-      expect(updatedUser.exportCountByMonth?.[currentMonth]).toBe(1);
+      const currentMonth = new Date()
+        .toISOString()
+        .slice(0, 7);
+      expect(
+        updatedUser.exportCountByMonth?.[currentMonth],
+      ).toBe(1);
     });
 
     it('should increment count correctly for multiple exports', async () => {
       const gateways = await initGateways();
       const { saveUser, getUser } = gateways;
-      const incrementExportCount = IncrementExportCount(gateways);
+      const incrementExportCount =
+        IncrementExportCount(gateways);
 
       await saveUser(freeUser);
       await saveUser(vizOwner);
@@ -203,8 +229,12 @@ export const checkExportLimitTest = () => {
       const getUserResult = await getUser(freeUser.id);
       assert(getUserResult.outcome === 'success');
       const updatedUser = getUserResult.value.data;
-      const currentMonth = new Date().toISOString().slice(0, 7);
-      expect(updatedUser.exportCountByMonth?.[currentMonth]).toBe(2);
+      const currentMonth = new Date()
+        .toISOString()
+        .slice(0, 7);
+      expect(
+        updatedUser.exportCountByMonth?.[currentMonth],
+      ).toBe(2);
     });
   });
 };

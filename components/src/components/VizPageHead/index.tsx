@@ -58,14 +58,18 @@ export const VizPageHead = ({
       if (onExportClick) {
         onExportClick(event);
       }
-      
+
       // If event wasn't prevented and user still can't export, show upgrade modal
       if (!event.defaultPrevented && !userCanExport) {
         event.preventDefault();
         toggleExportCodeUpgradeNudgeModal();
       }
     },
-    [userCanExport, toggleExportCodeUpgradeNudgeModal, onExportClick],
+    [
+      userCanExport,
+      toggleExportCodeUpgradeNudgeModal,
+      onExportClick,
+    ],
   );
 
   return (

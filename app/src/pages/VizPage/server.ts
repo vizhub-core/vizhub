@@ -484,9 +484,12 @@ VizPage.getPageData = async ({
     scoreStaleVizzes();
 
     // Fetch analytics data for viz views
-    let analyticsEventSnapshot: Snapshot<AnalyticsEvent> | null = null;
+    let analyticsEventSnapshot: Snapshot<AnalyticsEvent> | null =
+      null;
     const analyticsEventId = `event.pageview.viz.owner:${owner}.viz:${id}`;
-    const analyticsEventResult = await getAnalyticsEvent(analyticsEventId);
+    const analyticsEventResult = await getAnalyticsEvent(
+      analyticsEventId,
+    );
     if (analyticsEventResult.outcome === 'success') {
       analyticsEventSnapshot = analyticsEventResult.value;
     }

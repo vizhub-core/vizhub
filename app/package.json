@@ -68,11 +68,11 @@
     "screenshotgenie": "^0.2.0",
     "sharedb": "^5.2.2",
     "sharedb-mongo": "^5.0.0",
-    "stripe": "^18.3.0",
+    "stripe": "^18.4.0",
     "tailwindcss": "^4.1.11",
     "vizhub-libraries": "^1.8.0",
     "vizhub-ui": "^3.24.0",
-    "vzcode": "^1.43.0",
+    "vzcode": "^1.44.0",
     "ws": "^8.18.3",
     "xss": "^1.0.15"
   },
