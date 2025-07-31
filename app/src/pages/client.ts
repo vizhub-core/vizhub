@@ -17,6 +17,7 @@ import { StargazersPage } from './StargazersPage';
 import { DocumentationPage } from './DocumentationPage';
 import { DocsPage } from './DocsPage';
 import { CreateVizPageTest } from './CreateVizPageTest';
+import { DashboardPage } from './DashboardPage';
 
 // Note: order matters (profile page should come last)
 // Need to update `server.js` as well
@@ -36,6 +37,7 @@ export const pages = [
   AccountPage,
   SearchPage,
   ResourcesPage,
+  DashboardPage,
   KitchenSinkPage,
   CreateVizPage,
   CreateVizPageTest,

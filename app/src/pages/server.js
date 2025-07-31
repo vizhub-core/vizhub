@@ -17,6 +17,7 @@ import { StargazersPage } from './StargazersPage/server';
 import { DocumentationPage } from './DocumentationPage/server';
 import { DocsPage } from './DocsPage/server';
 import { CreateVizPageTest } from './CreateVizPageTest/server';
+import { DashboardPage } from './DashboardPage/server';
 
 // import { ExploreRedirect } from './ExploreRedirect';
 
@@ -44,6 +45,7 @@ export const pages = [
   AccountPage,
   SearchPage,
   ResourcesPage,
+  DashboardPage,
   KitchenSinkPage,
   CreateVizPage,
   CreateVizPageTest,
