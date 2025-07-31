@@ -193,16 +193,6 @@ export interface VizKitAPI {
     getNonPublicVizCount: () => Promise<
       Result<{ count: number }>
     >;
-
-    getExportLimit: () => Promise<
-      Result<{
-        plan: Plan;
-        unlimited: boolean;
-        remainingExports: number | null;
-        totalAllowed: number | null;
-        currentMonthExports: number | null;
-      }>
-    >;
   };
 }
 
@@ -462,9 +452,6 @@ export const VizKit = (
         await postJSON(
           `${baseUrl}/get-non-public-viz-count`,
         ),
-
-      getExportLimit: async () =>
-        await postJSON(`${baseUrl}/export-limit`),
     },
   };
 };
