@@ -178,12 +178,9 @@ export const VizPageBody = () => {
   }, [authenticatedUser]);
 
   // Handle export click for free users
-  const handleExportClick = useCallback(
-    (event) => {
-      // No export limits anymore - all authenticated users can export
-    },
-    [],
-  );
+  const handleExportClick = useCallback((event) => {
+    // No export limits anymore - all authenticated users can export
+  }, []);
 
   const handleRestoreToVersionClick = useCallback(() => {
     if (commitMetadata) {

@@ -43,9 +43,9 @@ export const StarterFeatures = () => {
         learnMoreHref="https://vizhub.com/forum/t/api-access-for-vizzes/971"
         hasBottomBorder={true}
       >
-        Export public vizzes as code. Perfect for integration
-        with your existing workflows and applications. See
-        also{' '}
+        Export public vizzes as code. Perfect for
+        integration with your existing workflows and
+        applications. See also{' '}
         <a href="https://github.com/vizhub-core/vite-export-template">
           Vite Export Template
         </a>
