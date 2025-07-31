@@ -46,24 +46,48 @@ export const ExplorePageBody = ({
             </h1>
             <p>{t('explore.hero.description')}</p>
             <div className="feature-list">
-              <div className="feature-item">
+              <div 
+                className="feature-item"
+                data-bs-toggle="tooltip"
+                data-bs-placement="bottom"
+                title="Create visualizations instantly with AI assistance"
+              >
                 <i className="bi bi-lightning-fill"></i>
                 <span>{t('explore.feature.instant')}</span>
               </div>
-              <div className="feature-item">
+              <div 
+                className="feature-item"
+                data-bs-toggle="tooltip"
+                data-bs-placement="bottom"
+                title="Powered by advanced language models for intelligent code generation"
+              >
                 <i className="bi bi-arrow-repeat"></i>
                 <span>{t('explore.feature.llms')}</span>
               </div>
-              <div className="feature-item">
+              <div 
+                className="feature-item"
+                data-bs-toggle="tooltip"
+                data-bs-placement="bottom"
+                title="Keep track of all your visualization iterations and changes"
+              >
                 <i className="bi bi-database"></i>
                 <span>{t('explore.feature.history')}</span>
               </div>
             </div>
             <div className="hero-buttons">
-              <CreateNewButton />
+              <div
+                data-bs-toggle="tooltip"
+                data-bs-placement="bottom"
+                title="Start creating your first data visualization"
+              >
+                <CreateNewButton />
+              </div>
               <a
                 href="/features"
                 className="hero-buttons-link btn btn-secondary"
+                data-bs-toggle="tooltip"
+                data-bs-placement="bottom"
+                title="Discover all the powerful features VizHub offers"
               >
                 <i className="bi bi-info-circle me-2"></i>
                 {t('explore.button.learn-more')}
