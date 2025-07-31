@@ -11,6 +11,7 @@ export { VizPageViewer } from './components/VizPageViewer';
 export { VizViewsChart } from './components/VizViewsChart';
 export { UpvoteWidget } from './components/UpvoteWidget';
 export { ResourcesPageBody } from './components/ResourcesPageBody';
+export { DashboardPageBody } from './components/DashboardPageBody';
 export { SettingsModal } from './components/SettingsModal';
 export { ShareModal } from './components/ShareModal';
 export { ForkModal } from './components/ForkModal';
