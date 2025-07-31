@@ -5,6 +5,7 @@ import { ProfilePage } from './ProfilePage';
 import { VizPage } from './VizPage';
 import { BetaConfirmPage } from './BetaConfirmPage';
 import { SandboxPage } from './SandboxPage';
+import { DashboardPage } from './DashboardPage';
 import { ExplorePage } from './ExplorePage';
 import { ForksPage } from './ForksPage';
 import { SearchPage } from './SearchPage';
@@ -29,6 +30,7 @@ export const pages = [
   VizPage,
   BetaConfirmPage,
   SandboxPage,
+  DashboardPage,
   ExplorePage,
   DocumentationPage,
   DocsPage,

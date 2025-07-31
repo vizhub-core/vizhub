@@ -5,6 +5,7 @@ import { ProfilePage } from './ProfilePage/server';
 import { VizPage } from './VizPage/server';
 import { BetaConfirmPage } from './BetaConfirmPage';
 import { SandboxPage } from './SandboxPage/server';
+import { DashboardPage } from './DashboardPage/server';
 import { ExplorePage } from './ExplorePage/server';
 import { ForksPage } from './ForksPage/server';
 import { SearchPage } from './SearchPage/server';
@@ -36,6 +37,7 @@ export const pages = [
   VizPage,
   BetaConfirmPage,
   SandboxPage,
+  DashboardPage,
   ExplorePage,
   // ExploreRedirect,
   DocumentationPage,
