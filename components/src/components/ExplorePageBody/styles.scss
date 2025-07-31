@@ -52,6 +52,15 @@
   justify-content: center;
   align-items: center;
 
+  @media (max-width: 768px) {
+    padding: 2rem 1rem;
+    min-height: auto;
+  }
+
+  @media (max-width: 480px) {
+    padding: 1.5rem 0.75rem;
+  }
+
   &.ai-hero {
     position: relative;
     overflow: hidden;
@@ -112,6 +121,15 @@
     @media (max-width: 992px) {
       flex-direction: column;
       text-align: center;
+      gap: 2rem;
+    }
+
+    @media (max-width: 768px) {
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 480px) {
+      gap: 1rem;
     }
 
     .hero-text {
@@ -122,12 +140,29 @@
 
       @media (max-width: 992px) {
         padding-right: 0;
-        margin-bottom: 2rem;
+        margin-bottom: 0;
         text-align: center;
+      }
+
+      @media (max-width: 768px) {
+        max-width: 100%;
+        padding: 0 1rem;
+      }
+
+      @media (max-width: 480px) {
+        padding: 0 0.5rem;
       }
 
       .badge-container {
         margin-bottom: 1rem;
+
+        @media (max-width: 768px) {
+          margin-bottom: 0.75rem;
+        }
+
+        @media (max-width: 480px) {
+          margin-bottom: 0.5rem;
+        }
 
         .new-feature-badge {
           display: inline-block;
@@ -144,6 +179,17 @@
           text-transform: uppercase;
           letter-spacing: 1px;
           box-shadow: 0 4px 10px rgba(255, 107, 107, 0.3);
+
+          @media (max-width: 768px) {
+            font-size: 0.8rem;
+            padding: 0.25rem 0.6rem;
+            letter-spacing: 0.5px;
+          }
+
+          @media (max-width: 480px) {
+            font-size: 0.75rem;
+            padding: 0.2rem 0.5rem;
+          }
         }
       }
 
@@ -152,6 +198,22 @@
         margin-bottom: 1.2rem;
         font-weight: 700;
         line-height: 1.2;
+
+        @media (max-width: 768px) {
+          font-size: 2.5rem;
+          margin-bottom: 1rem;
+          line-height: 1.3;
+        }
+
+        @media (max-width: 480px) {
+          font-size: 2rem;
+          margin-bottom: 0.75rem;
+          line-height: 1.4;
+        }
+
+        @media (max-width: 360px) {
+          font-size: 1.75rem;
+        }
 
         .ai-highlight {
           background: linear-gradient(
@@ -188,6 +250,18 @@
         opacity: 0.9;
         line-height: 1.6;
         color: rgba(255, 255, 255, 0.9);
+
+        @media (max-width: 768px) {
+          font-size: 1.1rem;
+          margin-bottom: 1.5rem;
+          line-height: 1.5;
+        }
+
+        @media (max-width: 480px) {
+          font-size: 1rem;
+          margin-bottom: 1rem;
+          line-height: 1.6;
+        }
       }
 
       .hero-description {
@@ -201,6 +275,18 @@
         margin-bottom: 2rem;
         justify-content: center;
 
+        @media (max-width: 768px) {
+          gap: 0.75rem;
+          margin-bottom: 1.5rem;
+        }
+
+        @media (max-width: 480px) {
+          gap: 0.5rem;
+          margin-bottom: 1rem;
+          flex-direction: column;
+          align-items: center;
+        }
+
         .feature-item {
           display: flex;
           align-items: center;
@@ -208,15 +294,41 @@
           padding: 0.5rem 1rem;
           border-radius: 50px;
 
+          @media (max-width: 768px) {
+            padding: 0.4rem 0.8rem;
+          }
+
+          @media (max-width: 480px) {
+            padding: 0.35rem 0.7rem;
+            width: fit-content;
+          }
+
           i {
             color: #4a90e2;
             margin-right: 0.5rem;
             font-size: 1rem;
+
+            @media (max-width: 768px) {
+              font-size: 0.9rem;
+              margin-right: 0.4rem;
+            }
+
+            @media (max-width: 480px) {
+              font-size: 0.8rem;
+            }
           }
 
           span {
             font-size: 0.9rem;
             font-weight: 500;
+
+            @media (max-width: 768px) {
+              font-size: 0.85rem;
+            }
+
+            @media (max-width: 480px) {
+              font-size: 0.8rem;
+            }
           }
         }
       }
@@ -227,6 +339,16 @@
       flex-wrap: wrap;
       gap: 1rem;
       justify-content: center;
+
+      @media (max-width: 768px) {
+        gap: 0.75rem;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      @media (max-width: 480px) {
+        gap: 0.5rem;
+      }
 
       .hero-create-button {
         background: linear-gradient(
@@ -243,6 +365,19 @@
         transition: all 0.3s ease;
         position: relative;
         overflow: hidden;
+
+        @media (max-width: 768px) {
+          padding: 0.7rem 1.5rem;
+          font-size: 0.95rem;
+          width: 100%;
+          max-width: 280px;
+        }
+
+        @media (max-width: 480px) {
+          padding: 0.6rem 1.25rem;
+          font-size: 0.9rem;
+          max-width: 240px;
+        }
 
         .button-content {
           position: relative;
@@ -290,6 +425,19 @@
         border-width: 2px;
         transition: all 0.3s ease;
 
+        @media (max-width: 768px) {
+          padding: 0.55rem 1.25rem;
+          font-size: 0.95rem;
+          width: 100%;
+          max-width: 280px;
+        }
+
+        @media (max-width: 480px) {
+          padding: 0.5rem 1rem;
+          font-size: 0.9rem;
+          max-width: 240px;
+        }
+
         &:hover {
           background-color: rgba(255, 255, 255, 0.15);
           color: white;
@@ -304,6 +452,20 @@
       justify-content: center;
       align-items: center;
 
+      @media (max-width: 992px) {
+        width: 100%;
+        max-width: 600px;
+      }
+
+      @media (max-width: 768px) {
+        max-width: 100%;
+        padding: 0 1rem;
+      }
+
+      @media (max-width: 480px) {
+        padding: 0;
+      }
+
       iframe {
         max-width: 100%;
         border-radius: 12px;
@@ -312,9 +474,32 @@
           transform 0.3s ease,
           box-shadow 0.3s ease;
 
+        @media (max-width: 768px) {
+          width: 100%;
+          height: auto;
+          aspect-ratio: 16/9;
+          border-radius: 8px;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        @media (max-width: 480px) {
+          border-radius: 6px;
+          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
         &:hover {
           transform: scale(1.02);
           box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
+
+          @media (max-width: 768px) {
+            transform: scale(1.01);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+          }
+
+          @media (max-width: 480px) {
+            transform: none;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+          }
         }
       }
     }
