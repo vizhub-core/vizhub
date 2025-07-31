@@ -143,26 +143,52 @@ export const CreateVizPageBody = ({
     <div className="vh-page vh-create-viz-page">
       {/* Hero Section */}
       <div className="create-viz-hero">
+        <div className="hero-particles"></div>
         <div className="hero-content">
           <div className="hero-text">
-            <h1>Create Your Visualization</h1>
+            <div className="hero-badge">
+              <i className="bi bi-sparkles me-2"></i>
+              New AI Features Available
+            </div>
+            <h1>
+              Create <span className="gradient-text">Amazing</span> Visualizations
+            </h1>
             <p className="hero-description">
-              Choose from our curated collection of templates or start from scratch. 
-              Build stunning, interactive data visualizations with AI assistance.
+              Transform your data into compelling stories with our AI-powered visualization platform. 
+              Choose from professional templates or let AI build custom charts for you.
             </p>
             <div className="hero-stats">
               <div className="stat-item">
+                <div className="stat-icon">
+                  <i className="bi bi-collection"></i>
+                </div>
                 <span className="stat-number">50+</span>
-                <span className="stat-label">Templates</span>
+                <span className="stat-label">Professional Templates</span>
               </div>
               <div className="stat-item">
+                <div className="stat-icon">
+                  <i className="bi bi-robot"></i>
+                </div>
                 <span className="stat-number">AI</span>
-                <span className="stat-label">Powered</span>
+                <span className="stat-label">Powered Creation</span>
               </div>
               <div className="stat-item">
+                <div className="stat-icon">
+                  <i className="bi bi-code-square"></i>
+                </div>
                 <span className="stat-number">D3.js</span>
-                <span className="stat-label">Based</span>
+                <span className="stat-label">Industry Standard</span>
               </div>
+            </div>
+            <div className="hero-cta">
+              <button className="btn btn-primary btn-lg hero-primary-btn">
+                <i className="bi bi-magic me-2"></i>
+                Start Creating Now
+              </button>
+              <button className="btn btn-outline-light btn-lg">
+                <i className="bi bi-play-circle me-2"></i>
+                Watch Demo
+              </button>
             </div>
           </div>
         </div>
@@ -171,39 +197,91 @@ export const CreateVizPageBody = ({
       <div className="create-viz-content vh-page-container">
         {/* Quick Start Section */}
         <div className="quick-start-section">
-          <h2>Quick Start</h2>
+          <div className="section-header">
+            <h2>Choose Your Path</h2>
+            <p>Three powerful ways to bring your data to life</p>
+          </div>
           <div className="quick-start-options">
             <div className="quick-start-card primary">
-              <div className="card-icon">
-                <i className="bi bi-magic"></i>
+              <div className="card-header">
+                <div className="card-icon">
+                  <i className="bi bi-magic"></i>
+                </div>
+                <div className="card-badge">Most Popular</div>
               </div>
-              <h3>Start with AI</h3>
-              <p>Describe your data and let AI create a visualization for you</p>
-              <button className="btn btn-primary">
+              <h3>AI-Powered Creation</h3>
+              <p>Simply describe your data and visualization goals. Our AI will generate the perfect chart for you in seconds.</p>
+              <div className="card-features">
+                <div className="feature">
+                  <i className="bi bi-check-circle-fill"></i>
+                  <span>Natural language input</span>
+                </div>
+                <div className="feature">
+                  <i className="bi bi-check-circle-fill"></i>
+                  <span>Smart chart recommendations</span>
+                </div>
+                <div className="feature">
+                  <i className="bi bi-check-circle-fill"></i>
+                  <span>Instant code generation</span>
+                </div>
+              </div>
+              <button className="btn btn-primary btn-lg">
                 <i className="bi bi-robot me-2"></i>
                 Create with AI
               </button>
             </div>
             <div className="quick-start-card">
-              <div className="card-icon">
-                <i className="bi bi-file-earmark-plus"></i>
+              <div className="card-header">
+                <div className="card-icon">
+                  <i className="bi bi-palette"></i>
+                </div>
               </div>
-              <h3>Blank Canvas</h3>
-              <p>Start from scratch with a clean HTML, CSS, and JavaScript setup</p>
-              <button className="btn btn-outline-primary">
-                <i className="bi bi-plus-circle me-2"></i>
-                Start Blank
+              <h3>Template Gallery</h3>
+              <p>Browse our curated collection of professional templates. Perfect for common visualization needs.</p>
+              <div className="card-features">
+                <div className="feature">
+                  <i className="bi bi-check-circle-fill"></i>
+                  <span>50+ professional templates</span>
+                </div>
+                <div className="feature">
+                  <i className="bi bi-check-circle-fill"></i>
+                  <span>Fully customizable</span>
+                </div>
+                <div className="feature">
+                  <i className="bi bi-check-circle-fill"></i>
+                  <span>Best practices included</span>
+                </div>
+              </div>
+              <button className="btn btn-outline-primary btn-lg">
+                <i className="bi bi-grid-3x3-gap me-2"></i>
+                Browse Templates
               </button>
             </div>
             <div className="quick-start-card">
-              <div className="card-icon">
-                <i className="bi bi-upload"></i>
+              <div className="card-header">
+                <div className="card-icon">
+                  <i className="bi bi-code-slash"></i>
+                </div>
               </div>
-              <h3>Upload Data</h3>
-              <p>Upload your CSV or JSON file and get template suggestions</p>
-              <button className="btn btn-outline-primary">
-                <i className="bi bi-cloud-upload me-2"></i>
-                Upload Data
+              <h3>Blank Canvas</h3>
+              <p>Start from scratch with complete creative freedom. Perfect for experienced developers and unique projects.</p>
+              <div className="card-features">
+                <div className="feature">
+                  <i className="bi bi-check-circle-fill"></i>
+                  <span>Full D3.js environment</span>
+                </div>
+                <div className="feature">
+                  <i className="bi bi-check-circle-fill"></i>
+                  <span>Live code editor</span>
+                </div>
+                <div className="feature">
+                  <i className="bi bi-check-circle-fill"></i>
+                  <span>Unlimited customization</span>
+                </div>
+              </div>
+              <button className="btn btn-outline-primary btn-lg">
+                <i className="bi bi-plus-circle me-2"></i>
+                Start Coding
               </button>
             </div>
           </div>
@@ -212,25 +290,41 @@ export const CreateVizPageBody = ({
         {/* Template Categories */}
         <div className="template-categories">
           <div className="section-header">
-            <h2>Choose a Template</h2>
-            <p>Browse our collection of professionally designed visualization templates</p>
+            <h2>Professional Templates</h2>
+            <p>Hand-crafted visualizations ready for your data</p>
+            <div className="template-filters">
+              <button className="filter-btn active">All Templates</button>
+              <button className="filter-btn">Beginner</button>
+              <button className="filter-btn">Intermediate</button>
+              <button className="filter-btn">Advanced</button>
+            </div>
           </div>
 
           {templateCategories.map((category) => (
             <div key={category.id} className="template-category">
               <div className="category-header">
                 <div className="category-title">
-                  <i className={category.icon}></i>
-                  <h3>{category.title}</h3>
+                  <div className="category-icon">
+                    <i className={category.icon}></i>
+                  </div>
+                  <div>
+                    <h3>{category.title}</h3>
+                    <p className="category-description">{category.description}</p>
+                  </div>
                 </div>
-                <p className="category-description">{category.description}</p>
+                <div className="category-count">
+                  {category.templates.length} templates
+                </div>
               </div>
               
               <div className="template-grid">
                 {category.templates.map((template) => (
                   <div key={template.id} className="template-card">
                     <div className="template-thumbnail">
-                      <img src={template.thumbnail} alt={template.title} />
+                      <div className="template-placeholder">
+                        <i className="bi bi-bar-chart-fill"></i>
+                        <span>{template.title}</span>
+                      </div>
                       <div className="template-overlay">
                         <button className="btn btn-primary btn-sm">
                           <i className="bi bi-play-fill me-1"></i>
@@ -238,21 +332,35 @@ export const CreateVizPageBody = ({
                         </button>
                         <button className="btn btn-outline-light btn-sm">
                           <i className="bi bi-eye me-1"></i>
-                          Preview
+                          Live Preview
                         </button>
                       </div>
                     </div>
                     <div className="template-info">
-                      <h4>{template.title}</h4>
+                      <div className="template-header">
+                        <h4>{template.title}</h4>
+                        <div className="template-actions">
+                          <button className="action-btn" title="Add to favorites">
+                            <i className="bi bi-heart"></i>
+                          </button>
+                          <button className="action-btn" title="Share template">
+                            <i className="bi bi-share"></i>
+                          </button>
+                        </div>
+                      </div>
                       <p>{template.description}</p>
                       <div className="template-meta">
                         <span className={`difficulty ${template.difficulty.toLowerCase()}`}>
+                          <i className="bi bi-star-fill me-1"></i>
                           {template.difficulty}
                         </span>
                         <div className="template-tags">
-                          {template.tags.map((tag) => (
+                          {template.tags.slice(0, 2).map((tag) => (
                             <span key={tag} className="tag">{tag}</span>
                           ))}
+                          {template.tags.length > 2 && (
+                            <span className="tag more">+{template.tags.length - 2}</span>
+                          )}
                         </div>
                       </div>
                     </div>
