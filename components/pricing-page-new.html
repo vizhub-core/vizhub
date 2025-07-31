@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing - Start for free. Upgrade as you go.</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #334155;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 4rem;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            font-size: 1.5rem;
+            margin-bottom: 3rem;
+            opacity: 0.9;
+        }
+
+        .billing-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .toggle-container {
+            display: flex;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 6px;
+            backdrop-filter: blur(10px);
+        }
+
+        .toggle-option {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: white;
+        }
+
+        .toggle-option.active {
+            background: white;
+            color: #667eea;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .savings-badge {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-size: 0.875rem;
+            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 4rem;
+            min-height: 600px;
+        }
+
+        .pricing-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+            transition: all 0.4s ease;
+            backdrop-filter: blur(20px);
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .pricing-card.popular {
+            border: 3px solid #667eea;
+            transform: scale(1.05);
+            background: rgba(255, 255, 255, 1);
+        }
+
+        .pricing-card.popular::before {
+            content: "Most Popular";
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            font-size: 0.875rem;
+            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .plan-name {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: #1e293b;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .plan-price {
+            font-size: 3rem;
+            font-weight: 900;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        .plan-price .currency {
+            font-size: 2rem;
+            color: #64748b;
+        }
+
+        .plan-billing {
+            color: #64748b;
+            font-size: 1rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .plan-tokens {
+            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+        }
+
+        .plan-tokens .label {
+            font-size: 0.875rem;
+            color: #64748b;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .plan-tokens .amount {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #1e293b;
+        }
+
+        .plan-button {
+            width: 100%;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 2rem;
+            border: none;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .plan-button.primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .plan-button.primary:hover {
+            background: linear-gradient(135deg, #5a67d8, #6b46c1);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .plan-button.secondary {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .plan-button.secondary:hover {
+            background: rgba(102, 126, 234, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .plan-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .plan-features {
+            list-style: none;
+        }
+
+        .plan-features li {
+            padding: 0.75rem 0;
+            position: relative;
+            padding-left: 2rem;
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .plan-features li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #10b981;
+            font-weight: bold;
+            font-size: 1.2rem;
+            top: 0.75rem;
+        }
+
+        .enterprise-note {
+            color: #64748b;
+            font-style: italic;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        .faq-section {
+            margin-top: 6rem;
+            text-align: center;
+            color: white;
+        }
+
+        .faq-section h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .faq-subtitle {
+            font-size: 1.25rem;
+            margin-bottom: 3rem;
+            opacity: 0.9;
+        }
+
+        .faq-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .faq-item {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        .faq-item h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1e293b;
+            text-align: left;
+            line-height: 1.4;
+        }
+
+        .help-center {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .help-center a {
+            color: #fbbf24;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .help-center a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 1400px) {
+            .pricing-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 1rem;
+            }
+            
+            .pricing-card {
+                padding: 2rem;
+            }
+            
+            .plan-name {
+                font-size: 1.5rem;
+            }
+            
+            .plan-price {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .pricing-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.5rem;
+            }
+
+            .header p {
+                font-size: 1.25rem;
+            }
+
+            .pricing-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .pricing-card.popular {
+                transform: none;
+            }
+
+            .billing-toggle {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .faq-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Pricing</h1>
+            <p>Start for free. Upgrade as you go.</p>
+            
+            <div class="billing-toggle">
+                <div class="toggle-container">
+                    <div class="toggle-option active">Monthly</div>
+                    <div class="toggle-option">Yearly</div>
+                </div>
+                <div class="savings-badge">Save 10% on a yearly subscription</div>
+            </div>
+        </div>
+
+        <div class="pricing-grid">
+            <!-- Free Plan -->
+            <div class="pricing-card">
+                <div class="plan-name">Free</div>
+                <div class="plan-price">
+                    <span class="currency">$</span>0
+                </div>
+                <div class="plan-billing">Your current plan</div>
+                
+                <div class="plan-tokens">
+                    <div class="label">Monthly tokens</div>
+                    <div class="amount">1M / month</div>
+                </div>
+
+                <button class="plan-button secondary">Current Plan</button>
+
+                <ul class="plan-features">
+                    <li>Public and private projects</li>
+                    <li>1M tokens per month</li>
+                    <li>150K tokens daily limit</li>
+                    <li>File upload limited to 10MB</li>
+                </ul>
+            </div>
+
+            <!-- Pro Plan -->
+            <div class="pricing-card popular">
+                <div class="plan-name">Pro</div>
+                <div class="plan-price">
+                    <span class="currency">$</span>20
+                </div>
+                <div class="plan-billing">per month, billed monthly</div>
+                
+                <div class="plan-tokens">
+                    <div class="label">Monthly tokens</div>
+                    <div class="amount">10M / month</div>
+                </div>
+
+                <button class="plan-button primary">Upgrade</button>
+
+                <ul class="plan-features">
+                    <li>Public and private projects</li>
+                    <li>Start at 10M tokens per month</li>
+                    <li>Increased file upload limit to 100MB</li>
+                    <li>No daily token limit</li>
+                    <li>Unused tokens roll over to next month</li>
+                </ul>
+            </div>
+
+            <!-- Teams Plan -->
+            <div class="pricing-card">
+                <div class="plan-name">Teams</div>
+                <div class="plan-price">
+                    <span class="currency">$</span>30
+                </div>
+                <div class="plan-billing">per month and member, billed monthly</div>
+                
+                <div class="plan-tokens">
+                    <div class="label">Monthly tokens per member</div>
+                    <div class="amount">10M / month</div>
+                </div>
+
+                <button class="plan-button secondary" disabled>Coming Soon</button>
+
+                <ul class="plan-features">
+                    <li>You get everything in Pro, plus:</li>
+                    <li>Centralized billing</li>
+                    <li>Team-level access management</li>
+                    <li>Granular admin controls &amp; user provisioning</li>
+                    <li>Private NPM registries support</li>
+                    <li>Design System knowledge with per-package prompts</li>
+                </ul>
+            </div>
+
+            <!-- Enterprise Plan -->
+            <div class="pricing-card">
+                <div class="plan-name">Enterprise</div>
+                <div class="plan-price">Custom</div>
+                <div class="plan-billing">Get advanced security, compliance, and 24/7 support</div>
+                
+                <div class="enterprise-note">
+                    Customized to your team's exact needs.
+                </div>
+
+                <button class="plan-button secondary" disabled>Coming Soon</button>
+
+                <ul class="plan-features">
+                    <li>You get everything in Pro, plus:</li>
+                    <li>Advanced security (SSO, audit logs, compliance support)</li>
+                    <li>Granular admin controls &amp; user provisioning</li>
+                    <li>Dedicated account manager &amp; 24/7 priority support</li>
+                    <li>Custom workflows, integrations &amp; SLAs</li>
+                    <li>Scalable for large teams and high-volume usage</li>
+                    <li>Flexible billing &amp; procurement options</li>
+                    <li>Data governance &amp; retention policies</li>
+                    <li>Hands-on onboarding &amp; enterprise training</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- FAQ Section -->
+        <div class="faq-section">
+            <h2>Frequently asked questions</h2>
+            <p class="faq-subtitle">Everything you need to know about the product and billing.</p>
+            
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <h3>What are tokens?</h3>
+                </div>
+                <div class="faq-item">
+                    <h3>How do Teams plans work?</h3>
+                </div>
+                <div class="faq-item">
+                    <h3>Do tokens rollover from month to month?</h3>
+                </div>
+                <div class="faq-item">
+                    <h3>Can I change my plan later?</h3>
+                </div>
+                <div class="faq-item">
+                    <h3>Can I cancel my subscription?</h3>
+                </div>
+                <div class="faq-item">
+                    <h3>What are the token limits associated with a free plan?</h3>
+                </div>
+            </div>
+            
+            <p class="help-center">For additional information, please visit our <a href="#">Help Center</a>.</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -245,9 +245,9 @@ export const PricingPageBody = ({
                       Premium
                     </h3>
                     <div className="plan-header-right">
-                      <h3>${premiumPrice}</h3>
+                      <h3>$5</h3>
                       <h3 className="plan-header-right-faint">
-                        /{isMonthly ? 'month' : 'year'}
+                        /month
                       </h3>
                     </div>
                   </div>

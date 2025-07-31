@@ -89,6 +89,9 @@ export const Header = ({
                 <Dropdown.Item href="/docs">
                   Documentation
                 </Dropdown.Item>
+                <Dropdown.Item href="/pricing">
+                  Pricing
+                </Dropdown.Item>
                 {/* <Dropdown.Item href="/blog">
                   Blog
                 </Dropdown.Item> */}
