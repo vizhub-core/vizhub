@@ -16,7 +16,6 @@ import {
   BuildViz,
   GetInfoByIdOrSlug,
   RecordAnalyticsEvents,
-  IncrementExportCount,
   GetAPIKeyOwner,
 } from 'interactors';
 import { zipFiles } from './zipFiles';
@@ -36,8 +35,6 @@ export const exportVizEndpoint = ({
   const buildViz = BuildViz(gateways);
   const recordAnalyticsEvents =
     RecordAnalyticsEvents(gateways);
-  const incrementExportCount =
-    IncrementExportCount(gateways);
   const getAPIKeyOwner = GetAPIKeyOwner(gateways);
 
   app.get(
@@ -319,14 +316,6 @@ export const exportVizEndpoint = ({
         await recordAnalyticsEvents({
           eventId: `event.exportViz`,
         });
-
-        // Increment export count for authenticated users
-        if (authenticatedUserId) {
-          await incrementExportCount({
-            userId: authenticatedUserId,
-            vizOwnerId: userId,
-          });
-        }
       }
     },
   );

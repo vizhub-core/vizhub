@@ -1,4 +1,4 @@
-import { Info, Snapshot, User } from 'entities';
+import { Info, Snapshot, User, AnalyticsEvent } from 'entities';
 import { AuthenticatedUserProvider } from '../../contexts/AuthenticatedUserContext';
 import { useShareDBDocData } from '../../useShareDBDocData';
 import {
@@ -15,6 +15,7 @@ export type ProfilePageData = PageData &
     profileUserSnapshot: Snapshot<User>;
     infoSnapshots: Array<Snapshot<Info>>;
     hasMore: boolean;
+    analyticsEventSnapshot: Snapshot<AnalyticsEvent> | null;
   };
 
 // Inspired by https://github.com/vitejs/vite-plugin-react/blob/main/playground/ssr-react/src/pages/Home.jsx
@@ -47,7 +48,10 @@ export const ProfilePage: Page = ({
           owner={profileUser.id}
           thumbnailURLs={pageData.thumbnailURLs}
         >
-          <Body profileUser={profileUser} />
+          <Body 
+            profileUser={profileUser} 
+            analyticsEventSnapshot={pageData.analyticsEventSnapshot}
+          />
           <ProfilePageToasts />
         </InfosAndOwnersProvider>
       </SectionSortProvider>

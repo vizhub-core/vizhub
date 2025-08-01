@@ -8,6 +8,24 @@ services:
       - mongodb_data:/data/db
       - mongodb_config:/data/configdb
 
+  postgres:
+    image: postgres:16-alpine
+    container_name: postgres
+    ports:
+      - "0.0.0.0:5432:5432"
+    environment:
+      POSTGRES_USER: vizhub
+      POSTGRES_PASSWORD: vizhub_password
+      POSTGRES_DB: vizhub_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
 volumes:
   mongodb_data:
   mongodb_config:
+  postgres_data:

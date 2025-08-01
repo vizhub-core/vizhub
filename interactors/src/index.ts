@@ -38,7 +38,3 @@ export { RestoreToRevision } from './restoreToRevision';
 export { GetRevisionHistory } from './getRevisionHistory';
 export { GetThumbnailURLs } from './getThumbnailURLs';
 export { EditWithAI } from './editWithAI';
-export {
-  CheckExportLimit,
-  IncrementExportCount,
-} from './checkExportLimit';
