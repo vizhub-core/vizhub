@@ -64,20 +64,6 @@ export const PremiumFeatures = ({}) => (
       Invite others to edit code with you in real time.
     </Feature>
     <Feature
-      title="Export Code"
-      id="api-access-for-vizzes"
-      learnMoreHref="https://vizhub.com/forum/t/api-access-for-vizzes/971"
-      hasBottomBorder={true}
-    >
-      Export public vizzes as code. Perfect for integration
-      with your existing workflows and applications. See
-      also{' '}
-      <a href="https://github.com/vizhub-core/vite-export-template">
-        Vite Export Template
-      </a>
-      .
-    </Feature>
-    <Feature
       title="Unlimited Non-Public Vizzes"
       id="unlimited-non-public-vizzes"
       hasBottomBorder={true}
