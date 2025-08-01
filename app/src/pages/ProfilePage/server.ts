@@ -6,6 +6,8 @@ import {
   asSectionId,
   asSortId,
   defaultSectionId,
+  AnalyticsEvent,
+  Snapshot,
 } from 'entities';
 import { getAuthenticatedUser } from '../getAuthenticatedUser';
 
@@ -18,7 +20,7 @@ ProfilePage.getPageData = async ({
   auth0User,
 }) => {
   const { userName } = params;
-  const { getUserByUserName } = gateways;
+  const { getUserByUserName, getAnalyticsEvent } = gateways;
   const getInfosAndOwners = GetInfosAndOwners(gateways);
 
   const userResult = await getUserByUserName(userName);
@@ -60,6 +62,17 @@ ProfilePage.getPageData = async ({
       thumbnailURLs,
     } = infosAndOwnersResult.value;
 
+    // Fetch analytics data for profile views
+    let analyticsEventSnapshot: Snapshot<AnalyticsEvent> | null =
+      null;
+    const analyticsEventId = `event.pageview.viz.owner:${owner}`;
+    const analyticsEventResult = await getAnalyticsEvent(
+      analyticsEventId,
+    );
+    if (analyticsEventResult.outcome === 'success') {
+      analyticsEventSnapshot = analyticsEventResult.value;
+    }
+
     const pageData: ProfilePageData = {
       title: `${userName} on VizHub`,
       authenticatedUserSnapshot,
@@ -68,6 +81,7 @@ ProfilePage.getPageData = async ({
       infoSnapshots,
       hasMore,
       thumbnailURLs,
+      analyticsEventSnapshot,
     };
 
     return pageData;
