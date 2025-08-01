@@ -48,7 +48,6 @@ export const ExplorePageBody = ({
             <div className="feature-list">
               <div 
                 className="feature-item"
-                data-bs-placement="bottom"
                 title="Create visualizations instantly with AI assistance"
               >
                 <i className="bi bi-lightning-fill"></i>
