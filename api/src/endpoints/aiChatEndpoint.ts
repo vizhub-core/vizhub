@@ -74,7 +74,7 @@ export const aiChatEndpoint = ({
 
       // Check daily message limit for free users
       const today = new Date().toISOString().split('T')[0]; // "YYYY-MM-DD"
-      
+
       // Reset daily count if it's a new day
       if (authenticatedUser.currentDay !== today) {
         authenticatedUser.currentDay = today;
@@ -83,7 +83,8 @@ export const aiChatEndpoint = ({
 
       // Check if free user has exceeded daily limit
       if (authenticatedUser.plan === FREE) {
-        const currentMessages = authenticatedUser.currentDayMessages || 0;
+        const currentMessages =
+          authenticatedUser.currentDayMessages || 0;
         if (currentMessages >= 5) {
           DEBUG &&
             console.log(
@@ -101,11 +102,15 @@ export const aiChatEndpoint = ({
       }
 
       DEBUG &&
-        console.log('[aiChatEndpoint] Daily message check passed:', {
-          plan: authenticatedUser.plan,
-          currentDay: authenticatedUser.currentDay,
-          currentDayMessages: authenticatedUser.currentDayMessages,
-        });
+        console.log(
+          '[aiChatEndpoint] Daily message check passed:',
+          {
+            plan: authenticatedUser.plan,
+            currentDay: authenticatedUser.currentDay,
+            currentDayMessages:
+              authenticatedUser.currentDayMessages,
+          },
+        );
 
       // Get the ShareDB document for the viz content
       const entityName: EntityName = 'Content';
@@ -163,7 +168,8 @@ export const aiChatEndpoint = ({
                 freshUserResult.value.data;
 
               // Increment daily message count
-              freshUser.currentDayMessages = (freshUser.currentDayMessages || 0) + 1;
+              freshUser.currentDayMessages =
+                (freshUser.currentDayMessages || 0) + 1;
 
               await saveUser(freshUser);
             },

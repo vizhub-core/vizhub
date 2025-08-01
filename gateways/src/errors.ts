@@ -160,4 +160,7 @@ export const creditsNeededError = (
 export const dailyQuotaExceededError = (
   message: string,
 ): VizHubError =>
-  new VizHubError(message, VizHubErrorCode.dailyQuotaExceeded);
+  new VizHubError(
+    message,
+    VizHubErrorCode.dailyQuotaExceeded,
+  );

@@ -5,6 +5,7 @@ import { UpgradeCallout } from '../UpgradeCallout';
 import { image } from '../image';
 import { PrivateVizzesUpgradeCallout } from '../PrivateVizzesUpgradeCallout';
 import './styles.css';
+import { FREE_NON_PUBLIC_VIZ_LIMIT } from 'entities/src/Pricing';
 
 const enableUnlisted = true;
 
@@ -54,7 +55,7 @@ export const VisibilityControl = ({
         const wouldExceedQuota =
           isChangingToNonPublic &&
           nonPublicVizCount !== undefined &&
-          nonPublicVizCount >= 3;
+          nonPublicVizCount >= FREE_NON_PUBLIC_VIZ_LIMIT;
 
         if (wouldExceedQuota) {
           setShowUpgradeCallout(true);

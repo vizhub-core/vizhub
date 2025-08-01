@@ -1,3 +1,4 @@
+import { FREE_NON_PUBLIC_VIZ_LIMIT } from 'entities/src/Pricing';
 import { discordLink } from '../links';
 import { Feature } from './Feature';
 
@@ -11,7 +12,8 @@ export const StarterFeatures = () => {
         startsExpanded={true}
         learnMoreHref="/features#ai-assisted-coding"
       >
-        Limited access to VizBot AI coding chat, up to 5 chat messages per day
+        Limited access to VizBot AI coding chat, up to 5
+        chat messages per day
       </Feature>
       <Feature
         title="Search Public Vizzes"
@@ -29,11 +31,12 @@ export const StarterFeatures = () => {
         Create your own works right in your browser.
       </Feature>
       <Feature
-        title="Limited Non-Public Vizzes (up to 5)"
+        title={`Limited Non-Public Vizzes (up to ${FREE_NON_PUBLIC_VIZ_LIMIT})`}
         id="limited-non-public-vizzes"
         hasBottomBorder={true}
       >
-        Create up to 5 private or unlisted vizzes.
+        Create up to {FREE_NON_PUBLIC_VIZ_LIMIT} private or
+        unlisted vizzes.
       </Feature>
       <Feature
         title="Community Access"

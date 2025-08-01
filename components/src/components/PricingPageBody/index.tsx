@@ -19,7 +19,7 @@ import { OrgFeatures } from './OrgFeatures';
 import { AcademicFeatures } from './AcademicFeatures';
 import './styles.scss';
 
-const premiumPriceMonthly = 9.99;
+const premiumPriceMonthly = 5;
 const premiumPriceAnnually = 50;
 const proPriceMonthly = 20;
 const proPriceAnnually = 200;
