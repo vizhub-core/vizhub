@@ -8,40 +8,13 @@ import { CREDIT_MARKUP } from 'entities/src/Pricing';
 export const PremiumFeatures = ({}) => (
   <>
     <Feature
-      title="Premium AI"
-      id="ai-assisted-coding"
+      title="Unlimited VizBot AI Chat"
+      id="unlimited-ai-chat"
       hasBottomBorder={true}
       startsExpanded={false}
       // learnMoreHref="https://vizhub.com/forum/t/ai-assisted-coding/952"
     >
-      Leverage artificial intelligence to code faster. How
-      it works:
-      <ul className="mt-2">
-        <li>
-          "Edit with AI" performs holistic code
-          modifications across multiple files based on your
-          prompt.
-        </li>
-        <li>
-          <strong>Get $5 in AI Credits</strong> each month
-        </li>
-        <li>
-          <strong>Top up any time</strong> when you need
-          more credits
-        </li>
-        <li>
-          AI requests are{' '}
-          <strong>
-            billed at a{' '}
-            {Math.round((CREDIT_MARKUP - 1) * 100)}% markup
-          </strong>{' '}
-          on the OpenRouter price
-        </li>
-        <li>
-          Each request cost is{' '}
-          <strong>rounded up to the nearest cent</strong>
-        </li>
-      </ul>
+      Unlimited access to VizBot AI coding chat
     </Feature>
     <Feature
       title="Hot Reloading & Interactive Widgets"
