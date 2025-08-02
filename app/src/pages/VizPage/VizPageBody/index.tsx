@@ -48,6 +48,7 @@ import { VizFileId } from '@vizhub/viz-types';
 import { useRuntime } from '../runtime/useRuntime';
 
 const enableVizPageUpgradeBanner = false;
+const enableEditWithAI = false;
 
 export const VizPageBody = () => {
   const {
@@ -278,7 +279,9 @@ export const VizPageBody = () => {
         showEditor={showEditor}
         setShowEditor={setShowEditor}
         userCanExport={userCanExport}
-        userCanEditWithAI={canUserEditViz}
+        userCanEditWithAI={
+          enableEditWithAI && canUserEditViz
+        }
         exportHref={exportHref}
         onExportClick={handleExportClick}
         onShareClick={toggleShareModal}

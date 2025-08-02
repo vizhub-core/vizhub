@@ -18,6 +18,7 @@ const enableRevisionHistory = true;
 // TODO fix this and use Screenshot Genie
 const enableDownloadImage = true;
 const enableAPIButton = false;
+const enableEditWithAI = false;
 
 export const VizPageHead = ({
   showEditor,
@@ -81,7 +82,7 @@ export const VizPageHead = ({
             {showEditor ? 'Close' : 'Open'} Editor
           </div>
         </Button>
-        {userCanEditWithAI && (
+        {enableEditWithAI && userCanEditWithAI && (
           <Button
             variant="primary"
             onClick={onEditWithAIClick}

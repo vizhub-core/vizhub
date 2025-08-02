@@ -9,7 +9,13 @@ import {
   ThumbsUpSVG,
   ThumbsUpSVGSymbol,
 } from '../Icons/sam/ThumbsUpSVG';
-import { SectionId, SortId, Plan, AnalyticsEvent, Snapshot } from 'entities';
+import {
+  SectionId,
+  SortId,
+  Plan,
+  AnalyticsEvent,
+  Snapshot,
+} from 'entities';
 import { VizViewsChart } from '../VizViewsChart';
 import { useMemo } from 'react';
 import { SidebarSection } from './SidebarSection';

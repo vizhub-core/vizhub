@@ -1,4 +1,9 @@
-import { Info, Snapshot, User, AnalyticsEvent } from 'entities';
+import {
+  Info,
+  Snapshot,
+  User,
+  AnalyticsEvent,
+} from 'entities';
 import { AuthenticatedUserProvider } from '../../contexts/AuthenticatedUserContext';
 import { useShareDBDocData } from '../../useShareDBDocData';
 import {
@@ -48,9 +53,11 @@ export const ProfilePage: Page = ({
           owner={profileUser.id}
           thumbnailURLs={pageData.thumbnailURLs}
         >
-          <Body 
-            profileUser={profileUser} 
-            analyticsEventSnapshot={pageData.analyticsEventSnapshot}
+          <Body
+            profileUser={profileUser}
+            analyticsEventSnapshot={
+              pageData.analyticsEventSnapshot
+            }
           />
           <ProfilePageToasts />
         </InfosAndOwnersProvider>
