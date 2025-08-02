@@ -272,7 +272,9 @@ export const useRuntime = ({
         runtime.run({
           vizId: content.id,
           files: vizFilesToFileCollection(content.files),
-          enableHotReloading: true,
+          // TODO update this enableHotReloading logic
+          // to match that from vzcode
+          enableHotReloading: false,
         });
       }
     };
@@ -286,4 +288,72 @@ export const useRuntime = ({
       return;
     }
   }, []);
+
+  // Track the last runId to detect changes
+  const lastRunIdRef = useRef<string | undefined>(
+    undefined,
+  );
+
+  // Check if runId has changed
+  const runId = content.runId;
+  const runIdChanged = runId !== lastRunIdRef.current;
+  if (runIdChanged) {
+    lastRunIdRef.current = runId;
+  }
+
+  // Track if this is the first run
+  const isFirstRunRef = useRef(true);
+
+  // Main effect for running the viz based on VZRight.tsx logic
+  useEffect(() => {
+    // Don't run if the viz is not visual (README.md only).
+    if (isVisual === false) {
+      return;
+    }
+
+    // Don't run if there's no content ID
+    if (!content.id) {
+      return;
+    }
+
+    const isInteracting = content.isInteracting || false;
+
+    // Run code when:
+    // 1. First run
+    // 2. User is interacting with widgets
+    // 3. runId changed (indicating AI finished or other trigger)
+    if (
+      isFirstRunRef.current ||
+      isInteracting ||
+      runIdChanged
+    ) {
+      const update = async () => {
+        const runtime = await getVizHubRuntime();
+        // Sanity check, should never happen.
+        if (runtime === null) {
+          throw new Error('VizHubRuntime is null');
+        }
+
+        // Clear the srcdoc error message when new code runs
+        setSrcdocErrorMessage(null);
+
+        runtime.run({
+          vizId: content.id,
+          files: vizFilesToFileCollection(content.files),
+          // Enable hot reloading when interacting, disable when runId changed without interaction
+          enableHotReloading: isInteracting,
+        });
+      };
+      update();
+      isFirstRunRef.current = false;
+    }
+  }, [
+    content.id,
+    content.files,
+    content.isInteracting,
+    runIdChanged,
+    isVisual,
+    getVizHubRuntime,
+    setSrcdocErrorMessage,
+  ]);
 };
