@@ -10,7 +10,7 @@ export const StarterFeatures = () => {
         id="limited-ai-chat"
         hasBottomBorder={true}
         startsExpanded={true}
-        learnMoreHref="/features#ai-assisted-coding"
+        // learnMoreHref="/features#ai-assisted-coding"
       >
         Limited access to VizBot AI coding chat, up to 5
         chat messages per day
@@ -51,6 +51,26 @@ export const StarterFeatures = () => {
       >
         Create up to {FREE_NON_PUBLIC_VIZ_LIMIT} private or
         unlisted vizzes.
+      </Feature>
+      <Feature
+        title="Hot Reloading & Interactive Widgets"
+        id="hot-reloading"
+        hasBottomBorder={true}
+        // startsExpanded={true}
+        learnMoreHref="https://vizhub.com/forum/t/hot-reloading-and-interactive-widgets/968"
+      >
+        Iterate faster with truly instant feedback.
+      </Feature>
+      <Feature
+        title="Unlimited Real-Time Collaborators"
+        id="real-time-collaborators"
+        hasBottomBorder={true}
+        // startsExpanded={true}
+        learnMoreHref={
+          'https://vizhub.com/forum/t/real-time-collaborators/976'
+        }
+      >
+        Invite others to edit code with you in real time.
       </Feature>
       <Feature
         title="Community Access"

@@ -16,26 +16,7 @@ export const PremiumFeatures = ({}) => (
     >
       Unlimited access to VizBot AI coding chat
     </Feature>
-    <Feature
-      title="Hot Reloading & Interactive Widgets"
-      id="hot-reloading"
-      hasBottomBorder={true}
-      // startsExpanded={true}
-      learnMoreHref="https://vizhub.com/forum/t/hot-reloading-and-interactive-widgets/968"
-    >
-      Iterate faster with truly instant feedback.
-    </Feature>
-    <Feature
-      title="Unlimited Real-Time Collaborators"
-      id="real-time-collaborators"
-      hasBottomBorder={true}
-      // startsExpanded={true}
-      learnMoreHref={
-        'https://vizhub.com/forum/t/real-time-collaborators/976'
-      }
-    >
-      Invite others to edit code with you in real time.
-    </Feature>
+
     <Feature
       title="Unlimited Non-Public Vizzes"
       id="unlimited-non-public-vizzes"
