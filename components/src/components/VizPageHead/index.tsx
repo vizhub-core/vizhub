@@ -54,22 +54,13 @@ export const VizPageHead = ({
         MouseEvent
       >,
     ) => {
-      // Call the parent's export click handler first (if provided)
+      // Call the parent's export click handler if provided
       if (onExportClick) {
         onExportClick(event);
       }
-
-      // If event wasn't prevented and user still can't export, show upgrade modal
-      if (!event.defaultPrevented && !userCanExport) {
-        event.preventDefault();
-        toggleExportCodeUpgradeNudgeModal();
-      }
+      // No export limit checking needed anymore
     },
-    [
-      userCanExport,
-      toggleExportCodeUpgradeNudgeModal,
-      onExportClick,
-    ],
+    [onExportClick],
   );
 
   return (

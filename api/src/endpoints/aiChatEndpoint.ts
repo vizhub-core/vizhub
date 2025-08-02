@@ -6,135 +6,16 @@ import { getAuthenticatedUserId } from '../parseAuth0User';
 import { err } from 'gateways';
 import {
   authenticationRequiredError,
-  creditsNeededError,
+  dailyQuotaExceededError,
 } from 'gateways/src/errors';
 import { RecordAnalyticsEvents } from 'interactors';
-import {
-  CREDIT_MARKUP,
-  STARTING_CREDITS,
-} from 'entities/src/Pricing';
 import { userLock, User } from 'entities';
-import { getExpiringCreditBalance } from 'entities/src/accessors';
+import {
+  FREE_AI_CHAT_LIMIT,
+  PREMIUM,
+} from 'entities/src/Pricing';
 
 const DEBUG = false;
-
-// Get the non-expiring credit balance (purchased credits)
-const getNonExpiringCreditBalance = (
-  user: User,
-): number => {
-  return user.creditBalance === undefined
-    ? STARTING_CREDITS
-    : user.creditBalance;
-};
-
-// Helper function to update user credits (similar to EditWithAI)
-async function updateUserCredits(
-  user: User,
-  userCostCents: number,
-  expiringCreditBalance: number,
-) {
-  const currentMonth = new Date().toISOString().slice(0, 7);
-
-  // Initialize credit balance objects if they don't exist
-  if (!user.freeCreditBalanceByMonth) {
-    user.freeCreditBalanceByMonth = {};
-  }
-  if (!user.premiumCreditBalanceByMonth) {
-    user.premiumCreditBalanceByMonth = {};
-  }
-  if (!user.proCreditBalanceByMonth) {
-    user.proCreditBalanceByMonth = {};
-  }
-
-  // Set up monthly credits for each plan type if not already set
-  const {
-    FREE_CREDITS_PER_MONTH,
-    PREMIUM_CREDITS_PER_MONTH,
-    PRO_CREDITS_PER_MONTH,
-    FREE,
-    PREMIUM,
-    PRO,
-  } = await import('entities/src/Pricing');
-
-  if (
-    user.plan === FREE &&
-    user.freeCreditBalanceByMonth[currentMonth] ===
-      undefined
-  ) {
-    user.freeCreditBalanceByMonth[currentMonth] =
-      FREE_CREDITS_PER_MONTH;
-  }
-
-  if (
-    user.plan === PREMIUM &&
-    user.premiumCreditBalanceByMonth[currentMonth] ===
-      undefined
-  ) {
-    user.premiumCreditBalanceByMonth[currentMonth] =
-      PREMIUM_CREDITS_PER_MONTH;
-  }
-
-  if (
-    user.plan === PRO &&
-    user.proCreditBalanceByMonth[currentMonth] === undefined
-  ) {
-    user.proCreditBalanceByMonth[currentMonth] =
-      PRO_CREDITS_PER_MONTH;
-  }
-
-  // Deduct credits from expiring balance first, then from non-expiring balance
-  if (expiringCreditBalance > 0) {
-    if (expiringCreditBalance >= userCostCents) {
-      // Deduct from the appropriate plan's monthly credits
-      switch (user.plan) {
-        case FREE:
-          user.freeCreditBalanceByMonth[currentMonth] =
-            (user.freeCreditBalanceByMonth[currentMonth] ||
-              0) - userCostCents;
-          break;
-        case PREMIUM:
-          user.premiumCreditBalanceByMonth[currentMonth] =
-            (user.premiumCreditBalanceByMonth[
-              currentMonth
-            ] || 0) - userCostCents;
-          break;
-        case PRO:
-          user.proCreditBalanceByMonth[currentMonth] =
-            (user.proCreditBalanceByMonth[currentMonth] ||
-              0) - userCostCents;
-          break;
-      }
-    } else {
-      const remainingUserCostCents =
-        userCostCents - expiringCreditBalance;
-
-      // Zero out the monthly credits for the current plan
-      switch (user.plan) {
-        case FREE:
-          user.freeCreditBalanceByMonth[currentMonth] = 0;
-          break;
-        case PREMIUM:
-          user.premiumCreditBalanceByMonth[currentMonth] =
-            0;
-          break;
-        case PRO:
-          user.proCreditBalanceByMonth[currentMonth] = 0;
-          break;
-      }
-
-      // Deduct remaining from non-expiring balance
-      user.creditBalance -= remainingUserCostCents;
-    }
-  } else {
-    user.creditBalance -= userCostCents;
-  }
-
-  if (user.creditBalance < 0) {
-    user.creditBalance = 0;
-  }
-
-  return user.creditBalance;
-}
 
 export const aiChatEndpoint = ({
   app,
@@ -192,37 +73,70 @@ export const aiChatEndpoint = ({
         res.json(err(userResult.error));
         return;
       }
-      const authenticatedUser = userResult.value.data;
-
-      // Check user credits before proceeding
-      const expiringCreditBalance =
-        getExpiringCreditBalance(authenticatedUser);
-      const nonExpiringCreditBalance =
-        getNonExpiringCreditBalance(authenticatedUser);
-      const totalCreditBalance =
-        expiringCreditBalance + nonExpiringCreditBalance;
+      const authenticatedUser: User = userResult.value.data;
 
       DEBUG &&
-        console.log('[aiChatEndpoint] Credit balances:', {
-          expiringCreditBalance,
-          nonExpiringCreditBalance,
-          totalCreditBalance,
-        });
+        console.log(
+          '[aiChatEndpoint] authenticatedUser.plan:',
+          authenticatedUser.plan,
+        );
 
-      if (totalCreditBalance === 0) {
+      DEBUG &&
+        console.log(
+          '[aiChatEndpoint] authenticatedUser.currentDayMessages:',
+          authenticatedUser.currentDayMessages,
+        );
+
+      // Check daily message limit for free users
+      const today = new Date().toISOString().split('T')[0]; // "YYYY-MM-DD"
+
+      // Reset daily count if it's a new day
+      if (authenticatedUser.currentDay !== today) {
         DEBUG &&
           console.log(
-            '[aiChatEndpoint] No credits available',
+            '[aiChatEndpoint] Resetting daily message count for new day',
           );
-        res.json(
-          err(
-            creditsNeededError(
-              'You need more AI credits to use this feature',
-            ),
-          ),
-        );
-        return;
+        authenticatedUser.currentDay = today;
+        authenticatedUser.currentDayMessages = 0;
+
+        // Save the updated user data
+        await saveUser(authenticatedUser);
+        DEBUG &&
+          console.log(
+            '[aiChatEndpoint] User data updated with new day and message count reset',
+          );
       }
+
+      // Check if free user has exceeded daily limit
+      if (authenticatedUser.plan !== PREMIUM) {
+        const currentMessages =
+          authenticatedUser.currentDayMessages || 0;
+        if (currentMessages >= FREE_AI_CHAT_LIMIT) {
+          DEBUG &&
+            console.log(
+              '[aiChatEndpoint] Daily quota exceeded for free user',
+            );
+          res.json(
+            err(
+              dailyQuotaExceededError(
+                'You have reached your daily limit of 5 AI chat messages. Upgrade to Premium for unlimited access.',
+              ),
+            ),
+          );
+          return;
+        }
+      }
+
+      DEBUG &&
+        console.log(
+          '[aiChatEndpoint] Daily message check passed:',
+          {
+            plan: authenticatedUser.plan,
+            currentDay: authenticatedUser.currentDay,
+            currentDayMessages:
+              authenticatedUser.currentDayMessages,
+          },
+        );
 
       // Get the ShareDB document for the viz content
       const entityName: EntityName = 'Content';
@@ -257,53 +171,39 @@ export const aiChatEndpoint = ({
       });
 
       try {
-        // Create credit deduction callback
-        const onCreditDeduction = async ({
-          upstreamCostCents,
-          provider,
-          inputTokens,
-          outputTokens,
-        }) => {
-          const userCostCents = Math.ceil(
-            upstreamCostCents * CREDIT_MARKUP,
+        DEBUG &&
+          console.log(
+            '[aiChatEndpoint] Incrementing daily message count',
           );
 
-          DEBUG &&
-            console.log(
-              '[aiChatEndpoint] Credit deduction',
-              {
-                upstreamCostCents,
-                userCostCents,
-                inputTokens,
-                outputTokens,
-              },
+        // Update user daily message count with locking
+        await lock(
+          [userLock(authenticatedUserId)],
+          async () => {
+            const freshUserResult = await getUser(
+              authenticatedUserId,
             );
-
-          // Update user credits with locking
-          await lock(
-            [userLock(authenticatedUserId)],
-            async () => {
-              const freshUserResult = await getUser(
-                authenticatedUserId,
+            if (freshUserResult.outcome === 'failure') {
+              throw new Error(
+                'Failed to get fresh user data',
               );
-              if (freshUserResult.outcome === 'failure') {
-                throw new Error(
-                  'Failed to get fresh user data',
-                );
-              }
-              const freshUser: User =
-                freshUserResult.value.data;
+            }
+            const freshUser: User =
+              freshUserResult.value.data;
 
-              await updateUserCredits(
-                freshUser,
-                userCostCents,
-                expiringCreditBalance,
+            // Increment daily message count
+            freshUser.currentDayMessages =
+              (freshUser.currentDayMessages || 0) + 1;
+
+            DEBUG &&
+              console.log(
+                '[aiChatEndpoint] Updated daily message count:',
+                freshUser.currentDayMessages,
               );
 
-              await saveUser(freshUser);
-            },
-          );
-        };
+            await saveUser(freshUser);
+          },
+        );
 
         // Create the handler with the ShareDB document and credit deduction callback
         DEBUG &&
@@ -328,7 +228,6 @@ export const aiChatEndpoint = ({
           shareDBDoc,
           createVizBotLocalPresence: () =>
             docPresence.create(generateVizBotId()),
-          onCreditDeduction,
         });
 
         DEBUG &&

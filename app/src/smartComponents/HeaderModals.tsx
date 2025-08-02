@@ -1,29 +1,10 @@
 import { NotificationsModal } from 'components';
-import {
-  FREE,
-  User,
-  UserId,
-  getAnyoneCanEdit,
-  getUserDisplayName,
-  iframeSnippet,
-} from 'entities';
-import {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
-import { STARTING_CREDITS } from 'entities/src/Pricing';
-import { getCreditBalance } from 'entities/src/accessors';
+import { User } from 'entities';
+import { useContext, useEffect, useState } from 'react';
+
 import { AuthenticatedUserContext } from '../contexts/AuthenticatedUserContext';
-import { VizId } from '@vizhub/viz-types';
 import { VizKit } from 'api/src/VizKit';
-import {
-  VizNotificationId,
-  VizNotificationRequestResult,
-} from 'entities';
-import { getProfilePageHref } from 'src/accessors';
+import { VizNotificationRequestResult } from 'entities';
 
 const vizKit = VizKit();
 

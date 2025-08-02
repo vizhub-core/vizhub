@@ -13,6 +13,8 @@ import {
   FREE,
   APIKey,
   SectionId,
+  AnalyticsEvent,
+  Snapshot,
 } from 'entities';
 import {
   APIKeysList,
@@ -36,8 +38,10 @@ const vizKit = VizKit();
 
 export const Body = ({
   profileUser,
+  analyticsEventSnapshot,
 }: {
   profileUser: User;
+  analyticsEventSnapshot: Snapshot<AnalyticsEvent> | null;
 }) => {
   const { userName, picture } = profileUser;
   const authenticatedUser = useContext(
@@ -247,6 +251,7 @@ export const Body = ({
         showUpgradeCallout={showUpgradeCallout}
         handleCreateAPIKeyClick={handleCreateAPIKeyClick}
         showCreateAPIKeyButton={Array.isArray(apiKeys)}
+        analyticsEventSnapshot={analyticsEventSnapshot}
       >
         {sectionId === SectionId.ApiKeys ? (
           Array.isArray(apiKeys) ? (

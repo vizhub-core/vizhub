@@ -1,3 +1,4 @@
+import { FREE_NON_PUBLIC_VIZ_LIMIT } from 'entities/src/Pricing';
 import { discordLink } from '../links';
 import { Feature } from './Feature';
 
@@ -5,22 +6,14 @@ export const StarterFeatures = () => {
   return (
     <>
       <Feature
-        title="Free AI"
-        id="limited-ai-edits"
+        title="Limited VizBot AI Chat"
+        id="limited-ai-chat"
         hasBottomBorder={true}
         startsExpanded={true}
         learnMoreHref="/features#ai-assisted-coding"
       >
-        Leverage artificial intelligence to code faster:
-        <ul className="mt-2">
-          <li>
-            <strong>Get $1 in AI Credits</strong> each month
-          </li>
-          <li>
-            <strong>Access to all AI models</strong>{' '}
-            including Claude 4
-          </li>
-        </ul>
+        Limited access to VizBot AI coding chat, up to 5
+        chat messages per day
       </Feature>
       <Feature
         title="Search Public Vizzes"
@@ -38,11 +31,26 @@ export const StarterFeatures = () => {
         Create your own works right in your browser.
       </Feature>
       <Feature
-        title="Limited Non-Public Vizzes"
+        title="Export Code"
+        id="api-access-for-vizzes"
+        learnMoreHref="https://vizhub.com/forum/t/api-access-for-vizzes/971"
+        hasBottomBorder={true}
+      >
+        Export public vizzes as code. Perfect for
+        integration with your existing workflows and
+        applications. See also{' '}
+        <a href="https://github.com/vizhub-core/vite-export-template">
+          Vite Export Template
+        </a>
+        .
+      </Feature>
+      <Feature
+        title={`Limited Non-Public Vizzes (up to ${FREE_NON_PUBLIC_VIZ_LIMIT})`}
         id="limited-non-public-vizzes"
         hasBottomBorder={true}
       >
-        Create up to 3 private or unlisted vizzes.
+        Create up to {FREE_NON_PUBLIC_VIZ_LIMIT} private or
+        unlisted vizzes.
       </Feature>
       <Feature
         title="Community Access"

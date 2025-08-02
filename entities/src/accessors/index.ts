@@ -7,13 +7,14 @@ export { getPackageJson } from './getPackageJson';
 export { getUserDisplayName } from './getUserDisplayName';
 export { getBio } from './getBio';
 export { getAnyoneCanEdit } from './getAnyoneCanEdit';
-// export { getVizThumbnailURL } from './getVizThumbnailURL';
 export { absoluteURL } from './absoluteURL';
 export { iframeSnippet } from './iframeSnippet';
+export { formatCreditBalance } from './formatCreditBalance';
+export { getVizPageHref } from './getVizPageHref';
+
+// TODO deprecate these:
 export {
   getCreditBalance,
   getExpiringCreditBalance,
   getNonExpiringCreditBalance,
 } from './getCreditBalance';
-export { formatCreditBalance } from './formatCreditBalance';
-export { getVizPageHref } from './getVizPageHref';

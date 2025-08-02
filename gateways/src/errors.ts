@@ -16,6 +16,7 @@ export enum VizHubErrorCode {
   tooLargeForFree = 'tooLargeForFree',
   buildError = 'buildError',
   creditsNeeded = 'creditsNeeded',
+  dailyQuotaExceeded = 'dailyQuotaExceeded',
 }
 
 export const errorCodeLabels = {
@@ -155,3 +156,11 @@ export const creditsNeededError = (
   message: string,
 ): VizHubError =>
   new VizHubError(message, VizHubErrorCode.creditsNeeded);
+
+export const dailyQuotaExceededError = (
+  message: string,
+): VizHubError =>
+  new VizHubError(
+    message,
+    VizHubErrorCode.dailyQuotaExceeded,
+  );

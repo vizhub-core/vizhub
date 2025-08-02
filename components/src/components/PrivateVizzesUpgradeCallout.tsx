@@ -1,12 +1,15 @@
+import { FREE_NON_PUBLIC_VIZ_LIMIT } from 'entities/src/Pricing';
+
 export const PrivateVizzesUpgradeCallout = ({
-  reachedLimit,
+  reachedLimit = false,
 }: {
-  reachedLimit: boolean;
+  reachedLimit?: boolean;
 }) => (
   <>
     {reachedLimit && (
       <>
-        You have reached the limit of 3 non-public vizzes
+        You have reached the limit of{' '}
+        {FREE_NON_PUBLIC_VIZ_LIMIT} non-public vizzes
         allowed on the free plan.{' '}
       </>
     )}

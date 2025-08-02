@@ -45,30 +45,40 @@ const Hero = () => (
 
 const Features = () => (
   <div className="features">
-    <div>
-      <div>
-        <h3 className="item">Related Books</h3>
+    <div className="features-grid">
+      <div className="feature-item">
+        <h3>
+          <a href="/dashboard">Dashboard</a>
+        </h3>
+        <p>Access your personal VizHub dashboard</p>
       </div>
-      <div>
-        <h3 className="item">Related Groups</h3>
+      <div className="feature-item">
+        <h3>Related Books</h3>
+        <p>Discover books about data visualization</p>
       </div>
-      <div>
-        <h3 className="item">Related Conferences</h3>
+      <div className="feature-item">
+        <h3>Related Groups</h3>
+        <p>Connect with data visualization communities</p>
       </div>
-      <div>
-        <h3 className="item">Influential People</h3>
+      <div className="feature-item">
+        <h3>Related Conferences</h3>
+        <p>Find conferences and events</p>
       </div>
-      <div>
-        <h3 className="item">Online Learning</h3>
+      <div className="feature-item">
+        <h3>Influential People</h3>
+        <p>Learn from data visualization experts</p>
       </div>
-      <div>
-        <h3 className="item">Similar Platforms</h3>
+      <div className="feature-item">
+        <h3>Online Learning</h3>
+        <p>Explore online courses and tutorials</p>
       </div>
-      <div>
-        <h3 className="item">About VizHub</h3>
-        <div>
-          <h3 className="item">Blogs.org</h3>
-        </div>
+      <div className="feature-item">
+        <h3>Similar Platforms</h3>
+        <p>Discover other visualization platforms</p>
+      </div>
+      <div className="feature-item">
+        <h3>About VizHub</h3>
+        <p>Learn more about VizHub</p>
       </div>
     </div>
   </div>

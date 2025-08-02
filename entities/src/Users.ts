@@ -115,6 +115,16 @@ export interface User {
     // Values are export counts.
     [month: string]: number;
   };
+
+  // currentDay
+  //  * The current day for tracking daily AI chat message limits.
+  //  * Format: "YYYY-MM-DD"
+  currentDay?: string;
+
+  // currentDayMessages
+  //  * The number of AI chat messages sent by this user today.
+  //  * Resets to 0 when currentDay changes.
+  currentDayMessages?: number;
 }
 
 // One of these is created

@@ -28,12 +28,6 @@ import { getVizPageHref } from 'entities/src/accessors';
 import { useOnTrashViz } from './useOnTrashViz';
 import { useValidateSlug } from './useValidateSlug';
 import { VizPageContext } from './VizPageContext';
-import { STARTING_CREDITS } from 'entities/src/Pricing';
-import {
-  getCreditBalance,
-  getExpiringCreditBalance,
-  getNonExpiringCreditBalance,
-} from 'entities/src/accessors';
 
 export const VizPageModals = () => {
   const {

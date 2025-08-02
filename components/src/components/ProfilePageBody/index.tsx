@@ -9,7 +9,8 @@ import {
   ThumbsUpSVG,
   ThumbsUpSVGSymbol,
 } from '../Icons/sam/ThumbsUpSVG';
-import { SectionId, SortId, Plan } from 'entities';
+import { SectionId, SortId, Plan, AnalyticsEvent, Snapshot } from 'entities';
+import { VizViewsChart } from '../VizViewsChart';
 import { useMemo } from 'react';
 import { SidebarSection } from './SidebarSection';
 import { UpgradeCallout } from '../UpgradeCallout';
@@ -76,6 +77,7 @@ export const ProfilePageBody = ({
 
   handleCreateAPIKeyClick,
   showCreateAPIKeyButton,
+  analyticsEventSnapshot,
 }: {
   children: React.ReactNode;
 
@@ -102,6 +104,7 @@ export const ProfilePageBody = ({
 
   handleCreateAPIKeyClick: () => void;
   showCreateAPIKeyButton: boolean;
+  analyticsEventSnapshot: Snapshot<AnalyticsEvent> | null;
 }) => {
   const sections: Array<ProfileSection> = useMemo(
     () =>
@@ -206,6 +209,11 @@ export const ProfilePageBody = ({
                 </OverlayTrigger>
               )}
             </div>
+            {analyticsEventSnapshot && (
+              <VizViewsChart
+                analyticsEvent={analyticsEventSnapshot.data}
+              />
+            )}
             <h3 className="profile-name">{displayName}</h3>
             <div className="profile-username-section">
               <div className="vh-lede-01">@{userName}</div>
