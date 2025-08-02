@@ -13,6 +13,7 @@ export {
   missingIndexJSError,
   accessDeniedError,
   creditsNeededError,
+  dailyQuotaExceededError,
 } from './errors';
 export {
   crudEntityNames,

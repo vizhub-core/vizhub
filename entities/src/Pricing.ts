@@ -11,27 +11,11 @@ export const PREMIUM: Plan = 'premium';
 // A paying customer on the professional plan.
 export const PRO: Plan = 'professional';
 
-// The number of AI credits a user starts with (in cents).
-// Correspones with the `User.creditBalance` field.
-export const STARTING_CREDITS: number = 0;
+// The limit of non-public vizzes allowed on the free plan.
+export const FREE_NON_PUBLIC_VIZ_LIMIT = 5;
 
-// The number of AI credits a user gets per month on the premium plan.
-export const PRO_CREDITS_PER_MONTH: number = 3000;
-
-// The number of AI credits a user gets per month on the free plan.
-export const FREE_CREDITS_PER_MONTH: number = 100;
-
-// The number of AI credits a user gets per month on the premium plan.
-export const PREMIUM_CREDITS_PER_MONTH: number = 5000;
-
-// The number of exports of other users' vizzes allowed per month on the free plan.
-export const FREE_EXPORTS_PER_MONTH: number = 5;
-
-// The markup on AI transaction fees.
-// e.g. if the AI provider's fee is $0.02 for a given transaction,
-// then the user's AI credit will be charged $0.03
-// if the CREDIT_MARKUP is 1.5.
-export const CREDIT_MARKUP: number = 1.1;
+// The limit of AI chat requests per day for free users.
+export const FREE_AI_CHAT_LIMIT = 5;
 
 // FeatureId is an enum of all the features that are
 // highlighted in the pricing page.
@@ -74,4 +58,29 @@ export type FeatureId =
   | 'premium-duration'
   | 'limited-ai-edits'
   | 'limited-non-public-vizzes'
-  | 'unlimited-non-public-vizzes';
+  | 'unlimited-non-public-vizzes'
+  | 'limited-ai-chat';
+
+// TODO deprecate all that follows:
+
+// The number of AI credits a user starts with (in cents).
+// Correspones with the `User.creditBalance` field.
+export const STARTING_CREDITS: number = 0;
+
+// The number of AI credits a user gets per month on the premium plan.
+export const PRO_CREDITS_PER_MONTH: number = 3000;
+
+// The number of AI credits a user gets per month on the free plan.
+export const FREE_CREDITS_PER_MONTH: number = 100;
+
+// The number of AI credits a user gets per month on the premium plan.
+export const PREMIUM_CREDITS_PER_MONTH: number = 5000;
+
+// The number of exports of other users' vizzes allowed per month on the free plan.
+export const FREE_EXPORTS_PER_MONTH: number = 5;
+
+// The markup on AI transaction fees.
+// e.g. if the AI provider's fee is $0.02 for a given transaction,
+// then the user's AI credit will be charged $0.03
+// if the CREDIT_MARKUP is 1.5.
+export const CREDIT_MARKUP: number = 1.1;

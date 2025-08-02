@@ -1,3 +1,4 @@
+import { FREE_NON_PUBLIC_VIZ_LIMIT } from 'entities/src/Pricing';
 import { discordLink } from '../links';
 import { Feature } from './Feature';
 
@@ -5,22 +6,14 @@ export const StarterFeatures = () => {
   return (
     <>
       <Feature
-        title="Free AI"
-        id="limited-ai-edits"
+        title="Limited VizBot AI Chat"
+        id="limited-ai-chat"
         hasBottomBorder={true}
         startsExpanded={true}
         learnMoreHref="/features#ai-assisted-coding"
       >
-        Leverage artificial intelligence to code faster:
-        <ul className="mt-2">
-          <li>
-            <strong>Get $1 in AI Credits</strong> each month
-          </li>
-          <li>
-            <strong>Access to all AI models</strong>{' '}
-            including Claude 4
-          </li>
-        </ul>
+        Limited access to VizBot AI coding chat, up to 5
+        chat messages per day
       </Feature>
       <Feature
         title="Search Public Vizzes"
@@ -52,11 +45,12 @@ export const StarterFeatures = () => {
         .
       </Feature>
       <Feature
-        title="Limited Non-Public Vizzes"
+        title={`Limited Non-Public Vizzes (up to ${FREE_NON_PUBLIC_VIZ_LIMIT})`}
         id="limited-non-public-vizzes"
         hasBottomBorder={true}
       >
-        Create up to 3 private or unlisted vizzes.
+        Create up to {FREE_NON_PUBLIC_VIZ_LIMIT} private or
+        unlisted vizzes.
       </Feature>
       <Feature
         title="Community Access"
