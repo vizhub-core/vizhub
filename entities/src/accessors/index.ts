@@ -11,3 +11,10 @@ export { absoluteURL } from './absoluteURL';
 export { iframeSnippet } from './iframeSnippet';
 export { formatCreditBalance } from './formatCreditBalance';
 export { getVizPageHref } from './getVizPageHref';
+
+// TODO deprecate these:
+export {
+  getCreditBalance,
+  getExpiringCreditBalance,
+  getNonExpiringCreditBalance,
+} from './getCreditBalance';

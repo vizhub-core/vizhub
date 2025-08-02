@@ -10,7 +10,10 @@ import {
 } from 'gateways/src/errors';
 import { RecordAnalyticsEvents } from 'interactors';
 import { userLock, User } from 'entities';
-import { FREE } from 'entities/src/Pricing';
+import {
+  FREE_AI_CHAT_LIMIT,
+  PREMIUM,
+} from 'entities/src/Pricing';
 
 const DEBUG = false;
 
@@ -70,22 +73,45 @@ export const aiChatEndpoint = ({
         res.json(err(userResult.error));
         return;
       }
-      const authenticatedUser = userResult.value.data;
+      const authenticatedUser: User = userResult.value.data;
+
+      DEBUG &&
+        console.log(
+          '[aiChatEndpoint] authenticatedUser.plan:',
+          authenticatedUser.plan,
+        );
+
+      DEBUG &&
+        console.log(
+          '[aiChatEndpoint] authenticatedUser.currentDayMessages:',
+          authenticatedUser.currentDayMessages,
+        );
 
       // Check daily message limit for free users
       const today = new Date().toISOString().split('T')[0]; // "YYYY-MM-DD"
 
       // Reset daily count if it's a new day
       if (authenticatedUser.currentDay !== today) {
+        DEBUG &&
+          console.log(
+            '[aiChatEndpoint] Resetting daily message count for new day',
+          );
         authenticatedUser.currentDay = today;
         authenticatedUser.currentDayMessages = 0;
+
+        // Save the updated user data
+        await saveUser(authenticatedUser);
+        DEBUG &&
+          console.log(
+            '[aiChatEndpoint] User data updated with new day and message count reset',
+          );
       }
 
       // Check if free user has exceeded daily limit
-      if (authenticatedUser.plan === FREE) {
+      if (authenticatedUser.plan !== PREMIUM) {
         const currentMessages =
           authenticatedUser.currentDayMessages || 0;
-        if (currentMessages >= 5) {
+        if (currentMessages >= FREE_AI_CHAT_LIMIT) {
           DEBUG &&
             console.log(
               '[aiChatEndpoint] Daily quota exceeded for free user',
@@ -145,36 +171,39 @@ export const aiChatEndpoint = ({
       });
 
       try {
-        // Create daily message increment callback
-        const onMessageSent = async () => {
-          DEBUG &&
-            console.log(
-              '[aiChatEndpoint] Incrementing daily message count',
-            );
-
-          // Update user daily message count with locking
-          await lock(
-            [userLock(authenticatedUserId)],
-            async () => {
-              const freshUserResult = await getUser(
-                authenticatedUserId,
-              );
-              if (freshUserResult.outcome === 'failure') {
-                throw new Error(
-                  'Failed to get fresh user data',
-                );
-              }
-              const freshUser: User =
-                freshUserResult.value.data;
-
-              // Increment daily message count
-              freshUser.currentDayMessages =
-                (freshUser.currentDayMessages || 0) + 1;
-
-              await saveUser(freshUser);
-            },
+        DEBUG &&
+          console.log(
+            '[aiChatEndpoint] Incrementing daily message count',
           );
-        };
+
+        // Update user daily message count with locking
+        await lock(
+          [userLock(authenticatedUserId)],
+          async () => {
+            const freshUserResult = await getUser(
+              authenticatedUserId,
+            );
+            if (freshUserResult.outcome === 'failure') {
+              throw new Error(
+                'Failed to get fresh user data',
+              );
+            }
+            const freshUser: User =
+              freshUserResult.value.data;
+
+            // Increment daily message count
+            freshUser.currentDayMessages =
+              (freshUser.currentDayMessages || 0) + 1;
+
+            DEBUG &&
+              console.log(
+                '[aiChatEndpoint] Updated daily message count:',
+                freshUser.currentDayMessages,
+              );
+
+            await saveUser(freshUser);
+          },
+        );
 
         // Create the handler with the ShareDB document and credit deduction callback
         DEBUG &&
@@ -199,7 +228,6 @@ export const aiChatEndpoint = ({
           shareDBDoc,
           createVizBotLocalPresence: () =>
             docPresence.create(generateVizBotId()),
-          onCreditDeduction: onMessageSent,
         });
 
         DEBUG &&
