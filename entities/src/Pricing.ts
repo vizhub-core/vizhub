@@ -59,7 +59,8 @@ export type FeatureId =
   | 'limited-ai-edits'
   | 'limited-non-public-vizzes'
   | 'unlimited-non-public-vizzes'
-  | 'limited-ai-chat';
+  | 'limited-ai-chat'
+  | 'unlimited-ai-chat';
 
 // TODO deprecate all that follows:
 

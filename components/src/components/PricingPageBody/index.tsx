@@ -19,8 +19,8 @@ import { OrgFeatures } from './OrgFeatures';
 import { AcademicFeatures } from './AcademicFeatures';
 import './styles.scss';
 
-const premiumPriceMonthly = 5;
-const premiumPriceAnnually = 50;
+const premiumPriceMonthly = 5.99;
+const premiumPriceAnnually = 59.99;
 const proPriceMonthly = 20;
 const proPriceAnnually = 200;
 const orgPrice = 30;
@@ -206,10 +206,13 @@ export const PricingPageBody = ({
                 <div className="pricing-page-plan-body">
                   <div className="plan-header">
                     <h3 className="plan-header-left">
-                      Starter
+                      Free
                     </h3>
                     <div className="plan-header-right">
-                      <h3>Free</h3>
+                      <h3>$0</h3>
+                      <h3 className="plan-header-right-faint">
+                        /month
+                      </h3>
                     </div>
                   </div>
 
@@ -269,7 +272,7 @@ export const PricingPageBody = ({
                     <div className="vh-lede-01 mb-2 mt-2 vh-color-neutral-02">
                       Everything in{' '}
                       <span style={{ fontWeight: 600 }}>
-                        Starter
+                        Free
                       </span>
                       , plus ...
                     </div>
@@ -422,7 +425,7 @@ export const PricingPageBody = ({
                       <div className="vh-lede-01 mb-2 mt-2 vh-color-neutral-02">
                         Everything in{' '}
                         <span style={{ fontWeight: 600 }}>
-                          Starter
+                          Free
                         </span>
                         , plus:
                       </div>
