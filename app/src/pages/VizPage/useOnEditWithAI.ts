@@ -4,6 +4,7 @@ import { VizKitAPI } from 'api/src/VizKit';
 import { VizContent, VizId } from '@vizhub/viz-types';
 import { ShareDBDoc } from 'vzcode';
 import { diff } from 'ot';
+import { CommitId, UserId } from 'entities';
 
 const DEBUG = false;
 
@@ -56,12 +57,26 @@ export const useOnEditWithAI = ({
   content,
   contentShareDBDoc,
   isFreePlan,
+  autoForkAndRetryAI,
+  authenticatedUserId,
+  ownerUserName,
+  vizTitle,
+  commitId,
 }: {
   vizKit: VizKitAPI;
   id: VizId;
   content?: VizContent;
   contentShareDBDoc?: ShareDBDoc<VizContent>;
   isFreePlan: boolean;
+  autoForkAndRetryAI?: (
+    prompt: string,
+    modelName: string,
+    commitId: CommitId,
+  ) => Promise<void>;
+  authenticatedUserId?: UserId;
+  ownerUserName?: string;
+  vizTitle?: string;
+  commitId?: CommitId;
 }): {
   onEditWithAI: (prompt: string) => void;
   isEditingWithAI: boolean;
@@ -160,7 +175,45 @@ export const useOnEditWithAI = ({
       if (editWithAIResult.outcome === 'failure') {
         setIsEditingWithAI(false);
 
-        // Clear AI state in ShareDB doc on error
+        // Check if this is an access denied error
+        const error = editWithAIResult.error;
+        const isAccessDenied =
+          error &&
+          (error.message?.includes('Write access denied') ||
+            error.message?.includes('access denied') ||
+            error.code === 'accessDenied');
+
+        if (
+          isAccessDenied &&
+          autoForkAndRetryAI &&
+          commitId &&
+          authenticatedUserId
+        ) {
+          DEBUG &&
+            console.log(
+              'Access denied detected, attempting auto-fork...',
+            );
+
+          // Clear AI state in ShareDB doc
+          if (contentShareDBDoc) {
+            const op = diff(contentShareDBDoc.data, {
+              ...contentShareDBDoc.data,
+              aiScratchpad: undefined,
+              aiStatus: 'Forking viz for AI edit...',
+            });
+            contentShareDBDoc.submitOp(op);
+          }
+
+          // Trigger auto-fork with the current prompt and model
+          await autoForkAndRetryAI(
+            prompt,
+            modelName,
+            commitId,
+          );
+          return;
+        }
+
+        // Clear AI state in ShareDB doc on other errors
         if (contentShareDBDoc) {
           const op = diff(contentShareDBDoc.data, {
             ...contentShareDBDoc.data,
@@ -183,6 +236,9 @@ export const useOnEditWithAI = ({
       setIsEditingWithAI,
       modelName,
       contentShareDBDoc,
+      autoForkAndRetryAI,
+      commitId,
+      authenticatedUserId,
     ],
   );
   return {

@@ -47,6 +47,7 @@ import { getVizExportHref } from '../../accessors/getVizExportHref';
 import { VizHubError } from 'gateways';
 import { useRevisionHistory } from './useRevisionHistory';
 import { useOnEditWithAI } from './useOnEditWithAI';
+import { useAutoForkForAI } from './useAutoForkForAI';
 import { VizContent, VizId } from '@vizhub/viz-types';
 import {
   determineRuntimeVersion,
@@ -162,6 +163,7 @@ export const VizPageProvider = ({
     infoSnapshot,
     infoStatic,
     ownerUserSnapshot,
+    authenticatedUserSnapshot,
     initialReadmeHTML,
     forkedFromInfoSnapshot,
     forkedFromOwnerUserSnapshot,
@@ -260,6 +262,10 @@ export const VizPageProvider = ({
     ownerUserSnapshot,
     'User',
   );
+  const authenticatedUser: User | null = useShareDBDocData(
+    authenticatedUserSnapshot,
+    'User',
+  );
   const forkedFromInfo: Info = useShareDBDocData(
     forkedFromInfoSnapshot,
     'Info',
@@ -347,6 +353,23 @@ export const VizPageProvider = ({
     toggleForkModal,
   });
 
+  ///////////////////////////////////////////
+  /////////////// Auto-Fork for AI //////////
+  ///////////////////////////////////////////
+
+  const {
+    autoForkAndRetryAI,
+    clearStoredAIPrompt,
+    getStoredAIPrompt,
+  } = useAutoForkForAI({
+    vizKit,
+    id: info.id,
+    content,
+    authenticatedUserId: authenticatedUser?.id,
+    ownerUserName: ownerUser.userName,
+    vizTitle: info.title,
+  });
+
   const {
     onEditWithAI,
     isEditingWithAI,
@@ -362,7 +385,14 @@ export const VizPageProvider = ({
     id: info.id,
     content,
     contentShareDBDoc,
-    isFreePlan: ownerUser.plan === FREE,
+    isFreePlan:
+      authenticatedUser?.plan === FREE ||
+      ownerUser.plan === FREE,
+    autoForkAndRetryAI,
+    authenticatedUserId: authenticatedUser?.id,
+    ownerUserName: ownerUser.userName,
+    vizTitle: info.title,
+    commitId: info.end, // Use the latest commit ID
   });
 
   ////////////////////////////////////////////
@@ -402,6 +432,53 @@ export const VizPageProvider = ({
   const setUncommitted = useSetUncommitted(
     submitInfoOperation,
   );
+
+  ///////////////////////////////////////////
+  /////////////// Auto-Restore AI Prompt ////
+  ///////////////////////////////////////////
+
+  // Check for stored AI prompt on page load and auto-restore it
+  useEffect(() => {
+    const storedPrompt = getStoredAIPrompt();
+
+    // Check if this is an AI fork redirect (via cookie)
+    const isAIPromptRedirect =
+      document.cookie
+        .split('; ')
+        .find((row) => row.startsWith('aiPromptRedirect='))
+        ?.split('=')[1] === 'true';
+
+    if (
+      storedPrompt &&
+      isAIPromptRedirect &&
+      authenticatedUser
+    ) {
+      // Clear the redirect cookie
+      document.cookie =
+        'aiPromptRedirect=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+
+      // Set the model name from storage
+      setModelName(storedPrompt.modelName);
+
+      // Auto-open the AI modal and submit the prompt
+      setTimeout(() => {
+        toggleEditWithAIModal();
+
+        // Auto-submit the prompt after a short delay to ensure modal is open
+        setTimeout(() => {
+          onEditWithAI(storedPrompt.prompt);
+          clearStoredAIPrompt(); // Clean up after successful submission
+        }, 500);
+      }, 1000);
+    }
+  }, [
+    authenticatedUser,
+    getStoredAIPrompt,
+    setModelName,
+    toggleEditWithAIModal,
+    onEditWithAI,
+    clearStoredAIPrompt,
+  ]);
 
   ///////////////////////////////////////////
   /////////////// Analytics//////////////////

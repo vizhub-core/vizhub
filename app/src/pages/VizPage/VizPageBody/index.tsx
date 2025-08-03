@@ -280,7 +280,7 @@ export const VizPageBody = () => {
         setShowEditor={setShowEditor}
         userCanExport={userCanExport}
         userCanEditWithAI={
-          enableEditWithAI && canUserEditViz
+          enableEditWithAI && isUserAuthenticated
         }
         exportHref={exportHref}
         onExportClick={handleExportClick}
