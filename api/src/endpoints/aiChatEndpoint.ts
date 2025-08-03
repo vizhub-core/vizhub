@@ -1,5 +1,5 @@
 import bodyParser from 'body-parser';
-import { EntityName } from 'entities';
+import { EntityName, WRITE } from 'entities';
 import { handleAIChatMessage } from 'vzcode/src/server/handleAIChatMessage';
 import { toCollectionName } from 'database/src/toCollectionName';
 import { getAuthenticatedUserId } from '../parseAuth0User';
@@ -7,8 +7,12 @@ import { err } from 'gateways';
 import {
   authenticationRequiredError,
   dailyQuotaExceededError,
+  accessDeniedError,
 } from 'gateways/src/errors';
-import { RecordAnalyticsEvents } from 'interactors';
+import {
+  RecordAnalyticsEvents,
+  VerifyVizAccess,
+} from 'interactors';
 import { userLock, User } from 'entities';
 import {
   FREE_AI_CHAT_LIMIT,
@@ -22,9 +26,10 @@ export const aiChatEndpoint = ({
   shareDBConnection,
   gateways,
 }) => {
-  const { getUser, saveUser, lock } = gateways;
+  const { getUser, saveUser, lock, getInfo } = gateways;
   const recordAnalyticsEvents =
     RecordAnalyticsEvents(gateways);
+  const verifyVizAccess = VerifyVizAccess(gateways);
 
   // Handle AI Chat requests.
   app.post(
@@ -36,9 +41,6 @@ export const aiChatEndpoint = ({
 
       const { vizId, content, chatId } = req.body;
 
-      // TODO only allow AI Chat requests users with edit access to the viz.
-      // And, only allow AI chat requests if the user requesting it
-      // is on the Premium plan.
       const authenticatedUserId =
         getAuthenticatedUserId(req);
 
@@ -56,6 +58,63 @@ export const aiChatEndpoint = ({
         res.json(err(authenticationRequiredError()));
         return;
       }
+
+      // Get the viz info to verify access
+      DEBUG &&
+        console.log(
+          '[aiChatEndpoint] Getting viz info for access control:',
+          vizId,
+        );
+
+      const infoResult = await getInfo(vizId);
+      if (infoResult.outcome === 'failure') {
+        DEBUG &&
+          console.log(
+            '[aiChatEndpoint] Failed to get viz info:',
+            infoResult.error,
+          );
+        res.json(err(infoResult.error));
+        return;
+      }
+      const info = infoResult.value.data;
+
+      // Access control: Verify that the user has write access to the viz
+      const verifyVizAccessResult = await verifyVizAccess({
+        authenticatedUserId,
+        info,
+        actions: [WRITE],
+      });
+      if (verifyVizAccessResult.outcome === 'failure') {
+        DEBUG &&
+          console.log(
+            '[aiChatEndpoint] Error when verifying viz access:',
+            verifyVizAccessResult.error,
+          );
+        res.json(err(verifyVizAccessResult.error));
+        return;
+      }
+      const vizAccess = verifyVizAccessResult.value;
+
+      // Check if user has write access
+      if (!vizAccess[WRITE]) {
+        DEBUG &&
+          console.log(
+            '[aiChatEndpoint] User does not have write access to viz',
+          );
+        res.json(
+          err(
+            accessDeniedError(
+              'You do not have permission to use AI chat on this visualization. Only users with edit access can use this feature. Fork the viz to edit it.',
+            ),
+          ),
+        );
+        return;
+      }
+
+      DEBUG &&
+        console.log(
+          '[aiChatEndpoint] Access control check passed, user has write access',
+        );
 
       DEBUG &&
         console.log(
