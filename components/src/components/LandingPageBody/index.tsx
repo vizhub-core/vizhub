@@ -5,6 +5,7 @@ import { image } from '../image';
 import './styles.scss';
 
 const enableFooter = true;
+const enableAISection = false;
 const headerBackgroundSrc = image('landing-header-bkg');
 
 export const LandingPageBody = ({
@@ -96,59 +97,64 @@ export const LandingPageBody = ({
           </div>
         </div>
         <div className="features-container">
-          <div
-            className="feature-section"
-            id="ai-assisted-coding"
-          >
-            <div className="feature-section-content brand-background">
-              <div className="feature-section-copy">
-                <h3>Edit with AI</h3>
-                <p>
-                  Ship code at lightning speed. Just click{' '}
-                  <strong>Edit with AI</strong>, and watch
-                  the LLM stream production-ready
-                  JavaScript, HTML, and CSS directly into
-                  your editor. Great for rapid prototyping
-                  and iteration. Keep your creative flow
-                  uninterrupted.{' '}
-                  <em>Available with VizHub Premium.</em>
-                </p>
+          {enableAISection && (
+            <div
+              className="feature-section"
+              id="ai-assisted-coding"
+            >
+              <div className="feature-section-content brand-background">
+                <div className="feature-section-copy">
+                  <h3>Edit with AI</h3>
+                  <p>
+                    Ship code at lightning speed. Just click{' '}
+                    <strong>Edit with AI</strong>, and watch
+                    the LLM stream production-ready
+                    JavaScript, HTML, and CSS directly into
+                    your editor. Great for rapid prototyping
+                    and iteration. Keep your creative flow
+                    uninterrupted.{' '}
+                    <em>Available with VizHub Premium.</em>
+                  </p>
 
-                <Button
-                  href="/pricing?feature=ai-assisted-coding"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  size="lg"
-                >
-                  See Plans
-                </Button>
-                {/* <p className="text-muted small mt-3">
-                  P. S. If you want a real coding mentor,
-                  that's available too!{' '}
-                  <a href="https://calendly.com/curran-kelleher/data-visualization-consultation?month=2024-03">
-                    Book a session now
-                  </a>{' '}
-                  to get expert help.
-                </p> */}
-              </div>
-              <div className="feature-section-image">
-                <a
-                  href="https://vizhub.com/forum/t/ai-assisted-coding/952"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <video autoPlay loop muted>
-                    <source
-                      src={image('ai-assist-demo', 'webm')}
-                      type="video/webm"
-                    />
-                    Your browser does not support the video
-                    tag.
-                  </video>
-                </a>
+                  <Button
+                    href="/pricing?feature=ai-assisted-coding"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    size="lg"
+                  >
+                    See Plans
+                  </Button>
+                  {/* <p className="text-muted small mt-3">
+                    P. S. If you want a real coding mentor,
+                    that's available too!{' '}
+                    <a href="https://calendly.com/curran-kelleher/data-visualization-consultation?month=2024-03">
+                      Book a session now
+                    </a>{' '}
+                    to get expert help.
+                  </p> */}
+                </div>
+                <div className="feature-section-image">
+                  <a
+                    href="https://vizhub.com/forum/t/ai-assisted-coding/952"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <video autoPlay loop muted>
+                      <source
+                        src={image(
+                          'ai-assist-demo',
+                          'webm',
+                        )}
+                        type="video/webm"
+                      />
+                      Your browser does not support the
+                      video tag.
+                    </video>
+                  </a>
+                </div>
               </div>
             </div>
-          </div>
+          )}
 
           <div
             className="feature-section"
