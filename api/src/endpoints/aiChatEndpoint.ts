@@ -8,8 +8,11 @@ import {
   authenticationRequiredError,
   dailyQuotaExceededError,
 } from 'gateways/src/errors';
-import { RecordAnalyticsEvents } from 'interactors';
-import { userLock, User } from 'entities';
+import {
+  RecordAnalyticsEvents,
+  CommitViz,
+} from 'interactors';
+import { userLock, User, dateToTimestamp } from 'entities';
 import {
   FREE_AI_CHAT_LIMIT,
   PREMIUM,
@@ -22,9 +25,11 @@ export const aiChatEndpoint = ({
   shareDBConnection,
   gateways,
 }) => {
-  const { getUser, saveUser, lock } = gateways;
+  const { getUser, saveUser, lock, getInfo, saveInfo } =
+    gateways;
   const recordAnalyticsEvents =
     RecordAnalyticsEvents(gateways);
+  const commitViz = CommitViz(gateways);
 
   // Handle AI Chat requests.
   app.post(
@@ -256,6 +261,65 @@ export const aiChatEndpoint = ({
           console.log(
             '[aiChatEndpoint] Analytics event recorded successfully',
           );
+
+        // Mark info as uncommitted and create a commit after AI chat changes have been applied
+        DEBUG &&
+          console.log(
+            '[aiChatEndpoint] Fetching latest info doc and marking as uncommitted',
+          );
+
+        const latestInfoResult = await getInfo(vizId);
+        if (latestInfoResult.outcome === 'failure') {
+          console.error(
+            '[aiChatEndpoint] Failed to get info:',
+            latestInfoResult.error,
+          );
+          // Don't fail the request if getting info fails, just log the error
+        } else {
+          const latestInfo = latestInfoResult.value.data;
+
+          // Mark the info uncommitted, so that the AI chat changes
+          // will trigger a new commit.
+          const newInfo = {
+            ...latestInfo,
+            committed: false,
+
+            // Add the authenticated user to the list of commit authors
+            commitAuthors: [authenticatedUserId, 'AI:chat'],
+
+            // Update the last updated timestamp, as this is used as the
+            // timestamp for the next commit.
+            updated: dateToTimestamp(new Date()),
+          };
+
+          const saveInfoResult = await saveInfo(newInfo);
+          if (saveInfoResult.outcome === 'failure') {
+            console.error(
+              '[aiChatEndpoint] Failed to save info:',
+              saveInfoResult.error,
+            );
+            // Don't fail the request if saving info fails, just log the error
+          } else {
+            DEBUG &&
+              console.log(
+                '[aiChatEndpoint] Info marked as uncommitted, creating commit',
+              );
+
+            const commitResult = await commitViz(vizId);
+            if (commitResult.outcome === 'failure') {
+              console.error(
+                '[aiChatEndpoint] Failed to create commit:',
+                commitResult.error,
+              );
+              // Don't fail the request if commit fails, just log the error
+            } else {
+              DEBUG &&
+                console.log(
+                  '[aiChatEndpoint] Commit created successfully',
+                );
+            }
+          }
+        }
       } catch (error) {
         console.error('[aiChatEndpoint] ERROR:', error);
         console.error(
