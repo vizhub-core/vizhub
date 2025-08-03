@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useSearchParams } from '../../reactRouterExports';
 export const useURLState = () => {
   // Embed mode - to make the viz full screen
@@ -26,11 +26,8 @@ export const useURLState = () => {
 
   // `showEditor`
   // True if the sidebar should be shown.
-  // ?edit=files
-  const showEditor = useMemo(
-    () => searchParams.has('edit'),
-    [searchParams],
-  );
+  // Default to true (open by default), no longer tracked in URL
+  const [showEditor, setShowEditor] = useState(true);
 
   // `isFileOpen`
   // True if a file is open.
@@ -39,26 +36,6 @@ export const useURLState = () => {
     () => searchParams.has('file'),
     [searchParams],
   );
-
-  const setShowEditor: (next: boolean) => void =
-    useCallback(
-      (next: boolean) => {
-        setSearchParams(
-          (oldSearchParams: URLSearchParams) => {
-            const updatedSearchParams = new URLSearchParams(
-              oldSearchParams,
-            );
-            if (next) {
-              updatedSearchParams.set('edit', 'files');
-            } else {
-              updatedSearchParams.delete('edit');
-            }
-            return updatedSearchParams;
-          },
-        );
-      },
-      [setSearchParams],
-    );
 
   return {
     isEmbedMode,
