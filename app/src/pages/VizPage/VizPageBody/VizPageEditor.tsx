@@ -109,10 +109,12 @@ export const VizPageEditor = ({
   const { info } = useContext(VizPageContext);
 
   // AI Chat configuration for VizHub
-  const aiChatEndpoint = '/api/ai-chat/';
-  const aiChatOptions = {
-    vizId: info.id,
-  };
+  const aiChatOptions = useMemo(
+    () => ({
+      vizId: info.id,
+    }),
+    [info.id],
+  );
 
   // Simple ESLint source that returns empty diagnostics
   // TODO make this work.
@@ -132,7 +134,8 @@ export const VizPageEditor = ({
       codeError={srcdocErrorMessage}
       submitOperation={submitContentOperation}
       connected={connected}
-      aiChatEndpoint={aiChatEndpoint}
+      aiChatEndpoint={'/api/ai-chat/'}
+      aiChatUndoEndpoint={'/api/ai-chat-undo'}
       aiChatOptions={aiChatOptions}
     >
       {showEditor ? (
