@@ -11,7 +11,8 @@ import {
 } from 'gateways/src/errors';
 import {
   RecordAnalyticsEvents,
-  CommitViz,  VerifyVizAccess,
+  CommitViz,
+  VerifyVizAccess,
 } from 'interactors';
 import { userLock, User, dateToTimestamp } from 'entities';
 import {
