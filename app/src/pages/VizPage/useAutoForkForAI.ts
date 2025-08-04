@@ -5,11 +5,18 @@ import { UserId, Visibility, CommitId } from 'entities';
 import { Result } from 'gateways';
 import { setCookie } from '../cookies';
 
-const DEBUG = false;
+const DEBUG = true;
 
 // Storage keys for preserving AI prompt across fork and redirect
 const AI_PROMPT_STORAGE_KEY = 'vizhub-pending-ai-prompt';
+
+// TODO get rid of AI_MODEL_STORAGE_KEY completely
+// The backend selects the model for us, we don't need to pass that in
 const AI_MODEL_STORAGE_KEY = 'vizhub-pending-ai-model';
+
+// Flag to guard against clearing the stored prompt
+// in the page that is triggering the auto-fork.
+let isAutoForking = false;
 
 export const useAutoForkForAI = ({
   vizKit,
@@ -43,6 +50,7 @@ export const useAutoForkForAI = ({
       modelName: string,
       commitId?: CommitId,
     ) => {
+      isAutoForking = true;
       if (!authenticatedUserId) {
         console.error(
           'Cannot fork: user not authenticated',
@@ -56,16 +64,20 @@ export const useAutoForkForAI = ({
           prompt,
         );
 
-      // Store the AI prompt and model in sessionStorage to survive the redirect
+      // Store the AI prompt and model in localStorage to persist across page loads
       if (typeof window !== 'undefined') {
-        sessionStorage.setItem(
-          AI_PROMPT_STORAGE_KEY,
-          prompt,
-        );
-        sessionStorage.setItem(
+        DEBUG && console.log('Storing AI prompt:', prompt);
+        DEBUG &&
+          console.log('Storing AI model:', modelName);
+        localStorage.setItem(AI_PROMPT_STORAGE_KEY, prompt);
+        localStorage.setItem(
           AI_MODEL_STORAGE_KEY,
           modelName,
         );
+        DEBUG &&
+          console.log(
+            'Stored AI prompt and model in localStorage',
+          );
       }
 
       try {
@@ -97,10 +109,8 @@ export const useAutoForkForAI = ({
           );
           // Clear stored prompt on error
           if (typeof window !== 'undefined') {
-            sessionStorage.removeItem(
-              AI_PROMPT_STORAGE_KEY,
-            );
-            sessionStorage.removeItem(AI_MODEL_STORAGE_KEY);
+            localStorage.removeItem(AI_PROMPT_STORAGE_KEY);
+            localStorage.removeItem(AI_MODEL_STORAGE_KEY);
           }
           return;
         }
@@ -124,8 +134,8 @@ export const useAutoForkForAI = ({
         console.error('Error during auto-fork:', error);
         // Clear stored prompt on error
         if (typeof window !== 'undefined') {
-          sessionStorage.removeItem(AI_PROMPT_STORAGE_KEY);
-          sessionStorage.removeItem(AI_MODEL_STORAGE_KEY);
+          localStorage.removeItem(AI_PROMPT_STORAGE_KEY);
+          localStorage.removeItem(AI_MODEL_STORAGE_KEY);
         }
       }
     },
@@ -133,28 +143,53 @@ export const useAutoForkForAI = ({
   );
 
   const clearStoredAIPrompt = useCallback(() => {
+    if (isAutoForking) {
+      return;
+    }
     if (typeof window !== 'undefined') {
-      sessionStorage.removeItem(AI_PROMPT_STORAGE_KEY);
-      sessionStorage.removeItem(AI_MODEL_STORAGE_KEY);
+      DEBUG && console.log('Clearing');
+      localStorage.removeItem(AI_PROMPT_STORAGE_KEY);
+      localStorage.removeItem(AI_MODEL_STORAGE_KEY);
     }
   }, []);
 
   const getStoredAIPrompt = useCallback(() => {
+    if (isAutoForking) {
+      return null;
+    }
     if (typeof window === 'undefined') {
+      DEBUG &&
+        console.log(
+          'getStoredAIPrompt: window is undefined (SSR)',
+        );
       return null;
     }
 
-    const prompt = sessionStorage.getItem(
+    const prompt = localStorage.getItem(
       AI_PROMPT_STORAGE_KEY,
     );
-    const modelName = sessionStorage.getItem(
+    const modelName = localStorage.getItem(
       AI_MODEL_STORAGE_KEY,
     );
 
+    DEBUG &&
+      console.log(
+        'Retrieved prompt from localStorage:',
+        prompt,
+      );
+    DEBUG &&
+      console.log(
+        'Retrieved modelName from localStorage:',
+        modelName,
+      );
+
     if (prompt && modelName) {
+      DEBUG &&
+        console.log('Found stored AI prompt and model');
       return { prompt, modelName };
     }
 
+    DEBUG && console.log('No stored AI prompt found');
     return null;
   }, []);
 

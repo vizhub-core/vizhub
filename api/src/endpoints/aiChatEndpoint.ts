@@ -285,7 +285,7 @@ export const aiChatEndpoint = ({
 
         const handler = handleAIChatMessage({
           shareDBDoc,
-          createVizBotLocalPresence: () =>
+          createAIEditLocalPresence: () =>
             docPresence.create(generateVizBotId()),
         });
 
