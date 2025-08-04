@@ -6,13 +6,13 @@ export const StarterFeatures = () => {
   return (
     <>
       <Feature
-        title="Limited VizBot AI Chat"
+        title="Limited Edit with AI Chat"
         id="limited-ai-chat"
         hasBottomBorder={true}
         startsExpanded={true}
         // learnMoreHref="/features#ai-assisted-coding"
       >
-        Limited access to VizBot AI coding chat, up to 5
+        Limited access to Edit with AI coding chat, up to 5
         chat messages per day
       </Feature>
       <Feature

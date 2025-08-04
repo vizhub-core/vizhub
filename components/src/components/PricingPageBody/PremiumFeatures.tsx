@@ -8,13 +8,13 @@ import { CREDIT_MARKUP } from 'entities/src/Pricing';
 export const PremiumFeatures = ({}) => (
   <>
     <Feature
-      title="Unlimited VizBot AI Chat"
+      title="Unlimited Edit with AI Chat"
       id="unlimited-ai-chat"
       hasBottomBorder={true}
       startsExpanded={false}
       // learnMoreHref="https://vizhub.com/forum/t/ai-assisted-coding/952"
     >
-      Unlimited access to VizBot AI coding chat
+      Unlimited access to Edit with AI coding chat
     </Feature>
 
     <Feature
