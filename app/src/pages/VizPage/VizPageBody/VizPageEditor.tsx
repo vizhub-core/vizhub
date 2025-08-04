@@ -106,7 +106,8 @@ export const VizPageEditor = ({
       }
     }, [canUserUseAIAssist]);
 
-  const { info } = useContext(VizPageContext);
+  const { info, ownerUser, vizKit } =
+    useContext(VizPageContext);
 
   // AI Chat configuration for VizHub
   const aiChatOptions = useMemo(
@@ -115,6 +116,9 @@ export const VizPageEditor = ({
     }),
     [info.id],
   );
+
+  // Get the current commit ID for forking - use the committed commit ID from info
+  const currentCommitId = info.committed;
 
   // Simple ESLint source that returns empty diagnostics
   // TODO make this work.
@@ -137,6 +141,12 @@ export const VizPageEditor = ({
       aiChatEndpoint={'/api/ai-chat/'}
       aiChatUndoEndpoint={'/api/ai-chat-undo'}
       aiChatOptions={aiChatOptions}
+      vizId={info.id}
+      authenticatedUserId={authenticatedUser?.id}
+      ownerUserName={ownerUser.userName}
+      vizTitle={info.title}
+      vizKit={vizKit}
+      commitId={currentCommitId}
     >
       {showEditor ? (
         <VZLeft enableUsernameField={false} />
