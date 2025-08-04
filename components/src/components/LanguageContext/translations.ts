@@ -45,7 +45,8 @@ export const translations = {
     'explore.hero.description':
       'Transform Ideas into Visualizations',
     'explore.feature.instant': 'Instant Results',
-    'explore.feature.llms': 'Various LLMs',
+    'explore.feature.vizbot':
+      'Edit with AI Coding Assistant',
     'explore.feature.history': 'Revision History',
     'explore.button.learn-more': 'Learn More',
     'explore.page.title': 'Explore',
@@ -100,7 +101,7 @@ export const translations = {
     'explore.hero.title.highlight': '生成式AI力量',
     'explore.hero.description': '将思想转化为可视化',
     'explore.feature.instant': '即时结果',
-    'explore.feature.llms': '各种LLM',
+    'explore.feature.vizbot': 'Edit with AI编程助手',
     'explore.feature.history': '修订历史',
     'explore.button.learn-more': '了解更多',
     'explore.page.title': '探索',
@@ -162,7 +163,8 @@ export const translations = {
     'explore.hero.description':
       'Transforma Pensamientos en Visualizaciones',
     'explore.feature.instant': 'Resultados Instantáneos',
-    'explore.feature.llms': 'Varios LLM',
+    'explore.feature.vizbot':
+      'Edit with AI Asistente de Codificación IA',
     'explore.feature.history': 'Historial de Revisiones',
     'explore.button.learn-more': 'Saber Más',
     'explore.page.title': 'Explorar',
@@ -224,7 +226,7 @@ export const translations = {
     'explore.hero.description':
       'विचारों को विज़ुअलाइज़ेशन में बदलें',
     'explore.feature.instant': 'तुरंत परिणाम',
-    'explore.feature.llms': 'विभिन्न LLM',
+    'explore.feature.vizbot': 'Edit with AI कोडिंग सहायक',
     'explore.feature.history': 'संशोधन इतिहास',
     'explore.button.learn-more': 'और जानें',
     'explore.page.title': 'अन्वेषण करें',
@@ -283,7 +285,8 @@ export const translations = {
       'قوة الذكاء الاصطناعي التوليدي',
     'explore.hero.description': 'حول الأفكار إلى تصورات',
     'explore.feature.instant': 'نتائج فورية',
-    'explore.feature.llms': 'نماذج لغوية متنوعة',
+    'explore.feature.vizbot':
+      'Edit with AI مساعد البرمجة بالذكاء الاصطناعي',
     'explore.feature.history': 'تاريخ المراجعات',
     'explore.button.learn-more': 'تعلم المزيد',
     'explore.page.title': 'استكشف',
@@ -329,7 +332,7 @@ export const translations = {
     'explore.hero.description':
       'চিন্তাভাবনাকে ভিজ্যুয়ালাইজেশনে রূপান্তর করুন',
     'explore.feature.instant': 'তাৎক্ষণিক ফলাফল',
-    'explore.feature.llms': 'বিভিন্ন LLM',
+    'explore.feature.vizbot': 'Edit with AI কোডিং সহায়ক',
     'explore.feature.history': 'সংশোধনের ইতিহাস',
     'explore.button.learn-more': 'আরও জানুন',
     'explore.page.title': 'অন্বেষণ',
@@ -377,7 +380,8 @@ export const translations = {
     'explore.hero.description':
       'Transforme Pensamentos em Visualizações',
     'explore.feature.instant': 'Resultados Instantâneos',
-    'explore.feature.llms': 'Vários LLMs',
+    'explore.feature.vizbot':
+      'Edit with AI Assistente de Codificação IA',
     'explore.feature.history': 'Histórico de Revisões',
     'explore.button.learn-more': 'Saiba Mais',
     'explore.page.title': 'Explorar',
@@ -425,7 +429,8 @@ export const translations = {
     'explore.hero.description':
       'Превратите Мысли в Визуализации',
     'explore.feature.instant': 'Мгновенные Результаты',
-    'explore.feature.llms': 'Различные LLM',
+    'explore.feature.vizbot':
+      'Edit with AI Ассистент Программирования',
     'explore.feature.history': 'История Версий',
     'explore.button.learn-more': 'Узнать Больше',
     'explore.page.title': 'Исследовать',
@@ -472,7 +477,8 @@ export const translations = {
     'explore.hero.title.highlight': '生成AI の力',
     'explore.hero.description': '思考を可視化に変換',
     'explore.feature.instant': '即座の結果',
-    'explore.feature.llms': '様々なLLM',
+    'explore.feature.vizbot':
+      'VizBot AI コーディングアシスタント',
     'explore.feature.history': 'リビジョン履歴',
     'explore.button.learn-more': '詳しく学ぶ',
     'explore.page.title': '探索',
@@ -520,7 +526,7 @@ export const translations = {
     'explore.hero.description':
       'ਵਿਚਾਰਾਂ ਨੂੰ ਵਿਜ਼ੂਅਲਾਈਜ਼ੇਸ਼ਨ ਵਿੱਚ ਬਦਲੋ',
     'explore.feature.instant': 'ਤੁਰੰਤ ਨਤੀਜੇ',
-    'explore.feature.llms': 'ਵੱਖ-ਵੱਖ LLM',
+    'explore.feature.vizbot': 'VizBot AI ਕੋਡਿੰਗ ਸਹਾਇਕ',
     'explore.feature.history': 'ਸੰਸ਼ੋਧਨ ਇਤਿਹਾਸ',
     'explore.button.learn-more': 'ਹੋਰ ਜਾਣੋ',
     'explore.page.title': 'ਖੋਜ',
@@ -568,7 +574,7 @@ export const translations = {
     'explore.hero.description':
       'Ubah Pemikiran menjadi Visualisasi',
     'explore.feature.instant': 'Hasil Instan',
-    'explore.feature.llms': 'Berbagai LLM',
+    'explore.feature.vizbot': 'VizBot Asisten Coding AI',
     'explore.feature.history': 'Riwayat Revisi',
     'explore.button.learn-more': 'Pelajari Lebih Lanjut',
     'explore.page.title': 'Jelajahi',
@@ -615,7 +621,7 @@ export const translations = {
     'explore.hero.description':
       'خیالات کو ویژولائزیشن میں تبدیل کریں',
     'explore.feature.instant': 'فوری نتائج',
-    'explore.feature.llms': 'مختلف LLM',
+    'explore.feature.vizbot': 'VizBot AI کوڈنگ اسسٹنٹ',
     'explore.feature.history': 'نظرثانی کی تاریخ',
     'explore.button.learn-more': 'مزید جانیں',
     'explore.page.title': 'دریافت کریں',
@@ -661,7 +667,7 @@ export const translations = {
     'explore.hero.description':
       'विचारांना व्हिज्युअलायझेशनमध्ये रूपांतरित करा',
     'explore.feature.instant': 'तत्काळ परिणाम',
-    'explore.feature.llms': 'विविध LLM',
+    'explore.feature.vizbot': 'VizBot AI कोडिंग सहायक',
     'explore.feature.history': 'पुनरावलोकन इतिहास',
     'explore.button.learn-more': 'अधिक जाणून घ्या',
     'explore.page.title': 'अन्वेषण',
@@ -725,7 +731,8 @@ export const translations = {
     'explore.hero.description':
       'Transformez les Pensées en Visualisations',
     'explore.feature.instant': 'Résultats Instantanés',
-    'explore.feature.llms': 'Divers LLM',
+    'explore.feature.vizbot':
+      'VizBot Assistant de Codage IA',
     'explore.feature.history': 'Historique des Révisions',
     'explore.button.learn-more': 'En Savoir Plus',
     'explore.page.title': 'Explorer',
@@ -788,7 +795,7 @@ export const translations = {
     'explore.hero.description':
       'Verwandeln Sie Gedanken in Visualisierungen',
     'explore.feature.instant': 'Sofortige Ergebnisse',
-    'explore.feature.llms': 'Verschiedene LLMs',
+    'explore.feature.vizbot': 'VizBot AI Coding-Assistent',
     'explore.feature.history': 'Revisionsgeschichte',
     'explore.button.learn-more': 'Mehr erfahren',
     'explore.page.title': 'Erkunden',
@@ -836,7 +843,7 @@ export const translations = {
     'explore.hero.title.highlight': '생성 AI 파워',
     'explore.hero.description': '생각을 시각화로 변환',
     'explore.feature.instant': '즉시 결과',
-    'explore.feature.llms': '다양한 LLM',
+    'explore.feature.vizbot': 'VizBot AI 코딩 어시스턴트',
     'explore.feature.history': '수정 기록',
     'explore.button.learn-more': '더 알아보기',
     'explore.page.title': '탐색',

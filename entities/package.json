@@ -22,7 +22,7 @@
     "@vizhub/viz-types": "^0.4.0",
     "@vizhub/viz-utils": "^1.4.0",
     "screenshotgenie": "^0.2.0",
-    "vzcode": "^1.47.0"
+    "vzcode": "^1.54.0"
   },
   "devDependencies": {
     "prettier": "^3.6.2",

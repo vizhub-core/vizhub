@@ -12,6 +12,7 @@ import PrettierWorker from 'vzcode/src/client/usePrettier/worker.ts?worker';
 import { customInteractRules } from './customInteractRules';
 import { VizPageContext } from '../VizPageContext';
 import { VizContent } from '@vizhub/viz-types';
+import { useAutoForkForAI } from '../useAutoForkForAI';
 
 // Instantiate the Prettier and TypeScript workers
 // in the client, but not in SSR.
@@ -106,13 +107,33 @@ export const VizPageEditor = ({
       }
     }, [canUserUseAIAssist]);
 
-  const { info } = useContext(VizPageContext);
+  const { info, ownerUser, vizKit } =
+    useContext(VizPageContext);
 
   // AI Chat configuration for VizHub
-  const aiChatEndpoint = '/api/ai-chat/';
-  const aiChatOptions = {
-    vizId: info.id,
-  };
+  const aiChatOptions = useMemo(
+    () => ({
+      vizId: info.id,
+    }),
+    [info.id],
+  );
+
+  // Get the current commit ID for forking - use the committed commit ID from info
+  const currentCommitId = info.committed;
+
+  // Auto-fork functionality for AI chat
+  const {
+    autoForkAndRetryAI,
+    clearStoredAIPrompt,
+    getStoredAIPrompt,
+  } = useAutoForkForAI({
+    vizKit,
+    id: info.id,
+    content,
+    authenticatedUserId: authenticatedUser?.id,
+    ownerUserName: ownerUser.userName,
+    vizTitle: info.title,
+  });
 
   // Simple ESLint source that returns empty diagnostics
   // TODO make this work.
@@ -132,8 +153,11 @@ export const VizPageEditor = ({
       codeError={srcdocErrorMessage}
       submitOperation={submitContentOperation}
       connected={connected}
-      aiChatEndpoint={aiChatEndpoint}
+      aiChatEndpoint={'/api/ai-chat/'}
       aiChatOptions={aiChatOptions}
+      autoForkAndRetryAI={autoForkAndRetryAI}
+      clearStoredAIPrompt={clearStoredAIPrompt}
+      getStoredAIPrompt={getStoredAIPrompt}
     >
       {showEditor ? (
         <VZLeft enableUsernameField={false} />

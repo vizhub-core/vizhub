@@ -8,6 +8,7 @@ import { discordLink } from '../links';
 import './styles.scss';
 
 const enableOfficeHoursLink = false;
+const enableYouTubeEmbed = false;
 
 export const ExplorePageBody = ({
   // Viz preview list props.
@@ -51,8 +52,8 @@ export const ExplorePageBody = ({
                 <span>{t('explore.feature.instant')}</span>
               </div>
               <div className="feature-item">
-                <i className="bi bi-arrow-repeat"></i>
-                <span>{t('explore.feature.llms')}</span>
+                <i className="bi bi-stars"></i>
+                <span>{t('explore.feature.vizbot')}</span>
               </div>
               <div className="feature-item">
                 <i className="bi bi-database"></i>
@@ -70,18 +71,20 @@ export const ExplorePageBody = ({
               </a>
             </div>
           </div>
-          <div className="hero-video">
-            <iframe
-              width="560"
-              height="315"
-              src="https://www.youtube-nocookie.com/embed/wd6BnelMO9g?si=aJz_9SRg4vKt-pdN&autoplay=1&mute=1&rel=0"
-              title="YouTube video player"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              referrerPolicy="strict-origin-when-cross-origin"
-              allowFullScreen
-            ></iframe>
-          </div>
+          {enableYouTubeEmbed && (
+            <div className="hero-video">
+              <iframe
+                width="560"
+                height="315"
+                src="https://www.youtube-nocookie.com/embed/wd6BnelMO9g?si=aJz_9SRg4vKt-pdN&autoplay=1&mute=1&rel=0"
+                title="YouTube video player"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerPolicy="strict-origin-when-cross-origin"
+                allowFullScreen
+              ></iframe>
+            </div>
+          )}
         </div>
       </div>
       <div className="vh-page-container">
