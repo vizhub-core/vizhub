@@ -122,7 +122,11 @@ export const VizPageEditor = ({
   const currentCommitId = info.committed;
 
   // Auto-fork functionality for AI chat
-  const { autoForkAndRetryAI, clearStoredAIPrompt, getStoredAIPrompt } = useAutoForkForAI({
+  const {
+    autoForkAndRetryAI,
+    clearStoredAIPrompt,
+    getStoredAIPrompt,
+  } = useAutoForkForAI({
     vizKit,
     id: info.id,
     content,
