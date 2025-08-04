@@ -5,7 +5,7 @@ import { UserId, Visibility, CommitId } from 'entities';
 import { Result } from 'gateways';
 import { setCookie } from '../cookies';
 
-const DEBUG = true;
+const DEBUG = false;
 
 // Storage keys for preserving AI prompt across fork and redirect
 const AI_PROMPT_STORAGE_KEY = 'vizhub-pending-ai-prompt';
