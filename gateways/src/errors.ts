@@ -25,7 +25,7 @@ export const errorCodeLabels = {
     'Invalid commit operation',
   [VizHubErrorCode.invalidDecrement]: 'Invalid decrement',
   [VizHubErrorCode.missingParameter]: 'Missing parameter',
-  [VizHubErrorCode.missingAuth]: 'Authentication required',
+  [VizHubErrorCode.missingAuth]: 'Log in first',
   [VizHubErrorCode.invariantViolation]:
     'Invariant violation',
   [VizHubErrorCode.accessDenied]: 'Access denied',

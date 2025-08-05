@@ -154,6 +154,7 @@ export const VizPageEditor = ({
       submitOperation={submitContentOperation}
       connected={connected}
       aiChatEndpoint={'/api/ai-chat/'}
+      aiChatUndoEndpoint="/api/ai-chat-undo/"
       aiChatOptions={aiChatOptions}
       autoForkAndRetryAI={autoForkAndRetryAI}
       clearStoredAIPrompt={clearStoredAIPrompt}
