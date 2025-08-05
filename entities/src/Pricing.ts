@@ -15,7 +15,7 @@ export const PRO: Plan = 'professional';
 export const FREE_NON_PUBLIC_VIZ_LIMIT = 5;
 
 // The limit of AI chat requests per day for free users.
-export const FREE_AI_CHAT_LIMIT = 5;
+export const FREE_AI_CHAT_LIMIT = 10;
 
 // FeatureId is an enum of all the features that are
 // highlighted in the pricing page.
