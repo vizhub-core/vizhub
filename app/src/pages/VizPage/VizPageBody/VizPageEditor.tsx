@@ -13,6 +13,7 @@ import { customInteractRules } from './customInteractRules';
 import { VizPageContext } from '../VizPageContext';
 import { VizContent } from '@vizhub/viz-types';
 import { useAutoForkForAI } from '../useAutoForkForAI';
+import { AIUndoWidget } from '../components/AIUndoWidget';
 
 // Instantiate the Prettier and TypeScript workers
 // in the client, but not in SSR.
@@ -158,6 +159,7 @@ export const VizPageEditor = ({
       autoForkAndRetryAI={autoForkAndRetryAI}
       clearStoredAIPrompt={clearStoredAIPrompt}
       getStoredAIPrompt={getStoredAIPrompt}
+      {...({ additionalWidgets: AIUndoWidget } as any)}
     >
       {showEditor ? (
         <VZLeft enableUsernameField={false} />

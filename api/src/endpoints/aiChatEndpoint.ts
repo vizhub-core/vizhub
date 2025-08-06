@@ -283,11 +283,17 @@ export const aiChatEndpoint = ({
           return `vizbot-${timestamp}`;
         };
 
+        // Function to get the current commit ID from the viz info
+        const getCurrentCommitId = () => {
+          return info.committed ? info.end : null;
+        };
+
         const handler = handleAIChatMessage({
           shareDBDoc,
           createAIEditLocalPresence: () =>
             docPresence.create(generateVizBotId()),
-        });
+          getCurrentCommitId,
+        } as any);
 
         DEBUG &&
           console.log(
