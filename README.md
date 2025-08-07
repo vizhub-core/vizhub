@@ -1,6 +1,6 @@
 # VizHub
 
-This repository contains the VizHub platform source code, which is currently deployed to https://vizhub.com/.
+This repository contains the open source core of the VizHub platform.
 
 Tour of the app:
 
