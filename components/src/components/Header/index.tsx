@@ -149,6 +149,7 @@ export const Header = ({
           </Dropdown>
 
           <Nav.Link href={pricingHref}>Pricing</Nav.Link>
+          <Nav.Link href="/feedback">Feedback</Nav.Link>
           <Nav.Link
             href={createVizHref}
             className="vh-create-button"
