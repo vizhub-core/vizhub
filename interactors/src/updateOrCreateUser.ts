@@ -59,7 +59,7 @@ export const UpdateOrCreateUser =
           userName,
           displayName,
           picture,
-          plan: 'free',
+          plan: 'premium',
           numUnreadNotifications: 0,
         };
       }
