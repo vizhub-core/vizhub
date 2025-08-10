@@ -8,7 +8,6 @@ import { SandboxPage } from './SandboxPage';
 import { ExplorePage } from './ExplorePage';
 import { ForksPage } from './ForksPage';
 import { SearchPage } from './SearchPage';
-import { PricingPage } from './PricingPage';
 import { AccountPage } from './AccountPage';
 import { ResourcesPage } from './ResourcesPage';
 import { KitchenSinkPage } from './KitchenSinkPage';
@@ -33,7 +32,6 @@ export const pages = [
   ExplorePage,
   DocumentationPage,
   DocsPage,
-  PricingPage,
   AccountPage,
   SearchPage,
   ResourcesPage,
