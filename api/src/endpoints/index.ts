@@ -3,12 +3,7 @@ import { recordAnalyticsEvents } from './recordAnalyticsEvents';
 import { getInfosAndOwnersEndpoint } from './getInfosAndOwnersEndpoint';
 import { forkVizEndpoint } from './forkVizEndpoint';
 import { trashVizEndpoint } from './trashVizEndpoint';
-import { fakeCheckoutSuccessEndpoint } from './fakeCheckoutSuccessEndpoint';
-import { fakeUnsubscribeSuccessEndpoint } from './fakeUnsubscribeSuccessEndpoint';
-import { stripeWebhookEndpoint } from './stripeWebhookEndpoint';
-import { createCheckoutSession } from './createCheckoutSessionEndpoint';
 import { aiAssistEndpoint } from './aiAssistEndpoint';
-import { billingPortalSessionEndpoint } from './billingPortalSessionEndpoint';
 import { getUsersForTypeaheadEndpoint } from './getUsersForTypeaheadEndpoint';
 import { addCollaboratorEndpoint } from './addCollaboratorEndpoint';
 import { addCommentEndpoint } from './addCommentEndpoint';
@@ -47,12 +42,7 @@ export const endpoints: Array<Endpoint> = [
   getInfosAndOwnersEndpoint,
   forkVizEndpoint,
   trashVizEndpoint,
-  fakeCheckoutSuccessEndpoint,
-  fakeUnsubscribeSuccessEndpoint,
-  stripeWebhookEndpoint,
-  createCheckoutSession,
   aiAssistEndpoint,
-  billingPortalSessionEndpoint,
   getUsersForTypeaheadEndpoint,
   addCollaboratorEndpoint,
   removeCollaboratorEndpoint,
