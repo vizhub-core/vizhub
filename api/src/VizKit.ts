@@ -10,7 +10,6 @@ import {
   RevisionHistory,
   APIKey,
   APIKeyId,
-  Plan,
 } from 'entities';
 import { AIEditMetadataUsage } from 'entities/src/AIEditMetadata';
 import {
@@ -79,33 +78,6 @@ export interface VizKitAPI {
     trashViz: (options: {
       id: VizId;
     }) => Promise<Result<Success>>;
-
-    fakeCheckoutSuccess: (
-      userId: UserId,
-    ) => Promise<Result<Success>>;
-
-    fakeUnsubscribeSuccess: (
-      userId: UserId,
-    ) => Promise<Result<Success>>;
-
-    createCheckoutSession: (options: {
-      userId: UserId;
-      plan?: Plan;
-      isMonthly?: boolean;
-      isCreditTopUp?: boolean;
-    }) => Promise<
-      Result<{
-        sessionURL: string;
-      }>
-    >;
-
-    createBillingPortalSession: (options: {
-      userId: UserId;
-    }) => Promise<
-      Result<{
-        sessionURL: string;
-      }>
-    >;
 
     // get-users-for-typeahead
     getUsersForTypeahead: (
@@ -278,43 +250,6 @@ export const VizKit = (
 
       trashViz: async (options: { id: VizId }) =>
         await postJSON(`${baseUrl}/trash-viz`, options),
-
-      fakeCheckoutSuccess: async (userId: UserId) =>
-        await postJSON(`${baseUrl}/fake-checkout-success`, {
-          userId,
-        }),
-
-      fakeUnsubscribeSuccess: async (userId: UserId) =>
-        await postJSON(
-          `${baseUrl}/fake-unsubscribe-success`,
-          {
-            userId,
-          },
-        ),
-
-      createCheckoutSession: async ({
-        userId,
-        isMonthly,
-        isCreditTopUp,
-        plan,
-      }) =>
-        await postJSON(
-          `${baseUrl}/create-checkout-session`,
-          {
-            userId,
-            isMonthly,
-            isCreditTopUp,
-            plan,
-          },
-        ),
-
-      createBillingPortalSession: async ({ userId }) =>
-        await postJSON(
-          `${baseUrl}/create-billing-portal-session`,
-          {
-            userId,
-          },
-        ),
 
       getUsersForTypeahead: async (query: string) =>
         await postJSON(

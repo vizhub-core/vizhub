@@ -27,10 +27,7 @@ export const Header = ({
   profileHref,
   createVizHref,
   onVizHubClick,
-  pricingHref,
   onNotificationsClick,
-  showBillingLink,
-  onBillingClick,
   initialSearchQuery,
   userHasNotifications,
 }: {
@@ -40,10 +37,7 @@ export const Header = ({
   profileHref: string;
   createVizHref: string;
   onVizHubClick: () => void;
-  pricingHref: string;
   onNotificationsClick: () => void;
-  showBillingLink?: boolean;
-  onBillingClick: () => void;
   initialSearchQuery?: string;
   userHasNotifications: boolean;
 }) => (
@@ -148,7 +142,6 @@ export const Header = ({
             </Dropdown.Menu>
           </Dropdown>
 
-          <Nav.Link href={pricingHref}>Pricing</Nav.Link>
           <Nav.Link
             href={createVizHref}
             className="vh-create-button"
@@ -216,11 +209,6 @@ export const Header = ({
                   Account
                 </Dropdown.Item> */}
                 {/* <Dropdown.Divider /> */}
-                {showBillingLink && (
-                  <Dropdown.Item onClick={onBillingClick}>
-                    Billing
-                  </Dropdown.Item>
-                )}
                 <Dropdown.Item href={logoutHref}>
                   Log out
                 </Dropdown.Item>
