@@ -1,7 +1,5 @@
 import {
-  AIAssistUpgradeNudgeModal,
   DeleteVizConfirmationModal,
-  ExportCodeUpgradeNudgeModal,
   EditWithAIModal,
   ForkModal,
   SettingsModal,
@@ -47,10 +45,6 @@ export const VizPageModals = () => {
     toggleDeleteVizConfirmationModal,
     vizKit,
     initialCollaborators,
-    showAIAssistUpgradeNudgeModal,
-    toggleAIAssistUpgradeNudgeModal,
-    showExportCodeUpgradeNudgeModal,
-    toggleExportCodeUpgradeNudgeModal,
     showEditWithAIModal,
     toggleEditWithAIModal,
     onEditWithAI,
@@ -327,18 +321,6 @@ export const VizPageModals = () => {
           show={showDeleteVizConfirmationModal}
           onClose={toggleDeleteVizConfirmationModal}
           onConfirm={onTrashViz}
-        />
-      )}
-      {showAIAssistUpgradeNudgeModal && (
-        <AIAssistUpgradeNudgeModal
-          show={showAIAssistUpgradeNudgeModal}
-          onClose={toggleAIAssistUpgradeNudgeModal}
-        />
-      )}
-      {showExportCodeUpgradeNudgeModal && (
-        <ExportCodeUpgradeNudgeModal
-          show={showExportCodeUpgradeNudgeModal}
-          onClose={toggleExportCodeUpgradeNudgeModal}
         />
       )}
       {showEditWithAIModal && (

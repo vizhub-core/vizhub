@@ -85,7 +85,6 @@ export type VizPageContextValue = {
   isEmbedMode: boolean;
   isEmbedBrandedURLParam: boolean;
   isHideMode: boolean;
-  toggleAIAssistUpgradeNudgeModal: () => void;
   isFileOpen: boolean;
   initialComments: Array<Snapshot<Comment>>;
   initialCommentAuthors: Array<Snapshot<User>>;
@@ -119,9 +118,6 @@ export type VizPageContextValue = {
   setAnyoneCanEdit: (anyoneCanEdit: boolean) => void;
   showDeleteVizConfirmationModal: boolean;
   initialCollaborators: Array<User>;
-  showAIAssistUpgradeNudgeModal: boolean;
-  showExportCodeUpgradeNudgeModal: boolean;
-  toggleExportCodeUpgradeNudgeModal: () => void;
   showRevisionHistory: boolean;
   toggleShowRevisionHistory: () => void;
   restoreToRevision: (commitId: CommitId) => void;
@@ -281,14 +277,6 @@ export const VizPageProvider = ({
   const [
     showDeleteVizConfirmationModal,
     toggleDeleteVizConfirmationModal,
-  ] = useToggleState();
-  const [
-    showAIAssistUpgradeNudgeModal,
-    toggleAIAssistUpgradeNudgeModal,
-  ] = useToggleState();
-  const [
-    showExportCodeUpgradeNudgeModal,
-    toggleExportCodeUpgradeNudgeModal,
   ] = useToggleState();
 
   const [showRevisionHistory, toggleShowRevisionHistory] =
@@ -473,10 +461,6 @@ export const VizPageProvider = ({
     setAnyoneCanEdit,
     showDeleteVizConfirmationModal,
     toggleDeleteVizConfirmationModal,
-    showAIAssistUpgradeNudgeModal,
-    toggleAIAssistUpgradeNudgeModal,
-    showExportCodeUpgradeNudgeModal,
-    toggleExportCodeUpgradeNudgeModal,
     showEditor,
     setShowEditor,
     isEmbedMode,

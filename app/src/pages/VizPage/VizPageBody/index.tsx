@@ -9,7 +9,6 @@ import {
 import {
   RevisionHistoryNavigator,
   VizPageHead,
-  VizPageUpgradeBanner,
   VizPageVersionBanner,
   VizPageViewer,
 } from 'components';
@@ -82,7 +81,6 @@ export const VizPageBody = () => {
     isEmbedMode,
     isEmbedBrandedURLParam,
     isHideMode,
-    toggleAIAssistUpgradeNudgeModal,
     isFileOpen,
     initialComments,
     initialCommentAuthors,
@@ -93,7 +91,6 @@ export const VizPageBody = () => {
     toggleShowRevisionHistory,
     restoreToRevision,
     commitMetadata,
-    toggleExportCodeUpgradeNudgeModal,
     toggleEditWithAIModal,
     isEditingWithAI,
     runtimeVersion,
@@ -291,9 +288,6 @@ export const VizPageBody = () => {
         downloadImageHref={downloadImageHref}
         toggleShowRevisionHistory={
           toggleShowRevisionHistory
-        }
-        toggleExportCodeUpgradeNudgeModal={
-          toggleExportCodeUpgradeNudgeModal
         }
         onEditWithAIClick={toggleEditWithAIModal}
         isEditingWithAI={isEditingWithAI}
